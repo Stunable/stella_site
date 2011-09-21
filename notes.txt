@@ -1,0 +1,4 @@
+Django Auth: 
+	   Superuser - user: root
+	   			   pass: stellaroot
+
