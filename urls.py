@@ -1,18 +1,24 @@
-from django.conf.urls.defaults import patterns, include, url
+"""The main urls configuration file. Delegates app-specific urls to those
+apps' urls confs.
+"""
 
-# Uncomment the next two lines to enable the admin:
+from django.conf.urls.defaults import patterns, include, url
+from django.views.generic.simple import direct_to_template
 from django.contrib import admin
-admin.autodiscover()
+
+admin.autodiscover() # enables admin
+
+# Examples:
+# url(r'^$', 'stella_project.views.home', name='home'),
+# url(r'^stella_project/', include('stella_project.foo.urls')),
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'stella_project.views.home', name='home'),
-    # url(r'^stella_project/', include('stella_project.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-                           url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-                           url(r'^admin/', include(admin.site.urls)),
-                       # url for login here
-)
+                       # admin documentation
+                       url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+                       # admin
+                       url(r'^admin/', include(admin.site.urls)),
+                       # main
+                       url(r'^$', direct_to_template, template="main.html"),
+                       # user accounts
+                       url(r'^accounts/', include(users.urls)),
+                       )

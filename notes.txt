@@ -13,4 +13,9 @@ Friends (foreign key user, foreign key another user) - this describes a friendsh
  | 
 Closet - Specific to each user, has clothes and categories and such. 
 
-
+Models: 
+		- User: Django user and user metadata. 
+		  - This deals with all user options, account settings, friends,
+		  	etc...
+		- Closet: Holds items. 
+		- ClothingItem: A single item of clothing. 
