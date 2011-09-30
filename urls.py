@@ -5,7 +5,6 @@ apps' urls confs.
 from django.conf.urls.defaults import patterns, include, url
 from django.views.generic.simple import direct_to_template
 from django.contrib import admin
-import users
 
 admin.autodiscover() # enables admin
 
@@ -19,7 +18,7 @@ urlpatterns = patterns('',
                        # admin
                        url(r'^admin/', include(admin.site.urls)),
                        # main
-                       url(r'^$', 'views.index'),
+                       url(r'^$', 'users.views.index'),
                        # user accounts
-                       url(r'^accounts/', include(users.urls)),
+                       url(r'^accounts/', include('stella_project.users.urls')),
                        )
