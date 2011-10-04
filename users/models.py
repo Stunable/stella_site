@@ -9,3 +9,10 @@ class StellaUser(User):
     - Closet: The user's closet. 
     """
     pass
+
+class PotentialUser(models.Model):
+    """A user that signs up for an invite. We need to store their email
+    address and use it in the future for their account if they decide
+    to sign-up. 
+    """
+    #email_address = models.charField()

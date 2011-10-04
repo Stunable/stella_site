@@ -12,12 +12,12 @@
     <![endif]-->
 
     <!-- Le styles -->
-	<link rel="stylesheet/less" href="../media/less/bootstrap.less">
-	  <script src="../media/js/less.js"></script>
+	<!-- <link rel="stylesheet/less" href="../media/less/bootstrap.less"> -->
+	<script src="../media/js/less.js"></script>
+	<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">
     <style type="text/css">
       /* Override some defaults */
-      html, body {
-        background-color: #eee;
+      html, body {        background-color: #eee;
       }
       body {
         padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
@@ -79,17 +79,12 @@
     <div class="topbar">
       <div class="fill">
         <div class="container">
-          <a class="brand" href="#">Project name</a>
+          <a class="brand" href="#">Stella</a>
           <ul class="nav">
             <li class="active"><a href="#">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
-          <form action="/account/login/" method="post" class="pull-right">
-            <input class="input-small" type="text" placeholder="Username">
-            <input class="input-small" type="password" placeholder="Password">
-            <button class="btn" type="submit">Sign in</button>
-          </form>
         </div>
       </div>
     </div>
@@ -97,21 +92,14 @@
     <div class="container">
 
       <div class="content">
-        <div class="page-header">
-          <h1>Page name <small>Supporting text or tagline</small></h1>
-        </div>
-        <div class="row">
-          <div class="span10">
-            <h2>Main content</h2>
-          </div>
-          <div class="span4">
-            <h3>Secondary content</h3>
-          </div>
-        </div>
+
+	  {% block content %}
+	  {% endblock %}
+		
       </div>
 
       <footer>
-        <p>&copy; Company 2011</p>
+        <p>&copy; ShopwithStella.com, L.L.C.</p>
       </footer>
 
     </div> <!-- /container -->

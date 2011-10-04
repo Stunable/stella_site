@@ -20,5 +20,5 @@ urlpatterns = patterns('',
                        # main
                        url(r'^$', 'users.views.index'),
                        # user accounts
-                       url(r'^accounts/', include('stella_project.users.urls')),
+                       url(r'^account/', include('stella_project.users.urls')),
                        )
