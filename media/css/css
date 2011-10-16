@@ -1,0 +1,18 @@
+@font-face {
+  font-family: 'Nothing You Could Do';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Nothing You Could Do'), local('NothingYouCouldDo'), url('http://themes.googleusercontent.com/static/fonts/nothingyoucoulddo/v2/jpk1K3jbJoyoK0XKaSyQAXEXHkG8fPQqt_tcmM6oBg_3rGVtsTkPsbDajuO5ueQw.woff') format('woff');
+}
+@font-face {
+  font-family: 'Play';
+  font-style: normal;
+  font-weight: bold;
+  src: local('Play-Bold'), url('http://themes.googleusercontent.com/static/fonts/play/v2/aBiGxW3iLixHo08CkkYT9gLUuEpTyoUstqEm5AMlJo4.woff') format('woff');
+}
+@font-face {
+  font-family: 'Play';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Play'), url('http://themes.googleusercontent.com/static/fonts/play/v2/IkErdnKw9ItVkLeeur9GHfesZW2xOQ-xsNqO47m55DA.woff') format('woff');
+}
