@@ -14,7 +14,7 @@
   <div class="span10">
 	<h2>Sign up for our Beta!</h2>
 	
-	<form action="/account/signupbeta/" method="post">
+	<form action="/accounts/signupbeta/" method="post">
 	  <input class="input-large" type="text" placeholder="Your email">
 	  <button class="btn" type="submit" value="Signup">Sign up</button>
 	</form>
@@ -25,7 +25,7 @@
         <div class="span4">
             <h3>Login</h3>
 
-			<form action="{% url django.contrib.auth.views.login %}" method="post">
+			<form action="/accounts/login" method="post">
 			  {% for field in form %}
 			  <p>
 				{{ field.label_tag }}: {{ field }}

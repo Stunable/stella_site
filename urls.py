@@ -18,7 +18,9 @@ urlpatterns = patterns('',
                        # admin
                        url(r'^admin/', include(admin.site.urls)),
                        # main
-                       url(r'^$', 'users.views.index'),
+                       url(r'^$', include('registration.urls')),
                        # user accounts
                        url(r'^accounts/', include('registration.urls')),
+                       # Main page (Carousel)
+                       url(r'^main/', include('rec.urls')),
                        )
