@@ -4,10 +4,17 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Mish', 'mish@shopwithstella.com'),
 )
 
 MANAGERS = ADMINS
+
+# Email settings
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'stella@shopwithstella.com'
+EMAIL_HOST_PASSWORD = 'keepshockingchewy123'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
 
 DATABASES = {
     'default': {
