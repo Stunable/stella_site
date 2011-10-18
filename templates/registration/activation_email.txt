@@ -1,0 +1,8 @@
+{% autoescape off %}
+
+Click on the following link to activate your account: 
+"http://{{ site.Site }}/activate/{{ activation_key }}/"
+
+You have {{ expiration_days }} left to activate the account. 
+
+{% endautoescape %}
