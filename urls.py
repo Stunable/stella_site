@@ -23,4 +23,8 @@ urlpatterns = patterns('',
                        url(r'^accounts/', include('registration.urls')),
                        # Main page (Carousel)
                        url(r'^main/', include('rec.urls')),
+                       ## Static pages here on out
+                       url(r'^about/$', 
+                           direct_to_template,
+                           {'template' : 'static/about.html'}),
                        )
