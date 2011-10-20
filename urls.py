@@ -26,5 +26,6 @@ urlpatterns = patterns('',
                        ## Static pages here on out
                        url(r'^about/$', 
                            direct_to_template,
-                           {'template' : 'static/about.html'}),
+                           {'template' : 'static/about.html'},
+                           name="main-about"),
                        )
