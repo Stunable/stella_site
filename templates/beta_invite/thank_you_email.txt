@@ -1,8 +1,5 @@
 {% autoescape off %}
 
-Click on the following link to activate your account: 
-"http://dev.{{ site.domain }}/activate/{{ activation_key }}/"
-
-You have {{ expiration_days }} left to activate the account. 
+Thanks for signing up to use our Beta. We'll make sure to let you know as soon as there's room for you to join ;)
 
 {% endautoescape %}

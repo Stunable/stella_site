@@ -1,8 +1,13 @@
 {% autoescape off %}
 
-Click on the following link to activate your account: 
-"http://dev.{{ site.domain }}/activate/{{ activation_key }}/"
+Heya!
 
-You have {{ expiration_days }} left to activate the account. 
+We're finally ready to let you in! To join our Beta, please click on the link below and create a user profile on our site.
+ 
+"http://dev.{{ site.domain }}/register/{{ activation_key }}/"
+
+
+Thanks! 
+Stella
 
 {% endautoescape %}
