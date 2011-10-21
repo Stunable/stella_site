@@ -4,6 +4,8 @@ Unit tests for beta_invite.
 """
 
 from django.test import TestCase
+from django.core import mail
+
 from beta_invite.models import BetaInviteProfile
 
 class InvitationTestCase(TestCase):
@@ -12,7 +14,6 @@ class InvitationTestCase(TestCase):
     """
     def setUp(self):
         self.beta_valid = BetaInviteProfile.objects.create_invite_profile(email="foo@bar.com")
-        self.beta_valid.save() # This shouldn't change anything right?
 
     def test_invitation_profile_created(self):
         """
@@ -43,11 +44,10 @@ class InvitationTestCase(TestCase):
 
     def test_finalize_invite(self):
         """
-        Tests that the profile can no longer be used to register for a new account after
-        finalization.
+        Tests that the profile has an invalid activation key after finalizing a registration.
         """
-        self.assertTrue(self.beta_valid.objects.finalize_invite)
-        self.assertTrue(self.beta_valid.activation_key_expired)
+        self.assertTrue(BetaInviteProfile.objects.finalize_invite(self.beta_valid.activation_key))
+        self.assertFalse(BetaInviteProfile.objects.register_invite(self.beta_valid.activation_key))
         
 class SimpleTest(TestCase):
     def test_basic_addition(self):

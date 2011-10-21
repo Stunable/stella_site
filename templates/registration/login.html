@@ -14,7 +14,12 @@
 	<h2>Sign up for our Beta!</h2>
 	
 	<form action="/beta/signup/" method="post">{% csrf_token %}
-	  <input class="input-large" type="text" placeholder="Your email">
+	  {% for field in form_signup %}
+		<p>
+		  {{ field.label_tag }} {{ field }}
+		  {{ field.errors }}
+		</p>
+	  {% endfor %}
 	  <button class="btn" type="submit" value="Signup">Sign up</button>
 	</form>
   
@@ -24,11 +29,11 @@
             <h3>Login</h3>
 
 			<form action="/accounts/login/" method="post">{% csrf_token %}
-			  {% for field in form %}
-			  <p>
-				{{ field.label_tag }} {{ field }}
-				{{ field.errors }}
-			  </p>
+			  {% for field in form_login %}
+				<p>
+				  {{ field.label_tag }} {{ field }}
+				  {{ field.errors }}
+				</p>
 			  {% endfor %}
 			  <p><button class="btn" type="submit" value="Login">Sign in</button></p>
 			  <input type="hidden" name="next" value="{{ next }}" />

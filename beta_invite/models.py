@@ -2,6 +2,7 @@ import sha
 import re
 import random
 
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.mail import send_mail
@@ -105,7 +106,7 @@ class BetaInviteProfile(models.Model):
         verbose_name_plural = _('invitation profiles')
 
     def __unicode__(self):
-        return u"Invitation request from %s" % self.email_address
+        return u"Invitation request from %s" % self.email
 
     def activation_key_expired(self):
         """
@@ -134,7 +135,7 @@ class BetaInviteProfile(models.Model):
         subject = ''.join(subject.splitlines())
         message = render_to_string('beta_invite/thank_you_email.txt',
                                    {'site':current_site})
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, self.email)
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
 
     def invite(self):
         """
@@ -150,5 +151,5 @@ class BetaInviteProfile(models.Model):
                                    { 'activation_key': self.activation_key,
                                      'site': current_site})
         
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, self.email)
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
         self.invited = True

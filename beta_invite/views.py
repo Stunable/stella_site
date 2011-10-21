@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.template import RequestContext
 
 from beta_invite.forms import SignupForm
-#from beta_invite.models import SignupProfile
+from beta_invite.models import BetaInviteProfile
 
 
 def signup(request, success_url='static/thankyou.html'):
@@ -19,11 +19,14 @@ def signup(request, success_url='static/thankyou.html'):
     if request.method == 'POST':
         form = SignupForm(data=request.POST, files=request.FILES)
         if form.is_valid():
-            new_beta_user = form.save(profile_callback=profile_callback)
+            new_beta_user = BetaInviteProfile.objects.create_invite_profile(email=form.email)
             return HttpResponseRedirect(success_url)
+    else:
+        form = SignupForm()
         
     # Need to add the form elements for login
     context = RequestContext(request)
     return render_to_response('registration/login.html',
-                              { 'form': AuthenticationForm()},
+                              { 'form_login': AuthenticationForm(),
+                                'form_signup': form},
                               context_instance=context)
