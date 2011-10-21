@@ -2,7 +2,7 @@
 Form for email sign up. 
 """
 
-from django import Forms
+from django import forms
 
 class SignupForm(forms.Form):
     """
