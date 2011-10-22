@@ -27,6 +27,8 @@ from django.contrib.auth import views as auth_views
 from registration.views import activate
 from registration.views import register
 
+from beta_invite.forms import SignupForm
+
 
 urlpatterns = patterns('',
                        # Activation keys get matched by \w+ instead of the more specific
@@ -39,12 +41,14 @@ urlpatterns = patterns('',
                        # Homepage is default log-in
                        url(r'^$',
                            auth_views.login,
-                           {'template_name': 'registration/login.html'},
+                           {'template_name': 'registration/login.html',
+                            'extra_context': {'form_signup': SignupForm()}},
                            name='auth_login'),
                        # For redirecting back
                        url(r'^login/$',
                            auth_views.login,
-                           {'template_name': 'registration/login.html'},
+                           {'template_name': 'registration/login.html',
+                            'extra_context': {'form_signup': SignupForm()}},
                            name='auth_login'),
                        url(r'^logout/$',
                            auth_views.logout_then_login,

@@ -19,7 +19,7 @@ def signup(request, success_url='static/thankyou.html'):
     if request.method == 'POST':
         form = SignupForm(data=request.POST, files=request.FILES)
         if form.is_valid():
-            new_beta_user = BetaInviteProfile.objects.create_invite_profile(email=form.email)
+            new_beta_user = BetaInviteProfile.objects.create_invite_profile(email=form.cleaned_data['email'])
             return HttpResponseRedirect(success_url)
     else:
         form = SignupForm()
@@ -27,6 +27,6 @@ def signup(request, success_url='static/thankyou.html'):
     # Need to add the form elements for login
     context = RequestContext(request)
     return render_to_response('registration/login.html',
-                              { 'form_login': AuthenticationForm(),
+                              { 'form': AuthenticationForm(),
                                 'form_signup': form},
                               context_instance=context)
