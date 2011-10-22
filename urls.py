@@ -25,9 +25,6 @@ urlpatterns = patterns('',
                            auth_views.login,
                            {'template_name': 'registration/login.html',
                             'extra_context': {'form_signup': SignupForm()}}),
-                       url(r'^logout/$',
-                           auth_views.logout_then_login,
-
                        # user accounts
                        url(r'^accounts/', include('registration.urls')),
                        # Main page (Carousel)
