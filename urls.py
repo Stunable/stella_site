@@ -5,6 +5,9 @@ apps' urls confs.
 from django.conf.urls.defaults import patterns, include, url
 from django.views.generic.simple import direct_to_template
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
+
+from beta_invite.forms import SignupForm
 
 admin.autodiscover() # enables admin
 
@@ -17,8 +20,6 @@ urlpatterns = patterns('',
                        url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
                        # admin
                        url(r'^admin/', include(admin.site.urls)),
-                       # main
-                       url(r'^$', include('registration.urls')),
                        # user accounts
                        url(r'^accounts/', include('registration.urls')),
                        # Main page (Carousel)
