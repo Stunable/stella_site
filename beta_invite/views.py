@@ -11,7 +11,7 @@ from beta_invite.forms import SignupForm
 from beta_invite.models import BetaInviteProfile
 
 
-def signup(request, success_url='static/thankyou.html'):
+def signup(request, success_url='/thankyou/'):
     """
     Creates a new BetaUser that only has an email address and registration key. Once they are
     deemed ready to join the Beta, they can be emailed a link to register unique to them. 
@@ -26,7 +26,9 @@ def signup(request, success_url='static/thankyou.html'):
         
     # Need to add the form elements for login
     context = RequestContext(request)
-    return render_to_response('registration/login.html',
+    # The extra forms will not be included for now because I'm not bothered 
+    # to augment the contrib.auth.views to such an extent. Can be dealt with later.
+    return render_to_response('registration/stella_login.html',
                               { 'form': AuthenticationForm(),
                                 'form_signup': form},
                               context_instance=context)

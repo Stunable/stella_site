@@ -23,17 +23,25 @@ urlpatterns = patterns('',
                        # Main entry
                        url(r'^$',
                            auth_views.login,
-                           {'template_name': 'registration/login.html',
+                           {'template_name': 'registration/stella_login.html',
                             'extra_context': {'form_signup': SignupForm()}}),
-                       # user accounts
-                       url(r'^accounts/', include('registration.urls')),
-                       # Main page (Carousel)
-                       url(r'^main/', include('rec.urls')),
                        # Beta pages
                        url(r'^beta/', include('beta_invite.urls')),
+                       # # user accounts
+                       # url(r'^accounts/', include('registration.urls')),
+                       # # Main page (Carousel)
+                       # url(r'^main/', include('rec.urls')),
                        ## Static pages here on out
                        url(r'^about/$', 
                            direct_to_template,
-                           {'template' : 'static/about.html'},
+                           {'template' : 'static/stella_about.html'},
                            name="main-about"),
+                       url(r'^contact/$',
+                           direct_to_template,
+                           {'template': 'static/stella_contact.html'},
+                           name="main-contact"),
+                       url(r'^thankyou/$',
+                           direct_to_template,
+                           {'template': 'static/stella_thank-you.html'},
+                           name="main-thankyou"),
                        )
