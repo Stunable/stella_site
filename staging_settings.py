@@ -17,8 +17,8 @@ from base_settings import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'stelladb_staging',
-        'USER': 'postgres',
+        'NAME': 'db_stella_staging',
+        'USER': 'pg_stella',
         'PASSWORD': '123shockchewy123',
         'HOST': '',
         }

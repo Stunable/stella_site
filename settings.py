@@ -1,1 +1,1 @@
-base_settings.py
+staging_settings.py
