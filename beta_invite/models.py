@@ -135,7 +135,14 @@ class BetaInviteProfile(models.Model):
         subject = ''.join(subject.splitlines())
         message = render_to_string('beta_invite/thank_you_email.txt',
                                    {'site':current_site})
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
+        html_content = render_to_string('beta_invite/thank_you_email.html')
+        from django.core.mail import EmailMultiAlternatives
+        
+        message_obj = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL,
+                                             [self.email])
+        message_obj.attach_alternative(html_content, "text/html")
+        message_obj.send()
+        #send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
 
     def invite(self):
         """
