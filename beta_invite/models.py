@@ -96,7 +96,7 @@ class BetaInviteProfile(models.Model):
 
     activation_key = models.CharField(_('activation key'), max_length=40)
     date_created = models.DateField(auto_now_add=True)
-    email = models.EmailField(max_length=75)
+    email = models.EmailField(max_length=75, unique=True)
     invited = models.BooleanField(default=False)
 
     objects = InvitationManager()

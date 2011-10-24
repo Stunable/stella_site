@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
+from django.db import IntegrityError
 
 from beta_invite.forms import SignupForm
 from beta_invite.models import BetaInviteProfile
@@ -19,7 +20,10 @@ def signup(request, success_url='/thankyou/'):
     if request.method == 'POST':
         form = SignupForm(data=request.POST, files=request.FILES)
         if form.is_valid():
-            new_beta_user = BetaInviteProfile.objects.create_invite_profile(email=form.cleaned_data['email'])
+            try:
+                new_beta_user = BetaInviteProfile.objects.create_invite_profile(email=form.cleaned_data['email'])
+            except IntegrityError: # This means they already signed up because emails are unique
+                return render_to_response('static/stella_already-registered.html')
             return HttpResponseRedirect(success_url)
     else:
         form = SignupForm()

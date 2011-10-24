@@ -38,12 +38,6 @@ urlpatterns = patterns('',
                        url(r'^activate/(?P<activation_key>\w+)/$',
                            activate,
                            name='registration_activate'),
-                       # Homepage is default log-in
-                       url(r'^$',
-                           auth_views.login,
-                           {'template_name': 'registration/login.html',
-                            'extra_context': {'form_signup': SignupForm()}},
-                           name='auth_login'),
                        # For redirecting back
                        url(r'^login/$',
                            auth_views.login,
