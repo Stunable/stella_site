@@ -2,13 +2,9 @@
 ## README.txt
 ## PROJECT_ROOT
 
-The project root, stella_project, contains those files that remain immutable while the site
+The project root, stella_site, contains those files that remain immutable while the site
 is running. This includes code, static media, and config files. This directory IS checked
 into source control. Technically, it is a Django project directory. 
-
-The diagram below describes the directory structure. The only difference currently is
-the lack of a settings directory, which will come into play later as the Django
-project begins to deploy. Right now it is an unnecessary complication. 
 
 IMPORTANT: Always update the REQUIREMENTS.txt file with new PIP dependencies that you
 have added to your working branch. 
@@ -28,4 +24,32 @@ PROJECT_ROOT/
 |-- REQUIREMENTS  # pip dependencies file
 |-- __init__.py   # Makes the project root a Python package
 `-- urls.py       # Root URLconf
+
+------------------------------------------------
+
+The STELLA_ROOT directory is a container for individual deployments. You should
+have your own on your development machine that is configured to work with the 
+project. It is an extension of the existing virtual environment directory. All
+files contained within are those that will vary from deployment to deployment,
+and as such, this directory is not checked into version control. 
+
+To create this directory container, create a new virtual environment for this
+project named STELLA_ROOT. Then, install the necessary libraries from the 
+project-included REQUIREMENTS file in the PROJECT_ROOT.
+
+Below is the directory structure and details for a generic deployment: 
+
+STELLA_ROOT/
+|-- PROJECT_ROOT   # Django project directory (see above)
+|-- bin/      	   # Part of the virtualenv
+|-- cache/    	   # A filesystem-based cache
+|-- db/       	   # Store SQLite files in here (during development)
+|-- include/  	   # Part of the virtualenv
+|-- lib/      	   # Part of the virtualenv
+|-- log/      	   # Log files
+|-- pid/      	   # PID files
+|-- share/    	   # Part of the virtualenv
+|-- sock/     	   # UNIX socket files
+|-- tmp/      	   # Temporary files
+`-- uploads/  	   # Site uploads
 
