@@ -1,0 +1,7 @@
+* TODO Invitation App
+
+  This app allows users to invite friends from WITHIN the application. This is
+  not the same as the 'Beta Invite' process defined in the beta_invite app. 
+
+  Throughout the Stella app, users have the opportunity to invite other users as
+  friends. This is the framework that supports that. 
