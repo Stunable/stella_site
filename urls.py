@@ -7,7 +7,7 @@ from django.views.generic.simple import direct_to_template
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
-from beta_invite.forms import SignupForm
+from apps.beta_invite.forms import SignupForm
 
 admin.autodiscover() # enables admin
 
