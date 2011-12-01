@@ -9,6 +9,8 @@ into source control. Technically, it is a Django project directory.
 IMPORTANT: Always update the REQUIREMENTS.txt file with new PIP dependencies that you
 have added to your working branch. 
 
+Below is the directory structure and details for a generic project deployment. ShopwithStella doesn't
+currently have all these directories, but when the need for them arises, you'll know where to put them.
 
 PROJECT_ROOT/
 |-- apps/         # Site-specific Django apps
@@ -35,7 +37,9 @@ and as such, this directory is not checked into version control.
 
 To create this directory container, create a new virtual environment for this
 project named STELLA_ROOT. Then, install the necessary libraries from the 
-project-included REQUIREMENTS file in the PROJECT_ROOT.
+project-included REQUIREMENTS file in the PROJECT_ROOT. You will have to edit your
+virtualenv activate script to support the custom settings configuration; more details
+in the settings README.
 
 Below is the directory structure and details for a generic deployment: 
 

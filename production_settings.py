@@ -1,8 +1,8 @@
 """
-These are settings specific to the staging environment. 
+These are settings specific to the production environment. 
 
- - DEBUG is still on
- - DB is specific to staging env
+ - DEBUG is off
+ - DB is specific to production env
  - CACHE_BACKEND 
  - EMAIL_HOST and EMAIL_PORT might change once more intricate staging occurs
  - SITE_ID
