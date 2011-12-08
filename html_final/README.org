@@ -1,0 +1,3 @@
+
+These are the Mechanism's HTML files that have been created for ShopwithStella. 
+They are not to be modified directly, rather, converted into Django templates. 
