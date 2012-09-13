@@ -1,7 +1,0 @@
-{% autoescape off %}
-
-Thanks for signing up to shop with Stella, your online personal shopper. As you can probably tell, she is spread a little thin right now. Sit tight, and she'll make sure to let you know as soon as her client list has enough room for you to join!
-
-In the meantime, check out Stella's Facebook page or follow her on Twitter for the latest updates.
-
-{% endautoescape %}

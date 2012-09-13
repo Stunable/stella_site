@@ -1,8 +1,0 @@
-* Beta Invite App
-
-  This application allows for users to sign-up for the ShopwithStella beta
-  using their email address. The models define 'Beta Users' who are inactive
-  by default. Once they have been invited by Stella, they are active and awaiting
-  confirmation of their sign-up. Once they have signed up, a new User is created 
-  for them and their associated Beta User becomes obsolete. 
-
