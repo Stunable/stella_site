@@ -1,0 +1,22 @@
+<style type="text/css">
+    .friend-notice-item {
+        width: 90%;
+        margin: auto;        
+        font-weight: 500;
+        text-transform: none !important;
+        padding: 5px;
+        margin-bottom: 2px;
+    }
+</style>
+
+<ul class="friend-notices">
+{% for notice in notices %}
+    {% if notice.notice_type.display == "friends_invite" %}
+        {% if notice.unseen %}
+        <li class="friend-notice-item">
+            <a class="item-ref" href="{% url notification_notices %}">{{ notice.sender }} wants to shop with you! (accept or decline)</a>
+        </li>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+</ul>

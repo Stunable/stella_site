@@ -1,0 +1,42 @@
+<div id="hidden-items">
+	<!-- ********************************************* Modal-Window for Invite Friends START ********************************************* -->
+	<div id="invite-friends-modal" class="item-details friend-request clearfix" style="width: 700px;">
+		<div class="left-backside">
+			<div class="right-backside">
+				<div class="dialog-header">
+					<div class="dialog-header-content-wrapper">
+						<p class="close">
+							<a class="close-box" href="#">close</a>
+						</p>
+						<h2>INVITE YOUR FRIENDS</h2>
+						<p>FRIENDS DON’T LET FRIENDS SHOP ALONE</p>
+					</div>
+				</div><!--/.section#intro-->
+			</div>
+		</div>
+		<div id="invitation-form-wrapper">
+			<form action="{% url friend_invite %}" class="user-entry" id="invitation-form" method="POST">
+				{% csrf_token %}
+				<p class="error_msg">
+					{{ form.non_field_errors }}
+				</p>
+				<input type="text" class="txt" id="emails" name="emails" lstyle="box-shadow:none;" placeholder="EMAIL ADDRESSES, SEPARATED BY COMAS"/>
+				<textarea id="email_message" id="email_message" name="email_message" placeholder="PERSONAL MESSAGE" ></textarea>
+				<p class="btn-wrap">
+					<input type="submit" class="btn send" id="btn_send" value="Send It!" />
+					<center>
+						<div id="loading">
+							<div class="spinner"></div>
+						</div>
+						<span class="confirmation">Sent!</span>
+					</center>				
+				</p>
+				<center>
+					<p id="bigform-error"></p>
+				</center>
+			</form><!--/.section.user-entry#signin-form-->
+		</div>
+	</div><!-- #item-denim-1 |!|-->
+	<!-- ********************************************* Modal-Window for Invite Friends END ********************************************* -->
+</div><!-- #hidden-items |!|-->
+<!-- ============================================= Modal Windows END ============================================= -->

@@ -1,0 +1,86 @@
+{% extends 'user_base.html' %}
+{% block left_panel %}{%endblock%}
+{% block body_class %}common{% endblock %}
+{% block content-class%}round-corner-shadow{%endblock%}
+
+{% block content %}
+
+<style>
+	.common #page-content h2{
+		background-color: white;
+		font-family: 'Advent Pro', sans-serif;
+		font-weight: 600;
+		font-size: 25px;
+		color: gray;
+		background: none;
+	}
+	
+	#btn-place-an-order {
+		float: right;
+	}
+	
+	.common #page-content .body-copy label {
+		text-transform: uppercase;
+	}
+	
+	#id_expdate_0, #id_expdate_1 {
+		width: auto;
+	}
+		
+</style>
+
+<script>
+	$(document).ready(function () {
+	});
+</script>
+
+
+<div>
+
+	{% if default_cc %}
+	<div class="section-intro">
+		<h2><span>Payment</span></h2>
+	</div>
+	<div class="body-copy bootstrap">
+		You can pay with default credit card ***{{ default_cc.cc_last_four_digits }} <a href="/cart/wpp_reference_pay" class="btn btn-primary">Pay</a>		
+
+		<p>OR</p>
+	</div>
+	
+	{% endif %}
+	
+	<div class="section-intro">
+		<h2><span>Credit Card</span></h2>
+	</div>
+	<div class="body-copy bootstrap">			
+		<form method="POST" id="payment-form" class="form-horizontal">
+			
+		{{ errors }}
+		
+		{% csrf_token %}
+		
+		{% for field in form %}
+		<div class="control-group">
+			<label class="control-label">{{ field.label }}</label>
+			<div class="controls">
+				{{ field }}
+				<span class="help-inline">{{ field.errors }}</span>
+			</div>
+		</div>
+		{% endfor %}
+
+		
+		<div class="form-actions">
+			<input type="submit" class="btn btn-primary" value="Submit" id="Submit" />
+		</div>
+		</form>
+	</div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+

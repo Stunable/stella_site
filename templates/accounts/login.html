@@ -1,0 +1,72 @@
+{% extends "non_user_base.html" %}
+
+{% block local_nav %}
+<div class="nav bar clearfix" id="local-nav">
+	<ul class="horizontal-list menu">
+		<li class="navlink member" id="nav-closet">
+			<a href="{% url racks_index %}" title="Peek inside your closet." class="text-link">{% if user.first_name %}{{user.first_name}}{% else %}{{user.username}}{%endif%}'s Closet</a>
+		</li>
+		<li class="navlink member" id="nav-admirers">
+			<a href="{% url friend_index %}" title="Browse your admirers List." id="currentpage" class="text-link">Admirers</a>
+		</li>
+		<li class="navlink" id="nav-news">
+			<a href="{% url news_index %}" title="The latest about Stunable."  class="text-link">News</a>
+		</li>
+		<li class="navlink" id="nav-about">
+			<a href="{% url main-about %}" title="Learn more about Stunable." class="text-link">What is Stunable?</a>
+		</li>
+		<li class="navlink" id="nav-blog">
+			<a href="{% url blog_index %}" title="Read the Stunable Blog."  class="text-link">Blog</a>
+		</li>
+	</ul><!--/.horizontal-list -->
+</div><!--/.section#local-nav-->
+{% endblock %}
+
+{% block content %}
+
+{% if errors %}
+<p>
+	Your username and password didn't match. Please try again.
+</p>
+{% endif %}
+<div class="section clearfix" id="page-content">
+	<form action="" class="user-entry php-form" id="signin-form">
+		<label for="username" class="unseen">Email</label>
+		<input required id="tester" class="txt" name="username" type="text" value="Email" onfocus="clearInput(this)" onblur="restoreInput(this)"/>
+		<label for="password" class="unseen">Password</label>
+		<input required class="txt pass" name="password" type="text" value="Password" onfocus="clearInput(this)" onblur="restoreInput(this)"/>
+		<input type="submit" class="btn" value="Stelllllaaaaaa!" />
+		<p class="forgot-pass">
+			Can't remember my <a href="index.html" title="Click here to retrieve your password.">password</a>.
+		</p>
+	</form><!--/.section.user-entry#signin-form-->
+	<div class="section clearfix" id="homepage-social">
+		<!--SOCIAL MEDIA ICON LINKS -->
+		<ul class="horizontal-list icon-list">
+			<li class="navlink">
+				<a href="http://twitter.com/shopwithstella" title="Follow Stunable on Twitter." class="icon" id="nav-twitter">Twitter</a>
+			</li>
+			<li class="navlink">
+				<a href="https://plus.google.com/113597005238885883965" title="Add Stunable to Google+." class="icon" id="nav-googleplus">Google+</a>
+			</li>
+			<li class="navlink">
+				<a href="http://facebook.com/shopstella" title="Subscribe to Stunable on Facebook." class="icon" id="nav-facebook">Facebook</a>
+			</li>
+		</ul><!--/.horizontal-list -->
+	</div><!--/.section#homepage-social -->
+	<div class="section" class="intro">
+		<h2><span class="identity">Stella's</span> Public Beta</h2>
+		<p>
+			You and your clothes can't be replaced&hellip; but they can be renewed. <span class="identity">Stella</span> is your online personal shopper. She brings you the clothes you like and lets you share her finds with your admirers. If you haven't received an invitation, send <span class="identity">Stella</span> a message and she'll invite you to shop with her as soon as she is available.
+		</p>
+	</div><!--/.section#intro-->
+	<form action="" class="user-entry" id="waitlist-form">
+		<label for="email" class="block">Request an invite from <span class="identity">Stella</span></label>
+		<input required class="txt" name="email" type="text" value="Email" onfocus="clearInput(this)" onblur="mailCheck(this, waitValid, waitError)"/>
+		<input type="submit" class="btn" value="Send Request" onclick="submitCheck($('#waitlist-form .txt')[0])"/>
+	</form><!--/.user-entry#waitlist-form -->
+	<div id="waitlist-error">
+		Stella can't reach you there
+	</div>
+</div>
+{% endblock %} 

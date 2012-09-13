@@ -1,0 +1,44 @@
+{% extends "user_base.html" %}
+
+{% block title %}Stunable | Bummer Jeans{% endblock %}
+
+{% block body_class %}bummer{% endblock %}
+{% block body_id %}gallery{% endblock %}
+
+{% block rack %}
+{% endblock %}
+
+{% block content1 %}
+<div id="page-content" class="section clearfix round-corner-shadow">
+    <div class="section intro">
+        <h2><span>What a</span><span class="font-bella">Bummer!</span></h2>
+        <p>
+            WE APOLOGIZE FOR FORGETTING TO INCLUDE YOUR DESERVING<br/> 
+DENIM IN OUR SEARCH…STUNABLE'S INTERNS WILL BE PAYING IN <br/>
+COFFEE RUNS AND EXCEL SPREADSHEETS FOR THIS ONE! <br/>
+WE LOVE DISCOVERING NEW CLOTHES AND HEARING ABOUT <br/>
+YOUR LATEST MUST-HAVES SO KEEP US IN THE LOOP AND TELL <br/>
+US WHO MAKES THESE JEANS AND WHERE WE CAN GET A PAIR!
+        </p>
+    </div><!--/.section#intro-->
+    <div class="separator"></div>
+    <div class="section body-copy">
+    	<form id="jeans-add-form" action="" method="POST">
+    		{% csrf_token %}
+    		<ul>
+	            {% for error in form.errors.values %}
+	            <li class="error_msg">
+	                {{error}}
+	            </li>
+	            {% endfor %}
+	        </ul>
+    		<input type="text" placeholder="NAME OF JEANS" class="txt" name="name" />
+            <input type="text" placeholder="COMPANY WEBSITE" class="txt" name="website" />
+            <input type="submit" class="btn" value="SEND IT" />
+            <div style="margin-left: auto; margin-right: auto; text-align: center">
+                <p id="bigform-error"></p>
+            </div>
+    	</form>        
+    </div>
+</div>
+{% endblock %}

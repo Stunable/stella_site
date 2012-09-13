@@ -1,0 +1,86 @@
+{% extends "user_base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/retailers.css" type="text/css" media="screen, projection" />
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/blitzer/jquery-ui.css" type="text/css" media="all" />
+{% endblock %}
+{% block body_class %}feed{% endblock %}
+
+{% block page_tab %}
+{% endblock %}
+
+{% block local_nav %} <!--LOCAL NAVIGATION LINKS-->
+					<div class="clearfix">
+	                    <div class="nav bar clearfix" id="local-nav">
+	                    	<div id="local-nav-begin"></div>
+	                        <ul class="horizontal-list menu">
+	                            <li class="navlink" id="nav-about">
+	                                <a href="#" title="Learn more about Stunable." class="text-link">What is Stunable?</a>
+	                                <ul>
+	                                <li><a class="text-link" href="{% url main-about %}">About</a></li>
+	                                <li><a class="text-link" href="{% url team %}">Team</a></li>
+	                                <li><a class="text-link" href="{% url hiw %}">How it Works</a></li>
+	                                <li><a class="text-link" href="{% url faq %}">FAQ</a></li>
+	                                <li><a class="text-link" href="{% url retailer_list %}">Stunable Stylists</a></li>
+	                                <li><a class="text-link" href="{% url careers %}">Careers</a></li>
+	                                <li><a class="text-link" href="{% url main-contact %}">Contact Us</a></li>
+	                                <li><a class="text-link" href="{% url main-privacy %}">Privacy Policy</a></li>
+	                                <li><a class="text-link" href="{% url terms %}">Terms of Use</a></li>
+	                                <li><a class="text-link" href="{% url return %}">Returns</a></li>
+	                                <li><a class="text-link" href="{% url devs %}">API</a></li>
+	                                </ul>
+	                            </li>
+	                            <li class="navlink" id="nav-news">
+	                                <a href="{% url news_index %}" title="The latest about Stunable."  class="text-link">News</a>
+	                            </li>
+	                            {% if request.user.is_authenticated %}
+	                            <li class="navlink" id="nav-signout">
+	                                <a href="{% url auth_logout %}" title="Sign out of Stunable." class="text-link">Log Out</a>
+	                            </li>
+	                            {% endif %}
+	                        </ul><!--/.horizontal-list -->
+	                        <div id="local-nav-end"></div>
+	                    </div><!--/.section#local-nav-->
+                    </div>
+                    {% endblock %}
+
+
+{% block left_panel %}
+{% if request.user.is_authenticated %}
+<div class="left-panel">
+        <div class="panel-header clearfix">
+            <div class="panel-tab active my-closet begin-tab clearfix one-tab">
+                <span class="text-link">Retailer Administration</span>
+                <div class="tab-content hidden">
+                    <h4 class="list-header" id="company-information-menu-item">
+                    	<a href="{% url retailer_information name=retailer_profile.name %}">Company Information</a></h4>
+                    
+                    <div class="separator"></div>
+                    <h4 class="list-header" id="account-information-menu-item">
+                    		<a href="{% url update_retailer_profile %}">Account Information</a></h4>
+                    
+                    <div class="separator"></div>
+                    <h4 class="list-header" id="product-inventory-menu-item">
+                    		<a href="{% url product_list %}">Product Inventory</a></h4>
+                    
+                    <div class="separator"></div>
+                    <h4 class="list-header" id="order-history-menu-item">
+                    	<a href="{% url retailer_order_history %}">Order history</a></h4>
+
+                    
+                    <div class="separator"></div>
+                </div>
+            </div>
+            <div class="fake-tab"></div>
+        <div class="panel-content">
+                <div class="panel-inner-content">
+                </div>
+                <p class="p-bottom"></p>
+        </div>
+    </div> 
+</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% endblock %}

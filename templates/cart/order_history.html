@@ -1,0 +1,177 @@
+{% extends 'accounts/profile_edit.html' %}
+
+{% block body_class %}common{% endblock %}
+{% block content-class%}round-corner-shadow{%endblock%}
+
+{% block left_panel %}
+<style>
+	.gallery .left-panel {
+		height: 200px;
+		padding: 10px 0 0 0;
+	}
+	.gallery #page-content {
+		padding-right: 10px;
+		width: 886px;
+	}
+
+</style>
+<div class="left-panel round-corner-shadow">
+    <ul class="my-closet-menu link">
+        <li >
+            <a href="{% url profile_edit %}">Settings</a>
+        </li>
+        <li class="active" style="background-color: #eee;">
+            <a href="{% url order_history %}">Order history</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content %}
+<style>
+	.common #page-content {
+		margin: 41px 10px 200px auto;
+		position: relative;
+		padding-bottom: 0;
+		float: right;
+	}
+	.common .body-copy {
+		font-family: 'Advent Pro', sans-serif;
+		width: 804px;
+		margin: 0px auto;
+	}
+	.common td input[type="text"] {
+		width: 40px;
+	}
+	.common th {
+		border: thin solid #EBEBEB;
+		vertical-align: middle;
+		text-align: center;
+		background-color: #eee;
+		font-weight: 600;
+	}
+	.common table, .common .no-border td {
+		border: none;
+	}
+	h3 {
+		text-transform: uppercase;
+		text-align: center;
+	}
+
+	
+	.bootstrap .alert-info {
+		background-color: #D9EDF7;
+		border-color: #BCE8F1;
+		color: #3A87AD;
+	}
+	
+	
+
+</style>
+<script>
+	$(document).ready(function() {
+		$('.update-price-btn').hide();
+		$("#checkout-table input").keyup(function() {
+			var value = $(this).val();
+			var btn = $(this).parent().parent().find('.update-price-btn');
+			btn.attr('href', $(this).parent().parent().find('.path').val() + value)
+			btn.show();
+		});
+	});
+
+</script>
+<div class="section-intro">
+    <h2><span>Order history</span></h2>
+</div>
+
+
+<div class="body-copy">
+	<div class="bootstrap">
+		<div class="alert alert-info" data-alert="alert" style="display: none;">
+		<a class="close right" style="float: right;" href="#" onclick="$(this).parent().fadeOut('fast'); return false;">×</a>
+		<span>
+		</span>
+		</div>
+	</div>
+	
+	{% for purchase in purchases %}
+	{% firstof purchase.calculate "" %}
+	<table id="checkout-table">
+		<tr>
+			<th colspan="2">Product</th>
+			<th>Price</th>
+			<th>Retailer</th>
+			<th>Quantity</th>
+			<th>Total Price</th>
+			<th>Status</th>
+			<th>Action</th>
+		</tr>
+
+		{% for item in purchase.cart.item_set.all %}
+		<tr id="product-item-{{item.product.pk}}">
+			{% load thumbnail %}
+            {% thumbnail item.product.item.get_image "100x100" as im %}
+			<td align="center"><img height="60px" src="{{ im.url }}"/></td>
+			{% endthumbnail %}
+			<td>{{ item.product.item.name }}</td>
+			<td align="right">{{ item.product.item.price }}</td>
+			<td align="center">{{ item.product.item.retailer }}</td>
+			<td align="center">
+			{{ item.quantity }}
+			</td>
+			<td align="right">{{ item.total_price }}<br />
+				<input type="hidden" class="path" value="/cart/update_cart/{{item.product.pk}}/"/>
+				<a href="#" class="update-price-btn">Update</a>
+			</td>
+			<td align="center">
+				<span id="item-{{item.pk}}-status">{{ item.status }}</span> <br/>
+				{% if item.status == "shipped" %} tracking no. <span class="item-tracking-no-{{item.pk}}">{% if item.shipping_number %}#{{item.shipping_number}}{% endif %}</span>{% endif %}
+			
+			</td>
+			<td align="center">
+				{% if item.status == "ordered" or item.status == "shipped" %}
+					<input type="button" class="btn" value="Return" onClick="if(confirm('Are you sure to request to refund this item?')) stella_request_refund_item('{{item.pk}}', '{{purchase.tx}}')"/>
+				{% else %}
+					NA
+				{% endif %}
+				
+			</td>
+		</tr>
+		{% endfor %}
+		
+		<tr>
+			<td colspan="8"></td>
+			<div class="span3">
+			</div>
+			<div class="span3">
+			</div>
+			<div class="span2">
+			</div>
+		</tr>
+		
+		<tr>
+			<td colspan="4" style="border: none;" align="left">Purchase date: {{purchase.purchased_at}}</td>
+			<td colspan="4"  style="border: none;" align="right">Tax: <strong>{{purchase.tax|floatformat:2}}</strong></td>
+		</tr>
+		<tr>
+			<td colspan="4" style="border: none;" align="left">Shipped date: {{purchase.shipped_at}}</td>
+			<td colspan="4"  style="border: none;" align="right">Shipping and handling: <strong>{{purchase.cart.shipping_and_handling_cost|floatformat:2 }}</strong></td>
+		</tr>
+		<tr>			
+			<td colspan="4"  style="border: none;" align="left">Ref: <strong>{{purchase.ref}}</strong></td>
+			<td colspan="4"  style="border: none;" align="right">Grand total: <strong>{{purchase.cart.grand_total|floatformat:2}}</strong></td>
+		</tr>
+		<tr>
+
+		</tr>
+	</table>
+	<br />
+	{% empty %}
+		<p>
+		There is no entry 
+		</p>
+	{% endfor %}
+</div>
+{% endblock %}
+
+{% block content1 %}{% endblock %}

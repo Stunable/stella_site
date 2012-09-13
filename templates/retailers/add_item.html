@@ -1,0 +1,227 @@
+{% extends "retailers/retailer_base.html" %}
+
+{% block title %} Stunable | Add items {% endblock %}
+
+{% block body_class %}common large_common others{% endblock %}
+{% block content-class%}round-corner-shadow{%endblock%}
+
+{% block content %}
+<style type="text/css">
+	table {
+		vertical-align: middle;
+	}
+	th {
+		vertical-align: middle !important;
+	}
+	.plus-icon {
+		display: inline-block;
+		vertical-align: bottom;
+		margin-bottom: 50px;
+	}
+	select {
+		display: inline;
+		max-height: 94px;
+	}
+	#size-wrapper {
+		display: inline;
+		max-height: 95px;
+	}
+	.others td input {
+		width: 210px;
+	}
+	.fixed-popup {
+		position: absolute;
+		opacity: 0.9;
+		top: 0px;
+		z-index: 0;
+		background: white;
+		text-align: center;
+		border: 1px #CCC solid;
+		padding: 10px;
+		margin: 18px 6px;
+		display: none;
+		border-radius: 3px;
+		-webkit-box-shadow: 1px 2px 38px 0 rgba(77,77,77,0.48);
+		-moz-box-shadow: 1px 2px 38px 0 rgba(77,77,77,0.48);
+		box-shadow: 1px 2px 38px 0 rgba(77,77,77,0.48);
+		width: 240px;
+	}
+	.add-size-popup-btn, .add-color-popup-btn {
+		position: relative;
+		cursor: pointer;
+	}
+	.alert-message {
+		color: orange;
+	}
+	
+	.bootstrap .btn {
+		margin-right: 10px;
+	}
+</style>
+<script type="text/javascript">
+	function hide_form_errors() {
+		$('.errorlist').remove();
+	}
+
+	function process_form_errors(json, form) {
+		hide_form_errors();
+		//form.clearForm();
+		errors = json.errors;
+
+		if(errors.__all__ != undefined)
+			form.append(errors.__all__);
+		prefix = form.find(":hidden[name='prefix']").val(); prefix == undefined ? prefix = '' : prefix = prefix + '-';
+		
+		for(field in errors) {
+			$('#id_' + prefix + field).after(errors[field]);
+		}
+	}
+
+	inventory_option_counter = 1;
+
+	$(document).ready(function() {
+		for( i = 0; i < parseInt($('#id_types-INITIAL_FORMS').val()); i++) {
+			inventory_option_counter++;
+			$('#tbl-' + inventory_option_counter).show();
+		}
+		
+		$('.add-color-popup-btn .plus-icon').click(function() {
+			$('.fixed-popup').remove();
+			$(this).parent().append('<div class="fixed-popup">' + $('.add-color-dlg').html() + '<div>');
+			$('.fixed-popup').show('fast');
+			$('.fixed-popup input[type="text"]').focus();
+			
+			$('.add-color-form').ajaxForm({
+				url : this.action,
+				// dataType : 'json',
+				success : function(json) {
+					if (json.success) {
+						$('.color-select select').append(new Option(json.name, json.id));
+						$('.fixed-popup .alert-message').text('Updated')
+						$('.fixed-popup').delay(3000).hide('fast');
+					} else {
+						$('.fixed-popup .alert-message').text(json.errors.__all__[0]);						
+					}
+				}
+			});
+			
+			$('.fixed-popup .btn-cancel').click(function() {
+				$('.fixed-popup').hide('fast');
+			});
+		});
+		
+		$('.add-size-popup-btn .plus-icon').click(function() {
+			$('.fixed-popup').remove();
+			$(this).parent().append('<div class="fixed-popup">' + $('.add-size-dlg').html() + '<div>');
+			$('.fixed-popup').show('fast');
+			$('.fixed-popup input[type="text"]').focus();
+			
+			$('.add-size-form').ajaxForm({
+				url : this.action,
+				// dataType : 'json',
+				success : function(json) {
+					if (json.success) {
+						$('.size-select select').append(new Option(json.name, json.id));
+						$('.fixed-popup .alert-message').text('Updated')
+						$('.fixed-popup').delay(3000).hide('fast');
+					} else {
+						$('.fixed-popup .alert-message').text(json.message);						
+					}
+				}
+			});
+			
+			$('.fixed-popup .btn-cancel').click(function() {
+				$('.fixed-popup').hide('fast');
+			});
+		});
+
+		$('#add-more-option').click(function() {
+			inventory_option_counter++;
+			$('#tbl-' + inventory_option_counter).show('fast');
+		});
+
+		$('#id_tags').chosen();
+		$('#id_Sizes').after("<a class='icon plus-icon item-ref' href='{% url add_size %}'>&nbsp</a>");
+		$('#id_Colors').after("<a class='icon plus-icon item-ref' href='{% url add_color %}'>&nbsp</a>");
+		$('.inventory').tooltip();
+
+		var add_item_form = $('#add-item-form');
+
+		add_item_form.ajaxForm({
+			url : this.action,
+			dataType : 'json',
+			success : function(json) {
+				if(json.success == false) {
+					if(json.message != undefined && json.message)
+						alert(json.message);
+
+					if(json.errors != undefined)
+						process_form_errors(json, add_item_form)
+				} else {
+					window.location.href = '/retailers/product_list';
+				}
+			}
+		});
+
+	})
+</script>
+<div class="section intro clearfix">
+	<h2><span>{{ retailer_profile.name }}</span></h2>
+	<h3>Add a Product to your Inventory</h3>
+</div>
+
+<div class="add-color-dlg" style="display: none">
+	<form class="add-color-form" method="post" action="{% url add_color %}">
+	{% csrf_token %}
+	<h3>New color</h3>
+	<input type="text" name="name" placeholder="Name"/>
+	<input type="text" name="color_css" placeholder="csss value"/>
+	<input type="submit" class="btn btn-primary btn-save" value="Submit"/><input type="button" class="btn btn-cancel" value="Cancel"/>
+	<p class="alert-message"></p>
+	</form>
+</div>
+
+<div class="add-size-dlg" style="display: none">
+	<form class="add-size-form" method="post" action="{% url add_size %}">
+	{% csrf_token %}
+	<h3>New size</h3>
+	<input type="text" name="size" placeholder="Name"/>
+	<input type="submit" class="btn btn-primary btn-save" value="Submit"/><input type="button" class="btn btn-cancel" value="Cancel"/>
+	<p class="alert-message"></p>
+	</form>
+</div>
+
+<div class="section body-copy bootstrap">
+	<form action="" method="post" id="add-item-form" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<table>
+			{{ form.as_table }}
+			<tr align="top" >
+				<th style="vertical-align: top !important;">Inventory Options: <span title="List available
+				inventory options for all color and
+				size combinations.  Choose a color
+				and corresponding size option then
+				allocate inventory (eg. Color:
+				Chocolate, Size: 2, Quantity Available:
+				10)" class="inventory" >?</span></th>
+				<td> {% for f in inventory_forms.management_form %}
+				{{ f }}
+				{% endfor %}
+				{% for inventory_form in inventory_forms.forms %}
+				<table cellpadding="10" class="inventory-item-entry" style="{% if forloop.counter > 1 %}display: none;{% endif %}" id="tbl-{{forloop.counter}}">
+					{% include "retailers/inventory_item_form_partial.html" %}
+				</table> {% endfor %} <a id="add-more-option" href="javascript:void()">Add another "color, size, inventory" option for this product</span> </td>
+			</tr>
+			<tr>
+				<th></th>
+				<td align="left">
+				<input type="submit" class="btn btn-primary" value="{% if item_pk %}Save{% else %}Add{% endif %}" />
+				</td>
+			</tr>
+		</table>
+		<br />
+		<br />
+	</form>
+</div>
+{% endblock %} 

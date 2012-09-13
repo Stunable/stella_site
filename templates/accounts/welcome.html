@@ -1,0 +1,43 @@
+{% extends "user_base.html" %}
+
+{% block title %} Stunable | Welcome {% endblock %}
+
+{% block body_class %}welcome{% endblock %}
+
+{% block body_id %}gallery{% endblock %}
+
+{% block left_panel %}
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#id_favourite_designer').chosen();
+    });
+</script>
+    <div class="header upper">
+        <h2><span>Welcome</span></h2>
+    </div>
+    <div class="header">
+        TO STUNABLE
+    </div>
+    <div class="separator"></div>
+    <div class="header sub smaller">
+        LET'S BEGIN
+    </div>
+    <form action="" class="user-entry bootstrap" id="welcome-form" method="POST">
+        {% csrf_token %}
+        <p class="designer-field bootstrap">
+            <label for="welcome-designer" class="sub block">Who makes your favorite</label><label class="sub block"> pair of jeans?</span></label>
+<!--             <input class="txt inline" id="welcome-auto-complete" name="favourite_designer" type="text" placeholder="jeans"/> -->
+            {{ form.favourite_designer }}
+            {% if form.favourite_designer.errors %}
+            <label class="helper">{{ form.favourite_designer.errors|striptags }}</label>
+            {% endif %}
+            <label class="helper">
+                <a href="{% url jean_submit %}" >Did you not see your favorite brand of jeans?</a>
+            </label>
+            <input type="submit" class="btn" value="Start Shopping" />      
+        </p>        
+    </form><!--/.section.user-entry#signin-form-->
+{% endblock %}

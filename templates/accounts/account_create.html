@@ -1,0 +1,187 @@
+{% extends "user_base.html" %}
+
+{% block title %} Stunable | Create Account {% endblock %}
+
+{% block body_class %}accounts{% endblock %}"
+
+{% block body_id %}homepage{% endblock %}
+
+{% block content1 %}
+<style>
+h2 {
+	text-transform: uppercase;
+	margin: 20px auto;
+	background: white url(/static/images/gui/pink-dot-bg.png) repeat-x 0 center;
+	width: 91%;
+	text-align: left;
+	font-family: 'Advent Pro', sans-serif;
+	font-weight: 600;
+	font-size: 25px;
+	color: gray;
+}
+
+h2 span {
+	background-color: white;
+}
+
+.page-header p {
+	margin: 0 30px;
+}
+	
+</style>
+<script>
+	$(document).ready(function() {
+		// the validation code
+		container = $('#bigform-error');
+		// validate form on keyup and submit
+		validator = $('#account-form').validate({
+			errorLabelContainer : container,
+			//errorClass : 'field-error',
+			errorElement : 'errorlist',
+			invalidHandler : function(form, validator) {
+				//display error on submit
+				var errors = validator.numberOfInvalids();
+				if(errors) {
+					if(validator.errorList[0].message) {
+						$("#bigform-error p").html("");
+						$('#bigform-error').animate({
+							"opacity" : "1"
+						}, "fast", function() {
+							changeError($('#bigform-error')[0], validator.errorList[0].message);
+							$('#bigform-error').css('display', 'inline').css('opacy', '1');
+						});
+						validator.errorList[0].element.focus();
+						$(validator.errorList[0].element).addClass('field-error');
+					}
+				}
+			},
+			showErrors : function(errorMap, errorList) {
+				//display error on blur
+				$("account-form").find("input").each(function() {
+					$(this).removeClass("error");
+				});
+				$("#bigform-error p").html("");
+				if(errorList.length) {
+					$('#bigform-error').animate({
+						"opacity" : "1"
+					}, "fast", function() {
+						changeError($('#bigform-error')[0], errorList[0]['message']);
+						$('#bigform-error').css('display', 'inline').css('opacy', '1');
+					});
+					$(errorList[0]['element']).addClass("field-error");
+				} else {
+					$("#account-form").find("input").each(function() {
+						$(this).removeClass("field-error");
+					});
+				}
+			},
+			submitHandler : function(form) {
+				$(".field-error").removeClass("field-error");
+				form.submit();
+			},
+			rules : {
+				firstname : "required",
+				lastname : "required",
+				password1 : {
+					minlength : 6,
+					maxlength : 12
+				},
+				email : {
+					required : true,
+					email : true
+				},
+				email_again : {
+					required : true,
+					equalTo : "#email",
+				},
+				password2 : {
+					required : false,
+					equalTo : "#password1",
+				}
+			},
+			messages : {
+				firstname : "Stella wants to know you on a first name basis",
+				lastname : "Stella wants to know you on a last name basis",
+				password1 : {
+					minlength : "Your password must be at least 6 characters long",
+					maxlength : "Your password must be at most 12 characters long"
+				},
+				email : "Stella can't reach you there",
+				email_again : "Your email address doesn't match",
+				password2 : "Your password doesn't match",
+			}
+		});
+		$('#firstname').blur(function() {
+			$('#account-form').validate().element('#firstname');
+		});
+		$('#lastname').blur(function() {
+			$('#account-form').validate().element('#lastname');
+		});
+		$('#email').blur(function() {
+			$('#account-form').validate().element('#email');
+		});
+	});
+
+</script>
+<div id="page-content" class="section clearfix round-corner-shadow">
+<div class="page-header">
+	<div class="section intro clearfix">
+		<h2><span class="identity">create an account with stella</span></h2>
+		<p>
+			creating an account provides you with a personal closet where you can save <span class="identity">Stella's</span> recommendations and check out what she suggests for your admirers. Your closet also gives you access to retailer discounts and provides you with the chance to have your wardrobe featured to millions of admirers as one of <span class="identity">Stella's</span> leading stylists.
+		</p>
+		<p></p>
+	</div>
+</div>
+<form action="" method="POST" class="user-entry acct bootstrap" id="account-form">
+	{% csrf_token %}
+	<ul>
+		{% for error in form.errors.values %}
+		<li class="error_msg">
+			{{error}}
+		</li>
+		{% endfor %}
+	</ul>
+	<p class="name-field">
+		<label for="firstname" class="inline">First Name</label>
+		<input class="txt inline required" id="firstname" name="firstname" type="text" placeholder="required" tabindex="1"/>
+	</p>
+	<p class="name-field">
+		<label for="lastname" class="inline">Last Name</label>
+		<input class="txt inline required" id="lastname" name="lastname" type="text" placeholder="required" tabindex="2"/>
+	</p>
+	<p class="email-field">
+		<label for="email" class="inline">Email</label>
+		<input class="txt inline required" id="email" name="email" type="text" placeholder="required" tabindex="3"/>
+	</p>
+	<p class="email-field">
+		<label for="validate-email" class="inline">Re-type Email</label>
+		<input class="txt inline required" id="email_again" name="email_again" type="text" placeholder="required" tabindex="4"/>
+	</p>
+	<p class="zip-field">
+		<label for="postal-code" class="inline">[*]Zip Code</label>
+		<input class="txt inline optional" name="zipcode" type="text" placeholder="required" value="" tabindex="5"/>
+	</p>
+	<p class="age-field">
+		<label for="age-range" class="inline">[*]Age Range</label>
+		{{ form.age_range }}
+	</p>
+	<p class="password-field">
+		<label for="password" class="inline">Password</label>
+		<input class="txt inline" id="password1" name="password1" type="password" value="" placeholder="required" tabindex="7"/>
+	</p>
+	<p class="password-field">
+		<label for="validate-password" class="inline">Re-type Password</label>
+		<input class="txt inline" id="password2" name="password2" type="password" value="" placeholder="required" tabindex="8"/>
+	</p>
+	<p style="margin-left: auto; margin-right: auto; text-align: center; width: 100%;height: auto;">
+		<span id="bigform-error" class="alert" style="opacity: 1; display: inline; display: none;">Stella can't reach you there</span>
+	</p>
+	{{ form.non_field_errors|escape }}
+	{{ form.email.errors }}
+	<p style="height: auto;float:right;">
+	<input type="submit" class="btn btn-primary right" style="margin-right: 150px;" value="Create Account" tabindex="9" />
+	</p>
+</form>
+</div>
+{% endblock %} 

@@ -1,0 +1,22 @@
+{% extends 'user_base.html' %}
+{% block left_panel %}{%endblock%}
+{% block body_class %}common{% endblock %}
+{% block content-class%}round-corner-shadow{%endblock%}
+{% block content %}
+	<div class="section intro">
+	<h2><span>Failed to validate payment!</span></h2>
+	</div>
+	
+	<div class="section body-copy">
+    <p>
+		{% firstof error "Please try again later" %}
+	</p>
+	
+	<p class="bootstrap">
+	<a href="/" class="btn btn-primary clearfix">Continue shopping</a>
+	<a href="/cart/wpp" class="btn btn-primary clearfix">Try again</a>
+	</p>
+	</br>
+	</br>
+	</div>
+{% endblock %}

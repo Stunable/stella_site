@@ -1,0 +1,27 @@
+{% extends 'user_base.html' %}
+
+{% block title %}Stunable | Contact{% endblock %}
+
+{% block body_class %}contact{% endblock %}
+{% block body_id %}gallery{% endblock %}
+
+{% block rack %}
+{% endblock %}
+
+{% block content1 %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        setTimeout("location.href = '{% url home %}'", 3000);        
+    })
+</script>
+<div id="page-content" class="section clearfix round-corner-shadow">
+    <div class="section intro">
+        
+    </div>
+    <div class="body-copy">
+        <div class="content">
+            <h3>Message sent succesfully!!!</h3>
+        </div>
+    </div>
+</div>
+{% endblock %}

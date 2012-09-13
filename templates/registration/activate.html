@@ -1,0 +1,34 @@
+{% extends "user_base.html" %}
+
+{% block title %} Stunable | Account activation {% endblock %}
+
+{% block body_class %} invite{% endblock %}"
+
+{% block body_id %}homepage{% endblock %}
+
+{% block left_panel %}
+{% endblock %}
+
+{% block rack %}
+{% endblock %}
+
+{% block content1 %}
+
+<div id="page-content" class="section clearfix round-corner-shadow" style="height: 177px;">
+    <div class="section intro">
+        <h2><span class="font-bella">Account activation</span></h2>
+    </div>
+    <div class="body-copy">
+    	<p>
+    		{% if not account %}
+    		  Oops. Account activation was unsuccessful.  
+    		{% else %}
+    		  You are now ready to begin using ShopwithStella.
+          <br/><br/>
+    		  <a href="{% url home %}">Login Now</a>
+    		{% endif %}
+    	</p>
+    </div>
+</div>
+
+{% endblock %} 

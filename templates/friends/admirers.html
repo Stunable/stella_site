@@ -1,0 +1,184 @@
+{% extends "user_base.html"  %}
+{% block title %} Stunable | Your Admirers {% endblock %}
+
+{% block content %}
+<style>
+	#bigform-error {
+		height: 25px;
+		width: 100%;
+		text-align: center;
+		color: #E84E4B;
+		top: 0px;
+		font-family: 'Play', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		font-size: 1.2em;
+		text-transform: none;
+		display: none;
+		opacity: 0;
+		margin-bottom: 15px;
+	}
+	.confirmation {
+	position:relative;
+	color:#e84e4b;
+	font-size:1.3em;
+	}
+</style>
+<script>
+	function confirmDelete(delUrl) {
+		if(confirm("Are you sure you want to delete")) {
+			document.location = delUrl;
+		}
+	}
+
+	function getUrlVars() {
+		var vars = [], hash;
+		var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+		for(var i = 0; i < hashes.length; i++) {
+			hash = hashes[i].split('=');
+			vars.push(hash[0]);
+			vars[hash[0]] = hash[1];
+		}
+		return vars;
+	}
+
+	$(document).ready(function() {
+		var href = $(location).attr('href');
+		if(href.indexOf('filter') != -1) {
+			var filter_by = getUrlVars()["filter"];
+			if(filter_by != "" && filter_by.length > 0) {
+				$('#filter').val(filter_by);
+			}
+		}
+
+		if($('.errorlist').length == 0) {
+			$('.confirmation').css('display', 'inline');
+			setTimeout("parent.$.fancybox.close()", 2000);
+			setTimeout("$('.confirmation').hide()", 2500);
+		} else {
+			$('.confirmation').hide();
+			$('.errorlist').hide();
+			$('#bigform-error').stop();
+			$('#bigform-error').animate({
+				"opacity" : "1"
+			}, "fast", function() {
+				changeError($('#bigform-error')[0], $('.errorlist').text());
+				$('.acct .password-field').css('margin-bottom', '0px');
+				$('#bigform-error').css('display', 'inline');
+			});
+		}
+
+		// the validation code
+		container = $('#bigform-error');
+		// validate form on keyup and submit
+		validator = $('#invitation-form').validate({
+			errorLabelContainer : container,
+			errorElement : 'errorlist',
+			invalidHandler : function(form, validator) {
+				//display error on submit
+				var errors = validator.numberOfInvalids();
+				if(errors) {
+					if(validator.errorList[0].message) {
+						$("#bigform-error p").html("");
+						$('#bigform-error').animate({
+							"opacity" : "1"
+						}, "fast", function() {
+							changeError($('#bigform-error')[0], validator.errorList[0].message);
+							$('#bigform-error').css('display', 'inline').css('opacy', '1');
+						});
+						validator.errorList[0].element.focus();
+						$(validator.errorList[0].element).addClass('field-error');
+					}
+				}
+			},
+			showErrors : function(errorMap, errorList) {
+				//display error on blur
+				$("invitation-form").find("input, textarea").each(function() {
+					$(this).removeClass("error");
+				});
+				$("#bigform-error p").html("");
+				if(errorList.length) {
+					$('#bigform-error').animate({
+						"opacity" : "1"
+					}, "fast", function() {
+						changeError($('#bigform-error')[0], errorList[0]['message']);
+						$('#bigform-error').css('display', 'inline').css('opacy', '1');
+					});
+					$(errorList[0]['element']).addClass("field-error");
+				} else {
+					$("#invitation-form").find("input, textarea").each(function() {
+						$(this).removeClass("field-error");
+					});
+				}
+			},
+			submitHandler : function(form) {
+				$(".field-error").removeClass("field-error");
+				form.submit();
+			},
+			rules : {
+				emails : {
+					required : true,
+				},
+				email_message : {
+					required : true,
+				},
+			},
+			messages : {
+				emails : "Please enter valid emails that are seperated by a comma",
+				email_message : "Please enter your message",
+			}
+		});
+		$('#emails').blur(function() {
+			$('#invitation-form').validate().element('#emails');
+		});
+		$('#email_message').blur(function() {
+			$('#invitation-form').validate().element('#email_message');
+		});
+		$('#loading').hide()
+		.ajaxStart(function() {
+		$(this).show();
+		})
+		.ajaxStop(function() {
+			$(this).hide();
+		});
+		
+		$('.item-details #friends-select').chosen();
+	});
+
+</script>
+<div class="section intro clearfix">
+	<h2>your admirers</h2>
+	<form action="{% url friend_search %}" method="GET">
+		<div class="clearfix" id="filter-form">
+			<label for="filter-by" class="unseen">Filter by</label>
+			<select name="filter" id="filter">
+				<option value="filter_by">Filter by</option>
+				<option value="first_name">First Name</option>
+				<option value="last_name">Last Name</option>
+				<option value="shared_racks">Shared Racks</option>
+				<option value="location">Location</option>
+			</select>
+		</div>
+		<div style="float:left;" class="clearfix ui-widget" id="admirer-search-form">
+			<label for="filter-by" class="unseen">Search your admirers</label>
+			<input type="input" id="admirers-auto-complete" name="q" class="txt srch" placeholder="Search your admirers"/>
+			<input type="submit" style="display: block; " value="search" class="btn srch" id="admirer_search_btn" />
+		</div>
+	</form>
+	<p class="btn-wrap" id="invite-admirers">
+		<a href="{% url invite_modal %}" class="btn item-ref">Invite More Friends</a>
+	</p>
+</div>
+<div class="mg-admirers clearfix">
+	<ul class="admirers clearfix">
+		{% for fs_u in friends_list %}
+		<li class="admirer">
+			{% autoescape on %} <a href="{% url profile_edit %}?user_id={{fs_u.friend.id}}" title="Go to {{fs_u.friend.first_name}}'s profile." class="avatar"><img src="{% if fs_u.friend.get_profile %}{{ fs_u.friend.get_profile.avatar_image }}{% else %}  {{ STATIC_URL}}images/default_avatar.gif {% endif %}" alt="{{fs_u.friend.first_name}}'s Avatar"/></a>
+			<div><a href="{% url profile_edit %}?user_id={{fs_u.friend.id}}" title="Go to {{fs_u.friend.get_full_name }}'s profile." class="name">{{ fs_u.friend.get_full_name }}</a></div>
+			<a href="{% url friend_delete fs_u.friend.id %}" onclick="return confirm('Are you sure you want to delete?')" title="Remove {{fs_u.friend.get_full_name}} from your admirers." class="icon x">(remove from admirers)</a>
+			{% endautoescape %}
+		</li>
+		{% endfor %}
+	</ul>
+</div>
+</div>
+
+{% endblock %}

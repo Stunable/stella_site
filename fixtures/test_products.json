@@ -1,0 +1,954 @@
+[
+    {
+        "pk": 10, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 1, 
+            "description": "This bikini top features ruffle trim at the triangle cups. Straps tie behind neck and at back. Lined.", 
+            "tags": "zinke,popsicle_pink,91%_polyester,9%_spandex,80%_nylon,20%_spandex", 
+            "image": "", 
+            "brand": "Zinke", 
+            "fabrics": "91% polyester,9% spandex,80% nylon,20% spandex", 
+            "label": "Zinke", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/zinke/zinke2004939370/zinke2004939370_p1_1-0.jpg", 
+            "price": "66.00", 
+            "name": "Electric Eel Bikini Top"
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 1, 
+            "description": "This mixed-print silk-chiffon Tory Burch blouse features a fold-over collar and a 6-button closure. Logo lettering at front and slits at sides. Ruching at 2-button cuffs. Long sleeves. Semi-sheer.", 
+            "tags": "tory_burch,tamarind_collage,00%_silk", 
+            "image": "", 
+            "brand": "Tory Burch", 
+            "fabrics": "00% silk", 
+            "label": "Tory Burch", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/toryb/toryb4079040100/toryb4079040100_p1_1-0.jpg", 
+            "price": "295.00", 
+            "name": "Angelique Print Blouse"
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 1, 
+            "description": "Print cardigan sweater and pullover sweater set. V-neck cardigan sweater features 5-button closure and slouchy hip pockets. Ribbed edges and long sleeves. Crew-neck pullover sweater features ribbed edges and long sleeves.", 
+            "tags": "preen,mushroom,38%_viscose,34%_nylon,23%_merino,5%_cashmere", 
+            "image": "", 
+            "brand": "Preen", 
+            "fabrics": "38% viscose,34% nylon,23% merino,5% cashmere", 
+            "label": "Preen", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/preen/preen4004812966/preen4004812966_p1_1-1.jpg", 
+            "price": "870.00", 
+            "name": "Print Twin Sweater Set"
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 1, 
+            "description": "Exclusive to Shopbop.", 
+            "tags": "dl1961,slither,98%_cotton,2%_polyester", 
+            "image": "", 
+            "brand": "DL1961", 
+            "fabrics": "98% cotton,2% polyester", 
+            "label": "DL1961", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/dldll/dldll4006841516/dldll4006841516_p1_1-0.jpg", 
+            "price": "188.00", 
+            "name": "Snakeskin Print Skinny Jeans"
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 2, 
+            "description": "This reversible, intarsia-knit cardigan sweater features a shawl collar and an open placket. Slant hip pockets and ribbed edges. Long sleeves.", 
+            "tags": "yigal_azrouel,black/white,00%_wool", 
+            "image": "", 
+            "brand": "Yigal Azrouel", 
+            "fabrics": "00% wool", 
+            "label": "Yigal Azrouel", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/yigal/yigal2000511838/yigal2000511838_p1_1-0.jpg", 
+            "price": "650.00", 
+            "name": "Reversible Cardigan"
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 2, 
+            "description": "These French terry leggings are a cold-weather take on a Splendid classic. Covered elastic waistband.", 
+            "tags": "splendid,black,48%_modal,48%_pima,4%_spandex", 
+            "image": "", 
+            "brand": "Splendid", 
+            "fabrics": "48% modal,48% pima,4% spandex", 
+            "label": "Splendid", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/splen/splen4020112867/splen4020112867_p1_1-0.jpg", 
+            "price": "68.00", 
+            "name": "Heavy Weight Leggings"
+        }
+    },
+    {
+        "pk": 4157, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 2, 
+            "description": "", 
+            "tags": "antipodium,natural,55%_linen,42%_cotton,3%_spandex,65%_cotton,32%_acrylic,3%_spandex", 
+            "image": "", 
+            "brand": "Antipodium", 
+            "fabrics": "55% linen,42% cotton,3% spandex,65% cotton,32% acrylic,3% spandex", 
+            "label": "Antipodium", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/antip/antip2001511611/antip2001511611_p1_1-2.jpg", 
+            "price": "493.00", 
+            "name": "Smoking Jacket"
+        }
+    }, 
+    {
+        "pk": 4158, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 2, 
+            "description": "This knit DVF jacket features a notched collar and a single-button closure. Welt bust pocket and flap hip pockets. Padding at shoulders. 3-button cuffs at long sleeves. Lined.", 
+            "tags": "diane_von_furstenberg,black,71%_viscose,23%_polyamide,6%_elastane,00%_polyester", 
+            "image": "", 
+            "brand": "Diane von Furstenberg", 
+            "fabrics": "71% viscose,23% polyamide,6% elastane,00% polyester", 
+            "label": "Diane von Furstenberg", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/diavf/diavf4070912867/diavf4070912867_p1_1-1.jpg", 
+            "price": "365.00", 
+            "name": "Reiko Blazer"
+        }
+    }, 
+    {
+        "pk": 3159, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 3, 
+            "description": "This scoop-neck zigzag-striped dress features open-knit detailing. Beaded drawstring at front keyhole. Removable self-belt. Spaghetti straps. Lined.", 
+            "tags": "tbags_los_angeles,beige_multi,00%_polyester", 
+            "image": "", 
+            "brand": "Tbags Los Angeles", 
+            "fabrics": "00% polyester", 
+            "label": "Tbags Los Angeles", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/tbags/tbags4009217908/tbags4009217908_p1_1-0.jpg", 
+            "price": "220.00", 
+            "name": "Zigzag Knit Maxi Dress"
+        }
+    }, 
+    {
+        "pk": 3160, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 3, 
+            "description": "This long jersey halter cover up dress features sheer burnout stripes. Ruching at scoop neck and at deep scoop back. Spaghetti straps tie behind neck. Semi-sheer.", 
+            "tags": "josa_tulum,navy/white,62%_polyester,8%_spandex,30%_rayon", 
+            "image": "", 
+            "brand": "JOSA tulum", 
+            "fabrics": "62% polyester,8% spandex,30% rayon", 
+            "label": "JOSA tulum", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/josat/josat3001011218/josat3001011218_p1_1-0.jpg", 
+            "price": "220.00", 
+            "name": "Striped Low Back Halter Cover Up Dress"
+        }
+    }, 
+    {
+        "pk": 3161, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 3, 
+            "description": "This long jersey halter dress features sheer burnout stripes. Ruching at scoop neck and at deep scoop back. Spaghetti straps tie behind neck. Semi-sheer.", 
+            "tags": "josa_tulum,grey,red,62%_polyester,8%_spandex,30%_rayon", 
+            "image": "", 
+            "brand": "JOSA tulum", 
+            "fabrics": "62% polyester,8% spandex,30% rayon", 
+            "label": "JOSA tulum", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/josat/josat3000910192/josat3000910192_p1_1-0.jpg", 
+            "price": "220.00", 
+            "name": "Striped Low Back Halter Dress"
+        }
+    }, 
+    {
+        "pk": 3162, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 3, 
+            "description": "This ribbed jersey maxi dress features ruching at the scoop neckline and at the open back. Unfinished hem. Halter straps tie behind neck. Semi-sheer.", 
+            "tags": "rachel_pally,bamboo,95%_rayon,5%_spandex", 
+            "image": "", 
+            "brand": "Rachel Pally", 
+            "fabrics": "95% rayon,5% spandex", 
+            "label": "Rachel Pally", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/rpall/rpall4012010856/rpall4012010856_p1_1-0.jpg", 
+            "price": "209.00", 
+            "name": "Sela Dress"
+        }
+    },
+    {
+        "pk": 20, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 4, 
+            "description": "This print silk-chiffon wrap dress features scattered sequins. Hook-and-eye and hidden button closures at gathered elastic waist. Envelope hem and ruched shoulders. Sleeveless. Solid silk lining.", 
+            "tags": "haute_hippie,military,00%_silk", 
+            "image": "", 
+            "brand": "Haute Hippie", 
+            "fabrics": "00% silk", 
+            "label": "Haute Hippie", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/haute/haute4012511565/haute4012511565_p1_1-0.jpg", 
+            "price": "495.00", 
+            "name": "Wrap Sequin Dress"
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 4, 
+            "description": "This print chiffon wrap dress features beaded and embroidered trims at the crossover V neck. Embroidered waist tie. Elbow-length kimono sleeves. Semi-sheer.", 
+            "tags": "clover_canyon,blue_boxes,00%_polyester", 
+            "image": "", 
+            "brand": "Clover Canyon", 
+            "fabrics": "00% polyester", 
+            "label": "Clover Canyon", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/clovr/clovr2000637600/clovr2000637600_p1_1-0.jpg", 
+            "price": "220.00", 
+            "name": "Kimono Wrap Dress"
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 4, 
+            "description": "This print voile romper features a shawl collar and a cross-over V neck. Bow detail at gathered elastic waistband. Cuffed short sleeves. Sheer.", 
+            "tags": "zimmermann,newsprint,00%_viscose", 
+            "image": "", 
+            "brand": "Zimmermann", 
+            "fabrics": "00% viscose", 
+            "label": "Zimmermann", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/zimme/zimme4011023221/zimme4011023221_p1_1-0.jpg", 
+            "price": "275.00", 
+            "name": "Memoir Playsuit"
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 4, 
+            "description": "This fine-knit wool wrap dress features a draped crossover V neck. Button closure at side and ribbed banding at edges. Asymmetrical hem. Sleeveless at right shoulder and long sleeve at left.", 
+            "tags": "alexander_wang,aubergine,midnight,00%_wool", 
+            "image": "", 
+            "brand": "Alexander Wang", 
+            "fabrics": "00% wool", 
+            "label": "Alexander Wang", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/awang/awang4027010039/awang4027010039_p1_1-0.jpg", 
+            "price": "545.00", 
+            "name": "Drape Wrap Dress"
+        }
+    }, 
+    {
+        "pk": 30, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 5, 
+            "description": "This camel trench coat features a notched collar and a self-belt closure. Vertical hip pockets and 17\" back vent. Long sleeves. Lined.", 
+            "tags": "smythe,camel,00%_camel,97%_polyester,3%_elastane", 
+            "image": "", 
+            "brand": "SMYTHE", 
+            "fabrics": "00% camel,97% polyester,3% elastane", 
+            "label": "SMYTHE", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/smyth/smyth4001212408/smyth4001212408_p1_1-1.jpg", 
+            "price": "895.00", 
+            "name": "Wrap Coat"
+        }
+    }, 
+    {
+        "pk": 31, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 5, 
+            "description": "This snakeskin-print cotton jacket features a fold-over collar and a 5-button closure. On-seam hip pockets. Removable self-belt. Vent at back. Long sleeves. Lined.", 
+            "tags": "marc_by_marc_jacobs,pale_khaki_multi,00%_cotton,00%_polyester", 
+            "image": "", 
+            "brand": "Marc by Marc Jacobs", 
+            "fabrics": "00% cotton,00% polyester", 
+            "label": "Marc by Marc Jacobs", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/marcj/marcj4143638340/marcj4143638340_p1_1-0.jpg", 
+            "price": "498.00", 
+            "name": "Python Mac Trench Coat"
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 5, 
+            "description": "This double-breasted, brushed alpaca coat features a notched collar and a 2-button closure. Welt front pockets and detachable self-belt. 10\" back vent. Long sleeves. Lined.", 
+            "tags": "boy._by_band_of_outsiders,camel,75%_alpaca,25%_wool,00%_cupro", 
+            "image": "", 
+            "brand": "Boy. by Band of Outsiders", 
+            "fabrics": "75% alpaca,25% wool,00% cupro", 
+            "label": "Boy. by Band of Outsiders", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/bband/bband2001712408/bband2001712408_p1_1-0.jpg", 
+            "price": "1890.00", 
+            "name": "Brushed Trench"
+        }
+    }, 
+    {
+        "pk": 33, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 5,
+            "description": "This double-breasted coat features detachable fur at the notched collar. 2-button closure and self-belt tie. Welt hip pockets and 10\" back vent. Long sleeves. Lined.", 
+            "tags": "boy._by_band_of_outsiders,medium_grey,50%_alpaca,50%_new,00%_cupro", 
+            "image": "", 
+            "brand": "Boy. by Band of Outsiders", 
+            "fabrics": "50% alpaca,50% new,00% cupro", 
+            "label": "Boy. by Band of Outsiders", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/bband/bband2001615469/bband2001615469_p1_1-2.jpg", 
+            "price": "2240.00", 
+            "name": "Fur Collar Trench Coat"
+        }
+    },
+    {
+        "pk": 74, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 6, 
+            "description": "These dark-rinse boot-cut jeans feature a jersey-covered elastic belly panel and 5-pocket styling. Logo stitching at back pocket. 18\" leg opening.", 
+            "tags": "dl1961,los,73%_cotton,27%_polyester", 
+            "image": "", 
+            "brand": "DL1961", 
+            "fabrics": "73% cotton,27% polyester", 
+            "label": "DL1961", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/dldll/dldll4005132520/dldll4005132520_p1_1-0.jpg", 
+            "price": "178.00", 
+            "name": "Milano Maternity Boot Cut Jeans"
+        }
+    }, 
+    {
+        "pk": 75, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 6, 
+            "description": "This scoop-neck silk top features a 3-button closure at the bust and ruching at the empire waist. Ruffled tiers at body and hidden zip at side. Beaded spaghetti straps tie at racer back.", 
+            "tags": "juicy_couture,bright_cerise,00%_silk", 
+            "image": "", 
+            "brand": "Juicy Couture", 
+            "fabrics": "00% silk", 
+            "label": "Juicy Couture", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/juicy/juicy4033037054/juicy4033037054_p1_1-0.jpg", 
+            "price": "118.00", 
+            "name": "Washed Silk Camisole"
+        }
+    }, 
+    {
+        "pk": 76, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 6, 
+            "description": "These dark-rinse skinny maternity jeans feature an elastic belly panel and 5-pocket styling. Logo embroidery at back pocket. Whiskering at front. Mild distressing. 13.5\" leg opening.", 
+            "tags": "dl1961,mariner,73%_cotton,27%_polyester", 
+            "image": "", 
+            "brand": "DL1961", 
+            "fabrics": "73% cotton,27% polyester", 
+            "label": "DL1961", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/dldll/dldll4001332521/dldll4001332521_p1_1-0.jpg", 
+            "price": "168.00", 
+            "name": "Angel Maternity Ankle Jeans"
+        }
+    }, 
+    {
+        "pk": 77, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 6, 
+            "description": "This jersey long skirt features covered elastic banding at the double-layered, fold-over waistband. Can also be worn as a dress.", 
+            "tags": "splendid,white,45%_pima,45%_modal,10%_spandex", 
+            "image": "", 
+            "brand": "Splendid", 
+            "fabrics": "45% pima,45% modal,10% spandex", 
+            "label": "Splendid", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/splen/splen4020812397/splen4020812397_p1_1-0.jpg", 
+            "price": "83.00", 
+            "name": "Maxi Tube Skirt / Dress"
+        }
+    }, 
+    {
+        "pk": 4145, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 7, 
+            "description": "Sheer mesh lingerie set. Babydoll features lace trim and ruching at the cups. Ruffle trim at edges. Ribbon straps tie at open back. Adjustable, elastic spaghetti straps. Matching panty features ruffle trim and back keyhole.", 
+            "tags": "honeydew_intimates,black_tea,95%_nylon,5%_spandex", 
+            "image": "", 
+            "brand": "Honeydew Intimates", 
+            "fabrics": "95% nylon,5% spandex", 
+            "label": "Honeydew Intimates", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/honey/honey4006742474/honey4006742474_p1_1-0.jpg", 
+            "price": "45.00", 
+            "name": "All You Need Is Love Fly Away Babydoll Set"
+        }
+    }, 
+    {
+        "pk": 4146, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 7, 
+            "description": "This sheer lace camisole features a heart pattern and ruffled trim. Scallop detailing at V neck. Ribbon bow at front. Tie closure at open back. Adjustable spaghetti straps. Matching briefs included.", 
+            "tags": "honeydew_intimates,creme_fraiche,00%_nylon", 
+            "image": "", 
+            "brand": "Honeydew Intimates", 
+            "fabrics": "00% nylon", 
+            "label": "Honeydew Intimates", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/honey/honey4007325600/honey4007325600_p1_1-0.jpg", 
+            "price": "50.00", 
+            "name": "Queen of Hearts Fly Away Babydoll Set"
+        }
+    }, 
+    {
+        "pk": 4147, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 7, 
+            "description": "Shopbop's own exclusive label.", 
+            "tags": "bop_basics,navy/cream,navy/white,00%_modal,50%_cotton,50%_polyester", 
+            "image": "", 
+            "brand": "Bop Basics", 
+            "fabrics": "00% modal,50% cotton,50% polyester", 
+            "label": "", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/bopaa/bopaa4010710833/bopaa4010710833_p1_1-0.jpg", 
+            "price": "135.00", 
+            "name": "Long Sleeve Crop Top Sleep Set"
+        }
+    }, 
+    {
+        "pk": 4148, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 7, 
+            "description": "These sheer mesh shorts feature crepe trim and a covered elastic waist.", 
+            "tags": "honeydew_intimates,cranberry_tart,90%_nylon,5%_spandex,5%_polyester", 
+            "image": "", 
+            "brand": "Honeydew Intimates", 
+            "fabrics": "90% nylon,5% spandex,5% polyester", 
+            "label": "Honeydew Intimates", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/honey/honey4006942475/honey4006942475_p1_1-0.jpg", 
+            "price": "25.00", 
+            "name": "Diamonds Lounge Shorts"
+        }
+    }, 
+    {
+        "pk": 4149, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 7, 
+            "description": "This sheer mesh tank features a scoop neck and a racer back. 1.75\" straps.", 
+            "tags": "honeydew_intimates,cranberry_tart,90%_nylon,5%_spandex,5%_polyester", 
+            "image": "", 
+            "brand": "Honeydew Intimates", 
+            "fabrics": "90% nylon,5% spandex,5% polyester", 
+            "label": "Honeydew Intimates", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/honey/honey4006842475/honey4006842475_p1_1-3.jpg", 
+            "price": "30.00", 
+            "name": "Diamonds Racer Back Lounge Tank"
+        }
+    }, 
+    {
+        "pk": 4150, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 7, 
+            "description": "This slinky-jersey chemise features sheer lace insets and scalloped lace trim. Adjustable, elastic spaghetti straps.", 
+            "tags": "hanky_panky,ivory,90%_rayon,10%_lycra,95%_nylon,5%_spandex", 
+            "image": "", 
+            "brand": "Hanky Panky", 
+            "fabrics": "90% rayon,10% lycra,95% nylon,5% spandex", 
+            "label": "Hanky Panky", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/hanky/hanky4020913149/hanky4020913149_p1_1-0.jpg", 
+            "price": "84.00", 
+            "name": "Silky Skins Lux Chemise"
+        }
+    }, 
+    {
+        "pk": 4151, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 7, 
+            "description": "This sheer lace babydoll features a V neck and a ribbon bow and rhinestone between the cups. Ruffled lace trim at edges. Adjustable, elastic spaghetti straps.", 
+            "tags": "hanky_panky,ivory,00%_nylon,84%_polyester,10%_spandex,6%_viscose", 
+            "image": "", 
+            "brand": "Hanky Panky", 
+            "fabrics": "00% nylon,84% polyester,10% spandex,6% viscose", 
+            "label": "Hanky Panky", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/hanky/hanky4020413149/hanky4020413149_p1_1-0.jpg", 
+            "price": "115.00", 
+            "name": "Julia Chemise"
+        }
+    }, 
+    {
+        "pk": 92, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 8, 
+            "description": "These wide-leg silk pants feature slant pockets at the hip and darting at the back. Surged bottom hem. Hook-and-eye closure.", 
+            "tags": "jenni_kayne,camel,red,00%_silk", 
+            "image": "", 
+            "brand": "Jenni Kayne", 
+            "fabrics": "00% silk", 
+            "label": "Jenni Kayne", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/jenni/jenni4002812408/jenni4002812408_p1_1-0.jpg", 
+            "price": "350.00", 
+            "name": "Wide Leg Trousers"
+        }
+    }, 
+    {
+        "pk": 93, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 8, 
+            "description": "This silk jacket features a shawl collar and a single-button closure. Welt pockets at bust and hips. 3-button cuffs. Long sleeves. Lined.", 
+            "tags": "jenni_kayne,camel,red,00%_silk", 
+            "image": "", 
+            "brand": "Jenni Kayne", 
+            "fabrics": "00% silk", 
+            "label": "Jenni Kayne", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/jenni/jenni4002712408/jenni4002712408_p1_1-0.jpg", 
+            "price": "495.00", 
+            "name": "Welt Blazer"
+        }
+    }, 
+    {
+        "pk": 94, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 8, 
+            "description": "These wool skinny pants feature slant pockets and welt coin pockets at the hip. Flap-welt pockets and darting at back. Extended-tab, hook-and-eye closure. 13\" leg opening.", 
+            "tags": "preen,red,00%_virgin", 
+            "image": "", 
+            "brand": "Preen", 
+            "fabrics": "00% virgin", 
+            "label": "Preen", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/preen/preen4001812010/preen4001812010_p1_1-0.jpg", 
+            "price": "970.00", 
+            "name": "Razor Pants"
+        }
+    }, 
+    {
+        "pk": 95, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 8, 
+            "description": "Exclusive to Shopbop.", 
+            "tags": "preen,violet,00%_virgin", 
+            "image": "", 
+            "brand": "Preen", 
+            "fabrics": "00% virgin", 
+            "label": "Preen", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/preen/preen4005513020/preen4005513020_p1_1-0.jpg", 
+            "price": "880.00", 
+            "name": "Razor Pants"
+        }
+    }, 
+    {
+        "pk": 240, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 9, 
+            "description": "These leather shorts feature a laser-cut pattern and on-seam hip pockets. Covered elastic waistband. Lined.", 
+            "tags": "madewell,true_black,00%_lambskin,00%_polyester", 
+            "image": "", 
+            "brand": "Madewell", 
+            "fabrics": "00% lambskin,00% polyester", 
+            "label": "Madewell", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/madew/madew4020118336/madew4020118336_p1_1-0.jpg", 
+            "price": "198.00", 
+            "name": "Laser Cut Leather Shorts"
+        }
+    }, 
+    {
+        "pk": 241, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 9, 
+            "description": "These leather shorts feature slant hip pockets and a hook-and-eye closure. Subtle distressing. Lined.", 
+            "tags": "cushnie_et_ochs,brown,00%_lambskin,00%_silk", 
+            "image": "", 
+            "brand": "Cushnie et Ochs", 
+            "fabrics": "00% lambskin,00% silk", 
+            "label": "Cushnie et Ochs", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/cushn/cushn2002011409/cushn2002011409_p1_1-0.jpg", 
+            "price": "895.00", 
+            "name": "Leather Shorts"
+        }
+    }, 
+    {
+        "pk": 242, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 9, 
+            "description": "This glazed leather miniskirt features a pointed, asymmetrical hem. Hidden back zip. Lined.", 
+            "tags": "cushnie_et_ochs,black,00%_lambskin,00%_silk", 
+            "image": "", 
+            "brand": "Cushnie et Ochs", 
+            "fabrics": "00% lambskin,00% silk", 
+            "label": "Cushnie et Ochs", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/cushn/cushn2001912867/cushn2001912867_p1_1-0.jpg", 
+            "price": "1195.00", 
+            "name": "Leather Skirt with Peaks"
+        }
+    }, 
+    {
+        "pk": 243, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 9, 
+            "description": "This pebbled leather miniskirt features a laser-cut flounce hem. Hidden back zip. Lined.", 
+            "tags": "thakoon,black,00%_lambskin,00%_silk", 
+            "image": "", 
+            "brand": "Thakoon", 
+            "fabrics": "00% lambskin,00% silk", 
+            "label": "Thakoon", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/thakn/thakn4014012867/thakn4014012867_p1_1-0.jpg", 
+            "price": "1490.00", 
+            "name": "Leather Tulip Skirt"
+        }
+    }, 
+    {
+        "pk": 6297, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 10, 
+            "description": "This jersey skirt features a slit at the side and a wrap detail at the peek-a boo lining. Covered elastic waistband. Unfinished edges.", 
+            "tags": "helmut_lang,summit,00%_micromodal", 
+            "image": "", 
+            "brand": "Helmut Lang", 
+            "fabrics": "00% micromodal", 
+            "label": "Helmut Lang", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/hlang/hlang4013838427/hlang4013838427_p1_1-0.jpg", 
+            "price": "230.00", 
+            "name": "Layered Skirt with Slit"
+        }
+    }, 
+    {
+        "pk": 6298, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 10, 
+            "description": "This skirt features on-seam hip pockets and patch back pockets. Hook-and-eye closure and hidden zip at side. Topstitched vertical seams at front and kick pleat at back.", 
+            "tags": "sonia_rykiel,red,60%_acetate,40%_viscose", 
+            "image": "", 
+            "brand": "Sonia Rykiel", 
+            "fabrics": "60% acetate,40% viscose", 
+            "label": "Sonia Rykiel", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/sonia/sonia2004712010/sonia2004712010_p1_1-0.jpg", 
+            "price": "795.00", 
+            "name": "Satin Skirt"
+        }
+    }, 
+    {
+        "pk": 6299, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 10, 
+            "description": "This denim skirt features 5-pocket styling and a single-button closure. 6.5\" back slit.", 
+            "tags": "blank_denim,nightchild,71%_cotton,27%_polyester,2%_spandex", 
+            "image": "", 
+            "brand": "Blank Denim", 
+            "fabrics": "71% cotton,27% polyester,2% spandex", 
+            "label": "Blank Denim", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/blank/blank4005539023/blank4005539023_p1_1-1.jpg", 
+            "price": "75.00", 
+            "name": "Pencil Skirt"
+        }
+    }, 
+    {
+        "pk": 6300, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 10, 
+            "description": "This striped jersey skirt features a covered elastic waistband. Side slits.", 
+            "tags": "kain_label,sand/navy,96%_modal,4%_spandex", 
+            "image": "", 
+            "brand": "KAIN Label", 
+            "fabrics": "96% modal,4% spandex", 
+            "label": "KAIN Label", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/kainn/kainn4004838384/kainn4004838384_p1_1-0.jpg", 
+            "price": "115.00", 
+            "name": "Chiara Skirt"
+        }
+    }, 
+    {
+        "pk": 6329, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 11, 
+            "description": "Shopbop's own exclusive label.", 
+            "tags": "bop_basics,charcoal,00%_acrylic", 
+            "image": "", 
+            "brand": "Bop Basics", 
+            "fabrics": "00% acrylic", 
+            "label": "Bop Basics", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/bopaa/bopaa4007112894/bopaa4007112894_p1_1-0.jpg", 
+            "price": "171.00", 
+            "name": "Manon Sweater"
+        }
+    }, 
+    {
+        "pk": 6330, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 11, 
+            "description": "This metallic wool cardigan sweater features pav\u00e9 rhinestones at the button epaulets and at the 7-button closure. Ruching at shoulders. Ribbed edges. Long sleeves.", 
+            "tags": "milly,blush,60%_wool,30%_polyester,10%_lurex", 
+            "image": "", 
+            "brand": "Milly", 
+            "fabrics": "60% wool,30% polyester,10% lurex", 
+            "label": "Milly", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/milly/milly4015312816/milly4015312816_p1_1-0.jpg", 
+            "price": "340.00", 
+            "name": "Lurex Cardigan with Rhinestone Buttons"
+        }
+    }, 
+    {
+        "pk": 6331, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 11, 
+            "description": "This wool cardigan sweater features a V neck and a 7-button closure. Rolled edges at patch hip pockets. Contrast trim at cuffs. Long sleeves.", 
+            "tags": "see_by_chloe,pink/cream,00%_virgin", 
+            "image": "", 
+            "brand": "See by Chloe", 
+            "fabrics": "00% virgin", 
+            "label": "See by Chloe", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/seecl/seecl4012713902/seecl4012713902_p1_1-1.jpg", 
+            "price": "395.00", 
+            "name": "Long Sleeve Contrast Edge Cardigan"
+        }
+    }, 
+    {
+        "pk": 6332, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 11, 
+            "description": "This ribbed wool cardigan sweater features subtle metallic accents. Shawl collar and open placket. Patch hip pockets. Ribbed edges. Long sleeves.", 
+            "tags": "club_monaco,taupe,34%_polyester,32%_acrylic,25%_wool,5%_mohair,4%_other", 
+            "image": "", 
+            "brand": "Club Monaco", 
+            "fabrics": "34% polyester,32% acrylic,25% wool,5% mohair,4% other", 
+            "label": "Club Monaco", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/clubm/clubm4038711876/clubm4038711876_p1_1-0.jpg", 
+            "price": "169.50", 
+            "name": "Hanan Cardigan"
+        }
+    }, 
+    {
+        "pk": 6333, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 11, 
+            "description": "This long wool-cashmere cardigan features a V neck and a 12-button closure. Patch hip pockets. Vertical back seam. Removable self-belt. Long sleeves.", 
+            "tags": "rachel_zoe,light_beige,90%_wool,10%_cashmere", 
+            "image": "", 
+            "brand": "Rachel Zoe", 
+            "fabrics": "90% wool,10% cashmere", 
+            "label": "Rachel Zoe", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/rachz/rachz2008124518/rachz2008124518_p1_1-0.jpg", 
+            "price": "395.00", 
+            "name": "Dusti Maxi Cardigan"
+        }
+    }, 
+    {
+        "pk": 7069, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 12, 
+            "description": "This chiffon halter cover-up features wrap detailing at the skirt and gathered elastic banding at waist. Removable self-belt. Sheer.", 
+            "tags": "thayer,black,00%_polyester", 
+            "image": "", 
+            "brand": "Thayer", 
+            "fabrics": "00% polyester", 
+            "label": "Thayer", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/thaye/thaye4008612867/thaye4008612867_p1_1-0.jpg", 
+            "price": "242.00", 
+            "name": "Halter Cover Up Dress"
+        }
+    }, 
+    {
+        "pk": 7070, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 12, 
+            "description": "This embroidered voile cover-up features a V neck and scalloped trim. 5\" side slits. Long bell. Semi-sheer.", 
+            "tags": "melissa_odabash,white,00%_cotton", 
+            "image": "", 
+            "brand": "Melissa Odabash", 
+            "fabrics": "00% cotton", 
+            "label": "Melissa Odabash", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/modab/modab3004512397/modab3004512397_p1_1-0.jpg", 
+            "price": "274.00", 
+            "name": "Avalon Cover Up"
+        }
+    }, 
+    {
+        "pk": 7071, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 12, 
+            "description": "This embroidered voile cover-up features a deep V neck and a drawstring waist. Tassels at draped sides and at hem. Ruching at back. Elbow-length sleeves. Sheer.", 
+            "tags": "melissa_odabash,navy,white,00%_cotton", 
+            "image": "", 
+            "brand": "Melissa Odabash", 
+            "fabrics": "00% cotton", 
+            "label": "Melissa Odabash", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/modab/modab3004812560/modab3004812560_p1_1-0.jpg", 
+            "price": "182.00", 
+            "name": "Sharize Cover Up"
+        }
+    }, 
+    {
+        "pk": 7072, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 12, 
+            "description": "This scoop-neck gauze dress features a crocheted lace bib. Ruching at yoke and at tiered skirt. 2\" straps. Semi-sheer.", 
+            "tags": "shoshanna,black,white,00%_cotton", 
+            "image": "", 
+            "brand": "Shoshanna", 
+            "fabrics": "00% cotton", 
+            "label": "Shoshanna", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/shosh/shosh4011212867/shosh4011212867_p1_1-0.jpg", 
+            "price": "240.00", 
+            "name": "Crinkle Crochet Bib Dress"
+        }
+    }, 
+    {
+        "pk": 7079, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 13, 
+            "description": "This crocheted lace tank features a scoop neckline and a fringed hem. 1.75\" straps. Sheer.", 
+            "tags": "dallin_chase,white,00%_cotton", 
+            "image": "", 
+            "brand": "Dallin Chase", 
+            "fabrics": "00% cotton", 
+            "label": "Dallin Chase", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/dalin/dalin4006612397/dalin4006612397_p1_1-1.jpg", 
+            "price": "128.00", 
+            "name": "Paisano Fringe Crochet Tank"
+        }
+    }, 
+    {
+        "pk": 7080, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 13, 
+            "description": "", 
+            "tags": "kain_label,white,heather_grey,black,90%_modal,10%_silk", 
+            "image": "", 
+            "brand": "KAIN Label", 
+            "fabrics": "90% modal,10% silk", 
+            "label": "KAIN Label", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/kainn/kainn2000212397/kainn2000212397_p1_1-2.jpg", 
+            "price": "80.00", 
+            "name": "Pocket Tank"
+        }
+    }, 
+    {
+        "pk": 7081, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 13, 
+            "description": "This cotton jersey muscle tee features a ribbed crew neck. Sleeveless.", 
+            "tags": "mm6_maison_martin_margiela,grey,00%_cotton", 
+            "image": "", 
+            "brand": "MM6 Maison Martin Margiela", 
+            "fabrics": "00% cotton", 
+            "label": "MM6 Maison Martin Margiela", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/maiso/maiso2011710192/maiso2011710192_p1_1-0.jpg", 
+            "price": "95.00", 
+            "name": "Sleeveless Crew Neck Tee"
+        }
+    }, 
+    {
+        "pk": 7082, 
+        "model": "racks.item", 
+        "fields": {
+            "category": 13, 
+            "description": "This cotton", 
+            "tags": "theyskens'_theory,multi,98%_cotton,2%_polyester,61%_cotton,24%_nylon,15%_linen", 
+            "image": "", 
+            "brand": "Theyskens' Theory", 
+            "fabrics": "98% cotton,2% polyester,61% cotton,24% nylon,15% linen", 
+            "label": "Theyskens' Theory", 
+            "colors": "", 
+            "image_urls": "http://g-ecx.images-amazon.com/images/G/01/Shopbop/p/pcs/products/theys/theys2009710917/theys2009710917_p1_1-0.jpg", 
+            "price": "140.00", 
+            "name": "Crunch Fargirl Top"
+        }
+    }
+]

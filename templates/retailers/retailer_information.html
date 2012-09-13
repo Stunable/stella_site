@@ -1,0 +1,185 @@
+{% extends "retailers/retailer_base.html" %}
+
+{% block title %} Stunable | Retailer Administration {% endblock %}
+
+{% block body_class %}common large_common{% endblock %}
+{% block content-class%}round-corner-shadow{%endblock%}
+
+{% block content %}
+<script type="text/javascript">
+	$('document').ready(function() {
+		$('#company-information-menu-item').addClass('active-menu');
+
+		$(".quest").click(function() {
+			$("#upload_avatar").click();
+		});
+		$('#avatar-upload-form').ajaxForm(function(data) {
+			message = "";
+			if(data.result == "ok") {
+				$('.retailer-logo').attr('src', data.source);
+				message = "Upload Successful!";
+			} else {
+				message = "There was an error. Please try again!";
+			}
+			$('#bigform-error').stop();
+			$('#bigform-error').animate({
+				"opacity" : "1"
+			}, "fast", function() {
+				changeError($('#bigform-error')[0], message);
+				$('#bigform-error').css('display', 'inline');
+				$('#bigform-error').delay(2000).fadeOut(1000);
+			});
+		});
+		$('input[type=file]').bind('change', function() {
+			var str = "";
+			str = $(this).val();
+			if(str != "" && str.length > 0) {
+				if(str.match(/.*\.(jpg|png|gif)$/)) {
+					$("#avatar-upload-form").submit();
+				} else {
+					$('#bigform-error').stop();
+					$('#bigform-error').animate({
+						"opacity" : "1"
+					}, "fast", function() {
+						changeError($('#bigform-error')[0], "Please Upload a valid image!");
+						$('#bigform-error').css('display', 'inline');
+						$('#bigform-error').delay(2000).fadeOut(1000);
+					});
+				}
+			}
+		}).change();
+
+		$('#new_shipping_type').hide();
+
+		$('#others').change(function() {
+			if($('#others').is(':checked')) {
+				$('#new_shipping_type').fadeIn(500);
+			} else {
+				$('#new_shipping_type').fadeOut(500);
+			}
+		});
+		// make inline edit
+		$('.editable').hide();
+
+		$('.edit').click(function(event) {
+			event.preventDefault();
+			if($(this).html() == 'Edit') {
+				$(this).html("Close");
+			} else {
+				$(this).html("Edit");
+			}
+
+			var stc = $(this).parent().parent().find('.static');
+			var editable = $(this).parent().parent().find('.editable');
+
+			if($(stc).css('display') == 'none') {
+				$(stc).css('display', '');
+				$(editable).css('display', 'none');
+			} else {
+				$(stc).css('display', 'none');
+				$(editable).css('display', '');
+			}
+		});
+	});
+
+</script>
+<style type="text/css">
+	.retailer-logo {
+		float: none;
+	}
+	textarea {
+		width: 100%;
+	}
+</style>
+<div class="section intro clearfix">
+    <h2><span>Company Information</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
+    <p>
+        This information will be visible to Stunable Shoppers 
+    </p>
+</div>
+<div class="section body-copy bootstrap">
+    <div class="retailer-wrapper">
+        <form style="margin: 0px; height: 0px;" action="{% url retailer_logo_upload %}" method="POST" id="avatar-upload-form" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <input style="visibility: collapse" type="file" id="upload_avatar" name="company_logo">
+        </form>
+        {% load thumbnail %}
+        {% thumbnail retailer_profile.logo_image "120x100" as im %}
+            <img src="{{ im.url }}" class="retailer-logo">
+            {% empty %}
+            <img src="{{ retailer_profile.logo_image }}" class="retailer-logo" />
+        {% endthumbnail %}
+        &nbsp;<a class="quest">Update Logo</a>
+    </div>
+    <p id="bigform-error"></p>
+    <div class="description">
+        <div>
+            <h3 class="inline">Company Description</h3><a class="edit" href="#">Edit</a>
+        </div>
+        <p class="static">
+            {{ retailer_profile.description }}
+        </p>
+        <div class="editable">
+            <form action='{% url update_retailer_profile %}' method="POST">
+                <textarea name="description">{{ retailer_profile.description }}</textarea>
+                <input type="hidden" name="account_page" value="yes" />
+                <input type="submit" class="btn btn-primary" value="Save"/>
+            </form>
+        </div>
+    </div>
+    <div class="return_policy">
+        <div>
+            <h3 class="inline">Return Policy</h3>
+        </div>
+        {% if retailer_profile.accept_refund %}
+        <p>
+            •   Merchandise must be returned within 21 days of purchase.
+            <br>
+            •   Merchandise must not be worn, altered, or washed.
+            <br>
+            •   Merchandise must have all tags attached.
+            <br>
+            •   Footwear must include the original shoe box in its original condition, without postal labels.
+            <br>
+            •   Shipping and handling charges are not refundable.
+            <br>
+            •   To be eligible for a refund, shoppers must include a valid tracking number for all products being returned.
+            <br>
+            •   Stylists are not responsible for accepting damaged or altered products and are not liable for alterations occurring during transit. It’s recommended that shipping and handling insurance accompany packages containing items that buyers are seeking to return.
+            <br>
+            •   Stylists are responsible for responding directly to buyers within a timely manner and are obligated to process returns and refunds within seven [7] days upon receipt of the returned items.
+            <br>
+            •   Stylists will notify Stunable that a refund is being issued and Stunable will process the transaction by crediting the buyer’s account and notifying the buyer of the refund via email notification.
+            <br>
+        </p>
+        {% else %}
+        <p>
+            You currently do not allow returns from your customers
+        </p>
+        {% endif %}
+    </div>
+    <div class="shipping_options">
+        <div>
+            <h3 class="inline">Shipping Options</h3><a class="edit" href="#">Edit</a>
+        </div>
+        <p class="static">
+            {% for type in retailer_profile.shipping_type.all %}
+            {{ type }},
+            {% endfor %}
+        </p>
+        <div class="editable">
+            <form action="{% url update_retailer_profile %}" method="POST">
+                {{ form.shipping_type }}
+                <input type="hidden" name="account_page" value="yes" />
+                <label class="checkbox">
+	                <input type="checkbox" id="others" name="others" value="others"/>
+	                Other
+                </label>
+                <input class="txt" id="new_shipping_type" name="new_shipping_type" placeholder="Please enter your shipping method" />
+                <br/>
+                <input type="submit" class="btn btn-primary" value="Save"/>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

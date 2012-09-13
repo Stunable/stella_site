@@ -1,0 +1,3 @@
+Dear {{ recipient }},
+
+{{ send.get_full_name }} share the {{ rack.name }} rack with {{ receive.get_full_name }}!

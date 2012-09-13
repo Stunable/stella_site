@@ -1,0 +1,177 @@
+{% extends "user_base.html" %}
+
+{% block title %} Stunable | Welcome {% endblock %}
+
+{% block body_class %}invite-facebook-friends{% endblock %}
+
+{% block body_id %}gallery{% endblock %}
+
+{% block left_panel %}
+{% endblock %}
+
+{% block content %}
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '{{ FB_APP_ID }}', // App ID
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+    
+    // walk around - ensure the FB loaded successfully before call the api function to post on user wall
+    FB.getLoginStatus(function(response){
+         // post on use timeline /wall when sign up with facebook 
+         var publish = {
+              method: 'stream.publish',
+              picture : 'Image to be displayed',
+              link : 'http://stunable.com',
+              name: 'Stunable',
+              description: '{{ request.user.first_name }} {{ request.user.last_name }} just signed up to Stunable,' + 
+              ' the ultimate online personal shopper. You can shop with both Stunable and {{ request.user.first_name }} by ' + 
+              'clicking the "Start Shopping" link below or visiting http://stunable.com!',
+              actions : { name : 'Start Shopping', link : 'http://stunable.com'}
+            };
+         FB.api('/{{ uid }}/feed', 'POST', publish, function(response) {
+            // do nothing
+         });
+         
+    });
+      
+  };
+
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+    
+    function sendPrivateMessage(error_list, error_user){
+        if (error_list.length > 0){
+                var name = "";
+                for(i=0; i<error_list.length; i++){
+                    var n = $('#friend_' + error_list[i]);
+                    if (i==error_list.length){
+                        name += n;
+                    }else{
+                        name += (n + ', ');
+                    }                    
+                }
+                if (confirm("Some of your friends don't allow wall posts. Please send  a request to them manually.")){
+                    FB.ui({
+                        method: 'send',
+                        name: "Stunable",
+                        link: 'http://stunable.com',
+                        to: error_user,
+                        description:'Come and shop with me on http://stunable.com'                    
+                    }, function(response){
+                        // ignore all error and redirect to welcome page
+                        window.location.href = "/";
+                    });
+                }    
+            }   
+    }
+   
+   $(document).ready(function(){
+        $('#skip_btn').click(function(){
+           window.location.href = '/';
+        });
+       
+   		$('#fb_friends_all').click(function(){
+   			if(this.checked){
+   				$('.fb_friends').attr('checked', 'checked');
+   			} else {
+   				$('.fb_friends').removeAttr('checked');
+   			}
+   		});
+   	       
+       $("#send_friends_invite").click(function(){
+           var message = $('#message').val();
+              var publish = {
+              method: 'stream.publish',
+              message: message,
+              picture : 'Image to be displayed',
+              link : 'http://stella.simpleunion.com',
+              name: 'Stunable',
+              caption: 'Stunable',
+              description: 'Come and shop with me on http://stunable.com',
+              actions : { name : 'Start Shopping', link : 'http://stunable.com'}
+            };
+            var user_ids = new Array();
+           $('.fb_friends:checked').each(function(){
+               user_ids.push($(this).val());
+           });
+           var message = $('#message').val();
+           var error_user = "";
+           var error_list = new Array();
+           var count = 0;
+           var success = 0;
+           for (i=0; i<user_ids.length; i++){
+               var id = user_ids[i];
+               FB.api('/' + user_ids[i] + '/feed', 'POST', publish, function(response) {  
+                    if(response && response.id){
+                        // do nothing here
+                        success += 1;
+                        // if no errors
+                        if (success == user_ids.length){
+                            window.location.href= '/';
+                        }
+                    }else{
+                        // rework facebook flow: send private message if user friends 
+                        // do not allow their timeline to be posted
+                        error_user += (id + ',');
+                        error_list.push(id);
+                        count += 1;
+                        if(user_ids.length == count){
+                            sendPrivateMessage(error_list, error_user);
+                        }
+                    }
+                    // return true;
+               });
+            }
+        });
+   })
+
+</script>
+
+<div id="fiends-form" class="round-corner-shadow">
+	<h1>Invite Facebook Friends</h1>
+	<div class="fiends-list-header">
+		<table>
+			<td class="friend-col">Friend</td>
+			<td><input type="checkbox" id="fb_friends_all" title="Select all" /></td>
+		</table>
+	</div>
+	<div class="friends-list">
+	    <table>
+	    {% for friend in fb_friends %}
+	    	<tr>
+		    	<td class="thumbnail-col">
+					<img class="fb-thumbnail" src="http://graph.facebook.com/{{ friend.id }}/picture" alt="img"/>
+				</td>
+				<td class="name-col" id="friend_{{ friend.id }}">
+					{{ friend.name }}
+				</td>
+				<td class="checkbox-col">
+					<input class="fb_friends" type="checkbox" value="{{ friend.id }}" />
+				</td>
+			</tr>
+	    {% endfor %}
+	    </table>
+    </div>
+    <div class="bootstrap">
+	    <div id="message-wrapper">
+	        <textarea style="width:390px;" id="message" placeholder="Message..."></textarea>
+	    </div>
+	    <div style="text-align: right;">
+	    	<input type="button" class="btn" id="skip_btn" value="SKIP" />
+	    	<input type="button" class="btn btn-primary" id="send_friends_invite" value="SEND" />
+	    </div>
+    </div>
+</div>
+
+{% endblock %}

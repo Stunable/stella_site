@@ -1,0 +1,44 @@
+{% extends 'user_base.html' %}
+{% block left_panel %}{%endblock%}
+{% block body_class %}common{% endblock %}
+{% block content-class%}round-corner-shadow{%endblock%}
+
+{% block content %}
+
+<style>
+	.common #page-content h2{
+		background-color: white;
+		font-family: 'Advent Pro', sans-serif;
+		font-weight: 600;
+		font-size: 25px;
+		color: gray;
+		background: none;
+	}
+	
+	#btn-place-an-order {
+		float: right;
+	}
+	
+	.common #page-content .body-copy label {
+		text-transform: uppercase;
+	}
+		
+</style>
+
+
+<div>
+	<div class="section-intro">
+		<h2><span>Payment confirm</span></h2>
+	</div>
+	<div class="body-copy bootstrap">
+		<form method="POST" id="cart-form" class="form-horizontal">
+		{% csrf_token %}
+        {{ form.as_table }}
+		<div class="form-actions">
+			<input type="submit" class="btn btn-primary" value="Cofirm" id="btn-place-an-order" />
+		</div>
+		</form>	
+	</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,182 @@
+<script>
+	//Fancybox
+	///------------------------------------------------------
+	//variables
+	var closeBox = $('.close-box').parent(), itemLink = $('.item-ref'), trash = $('.trash');
+
+	//determines new class for a button
+	closeBox.click($.fancybox.close);
+	closeBox.click(function(e) {e.preventDefault();
+	});
+	//sent message appearence
+	
+	$('.confirmation').css('opacity', 0);
+	$('.send').click(function(e) {
+		if($('#invitation-form').valid()) {
+			e.preventDefault();
+			$('#loading').show();
+			$.ajax({
+				type : "POST",
+				url : "/admirers/invite",
+				data : $("#invitation-form").serialize(),
+				success : function(returnvalue) {
+					if (returnvalue['result']=='error'){
+						$('#bigform-error').animate({
+							"opacity" : "1"
+						}, "fast", function() {
+							changeError($('#bigform-error')[0], returnvalue['errors']['__all__']);
+							$('#bigform-error').css('display', 'inline').css('opacy', '1');
+						});
+					}else{
+						$('#invitation-form').html('<img src="/static/images/invitation-sent.png" />');
+						setTimeout("parent.$.fancybox.close()", 3000);
+					}	
+					$('#loading').hide();				
+				},
+				error : function() { 
+					$('.confirmation').html("Error!");
+					$('.confirmation').css("display", "inline");
+					$('.confirmation').css("opacity", "1");
+					$('#loading').show();
+				}
+			});
+			
+		}
+	});
+
+	$(document).ready(function() {
+		// the validation code
+		container = $('#bigform-error');
+		// validate form on keyup and submit
+		validator = $('#invitation-form').validate({
+			errorLabelContainer : container,
+			errorElement : 'errorlist',
+			invalidHandler : function(form, validator) {
+				//display error on submit
+				var errors = validator.numberOfInvalids();
+				if(errors) {
+					if(validator.errorList[0].message) {
+						$("#bigform-error p").html("");
+						$('#bigform-error').animate({
+							"opacity" : "1"
+						}, "fast", function() {
+							changeError($('#bigform-error')[0], validator.errorList[0].message);
+							$('#bigform-error').css('display', 'inline').css('opacy', '1');
+						});
+						validator.errorList[0].element.focus();
+						$(validator.errorList[0].element).addClass('field-error');
+					}
+				}
+			},
+			showErrors : function(errorMap, errorList) {
+				//display error on blur
+				$("invitation-form").find("input, textarea").each(function() {
+					$(this).removeClass("error");
+				});
+				$("#bigform-error p").html("");
+				if(errorList.length) {
+					$('#bigform-error').animate({
+						"opacity" : "1"
+					}, "fast", function() {
+						changeError($('#bigform-error')[0], errorList[0]['message']);
+						$('#bigform-error').css('display', 'inline').css('opacy', '1');
+					});
+					$(errorList[0]['element']).addClass("field-error");
+				} else {
+					$("#invitation-form").find("input, textarea").each(function() {
+						$(this).removeClass("field-error");
+					});
+				}
+			},
+			submitHandler : function(form) {
+				$(".field-error").removeClass("field-error");
+				form.submit();
+			},
+			rules : {
+				emails : {
+					required : true,
+				},
+				email_message : {
+					required : true,
+				},
+			},
+			messages : {
+				emails : "Please enter valid emails that are seperated by a comma",
+				email_message : "Please enter your message",
+			}
+		});
+		$('#emails').blur(function() {
+			$('#invitation-form').validate().element('#emails');
+		});
+		$('#email_message').blur(function() {
+			$('#invitation-form').validate().element('#email_message');
+		});
+		$('#loading').hide()
+		.ajaxStart(function() {
+		$(this).show();
+		})
+		.ajaxStop(function() {
+			$(this).hide();
+		});
+
+		$('.spinner').sprite({ fps: 10, no_of_frames: 12 });
+	});
+
+</script>
+<style>
+	#bigform-error {
+		height: 25px;
+		width: 100%;
+		text-align: center;
+		color: #E84E4B;
+		top: 0px;
+		font-family: 'Play', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		font-size: 1.2em;
+		text-transform: none;
+		display: none;
+		opacity: 0;
+		margin-bottom: 15px;
+	}
+	.confirmation {
+	position:relative;
+	color:#e84e4b;
+	font-size:1.3em;
+	}
+</style>
+<div id="invite-friends-modal" class="item-details friend-request clearfix" style="width: 700px;">
+		<div class="left-backside">
+			<div class="right-backside">
+				<div class="dialog-header">
+					<div class="dialog-header-content-wrapper">
+						<p class="close">
+							<a class="close-box" href="#">close</a>
+						</p>
+						<h2>INVITE YOUR FRIENDS</h2>
+						<p>FRIENDS DON’T LET FRIENDS SHOP ALONE</p>
+					</div>
+				</div><!--/.section#intro-->
+			</div>
+		</div>
+		<div id="invitation-form-wrapper">
+			<form action="{% url friend_invite %}" class="user-entry" id="invitation-form" method="POST">
+				{% csrf_token %}
+				<input type="text" class="txt" id="emails" name="emails" placeholder="EMAIL ADDRESSES, SEPARATED BY COMAS" style="box-shadow: none;"/>
+				<textarea id="email_message" id="email_message" name="email_message" placeholder="PERSONAL MESSAGE" ></textarea>
+				<p class="btn-wrap bootstrap">
+					<input type="submit" class="btn btn-primary send" id="btn_send" value="Send It!" />
+					<center>
+						<div id="loading" style="display: none;">
+							<div class="spinner"></div>
+						</div>
+						<span class="confirmation">Sent!</span>
+					</center>				
+				</p>
+				<p class="error_msg">
+					{{ form.non_field_errors }}
+				</p>
+				<center>
+					<p id="bigform-error"></p>
+				</center>
+			</form><!--/.section.user-entry#signin-form-->
+		</div>
+	</div>

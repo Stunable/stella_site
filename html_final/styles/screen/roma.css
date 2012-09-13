@@ -1,0 +1,174 @@
+
+.js #homepage,
+.js #carousel{
+	height: auto;
+}
+#welcome .landing .container {
+	height:100%;
+}
+.options{
+	padding: 0 0 0 15px;
+	font-family: 'Nothing You Could Do',Georgia,serif;
+	font-size: 1em;
+	width: auto;
+	min-width: 143px;
+}
+.ie-fix-none{
+	display: none;
+}
+.ie-fix-block{
+	display: block;
+}
+
+.not-ie #welcome, .not-ie #thank-you {
+    height: 100%;
+    min-height: 800px;
+}
+.not-ie #homepage {
+	height: 100%;
+}
+.ie8 #thank-you,
+.ie8 #welcome {
+	height: 800px;
+}
+.not-ie #welcome .container,
+.not-ie #thank-you .container{
+	height: 100%;
+}
+.not-ie #homepage .container{
+	height: 100%;
+	min-height: 1100px;
+}
+.blocker{
+    height: 80px;
+    position: absolute;
+    top: 33%;
+    width: 80px;
+}
+.blocker-right{
+	left: 91%;
+}
+
+ul .item .ie-icon-link{
+	display: block;
+}
+
+
+.item-visuals .img-link{
+	background: #333333;
+	border: 10px solid #333333;
+    height: 320px;
+    margin: 0 0 10px;
+    width: 260px;
+}
+#fancybox-content .item-visuals img{
+    border: medium none;
+    display: block;
+    height: auto;
+    margin: 0 auto;
+    max-height: 320px;
+    max-width: 260px;
+    position: relative;
+    width: auto;
+}
+ul .item img{
+	border:none;
+    display: block;
+    margin: 0 auto;
+    max-height: 200px;
+    max-width: 200px;
+    position: relative;
+    width: auto;
+}
+ul .item img:hover{
+	border: none;
+}
+.bottom-ref{
+	background: #cccccc;
+	padding: 1px;
+    display: block;
+    height: auto;
+    width: 100%;
+}
+.bottom-ref:hover{
+	padding: 0;
+	border: 1px solid #E84E4B;
+}
+.item-name .item-ref{
+
+}
+.item-name .item-ref:hover{
+	color: #000;
+}
+.js #carousel-body .item-details,
+.js #closet .item-details {
+    width: 93%;
+}
+#manage-account .acct-first-name,
+#manage-account .acct-last-name{
+	float: none;
+}
+#manage-account .acct-first-label,
+#manage-account .acct-last-label{
+	text-align: left;
+}
+#manage-account .acct .avatar-field {
+    margin-bottom: 20px;
+}
+
+.modal-image-wrap{
+	height: 100%;
+    width: 100%;
+}
+.ui-autocomplete{
+	border: 1px solid #666;
+	background: #333333;
+    max-height: 245px;
+    left: 338px;
+    overflow: auto;
+    position: absolute;
+    width: 250px;
+    z-index: 1;
+	cursor: pointer;
+}
+.ui-autocomplete li{
+	margin: 0;
+}
+.ui-autocomplete li:hover{
+}
+.ui-autocomplete li a{
+    color: #999999;
+    display: block;
+    font-family: 'Nothing You Could Do',Georgia,serif;
+    font-size: 0.85em;
+    height: 100%;
+    width: 94%;
+	padding: 0 0 0 15px;
+	text-align: left;
+}
+.ui-autocomplete li .ui-state-hover{
+	color: #FFFFFF;
+	background-color: highlight;
+}
+#admirer-search-form{
+	position: relative;
+}
+.designer-field{
+	position: relative;
+}
+#welcome #local-nav{
+	filter: ;
+}
+#input-list-field{
+	font-size: 1em;
+	color: #888888;
+	float: left;
+	margin: 2px 0 0 0;
+	padding: 2px;
+	font-family: 'Play','HelveticaNeue-Light','Helvetica Neue Light','Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+#new-shared .plus{
+	float: left;
+	margin: 0;
+	
+}

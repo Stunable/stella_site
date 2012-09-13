@@ -1,0 +1,403 @@
+{% extends "user_base.html" %}
+
+{% block title %} Stunable | Manage Account {% endblock %}
+
+{% block body_id %}gallery{% endblock %}
+
+{% block body_class %}profile_edit common large_common{% endblock %}
+
+{% block content-class%}round-corner-shadow{%endblock%}
+
+{% block left_panel %}
+<style>
+	.gallery .left-panel {
+		height: 200px;
+		padding: 10px 0 0 0;
+	}
+	.gallery #page-content {
+		padding-right: 10px;
+		width: 886px;
+	}
+	.image-holder, .link {
+		float: left;
+	}
+	.edit {
+		display: inline;
+		margin-left: 10px;
+	}
+	.common table {
+		width: 70%;
+	}
+	.shipping_information, .billing_information {
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	.static {
+		margin-bottom: 10px;
+	}
+	.details {
+		margin: 0 !important;
+	}
+	.shipping-wrapper {
+		width: 260px;
+		min-height: 70px;
+	}
+	.shipping-wrapper .static {
+		float: left;
+		min-width: 150px;
+	}
+	.shipping-wrapper .action-link {
+		float: left;
+		width: 100px;
+		margin: 0;
+	}
+	.alert {
+		width: 92% !important;
+		margin-top: 0 !important;
+		text-align: center;
+	}
+	.first {
+		width: 15%;
+	}
+	.first label {
+		margin-bottom: 0;
+	}
+	.common table {
+		border: none;
+	}
+	.common table td {
+		border: none;
+	}
+	.edit_name {
+		display: inline;
+	}
+</style>
+<div class="left-panel round-corner-shadow">
+    <ul class="my-closet-menu link">
+        <li class="active" style="background-color: #eee;">
+            <a href="{% url profile_edit %}">Settings</a>
+        </li>
+        <li>
+            <a href="{% url order_history %}">Order history</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content %}
+<script>
+	$(document).ready(function() {
+		$(".quest").click(function() {
+			$("#upload_avatar").click();
+		});
+		$('#avatar-upload-form').ajaxForm(function(data) {
+			message = "";
+			console.log(data);
+			if(data.result == "ok") {
+				$('.acct-avatar').attr('src', data.source);
+				$('#avatar-error').css('display', 'none');
+				// message = "Upload Successful!";
+			} else {
+				message = data.error;
+				$('#avatar-error').stop();
+				$('#avatar-error').animate({
+					"opacity" : "1"
+				}, "fast", function() {
+					changeError($('#avatar-error')[0], message);
+					$('#avatar-error').css('display', 'inline');
+				});
+				// message = "There were errors with your image upload. Please try again!";
+			}
+		});
+		$('#upload_avatar').bind('change', function() {
+			var str = "";
+			str = $(this).val();
+			if(str != "" && str.length > 0) {
+				if(str.match(/.*\.(jpg|png|gif)$/)) {
+					$("#avatar-upload-form").submit();
+				} else {
+					$('#avatar-error').stop();
+					$('#avatar-error').animate({
+						"opacity" : "1"
+					}, "fast", function() {
+						changeError($('#avatar-error')[0], "Please Upload a valid image!");
+						$('#avatar-error').css('display', 'inline');
+					});
+				}
+			}
+		}).change();
+		$('.editable').hide();
+		$('.edit').click(function(event) {
+			event.preventDefault();
+			if($(this).html() == 'Edit') {
+				$(this).html("Close");
+			} else {
+				$(this).html("Edit");
+			}
+
+			var stc = $(this).parent().parent().find('.static');
+			var editable = $(this).parent().parent().find('.editable');
+
+			if($(stc).css('display') == 'none') {
+				$(stc).css('display', '');
+				$(editable).css('display', 'none');
+			} else {
+				$(stc).css('display', 'none');
+				$(editable).css('display', '');
+			}
+		});
+	});
+
+</script>
+<div class="section intro clearfix bootstrap">
+    <center style="margin-top: 10px">
+        <div id="avatar-error" style="display: none" class="alert" ></div>
+    </center>
+    <h2><span>{% if profile.user.first_name and profile.user.last_name %}manage{%else%}setup{%endif%} your account</span></h2>
+    <h3> {% if profile.user.first_name %}
+    <div>
+        <span class="static">{{ profile.user.get_full_name }}</span>
+        <div class="editable edit_name" style="margin-left: 10px;">
+            <form action="{% url update_profile %}" class="form-horizontal" style="display: inline" method="POST">
+                <input type="text" id="first_name" name="first_name" value="{{ profile.user.first_name }}" />
+                <input type="text" id="last_name" name="last_name" value="{{ profile.user.last_name }}" />
+                <input type="submit" class="btn btn-primary" value="Save"/>
+            </form>
+        </div>
+        <span> <a style="float: none; font-size: 16px;" class="edit">Edit</a> </span>
+    </div> {% endif %} </h3>
+</div>
+<div class="section body-copy bootstrap">
+    {% if profile.user.first_name %}
+    <form style="margin: 0px; height: 0px;" action="{% url avatar_upload %}" method="POST" id="avatar-upload-form" enctype="multipart/form-data" >
+        {% csrf_token %}
+        <input style="visibility: collapse" type="file" id="upload_avatar" name="avatar">
+    </form>
+    <div class="avatar-field">
+        <div class="image-holder">
+            {% load thumbnail %}
+            {% thumbnail profile.avatar_image "100x100" as im %} <img src="{{ im.url }}" alt="[username]" width="100" height="100" class="acct-avatar" />
+            {% empty %} <img src="{{ profile.avatar_image }}" alt="[username]" class="acct-avatar" />
+            {% endthumbnail %}
+        </div>
+        <div class="link">
+            <p>
+                <!-- <a href="#">Take my picture</a> -->
+            </p>
+            <p>
+                <a class="quest">Select a Profile Photo</a>
+            </p>
+        </div>
+    </div>
+    <div class="account-info">
+        <table class="account_info">
+            <tr>
+                <td class="first"><label>Email: </label></td>
+                <td>
+                <p>
+                    <a class="edit">Edit</a>
+                </p>
+                <p class="static">
+                    {{ profile.user.email }}
+                </p>
+                <div class="editable" style="margin-left: 10px;">
+                    <form action='{% url update_profile %}' class="form-horizontal" method="POST">
+                        <div class="control-group">
+                            <input type="text" name="email" value="{{ profile.user.email }}" />
+                            <input type="submit" class="btn btn-primary" value="Save"/>
+                        </div>
+                    </form>
+                </div></td>
+            </tr>
+            <tr>
+                <td class="first"><label>Password: </label></td>
+                <td>
+                <p>
+                    <a class="edit">Edit</a>
+                </p>
+                <p class="static">
+                    *****
+                </p>
+                <div class="editable" style="margin-left: 10px;">
+                    <form action="{% url update_profile %}" class="form-horizontal" id="password_form" method="POST" >
+                        <div class="control-group">
+                            <input type="password" id="edit_password" name="password" placeholder="password" />
+                            <input type="password" id="edit_password_confirm" name="retype-password" placeholder="retype-password" />
+                            <span></span>
+                            <input type="submit" class="btn btn-primary" value="Save"/>
+                        </div>
+                    </form>
+                </div></td>
+            </tr>
+            <tr>
+                <td class="first"><label>Would you like to see Happenings?</label></td>
+                <td>
+                <p>
+                    <a class="edit">Edit</a>
+                </p>
+                <p class="static">
+                    {% if profile.view_happenings %} Yes, please!{% else %} No, thanks {% endif %}
+                </p>
+                <div class="editable" style="margin-left: 10px;">
+                    <form action="{% url update_profile %}" class="form-horizontal" method="POST" >
+                        <div class="control-group">
+                            <input type="checkbox" name="view_happenings" {% if profile.view_happenings %}checked="checked"{%endif%} />
+                            <input type="submit" class="btn btn-primary" value="Save"/>
+                        </div>
+                    </form>
+                </div></td>
+            </tr>
+        </table>
+    </div>
+    <div class="wrapper">
+        <div class="shipping_information" style="float: left">
+            <h3>Shipping Information</h3>
+            {% for shipping_info in shipping_infos %}
+            <div class="shipping-wrapper">
+                <div class="static">
+                    <p class="details">
+                        {{ shipping_info.firstname }} {{ shipping_info.lastname }}
+                    </p>
+                    <p class="details">
+                        {{ shipping_info.line1 }} {{ shipping_info.line2 }}
+                    </p>
+                    <p class="details">
+                        {{ shipping_info.city }}, {{ shipping_info.state }} {{ shipping_info.zip_code }}
+                    </p>
+                </div>
+                <p class="action-link">
+                    {% if shipping_info.is_default %} <a href="#">(default)</a>
+                    <a href="#" class="edit">Edit</a>
+                    {% else %} <a href="{% url make_default shipping_info.id %}">Make default</a>
+                    {% endif %}
+                </p>
+                <div class="editable">
+                    <form action="{% url update_shipping_info shipping_info.id %}" class="form-horizontal" method="POST">
+                        {% csrf_token %}
+                        <div class="control-group">
+                            <input type="text" name="firstname" value="{{ shipping_info.firstname }}" />
+                            <input type="text" name="lastname" value="{{ shipping_info.lastname }}" />
+                            <input type="text" name="line1" value="{{ shipping_info.line1 }}" />
+                            <input type="text" name="line2" value="{{ shipping_info.line2 }}" />
+                            <input type="text" name="city" value="{{ shipping_info.city }}" />
+                            <input type="text" name="state" value="{{ shipping_info.state }}" />
+                            <input type="text" name="zip_code" value="{{ shipping_info.zip_code }}" />
+                            <input type="submit" class="btn btn-primary" value="Save"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+            <div>
+                <a href="{% url create_new_shipping_info %}" class="item-ref">Add New Shipping Address</a>
+            </div>
+        </div>
+        <div class="billing_information" style="float: left; margin-left: 100px;">
+            <h3>Billing information</h3>
+            <div class="static">
+                <p class="details">
+                    PayPal Email Address:{{ profile.paypay_email }}
+                </p>
+            </div>
+        </div>
+        
+        <p class="clearfix">
+        	<h3>Credit Card</h3>
+        	<div class="static">
+        		
+        		{% for cc in cc_tokens %}
+                <p class="details">
+            		Card holder: {{ cc.first_name }} {{cc.last_name }} <br />
+            		CC Number: ***{{ cc.cc_last_four_digits }} 
+            		{% if not cc.is_default %}  <a href="{% url cc_set_default cc.id %}" class="btn">Set as default</a>
+            		{% else %}
+            		<br /> Default credit card
+            		{% endif %}
+                </p>
+                
+                <br />
+                {% empty %}
+                Your credit card will be shown after successful payments                                           
+                {% endfor %}
+            </div>
+        </p>
+    </div>
+        
+    {% else %}
+    <script>
+    jQuery(function($){
+        
+        var login_form = $('#mng-account-form');
+        
+        login_form.ajaxForm({
+            url : this.action,
+            dataType : 'json',
+            success : function(json)
+            {
+                if (json.success == false && json.errors != undefined)
+                    process_form_errors(json, login_form)
+                else {
+                    //do something if there aren't errors
+                    
+                    window.location.href = "/"; 
+                }
+            }
+        }); 
+    });
+    
+    
+
+    function hide_form_errors()
+    {
+        $('.errorlist').remove();
+    }
+
+    function process_form_errors(json, form)
+    {
+        var curField;
+        
+        hide_form_errors();
+        //form.clearForm();
+        errors = json.errors;
+    
+        if (errors.__all__ != undefined)
+            form.append(errors.__all__);
+
+        prefix = form.find(":hidden[name='prefix']").val();
+
+        prefix == undefined ? prefix = '' : prefix = prefix + '-';
+        $('.error').removeClass('error');
+        $('.help-inline').text('');
+        for (field in errors) {
+            if(errors.hasOwnProperty(field)){
+                curField = $('[name=' + field + '], [name=' + field + ']');
+                if(curField.attr('type') === 'checkbox'){
+                    curField.parent().siblings('.help-inline').text(errors[field][0]);
+                } else {
+                    curField.siblings('.help-inline').text(errors[field][0]);
+                }
+                curField.parents('.control-group:first').addClass('error')
+            }
+        }
+    }
+</script>
+    <div class="bootstrap">
+    <form method="POST" action="{% url profile_edit %}" id="mng-account-form" class="form-horizontal" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="control-group">
+            <label class="control-label">{{ field.label }}</label>
+            <div class="controls">
+                {{ field }}
+                <span class="help-inline">{{ field.errors }}</span>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="form-actions">
+            <input type="submit" class="btn btn-primary" value="Save" id="btn-update"/>
+        </div>
+    </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

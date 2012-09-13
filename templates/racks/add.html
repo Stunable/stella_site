@@ -1,0 +1,111 @@
+{% block content %}
+<script>
+	$(document).ready(function() {
+		//Fancybox
+		///------------------------------------------------------
+		//variables
+		var closeBox = $('.close-box').parent(), itemLink = $('.item-ref'), trash = $('.trash');
+
+		//determines new class for a button
+		closeBox.click($.fancybox.close);
+		closeBox.click(function(e) {e.preventDefault();
+		});
+		$('.confirmation').hide();
+		var options = {
+			success : close_dialog
+		};
+
+		function close_dialog(responseText, statusText, xhr, $form) {
+		    console.log(responseText);
+		    if ($(responseText).find(".errorlist").length > 0){
+		        $('.confirmation').text($(responseText).find(".errorlist > li").text());
+		        $('.confirmation').css('color', 'red');
+		    }else{
+		        $('.confirmation').text("Created!");
+		        $('.confirmation').css('color', 'gray');
+		        setTimeout("parent.$.fancybox.close()", 2000);
+		        setTimeout("location.reload(true)", 2500);
+		    }
+		    $('.confirmation').show();
+		}
+
+		$('#rack-insert-form').ajaxForm(options);
+
+		$('#btn_create').click(function(e) {
+			if($('#name').attr('value') == 'Enter Rack name here' || $('#name').attr('value') == '') {
+				e.preventDefault();
+				$('#bigform-error').stop();
+				$('#bigform-error').animate({
+					"opacity" : "1"
+				}, "fast", function() {
+					changeError($('#bigform-error')[0], "Please Enter Rack Name");
+					$('.acct .password-field').css('margin-bottom', '0px');
+					$('#bigform-error').css('display', 'inline');
+				});
+			} else {
+				$('#rack-insert-form').submit();
+			}
+		});
+		
+		$('.spinner').sprite({ fps: 10, no_of_frames: 12 });
+	});
+
+</script>
+<style type="text/css">
+	#bigform-error {
+		height: 25px;
+		width: 100%;
+		text-align: center;
+		color: #E84E4B;
+		top: 0px;
+		font-family: 'Play', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		font-size: 1.2em;
+		text-transform: none;
+		display: none;
+		opacity: 0;
+		margin-bottom: 15px;
+		float: left;
+	}
+</style>
+
+<div id="create-new-rack-modal" class="item-details friend-request clearfix" style="width: 700px;">
+		<div class="left-backside">
+			<div class="right-backside">
+				<div class="dialog-header">
+					<div class="dialog-header-content-wrapper">
+						<p class="close">
+							<a class="close-box" href="#">close</a>
+						</p>
+						<h2>CREATE A NEW RACK</h2>
+						<p>You can create new rack here</p>
+					</div>
+				</div><!--/.section#intro-->
+			</div>
+		</div>
+		<div id="invitation-form-wrapper">
+			<form action="{% url racks_add %}" class="user-entry" id="rack-insert-form" method="POST">
+				{% csrf_token %}
+				<p class="error_msg">
+					{{ form.non_field_errors }}
+					{{ form.name.errors }}
+				</p>
+				
+				<input type="text" id="name" class="txt" name="name" value="Enter rack name here" style="box-shadow:none;" onfocus="clearInput(this)" onblur="restoreInput(this)"/>
+				<input type="hidden" name="public" value="{{ public }}"/>
+				<input type="hidden" id="next" name="next" value="{% url racks_index %}" />
+				<p class="btn-wrap bootstrap">
+					<input type="submit" class="btn btn-primary send" id="btn_send" value="Submit" />
+					<center>
+						<div id="loading" style="display: none;">
+							<div class="spinner"></div>
+						</div>
+						<span class="confirmation">Created</span>
+					</center>				
+				</p>
+				<center>
+					<p id="bigform-error"></p>
+				</center>
+			</form><!--/.section.user-entry#signin-form-->
+		</div>
+	</div>
+{% endblock %} 

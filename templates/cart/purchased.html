@@ -1,0 +1,26 @@
+{% extends 'user_base.html' %}
+{% block left_panel %}{%endblock%}
+{% block body_class %}common{% endblock %}
+{% block content-class%}round-corner-shadow{%endblock%}
+{% block content %}
+	<div class="section intro">
+	<h2><span>Thank You!</span></h2>
+	</div>
+	
+	<div class="section body-copy">
+    <p>
+    Your order has been placed.
+   	</p>
+	<p>
+	Order confirmation: #{{purchase.ref}}
+	</p>
+	<p>
+	You will receive an email with your shipping and tracking information soon.
+	</p>
+	<p class="bootstrap">
+	<a href="/" class="btn btn-primary clearfix">Continue shopping</a>
+	</p>
+	</br>
+	</br>
+	</div>
+{% endblock %}

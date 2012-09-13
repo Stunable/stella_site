@@ -1,0 +1,8 @@
+Dear {{firstname}}:
+
+Thanks for contacting us. We’ll be in touch! 
+
+Cheers!
+
+Sam, Brie, and Lizzy
+Stunable Co-Founders

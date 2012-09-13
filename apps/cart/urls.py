@@ -1,0 +1,57 @@
+from django.conf.urls.defaults import *
+
+
+urlpatterns = patterns('cart.views',
+    url(r'^add_to_cart/(?P<product_id>\d+)/(?P<quantity>\d+)/(?P<size>.*)$',
+        view='add_to_cart',
+        name='add_to_cart'
+    ),                  
+    url(r'^update_cart/(?P<product_id>\d+)/?$',
+        view='update_cart',
+        name='update_cart'
+    ),
+    url(r'^remove_from_cart/(?P<product_id>\d+)/$',
+        view='remove_from_cart',
+        name='remove_from_cart'
+    ),
+    url(r'^$',
+        view='get_cart',
+        name='get_cart'
+    ),
+    url(r'^update_info',
+        view='update_info',
+        name='update_cart_info'
+    ),                 
+    url(r'^order_history',
+        view='order_history',
+        name='order_history'
+    ),
+    url(r'^update_zipcode',
+        view='update_zipcode',
+        name='update_zipcode'
+    ),
+    url(r'^shopper_return_purchase',
+        view='shopper_return_purchase',
+        name='shopper_return_purchase'
+    ),
+    url(r'^shopper_return_item',
+        view='shopper_return_item',
+        name='shopper_return_item'
+    ),                       
+    url(r'^shopper_request_refund_item',
+        view='shopper_request_refund_item',
+        name='shopper_request_refund_item'
+    ),                       
+    url(r'^wpp$',
+        view='wpp',
+        name='express_checkout'
+    ),
+    url(r'^wpp_success',
+        view='wpp_success',
+        name='wpp_success'
+    ),
+    url(r'^wpp_reference_pay',
+        view='wpp_reference_pay',
+        name='wpp_reference_pay'
+    ),
+)

@@ -1,0 +1,192 @@
+<style type="text/css">
+    .wrapper {
+        width: 600px;
+        min-height: 350px;
+    }
+    
+    .friend_item {
+        display: block;
+        position: relative;
+        width: 550px;
+        margin: auto;
+        min-height: 100px;
+        font-family: 'Advent-Pro', sans-serif !important;
+    }
+    
+    .empty {
+        padding: 80px 150px;
+    }
+    
+    .friend_item .avatar {
+        position: absolute;
+        top: 25px;
+        float: left;
+    }
+    
+    .friend_item .avatar img {
+        height: 50px;
+        width: 50px;
+    }
+    
+    .friend_item .info {
+        position: absolute;
+        top: 25px;
+        left: 60px;
+        float: left;
+    }
+    
+    .friend_item .action {
+        float: left;
+        margin-top: 30px;
+/*        margin-left: 20px;*/
+        margin-left: 80px;
+    }
+    
+    .friend_item .action a {
+        float: left;
+    }
+    
+    .friend_item .action button {
+        width: 75px;
+        margin-left: 10px;
+        font-size: 14px;
+    }
+
+    .mini {
+        height: 30px;
+    }
+    .mini a {
+        float: right;
+        font-size: 13px;
+        margin-right: 30px;
+    }
+    
+    .item-ref img {
+        height: 90px;
+    }
+    
+    .share-item-info {
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        margin-left: 250px !important;
+        width: 50px !important;
+    }
+    
+    .gallery .item-detail-info{
+        overflow: visible;
+    }
+    
+    .info {
+        padding: 0 5px;
+    }
+    
+    .trend-item-text {
+        font-size: 12px;
+        max-width: 130px;
+        text-transform: uppercase;
+    }
+    
+    .trend-item-sender {
+        position: absolute;
+        font-size: 12px;
+    }
+    
+    .user_info {
+        margin: 0 !important;
+    }
+    
+</style>
+<script type='text/javascript'>
+$(function(){
+    initFancyBox();
+    
+    $(".trend_view").click(function(event){
+    	
+		// Hack to keep the overlay while closing and opening new fancybox
+		var fancyboxOverlay = $('#fancybox-overlay');
+		var myFancyboxOverlay = fancyboxOverlay.clone().attr('id', 'my-fancybox-overlay').css('position', 'absolute')
+			.css('top', '0').css('left', '0').css('width', '100%').css('z-index', '1100').appendTo('body');
+		fancyboxOverlay.css('opacity', 0);
+		var href = $(this).attr('href');
+		
+		$.fancybox.close();
+		
+		setTimeout(function(){
+			$('<a/>', { href: href }).fancybox({
+				'speedIn' : 1000,
+				'speedOut' : 500,
+				'overlayShow' : true,
+				'overlayOpacity' : 0.85,
+				'titleShow' : false,
+				'overlayColor' : '#000',
+				'transitionIn' : 'elastic',
+				'transitionOut' : 'elastic',
+				'easingIn' : 'easeOutBack',
+				'easingOut' : 'easeInBack',
+				'overlayOpacity': 0,
+				'onStart' : function() {
+					$('.item-info,.item-actions,#invitation-form').css('opacity', '0').delay(200).animate({
+						opacity : 1
+					}, 800);
+					
+				},	
+				'onCleanup' : function() {
+					$('.item-info,.item-actions,#invitation-form').fadeOut(300).delay(350).fadeIn();
+				},'onComplete': function(){
+					$('#my-fancybox-overlay').remove();
+					$('#fancybox-overlay').css('opacity', '0.85');
+				}
+			}).click();
+		}, 800);
+    });
+    
+    $(".action").on('click', ".trend_delete", function(event){
+        event.preventDefault();
+        // stupid hack because notices don't know their own ID when they're being rendered.
+        var trend_item = $(this).closest(".friend_item")
+        var id_string= trend_item.attr('id');
+        var id = id_string.match(/\d+$/);
+        //var id='100';
+        $.ajax({
+            url: "/trends/delete/" + id,
+            type: 'post',
+            success: function(data, textStatus, jqXHR){
+                trend_item.prev().hide(); // the seperator
+                trend_item.fadeOut();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log(errorThrown);
+            }
+        });
+    });
+});
+</script>
+
+{% load i18n %}
+<div id="invite-friends-modal" class="item-details clearfix">
+    <div class="dialog-header">
+        <div class="dialog-header-content-wrapper">
+            <p class="close">
+                <a class="close-box" href="#">close</a>
+            </p>
+            <h2 style="background: none;">TRENDS</h2>
+            <p>
+                SHARE YOUR STYLE
+            </p>
+        </div>
+    </div><!--/.section#intro-->
+    <div class="wrapper">
+    <div class="separator"></div>
+    {% for notice in notices %}
+        <div id="trend_notice_id_{{ notice.id }}" class="friend_item{% if notice.is_unseen %} unseen{% endif %}">
+            {{ notice.message|safe }}
+        </div>
+        <div class="separator"></div>
+    {% empty %}
+        <div class='friend-item empty'>
+                No new trends. Why not create your own!
+        </div>
+    {% endfor %}
+    </div>
+</div>

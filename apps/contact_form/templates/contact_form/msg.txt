@@ -1,0 +1,7 @@
+The following is a message sent from {{ site }}:
+
+Wrote by: {{ contact }}
+Email: {{ email }}
+Message: 
+{{ message }}
+   

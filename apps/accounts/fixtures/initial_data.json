@@ -1,0 +1,62 @@
+[
+    {
+        "pk": 13, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "test@test.com", 
+            "first_name": "test", 
+            "last_name": "1", 
+            "is_active": true, 
+            "is_superuser": false, 
+            "is_staff": false, 
+            "last_login": "2012-08-06 02:27:46", 
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "sha1$e12b3$b048c4968b7cc729e0d62de31f86236dd7d617aa", 
+            "email": "test@test.com", 
+            "date_joined": "2012-08-06 02:25:31"
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "test2@test.com", 
+            "first_name": "test", 
+            "last_name": "2", 
+            "is_active": true, 
+            "is_superuser": false, 
+            "is_staff": false, 
+            "last_login": "2012-08-06 02:27:56", 
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "sha1$15f15$0ceb0a4f76eb65bfdac6f35ce31febf1d617e9ec", 
+            "email": "test2@test.com", 
+            "date_joined": "2012-08-06 02:26:55"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "accounts.userprofile", 
+        "fields": {
+            "age_range": "20 or younger", 
+            "favourite_designer": "Calvin Klein Collection", 
+            "zipcode": "12345", 
+            "last_modified": "2012-08-06 02:27:39", 
+            "user": 13, 
+            "avatar": ""
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "accounts.userprofile", 
+        "fields": {
+            "age_range": "20 or younger", 
+            "favourite_designer": "Calvin Klein Collection", 
+            "zipcode": "12345", 
+            "last_modified": "2012-08-06 02:27:17", 
+            "user": 14, 
+            "avatar": ""
+        }
+    }
+]

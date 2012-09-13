@@ -1,0 +1,29 @@
+<!--{{ inventory_form.as_table  }}-->
+
+
+	<tr>
+		<td colspan="2">Color<br />
+		{% for hidden in inventory_form.hidden_fields %}
+    		{{ hidden }}
+    	{% endfor %}
+		<div style="border: 1px #ccc solid; padding: 10px; margin: 0 auto 0 auto; width: 90%;display: inline-block;">
+		<span class="color-select"> {{ inventory_form.color }}
+		Carousel color name </span> {{ inventory_form.custom_color_name }} <!--<a class='icon plus-icon item-ref' href='{% url add_color %}'>Add a custom color to this item</a>-->
+		</div>
+		</td>
+	</tr>
+	<tr>
+		<td>Size</td>
+		<td><span class="size-select"> {{ inventory_form.size }} <span class='add-size-popup-btn'><span class='icon plus-icon'></span></span>( Add more custom sizes for your company )</span></td>
+	</tr>
+	<tr>
+		<td>Inventory</td> 
+		<td>{{ inventory_form.inventory }}</td>
+	</tr>
+	{% if inventory_form.inventory.value %}
+	<tr>
+		<td>Delete</td>
+		<td>{{ inventory_form.DELETE }}</td>
+	</tr>
+	{% endif %}
+	

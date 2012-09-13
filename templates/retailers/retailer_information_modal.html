@@ -1,0 +1,27 @@
+{% block content %}
+
+<div class="retailer-wrapper">
+	<a class="close" href="javascript:void(0)">close</a>
+	<a class="flip" href="javascript:void(0)">flip</a>
+	<div class="retailer-content">
+		<div class="retailer-header">
+		    {% load thumbnail %}
+            {% thumbnail retailer_profile.logo_image "x50" as im %}
+                <img class="company-logo" src="{{ im.url }}" />
+                {% empty %}
+                <img class="company-logo" src="{{ retailer_profile.logo_image }}" />
+            {% endthumbnail %}
+			
+		</div>
+		<div class="retailer-detail bootstrap">
+			<div class="retailer-name">{{ retailer_profile.name }}</div>
+			<div class="retailer-location">{{ retailer_profile.city }}, {{ retailer_profile.state }}</div>
+			<div class="retailer-description">
+				{{ retailer_profile.description }} 
+			</div>
+			<a class="all-products-link btn btn-primary" href="{% url view_all_products retailer_profile.id %}">View All Products</a>
+		</div>
+	</div>	
+</div>
+
+{% endblock %}

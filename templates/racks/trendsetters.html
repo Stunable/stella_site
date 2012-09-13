@@ -1,0 +1,218 @@
+{% extends "racks/rack_base.html" %}
+
+{% block title %}Stunable | Trendsetter's Closet {% endblock %}
+
+{% block page_tab %}{% endblock %}
+{% load thumbnail %}
+
+{% block content %}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        // make inline edit
+        $('.editable').hide();
+
+        $('.edit').click(function(event) {
+            event.preventDefault();
+            if($(this).html() == 'Edit') {
+                $(this).html("Close");
+            } else {
+                $(this).html("Edit");
+            }
+
+            var stc = $(this).parent().parent().find('.static');
+            var editable = $(this).parent().parent().find('.editable');
+
+            if($(stc).css('display') == 'none') {
+                $(stc).css('display', '');
+                $(editable).css('display', 'none');
+            } else {
+                $(stc).css('display', 'none');
+                $(editable).css('display', '');
+            }
+        });
+        
+        $('.editable').submit(function(event){
+            event.preventDefault();
+            var href = $(this).attr('action');
+            var new_name = $($(this).find('input:text')[0]).val();
+            var editable = $(this);
+            $.post(href, $(editable).serialize(), function(returnData){
+                if(returnData['success'] == true){
+                    window.location.reload();
+                }else{
+                    console.log("There are some errors!");
+                }
+            });
+        });
+        
+        $('.steal-rack-link').click(function(e){
+        	e.preventDefault();
+			$.ajax({
+				url : $(this).attr('href'),
+				type : 'post',
+				success : function(data, textStatus, jqXHR) {
+					if (data.success == true) {
+						$('.update-zipcode').hide();
+						new_item = $('<li class="drop_item ui-droppable"><span data-value="' + data.created_rack.id +  '"><a href="' + data.created_rack.url +'">' + data.created_rack.name +'</a></span></li>');
+						new_item.hide();
+						$('.public-racks').append(new_item);
+						new_item.fadeIn('slow');
+					} else {
+						alert(data.message);
+					}
+				}
+			});
+		});
+		
+		$('.delete-link').click(function(e){
+		    e.preventDefault();
+		    $.getJSON($(this).attr('href'), function(returnData){
+		        if(returnData['success'] == true){
+                    window.location.reload();
+                }else{
+                    console.log("There are some errors!");
+                }
+		    });
+		});
+		
+		$('#left-panel').portamento({wrapper: $('#carousel-wrapper')});
+    });
+</script>
+
+<style type="text/css">
+    .head-link {
+        margin-right: 10px;
+    }
+    .static {
+        display: inline;
+    }
+    .editable {
+        display: inline-block;
+    }
+    .editable input {
+        display: inline;
+    }
+    a, span {
+    	font-family: 'Advent Pro', sans-serif;
+    }
+</style>
+
+{% load voting_tags %}
+
+{% votes_by_user request.user on rack.rack_items.all as vote_dict %} 
+<div id="item_count" style="display: none">
+    {{item_count}}
+</div>
+<body class="internal gallery" id="carousel-body">
+    <div class="" id="page-content">
+        <div id="happening-events">
+            <div class="icon"></div>
+            <div id="event-table" class="event-table" style="display:none;">
+                {% if notice_unseen_count|default_if_none:0 != 0 and request.user.get_profile.view_happenings %} 
+                {% else %}
+                    {% if not request.user.get_profile.view_happenings %}
+                    You have disabled happenings. Feel free to enable using the settings page.
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        
+        
+        <div class="special" id="item-viewer">
+            <div class="tab-detail clearfix" id="carousel" style="padding:10px 0 0 0;">
+            	<h1 style="font-size: 30px; margin-left: 40px;">
+            	    {% if trendsetter == request.user %}
+            	       My Closet
+                    {% else %}
+            	       {{trendsetter.first_name}} {{trendsetter.last_name}}'s Closet
+            	    {% endif %}
+            	</h1>
+            	{% for rack in racks %}
+                <div class="views clearfix" id="rotator">
+                    <div class="header">
+                        <div>
+                        <h2 class="static" style="font-size: 1.5em;text-transform: uppercase;color: #888;text-align: left;font-weight: 200; padding-bottom:10px">{{rack.name}}</h2>
+                        <form action="{% url update_rack_name rack.id %}" method="POST" class="editable" >
+                            {% csrf_token %}
+                            <input type="text" value="{{ rack.name }}" name="name" />
+                            <input type="submit" value="Save" />
+                        </form>
+                        {% if request.user == rack.owner %}<a class="edit" href="#">Edit</a>{% endif %}
+                        </div>
+                    </div>
+                    {% if request.user == rack.owner %}
+                    <a href="{% url rack_delete rack.id %}" class="head-link delete-link" onclick="return confirm('Are you sure you want to delete this rack?')">Delete this rack</a>
+                    {% else %}
+                    <a href="{% url steal_rack rack.pk %}" class="head-link steal-rack-link" onclick="return confirm('Are you sure you want to steal this rack?')">Steal this rack</a>
+                    {% endif %}					
+                    <a href="#" class="head-link" onclick="return confirm('Are you sure you want to buy this rack?')">Buy this rack</a>
+                    <div style="text-align: center">
+                    <a href="{% url racks_detail rack.pk %}?order_by=brand-ascending" {% if order_by == 'brand-ascending' %}class="highlighted"{% endif %}><img src="{{ STATIC_URL }}images/gui/sg_arrow_down.png"/></a>
+                    <span>Brand</span>
+                    <a {% if order_by == 'brand-descending' %}class="highlighted" {% endif %} href="{% url racks_detail rack.pk %}?order_by=brand-descending"><img src="{{ STATIC_URL }}images/gui/sg_arrow_up.png"/> </a>
+                    <a href="{% url racks_detail rack.pk %}?order_by=price-ascending"><img src="{{ STATIC_URL }}images/gui/sg_arrow_down.png"/></a>
+                    <span>Price</span>
+                    <a href="{% url racks_detail rack.pk %}?order_by=price-descending"><img src="{{ STATIC_URL }}images/gui/sg_arrow_up.png"/> </a>
+                    <form action="{% url racks_detail rack.pk %}" method="GET" id="item-filter-form" class="bootstrap">
+                    <input type="text" name="q" id="filter" placeholder="Filter Keyword" style="margin-bottom: 0" />
+                    <input type="submit" value="View" class="btn btn-primary" />
+                    </form>
+                    </div>
+                    <div class="separator"></div>
+                    <ul class="item-list">
+                        {% for item in rack.rack_items.all %}
+                        <li class="item some-crazy-class">
+                            <h5 class="item-label"><span>{{item.brand}}</span></h5>
+                            <h4 class="item-name"><a class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.id %}">{{item.name}}</a></h4>
+                            <div class="wp drag_item">
+                                <a class="item-ref bottom-ref rel_pos" data-value="{{ item.id }}" href="{% url item_modal item.id %}">
+                                    {% thumbnail item.get_image "200x390" as im %}
+                                        <img src="{{ im.url }}">
+                                        {% empty %}
+                                        <img src="{{item.get_image}}" alt="" />
+                                    {% endthumbnail %} 
+                                </a>
+                            </div>
+                            {% dict_entry_for_item item from vote_dict as vote %}
+                            <div class="link-holder" id="item_{{item.pk}}">
+                                <p class="icon-link yes-no no {% if vote and vote.is_downvote %}voted{% endif %} no_{{item.pk}}">
+                                    <a href="{% url item_vote item.pk 'down' %}" class="icon disapprove">No way.</a>
+                                </p>
+                                <p class="icon-link hanger">
+                                    <a href="{% url item_modal item.id %}?opt=rack_it" class="icon rack-icon item-ref">Rack it.</a>
+                                </p>
+                                <p class="icon-link yes-no yes {% if vote and vote.is_upvote %}voted{% endif %} yes_{{item.pk}}">
+                                    <a href="{% url item_vote item.pk 'up' %}" class="icon approve">Yes, please!</a>
+                                </p>
+                            </div>
+                            <div class="carousel_price_tag">
+                                <sup>$</sup>{{item.price}}
+                            </div>
+                        </li>
+                        {% empty %}
+	                       	<div class="center" >
+	                            <p style="line-height: 200px; text-align: center;">This rack is empty</p>
+	                        </div>
+                        {% endfor %}
+
+                    </ul><!--/.item-list -->
+                    <!-- ********************************************* Recurring-Item-List END ********************************************* -->
+                </div><!--/.views -->
+                {% empty %}
+                <div class="center" >
+                    <p style="line-height: 500px; text-align: center;">
+                        {% if trendsetter == request.user %}
+                           This closet is empty, you can begin by creating a rack and drag drop an item into it from carousel page
+                        {% else %}
+                           Their closet is empty! You should recommend something to them!
+                        {% endif %}
+                    </p>
+                </div>
+                {% endfor %}
+                <p class="p-bottom"></p>
+            </div>
+        </div><!--/.special#item-carousel"-->
+        
+    </div><!--/.section#page-content"-->
+    {% endblock %}

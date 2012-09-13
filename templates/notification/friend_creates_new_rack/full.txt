@@ -1,0 +1,3 @@
+Dear {{ recipient }},
+
+{{ sender.get_full_name }} created a new {{ rack.name }} rack!

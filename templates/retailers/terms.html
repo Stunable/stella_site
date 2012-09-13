@@ -1,0 +1,58 @@
+{% extends "retailers/retailer_base.html" %}
+
+{% block title %} Stunable | Create Stylist Account {% endblock %}
+
+{% block body_class %}stylist common{% endblock %}"
+
+{% block body_id %}homepage{% endblock %}
+
+{% block content %}
+<style type="text/css">
+	#terms-and-cons-modal {
+		border: 1px gray solid;
+		height: 500px;
+		overflow: scroll;
+		border-image: initial;
+		margin-bottom: 10px;
+	}
+</style>
+
+<script>
+	$(document).ready(function() {
+		$('#terms-input, #terms-continue-btn').prop('disabled', true);;
+		
+		 $('#terms-and-cons-modal').scroll(function () {
+		 	var term_doc = $('#terms-and-cons-modal');
+		 	 
+      		if ( (term_doc.scrollTop() + 500) > term_doc[0].scrollHeight ) {
+      			$('#terms-input').prop('disabled', false);;
+      			$('#terms-label').css('color', 'black');
+      			$('#terms-continue-btn').attr('href', '{% url retailer_terms_complete retailer_id %}').css('color', 'black').click(function(e){
+      				if (!$('#terms-input').is(':checked')) {
+      					e.preventDefault();
+      				} 
+      			});
+      		} 
+    	});
+	});
+	
+</script>
+
+<div id="page-content" class="section clearfix round-corner-shadow">
+	<div class="page-header">
+		<div class="section intro">
+			<h2><span>Stella Stylist Terms of Use</span></h2>
+		</div>
+	</div>
+	<div class="section body-copy">
+		{% include 'retailers/retailer_terms_and_cons.html' %}
+		
+		<p style="text-align: right;" class="bootstrap">
+			<input type="checkbox" name="terms" id="terms-input" /><span style="color:gray; margin-left:10px;" id="terms-label">I Agree to the Stunable Term Of Use</span>
+			<br/><br/>
+			<a type="button" href="#" class="btn btn-primary" value="Continue" id="terms-continue-btn" style="color: #aaa;">Continue</a>
+			<br /><br />
+		</p>
+	</div>
+</div>
+{% endblock %} 

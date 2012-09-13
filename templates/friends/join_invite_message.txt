@@ -1,0 +1,13 @@
+Subject for invite email (TBU)
+
+{{ SITE_NAME }}
+
+{{ CONTACT_EMAIL }}
+
+
+{{ user }}
+            
+{{ message }}            
+
+Click the link below to accept invitation  
+{{ accept_url }}

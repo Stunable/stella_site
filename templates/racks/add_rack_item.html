@@ -1,0 +1,15 @@
+{% extends "racks/rack_base.html" %}
+{% block title %} Stunable | Add Items {% endblock %}
+{% block content %}
+<div class="page-header">
+	<h1>Add Existing Item to Rack</h1>
+</div>
+<form action="" method="post">
+	{% csrf_token %}
+	{{ form.non_field_errors }}
+	{{ form.as_p }}
+	<p>
+		<input type="submit" value="Save" />
+	</p>
+</form>
+	{% endblock %} 

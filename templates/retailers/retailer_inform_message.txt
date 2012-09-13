@@ -1,0 +1,8 @@
+Dear {{retailer.name}}:
+
+Thanks for requesting to become a Stunable Stylist. We’ll review your  information and a member of our sales team will contact you shortly. 
+
+Cheers!
+
+Sam, Brie, and Lizzy
+Stunable Co-Founders

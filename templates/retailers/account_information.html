@@ -1,0 +1,154 @@
+{% extends "retailers/retailer_base.html" %}
+
+{% block title %} Stunable | Retailer Administration {% endblock %}
+
+{% block body_class %}common large_common{% endblock %}
+{% block content-class%}round-corner-shadow{%endblock%}
+
+{% block content %}
+<style type="text/css">
+	.edit {
+		display: inline;
+		margin-left: 10px;
+	}
+	table {
+	    margin-bottom: 20px;
+	}
+    .first {
+        width: 10%;
+    }
+    .common td input {
+        width: 150px;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+    	$('#account-information-menu-item').addClass('active-menu');
+    	
+        // make inline edit
+    $('.editable').hide();
+        
+    $('.edit').click(function(event){
+        event.preventDefault();
+        if ($(this).html() == 'Edit'){
+            $(this).html("Close");
+        }else{
+            $(this).html("Edit");
+        }
+        
+        var stc = $(this).parent().parent().find('.static');
+        var editable = $(this).parent().parent().find('.editable');
+        
+        if ($(stc).css('display')=='none'){
+            $(stc).css('display', '');
+            $(editable).css('display', 'none');
+        }else{
+            $(stc).css('display', 'none');
+            $(editable).css('display','');
+        }
+    });
+    })
+</script>
+<div class="section intro clearfix">
+    <h2><span>Account Information</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
+</div>
+<div class="section body-copy bootstrap">
+        <table class="account_info">
+            <tr>
+                <td class="first"><label>Email: </label></td>
+                <td>
+                    <p>
+                       <a class="edit">Edit</a> 
+                    </p>
+                    <p class="static">
+                        {{ retailer_profile.email_address }} 
+                    </p>
+                
+                    <div class="editable" style="margin-left: 10px;">
+                        <form action='' class="form-horizontal" method="POST">
+                        	<div class="control-group">
+	                            <input type="text" name="email_address" value="{{ retailer_profile.email_address }}" />
+	                            <input type="submit" class="btn btn-primary" value="Save"/>
+                            </div>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="first"><label>Password: </label></td>
+                <td>
+                    <p>
+                       <a class="edit">Edit</a> 
+                    </p>
+                    <p class="static">
+                        *****
+                    </p>
+                    <div class="editable" style="margin-left: 10px;">
+                        <form action="" class="form-horizontal" method="POST">
+                        	<div class="control-group">
+                            	<input type="password" name="password">{{ retailer_profile.password }}</input>
+                            	<input type="submit" class="btn btn-primary" value="Save"/>
+                            </div>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div class="wrapper">
+            <div class="company_address" style="float: left">
+                <h3>Company Address</h3>
+                <p>
+                   <a class="edit">Edit</a> 
+                </p>
+                <div class="static">
+                    <p>
+                        {{ retailer_profile.name }}
+                    </p>
+                    <p>
+                        {{ retailer_profile.address_1 }}
+                    </p>
+                    <p>
+                        {{ retailer_profile.address_2 }}
+                    </p>
+                </div>
+                <div class="editable">
+                    <form action="" method="POST">
+                    <p>
+                        {{ retailer_profile.name }}
+                    </p>
+                    <input type="text" name="address_1" value="{{ retailer_profile.address_1 }}"/>
+                    <br>
+                    <input type="text" name="address_2" value="{{ retailer_profile.address_2 }}"/>
+                    <br/>
+                    <input type="submit" class="btn btn-primary" value="Save"/>
+                    </form>
+                </div>
+            </div>
+            <div class="billing_information" style="float: left; margin-left: 100px;">
+                <h3>Billing information</h3>
+                <p>
+                   <a class="edit">Edit</a> 
+                </p>
+                <div class="static">
+                    <p>
+                        {{ retailer_profile.name }}
+                    </p>
+                    <p style="display: inline">
+                        Paypal Account: {{ retailer_profile.paypal_email }}
+                    </p>
+                </div>
+                <div class="editable">
+                    <form action="" class="form-horizontal" method="POST">
+                    <p>
+                        {{ retailer_profile.name }}
+                    </p>
+                    <div class="control-group">
+	                    <input type="text" class="txt" name="paypal_email" value="{{ retailer_profile.paypal_email }}" />
+	                    <input type="submit" class="btn btn-primary" value="Save"/>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+</div>
+{% endblock %} 

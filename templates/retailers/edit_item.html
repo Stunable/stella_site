@@ -1,0 +1,90 @@
+{% extends "retailers/retailer_base.html" %}
+
+{% block title %} Stunable | Edit Items {% endblock %}
+
+{% block body_class %}common large_common others{% endblock %}
+{% block content-class%}round-corner-shadow{%endblock%}
+
+{% block content %}
+<style type="text/css">
+    .edit-item-img {
+        width: 100px;
+        height: 100px;
+    }
+    .plus-icon {
+        display: inline-block;
+        vertical-align: bottom;
+        margin-bottom: 50px;
+    }
+    select{
+        display: inline;
+        max-height: 94px;
+    }
+    #size-wrapper {
+        display: inline;
+        max-height: 95px;
+    }
+</style>
+<script type="text/javascript">
+    function hide_form_errors()
+    {
+        $('.errorlist').remove();
+    }
+
+    function process_form_errors(json, form)
+    {
+        hide_form_errors();
+        //form.clearForm();
+        errors = json.errors;
+    
+        if (errors.__all__ != undefined)
+            form.append(errors.__all__);
+
+        prefix = form.find(":hidden[name='prefix']").val();
+
+        prefix == undefined ? prefix = '' : prefix = prefix + '-';
+        for (field in errors) {
+            // console.log('#id_' + prefix + field);
+            $('#id_' + prefix + field).after(errors[field]);
+        }
+    }
+
+    $(document).ready(function(){
+        $('#id_tags').chosen();
+        $('#id_sizes').after("<a class='icon plus-icon item-ref' href='{% url add_size %}'>&nbsp</a>");
+        $('#id_colors').after("<a class='icon plus-icon item-ref' href='{% url add_color %}'>&nbsp</a>");
+        
+        var add_item_form = $('#add-item-form'); 
+        
+        add_item_form.ajaxForm({
+            url : this.action,
+            dataType : 'json',
+            success : function(json)
+            {
+                if (json.success == false && json.errors != undefined)
+                    process_form_errors(json, add_item_form)
+                else {
+                    //do something if there aren't errors
+                    // $('#paypal-form').submit();
+                }
+            }
+        }); 
+        
+    })
+</script>
+<div class="section intro clearfix">
+    <h2><span>{{ retailer_profile.name }}</span></h2>
+    <h3>Edit a Product in your Inventory</h3>
+</div>
+<div class="section body-copy">
+<form action="" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{ form.non_field_errors }}
+	<table>
+	{{ form.as_table }}
+	</table>
+	<p>
+		<input type="submit" class="btn" value="Update" />
+	</p>
+</form>
+	{% endblock %} 

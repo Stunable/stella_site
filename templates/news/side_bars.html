@@ -1,0 +1,35 @@
+{% load news %}
+{% load news_archive %}
+{% load tagging_tags %} <!-- Get 10 latest posts as Latest Post List -->
+<div class="section sidebar">
+	<div class="widget round-corner-shadow">
+		{% get_latest_posts 10 as latest_post_list %} <h3 class="widget-title">what’s happening</h3>
+		<ul class="listing">
+			{% for p in latest_post_list %}
+			<li>
+				<a href="{{p.get_absolute_url}}">{{p.title}}</a>
+			</li>
+			{% endfor %}
+		</ul><!--/.listing -->
+	</div><!--/.widget-->
+	<!-- Get Archive -->
+	{% get_post_archive as archives %}
+	<div class="widget round-corner-shadow">
+		<h3 class="widget-title">archived stories</h3>
+		<ul class="listing">
+			{% for archive in archives %}
+			<li>
+				<a href="/news/{{archive.year}}/{{archive|date:"M"}}">{{archive|date:"M, Y"}}</a>
+			</li>
+			{% endfor %}
+		</ul><!--/.listing -->
+	</div><!--/.widget-->
+	<!-- Get Tags -->
+	<div class="widget round-corner-shadow">
+		<h3 class="widget-title">shout outs and tags</h3>
+		{% tags_for_model news.Post as news_tags %}
+		<p class="tag-cloud">
+			{% for tag in news_tags %}<a href="{% url news_tag_detail tag %}">{{ tag }}</a>{% if forloop.last %}{% else %}, {%endif%}{% endfor %}
+		</p>
+	</div><!--/.widget-->
+</div><!--/.section.sidebar-->

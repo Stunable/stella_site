@@ -1,0 +1,49 @@
+{% extends "base.html"  %}
+
+{% block content %}
+<script>
+	function confirmDelete(delUrl) {
+		if(confirm("Are you sure you want to delete")) {
+			document.location = delUrl;
+		}
+	}
+</script>
+<div class="section clearfix" id="page-content">
+	<div class="special" id="racks-gallery">
+		<ul class="nav tabbed clearfix">
+			<li class="tab" id="tab-title">
+				<span class="text">Your Racks:</span>
+			</li>
+			<li class="tab" id="tab-private">
+				<a href="{% url racks_index %}" title="" class="text-link" id="current-tab"><span>Private</span></a>
+			</li>
+			<li class="tab" id="tab-shared">
+				<a href="{% url list_shared_racks %}" title="View your shared racks." class="text-link">Shared</a>
+			</li>
+		</ul>
+		<br/>
+		<div class="tab-detail clearfix" id="racks">
+			<div class="views">
+				<div class="rack-list">
+					<div id="public-racks">
+						<h4>Public Racks</h4>
+						<ul class="menu">
+							{% for rack in public_racks %}
+							<li>
+								<a href="{% url racks_detail rack.id %}">{{rack.name}}</a>
+							</li>
+							{% endfor %}
+						</ul>
+					</div>
+					<p id="add-rack">
+						<a href="{% url racks_add %}" class="icon plus" title="Create a New Rack">Add a New Rack</a>
+					</p>
+				</div><!--/.rack-list-->
+				<div id="rack-contents">
+					
+				</div><!--/#rack-contents-->
+			</div><!--/.views -->
+		</div>
+	</div>
+</div>
+{% endblock %} 

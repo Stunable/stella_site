@@ -1,0 +1,128 @@
+{% extends 'user_base.html' %}
+{% block left_panel %}{%endblock%}
+{% block body_class %}common{% endblock %}
+{% block content-class%}round-corner-shadow{%endblock%}
+
+{% block content %}
+
+<style>
+	.common #page-content h2{
+		background-color: white;
+		font-family: 'Advent Pro', sans-serif;
+		font-weight: 600;
+		font-size: 25px;
+		color: gray;
+		background: none;
+	}
+	
+	#btn-place-an-order {
+		float: right;
+	}
+	
+	.common #page-content .body-copy label {
+		text-transform: uppercase;
+	}
+		
+</style>
+
+<script>
+	jQuery(function($){
+		
+		var login_form = $('#cart-form');
+		
+		$('input[name="shipping-zip_code"]').prop('readonly', true);
+		
+        login_form.ajaxForm({
+            url : this.action,
+            dataType : 'json',
+            success : function(json)
+            {
+                if (json.success == false && json.errors != undefined)
+                    process_form_errors(json, login_form)
+                else {
+                    //do something if there aren't errors
+                    
+                    window.location.href = "/cart/wpp"; 
+                }
+            }
+        }); 
+    });
+    
+    
+
+    function hide_form_errors()
+    {
+        $('.errorlist').remove();
+    }
+
+    function process_form_errors(json, form)
+    {
+    	var curField;
+    	
+        hide_form_errors();
+        //form.clearForm();
+        errors = json.errors;
+    
+        if (errors.__all__ != undefined)
+            form.append(errors.__all__);
+
+        prefix = form.find(":hidden[name='prefix']").val();
+
+        prefix == undefined ? prefix = '' : prefix = prefix + '-';
+        $('.error').removeClass('error');
+        $('.help-inline').text('');
+        for (field in errors) {
+        	if(errors.hasOwnProperty(field)){
+    			curField = $('[name=shipping-' + field + '], [name=' + field + ']');
+    			if(curField.attr('type') === 'checkbox'){
+    				curField.parent().siblings('.help-inline').text(errors[field][0]);
+    			} else {
+        			curField.siblings('.help-inline').text(errors[field][0]);
+        		}
+        		curField.parents('.control-group:first').addClass('error')
+        	}
+        }
+    }
+</script>
+
+
+<div>
+	<div class="section-intro">
+		<h2><span>Shipping Information</span></h2>
+	</div>
+	<div class="body-copy bootstrap">
+		<form method="POST" id="cart-form" class="form-horizontal">
+		{% csrf_token %}
+		
+		{% for field in shipping %}
+		<div class="control-group">
+			<label class="control-label">{{ field.label }}</label>
+			<div class="controls">
+				<input type="text" name="shipping-{{ field.name }}" value="{{field.value|default_if_none:''}}" />
+				<span class="help-inline">{{ field.errors }}</span>
+			</div>
+		</div>
+		{% endfor %}
+		
+		<div class="control-group">
+			<div class="controls">
+				<h2 style="margin: 0;">Total: ${{cart.grand_total}}</h2>
+			</div>
+		</div>		
+		<div class="control-group">
+			<div class="controls">
+				<label class="checkbox" style="text-transform: none">
+						<input class="" type="checkbox" name="term_and_condition" id="id_term_and_condition"/>
+						<a href="/terms/" target="_" class="">Terms & Condition</a>
+				</label>
+				<span class="help-inline"></span>
+			</div>
+		</div>
+		<div class="form-actions">
+			<input type="submit" class="btn btn-primary" value="Place an order" id="btn-place-an-order" />
+		</div>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

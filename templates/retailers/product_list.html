@@ -1,0 +1,82 @@
+{% extends "retailers/retailer_base.html" %}
+
+{% block title %} Stunable | Retailer Administration {% endblock %}
+
+{% block body_class %}common large_common pad-bottom{% endblock %}
+{% block content-class%}round-corner-shadow{%endblock%}
+
+{% block content %}
+<style type="text/css">
+	.account #page-content {
+		margin-top: 0px;
+	}
+	select {
+	    display: inline;
+	}
+	input {
+		display: block;
+	  }
+	  .inner-table td{
+	      width: 20%;
+	  }
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+    	$('#product-inventory-menu-item').addClass('active-menu');
+    });
+</script>
+<div class="section intro clearfix">
+    <h2><span>Product List</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
+</div>
+<div class="section body-copy bootstrap">
+    <select name="delete">
+        <option value=""></option>
+        <option value="delete">Delete Selected</option>
+    </select>
+    <a href="{% url add_item %}">Add Item</a>
+    <table>
+        <tbody>
+            {% for product in product_list %}
+            <tr>
+                <td>
+                    <input type="checkbox" />
+                    <a class="edit-link" href="{% url edit_item product.item.pk %}">Edit</a>
+                </td>
+                <td>
+                    {% load thumbnail %}
+                    {% thumbnail product.item.get_image "50" as im %}
+                        <img src="{{ im.url }}">
+                        {% empty %}
+                        <img src="{{ product.item.get_image }}" style="width: 50px;" alt=""/>
+                    {% endthumbnail %}
+                    
+                </td>
+                <td>
+                <table class="inner-table">
+                    <thead>
+                        <th>SIZE</th>
+                        <th>PRICE</th>
+                        <th>RETAILER</th>
+                        <th>INVENTORY</th>
+                        <th>STATUS</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                {% for size in product.item.sizes.all %}
+                                {{ size }},
+                                {% endfor %}                                
+                            </td>
+                            <td>{{ product.item.price }}</td>
+                            <td>{{ product.item.retailer }}</td>
+                            <td>{{ product.item.inventory }}</td>
+                            <td>{{ product.item.status }}</td>
+                        </tr>
+                    </tbody>
+                </table></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %} 

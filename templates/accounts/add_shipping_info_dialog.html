@@ -1,0 +1,143 @@
+<script>
+	//Fancybox
+	///------------------------------------------------------
+	//variables
+	var closeBox = $('.close-box').parent(), itemLink = $('.item-ref'), trash = $('.trash');
+
+	//determines new class for a button
+	closeBox.click($.fancybox.close);
+	closeBox.click(function(e) {e.preventDefault();
+	});
+	//sent message appearence
+	
+	$('.confirmation').css('opacity', 0);
+	// $('.send').click(function(e) {
+	$('#shipping-info-insert-form').submit(function(e){
+		e.preventDefault();
+		$('#loading').show();
+		$.ajax({
+			type : "POST",
+			url : "{% url create_new_shipping_info %}",
+			data : $("#shipping-info-insert-form").serialize(),
+			success : function(returnvalue) {
+			    console.log(returnvalue['success']);
+				if (returnvalue['success']==false){
+					$('#bigform-error').animate({
+						"opacity" : "1"
+					}, "fast", function() {
+						changeError($('#bigform-error')[0], returnvalue['message']);
+						$('#bigform-error').css('display', 'block').css('opacy', '1');
+					});
+				}else{
+				    //remove error message
+				    $('#bigform-error').text("");
+				    $('#bigform-error').css('display', 'none').css('opacy', '0');
+				    //display success
+					$('.confirmation').html("Added!");
+                    // $('.confirmation').css("display", "inline");
+                    $('.confirmation').css("opacity", "1");
+					setTimeout("parent.$.fancybox.close()", 3000);
+					setTimeout("window.location.reload()", 3500);
+				}	
+				$('#loading').hide();				
+			},
+			error : function() { 
+				$('.confirmation').html("Error!");
+				// $('.confirmation').css("display", "inline");
+				$('.confirmation').css("opacity", "1");
+				$('#loading').show();
+			}
+		});
+	});
+
+	$(document).ready(function() {
+		$('#loading').hide()
+        .ajaxStart(function() {
+        $(this).show();
+        })
+        .ajaxStop(function() {
+            $(this).hide();
+        });
+	});
+
+</script>
+<style>
+	#bigform-error {
+		height: 25px;
+/*		width: 100%;*/
+		text-align: center;
+		color: #E84E4B;
+		top: 0px;
+		font-family: 'Play', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		font-size: 1.2em;
+		text-transform: none;
+		display: none;
+		opacity: 0;
+		margin-bottom: 15px;
+	}
+	.confirmation {
+	position:relative;
+	color:#e84e4b;
+	font-size:1.3em;
+	width: 100px !important;
+	padding-left:20px;
+	}
+	.common h2 {
+	    background: none;
+	    text-align: center;
+	}
+	.large_common .intro p{
+	    text-align: center;
+	}
+	#create-new-shipping-info-modal .dialog-header p {
+	    color: #F4F3F3;
+	}
+	table {
+	    margin: auto;
+	}
+	.common td {
+	    border: none;
+	}
+	table {
+	    border: none;
+	}
+	table td input{
+	    width: 70%;
+	}
+	#btn_create {
+	    float: none;
+	    width: 100px;
+	    margin: auto;
+	}
+</style>
+<div id="create-new-shipping-info-modal" class="item-details clearfix bootstrap" style="width: 670px;">
+    <div class="left-backside">
+            <div class="right-backside">
+                <div class="dialog-header">
+                    <div class="dialog-header-content-wrapper">
+                        <p class="close">
+                            <a class="close-box" href="#">close</a>
+                        </p>
+                        <h2>Create New Shipping Information</h2>
+                        <p>You can create new shipping information here.</p>
+                    </div>
+                </div><!--/.section#intro-->
+            </div>
+        </div>
+    <form action="{% url create_new_shipping_info %}" method="post" id='shipping-info-insert-form' class="user-entry">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <table>
+            {{ form.as_table }}
+            <tr>
+                <td colspan="2"><p id="bigform-error"></p></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" class="btn send btn-primary" id="btn_create" value="Create" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><p class="confirmation">Created</p></td>                
+            </tr>
+        </table>
+    </form>
+</div>

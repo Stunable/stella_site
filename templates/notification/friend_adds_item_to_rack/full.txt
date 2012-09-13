@@ -1,0 +1,3 @@
+Dear {{ recipient }},
+
+{{ sender.get_full_name }} added {{ item.brand }} {{ item.name }} to {{ rack.name }}!

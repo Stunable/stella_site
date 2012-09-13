@@ -1,0 +1,10 @@
+<ul>
+{% for notice in notes %}
+    {% if notice.unseen %}
+    <li class="row">
+        <div class="user-name">{{ notice.sender }}</div>
+        <div class="message">{{ notice.message|safe }}</div>
+    </li>
+    {% endif %}
+{% endfor %}
+</ul>

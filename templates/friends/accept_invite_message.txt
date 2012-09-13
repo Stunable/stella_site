@@ -1,0 +1,8 @@
+Dear {{ sender.first_name }}:
+
+{{recipient_first_name}} has accepted your request to shop together 
+
+Cheers!
+
+Sam, Brie, and Lizzy
+Stunable Co-Founders 

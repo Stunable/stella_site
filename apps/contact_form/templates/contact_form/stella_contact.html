@@ -1,0 +1,46 @@
+{% extends "user_base.html" %}
+
+{% block title %}Stunable | Contact{% endblock %}
+
+{% block body_class %}contact{% endblock %}
+{% block body_id %}gallery{% endblock %}
+
+{% block rack %}
+{% endblock %}
+
+{% block content1 %}
+<div id="page-content" class="section clearfix round-corner-shadow">
+	<div class="section intro">
+		<h2><span class="font-bella">Contact</span><span>Stunable</span></h2>
+		<p>
+			WANT MORE PERSONALIZED ATTENTION!<br />
+PLEASE CONTACT US VIA EMAIL, PHONE, OR SOCIAL! <br />
+WE LOOK FORWARD TO HEARING FROM YOU!
+		</p>
+	</div><!--/.section#intro-->
+	<div class="separator"></div>
+	<div class="section body-copy">
+	    <form action="" method="POST">
+	        {% csrf_token %}
+		<div class="column-left">
+			<input type="text" name="firstname" placeholder="FIRST NAME" class="txt" />
+			<input type="text" name="lastname" placeholder="LAST NAME" class="txt" />
+			<input type="text" name="email" placeholder="EMAIL" class="txt" />			
+		</div>
+		<div class="column-right">			
+			 <textarea type="text" name="message" placeholder="PRIVATE MESSAGE: less then 160 characters" class="txt no-border "></textarea>
+			 <div class="separator" style="margin-bottom: 7px;"></div>
+			 <div class="bootstrap" style="text-align: right;padding-right: 8px;">
+			 	<input type="submit" class="btn btn-primary" value="SEND IT">
+		 	</div>
+		</div>
+		</form>
+	</div>
+</div>
+<div id="extra-content" class="round-corner-shadow">
+	<p>General inquiries? Drop us a line at numberonestunner@stunable.com</p>
+	<p>Want a job? Send us your resume at jobs@stunable.com</p>
+	<p class="title">Retailers & Merchants</p>
+	<p>Interested in a partnership or advertising? Please contact stylists@stunable.com</p>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+Dear {{ recipient }},
+
+{{ sender }} says:
+
+{{ item.name }}
+
+{{ text }}
+
+

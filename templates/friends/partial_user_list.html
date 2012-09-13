@@ -1,0 +1,25 @@
+{% load thumbnail %}
+<h4 class="list-header">Search Results</h4>
+<ul class="friend-list" id="result-list">
+{% for user in user_list %}
+<li>
+    <div class="friend-img-item">
+        {% thumbnail user.get_profile.avatar_image "21x21" as im %}
+            <img src="{{ im.url }}">
+            {% empty %}
+            <img class="friend-img" src="{{ user.get_profile.avatar_image }}"/>
+        {% endthumbnail %}
+        <span class="friend-name">{{ user }}</span>
+        {% if user.id not in pending_from_list and user.id not in pending_to_list %}
+        <a href="{% url friend_add user.id %}" class="icon plus-icon plus-inline" title="Add Friend">Add Trendsetter</a>
+        {% endif %}
+    </div>
+</li>
+{% empty %}
+<li>
+    <div class="friend-img-item">
+        <span>No one by that name</span>
+    </div>
+</li>
+{% endfor %}
+</ul>

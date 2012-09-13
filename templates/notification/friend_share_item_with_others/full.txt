@@ -1,0 +1,3 @@
+Dear {{ recipient }},
+
+{{ send.get_full_name }} share a {{ item.brand }} {{ item.name }} with {{ receive.get_full_name }}!

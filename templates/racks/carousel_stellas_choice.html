@@ -1,0 +1,51 @@
+{% extends "racks/rack_base.html" %}
+{% block title %} Stunable | Browse Items {% endblock %}
+
+{% block page_tab %}
+
+{% endblock %}
+{% block content %}
+<body class="internal gallery" id="carousel-body">
+    <div class="section clearfix" id="page-content">
+        <div id="happening-events">
+            <div class="icon"></div>
+            <div id="event-table" class="event-table" style="display:none;">
+                {% if notice_unseen_count|default_if_none:0 != 0 and request.user.get_profile.view_happenings %}
+                
+                {% else %}
+                    {% if not request.user.get_profile.view_happenings %}
+                        You have disabled happenings. Feel free to enable using the settings page.
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="special" id="item-viewer">
+            <ul class="nav tabbed clearfix">
+                <li class="tab" id="tab-choice">
+                    <a href="{% url stella_choice %}" {% if current == "Stella's Choice" %} id = "current-tab" {% endif %} title="" class="text-link"><span class="identity">Most Stunable</span></a>
+                </li>
+                <li class="tab" id="tab-new">
+                    <a href="{% url new %}" {% if current == "new" %} id = "current-tab" {% endif %} title="" class="text-link"><span class="identity">new</span></a>
+                </li>
+                <li class="tab" id="tab-all">
+                    <a href="{% url all %}" title="" {% if current == "all" %} id = "current-tab" {% endif %} class="text-link"><span>all</span></a>
+                </li>
+                {% for category in categories %}
+                <li class="tab {% if category.name == 'Shoes' %}end{% endif %}" id="tab-{{category.name}}">
+                    <a href="{% url carousel category.id %}" {% if current_category.id == category.id %} id="current-tab" {% endif %} title="" class="text-link {% if category.name == "Jeans" %}new-line{% endif %} "><span>{{category.name}}</span></a>
+                </li>
+                {% endfor %}
+            </ul>
+            <div class="tab-detail clearfix" id="carousel">
+                <div class="choice">
+                    <p>
+                        when you have invited 10 friends to <span class="identity">Stunable</span>, Most Stunable will be unlocked, giving you access to Stunable’s top picks of the week.
+                    </p>
+                    <!-- <p id="invite" class="btn-wrap">
+                    <a href="#invite-friends-modal" class="item-ref btn">Invite Friends</a>
+                    </p> -->
+                </div><!--/.choice-->
+            </div><!--/.tab-detail#carousel-->
+        </div><!--/.special#item-carousel"-->
+    </div><!--/.section#page-content"-->
+    {% endblock %}

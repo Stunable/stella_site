@@ -1,0 +1,106 @@
+{% extends "user_base.html" %}
+
+{% block title %}Stunable | Help From Stella{% endblock %}
+
+{% block body_class %}gallery{% endblock %}
+{% block body_id %}gallery{% endblock %}
+
+{% block rack %}
+{% endblock %}
+
+{% block local_nav %} <!--LOCAL NAVIGATION LINKS-->
+<div class="nav bar clearfix" id="local-nav">
+	<ul class="horizontal-list menu">
+		{% if user.is_authenticated %}
+		<li class="navlink member" id="nav-closet">
+			<a href="{% url racks_index %}" title="Peek inside your closet." class="text-link">{{ user.get_full_name }}'s Closet</a>
+		</li>
+		<li class="navlink member" id="nav-admirers">
+			<a href="{% url friend_index %}" title="Browse your admirers List." class="text-link">Admirers</a>
+		</li>
+		{% endif %}
+		<li class="navlink" id="nav-about">
+			<a href="{% url main-about %}" title="Learn more about Stunable." class="text-link">What is Stunable?</a>
+		</li>
+		<li class="navlink" id="nav-news">
+			<a href="{% url news_index %}" title="The latest about Stunable."  class="text-link">News</a>
+		</li>
+		<li class="navlink" id="nav-blog">
+			<a href="{% url blog_index %}" title="Read the Stunable Blog."  class="text-link">Blog</a>
+		</li>
+	</ul><!--/.horizontal-list -->
+</div><!--/.section#local-nav-->
+{% endblock %}
+
+{% block navigation %}
+<ul class="horizontal-list menu">
+	<li class="navlink" id="nav-home">
+		<a href="{% url home %}" title="Go back to the homepage." class="text-link">Home</a>
+	</li>
+	{% if user.is_authenticated %}
+	<li class="navlink" id="nav-account">
+		<a href="{% url profile_edit %}" title="Go to your Account Preferences." class="text-link">Account</a>
+	</li>
+	{% endif %}
+	<li class="navlink" id="nav-help">
+		<a href="{% url main-help %}" title="Get help using the Stunable web site." id="currentpage" class="text-link">Help from Stella</a>
+	</li>
+	{% if user.is_authenticated %}
+	<li class="navlink" id="nav-signout">
+		<a href="{% url auth_logout %}" title="Sign out of Stunable." class="text-link">Log Out</a>
+	</li>
+	{% endif %}
+</ul><!--/.horizontal-list -->
+{% endblock %}
+
+{% block content1 %}
+<div id="page-content" class="section clearfix">
+	<div class="section intro">
+		<h2>help from Stella</h2>
+	</div><!--/.section#intro-->
+	<div class="section body-copy">
+		<p>
+			Seriously, who is Stella?
+		</p>
+		<p>
+			Stella is your online personal shopper. Everyone here at Stunable.com works night and day scouring the Internet for unique, never-before-seen clothing. We put everything together in one place and then let Stella sort through it all, bringing you personalized clothing recommendations based on your style and preferences.
+		</p>
+		<p>
+			Why add stuff to my closet?
+		</p>
+		<p>
+			Adding clothing you have discovered creates a fashion profile of sorts. It allows you easily bookmark clothing from a variety of sources without having to navigate to each individual website. Furthermore, the closet helps you to remember those items you otherwise may have forgotten AND alerts you when something you have saved goes on sale. You can make the clothing in your closet publically visible to admirers and view the items that your friends enjoy and save in their closets.
+		</p>
+		<p>
+			Who can see my closet?
+		</p>
+		<p>
+			Initially, the items in your closet are able to be viewed by all of your admirers. You can refine the privacy of your closet by making certain clothes and racks private.
+		</p>
+		<p>
+			What is a rack?
+		</p>
+		<p>
+			A rack is a category of related clothing. Stunable.com provides default racks such as jeans and sweaters in both the corresponding recommendation page and user closet. The default categories allow you to filter Stella’s recommendations, which is helpful if you’re looking for a certain type of item. While the default racks are also present in your closet, helping you to organize it as you wish, the closet also permits you to create your own unique racks. This feature is helpful if you want to save items pertaining to a particular event or season such as “wedding outfits” or “workout clothes.”
+		</p>
+		<p>
+			How do I find admirers?
+		</p>
+		<p>
+			You can find admirers in two ways. First, you can search for a particular admirer in Stunable.com’s database by entering their name or email. If you would like ask someone to join the Stunable.com network, you can send them an invitation by entering the recipient’s email address. If you become an admirer of a particular user, you have access to their public closet. Granting permission of another user to become an admirer of yours gives that person access to your publicly visible closet.
+		</p>
+		<p>
+			Can I suggest clothes I find to my admirers?
+		</p>
+		<p>
+			If Stella suggests something to you that you know would look great on a friend- pass it on! Stunable.com provides an internal messaging system, which allows users to send a picture of clothing to their admirers along with a message. You can ask for advice on something you have found, comment on an article of clothing or let your friend know you found something you think she might like.
+		</p>
+		<p>
+			How can I improve my recommendations?
+		</p>
+		<p>
+			The more time you spend shopping with Stella, the more she will get to know your style. Stella’s recommendation improve each time you click the thumbs up and thumbs down buttons, letting her know what you like and just can’t stand. To receive even better recommendations faster, click on the account page and answer the optional questions. The answers to these fashion savvy questions give Stella an even better idea of the clothes you look great wearing.
+		</p>
+	</div>
+</div>
+{% endblock %} 

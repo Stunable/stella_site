@@ -1,0 +1,14 @@
+<div id="div_{{ label_id }}" class="control-group{% if errors %} error {% endif %} inline_field_group">
+    <label class="control-label" for="{{ label_id }}">{{ label }}</label>
+    <div class="controls">
+    	{% for field in fields %}
+	        {{ field.bf }}
+	        {% if field.errors %}	      
+	        {% endif %}
+	        {% if field.help_text %}
+	        {{ field.help_text }}
+	        {% endif %}
+        {% endfor %}
+        <span class="help-inline">{{ errors }}</span>
+    </div>
+</div> <!-- /clearfix -->

@@ -1,0 +1,39 @@
+{% extends "racks/rack_base.html"  %}
+
+{% block title %} Stunable | Your Closet {% endblock %}
+
+{% block content %}
+<script>
+	function confirmDelete(delUrl) {
+		if(confirm("Are you sure you want to delete")) {
+			document.location = delUrl;
+		}
+	}
+</script>
+			<div class="tab-detail clearfix" id="racks">
+				<div class="views">
+					<div class="rack-list">
+						<div id="private-racks">
+							<h4>your private racks</h4>
+							<ul class="menu">
+								{% for rack in private_racks %}
+								{% if user.username == rack.owner.username and not rack.is_default %}
+								<li>									
+									
+									<a href="{% url racks_detail rack.id %}">{{rack.name}}</a>
+									
+								</li>
+								{% endif %}
+								{% endfor %}
+							</ul>
+						</div>
+						<p id="add-rack">
+							<a href="{% url racks_add %}" class="icon plus item-ref" title="Create a New Rack">Add a New Rack</a>
+						</p>
+					</div><!--/.rack-list-->
+					<div id="rack-contents"></div><!--/#rack-contents-->
+				</div><!--/.views -->
+			</div>
+		</div>
+	</div>
+{% endblock %} 

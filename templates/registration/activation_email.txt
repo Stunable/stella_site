@@ -1,0 +1,12 @@
+{% autoescape off %}
+Dear {{user.first_name}}:
+
+Thanks for signing up to Stunable, your online personal shopper.
+Please login here "http://{{ site.domain }}/accounts/activate/{{ activation_key }}/" to start shopping !
+
+Cheers!
+
+Sam, Brie, and Lizzy
+Stunable Co-Founders 
+
+{% endautoescape %}

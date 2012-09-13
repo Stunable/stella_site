@@ -1,0 +1,52 @@
+{% extends "user_base.html"  %}
+
+{% block body_class %}gallery{% endblock %}
+
+
+{% block page_tab_hide_for_now %}
+<style>
+	#admirer_search_btn {
+	background:#000;
+	/* Gradient bg = WebKit (Safari, Google Chrome etc) */
+	background:-webkit-gradient(linear, left top, left bottom, from(#000), to(#333));
+	/* Gradient bg = Mozilla/Gecko (Firefox etc) */
+	background:-moz-linear-gradient(top, #000, #333);
+	/* For Internet Explorer 5.5 - 7 */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#000000, endColorstr=#333333);
+	/* For Internet Explorer 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#000000, endColorstr=#333333)";
+}
+</style>
+<ul class="nav tabbed clearfix">
+	<li class="tab" id="tab-title">
+		<span class="text">Your Racks:</span>
+	</li>
+	{% block current_tab %}
+	<li class="tab" id="tab-private">
+		<a href="{% url racks_index %}" title="" class="text-link" {% if not rack.shared_users.all %} id="current-tab" {% endif %}><span>Private</span></a>
+	</li>
+	<li class="tab" id="tab-shared">
+		<a href="{% url list_shared_racks %}" title="View your shared racks." class="text-link" {% if rack.shared_users.all %} id="current-tab" {% endif %}><span>Shared</span></a>
+	</li>
+	{% endblock %}
+	<li class="tab" id="tab-filter">
+				<form action="{% url rack_search %}" class="clearfix" id="filter-form" method="GET">
+					<label for="filter-by" class="unseen">Filter by</label>					
+					<div class="clearfix ui-widget" id="admirer-search-form">
+						<label for="filter-by" class="unseen">Filter your racks</label>
+						<input type="submit" value="search" id="admirer-search-form" class="btn" style="float: right" />
+						<input type="hidden" name="rack_id" value="{{rack.id}}"/>
+						<input type="input" name="q" style="float:right;width: 125px" class="txt srch" placeholder="Search your racks"/>						
+						<select name="filter" id="filter" style="margin-right: 5px">
+							<option value="filter_by">Filter by&hellip;</option>
+							<option value="designer">Designer</option>
+							<option value="category">Type</option>
+							<option value="color">Color</option>
+						</select>
+												
+					</div>
+					
+				</form>
+	</li>
+</ul>
+{% endblock %}

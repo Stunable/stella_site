@@ -1,0 +1,8 @@
+Dear {{ email }}:
+
+Thanks for requesting an invite to Stunable. We're spread pretty thin right now, but you’ll be the first to know when she’s ready to assist more shoppers.
+
+Cheers!
+
+Sam, Brie, and Lizzy
+Stunable Co-Founders

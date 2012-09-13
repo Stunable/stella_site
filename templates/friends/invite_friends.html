@@ -1,0 +1,112 @@
+{% extends "user_base.html" %}
+{% block title %} Stunable | Invite Friends {% endblock %}
+
+{% block local_nav %}
+{% endblock %}
+
+{% block content %}
+<script>
+	$(document).ready(function() {
+		// the validation code
+		container = $('#bigform-error');
+		// validate form on keyup and submit
+		validator = $('#invitation-form1').validate({
+			errorLabelContainer : container,
+			errorElement : 'errorlist',
+			invalidHandler : function(form, validator) {
+				//display error on submit
+				var errors = validator.numberOfInvalids();
+				if(errors) {
+					if(validator.errorList[0].message) {
+						$("#bigform-error p").html("");
+						$('#bigform-error').animate({
+							"opacity" : "1"
+						}, "fast", function() {
+							changeError($('#bigform-error')[0], validator.errorList[0].message);
+							$('#bigform-error').css('display', 'inline').css('opacy', '1');
+						});
+						validator.errorList[0].element.focus();
+						$(validator.errorList[0].element).addClass('field-error');
+					}
+				}
+			},
+			showErrors : function(errorMap, errorList) {
+				//display error on blur
+				$("invitation-form1").find("input, textarea").each(function() {
+					$(this).removeClass("error");
+				});
+				$("#bigform-error p").html("");
+				if(errorList.length) {
+					$('#bigform-error').animate({
+						"opacity" : "1"
+					}, "fast", function() {
+						changeError($('#bigform-error')[0], errorList[0]['message']);
+						$('#bigform-error').css('display', 'inline').css('opacy', '1');
+					});
+					$(errorList[0]['element']).addClass("field-error");
+				} else {
+					$("#invitation-form1").find("input, textarea").each(function() {
+						$(this).removeClass("field-error");
+					});
+				}
+			},
+			submitHandler : function(form) {
+				$(".field-error").removeClass("field-error");
+				form.submit();
+			},
+			rules : {
+				emails : {
+					required : true,
+				},
+				email_message : {
+					required : true,
+				},
+			},
+			messages : {
+				emails : "Please enter valid emails that are seperated by a comma",
+				email_message : "Please enter your message",
+			}
+		});
+		$('#emails').blur(function() {
+			$('#invitation-form1').validate().element('#emails');
+		});
+		$('#email_message').blur(function() {
+			$('#invitation-form1').validate().element('#email_message');
+		});
+	});
+
+</script>
+<div class="section intro">
+	<h2>invite your friends</h2>
+				<p>inviting your friends to join <span class="identity">Stunable</span> will unlock discounts, allow you to share your clothes with new admirers and view the closets of others</p>
+</div>
+<form action="{% url friend_invite %}" class="user-entry" id="invitation-form1" method="POST">
+	{% csrf_token %}
+	<p class="error_msg">
+		{{ form.non_field_errors }}
+	</p>
+	<div class="fieldWrapper">
+		<p>
+			<label>Enter Friends' Email Addresses</label>
+		</p>
+		<input type="text" class="txt" name="emails" id="emails" placeholder="Enter email addresses here, seperated by commas"/>
+	</div>
+	<br/>
+	<div class="fieldWrapper">
+		<p>
+			<label>Personalize your message</label>
+		</p>
+		<textarea name="email_message" id="email_message" placeholder="Write your message here..."></textarea>
+	</div>
+	<center>
+		<p id="bigform-error"></p>
+	</center>
+	<p class="btn-wrap">
+		<input type="submit" class="btn" value="Send It!" />
+		<span class="confirmation">Sent!</span>
+	</p>
+	</div>
+</form>
+</div>
+</div></div>
+{% endblock %} 

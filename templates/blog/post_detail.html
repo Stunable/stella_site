@@ -1,0 +1,105 @@
+{% extends "blog/blog_base.html"  %}
+
+{% load comments %}
+{% load markup %}
+{% load i18n %}
+{% block title %} Stunable | Blog Details {% endblock %}
+
+{% block content1 %}
+
+<div class="section clearfix" id="page-content">		
+						
+			<div class="section main-column">
+				<div class="section intro">
+					<h2>follow Stella’s blog</h2>
+				</div><!--/.section.intro-->
+{% block content_title %}
+  <h2>{{ object.title }}</h2>
+  <p class="other_posts">
+    {% if object.get_previous_by_publish %}
+    <a class="previous" href="{{ object.get_previous_post.get_absolute_url }}" title="{% trans "View previous post" %}">&laquo; {{ object.get_previous_post }}</a>
+    {% endif %}
+    {% if object.get_next_by_publish %}
+    | <a class="next" href="{{ object.get_next_post.get_absolute_url }}" title="{% trans "View next post" %}">{{ object.get_next_post }} &raquo;</a>
+    {% endif %}
+  </p>
+{% endblock %}
+
+
+  {% load blog comments tagging_tags inlines markup %}
+  <p class="date">{{ object.publish|date:"j F Y" }}</p>
+
+  <div class="body">
+    {{ object.body|render_inlines|safe }}
+  </div>
+
+  {% tags_for_object object as tag_list %}
+  {% if tag_list %}
+  <p class="inline_tag_list"><strong>{% trans "Related tags" %}:</strong>
+    {{ tag_list|join:", " }}
+  </p>
+  {% endif %}
+
+  {% get_comment_list for object as comment_list %}
+  {% if comment_list %}
+  <div id="comments">
+    <a name="comments"></a>
+    <h3 class="comments_title">{% trans "Comments" %}</h3>
+    {% for comment in comment_list %}
+      {% if comment.is_public %}
+      <div class="comment">
+        <h5 class="name">
+          {% if comment.user_url %}<a href="{{ comment.user_url }}" title="{% trans "View" %} {% blocktrans with comment.user_name as user_name %}{{ user_name }}'s{% endblocktrans %} {% trans "website" %}">{{ comment.user_name }}</a>{% else %}{{ comment.user_name }}{% endif %} {% trans "says" %}...
+        </h5>
+        {{ comment.comment|urlizetrunc:"60"|markdown:"safe" }}
+        <p class="date">{% trans "Posted at" %} {{ comment.submit_date|date:"P" }} {% trans "on" %} {{ comment.submit_date|date:"F j, Y" }}</p>
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if object.allow_comments %}
+  	{% get_comment_form for object as postcomments %}
+		<form action="{% comment_form_target %}" method="post">
+			<fieldset>
+				{% csrf_token %}
+				<table>
+					<tbody>
+						{{ postcomments.management_form }}
+						{{ postcomments.id }}
+						<tr>
+							<td><label for="comment">Comment:</label></td>
+						</tr>
+						<tr>
+							<td>
+							{{ postcomments.comment }}
+							{{ postcomments.content_type }}
+							{{ postcomments.object_pk }}
+							{{ postcomments.timestamp }}
+							{{ postcomments.security_hash }}
+							{% if not user.is_authenticated %}
+							<input type="hidden" name="name" value="Anonymous" />
+							<input type="hidden" name="email" value="Anonymous@stella.com" />
+							{% endif %}
+							<input type="hidden" name="next" value="{{object.get_absolute_url}}" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+							<div>
+								<input type="submit" name="submit" value="Comment" id="save_button"/>
+							</div></td>
+						</tr>
+					</tbody>
+				</table>
+			</fieldset>
+		</form>
+  {% else %}
+    <div id="comment_form">
+      <h3>{% trans "Comments are closed" %}.</h3>
+      <p>{% trans "Comments have been closed for this post" %}.</p>
+    </div>
+  {% endif %}
+  </div>
+  {% include "blog/side_bars.html" %}
+{% endblock %}

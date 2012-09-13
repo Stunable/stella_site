@@ -1,0 +1,141 @@
+{% extends "user_base.html" %}
+
+{% block title %} Stunable | Home {% endblock %}
+
+{% block body_class %}login {% endblock %}"
+
+{% block content-class%}round-corner-shadow{%endblock%}
+
+{% block body_id %}homepage{% endblock %}
+
+{% block left_panel %}
+{% endblock %}
+
+{% block content %}
+<script>
+	$(document).ready(function() {
+		// the validation code
+		container = $('#bigform-error1');
+		// validate form on keyup and submit
+		validator = $('#waitlist-form').validate({
+			errorLabelContainer : container,
+			//errorClass : 'field-error',
+			errorElement : 'errorlist',
+			invalidHandler : function(form, validator) {
+				//display error on submit
+				var errors = validator.numberOfInvalids();
+				if(errors) {
+					if(validator.errorList[0].message) {
+						$('#bigform-error1').text = "";
+						$('#bigform-error1').animate({
+							"opacity" : "1"
+						}, "fast", function() {
+							changeError($('#bigform-error1')[0], validator.errorList[0].message);
+							$('#bigform-error1').css('display', 'inline').css('opacy', '1');
+						});
+						validator.errorList[0].element.focus();
+						$(validator.errorList[0].element).addClass('field-error');
+					}
+				}
+			},
+			showErrors : function(errorMap, errorList) {
+				//display error on blur
+				$("#waitlist-form'").find("input").each(function() {
+					$(this).removeClass("error");
+				});
+				$("#bigform-error1").html("");
+				if(errorList.length) {
+					$('#bigform-error1').animate({
+						"opacity" : "1"
+					}, "fast", function() {
+						changeError($('#bigform-error1')[0], errorList[0]['message']);
+						$('#bigform-error1').css('display', 'inline').css('opacy', '1');
+					});
+					$(errorList[0]['element']).addClass("field-error");
+				} else {
+					$("#waitlist-form").find("input").each(function() {
+						$(this).removeClass("field-error");
+					});
+				}
+			},
+			submitHandler : function(form) {
+				$(".field-error").removeClass("field-error");
+				form.submit();
+			},
+			rules : {
+				email : {
+					required : true,
+					email : true
+				},
+			},
+			messages : {
+				email : "Stella can't reach you there",
+			}
+		});
+	})
+</script>
+{% if form.errors %}
+<p id="bigform-error3">
+	Your username and password didn't match. Please try again.
+</p>
+{% endif %}
+	<form action="{% url auth_login %}" class="user-entry php-form" id="signin-form" method="POST">
+		{% csrf_token %}
+		<input required id="tester" class="txt" name="email" type="text" placeholder="EMAIL"/>
+		<div class="separator"></div>
+		<input required class="txt pass" name="password" type="password" placeholder="PASSWORD"/>
+		<div class="separator"></div>
+		<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{% url welcome %}{% endif %}" />
+		<input type="submit" class="btn" value="Login" />
+		<div onclick="document.location.href='{% url login_with_fb %}'" class="input-wrapper" style="cursor:pointer"><input type="button" class="btn" value="Login With Facebook" /></div>
+		<div class="forgot-pass">
+			<a href="{% url auth_password_reset %}" title="Click here to retrieve your password."><span style="display: block">-- FORGOT PASSWORD? --</span></a>
+		</div>
+	</form><!--/.section.user-entry#signin-form-->
+
+
+<!-- 	<form action="{% url invite_waitlist %}" class="user-entry" id="waitlist-form" method="POST">
+		{% csrf_token %}
+		<input required class="txt" name="email" type="text" placeholder="Email"/>
+		<input type="submit" class="btn" value="Send Request"/>
+	</form><!--/.user-entry#waitlist-form --> 
+	
+	<center>
+		<p id="bigform-error1"></p>
+	</center>
+	
+	<form class="clearfix">
+	
+	<div class="sign-up first">
+		<div class="sign-up-header clearfix">
+			SIGN UP
+		</div>
+		<a class="big-icon sign-up-icon" href="{% url account_create %}">
+		<!--<a class="big-icon sign-up-icon" href="{% url invite_waitlist %}">-->
+		</a>
+	</div>
+	<div class="sign-up">
+		<div class="sign-up-header clearfix">
+			SIGN UP WITH
+		</div>
+		<a class="big-icon sign-up-fb-icon" href="{% url login_with_fb %}">
+<!-- 		<a class="big-icon sign-up-fb-icon" href="{% url invite_waitlist %}"> -->
+		</a>
+	</div>
+	<div class="sign-up last">
+		<div class="sign-up-header clearfix">
+		  REQUEST INVITE	
+		</div>
+		<a class="big-icon sign-up-request-icon" href="{% url invite_waitlist %}">
+		</a>
+	</div>
+	<div class="sub-form" >
+		<p class="own-show">
+			Run your own show
+		</p>
+	</div>
+	<input type="button" class="btn become-stylelist" style="position: absolute;" value="Become a Stunable Stylist" onclick="document.location.href='{% url create_retailer_profile %}'"/>
+	</form>
+	
+	
+{% endblock %} 

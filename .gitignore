@@ -1,0 +1,15 @@
+# Emacs generated backups
+\#*
+.\#*
+
+bin
+build
+include
+lib
+.Python
+*.pyc
+/joc
+_static
+media
+local_settings.py
+*.komodoproject

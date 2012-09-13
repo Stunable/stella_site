@@ -1,0 +1,264 @@
+{% extends "retailers/retailer_base.html" %}
+
+{% block title %} Stunable | Retailer Administration {% endblock %}
+
+{% block body_class %}common large_common{% endblock %}
+{% block content-class%}round-corner-shadow{%endblock%}
+
+{% block content %}
+<style>
+	.common #page-content {
+/*		margin: 41px 10px 200px auto;*/
+		position: relative;
+		padding-bottom: 0;
+		float: right;
+		min-height: 667px;
+	}
+	.common .body-copy {
+		font-family: 'Advent Pro', sans-serif;
+		margin: 0px 40px;
+	}
+	.common td input[type="text"] {
+		width: 40px;
+	}
+	.common th {
+		border: thin solid #EBEBEB;
+		vertical-align: middle;
+		text-align: center;
+		background-color: #eee;
+		font-weight: 600;
+	}
+	.common table, .common .no-border td {
+		border: none;
+	}
+	h3 {
+		text-transform: uppercase;
+		text-align: center;
+	}
+	
+	.bootstrap input {
+		width: 100px;
+	}
+	.order-action ul {
+		position:absolute;top: 0; left:0;display:none;background-color: white;width: 200px;cursor: pointer;
+		border: gray 1px solid;
+	}
+	
+	.order-action ul li {
+	}
+	
+	.order-action {
+		position:relative; cursor: pointer;
+	}
+</style>
+<script>
+	$(document).ready(function() {
+		$('.update-price-btn').hide();
+		$('#datepicker-from, #datepicker-to').datepicker({
+			dateFormat : 'yy-mm-dd'
+		}).change(function() {
+			window.location.href = '{% url retailer_order_history %}?from=' + $('#datepicker-from').val() + '&to=' + $('#datepicker-to').val();
+		});
+
+		$("#checkout-table input").keyup(function() {
+			var value = $(this).val();
+			var btn = $(this).parent().parent().find('.update-price-btn');
+			btn.attr('href', $(this).parent().parent().find('.path').val() + value)
+			btn.show();
+		});
+		
+		$('.order-action').click(function(){
+			$('.order-action ul').hide();
+			$(this).find('ul').toggle();
+		});
+		
+		$('.order-update').change(function(e){
+			
+			if ($(this).val() == "return-item")
+				$('<div id="dialog-confirm" title="Confirmation"><p>Are you sure you want to return this item and credit ' + $(this).parent().find('.total-price').val() + '  back to ' +  $(this).parent().find('.purchaser-name').val() + ' ?</p></div>').dialog({
+					resizable: false,
+					height:250,
+					modal: true,
+					buttons: {
+						"Yes": function() {
+							$( this ).dialog( "close" );
+							$.ajax({
+							  type: 'POST',
+							  url: '/retailers/order/update/' + item_pk + '/',
+							  data: {status: 'return-item'},
+							  success: function() { $('<div id="dialog-confirm" title="Success"><p>Updated successfully</p></div>').dialog({
+									height: 140,
+									modal: true
+								}); },
+							});
+							
+						},
+						No: function() {
+							$( this ).dialog( "close" );
+						}
+					}
+				});
+			
+			item_pk = $(this).parent().find('.item-pk').val();
+			if ($(this).val() == "shipped")
+				$('<div id="dialog-confirm" title="Confirmation"><p>Are you sure you want to mark this order as shipped ?</p></div>').dialog({
+					resizable: false,
+					height:250,
+					modal: true,
+					buttons: {
+						"Yes": function() {
+							$( this ).dialog( "close" );
+							
+							$.ajax({
+							  type: 'POST',
+							  url: '/retailers/order/update/' + item_pk + '/',
+							  data: {status: 'shipped'},
+							  success: function() { $('<div id="dialog-confirm" title="Success"><p>Updated successfully</p></div>').dialog({
+									height: 140,
+									modal: true
+								}); },
+							});
+							 
+						},
+						No: function() {
+							$( this ).dialog( "close" );
+						}
+					}
+				});
+			
+			if ($(this).val() == "ship")
+				$('<div id="dialog-confirm" title="Confirmation"><p>Are you sure you want to mark this order as shipment requested ?</p><p>Tracking number:<p style="display:none; color:red;" class="tracking-number-alert">required</p><input type="text" name="" id="input-tracking-number"/></p> </div>').dialog({
+					resizable: false,
+					height:350,
+					modal: true,
+					buttons: {
+						"Yes": function() {
+							if ($('#input-tracking-number').val().length == 0) {
+								$('.tracking-number-alert').show();
+								return;
+							} 
+							$.ajax({
+								  type: 'POST',
+								  url: '/retailers/order/update/' + item_pk + '/',
+								  data: { status: 'shipped', tracking_number: $('#input-tracking-number').val() },
+								  success: function(data) { $('<div id="dialog-confirm" title="Success"><p>Updated successfully</p></div>').dialog({
+										height: 140,
+										modal: true
+								  });
+								
+								  $('#item-status-' + item_pk).val('shipped');
+								   
+								},
+								error: function(data) {
+									$('<div id="dialog-confirm" title="Error"><p>Failed to update. Please retry later</p></div>').dialog({
+										height: 140,
+										modal: true
+								  	});
+								}
+							});
+							
+							$( this ).dialog( "close" );
+							$( "#dialog:ui-dialog" ).dialog( "destroy" );
+						},
+						No: function() {
+							$( this ).dialog( "close" );
+						}
+					},
+					close: function() {
+						$(this).remove();
+					}
+				});
+			
+			if ($(this).val() == "cancel-order-return")
+				$('<div id="dialog-confirm" title="Confirmation"><p>Are you sure you want to cancel this order and credit ' + $(this).parent().find('.total-price').val() + '  back to ' +  $(this).parent().find('.purchaser-name').val() + ' ?</p></div>').dialog({
+					resizable: false,
+					height:250,
+					modal: true,
+					buttons: {
+						"Yes": function() {
+							$( this ).dialog( "close" );
+							
+							$.ajax({
+							  type: 'POST',
+							  url: '/retailers/order/update/' + item_pk + '/',
+							  data: {status: 'cancel-order-return'},
+							  success: function() { $('<div id="dialog-confirm" title="Success"><p>Updated successfully</p></div>').dialog({
+									height: 140,
+									modal: true
+								}); },
+							});
+							
+						},
+						No: function() {
+							$( this ).dialog( "close" );
+						}
+					}
+				});
+		});
+	});
+
+</script>
+<div class="section-intro">
+    <h2><form class="bootstrap"> <span>Order history</span><span style="float:right;font-size: 15px;font-weight: 400;">From:
+        <input type="text" value="{{request.GET.from}}" id="datepicker-from">
+        To:
+        <input type="text" id="datepicker-to" value="{{request.GET.to}}">
+    </span></form>
+    </h2>
+</div>
+<div class="body-copy">
+    {% for purchase in purchases %}
+    {% firstof purchase.calculate "" %}
+    <table id="checkout-table">
+        <tr>
+            <th style="width: 17%;">Purchase Date</th>
+            <th style="width: 35%;">Product Name</th>
+            <th style="width: 7%;">Price</th>
+            <th>Size</th>
+            <th>Color</th>
+            <th style="width: 7%;">Quantity</th>
+            <th style="width: 20%;">Status</th>
+            <th style="width: 10%;">Action</th>
+        </tr>
+        {% for item in purchase.this_retailer_items %}
+        <tr id="product-item-{{item.product.pk}}">
+            <td>{{ purchase.purchased_at}}</td>
+            <td>{{ item.product.item.name }}</td>
+            <td>{{ item.product.item.price }}</td>
+            <td>{{ item.size }}</td>
+            <td>{{ item.color }}</td>
+            <td align="center">{{ item.quantity }}</td>
+            <td><span class="item-status-{{item.pk}}">{{ item.status}}</span><br />
+            	{% if item.status == "shipped" %} tracking no. <span class="item-tracking-no-{{item.pk}}">{% if item.shipping_number %}#{{item.shipping_number}}{% endif %}</span>{% endif %}
+            </td>
+            <td>
+            <input type="hidden" class="item-pk" value="{{item.pk}}" />
+            <input type="hidden" class="total-price" value="{{item.total_price}}" />
+            <input type="hidden" class="purchaser-name" value="shopper" />    
+            	{% if item.actions %}
+            		<select class="order-update">
+            		<option value="">Select</option>
+	            	{% for action in item.actions %}
+	            		<option value="{{action.value}}">{{action.name}}</option>
+	            	{% endfor %}
+					</select>
+            	{% else %}
+            		NA            	
+            	{% endif %}
+            </span>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br />
+    {% empty %}
+    <p>
+        There is no entry
+    </p>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+
+{% block content1 %}{% endblock %}

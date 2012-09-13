@@ -1,0 +1,76 @@
+{% extends "racks/rack_base.html" %}
+
+{% block title %}Stunable | {{title}} {% endblock %}
+
+{% block page_tab %}{% endblock %}
+{% load thumbnail %}
+
+{% block content %}
+
+{% load voting_tags %}
+
+{% votes_by_user request.user on items as vote_dict %}
+<script type="text/javascript">
+	$(function(){
+		$('#left-panel').portamento({wrapper: $('#carousel-wrapper')});
+	});
+</script>
+<div id="item_count" style="display: none">
+    {{item_count}}
+</div>
+<body class="internal gallery" id="carousel-body">
+    <div class="" id="page-content">
+        <div id="happening-events">
+            <div class="icon"></div>
+            <div id="event-table" class="event-table" style="display:none;">
+                {% if notice_unseen_count|default_if_none:0 != 0 and request.user.get_profile.view_happenings %} 
+                {% else %}
+                    {% if not request.user.get_profile.view_happenings %}
+                    You have disabled happenings. Feel free to enable using the settings page.
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="special" id="item-viewer">
+            <div class="tab-detail clearfix" id="carousel" style="padding:10px 0 0 0;">
+                <div class="views" id="rotator">
+                    <h1 style="font-size: 2em;text-transform: capitalize;">{{title}}</h1>
+                    <h2 style="font-size: 1.5em;text-transform: uppercase;color: #888;text-align: left;font-weight: 200; padding-bottom:10px">{{rack.name}}</h2>
+                    <ul class="item-list">
+                        {% for item in items %}
+                        <li class="item some-crazy-class">
+                            <h5 class="item-label"><span>{{item.brand}}</span></h5>
+                            <h4 class="item-name"><a class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.id %}">{{item.name}}</a></h4>
+                            <div class="wp drag_item">
+                                <a class="item-ref bottom-ref rel_pos" data-value="{{ item.id }}" href="{% url item_modal item.id %}"> {% thumbnail item.get_image "200x390" as im %} <img src="{{ im.url }}" alt=""> {% endthumbnail %} </a>
+                            </div>
+                            {% dict_entry_for_item item from vote_dict as vote %}
+                            <div class="link-holder" id="item_{{item.pk}}">
+                                <p class="icon-link yes-no no {% if vote and vote.is_downvote %}voted{% endif %} no_{{item.pk}}">
+                                    <a href="{% url item_vote item.pk 'down' %}" class="icon disapprove">No way.</a>
+                                </p>
+                                <p class="icon-link hanger">
+                                    <a href="{% url item_modal item.id %}?opt=rack_it" class="icon rack-icon item-ref">Rack it.</a>
+                                </p>
+                                <p class="icon-link yes-no yes {% if vote and vote.is_upvote %}voted{% endif %} yes_{{item.pk}}">
+                                    <a href="{% url item_vote item.pk 'up' %}" class="icon approve">Yes, please!</a>
+                                </p>
+                            </div>
+                            <div class="carousel_price_tag">
+                                <sup>$</sup>{{item.price}}
+                            </div>
+                        </li>
+                        {% empty %}
+	                       	<div class="center" >
+	                            <p style="line-height: 500px; text-align: center;">You haven't purchased anything yet.</p>
+	                        </div>
+                        {% endfor %}
+
+                    </ul><!--/.item-list -->
+                    <!-- ********************************************* Recurring-Item-List END ********************************************* -->
+                </div><!--/.views -->
+                <p class="p-bottom"></p>
+            </div>
+        </div><!--/.special#item-carousel"-->
+    </div><!--/.section#page-content"-->
+    {% endblock %}

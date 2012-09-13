@@ -1,0 +1,53 @@
+<!-- {% extends "user_base.html" %}
+
+{% load i18n %}
+
+{% block notification %}
+{% endblock %}
+
+{% block content %}
+<div class="section intro clearfix">
+	<h2>Notification</h1>
+</div>
+<table>
+    <caption>{% trans "Notifications" %}</caption> 
+    <thead>
+        <tr>
+            <th>{% trans "Type" %}</th>
+            <th>{% trans "Recipient" %}</th>
+            <th>{% trans "Sender" %}</th>
+            <th>{% trans "Message" %}</th>
+            <th>{% trans "Date of the Notice" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for notice in notices %}
+            {% if notice.notice_type.display == "friends_invite" %}
+            	{% if notice.unseen %}
+            <tr class="notice">
+                	<td class="notice_type">[{% trans notice.notice_type.display %}]</td>
+                <td class="notice_recipient">{{ notice.recipient }}</td>
+                <td class="notice_sender">{{ notice.sender }}</td>
+                <td class="notice_message">{{ notice.message|safe }}</td>
+                <td class="notice_time">{{ notice.added|timesince }} {% trans "ago" %}</td>
+                <td><input type="button" value="Accept" onclick="location.href='/admirers/accept_invitation/{{notice.sender.username}}/{{notice.id}}'"/></td>
+                <td><input type="button" value="Decline" onclick="location.href='/admirers/decline_invitation/{{notice.sender.username}}/{{notice.id}}'"/></td>
+                </tr>
+                {% endif %}
+            {% else %}        
+        
+            {%  if notice.is_unseen %}
+                <tr class="notice">
+                	<td class="notice_type">[{% trans notice.notice_type.display %}]</td>
+                <td class="notice_recipient">{{ notice.recipient }}</td>
+                <td class="notice_sender">{{ notice.sender }}</td>
+                <td class="notice_message">{{ notice.message|safe }}</td>
+                <td class="notice_time">{{ notice.added|timesince }} {% trans "ago" %}</td>
+                </tr>
+            {% endif %}
+            {% endif %}
+            
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %} -->

@@ -1,0 +1,406 @@
+{% block content %}
+
+{% load voting_tags %}
+{% vote_by_user user on item as vote %}
+<style>
+	#bigform-error, #bigform-error1 {
+		height: 25px;
+		width: 100%;
+		text-align: center;
+		color: #E84E4B;
+		top: 0px;
+		font-family: 'Play', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		font-size: 1.2em;
+		text-transform: none;
+		display: none;
+		opacity: 0;
+		margin-bottom: 15px;
+	}
+	#add-to-cart-link {
+		text-transform: uppercase;
+	}
+	#loading1 {
+	    display: inline;
+	}
+	#loading1 img{
+	    vertical-align: bottom;
+	}
+	
+</style>
+<script>
+
+	var size2color = {{size2color|safe}};
+	var inventories = {{inventories|safe}};
+	var add_selected_product_variant_url = undefined;
+	
+	
+	$(document).ready(function() {
+		$('.spinner').sprite({ fps: 10, no_of_frames: 12 });		
+		
+		$('.item-size-list').html('');
+		for(i in inventories) {
+			var inventory = inventories[i];
+			$('.item-size-list').append("<span><a href='#'>" + inventory.size +"</a></span>");
+			
+			$('.item-size-list span').click(function(e) {
+				e.preventDefault();
+				$('.item-color-list').html('');
+				for(i in inventories) {
+					if (inventories[i].size === $(this).text()) {
+						$('.item-color-list').append("<span><a href='" + inventories[i].add_cart_url + "' >" + inventories[i].color +"</a></span>");						
+					}
+				}
+				$('.item-details .item-color-list span').click(function(e) {
+					e.preventDefault();
+					if (!$(this).hasClass('selected')) {						
+						$('.item-details .item-color-list span').removeClass('selected');
+						$(this).addClass('selected');
+					}
+				});
+			});
+		}
+		
+	    function aboutDetailsClicked(e){
+            var link = $(this);
+            var container = link.parents('.item-details');
+            e.preventDefault();
+            
+            $.get(link.attr('href'), function(content){
+                container.flip({
+                    direction:'lr',
+                    color: '#FFFFFF',
+                    content: content,
+                    onEnd: function(){
+                        $('.retailer-wrapper .close').click($.fancybox.close);
+                        $('.retailer-wrapper .flip').click(function(){
+                            container.flip({
+                                direction:'lr',
+                                color: '#FFFFFF',
+                                content: container.data('flipRevertedSettings').content,
+                                onEnd: function(){
+                                    setItemDetailsEvent();
+                                }
+                            });
+                        });
+                    }
+                });
+            });         
+        }
+	    
+	    	    
+		function setItemDetailsEvent(){
+			$('.item-details .chzn-container').remove();
+			$('.item-details #friends-select').css('display', 'block').removeClass('chzn-done').chosen();
+			
+			$('.item-details .item-size-list span').click(function() {
+				if (!$(this).hasClass('selected')) {
+					$('.item-details .item-size-list span').removeClass('selected');
+					$(this).addClass('selected');
+				}
+			});
+			
+			$('.item-details .item-color-list span').click(function() {
+				if (!$(this).hasClass('selected')) {
+					$('.item-details .item-color-list span').removeClass('selected');
+					$(this).addClass('selected');
+				}
+			});
+			
+			$('#add-to-cart-link, .buy-now').click(function(e) {
+				e.preventDefault();
+				if ($('.item-details .item-size-list .selected').length == 0 || $('.item-details .item-color-list .selected').length == 0) {
+					alert('Please select size and color');
+				} else {
+					window.location.href = $('.item-details .item-color-list .selected a').attr('href');
+				}
+			});
+		
+			$('.item-details .about_retailer').click(aboutDetailsClicked);
+				
+			$('.item-details .flip').click(function(e){
+				e.preventDefault();
+				$('.item-details .about_retailer').click();
+			});
+			
+			
+			setupRackIt();			
+			
+			$(".confirmation").hide();
+			$('#send_it_to_rack').click(function() {
+				if($('#rack_it_form').valid()) {
+					$('#loading').show();
+					$('#loading').css('display', 'inline');
+					$('#loading').css('position', 'relative');
+					$('#loading').css('top', '-35px');
+					$('#loading').css('left', '190px');
+					$.getJSON('/racks/add_item?' + $('#rack_it_form').serialize(), function(data) {
+						$("#rack_confirmation").text(data.result == 'ok' ? "Sent" : "Error").show();
+						if(data.result != 'ok') {
+							//alert(data.text);
+							$('bigform-error').html("");
+						} else {
+							// close fancy box after 2 second on success
+							setTimeout("parent.$.fancybox.close()", 2000);
+						}
+					});
+				}
+			});
+			$('#send_it_to_admirer').click(function() {
+				if($('#send_to_admirer_form').valid()) {
+					$.getJSON('/racks/sent_to_admirer?' + $('#send_to_admirer_form').serialize(), function(data) {
+						$("#send_item_confirmation").text(data.result == 'ok' ? "Sent" : "Error").show();
+						if(data.result != 'ok') {
+							//alert(data.text);
+							$('#bigform-error').html("");
+						} else {
+							// close fancy box after 2 second on success
+							setTimeout("parent.$.fancybox.close()", 2000);
+						}
+					});
+				}
+			});
+			//Fancybox
+			///------------------------------------------------------
+			//variables
+			var itemLink = $('.item-ref'), trash = $('.trash');
+	
+			// the validation code
+			container = $('#bigform-error');
+			// validate form on keyup and submit
+			validator = $('#send_to_admirer_form').validate({
+				errorLabelContainer : container,
+				errorElement : 'errorlist',
+				invalidHandler : function(form, validator) {
+					//display error on submit
+					var errors = validator.numberOfInvalids();
+					if(errors) {
+						if(validator.errorList[0].message) {
+							$("#bigform-error p").html("");
+							$('#bigform-error').animate({
+								"opacity" : "1"
+							}, "fast", function() {
+								changeError($('#bigform-error')[0], validator.errorList[0].message);
+								$('#bigform-error').css('display', 'inline').css('opacy', '1');
+							});
+							validator.errorList[0].element.focus();
+							$(validator.errorList[0].element).addClass('field-error');
+						}
+					}
+				},
+				showErrors : function(errorMap, errorList) {
+					//display error on blur
+					$("#send_to_admirer_form").find("textarea, select").each(function() {
+						$(this).removeClass("error");
+					});
+					$("#bigform-error p").html("");
+					if(errorList.length) {
+						$('#bigform-error').animate({
+							"opacity" : "1"
+						}, "fast", function() {
+							changeError($('#bigform-error')[0], errorList[0]['message']);
+							$('#bigform-error').css('display', 'inline').css('opacy', '1');
+						});
+						$(errorList[0]['element']).addClass("field-error");
+					} else {
+						$("#send_to_admirer_form").find("textarea, select").each(function() {
+							$(this).removeClass("field-error");
+						});
+					}
+				},
+				submitHandler : function(form) {
+					$(".field-error").removeClass("field-error");
+					form.submit();
+				},
+				rules : {
+					admirer : {
+						required : true,
+					},
+					message : {
+						required : true,
+					},
+				},
+				messages : {
+					admirer : "Please choose your admirer",
+					message : "Please enter your message",
+				}
+			});
+			$('#admirer').blur(function() {
+				$('#send_to_admirer_form').validate().element('#admirer');
+			});
+			$('#message').blur(function() {
+				$('#send_to_admirer_form').validate().element('#send_to_admirer_form');
+			});
+			//send to rack validation
+			// the validation code
+			container1 = $('#bigform-error1');
+			// validate form on keyup and submit
+			validator1 = $('#rack_it_form').validate({
+				errorLabelContainer : container1,
+				errorElement : 'errorlist',
+				invalidHandler : function(form, validator1) {
+					//display error on submit
+					var errors = validator.numberOfInvalids();
+					if(errors) {
+						if(validator.errorList[0].message) {
+							$("#bigform-error1 p").html("");
+							$('#bigform-error1').animate({
+								"opacity" : "1"
+							}, "fast", function() {
+								changeError($('#bigform-error1')[0], validator.errorList[0].message);
+								$('#bigform-error1').css('display', 'inline').css('opacy', '1');
+							});
+							validator1.errorList[0].element.focus();
+							$(validator1.errorList[0].element).addClass('field-error');
+						}
+					}
+				},
+				showErrors : function(errorMap, errorList) {
+					//display error on blur
+					$("#rack_it_form").find("textarea, select").each(function() {
+						$(this).removeClass("error");
+					});
+					$("#bigform-error1 p").html("");
+					if(errorList.length) {
+						$('#bigform-error1').animate({
+							"opacity" : "1"
+						}, "fast", function() {
+							changeError($('#bigform-error1')[0], errorList[0]['message']);
+							$('#bigform-error1').css('display', 'inline').css('opacy', '1');
+						});
+						$(errorList[0]['element']).addClass("field-error");
+					} else {
+						$("#rack_it_form").find("textarea, select").each(function() {
+							$(this).removeClass("field-error");
+						});
+					}
+				},
+				submitHandler : function(form) {
+					$(".field-error").removeClass("field-error");
+					form.submit();
+				},
+				rules : {
+					rack : {
+						required : true,
+					},
+				},
+				messages : {
+					rack : "Please choose your rack",
+				}
+			});
+			$('#rack').blur(function() {
+				$('#rack_it_form').validate().element('#rack');
+			});
+			$('#loading1').hide()
+            .ajaxStart(function() {
+                $(this).show();
+                $('#bigform-error').text("");
+                $('.confirmation').hide();
+            })
+            .ajaxStop(function() {
+                $(this).hide();
+            });
+		}
+		
+		setItemDetailsEvent();
+	});
+
+</script>
+<div id="fu" class="item-details clearfix" style="width: 650px;">
+	<div class="item-info-wrapper left-backside">
+		<div class="item-info right-backside">
+			<div class="item-name-wrapper">
+				<div class="item-name">
+				    {{item.brand}}
+				</div>
+			</div>
+			<div class="item-general-info-wrapper">
+				<div class="item-general-info">
+					<div class="item-label">
+						{{item.name}}
+					</div>
+					<div class="item-price">
+						<span class="dollard-sign">$</span>
+						<span>{{item.price}}</span>
+					</div>
+				</div>
+			</div>
+		</div><!--/.item-info-->
+	</div>
+	<div class="item-body flippable">
+		<div class="item-visuals" id="item_visual_{{item.pk}}">
+			<a class="about_retailer" href="{% url retailer_modal item.id %}">About this retailer</a>
+			<a href="#" class="img-link">
+			    {% load thumbnail %}
+			    {% thumbnail item.get_full_size_image "137x267" as im %}
+                    <img src="{{ im.url }}" alt="item">
+                    {% empty %}
+                    <img src="{{item.get_full_size_image}}" alt="item" width="135px" />
+                {% endthumbnail %}
+<!-- 			    <img src="{{item.get_full_size_image}}" alt="item" width="135px" /> -->
+			</a>
+			<div class="link-holder" id="item_{{item.pk}}">
+				<span class="icon-link yes-no {% if vote and vote.is_downvote %}voted{% endif %} no_{{item.pk}}">
+					<a href="{% url item_vote item.pk 'down' %}" class="icon disapprove">No way.</a>
+				</span>
+				<span class="icon-link hanger">
+					<a href="{% url add_item_from_modal %}" data-value="{{ item.id }}" class="icon rack-icon">Rack It!</a>
+				</span>
+				<span class="icon-link yes-no {% if vote and vote.is_upvote %}voted{% endif %} yes_{{item.pk}}">
+					<a href="{% url item_vote item.pk 'up' %}" class="icon approve">Yes, please!</a>
+				</span>
+			</div>
+		</div><!--/.item-visuals-->
+		<div class="item-actions">
+			<p class="description">
+				{{item.description}}
+			</p>					
+			<div class="item-size">
+				<div>SELECT SIZE:</div>
+				<div class="item-size-list">
+					{% for size in sizes %}
+						<span><a href="#">{{size}}</a></span>
+					{% endfor %}
+				</div>
+				
+				<div>COLOR:</div>
+				<div class="item-color-list">
+					{% for color in colors %}
+						<span><a href="#">{{color}}</a></span>
+					{% endfor %}
+				</div>
+
+			</div>
+			<div class="buy-wrapper bootstrap" style="float: right;">
+                <a class="btn btn-primary" href="{% url add_to_cart item.pk 1 '' %}" id="add-to-cart-link">ADD TO CART</a>
+            </div>
+		</div>
+	</div><!--/.item-actions-->
+	<div class="item-send clearfix">
+		<form action="{% url send_item_to_admirer %}" id="send_to_admirer_form" method="POST">
+			{% csrf_token %}
+			<div class="item-send-left">
+				<label for="sendit" class="">LOOKING FOR FEEDBACK OR THINK THIS WOULD LOOK GREAT ON A FRIEND?</label>
+				<select id="friends-select" multiple="true" name="admirer" data-placeholder="Select friends..." style="width: 220px;">
+					{% for fs_u in admirer_list %}
+					<option value="{{ fs_u.friend.id }}">{% if fs_u.friend.first_name %} {{fs_u.friend.first_name}} {{fs_u.friend.last_name}} {% else %} {{ fs_u.friend.username }} {% endif %} </option>
+					{% endfor %}
+				</select>
+			</div>
+			<div class="item-send-right">
+				<textarea name="message" id="message" placeholder="PERSONAL MESSAGE: Less then 160 characters"></textarea>
+				<center>
+					<p id='bigform-error'></p>
+				</center>
+				<input type="hidden" name="item_id" value="{{item.id}}" />
+				<div class="btn-wrap bootstrap">
+					<input type="button" class="btn send btn-primary" id="send_it_to_admirer" value="Send It" />
+					<div id="loading1">
+						<div class="spinner"></div>
+					</div>
+					<span class="confirmation" id="send_item_confirmation">Sent!</span>
+				</div>
+			</div>			
+		</form>
+	</div>
+	<a class="flip" href="javascript:void(0)">flip</a>
+	{% endblock %}

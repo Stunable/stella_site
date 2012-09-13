@@ -1,0 +1,35 @@
+{% extends "user_base.html" %}
+
+{% block title %}Stunable | Contact{% endblock %}
+
+{% block body_class %}contact{% endblock %}
+{% block body_id %}gallery{% endblock %}
+
+{% block rack %}
+{% endblock %}
+
+{% block content1 %}
+<div id="page-content" class="section clearfix round-corner-shadow">
+	<div class="section intro">
+		<h2><span class="font-bella">Contact</span><span>Stella</span></h2>
+		<p>
+			WANT MORE PERSONALIZED ATTENTION!<br />
+PLEASE CONTACT US VIA EMAIL, PHONE, OR SOCIAL! <br />
+WE LOOK FORWARD TO HEARING FROM YOU!
+		</p>
+	</div><!--/.section#intro-->
+	<div class="separator"></div>
+	<div class="section body-copy">
+		<div class="column-left">
+			<input type="text" placeholder="FIRST NAME" class="txt" />
+			<input type="text" placeholder="LAST NAME" class="txt" />
+			<input type="text" placeholder="EMAIL" class="txt" />			
+		</div>
+		<div class="column-right">			
+			 <textarea type="text" placeholder="PRIVATE MESSAGE: less then 160 characters" class="txt no-border "></textarea>
+			 <div class="separator"></div>
+			 <input type="submit" class="btn" value="SEND IT">
+		</div>		
+	</div>
+</div>
+{% endblock %}

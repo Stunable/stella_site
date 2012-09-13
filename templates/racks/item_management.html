@@ -1,0 +1,37 @@
+{% extends "base.html"  %}
+
+{% block content %}
+<script>
+	function confirmDelete(delUrl) {
+		if(confirm("Are you sure you want to delete")) {
+			document.location = delUrl;
+		}
+	}
+</script>
+<div class="section clearfix" id="page-content">
+	<div class="special" id="racks-gallery">
+		<div class="tab-detail clearfix" id="items">
+			<div class="views">
+				<div class="item-list">
+					<div id="items">
+						<h4>Item List</h4>
+						<ul class="menu">
+							{% for item in item_list %}
+							<li>
+								<p>{{item.name}}
+								<button onclick="location.href='{% url edit_item item.id %}'">Edit</button>
+								<a href="{% url delete_item item.id %}" onclick="return confirm('Are you sure you want to delete this item?')"class="btn">Delete this item</a>						
+								</p>
+							</li>
+							{% endfor %}
+						</ul>
+					</div>
+					<p id="add-item">
+						<a href="{% url add_item %}" class="icon plus" title="Create New Item">Add a New Item</a>
+					</p>
+				</div>
+			</div><!--/.views -->
+		</div>
+	</div>
+</div>
+{% endblock %} 

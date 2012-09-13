@@ -1,0 +1,22 @@
+from django.conf.urls.defaults import *
+from django.views.generic.simple import direct_to_template
+from retailers.views import *
+
+urlpatterns = patterns('',
+    url(r'^create_profile$', create_retailer_profile, name='create_retailer_profile'),
+    url(r'^update_profile$', update_retailer_profile, name='update_retailer_profile'),
+    url(r'^product_list$', product_list, name='product_list'),
+    url(r'^info/(?P<name>\w+)', retailer_information, name='retailer_information'),
+    url(r'^item/add$', add_item, name='add_item'),
+    url(r'^item/delete/(?P<item_id>\d+)', delete_item, name='delete_item'),
+    url(r'^item/edit/(?P<item_id>\d+)', edit_item, name='edit_item'),
+    url(r'^(?P<retailer_id>\d+)/view_all_products', view_all_products, name='view_all_products'),
+    url(r'^upload_logo$', retailer_logo_upload, name='retailer_logo_upload'),
+    url(r'^list$', retailer_list, name='retailer_list'),
+    url(r'^retailer_modal/(?P<item_id>\d+)$', retailer_modal, name='retailer_modal'),
+    url(r'^order_history', order_history, name='retailer_order_history'),
+    url(r'^(?P<retailer_id>\d+)/terms$', terms, name='retailer_terms'),
+    url(r'^(?P<retailer_id>\d+)/terms_complete$', terms_complete, name='retailer_terms_complete'),
+    url(r'^order/update/(?P<order_item_id>\d+)', update_order_item, name='retailer_update_order_item'),
+)
+

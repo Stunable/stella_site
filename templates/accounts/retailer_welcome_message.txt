@@ -1,0 +1,10 @@
+Dear {{retailer.name}}:
+
+Welcome to Stunable. You now have access to manage and sell your products on Stunable.com
+
+Login and start uploading your products here: {{ accept_url }}
+
+Cheers!
+
+Sam, Brie, and Lizzy
+Stunable Co-Founders 

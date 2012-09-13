@@ -1,0 +1,10 @@
+Dear {{ email }}:
+
+Thanks for signing up for Stunable, your personalized yet social shopping experience. You have been moved on our client list and we are ready to shop with you. 
+
+To shop with Stunable, enter here {{ accept_url }}
+
+Cheers!
+
+Sam, Brie, and Lizzy
+Stunable Co-Founders 

@@ -1,0 +1,537 @@
+{% extends "user_base.html" %}
+
+{% block h1 %} Main recommendation page. {% endblock %}
+
+{% block body_class %}internal gallery gallery{% endblock %}
+
+{% block content %}
+<div class="section clearfix" id="page-content">
+	<div class="special" id="item-viewer">
+		<ul class="nav tabbed clearfix">
+			<li class="tab" id="tab-choice">
+				<a href="#" title="" class="text-link"><span class="identity">Stella's</span> Choice</a>
+			</li>
+			<li class="tab" id="tab-tops">
+				<a href="#" title="" class="text-link"><span>Tops</span></a>
+			</li>
+			<li class="tab" id="tab-dresses">
+				<a href="#" title="" class="text-link"><span>Dresses</span></a>
+			</li>
+			<li class="tab" id="tab-skirts">
+				<a href="#" title="" class="text-link"><span>Skirts</span></a>
+			</li>
+			<li class="tab" id="tab-jackets">
+				<a href="#" title="" class="text-link"><span>Jackets</span></a>
+			</li>
+			<li class="tab" id="tab-sweaters">
+				<a href="#" title="" class="text-link"><span>Sweaters</span></a>
+			</li>
+			<li class="tab" id="tab-pants">
+				<a href="#" title="" class="text-link"><span>Pants</span></a>
+			</li>
+			<li class="tab" id="tab-shorts">
+				<a href="#" title="" class="text-link"><span>Shorts</span></a>
+			</li>
+			<li class="tab end" id="tab-jeans">
+				<a href="#" title="" class="text-link" id="current-tab"><span>Jeans</span></a>
+			</li>
+			<li class="tab" id="tab-winter">
+				<a href="#" title="" class="text-link"><span>Winter Wear</span></a>
+			</li>
+			<li class="tab" id="tab-work">
+				<a href="#" title="" class="text-link"><span>Work</span></a>
+			</li>
+			<li class="tab" id="tab-cocktail">
+				<a href="#" title="" class="text-link"><span>Cocktail</span></a>
+			</li>
+			<li class="tab" id="tab-wedding">
+				<a href="#" title="" class="text-link"><span>Wedding</span></a>
+			</li>
+			<li class="tab end" id="tab-weekend">
+				<a href="#" title="" class="text-link"><span>Weekend Wear</span></a>
+			</li>
+		</ul>
+		<div class="tab-detail clearfix" id="carousel">
+			<div class="nav directional">
+				<div class="blocker blocker-right"></div>
+				<a class="btn previous" id="prev" href="#">Previous</a>
+				<div class="blocker blocker-left"></div>
+				<a class="btn next" id="next" href="#">Next</a>
+			</div>
+			<div class="views" id="rotator">
+				<!-- ********************************************* Recurring-Item-List START ********************************************* -->
+				<ul class="item-list">
+					<li class="item some-crazy-class">
+						<h5 class="item-label">[ITEM LABEL 1]</h5>
+						<h4 class="item-name"><a class="item-ref top-ref" href="#item-denim-1">[ITEM NAME]</a></h4>
+						<a class="item-ref bottom-ref" href="#item-denim-1"><img src="{{ STATIC_URL }}images/general/jeans-1-500x500.jpg" alt="item" /></a>
+						<div class="link-holder">
+							<p class="icon-link yes-no no">
+								<a href="#" class="icon disapprove">No way.</a>
+							</p>
+							<p class="icon-link hanger">
+								<a href="#" class="icon rack-icon">Rack it.</a>
+							</p>
+							<p class="icon-link yes-no yes">
+								<a href="#" class="icon approve">Yes, please!</a>
+							</p>
+						</div>
+					</li>
+					<li class="item">
+						<h5 class="item-label">[ITEM LABEL 2]</h5>
+						<h4 class="item-name"><a class="item-ref top-ref" href="#item-denim-2">[ITEM NAME]</a></h4>
+						<a class="item-ref bottom-ref" href="#item-denim-2"><img src="{{ STATIC_URL }}images/general/agjea1.254x500.jpg" alt="item" /></a>
+						<div class="link-holder">
+							<p class="icon-link yes-no no">
+								<a href="#" class="icon disapprove">No way.</a>
+							</p>
+							<p class="icon-link hanger">
+								<a href="#" class="icon rack-icon">Rack it.</a>
+							</p>
+							<p class="icon-link yes-no yes">
+								<a href="#" class="icon approve">Yes, please!</a>
+							</p>
+						</div>
+					</li>
+					<li class="item">
+						<h5 class="item-label">[ITEM LABEL 3]</h5>
+						<h4 class="item-name"><a class="item-ref top-ref" href="#item-denim-3">[ITEM NAME]</a></h4>
+						<a class="item-ref bottom-ref" href="#item-denim-3"><img src="{{ STATIC_URL }}images/general/jeans-3-500x500.jpg" alt="item" /></a>
+						<div class="link-holder">
+							<p class="icon-link yes-no no">
+								<a href="#" class="icon disapprove">No way.</a>
+							</p>
+							<p class="icon-link hanger">
+								<a href="#" class="icon rack-icon">Rack it.</a>
+							</p>
+							<p class="icon-link yes-no yes">
+								<a href="#" class="icon approve">Yes, please!</a>
+							</p>
+						</div>
+					</li>
+				</ul><!--/.item-list -->
+				<!-- ********************************************* Recurring-Item-List END ********************************************* -->
+				<!-- ********************************************* Recurring-Item-List START ********************************************* -->
+				<ul class="item-list">
+					<li class="item">
+						<h5 class="item-label">[ITEM LABEL 4]</h5>
+						<h4 class="item-name"><a class="item-ref top-ref" href="#item-denim-4">[ITEM NAME]</a></h4>
+						<a class="item-ref bottom-ref" href="#item-denim-4"><img src="{{ STATIC_URL }}images/general/jeans-4-500x500.jpg" alt="item" /></a>
+						<div class="link-holder">
+							<p class="icon-link yes-no no">
+								<a href="#" class="icon disapprove">No way.</a>
+							</p>
+							<p class="icon-link hanger">
+								<a href="#" class="icon rack-icon">Rack it.</a>
+							</p>
+							<p class="icon-link yes-no yes">
+								<a href="#" class="icon approve">Yes, please!</a>
+							</p>
+						</div>
+					</li>
+					<li class="item">
+						<h5 class="item-label">[ITEM LABEL 5]</h5>
+						<h4 class="item-name"><a class="item-ref top-ref" href="#item-denim-5">[ITEM NAME]</a></h4>
+						<a class="item-ref bottom-ref" href="#item-denim-5"><img src="{{ STATIC_URL }}images/general/jeans-7-500x500.jpg" alt="item" /></a>
+						<div class="link-holder">
+							<p class="icon-link yes-no no">
+								<a href="#" class="icon disapprove">No way.</a>
+							</p>
+							<p class="icon-link hanger">
+								<a href="#" class="icon rack-icon">Rack it.</a>
+							</p>
+							<p class="icon-link yes-no yes">
+								<a href="#" class="icon approve">Yes, please!</a>
+							</p>
+						</div>
+					</li>
+					<li class="item">
+						<h5 class="item-label">[ITEM LABEL 6]</h5>
+						<h4 class="item-name"><a class="item-ref top-ref" href="#item-denim-6">[ITEM NAME]</a></h4>
+						<a class="item-ref bottom-ref" href="#item-denim-6"><img src="{{ STATIC_URL }}images/general/jeans-6-500x500.jpg" alt="item" /></a>
+						<div class="link-holder">
+							<p class="icon-link yes-no no">
+								<a href="#" class="icon disapprove">No way.</a>
+							</p>
+							<p class="icon-link hanger">
+								<a href="#" class="icon rack-icon">Rack it.</a>
+							</p>
+							<p class="icon-link yes-no yes">
+								<a href="#" class="icon approve">Yes, please!</a>
+							</p>
+						</div>
+					</li>
+				</ul><!--/.item-list -->
+				<!-- ********************************************* Recurring-Item-List END ********************************************* -->
+			</div><!--/.views -->
+			<p id="more-results" class="btn-wrap">
+				<a href="#" class="btn">Change It Up</a>
+			</p>
+		</div>
+	</div><!--/.special#item-carousel"-->
+</div><!--/.section#page-content"-->
+</div><!--/.wrap--></div><!--/.section-->
+<div id="hidden-items">
+	<!-- ============================================= Modal Windows START ============================================= -->
+	<!-- ********************************************* Modal-WIndowfor Item 1 START ********************************************* -->
+	<!-- The list item's links href="#item-denim-1" form Recurring-Item-List link/reference div id="item-denim-1" in Modal-WIndow. So by clicking on those links a modal window comes up. In other words those links with href="#item-denim-1" link to div with id="item-denim-1". The div with id="item-denim-1" is the modal window. -->
+	<div id="item-denim-1" class="item-details clearfix">
+		<p class="close">
+			<a class="close-box" href="#">close</a>
+		</p>
+		<div class="item-info">
+			<h4 class="item-name">Women's Carrie Foresaken Jean</h4>
+			<h5 class="item-label">Lonestar</h5>
+			<p class="description">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac molestie augue. Nam risus mi, condimentum sit amet porttitor et, vulputate nec lacus. Fusce eget orci ut ipsum blandit aliquam in et metus. Sed lorem erat, vehicula eget rhoncus vitae, imperdiet vel libero.
+			</p>
+		</div><!--/.item-info-->
+		<div class="item-visuals">
+			<a href="#" class="img-link"><img src="{{ STATIC_URL }}images/general/jeans-1-500x500.jpg" alt="item" /></a>
+			<p class="icon-link yes-no">
+				<a href="#" class="icon disapprove">No way.</a>
+			</p>
+			<p class="icon-link yes-no">
+				<a href="#" class="icon approve">Yes, please!</a>
+			</p>
+			<p class="btn-wrap">
+				<a href="#" class="btn buy-now" title="Buy It Now for $$$">Buy It Now for $$$</a>
+			</p>
+		</div><!--/.item-visuals-->
+		<form class="item-actions">
+			<div class="item-rackit">
+				<label for="rackit" class="">Keep it to Yourself</label>
+				<p class="instruction">
+					Want to save this to your personal closet? Choose "Rack It" and select from one of your presaved racks.
+				</p>
+				<select id="rackit" class="styled">
+					<option class="default">Rack It</option>
+					<option>Party</option>
+					<option>Work</option>
+					<option>Summer 2012</option>
+				</select>
+				<p class="btn-wrap">
+					<input type="submit" class="btn send" value="Send It to Rack" />
+					<span class="confirmation">Sent!</span>
+				</p>
+			</div>
+			<div class="item-send">
+				<label for="sendit" class="">Send It to a admirer</label>
+				<textarea onfocus="clearInput(this)" onblur="restoreInput(this)">Add a personal message&hellip;</textarea>
+				<select id="rackit" class="styled">
+					<option class="default">Pick a admirer</option>
+					<option>Dave</option>
+					<option>Phoebe</option>
+					<option>Antonio</option>
+					<option>Roma</option>
+					<option>Ben</option>
+				</select>
+				<p class="btn-wrap">
+					<input type="submit" class="btn send" value="Send It to admirer" />
+					<span class="confirmation">Sent!</span>
+				</p>
+			</div>
+		</form><!--/.item-actions-->
+	</div>
+	<!-- ********************************************* Modal-WIndow for Item 1 END ********************************************* -->
+	<!-- ********************************************* Modal-WIndow for Item 2 START ********************************************* -->
+	<div id="item-denim-2" class="item-details clearfix">
+		<p class="close">
+			<a class="close-box" href="#">close</a>
+		</p>
+		<div class="item-info">
+			<h4 class="item-name">Women's Carrie Foresaken Jean</h4>
+			<h5 class="item-label">Lonestar</h5>
+			<p class="description">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac molestie augue. Nam risus mi, condimentum sit amet porttitor et, vulputate nec lacus. Fusce eget orci ut ipsum blandit aliquam in et metus. Sed lorem erat, vehicula eget rhoncus vitae, imperdiet vel libero.
+			</p>
+		</div><!--/.item-info-->
+		<div class="item-visuals">
+			<a href="#" class="img-link"><img src="{{ STATIC_URL }}images/general/agjea1.254x500.jpg" alt="item" /></a>
+			<p class="icon-link yes-no">
+				<a href="#" class="icon disapprove">No way.</a>
+			</p>
+			<p class="icon-link yes-no">
+				<a href="#" class="icon approve">Yes, please!</a>
+			</p>
+			<p class="btn-wrap">
+				<a href="#" class="btn buy-now" title="Buy It Now for $$$">Buy It Now for $$$</a>
+			</p>
+		</div><!--/.item-visuals-->
+		<form class="item-actions">
+			<div class="item-rackit">
+				<label for="rackit" class="">Keep it to Yourself</label>
+				<p class="instruction">
+					Want to save this to your personal closet? Choose "Rack It" and select from one of your presaved racks.
+				</p>
+				<select id="rackit" class="styled">
+					<option class="default">Rack It</option>
+					<option>Party</option>
+					<option>Work</option>
+					<option>Summer 2012</option>
+				</select>
+				<p class="btn-wrap">
+					<input type="submit" class="btn send" value="Send It to Rack" />
+					<span class="confirmation">Sent!</span>
+				</p>
+			</div>
+			<div class="item-send">
+				<label for="sendit" class="">Send It to a admirer</label>
+				<textarea onfocus="clearInput(this)" onblur="restoreInput(this)">Add a personal message&hellip;</textarea>
+				<select id="rackit" class="styled">
+					<option class="default">Pick a admirer</option>
+					<option>Dave</option>
+					<option>Phoebe</option>
+					<option>Antonio</option>
+					<option>Roma</option>
+					<option>Ben</option>
+				</select>
+				<p class="btn-wrap">
+					<input type="submit" class="btn send" value="Send It to admirer" />
+					<span class="confirmation">Sent!</span>
+				</p>
+			</div>
+		</form><!--/.item-actions-->
+	</div>
+	<!-- ********************************************* Modal-WIndow for Item 2 END ********************************************* -->
+	<!-- ********************************************* Modal-WIndow for Item 3 START ********************************************* -->
+	<div id="item-denim-3" class="item-details clearfix">
+		<p class="close">
+			<a class="close-box" href="#">close</a>
+		</p>
+		<div class="item-info">
+			<h4 class="item-name">Women's Carrie Foresaken Jean</h4>
+			<h5 class="item-label">Lonestar</h5>
+			<p class="description">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac molestie augue. Nam risus mi, condimentum sit amet porttitor et, vulputate nec lacus. Fusce eget orci ut ipsum blandit aliquam in et metus. Sed lorem erat, vehicula eget rhoncus vitae, imperdiet vel libero.
+			</p>
+		</div><!--/.item-info-->
+		<div class="item-visuals">
+			<a href="#" class="img-link"><img src="{{ STATIC_URL }}images/general/jeans-1-500x500.jpg" alt="item" /></a>
+			<p class="icon-link yes-no">
+				<a href="#" class="icon disapprove">No way.</a>
+			</p>
+			<p class="icon-link yes-no">
+				<a href="#" class="icon approve">Yes, please!</a>
+			</p>
+			<p class="btn-wrap">
+				<a href="#" class="btn buy-now" title="Buy It Now for $$$">Buy It Now for $$$</a>
+			</p>
+		</div><!--/.item-visuals-->
+		<form class="item-actions">
+			<div class="item-rackit">
+				<label for="rackit" class="">Keep it to Yourself</label>
+				<p class="instruction">
+					Want to save this to your personal closet? Choose "Rack It" and select from one of your presaved racks.
+				</p>
+				<select id="rackit" class="styled">
+					<option class="default">Rack It</option>
+					<option>Party</option>
+					<option>Work</option>
+					<option>Summer 2012</option>
+				</select>
+				<p class="btn-wrap">
+					<input type="submit" class="btn send" value="Send It to Rack" />
+					<span class="confirmation">Sent!</span>
+				</p>
+			</div>
+			<div class="item-send">
+				<label for="sendit" class="">Send It to a admirer</label>
+				<textarea onfocus="clearInput(this)" onblur="restoreInput(this)">Add a personal message&hellip;</textarea>
+				<select id="rackit" class="styled">
+					<option class="default">Pick a admirer</option>
+					<option>Dave</option>
+					<option>Phoebe</option>
+					<option>Antonio</option>
+					<option>Roma</option>
+					<option>Ben</option>
+				</select>
+				<p class="btn-wrap">
+					<input type="submit" class="btn send" value="Send It to admirer" />
+					<span class="confirmation">Sent!</span>
+				</p>
+			</div>
+		</form><!--/.item-actions-->
+	</div>
+	<!-- ********************************************* Modal-WIndow for Item 3 END ********************************************* -->
+	<!-- ********************************************* Modal-WIndow for Item 1 START ********************************************* -->
+	<!-- The list item from the recurring list is referring to this id: id="item-denim-1" So by clicking on -->
+	<div id="item-denim-4" class="item-details clearfix">
+		<p class="close">
+			<a class="close-box" href="#">close</a>
+		</p>
+		<div class="item-info">
+			<h4 class="item-name">Women's Carrie Foresaken Jean</h4>
+			<h5 class="item-label">Lonestar</h5>
+			<p class="description">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac molestie augue. Nam risus mi, condimentum sit amet porttitor et, vulputate nec lacus. Fusce eget orci ut ipsum blandit aliquam in et metus. Sed lorem erat, vehicula eget rhoncus vitae, imperdiet vel libero.
+			</p>
+		</div><!--/.item-info-->
+		<div class="item-visuals">
+			<a href="#" class="img-link"><img src="{{ STATIC_URL }}images/general/jeans-1-500x500.jpg" alt="item" /></a>
+			<p class="icon-link yes-no">
+				<a href="#" class="icon disapprove">No way.</a>
+			</p>
+			<p class="icon-link yes-no">
+				<a href="#" class="icon approve">Yes, please!</a>
+			</p>
+			<p class="btn-wrap">
+				<a href="#" class="btn buy-now" title="Buy It Now for $$$">Buy It Now for $$$</a>
+			</p>
+		</div><!--/.item-visuals-->
+		<form class="item-actions">
+			<div class="item-rackit">
+				<label for="rackit" class="">Keep it to Yourself</label>
+				<p class="instruction">
+					Want to save this to your personal closet? Choose "Rack It" and select from one of your presaved racks.
+				</p>
+				<select id="rackit" class="styled">
+					<option class="default">Rack It</option>
+					<option>Party</option>
+					<option>Work</option>
+					<option>Summer 2012</option>
+				</select>
+				<p class="btn-wrap">
+					<input type="submit" class="btn send" value="Send It to Rack" />
+					<span class="confirmation">Sent!</span>
+				</p>
+			</div>
+			<div class="item-send">
+				<label for="sendit" class="">Send It to a admirer</label>
+				<textarea onfocus="clearInput(this)" onblur="restoreInput(this)">Add a personal message&hellip;</textarea>
+				<select id="rackit" class="styled">
+					<option class="default">Pick a admirer</option>
+					<option>Dave</option>
+					<option>Phoebe</option>
+					<option>Antonio</option>
+					<option>Roma</option>
+					<option>Ben</option>
+				</select>
+				<p class="btn-wrap">
+					<input type="submit" class="btn send" value="Send It to admirer" />
+					<span class="confirmation">Sent!</span>
+				</p>
+			</div>
+		</form><!--/.item-actions-->
+	</div>
+	<!-- ********************************************* Modal-WIndow for Item 1 END ********************************************* -->
+	<!-- ********************************************* Modal-WIndow for Item 2 START ********************************************* -->
+	<div id="item-denim-5" class="item-details clearfix">
+		<p class="close">
+			<a class="close-box" href="#">close</a>
+		</p>
+		<div class="item-info">
+			<h4 class="item-name">Women's Carrie Foresaken Jean</h4>
+			<h5 class="item-label">Lonestar</h5>
+			<p class="description">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac molestie augue. Nam risus mi, condimentum sit amet porttitor et, vulputate nec lacus. Fusce eget orci ut ipsum blandit aliquam in et metus. Sed lorem erat, vehicula eget rhoncus vitae, imperdiet vel libero.
+			</p>
+		</div><!--/.item-info-->
+		<div class="item-visuals">
+			<a href="#" class="img-link"><img src="{{ STATIC_URL }}images/general/jeans-1-500x500.jpg" alt="item" /></a>
+			<p class="icon-link yes-no">
+				<a href="#" class="icon disapprove">No way.</a>
+			</p>
+			<p class="icon-link yes-no">
+				<a href="#" class="icon approve">Yes, please!</a>
+			</p>
+			<p class="btn-wrap">
+				<a href="#" class="btn buy-now" title="Buy It Now for $$$">Buy It Now for $$$</a>
+			</p>
+		</div><!--/.item-visuals-->
+		<form class="item-actions">
+			<div class="item-rackit">
+				<label for="rackit" class="">Keep it to Yourself</label>
+				<p class="instruction">
+					Want to save this to your personal closet? Choose "Rack It" and select from one of your presaved racks.
+				</p>
+				<select id="rackit" class="styled">
+					<option class="default">Rack It</option>
+					<option>Party</option>
+					<option>Work</option>
+					<option>Summer 2012</option>
+				</select>
+				<p class="btn-wrap">
+					<input type="submit" class="btn send" value="Send It to Rack" />
+					<span class="confirmation">Sent!</span>
+				</p>
+			</div>
+			<div class="item-send">
+				<label for="sendit" class="">Send It to a admirer</label>
+				<textarea onfocus="clearInput(this)" onblur="restoreInput(this)">Add a personal message&hellip;</textarea>
+				<select id="rackit" class="styled">
+					<option class="default">Pick a admirer</option>
+					<option>Dave</option>
+					<option>Phoebe</option>
+					<option>Antonio</option>
+					<option>Roma</option>
+					<option>Ben</option>
+				</select>
+				<p class="btn-wrap">
+					<input type="submit" class="btn send" value="Send It to admirer" />
+					<span class="confirmation">Sent!</span>
+				</p>
+			</div>
+		</form><!--/.item-actions-->
+	</div>
+	<!-- ********************************************* Modal-WIndow for Item 2 END ********************************************* -->
+	<!-- ********************************************* Modal-WIndow for Item 3 START ********************************************* -->
+	<div id="item-denim-6" class="item-details clearfix">
+		<p class="close">
+			<a class="close-box" href="#">close</a>
+		</p>
+		<div class="item-info">
+			<h4 class="item-name">Women's Carrie Foresaken Jean</h4>
+			<h5 class="item-label">Lonestar</h5>
+			<p class="description">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac molestie augue. Nam risus mi, condimentum sit amet porttitor et, vulputate nec lacus. Fusce eget orci ut ipsum blandit aliquam in et metus. Sed lorem erat, vehicula eget rhoncus vitae, imperdiet vel libero.
+			</p>
+		</div><!--/.item-info-->
+		<div class="item-visuals">
+			<a href="#" class="img-link"><img src="{{ STATIC_URL }}images/general/jeans-1-500x500.jpg" alt="item" /></a>
+			<p class="icon-link yes-no">
+				<a href="#" class="icon disapprove">No way.</a>
+			</p>
+			<p class="icon-link yes-no">
+				<a href="#" class="icon approve">Yes, please!</a>
+			</p>
+			<p class="btn-wrap">
+				<a href="#" class="btn buy-now" title="Buy It Now for $$$">Buy It Now for $$$</a>
+			</p>
+		</div><!--/.item-visuals-->
+		<form class="item-actions">
+			<div class="item-rackit">
+				<label for="rackit" class="">Keep it to Yourself</label>
+				<p class="instruction">
+					Want to save this to your personal closet? Choose "Rack It" and select from one of your presaved racks.
+				</p>
+				<select id="rackit" class="styled">
+					<option class="default">Rack It</option>
+					<option>Party</option>
+					<option>Work</option>
+					<option>Summer 2012</option>
+				</select>
+				<p class="btn-wrap">
+					<input type="submit" class="btn send" value="Send It to Rack" />
+					<span class="confirmation">Sent!</span>
+				</p>
+			</div>
+			<div class="item-send">
+				<label for="sendit" class="">Send It to a admirer</label>
+				<textarea onfocus="clearInput(this)" onblur="restoreInput(this)">Add a personal message&hellip;</textarea>
+				<select id="rackit" class="styled">
+					<option class="default">Pick a admirer</option>
+					<option>Dave</option>
+					<option>Phoebe</option>
+					<option>Antonio</option>
+					<option>Roma</option>
+					<option>Ben</option>
+				</select>
+				<p class="btn-wrap">
+					<input type="submit" class="btn send" value="Send It to admirer" />
+					<span class="confirmation">Sent!</span>
+				</p>
+			</div>
+		</form><!--/.item-actions-->
+	</div>
+	{% endblock %}
