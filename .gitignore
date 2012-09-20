@@ -13,3 +13,5 @@ _static
 media
 local_settings.py
 *.komodoproject
+
+dev.py

@@ -13,7 +13,7 @@ WebError==0.10.3
 WebOb==1.2.1
 bootstrap==0.1dev
 couchpy==0.2dev
-django-chronograph==svn-r21-git.2
+django-chronograph
 django-invitation==1.0
 django-registration==0.7
 django-social-auth==0.7.0
