@@ -7,6 +7,24 @@ if path: sys.path = list(path) + sys.path
 
 import stats
 
+
+
+from django.core.files.storage import FileSystemStorage
+
+class OverwriteStorage(FileSystemStorage):
+    
+    def get_available_name(self, name):
+        """
+        Returns a filename that's free on the target storage system, and
+        available for new content to be written to.
+        """
+        # If the filename already exists, remove it as if it was a true file system
+        if self.exists(name):
+            os.remove(os.path.join(settings.MEDIA_ROOT, name))
+        return name
+
+
+
 #Return [0..1] where -1 is not correlated, and 1 is fully correlated
 def pearson_correlation(v1,v2):
     '''>>> v1=[0,10,10,0,10]

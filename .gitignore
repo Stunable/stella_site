@@ -15,3 +15,5 @@ local_settings.py
 *.komodoproject
 
 dev.py
+
+hack.py

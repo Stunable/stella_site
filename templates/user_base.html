@@ -124,6 +124,9 @@
                                     </ul>
                                 </li>
                                 <li class="navlink" id="nav-news">
+                                    <a href="{% url news_index %}" title="The latest about Stunable."  class="text-link">Blog</a>
+                                </li>
+                                <li class="navlink" id="nav-news">
                                     <a href="{% url news_index %}" title="The latest about Stunable."  class="text-link">News</a>
                                 </li>
                                 {% if request.user.is_authenticated %}

@@ -11,37 +11,15 @@
 		<div class="section intro">
 			<h2>stunable in the news</h2>
 		</div><!--/.section.intro-->
-		{% for post in object_list %}
+		
+		{% for post in wp_posts %}
 		{% if forloop.counter == 1 %}
-		<div class="article featured">
-			<div class="hgroup">
-				<h3 class="article-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
-				<h5 class="byline">Posted by <span class="article-author"><a href="#">{{ post.author }}</a></span> on <span class="article-date">{{ post.publish|date:"Y F d" }}</span> at <span class="article-time">{{ post.publish|date:"P" }}</span></h5>
-			</div><!--/.hgroup-->
-			<p>
-				{{ post.tease|safe }} <span class="read-more"><a href="{{post.get_absolute_url}}">Read more&hellip;</a></span>
-			</p>
-			<div class="article-footer">
-				<h5 class="categories">Categories: {% for item in post.categories.values_list %} <a href="#">{{item.1}}</a>{% if forloop.last %} {% else %}, {%endif%}{% endfor %}</h5>
-				{% get_comment_count for post as comment_count %} <h5><a href="#">{{ comment_count }} Comments</a></h5>
-			</div><!--/.article-footer-->
-		</div><!--/.article.featured-->
+		{{post|safe}}
 		{% else %}
-		<div class="article">
-			<div class="hgroup">
-				<h3 class="article-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
-				<h5 class="byline">Posted by <span class="article-author"><a href="#">{{ post.author }}</a></span> on <span class="article-date">{{ post.publish|date:"Y F d" }}</span> at <span class="article-time">{{ post.publish|date:"P" }}</span></h5>
-			</div><!--/.hgroup-->
-			<p>
-				{{ post.tease|safe }} <span class="read-more"><a href="{{post.get_absolute_url}}">Read more&hellip;</a></span>
-			</p>
-			<div class="article-footer">
-				<h5 class="categories">Categories: {% for item in post.categories.values_list %} <a href="#">{{item.1}}</a>{% if forloop.last %} {% else %}, {%endif%}{% endfor %}</h5>
-				{% get_comment_count for post as comment_count %} <h5><a href="#">{{ comment_count }} Comments</a></h5>
-			</div><!--/.article-footer-->
-		</div><!--/.article.featured-->
+		{{post|safe}}
 		{% endif %}
 		{% endfor %}
+
 	</div><!--/.main-column-->
 	{% include "news/side_bars.html" %}
 	{% endblock %}

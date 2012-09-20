@@ -3,12 +3,20 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models import permalink
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.core.files.temp import NamedTemporaryFile
+from django.core.files import File
 
 from apps.news.managers import PublicManager
+from apps.common.utils import OverwriteStorage
+
 
 import datetime
 import tagging
 from tagging.fields import TagField
+
+import urllib2
 
 
 class Category(models.Model):
@@ -74,3 +82,38 @@ class Post(models.Model):
 
     def get_next_post(self):
         return self.get_next_by_publish(status__gte=2)
+
+
+class ExternalPost(models.Model):
+    BLOG_TYPE_CHOICES = (
+        ('blog', _('blog')),
+        ('news', _('news'))
+    )
+
+    text = models.FileField(null=True,blank=True,upload_to='upload/blog_cache',storage=OverwriteStorage())
+    date = models.DateField(default=datetime.datetime.now)
+    post_type = models.CharField(default='news',max_length=16,choices=BLOG_TYPE_CHOICES)
+    source = models.CharField(max_length=256,default=settings.EXTERNAL_NEWS_BLOG_URL)
+
+
+    def refresh_content(self):
+        url = self.source + self.date.strftime('%Y/%m/%d')
+        try:
+            temp = NamedTemporaryFile(delete=True)
+            temp.write(urllib2.urlopen(url).read())
+            temp.flush()
+
+            self.text.save(url.replace('/','_')+'.html', File(temp))
+        except Exception, e:
+            print e
+
+@receiver(post_save, sender=ExternalPost)
+def updateContent(sender, instance, created, **kwargs):
+    if not instance.text:
+        instance.refresh_content()
+
+
+
+
+
+

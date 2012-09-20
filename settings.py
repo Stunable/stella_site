@@ -176,6 +176,7 @@ INSTALLED_APPS = (
     'paypal.pro',
     'api',
     'gunicorn',
+    'chronograph'
 )
 
 # django-registration
@@ -270,6 +271,9 @@ WAITLIST_ACTIVE = True
 NOTICE_TIME_DIFF = 2 #minutes
 
 FACEBOOK_EXTENDED_PERMISSIONS = ['publish_stream, email']
+
+EXTERNAL_BLOG_URL = "http://stunable.wordpress.com/"
+EXTERNAL_NEWS_BLOG_URL = "http://stunablenews.wordpress.com/"
 
 
 from dev import *

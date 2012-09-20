@@ -156,6 +156,11 @@ strong {
 	text-align:left;
 }
 
+.feed article .comments-link{
+	display:none;
+}
+
+
 h4, h5, .left-panel li {
 	font-family: 'Advent Pro', sans-serif;
 	font-size: 15px;
@@ -2157,7 +2162,7 @@ height: 593px;
 	font-family: 'Advent Pro';
 }
 
-.article-title {
+.article-title,.entry-title {
 	font-weight: bold;
 }
 

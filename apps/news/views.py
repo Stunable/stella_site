@@ -1,5 +1,6 @@
 import datetime
 import re
+import os
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -12,14 +13,25 @@ from apps.news.models import *
 from apps.news.constants import STOP_WORDS_RE
 from tagging.models import Tag, TaggedItem
 
+from bs4 import BeautifulSoup
+
 
 def post_list(request, page=0, paginate_by=20, **kwargs):
+
+    last_post = ExternalPost.objects.filter().order_by('date').reverse()[0]
+    html = open(settings.PROJECT_ROOT+last_post.text.url,'r').read()
+    soup = BeautifulSoup(html)
+    #print soup.prettify()
+
+    posts = soup.findAll("article", "post" )
+
     page_size = getattr(settings,'BLOG_PAGESIZE', paginate_by)
     return list_detail.object_list(
         request,
         queryset=Post.objects.published(),
         paginate_by=page_size,
         page=page,
+        extra_context={'wp_posts':[str(p) for p in posts]},
         **kwargs
     )
 post_list.__doc__ = list_detail.object_list.__doc__
