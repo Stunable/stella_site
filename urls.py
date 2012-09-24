@@ -71,6 +71,7 @@ urlpatterns = patterns('',
                        # blog apps
                        url(r'^comments/', include('django.contrib.comments.urls')),
                        url(r'^news/', include('news.urls')),
+                       url(r'^blog/', include('blog.urls')),
                        
                        # facebook integration
                        url(r'^facebook/', include('facebook.urls')),

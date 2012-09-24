@@ -154,6 +154,7 @@ INSTALLED_APPS = (
     'south',
     'friends',
     'notification',
+    'cms',
     'racks',
     'trends',
     'voting',
@@ -272,8 +273,10 @@ NOTICE_TIME_DIFF = 2 #minutes
 
 FACEBOOK_EXTENDED_PERMISSIONS = ['publish_stream, email']
 
-EXTERNAL_BLOG_URL = "http://stunable.wordpress.com/"
-EXTERNAL_NEWS_BLOG_URL = "http://stunablenews.wordpress.com/"
+EXTERNAL_CONTENT_URL = {
+                            'blog':"http://stunable.wordpress.com/",
+                            'news': "http://stunablenews.wordpress.com/"
+                        }
 
 
 from dev import *

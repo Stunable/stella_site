@@ -10,6 +10,8 @@ from django.conf import settings
 
 from apps.blog.models import *
 from apps.blog.constants import STOP_WORDS_RE
+from apps.cms.models import *
+
 from tagging.models import Tag, TaggedItem
 
 
@@ -20,6 +22,7 @@ def post_list(request, page=0, paginate_by=20, **kwargs):
         queryset=Post.objects.published(),
         paginate_by=page_size,
         page=page,
+        extra_context={'wp_posts':ExternalPost.get_default_content('blog')},
         **kwargs
     )
 post_list.__doc__ = list_detail.object_list.__doc__

@@ -1,3 +1,5 @@
+
+import os
 from os.path import abspath, dirname, join
 import sys
 from site import addsitedir
@@ -9,6 +11,7 @@ import stats
 
 
 
+from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 class OverwriteStorage(FileSystemStorage):

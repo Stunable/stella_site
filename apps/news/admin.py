@@ -23,15 +23,3 @@ class PostAdmin(admin.ModelAdmin):
     form = PostAdminForm
 admin.site.register(Post, PostAdmin)
 
-
-class Ext_News_Admin(admin.ModelAdmin):
-    list_display = ('source','post_type','date')
-
-    actions = ('refresh_content',)
-
-
-    def refresh_content(self,request,queryset):
-        for obj in queryset:
-            obj.refresh_content()
-
-admin.site.register(ExternalPost,Ext_News_Admin)
