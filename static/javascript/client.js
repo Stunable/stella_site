@@ -996,6 +996,17 @@ function initFancyBox(container) {
 }
 
 
+function throttle(fn, delay) {
+  var timer = null;
+  return function () {
+    var context = this, args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      fn.apply(context, args);
+    }, delay);
+  };
+}
+
 
 function getCookie(name) {
 	var cookieValue = null;
@@ -1065,85 +1076,138 @@ function calcSlide(){
 }
 
 function initDesktopSwipe(){
-	$('.iosSlider').iosSlider({
-		snapToChildren: true,
-		desktopClickDrag: true,
-		startAtSlide: slideNum+1,
-		unselectableSelector: $('.drag_item'),
-		onSliderLoaded: function(args){
-			if (isNaN(args['currentSlideNumber'])){
-				slideNum = 1;
-			}else{
-				slideNum = args['currentSlideNumber'];
-			}
-			//sliderTracking
-			if (args.numberOfSlides){
-				latest_slide = args.numberOfSlides;
-			}else{
-				latest_slide = 1;
-			}
+	// $('.iosSlider').iosSlider({
+	// 	snapToChildren: true,
+	// 	desktopClickDrag: true,
+	// 	startAtSlide: slideNum+1,
+	// 	unselectableSelector: $('.drag_item'),
+	// 	onSliderLoaded: function(args){
+	// 		if (isNaN(args['currentSlideNumber'])){
+	// 			slideNum = 1;
+	// 		}else{
+	// 			slideNum = args['currentSlideNumber'];
+	// 		}
+	// 		//sliderTracking
+	// 		if (args.numberOfSlides){
+	// 			latest_slide = args.numberOfSlides;
+	// 		}else{
+	// 			latest_slide = 1;
+	// 		}
 			
-		},
-		onSlideStart: function(args){
-			current = args['currentSlideObject'][0];
-			prev = $(current).prev();
-			next = $(current).next();
-			if ($(current).hasClass('prev')){
-				$(current).removeClass('prev');
-			}
-			if ($(prev).hasClass('prev')){
-				$(prev).removeClass('prev');
-			}
-		},
-		onSlideChange: function(args){
-			if (isNaN(args['currentSlideNumber'])){
-				slideNum = 1;
-			}else{
-				slideNum = args['currentSlideNumber'];
-				// slideNum = calcSlide();
-			}
-			if (args.numberOfSlides){
-				latest_slide = args.numberOfSlides;
-			}else{
-				latest_slide = 1;
-			}
-			current = args['currentSlideObject'][0];
-			
-			
-			// Append more item into this queue 
+	// 	},
+	// 	onSlideStart: function(args){
+	// 		current = args['currentSlideObject'][0];
+	// 		prev = $(current).prev();
+	// 		next = $(current).next();
+	// 		if ($(current).hasClass('prev')){
+	// 			$(current).removeClass('prev');
+	// 		}
+	// 		if ($(prev).hasClass('prev')){
+	// 			$(prev).removeClass('prev');
+	// 		}
+	// 	},
+	// 	onSlideChange: function(args){
+	// 		if (isNaN(args['currentSlideNumber'])){
+	// 			slideNum = 1;
+	// 		}else{
+	// 			slideNum = args['currentSlideNumber'];
+	// 			// slideNum = calcSlide();
+	// 		}
+	// 		if (args.numberOfSlides){
+	// 			latest_slide = args.numberOfSlides;
+	// 		}else{
+	// 			latest_slide = 1;
+	// 		}
+	// 		current = args['currentSlideObject'][0];
 			
 			
-			// add class to prev object
-			prevs = $(current).prevAll();
+	// 		// Append more item into this queue 
 			
-			$(prevs).each(function(){
-				if (!$(this).hasClass('prev')){
-					$(this).addClass('prev');
-				}
-			});
 			
-			currentSlideNum = parseInt($(current).find('input[name="page_id"]').val(),10);
-			itemPerPage = parseInt($(current).find('input[name="item_per_page"]').val(), 10);
-			var page = latest_slide + 1;
-			if (latest_slide - 2 <= currentSlideNum){
-				$.ajax({
-			  		url: '?page=' + page + '&item_per_page=' + itemPerPage,
-			  		success: function(data) {
-			  			$('.iosSlider').iosSlider('addSlide', data, latest_slide + 1);
-			  			$('.iosSlider').iosSlider('update');
-			  			initFancyBox();
-			  			initDragDrop();
-			  			fixDragDropIssue();
-			  		}
-			  	});
-			}			
-		},
-		sliderCSS: { overflow: 'none', width: '787px', height: '588px' },
-		stageCSS: { position: 'relative', top: '0', left: '0', overflow: 'none', zIndex: 1 },
-		navPrevSelector: $('#prev'),
-		navNextSelector: $('#next'),
-	});
-	$('li.some-crazy-class').css("display", "block");
+	// 		// add class to prev object
+	// 		prevs = $(current).prevAll();
+			
+	// 		$(prevs).each(function(){
+	// 			if (!$(this).hasClass('prev')){
+	// 				$(this).addClass('prev');
+	// 			}
+	// 		});
+			
+	// 		currentSlideNum = parseInt($(current).find('input[name="page_id"]').val(),10);
+	// 		itemPerPage = parseInt($(current).find('input[name="item_per_page"]').val(), 10);
+	// 		var page = latest_slide + 1;
+	// 		if (latest_slide - 2 <= currentSlideNum){
+	// 			$.ajax({
+	// 		  		url: '?page=' + page + '&item_per_page=' + itemPerPage,
+	// 		  		success: function(data) {
+	// 		  			$('.iosSlider').iosSlider('addSlide', data, latest_slide + 1);
+	// 		  			$('.iosSlider').iosSlider('update');
+	// 		  			initFancyBox();
+	// 		  			initDragDrop();
+	// 		  			fixDragDropIssue();
+	// 		  		}
+	// 		  	});
+	// 		}			
+	// 	},
+	// 	sliderCSS: { overflow: 'none', width: '787px', height: '588px' },
+	// 	stageCSS: { position: 'relative', top: '0', left: '0', overflow: 'none', zIndex: 1 },
+	// 	navPrevSelector: $('#prev'),
+	// 	navNextSelector: $('#next'),
+	// });
+
+	$('.iosSlider').touchCarousel({
+	    itemsPerMove: 3,              // The number of items to move per arrow click.
+	    
+	    snapToItems: true,           // Snap to items, based on itemsPerMove.
+	    pagingNav: false,             // Enable paging nav. Overrides snapToItems.
+	                                  // Snap to first item of every group, based on itemsPerMove. 
+	                                  
+	    pagingNavControls: false,      // Paging controls (bullets).
+	    
+	    scrollSpeed:1,
+	    
+	    autoplay:true,               // Autoplay enabled.
+	    autoplayDelay:3000,	          // Delay between transitions.
+	    autoplayStopAtAction:true,    // Stop autoplay forever when user clicks arrow or does any other action.
+	    
+	    scrollbar: true,              // Scrollbar enabled.
+	    scrollbarAutoHide: false,     // Scrollbar autohide.
+	    scrollbarTheme: "light",       // Scrollbar color. Can be "light" or "dark".	
+	    
+	    transitionSpeed: 600,         // Carousel transition speed (next/prev arrows, slideshow).		
+	    
+	    directionNav:true,            // Direction (arrow) navigation (true or false).
+	    directionNavAutoHide:false,   // Direction (arrow) navigation auto hide on hover. 
+	                                  // On touch devices arrows are always displayed.
+	    
+	    loopItems: false,             // Loop items (don't disable arrows on last slide and allow autoplay to loop).
+	    
+	    keyboardNav: true,           // Keyboard arrows navigation.
+	    dragUsingMouse:true,          // Enable drag using mouse.	
+	    
+	    
+	    scrollToLast: false,          // Last item ends at start of carousel wrapper.	
+	    
+	    
+	    itemFallbackWidth: 500,       // Default width of the item in pixels. (used if impossible to get item width).
+	    
+	    baseMouseFriction: 0.0012,    // Container friction on desktop (higher friction - slower speed).
+	    baseTouchFriction: 0.0008,    // Container friction on mobile.
+	    lockAxis: true,               // Allow dragging only on one direction.
+	    useWebkit3d: false,           // Enable WebKit 3d transform on desktop devices. 
+	                                  // (on touch devices this option is turned on).
+	                                  // Use it if you have only images, 3d transform makes text blurry.
+	                                           
+	    
+	    onAnimStart: null,            // Callback, triggers before deceleration or transition animation.
+	    onAnimComplete: null,         // Callback, triggers after deceleration or transition animation.
+	    
+	    onDragStart:null,             // Callback, triggers on drag start.
+	    onDragRelease: null           // Callback, triggers on drag complete.
+	});	
+
+
+	//$('li.some-crazy-class').css("display", "block");
 	
 	// add mouse over support
 	$('#prev').click(function(e){
@@ -1173,15 +1237,49 @@ function initDesktopSwipe(){
 }
 
 function initSwipe(){
-	if((navigator.userAgent.match(/iPhone/i)) || 
-		   (navigator.userAgent.match(/iPad/i))) {
-				window.swiper = new Swipe(document.getElementById('rotator'));
-				$('li.some-crazy-class').css("display", "block");
-		}
-		else {
+
 				// Temporarily replacing with swipe.js for demo
-				initDesktopSwipe();
+	initDesktopSwipe();
+
+
+	/** This is high-level function; REPLACE IT WITH YOUR CODE.
+	 * It must react to delta being more/less than zero.
+	 */
+	function handle(delta) {
+		console.log(delta)
+		var sliderInstance = $('.iosSlider').data('touchCarousel');
+		//var c = sliderInstance._getXPos();
+		if (delta > 0){
+			
+			sliderInstance.prev()
+
+		}else{
+			sliderInstance.next()
 		}
+			/* something. */;
+	}
+
+	function wheel(event){
+		var delta = 0;
+		if (!event) event = window.event;
+		if (event.wheelDelta) {
+			delta = event.wheelDelta/120; 
+		} else if (event.detail) {
+			delta = -event.detail/3;
+		}
+		if (delta)
+			throttle(handle(delta),800);
+	        if (event.preventDefault)
+	                event.preventDefault();
+	        event.returnValue = false;
+	}
+
+	/* Initialization code. */
+	if (window.addEventListener)
+		window.addEventListener('DOMMouseScroll', wheel, false);
+	window.onmousewheel = document.onmousewheel = wheel;
+
+
 }
 
 function initDragDrop() {	
@@ -1194,6 +1292,9 @@ function initDragDrop() {
 	    },
 		zIndex: 2700,
 		start: function(event, ui) {
+			$('.iosSlider').data('touchCarousel').freeze();
+
+
 			prevs = $(this).parent().parent().prevAll();			
 			$(prevs).each(function(){
 				if(!$(this).hasClass('prev')){
@@ -1204,14 +1305,14 @@ function initDragDrop() {
 			if(!$(next).hasClass('nxt')){
 				$(next).addClass('nxt');
 			}
-            $('.iosSlider').iosSlider('destroy', false);
+            
             $('.iosSlider').css('overflow','visible');
             $('#prev').off('hover');
             $('#next').off('hover');
         },
         stop: function(event, ui){
         	// slideNum = calcSlide();
-            initDesktopSwipe();
+            $('.iosSlider').data('touchCarousel').unfreeze();
             $('.prev').each(function(){
             	$(this).removeClass('prev');
             });
@@ -2037,9 +2138,11 @@ function initSliderTracking() {
 }
 
 $(document).ready(function(){
+
 	setupRackIt();
 	
-	initSliderTracking();
+	//initSliderTracking();
+	$('.iosSlider').css('overflow','hidden');
 	
 	// setup the remove icon in the rack detail
 	$('.remove').click(function(){
@@ -2133,6 +2236,8 @@ function stella_request_refund_item(item_id, transaction) {
   		}
   	});
 }
+
+
 
 
 

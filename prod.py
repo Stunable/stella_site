@@ -1,4 +1,5 @@
 
+print "USING PROD SETTINGS"
 # dev overrides
 DEBUG = False
 IS_DEV = False

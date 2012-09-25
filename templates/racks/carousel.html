@@ -65,10 +65,10 @@
             <div class="tab-detail clearfix" id="carousel">
                 {% if rack_items_list %}
                 <div class="nav directional">
-                    <div class="blocker blocker-right"></div>
-                    <a class="btn previous" id="prev" href="#">Previous</a>
-                    <div class="blocker blocker-left"></div>
-                    <a class="btn next" id="next" href="#">Next</a>
+                    <!-- <div class="blocker blocker-right"></div> -->
+                    <!-- <a class="btn previous" id="prev" href="#">Previous</a> -->
+                    <!-- <div class="blocker blocker-left"></div> -->
+                    <!-- <a class="btn next" id="next" href="#">Next</a> -->
                 </div>
                 <div class="views" id="rotator">
                     <div id="item-per-page-slider">
@@ -79,15 +79,11 @@
                     </div>
                     <div class="iosSlider">
                         <!-- ********************************************* Recurring-Item-List START ********************************************* -->
-                        <ul class="item-list slider">
+                        <ul class="item-list touchcarousel-container">
                             {% block carousel_items %}
                             {% for list_3_items in rack_items_list %}
-                            <ul class="slide items-{{ item_per_page }}">
-                                {% with forloop.counter as parent_loop_counter %}
-                                <input type="hidden" name="page_id" value="{{parent_loop_counter}}" />
-                                <input type="hidden" class="item_per_page" name="item_per_page" value="{{ item_per_page }}" />
-                                {% for item in list_3_items %}
-                                <li class="item some-crazy-class"{% if parent_loop_counter > 1 %} style='display:none;'{% endif %}> <h5 class="item-label"><span>{{item.brand}}</span></h5>
+                            {% for item in list_3_items %}
+                                <li class="touchcarousel-item item some-crazy-class"> <h5 class="item-label"><span>{{item.brand}}</span></h5>
                                     <h4 class="item-name"><a class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.id %}">{{item.name}}</a></h4>
                                     <div class="wp drag_item">
                                         <a class="item-ref bottom-ref rel_pos" data-value="{{ item.id }}" href="{% url item_modal item.id %}"> {% thumbnail item.get_image "200x390" as im %} <img src="{{ im.url }}"> {% empty %} <img src="{{item.get_image}}" alt="" /> {% endthumbnail %} </a>
@@ -105,11 +101,9 @@
                                         </p>
                                     </div>
                                     <div class="carousel_price_tag">
-                                        <sup>$</sup>{{item.price}}
+                                        <sup>$</sup>{{item.price}}</div>
                                 </li>
-                                {% endfor %}
-                            </ul>
-                            {% endwith %}
+                            {% endfor %}
                             {% endfor %}
                             {% endblock %}
                         </ul><!--/.item-list -->

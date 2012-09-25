@@ -17,6 +17,7 @@
         <meta name="author" content="Stella &amp; Simple Union Interactive" />
         <meta name="description" content="Shopping online has never been sassier!" />
         <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/main.css" type="text/css" media="screen, projection" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/touchcarousel.css" type="text/css" media="screen, projection" />
         {% block extra_css %}{% endblock %}
         <link rel="shortcut icon" href="{{ STATIC_URL }}images/gui/favicon.ico" type="image/x-icon" />
         <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/jquery.tooltip.css"/>
@@ -39,6 +40,7 @@
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.tooltip.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.iosslider.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/portamento-min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.touchcarousel-1.1.js"></script>
         <script src="{{ STATIC_URL }}javascript/jquery.spritely-0.6.1.js" type="text/javascript"></script>
     </head>
     <body class="internal {% block body_class %}account{% endblock %} gallery" id="{% block body_id %}gallery{% endblock %}">

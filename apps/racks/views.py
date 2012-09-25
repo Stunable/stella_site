@@ -597,6 +597,7 @@ def _all(request, template='racks/carousel.html'):
         get_context_variables(ctx, request.user)
         
         if settings.IS_PROD:
+            print "PROD"
             query_set = Item.objects.filter(approved=True).order_by('order')
         else:
             query_set = Item.objects.all().order_by('order')
