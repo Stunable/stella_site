@@ -20,6 +20,15 @@ class FlatpageForm(FlatpageFormOld):
 class FlatPageAdmin(FlatPageAdminOld):
     form = FlatpageForm
  
+
+
+class WaitingListAdmin(admin.ModelAdmin):
+    list_display  = ('email', 'added', 'approved')
+    list_filter   = ('approved',)
+    search_fields = ('email',)
+
+
+admin.site.register(WaitingList, WaitingListAdmin)
  
 # We have to unregister the normal admin, and then reregister ours
 admin.site.unregister(FlatPage)
@@ -29,7 +38,6 @@ admin.site.register(UserProfile)
 admin.site.register(Question)
 admin.site.register(Answer)
 admin.site.register(QuestionAnswer)
-admin.site.register(WaitingList)
 admin.site.register(BillingInfo)
 admin.site.register(ShippingInfo)
 admin.site.register(CCToken)

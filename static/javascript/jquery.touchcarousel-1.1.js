@@ -447,7 +447,6 @@
 				}
 				
 				
-				
 				this.goTo(newItemId, fromAutoplay);
 			},
 			prev:function(fromAutoplay) {	
