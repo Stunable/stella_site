@@ -1205,7 +1205,7 @@ function initDesktopSwipe(){
 	    scrollSpeed:1,
 	    
 	    autoplay:false,               // Autoplay enabled.
-	    autoplayDelay:3000,	          // Delay between transitions.
+	    autoplayDelay:100,	          // Delay between transitions.
 	    autoplayStopAtAction:true,    // Stop autoplay forever when user clicks arrow or does any other action.
 	    
 	    scrollbar: true,              // Scrollbar enabled.
@@ -1218,7 +1218,7 @@ function initDesktopSwipe(){
 	    directionNavAutoHide:false,   // Direction (arrow) navigation auto hide on hover. 
 	                                  // On touch devices arrows are always displayed.
 	    
-	    loopItems: false,             // Loop items (don't disable arrows on last slide and allow autoplay to loop).
+	    loopItems: true,             // Loop items (don't disable arrows on last slide and allow autoplay to loop).
 	    
 	    keyboardNav: true,           // Keyboard arrows navigation.
 	    dragUsingMouse:true,          // Enable drag using mouse.	
@@ -1238,7 +1238,24 @@ function initDesktopSwipe(){
 	                                           
 	    
 	    onAnimStart: null,            // Callback, triggers before deceleration or transition animation.
-	    onAnimComplete: null,         // Callback, triggers after deceleration or transition animation.
+	    onAnimComplete: function(){
+
+	    	number_of_slides = this.numItems;
+	    	currentSlideNum = this.getCurrentId();
+
+			if (latest_slide - 2 <= currentSlideNum){
+				$.ajax({
+			  		url: '?page=' + 3 + '&item_per_page=' + 3,
+			  		success: function(data) {
+			  			$('.touchcarousel-container').append(data)
+			  			
+			  			// initFancyBox();
+			  			// initDragDrop();
+			  			// fixDragDropIssue();
+			  		}
+			  	});
+			}
+	    },         // Callback, triggers after deceleration or transition animation.
 	    
 	    onDragStart:null,             // Callback, triggers on drag start.
 	    onDragRelease: null           // Callback, triggers on drag complete.
@@ -1306,7 +1323,7 @@ function initSwipe(){
 			delta = -event.detail/3;
 		}
 		if (delta)
-			throttle(handle(delta),800);
+			throttle(handle(delta),200);
 	        if (event.preventDefault)
 	                event.preventDefault();
 	        event.returnValue = false;

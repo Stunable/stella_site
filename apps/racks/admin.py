@@ -20,6 +20,12 @@ class ItemTypeInline(admin.StackedInline):
     
 class ItemAdmin(admin.ModelAdmin):
     inlines = [ItemTypeInline]
+
+    actions = ('make_pretty',)
+
+    def make_pretty(self,request,queryset):
+        for obj in queryset:
+            obj.generate_pretty_picture()
     
 
 class SizeAdmin(admin.ModelAdmin):

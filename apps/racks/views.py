@@ -598,9 +598,9 @@ def _all(request, template='racks/carousel.html'):
         
         if settings.IS_PROD:
             print "PROD"
-            query_set = Item.objects.filter(approved=True).order_by('order')
+            query_set = Item.objects.filter(approved=True).order_by('?')
         else:
-            query_set = Item.objects.all().order_by('order')
+            query_set = Item.objects.all().order_by('?')
         
         return pagination(request, ctx, template, query_set)
             

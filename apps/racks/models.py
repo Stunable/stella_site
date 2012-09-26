@@ -11,6 +11,9 @@ from django.db.models import Avg
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.loading import get_model, get_models
 
+from tasks import *
+from apps.common.utils import *
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
     
@@ -68,7 +71,9 @@ class Color(models.Model):
 
 class Item(models.Model):
     image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product Image")
-    #cropped_image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product Cropped Image")
+    pretty_image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product pretty Image",storage=OverwriteStorage())
+    bg_color = models.CharField(max_length=32,default='white',blank=True,null=True)
+
     brand = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(max_length=200, verbose_name='Product Name')
     price = models.DecimalField(max_digits=19, decimal_places=2, verbose_name='Retail Price')
@@ -94,6 +99,8 @@ class Item(models.Model):
         return self.name
     
     def get_image(self):
+        if self.pretty_image:
+            return self.pretty_image
         if self.image:
             return self.image
         elif self.image_urls:
@@ -116,6 +123,10 @@ class Item(models.Model):
             return self.image_urls.split(',')[0]
         else: 
             return "upload/agjea1.254x500.jpg"
+
+    def generate_pretty_picture(self):
+        prettify(self)
+
 
 
 class ItemType(models.Model):
