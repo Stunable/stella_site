@@ -24,6 +24,7 @@
 		this._latestDragX;
 		
 		this._startTime = 0;
+		this._isFrozen = false;
 		
 		this.settings = $.extend({}, $.fn.touchCarousel.defaults, options);		
 		
@@ -248,10 +249,11 @@
 		//Direction navigation (arrows)
 		if(this.settings.directionNav) {	
 			this._itemsWrapper.after("<a href='#' class='arrow-holder left'><span class='arrow-icon left'></span></a> <a href='#' class='arrow-holder right'><span class='arrow-icon right'></span></a>");
-			this.arrowLeft = this.carouselRoot.find(".arrow-holder.left");
-			this.arrowRight = this.carouselRoot.find(".arrow-holder.right");
+			this.arrowLeft = $(".btn.previous");
+			this.arrowRight = $(".btn.next");
 
 			
+			console.log(this.arrowRight)
 			/*if(this.settings.loopItems) {
 				this._arrowLeftBlocked = false;
 				this._disableLeftArrow();
@@ -292,6 +294,7 @@
 				});
 
 				this.arrowLeft.click(function(e) {
+					console.log()
 					e.preventDefault();
 					if(self.settings.loopItems && !self._blockClickEvents || !self._arrowLeftBlocked )
 						self.prev();
@@ -676,7 +679,6 @@
 			},
 			
 			freeze: function(){
-				console.log('freezing!')
 				this._isFrozen = true;
 			},
 
@@ -816,11 +818,11 @@
 				var obj = !isScrollbar ? this._dragContainer : this.scrollbarJQ;			
 				
 				if(!this._useWebkitTransition) {
-					return Math.round(obj.position().left);	
+					return Math.round(obj.position().left)-40;	//TODO: figure out why this 40 offset is needed...
 				} else {						
 					var transform = obj.css("-webkit-transform");
 					var explodedMatrix = transform.replace(/^matrix\(/i, '').split(/, |\)$/g);
-					return parseInt(explodedMatrix[4], 10);				
+					return parseInt(explodedMatrix[4], 10)-40;	//TODO: figure out why this 40 offset is needed...			
 				}
 			},		
 			

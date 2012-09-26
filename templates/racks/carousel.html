@@ -65,10 +65,10 @@
             <div class="tab-detail clearfix" id="carousel">
                 {% if rack_items_list %}
                 <div class="nav directional">
-                    <!-- <div class="blocker blocker-right"></div> -->
-                    <!-- <a class="btn previous" id="prev" href="#">Previous</a> -->
-                    <!-- <div class="blocker blocker-left"></div> -->
-                    <!-- <a class="btn next" id="next" href="#">Next</a> -->
+                    <div class="blocker blocker-right"></div>
+                    <a class="btn previous" id="prev" href="#">Previous</a>
+                    <div class="blocker blocker-left"></div>
+                    <a class="btn next" id="next" href="#">Next</a>
                 </div>
                 <div class="views" id="rotator">
                     <div id="item-per-page-slider">
@@ -85,7 +85,7 @@
                             {% for item in list_3_items %}
                                 <li class="touchcarousel-item item some-crazy-class"> <h5 class="item-label"><span>{{item.brand}}</span></h5>
                                     <h4 class="item-name"><a class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.id %}">{{item.name}}</a></h4>
-                                    <div class="wp drag_item">
+                                    <div class="wp drag_item touchable">
                                         <a class="item-ref bottom-ref rel_pos" data-value="{{ item.id }}" href="{% url item_modal item.id %}"> {% thumbnail item.get_image "200x390" as im %} <img src="{{ im.url }}"> {% empty %} <img src="{{item.get_image}}" alt="" /> {% endthumbnail %} </a>
                                     </div>
                                     {% dict_entry_for_item item from vote_dict as vote %}

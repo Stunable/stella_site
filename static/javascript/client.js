@@ -1024,6 +1024,44 @@ function getCookie(name) {
 	return cookieValue;
 }
 
+
+
+function touchHandler(event){
+	//alert($(event.target).attr('class'))
+  if($(event.target).hasClass('touchable') || $(event.target).parent().hasClass('touchable')){
+  	 //alert(event.target)
+  	 $('.iosSlider').data('touchCarousel').freeze()
+      var touches = event.changedTouches,
+          first = touches[0],
+          type = "";
+
+           switch(event.type)
+      {
+          case "touchstart": type = "mousedown"; $('.iosSlider').data('touchCarousel').freeze(); break;
+          case "touchmove":  type="mousemove"; break;        
+          case "touchend":   type="mouseup"; $('.iosSlider').data('touchCarousel').unfreeze(); break;
+          default: return;
+      }
+      var simulatedEvent = document.createEvent("MouseEvent");
+      simulatedEvent.initMouseEvent(type, true, true, window, 1,
+                                first.screenX, first.screenY,
+                                first.clientX, first.clientY, false,
+                                false, false, false, 0/*left*/, null);
+
+      first.target.dispatchEvent(simulatedEvent);
+      event.preventDefault();
+      //event.stopPropagation();
+  }
+}
+
+function initTouch()
+{
+   document.addEventListener("touchstart", touchHandler, true);
+   document.addEventListener("touchmove", touchHandler, true);
+   document.addEventListener("touchend", touchHandler, true);
+   document.addEventListener("touchcancel", touchHandler, true);    
+}
+
 ///------------------------------------------------------ Plugin/Module Separator ------------------------------------------------------
 
 // jquery ui drag and drop init function
@@ -1166,7 +1204,7 @@ function initDesktopSwipe(){
 	    
 	    scrollSpeed:1,
 	    
-	    autoplay:true,               // Autoplay enabled.
+	    autoplay:false,               // Autoplay enabled.
 	    autoplayDelay:3000,	          // Delay between transitions.
 	    autoplayStopAtAction:true,    // Stop autoplay forever when user clicks arrow or does any other action.
 	    
@@ -1210,30 +1248,30 @@ function initDesktopSwipe(){
 	//$('li.some-crazy-class').css("display", "block");
 	
 	// add mouse over support
-	$('#prev').click(function(e){
-		e.preventDefault();
-	});
-	$('#next').click(function(e){
-		e.preventDefault();
-	});
+	// $('#prev').click(function(e){
+	// 	e.preventDefault();
+	// });
+	// $('#next').click(function(e){
+	// 	e.preventDefault();
+	// });
 	
-	var id; 
-	$('#prev').hover(function(){
-		id = setInterval(manualSlideLeft, 50);
-	}, function(){
-		// remove the interval
-		clearInterval(id);
-		// set carousel to the earest slide
-		updateSlide();		
-	});
+	//var id; 
+	// $('#prev').hover(function(){
+	// 	id = setInterval(manualSlideLeft, 50);
+	// }, function(){
+	// 	// remove the interval
+	// 	clearInterval(id);
+	// 	// set carousel to the earest slide
+	// 	updateSlide();		
+	// });
 	
-	$('#next').hover(function(){
-		id = setInterval(manualSlideRight, 50);
-	}, function(){
-		// clear interval
-		clearInterval(id);
-		updateSlide();
-	});
+	// $('#next').hover(function(){
+	// 	id = setInterval(manualSlideRight, 50);
+	// }, function(){
+	// 	// clear interval
+	// 	clearInterval(id);
+	// 	updateSlide();
+	// });
 }
 
 function initSwipe(){
@@ -1241,7 +1279,7 @@ function initSwipe(){
 				// Temporarily replacing with swipe.js for demo
 	initDesktopSwipe();
 
-
+	
 	/** This is high-level function; REPLACE IT WITH YOUR CODE.
 	 * It must react to delta being more/less than zero.
 	 */
@@ -1285,7 +1323,8 @@ function initSwipe(){
 function initDragDrop() {	
 	$('.drag_item').draggable({
 		helper : "clone",
-		opacity : 0.3,
+		appendTo : 'body',
+		opacity : 0.6,
 	    cursorAt : {
 	      top : 200,
 	      left : 100  	
@@ -1306,7 +1345,7 @@ function initDragDrop() {
 				$(next).addClass('nxt');
 			}
             
-            $('.iosSlider').css('overflow','visible');
+            //$('.iosSlider').css('overflow','visible');
             $('#prev').off('hover');
             $('#next').off('hover');
         },
@@ -1911,7 +1950,7 @@ function fixDragDropIssue(){
 
 $(document).ready(function() {
 	initSwipe();
-	
+	initTouch();
 	function initAddFriend(){
 		// unbind the click function just in case
 		$('.plus-inline').unbind("click");
@@ -2236,8 +2275,6 @@ function stella_request_refund_item(item_id, transaction) {
   		}
   	});
 }
-
-
 
 
 

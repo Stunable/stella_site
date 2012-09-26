@@ -68,6 +68,7 @@ class Color(models.Model):
 
 class Item(models.Model):
     image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product Image")
+    #cropped_image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product Cropped Image")
     brand = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(max_length=200, verbose_name='Product Name')
     price = models.DecimalField(max_digits=19, decimal_places=2, verbose_name='Retail Price')
