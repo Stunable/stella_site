@@ -121,3 +121,167 @@
         </div><!--/.special#item-carousel"-->
     </div><!--/.section#page-content"-->
     {% endblock %}
+
+    {% block extra_script %}
+    <script>
+    $(document).ready(function() {
+        initSwipe($('.iosSlider'));
+        initTouch();
+        function initAddFriend(){
+            // unbind the click function just in case
+            $('.plus-inline').unbind("click");
+            // when click on the add friend icon
+            $('.plus-inline').click(function(){
+                var current_item = $(this).parent().parent();
+                var span = $(this).parent().find("span");
+                var spinner = $('<div class="spinner" style="float:right;"></div>');
+                var plusBtn = $(this);
+                plusBtn.hide();         
+                spinner.appendTo(plusBtn.parent());
+                spinner.sprite({ fps: 10, no_of_frames: 12 });
+                
+                $.getJSON($(this).attr('href'), function(result){
+                    // remove the plus icon when invitation is sent
+                    plusBtn.remove();
+                    spinner.remove();
+                    // plusBtn.show();
+                    
+                    if(result['result'] == true){
+                        // notice user
+                        var temp = $(span).html();
+                        $(span).html("Request Sent!").delay(3000).fadeOut(500, function() {
+                            $(span).html(temp);
+                            $(span).fadeIn(500);
+                        });
+                    }else{
+                        alert(result['error']);
+                    }
+                });
+                return false;
+            });
+        }
+        
+        function listFilter(input, list) {
+            $(input).change(function() {
+                var filter = $(this).val();
+                // get the value of the input, which we filter on
+                if(filter) {
+                    $(list).find("span:not(:contains(" + filter + "))").parent().parent().slideUp();
+                    $(list).find("span:contains(" + filter + ")").parent().parent().slideDown();
+                } else {
+                    $(list).find("li").slideDown();
+                }
+            }).keyup(function() {
+                // fire the above change event after every letter
+                $(this).change();
+            });
+        }
+        
+        var oldFilter = "";
+        
+        function getUserlist(input, list){
+            var form = $(input).parent();
+            var href = $(form).attr('action');
+            $(input).change(function(){
+                // from the jquery document, the change event is fired 
+                // only if the input loses focus, so we need to compare
+                // the old and new value of the input box after it loses
+                // focus, so we can decide to init the plus icon or just ignore
+                
+                var filter = $(this).val();
+                if (filter != oldFilter){
+                    var link = href + '?q=' + filter;           
+                    $.get(link, function(returnValue){
+                        $.each(list, function(){
+                            $(this).html(returnValue);
+                        });
+                        initAddFriend();
+                        oldFilter = filter;
+                    });
+                }
+                // else ignore it for god sake
+            }).keyup(function() {
+                // fire the above change event after every letter
+                $(this).change();
+            });
+        }
+
+
+        $('.panel-tab').click(function() {
+            if(!$(this).hasClass('active')) {
+                $('.panel-tab').removeClass('active');
+                $(this).addClass('active');
+                $('.panel-inner-content').fadeOut(500, function() {
+                    $('.panel-inner-content').html($('.panel-header .active').find('.tab-content').html()).fadeIn(500, function() {
+                        initDragDrop();
+                        initFancyBox('#add-rack ');
+                        initFancyBox('#add-friend ');
+                        initFancyBox();
+                        fixDragDropIssue();
+                    });
+                    if($('.friend-search-box').length > 1) {
+                        // because there are exactly identical elements so i need to choose the last one (the first one is hidden)
+                        // listFilter($('.friend-search-box')[1], $('.friend-list')[1]);
+                        getUserlist($('.friend-search-box')[1], $('.search-result'));
+                        initFriendDragDrop();
+                    }
+                });
+            }
+        });
+
+        $('.panel-inner-content').html($('.panel-header .active').find('.tab-content').html()).fadeIn(1000, function() {
+            initDragDrop();
+            initFancyBox('#add-rack ');
+            initFancyBox('#add-friend ');
+            initFancyBox();
+            fixDragDropIssue();
+        });
+        
+    });
+$(document).ready(function(){
+
+    setupRackIt();
+    
+    //initSliderTracking();
+    $('.iosSlider').css('overflow','hidden');
+    
+    // setup the remove icon in the rack detail
+    $('.remove').click(function(){
+        var conf = confirm("Are you sure you want to remove this item from this rack?");
+        if (conf == true){
+            // call ajax to remove the item from rack
+            var current_item = $(this).parent();
+            $.getJSON($(this).attr('href'), function(result){
+                if(result['result'] == true){
+                    $(current_item).remove();
+                }else{
+                    alert(result['message']);
+                }
+            });
+            return false;
+        }
+    });
+    
+    // calls ajax when click on the products per page slider
+    $('.products_per_page_links').click(function(event){
+        event.preventDefault();
+        var link = $(this).attr('href');
+        $('.products_per_page_links').css('text-decoration', 'none');
+        $(this).css('text-decoration', 'underline');
+        $.ajax({
+            url: link,
+            success: function(returnData){
+                $('.iosSlider').iosSlider('destroy', true);
+                // return to the first slide
+                slideNum = 0;
+                $('.iosSlider .slider').html(returnData);
+                initDesktopSwipe();
+                initFancyBox();
+                initDragDrop();
+                fixDragDropIssue();
+            }
+        })
+    })
+});
+</script>
+    {% endblock %}

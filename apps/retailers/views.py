@@ -345,4 +345,28 @@ def update_order_item(request, order_item_id):
     return HttpResponse(json.dumps({'success': True}, ensure_ascii=False), mimetype='application/json')
         
         
-    
+@login_required 
+def item_action(request, template="retailers/product_list.html"):
+    if request.method=='POST':
+        try:
+            retailer_profile = RetailerProfile.objects.get(user=request.user)
+            pl = []
+            s = set()
+            for si in StylistItem.objects.filter(stylist=request.user):
+                if si.item.pk not in s and si.item.pk in [int(pk) for pk in request.POST.getlist('selected_items')]:
+                    pl.append(si)
+                    s.add(si.item.pk)
+            if request.POST.get('action_name','None') and request.POST.get('confirm_%s'%request.POST.get('action_name')):
+                for i in pl:
+                    getattr(i,request.POST.get('action_name','None'))()
+                return redirect(request.get('next',reverse("product_list")))
+            else:   
+                data = {
+                    'action_name': request.POST.get('action_name')
+                }
+                ctx = {'retailer_profile': retailer_profile, 'product_list': pl, 'confirm': data}
+                return direct_to_template(request, template, ctx)
+
+        except:    
+            return redirect(reverse("product_list"))
+            

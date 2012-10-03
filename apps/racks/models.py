@@ -83,6 +83,7 @@ class Item(models.Model):
     fabrics = models.CharField(max_length=200, null=True, blank=True)
     image_urls = models.TextField(null=True, blank=True)
     order = models.IntegerField(default=0, db_index=True)
+    is_deleted = models.BooleanField(default=False,blank=True)
     
     retailers = models.ManyToManyField(User, through='retailers.StylistItem', null=True, blank=True)
     sizes = models.ManyToManyField(Size, through='racks.ItemType', null=True, blank=True)
@@ -126,6 +127,11 @@ class Item(models.Model):
 
     def generate_pretty_picture(self):
         prettify(self)
+
+
+    def list_image(self):
+        return '<img style="width:60px" src="/media/%s"/>' % self.get_image()
+    list_image.allow_tags = True
 
 
 

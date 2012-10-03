@@ -996,17 +996,6 @@ function initFancyBox(container) {
 }
 
 
-function throttle(fn, delay) {
-  var timer = null;
-  return function () {
-    var context = this, args = arguments;
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-      fn.apply(context, args);
-    }, delay);
-  };
-}
-
 
 function getCookie(name) {
 	var cookieValue = null;
@@ -1291,49 +1280,50 @@ function initDesktopSwipe(){
 	// });
 }
 
-function initSwipe(){
+var sliderInstance;
+
+function initSwipe(selector){
 
 				// Temporarily replacing with swipe.js for demo
 	initDesktopSwipe();
-
-	
-	/** This is high-level function; REPLACE IT WITH YOUR CODE.
-	 * It must react to delta being more/less than zero.
-	 */
+	sliderInstance = $('.iosSlider').data('touchCarousel');
+	sliderInstance.swipeStart = new Date();
 	function handle(delta) {
-		console.log(delta)
-		var sliderInstance = $('.iosSlider').data('touchCarousel');
+		
 		//var c = sliderInstance._getXPos();
 		if (delta > 0){
-			
+			//sliderInstance.animateTo(-80, sliderInstance.settings.transitionSpeed, "easeInOutSine");	
 			sliderInstance.prev()
 
 		}else{
 			sliderInstance.next()
+			//sliderInstance.animateTo(-80, sliderInstance.settings.transitionSpeed, "easeInOutSine");	
 		}
-			/* something. */;
 	}
 
 	function wheel(event){
 		var delta = 0;
-		if (!event) event = window.event;
-		if (event.wheelDelta) {
-			delta = event.wheelDelta/120; 
-		} else if (event.detail) {
-			delta = -event.detail/3;
+		//if (!event) event = window.event;
+		if (event.originalEvent.wheelDelta) {
+			delta = event.originalEvent.wheelDelta/120; 
+		} else if (event.originalEvent.detail) {
+			delta = -event.originalEvent.detail/3;
 		}
-		if (delta)
-			throttle(handle(delta),200);
-	        if (event.preventDefault)
-	                event.preventDefault();
-	        event.returnValue = false;
+		//console.log(delta)
+		var now = new Date()
+		if (! sliderInstance._isAnimating && now - sliderInstance.swipeStart > (sliderInstance.settings.transitionSpeed*2)){
+			handle(delta);
+			sliderInstance.swipeStart = now;
+		}
+
+	    if (event.preventDefault)
+	            event.preventDefault();
+	    event.originalEvent.returnValue = false;
 	}
 
-	/* Initialization code. */
-	if (window.addEventListener)
-		window.addEventListener('DOMMouseScroll', wheel, false);
-	window.onmousewheel = document.onmousewheel = wheel;
-
+	if (selector){
+		$(selector).on( "mousewheel DOMMouseScroll", wheel);
+	}
 
 }
 
@@ -1965,120 +1955,7 @@ function fixDragDropIssue(){
 	}
 }
 
-$(document).ready(function() {
-	initSwipe();
-	initTouch();
-	function initAddFriend(){
-		// unbind the click function just in case
-		$('.plus-inline').unbind("click");
-		// when click on the add friend icon
-		$('.plus-inline').click(function(){
-			var current_item = $(this).parent().parent();
-			var span = $(this).parent().find("span");
-			var spinner = $('<div class="spinner" style="float:right;"></div>');
-			var plusBtn = $(this);
-			plusBtn.hide();			
-			spinner.appendTo(plusBtn.parent());
-			spinner.sprite({ fps: 10, no_of_frames: 12 });
-			
-			$.getJSON($(this).attr('href'), function(result){
-				// remove the plus icon when invitation is sent
-				plusBtn.remove();
-				spinner.remove();
-				// plusBtn.show();
-				
-				if(result['result'] == true){
-					// notice user
-					var temp = $(span).html();
-					$(span).html("Request Sent!").delay(3000).fadeOut(500, function() {
-						$(span).html(temp);
-						$(span).fadeIn(500);
-					});
-				}else{
-					alert(result['error']);
-				}
-			});
-			return false;
-		});
-	}
-	
-	function listFilter(input, list) {
-		$(input).change(function() {
-			var filter = $(this).val();
-			// get the value of the input, which we filter on
-			if(filter) {
-				$(list).find("span:not(:contains(" + filter + "))").parent().parent().slideUp();
-				$(list).find("span:contains(" + filter + ")").parent().parent().slideDown();
-			} else {
-				$(list).find("li").slideDown();
-			}
-		}).keyup(function() {
-			// fire the above change event after every letter
-			$(this).change();
-		});
-	}
-	
-	var oldFilter = "";
-	
-	function getUserlist(input, list){
-		var form = $(input).parent();
-		var href = $(form).attr('action');
-		$(input).change(function(){
-			// from the jquery document, the change event is fired 
-			// only if the input loses focus, so we need to compare
-			// the old and new value of the input box after it loses
-			// focus, so we can decide to init the plus icon or just ignore
-			
-			var filter = $(this).val();
-			if (filter != oldFilter){
-				var link = href + '?q=' + filter;			
-				$.get(link, function(returnValue){
-					$.each(list, function(){
-						$(this).html(returnValue);
-					});
-					initAddFriend();
-					oldFilter = filter;
-				});
-			}
-			// else ignore it for god sake
-		}).keyup(function() {
-			// fire the above change event after every letter
-			$(this).change();
-		});
-	}
 
-
-	$('.panel-tab').click(function() {
-		if(!$(this).hasClass('active')) {
-			$('.panel-tab').removeClass('active');
-			$(this).addClass('active');
-			$('.panel-inner-content').fadeOut(500, function() {
-				$('.panel-inner-content').html($('.panel-header .active').find('.tab-content').html()).fadeIn(500, function() {
-					initDragDrop();
-					initFancyBox('#add-rack ');
-					initFancyBox('#add-friend ');
-					initFancyBox();
-					fixDragDropIssue();
-				});
-				if($('.friend-search-box').length > 1) {
-					// because there are exactly identical elements so i need to choose the last one (the first one is hidden)
-					// listFilter($('.friend-search-box')[1], $('.friend-list')[1]);
-					getUserlist($('.friend-search-box')[1], $('.search-result'));
-					initFriendDragDrop();
-				}
-			});
-		}
-	});
-
-	$('.panel-inner-content').html($('.panel-header .active').find('.tab-content').html()).fadeIn(1000, function() {
-		initDragDrop();
-		initFancyBox('#add-rack ');
-		initFancyBox('#add-friend ');
-		initFancyBox();
-		fixDragDropIssue();
-	});
-	
-});
 
 $(document).ready(function() {
   initFancyBox();
@@ -2193,51 +2070,7 @@ function initSliderTracking() {
 	};	
 }
 
-$(document).ready(function(){
 
-	setupRackIt();
-	
-	//initSliderTracking();
-	$('.iosSlider').css('overflow','hidden');
-	
-	// setup the remove icon in the rack detail
-	$('.remove').click(function(){
-		var conf = confirm("Are you sure you want to remove this item from this rack?");
-		if (conf == true){
-			// call ajax to remove the item from rack
-			var current_item = $(this).parent();
-			$.getJSON($(this).attr('href'), function(result){
-				if(result['result'] == true){
-					$(current_item).remove();
-				}else{
-					alert(result['message']);
-				}
-			});
-			return false;
-		}
-	});
-	
-	// calls ajax when click on the products per page slider
-	$('.products_per_page_links').click(function(event){
-		event.preventDefault();
-		var link = $(this).attr('href');
-		$('.products_per_page_links').css('text-decoration', 'none');
-		$(this).css('text-decoration', 'underline');
-		$.ajax({
-			url: link,
-			success: function(returnData){
-				$('.iosSlider').iosSlider('destroy', true);
-				// return to the first slide
-				slideNum = 0;
-	  			$('.iosSlider .slider').html(returnData);
-	  			initDesktopSwipe();
-	  			initFancyBox();
-	  			initDragDrop();
-	  			fixDragDropIssue();
-			}
-		})
-	})
-});
 
 function stella_refund(transaction) {
 	$.ajax({

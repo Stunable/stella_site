@@ -104,15 +104,15 @@ class RetailerEditForm(forms.ModelForm):
     
 
 class RetailerProfileCreationForm(forms.ModelForm):
-    first_name = forms.CharField(required=True, error_messages={'required': (u'Stella wants to know your first name')})
-    last_name = forms.CharField(required=True, error_messages={'required': (u'Stella wants to know your last name')})
+    first_name = forms.CharField(required=False, error_messages={'required': (u'Stella wants to know your first name')})
+    last_name = forms.CharField(required=False, error_messages={'required': (u'Stella wants to know your last name')})
     state = forms.ChoiceField(widget=forms.Select(attrs={'class': 'required', 'id': 'state'}), choices=US_STATES,error_messages={'required': (u'State is required')} )
     description = forms.CharField(widget=forms.Textarea(attrs=dict(cols=50, rows=5, placeholder=(u"Tell us a little something about\
                                  yourself and the products you sell. Hit us with your best elevator pitch in under 600 words!"))),
-                                  max_length=600, help_text='600 characters max.', required=False, error_messages={'max_length': (u'Your description must be less than 600 words')})
+                                  max_length=600, help_text='600 characters max.', required=True, error_messages={'max_length': (u'Your description must be less than 600 words')})
     password = forms.CharField(widget=forms.PasswordInput(), required=True, error_messages={'required': (u'Password is required')})
     password_confirm = forms.CharField(widget=forms.PasswordInput(), required=True, error_messages={'required': (u'Password Confirm is required')})
-    selling_options = forms.MultipleChoiceField(choices=SELLING_OPTIONS, widget=forms.CheckboxSelectMultiple, error_messages={'required': (u'Selling options is required')})
+    selling_options = forms.MultipleChoiceField(required=False,choices=SELLING_OPTIONS, widget=forms.CheckboxSelectMultiple, error_messages={'required': (u'Selling options is required')})
     more_details = forms.CharField(required=False)
 #    terms = forms.BooleanField(error_messages={'required': (u'You must agree to the terms and conditions')})
     

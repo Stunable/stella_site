@@ -59,6 +59,212 @@
 		/*		display: inline-block;*/
 	}
 </style>
+
+<div id="page-content" class="section clearfix round-corner-shadow">
+	<div class="page-header">
+		<div class="section intro">
+			<h2><span>Interested in Becoming a Retailer?</span></h2>
+			<h3><span>Please complete our application below and we'll be in touch.</span></h3>
+		</div>
+	</div>
+	<div class="section body-copy bootstrap">
+		<form action="" method="POST" class="user-entry" id="account-form" enctype="multipart/form-data">
+			{% csrf_token %}
+			<ul>
+				{% for error in form.errors.values %}
+				<li class="error_msg">
+					{{error}}
+				</li>
+				{% endfor %}
+			</ul>
+			<table style="width: 100%">
+				<tbody>
+					<tr>
+						<td>Company Name</td>
+						<td>
+						<input type="text" class="inline txt" value="{{ form.name.value|default_if_none:'' }}" id="name" name="name"/>
+						</td>
+						{{form.name.errors}}
+					</tr>
+					<tr>
+						<td>First Name</td>
+						<td>
+						<input type="text" class="inline txt" value="{{ form.first_name.value|default_if_none:'' }}" id="first_name" name="first_name"/>
+						</td>
+						{{form.first_name.errors}}
+					</tr>
+					<tr>
+						<td>Last Name</td>
+						<td>
+						<input type="text" class="inline txt" value="{{ form.last_name.value|default_if_none:'' }}" id="last_name" name="last_name"/>
+						</td>
+						{{form.last_name.errors}}
+					</tr>
+					<tr>
+						<td>Address 1</td>
+						<td>
+						<input type="text" class="inline txt" value="{{ form.address_1.value|default_if_none:'' }}" id="address_1" name="address_1"/>
+						</td>
+						{{form.address_1.errors}}
+					</tr>
+					<tr>
+						<td>Address 2</td>
+						<td>
+						<input type="text" class="inline txt" value="{{ form.address_2.value|default_if_none:'' }}" id="address_2" name="address_2"/>
+						</td>
+						{{form.address_2.errors}}
+					</tr>
+					<tr>
+						<td>City</td>
+						<td>
+						<input type="text" class="inline txt" value="{{ form.city.value|default_if_none:'' }}" id="city" name="city"/>
+						</td>
+						{{form.city.errors}}
+					</tr>
+					<tr>
+						<td><span>State</span></td><td>{{ form.state }} <span style="margin: 6px; width: 46px; display: inline-block;">Zip</span>
+						<input type="text" class="inline txt" value="{{ form.zip_code.value|default_if_none:'' }}" id="zip_code" name="zip_code"/>
+						</td>
+						{{form.state.errors}}
+						{{form.zip.errors}}
+					</tr>
+					<tr>
+						<td>Hours</td>
+						<td>
+						<input type="text" class="inline txt small-size" name="time_picker_1" id="time_picker_1" value="{{ time_picker_1|default_if_none:'' }}"/>
+						<span style="margin: 6px; width: 46px; display: inline-block;">to</span>
+						<input type="text" name="time_picker_2" class="inline txt small-size" id="time_picker_2" value="{{ time_picker_2|default_if_none:'' }}" />
+						<br/>
+						<input type="hidden" id="day_1_hidden" value="{{ day_1 }}"/>
+						<input type="hidden" id="day_2_hidden" value="{{ day_2 }}"/>
+						<select name="day_1" id="day_1">
+							<option value="Monday">Monday</option>
+							<option value="Tuesday">Tuesday</option>
+							<option value="Wednesday">Wednesday</option>
+							<option value="Thursday">Thursday</option>
+							<option value="Friday">Friday</option>
+							<option value="Saturday">Saturday</option>
+							<option value="Sunday">Sunday</option>
+						</select><span style="margin: 6px; width: 50px; display: inline-block;">through</span>
+						<select name="day_2" id="day_2">
+							<option value="Monday">Monday</option>
+							<option value="Tuesday">Tuesday</option>
+							<option value="Wednesday">Wednesday</option>
+							<option value="Thursday">Thursday</option>
+							<option value="Friday" selected="selected">Friday</option>
+							<option value="Saturday">Saturday</option>
+							<option value="Sunday">Sunday</option>
+						</select>
+						<input type="text" class="inline txt" value="{{ form.hours.value|default_if_none:'' }}" type="hidden" id="hours" name="hours"/>
+						</td>
+						{{form.time_picker_1.errors}}
+						{{form.time_picker_2.errors}}
+					</tr>
+					<tr>
+						<td>Phone Number</td>
+						<td>
+						<input type="text" class="inline txt" value="{{ form.phone_number.value|default_if_none:'' }}" id="phone_number" name="phone_number"/>
+						</td>
+						
+						{{form.phone_number.errors}}
+					    
+					</tr>
+					<tr>
+						<td>Email Address</td>
+						<td>
+						<input type="text" class="inline txt" value="{{ form.email_address.value|default_if_none:'' }}" id="email_address" name="email_address"/>
+						</td>
+						{{form.email_address.errors}}
+					</tr>
+					<tr>
+						<td>Paypal Email</td>
+						<td>
+						<input type="text" class="inline txt" value="{{ form.paypal_email.value|default_if_none:'' }}" id="paypal_email" name="paypal_email"/>
+						</td>
+						{{form.paypal_email.erros}}
+					</tr>
+					<tr>
+						<td>Company Logo</td>
+						<td>
+						<input type="file" name="company_logo" id="company_logo" />
+						</td>
+						{{form.company_logo.errors}}
+					</tr>
+					<tr>
+						<td>Description</td>
+						<td>						
+						    <textarea class="inline txt" 
+						    placeholder="Tell us a little something about yourself and the products you sell. Hit us with your best elevator pitch in under 600 words!"
+						     id="description" name="description">{{ form.description.value|default_if_none:'' }}</textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>Password</td>
+						<td>
+						<input class="inline txt" type="password" id="password" name="password" value="" />
+						</td>
+						{{form.password.errors}}
+					</tr>
+					<tr>
+						<td>Password Confirm</td>
+						<td>
+						<input class="inline txt" type="password" id="password_confirm" name="password_confirm" value="" />
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>{{ form.accept_refund }} I accept <a href="#return-policy" class="item-ref">Stunable Return Policy</a> <span>{{ form.not_accept_refund }}<span>I do not accept</span></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td> {{ form.selling_options }} </td>
+					</tr>
+					<tr>
+						<td colspan="2">
+						<div style="margin-left: auto; margin-right: auto; text-align: center">
+							<p id="bigform-error" class="alert"></p>
+						</div></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+						<div style="float:right;">
+							<input type="submit" class="btn btn-primary" value="Sign Up" />
+						</div></td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+	<div id="hidden-items">
+		<div id="return-policy" class="item-details clearfix sub-page">
+            <p class="close">
+                <a class="close-box" href="#">Close</a>
+            </p>
+            <div class="section intro">
+                <h2><span>Standard Return Policy</span></h2>
+            </div>
+            <div class="user-entry sub-page-content">
+                <p>
+•   Merchandise must be returned within 21 days of purchase.<br>
+•   Merchandise must not be worn, altered, or washed.<br>
+•   Merchandise must have all tags attached.<br>
+•   Footwear must include the original shoe box in its original condition, without postal labels.<br>
+•   Shipping and handling charges are not refundable.<br>
+•   To be eligible for a refund, shoppers must include a valid tracking number for all products being returned.<br> 
+•   Stylists are not responsible for accepting damaged or altered products and are not liable for alterations occurring during transit. It’s recommended that shipping and handling insurance accompany packages containing items that buyers are seeking to return.<br>
+•   Stylists are responsible for responding directly to buyers within a timely manner and are obligated to process returns and refunds within seven [7] days upon receipt of the returned items.<br> 
+•   Stylists will notify Stunable that a refund is being issued and Stunable will process the transaction by crediting the buyer’s account and notifying the buyer of the refund via email notification.<br> 
+                </p>
+            </div>
+        </div>
+		<!-- ********************************************* Modal-Window for Invite Friends START ********************************************* -->
+		{% include 'retailers/retailer_terms_and_cons.html' %}
+	</div>
+</div>
+{% endblock %} 
+
+{% block extra_script %}
+
 <script type="text/javascript">
 	function get_time_text() {
 		var day_1 = $('#day_1').val();
@@ -188,15 +394,15 @@
 			},
 			rules : {
 				company_name : "required",
-				first_name : "required",
-				last_name : "required",
-				city : "required",
-				state : "required",
-				zip_code : "required",
-				time_picker_1 : 'required',
-				time_picker_2 : 'required',
-				phone_number : "required",
-				company_logo : 'required',
+				// first_name : "required",
+				// last_name : "required",
+				// city : "required",
+				// state : "required",
+				// zip_code : "required",
+				// time_picker_1 : 'required',
+				// time_picker_2 : 'required',
+				// phone_number : "required",
+				// company_logo : 'required',
 				email_address : {
 					required : true,
 					email : true
@@ -214,7 +420,7 @@
 					required : false,
 					equalTo : "#password",
 				},
-				selling_options : "required",
+				//selling_options : "required",
 				terms : "required"
 			},
 			messages : {
@@ -242,188 +448,4 @@
 		});
 	})
 </script>
-<div id="page-content" class="section clearfix round-corner-shadow">
-	<div class="page-header">
-		<div class="section intro">
-			<h2><span>Interested in Becoming a Retailer?</span></h2>
-			<h3><span>Please complete our application below and we'll be in touch.</span></h3>
-		</div>
-	</div>
-	<div class="section body-copy bootstrap">
-		<form action="" method="POST" class="user-entry" id="account-form" enctype="multipart/form-data">
-			{% csrf_token %}
-			<ul>
-				{% for error in form.errors.values %}
-				<li class="error_msg">
-					{{error}}
-				</li>
-				{% endfor %}
-			</ul>
-			<table style="width: 100%">
-				<tbody>
-					<tr>
-						<td>Company Name</td>
-						<td>
-						<input type="text" class="inline txt" value="{{ form.name.value|default_if_none:'' }}" id="name" name="name"/>
-						</td>
-					</tr>
-					<tr>
-						<td>First Name</td>
-						<td>
-						<input type="text" class="inline txt" value="{{ form.first_name.value|default_if_none:'' }}" id="first_name" name="first_name"/>
-						</td>
-					</tr>
-					<tr>
-						<td>Last Name</td>
-						<td>
-						<input type="text" class="inline txt" value="{{ form.last_name.value|default_if_none:'' }}" id="last_name" name="last_name"/>
-						</td>
-					</tr>
-					<tr>
-						<td>Address 1</td>
-						<td>
-						<input type="text" class="inline txt" value="{{ form.address_1.value|default_if_none:'' }}" id="address_1" name="address_1"/>
-						</td>
-					</tr>
-					<tr>
-						<td>Address 2</td>
-						<td>
-						<input type="text" class="inline txt" value="{{ form.address_2.value|default_if_none:'' }}" id="address_2" name="address_2"/>
-						</td>
-					</tr>
-					<tr>
-						<td>City</td>
-						<td>
-						<input type="text" class="inline txt" value="{{ form.city.value|default_if_none:'' }}" id="city" name="city"/>
-						</td>
-					</tr>
-					<tr>
-						<td><span>State</span></td><td>{{ form.state }} <span style="margin: 6px; width: 46px; display: inline-block;">Zip</span>
-						<input type="text" class="inline txt" value="{{ form.zip_code.value|default_if_none:'' }}" id="zip_code" name="zip_code"/>
-						</td>
-					</tr>
-					<tr>
-						<td>Hours</td>
-						<td>
-						<input type="text" class="inline txt small-size" name="time_picker_1" id="time_picker_1" value="{{ time_picker_1|default_if_none:'' }}"/>
-						<span style="margin: 6px; width: 46px; display: inline-block;">to</span>
-						<input type="text" name="time_picker_2" class="inline txt small-size" id="time_picker_2" value="{{ time_picker_2|default_if_none:'' }}" />
-						<br/>
-						<input type="hidden" id="day_1_hidden" value="{{ day_1 }}"/>
-						<input type="hidden" id="day_2_hidden" value="{{ day_2 }}"/>
-						<select name="day_1" id="day_1">
-							<option value="Monday">Monday</option>
-							<option value="Tuesday">Tuesday</option>
-							<option value="Wednesday">Wednesday</option>
-							<option value="Thursday">Thursday</option>
-							<option value="Friday">Friday</option>
-							<option value="Saturday">Saturday</option>
-							<option value="Sunday">Sunday</option>
-						</select><span style="margin: 6px; width: 50px; display: inline-block;">through</span>
-						<select name="day_2" id="day_2">
-							<option value="Monday">Monday</option>
-							<option value="Tuesday">Tuesday</option>
-							<option value="Wednesday">Wednesday</option>
-							<option value="Thursday">Thursday</option>
-							<option value="Friday" selected="selected">Friday</option>
-							<option value="Saturday">Saturday</option>
-							<option value="Sunday">Sunday</option>
-						</select>
-						<input type="text" class="inline txt" value="{{ form.hours.value|default_if_none:'' }}" type="hidden" id="hours" name="hours"/>
-						</td>
-					</tr>
-					<tr>
-						<td>Phone Number</td>
-						<td>
-						<input type="text" class="inline txt" value="{{ form.phone_number.value|default_if_none:'' }}" id="phone_number" name="phone_number"/>
-						</td>
-					</tr>
-					<tr>
-						<td>Email Address</td>
-						<td>
-						<input type="text" class="inline txt" value="{{ form.email_address.value|default_if_none:'' }}" id="email_address" name="email_address"/>
-						</td>
-					</tr>
-					<tr>
-						<td>Paypal Email</td>
-						<td>
-						<input type="text" class="inline txt" value="{{ form.paypal_email.value|default_if_none:'' }}" id="paypal_email" name="paypal_email"/>
-						</td>
-					</tr>
-					<tr>
-						<td>Company Logo</td>
-						<td>
-						<input type="file" name="company_logo" id="company_logo" />
-						</td>
-					</tr>
-					<tr>
-						<td>Description</td>
-						<td>						
-						    <textarea class="inline txt" 
-						    placeholder="Tell us a little something about yourself and the products you sell. Hit us with your best elevator pitch in under 600 words!"
-						     id="description" name="description">{{ form.description.value|default_if_none:'' }}</textarea>
-						</td>
-					</tr>
-					<tr>
-						<td>Password</td>
-						<td>
-						<input class="inline txt" type="password" id="password" name="password" value="" />
-						</td>
-					</tr>
-					<tr>
-						<td>Password Confirm</td>
-						<td>
-						<input class="inline txt" type="password" id="password_confirm" name="password_confirm" value="" />
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>{{ form.accept_refund }} I accept <a href="#return-policy" class="item-ref">Stunable Return Policy</a> <span>{{ form.not_accept_refund }}<span>I do not accept</span></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td> {{ form.selling_options }} </td>
-					</tr>
-					<tr>
-						<td colspan="2">
-						<div style="margin-left: auto; margin-right: auto; text-align: center">
-							<p id="bigform-error" class="alert"></p>
-						</div></td>
-					</tr>
-					<tr>
-						<td colspan="2">
-						<div style="float:right;">
-							<input type="submit" class="btn btn-primary" value="Sign Up" />
-						</div></td>
-					</tr>
-				</tbody>
-			</table>
-		</form>
-	</div>
-	<div id="hidden-items">
-		<div id="return-policy" class="item-details clearfix sub-page">
-            <p class="close">
-                <a class="close-box" href="#">Close</a>
-            </p>
-            <div class="section intro">
-                <h2><span>Standard Return Policy</span></h2>
-            </div>
-            <div class="user-entry sub-page-content">
-                <p>
-•   Merchandise must be returned within 21 days of purchase.<br>
-•   Merchandise must not be worn, altered, or washed.<br>
-•   Merchandise must have all tags attached.<br>
-•   Footwear must include the original shoe box in its original condition, without postal labels.<br>
-•   Shipping and handling charges are not refundable.<br>
-•   To be eligible for a refund, shoppers must include a valid tracking number for all products being returned.<br> 
-•   Stylists are not responsible for accepting damaged or altered products and are not liable for alterations occurring during transit. It’s recommended that shipping and handling insurance accompany packages containing items that buyers are seeking to return.<br>
-•   Stylists are responsible for responding directly to buyers within a timely manner and are obligated to process returns and refunds within seven [7] days upon receipt of the returned items.<br> 
-•   Stylists will notify Stunable that a refund is being issued and Stunable will process the transaction by crediting the buyer’s account and notifying the buyer of the refund via email notification.<br> 
-                </p>
-            </div>
-        </div>
-		<!-- ********************************************* Modal-Window for Invite Friends START ********************************************* -->
-		{% include 'retailers/retailer_terms_and_cons.html' %}
-	</div>
-</div>
-{% endblock %} 
+{% endblock %}

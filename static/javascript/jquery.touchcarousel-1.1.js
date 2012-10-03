@@ -253,7 +253,7 @@
 			this.arrowRight = $(".btn.next");
 
 			
-			console.log(this.arrowRight)
+			//console.log(this.arrowRight)
 			/*if(this.settings.loopItems) {
 				this._arrowLeftBlocked = false;
 				this._disableLeftArrow();
@@ -397,19 +397,14 @@
 	TouchCarousel.prototype = {
 			/* Public methods: */
 			goTo:function(id, fromAutoplay) {
-						
-				
 				var newItem = this.items[id];
-				
 				
 				if(newItem) {					
 					if(!fromAutoplay && this.autoplay && this.settings.autoplayStopAtAction) {						
 						this.stopAutoplay();
 					}
 					
-					this._updatePagingNav(id);
-					
-					
+					this._updatePagingNav(id);		
 					this.endPos = this._getXPos();
 					var newX = -newItem.posX;
 					if(newX > 0) {
@@ -417,7 +412,7 @@
 					} else if(newX < this.carouselWidth - this._maxXPos) {
 						newX = this.carouselWidth - this._maxXPos;
 					}
-					this.animateTo(newX, this.settings.transitionSpeed, "easeInOutSine");					
+					this.animateTo(newX, this.settings.transitionSpeed, "easeOutSine");					
 				}			
 				
 			},
