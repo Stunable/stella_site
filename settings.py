@@ -177,7 +177,7 @@ INSTALLED_APPS = (
     'paypal.pro',
     'api',
     'gunicorn',
-    'chronograph'
+    #'chronograph'
 )
 
 # django-registration
