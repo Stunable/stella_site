@@ -91,10 +91,19 @@ class ItemTypeInline(admin.StackedInline):
 class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
     inlines = [ItemTypeInline]
     list_display = ('name','category','approved','list_image',)
-    actions = ('make_pretty',)
+    actions = ('make_pretty','approve','unapprove')
     list_filter = ('approved',)
     search_fields = ('name','description')
 
+    def unapprove(self,request,queryset):
+        for obj in queryset:
+            obj.approved = False
+            obj.save()
+
+    def approve(self,request,queryset):
+        for obj in queryset:
+            obj.approved = True
+            obj.save()
 
 
     def make_pretty(self,request,queryset):

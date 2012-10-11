@@ -15,18 +15,22 @@ from fabric.colors import yellow, green, blue, red
 # Config setup #
 ################
 
+
+# FIRST:
+# apt-get install python-virtualenv git-core mysql-server libmysqlclient-dev nginx 
+
 conf = {
     "SSH_USER": "ubuntu", # SSH username
     "SSH_PASS":  "", # SSH password (consider key-based authentication)
-    "SSH_KEY_PATH":  "/home/ubuntu/us-east.pem", # Local path to SSH key file, for key-based auth
-    "HOSTS": ['stunable.com',], # List of hosts to deploy to
+    "SSH_KEY_PATH":  "", # Local path to SSH key file, for key-based auth
+    "HOSTS": ['198.74.59.175',], # List of hosts to deploy to
     "VIRTUALENV_HOME":  "/home/ubuntu", # Absolute remote path for virtualenvs
     "PROJECT_NAME": "stella", # Unique identifier for project
     "REQUIREMENTS_PATH": "requirements.txt", # Path to pip requirements, relative to project
     "GUNICORN_PORT": 8000, # Port gunicorn will listen on
     "LOCALE": "en_US.utf8", # Should end with ".utf8"
     "LIVE_HOSTNAME": "stunable.com", # Host for public site.
-    "REPO_URL": "https://su-tn@github.com/simpleunion/stella_site.git", # Git or Mercurial remote repo URL for the project
+    "REPO_URL": "https://github.com/Stunable/stella_site.git --branch=forward", # Git or Mercurial remote repo URL for the project
     "DB_PASS": "123456", # Live database password
     "ADMIN_PASS": "123456", # Live admin user password
 }

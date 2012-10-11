@@ -1311,7 +1311,7 @@ function initSwipe(selector){
 		}
 		//console.log(delta)
 		var now = new Date()
-		if (! sliderInstance._isAnimating && now - sliderInstance.swipeStart > (sliderInstance.settings.transitionSpeed*2)){
+		if (! sliderInstance._isAnimating && now - sliderInstance.swipeStart > (sliderInstance.settings.transitionSpeed*1.5)){
 			handle(delta);
 			sliderInstance.swipeStart = now;
 		}
