@@ -278,6 +278,8 @@ EXTERNAL_CONTENT_URL = {
                             'blog':"http://stunable.wordpress.com/",
                             'news': "http://stunablenews.wordpress.com/"
                         }
-                        
-from dev import *
+try:                        
+    from dev import *
+except:
+    pass
 
