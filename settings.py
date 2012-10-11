@@ -281,5 +281,5 @@ EXTERNAL_CONTENT_URL = {
 try:                        
     from dev import *
 except:
-    pass
+    from prod import *
 
