@@ -40,3 +40,4 @@ zope.component==4.0.0
 zope.deprecation==4.0.0
 zope.event==4.0.0
 zope.interface==4.0.1
+python-memcached
