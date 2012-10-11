@@ -16,8 +16,7 @@ from fabric.colors import yellow, green, blue, red
 ################
 
 
-# FIRST:
-# apt-get install python-virtualenv git-core mysql-server libmysqlclient-dev nginx 
+
 
 conf = {
     "SSH_USER": "ubuntu", # SSH username
