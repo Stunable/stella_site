@@ -13,6 +13,7 @@ class ItemDoesNotExist(Exception):
 
 class Cart:
     def __init__(self, request, instance=None):
+        self.request = request
         self.recipient_zipcode = request.session.get('recipient_zipcode')
 
         if instance:
@@ -165,7 +166,16 @@ class Cart:
     def clear(self):
         for item in self.cart.item_set.all():
             item.delete()
+
+
+    def set_checkout_id(self,wepay_checkout_id):
+        self.cart.checkout_id = wepay_checkout_id
+        self.cart.save()
             
     def checkout(self):
-        self.cart.checked_out = True
-        self.cart.save()
+        if self.request.GET.get('checkout_id') == self.cart.checkout_id:
+            self.cart.checked_out = True
+            self.cart.save()
+        else:
+            raise
+

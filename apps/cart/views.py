@@ -30,6 +30,7 @@ except ImportError:
 import logging
 logger = logging.getLogger(__name__)
 
+from wepay import WePay
 
 @login_required
 def add_to_cart(request, product_id, quantity, size=None):
@@ -240,8 +241,27 @@ def shopper_return_item(request):
     return HttpResponse(json.dumps(response, ensure_ascii=False), mimetype='application/json')
 
 @login_required
-def wpp(request):    
+def wpp(request): 
+
+
+    # set production to True for live environments
     cart = Cart(request)
+    
+    wepay = WePay(settings.WEPAY_PRODUCTION, settings.WEPAY_ACCESS_TOKEN)
+    
+    # create the checkout
+    response = wepay.call('/checkout/create', {
+        'account_id': settings.WEPAY_CLIENT_ID,
+        'amount': cart.grand_total,
+        'short_description': cart.name(),
+        'type': 'GOODS',
+        'mode': 'iframe',
+        'redirect_uri':settings.WWW_ROOT.rstrip('/')+reverse('wpp_success')
+    })
+    # display the response
+    WePay_response = response
+
+    cart.set_checkout_id(WePay_response['checkout_id'])
     
     item = {"amt": cart.grand_total,             # amount to charge for item
         "inv": cart.name(),         # unique tracking variable paypal
@@ -261,28 +281,33 @@ def wpp(request):
       "confirm_template": "cart/confirm.html", # template name for confirmation
       "success_url": "/cart/wpp_success/"}              # redirect location after success
     
-    ppp = PayPalPro(**kw)
-    return ppp(request)
+    # ppp = PayPalPro(**kw)
+    # return ppp(request)
+
+    return render_to_response('cart/payment.html', 
+                              {'wepay': WePay_response }, 
+                              context_instance=RequestContext(request) )
 
 
 @login_required
 def wpp_success(request):
-    
+    purchase = None
+
     current_cart = Cart(request)
     current_cart.cart.save()
     
     # update grand total
     
-    try:        
-        current_cart.checkout()
-        purchase = Purchase.objects.filter(cart=current_cart.cart)[0]
-        return render_to_response('cart/purchased.html', 
-                                  {'cart': Cart(request), 'purchase': purchase }, 
-                                  context_instance=RequestContext(request) )
-    except: 
-        return render_to_response('cart/error.html', 
-                                  {'error': "Failed to validate payment" }, 
-                                  context_instance=RequestContext(request) )
+    # try:        
+    current_cart.checkout()
+    #purchase = Purchase.objects.filter(cart=current_cart.cart)[0]
+    return render_to_response('cart/purchased.html', 
+                              {'cart': Cart(request), 'purchase': current_cart }, 
+                              context_instance=RequestContext(request) )
+    # except: 
+    #     return render_to_response('cart/error.html', 
+    #                               {'error': "Failed to validate payment" }, 
+    #                               context_instance=RequestContext(request) )
         
         
 @login_required

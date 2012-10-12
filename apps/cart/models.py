@@ -21,6 +21,8 @@ class Cart(models.Model):
     shipping_and_handling_cost = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2)
     shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
 
+    checkout_id = models.CharField(max_length=64,blank=True,null=True)#from WePay
+
     class Meta:
         verbose_name = _('cart')
         verbose_name_plural = _('carts')

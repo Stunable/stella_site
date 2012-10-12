@@ -29,7 +29,7 @@ conf = {
     "GUNICORN_PORT": 8000, # Port gunicorn will listen on
     "LOCALE": "en_US.utf8", # Should end with ".utf8"
     "LIVE_HOSTNAME": "stunable.com", # Host for public site.
-    "REPO_URL": "https://github.com/Stunable/stella_site.git --branch=forward", # Git or Mercurial remote repo URL for the project
+    "REPO_URL": "https://github.com/Stunable/stella_site.git", # Git or Mercurial remote repo URL for the project
     "DB_PASS": "123456", # Live database password
     "ADMIN_PASS": "123456", # Live admin user password
 }
@@ -277,9 +277,9 @@ def install():
     
     sudo("apt-get build-dep python-imaging ")
     
-    sudo("ln -s /usr/lib/`uname -i`-linux-gnu/libfreetype.so /usr/lib/")
-    sudo("ln -s /usr/lib/`uname -i`-linux-gnu/libjpeg.so /usr/lib/")
-    sudo("ln -s /usr/lib/`uname -i`-linux-gnu/libz.so /usr/lib/")
+    #sudo("ln -s /usr/lib/`uname -i`-linux-gnu/libfreetype.so /usr/lib/")
+    #sudo("ln -s /usr/lib/`uname -i`-linux-gnu/libjpeg.so /usr/lib/")
+    #sudo("ln -s /usr/lib/`uname -i`-linux-gnu/libz.so /usr/lib/")
     
     sudo("easy_install pip")
     sudo("pip install virtualenv mercurial")
@@ -360,7 +360,10 @@ def create():
             pip("-r %s/%s" % (env.proj_path, env.reqs_path))
         pip("gunicorn setproctitle south psycopg2 "
             "django-compressor python-memcached")
-        manage("createdb --noinput")
+        try:
+            manage("createdb --noinput")
+        except:
+            manage("syncdb --noinput")
         python("from django.conf import settings;"
                "from django.contrib.sites.models import Site;"
                "site, _ = Site.objects.get_or_create(id=settings.SITE_ID);"

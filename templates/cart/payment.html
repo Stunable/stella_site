@@ -29,15 +29,12 @@
 		
 </style>
 
-<script>
-	$(document).ready(function () {
-	});
-</script>
 
 
-<div>
 
-	{% if default_cc %}
+<div id="wepay_iframe">
+
+<!-- 	{% if default_cc %}
 	<div class="section-intro">
 		<h2><span>Payment</span></h2>
 	</div>
@@ -74,11 +71,23 @@
 			<input type="submit" class="btn btn-primary" value="Submit" id="Submit" />
 		</div>
 		</form>
-	</div>
+	</div> -->
+
+
+
 </div>
 
 {% endblock %}
+{% block extra_script %}
+<script type="text/javascript" src="https://www.wepay.com/min/js/iframe.wepay.js">
+</script>
+<script>
+	$(document).ready(function () {
 
+		WePay.iframe_checkout("wepay_iframe", "{{wepay.checkout_uri}}");
+	});
+</script>
+{% endblock %}
 
 
 
