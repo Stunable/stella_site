@@ -18,11 +18,11 @@ TEMPLATE_DEBUG = DEBUG
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
 ADMINS = (
-    ('Dev Alerts', 'dev-alerts@simpleunion.com'),
+    ('Dev Alerts', 'gdamon@gmail.com'),
 )
 
 CONTACT_LIST = (
-    ('Dev Alerts', 'dev-alerts@simpleunion.com'),
+   # ('Dev Alerts', 'dev-alerts@simpleunion.com'),
     ('Stella Admin', 'admin@shopwithstella.com'),
 )
 

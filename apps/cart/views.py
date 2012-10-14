@@ -261,7 +261,6 @@ def wpp(request):
     # display the response
     WePay_response = response
 
-    cart.set_checkout_id(WePay_response['checkout_id'])
     
     item = {"amt": cart.grand_total,             # amount to charge for item
         "inv": cart.name(),         # unique tracking variable paypal
@@ -291,23 +290,22 @@ def wpp(request):
 
 @login_required
 def wpp_success(request):
-    purchase = None
-
+    
     current_cart = Cart(request)
     current_cart.cart.save()
     
     # update grand total
     
-    # try:        
-    current_cart.checkout()
-    #purchase = Purchase.objects.filter(cart=current_cart.cart)[0]
-    return render_to_response('cart/purchased.html', 
-                              {'cart': Cart(request), 'purchase': current_cart }, 
-                              context_instance=RequestContext(request) )
-    # except: 
-    #     return render_to_response('cart/error.html', 
-    #                               {'error': "Failed to validate payment" }, 
-    #                               context_instance=RequestContext(request) )
+    try:        
+        current_cart.checkout()
+        purchase = Purchase.objects.filter(cart=current_cart.cart)[0]
+        return render_to_response('cart/purchased.html', 
+                                  {'cart': Cart(request), 'purchase': purchase }, 
+                                  context_instance=RequestContext(request) )
+    except: 
+        return render_to_response('cart/error.html', 
+                                  {'error': "Failed to validate payment" }, 
+                                  context_instance=RequestContext(request) )
         
         
 @login_required

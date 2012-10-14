@@ -19,6 +19,7 @@ def get_rate(**kwargs):
     weight = kwargs['weight']
     shipper_zipcode = kwargs['shipper_zipcode']
     recipient_zipcode = kwargs['recipient_zipcode']
+    shipping_option = kwargs.get('shipping_option','FEDEX_GROUND')
     
     # Set this to the INFO level to see the response from Fedex printed in stdout.
     logging.basicConfig(level=logging.INFO)
@@ -33,7 +34,7 @@ def get_rate(**kwargs):
     
     # See page 355 in WS_ShipService.pdf for a full list. Here are the common ones:
     # STANDARD_OVERNIGHT, PRIORITY_OVERNIGHT, FEDEX_GROUND, FEDEX_EXPRESS_SAVER
-    rate_request.RequestedShipment.ServiceType = 'FEDEX_GROUND'
+    rate_request.RequestedShipment.ServiceType = shipping_option #TODO:Handle Other Options
     
     # What kind of package this will be shipped in.
     # FEDEX_BOX, FEDEX_PAK, FEDEX_TUBE, YOUR_PACKAGING

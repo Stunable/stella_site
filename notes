@@ -1,0 +1,39 @@
+Checkout Order
+
+    Wepay
+
+    Customer:
+        approve grand total:
+            grand total:
+                total shipping
+                total item costs
+                total sales tax
+                total processing
+        shipping info:
+
+        wepay:
+
+
+    Retailer_Order:
+        retailer order:
+            display:
+                total shipping
+                total item costs
+                total sales tax
+                total processing
+
+        fields:
+            wepay_checkout_id
+            items
+            date
+            status
+            
+
+orders per retailer
+    retailer_order
+        checkout_id
+        retailer
+        
+        retailer location specific info
+            sales tax
+            shipping info

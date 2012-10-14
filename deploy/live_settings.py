@@ -6,7 +6,8 @@ DATABASES = {
         # DB name or path to database file if using sqlite3.
         "NAME": "%(proj_name)s",
         # Not used with sqlite3.
-        "USER": "%(proj_name)s",
+        #"USER": "%(proj_name)s",TODO:FIX THIS
+        "USER": "root",
         # Not used with sqlite3.
         "PASSWORD": "%(db_pass)s",
         # Set to empty string for localhost. Not used with sqlite3.
