@@ -274,15 +274,14 @@ def wpp(request):
 def wpp_success(request):
     
     current_cart = Cart(request)
-    current_cart.cart.save()
-    
-    # update grand total
+    #current_cart.cart.save()
     
     try:        
-        #current_cart.checkout()
-        #purchase = Purchase.objects.filter(cart=current_cart.cart)[0]
+        current_cart.checkout()
+        purchase_objects = Purchase.objects.filter(cart=current_cart.cart)
+        print 'found ',len(purchase_objects), 'purchase objects'
         return render_to_response('cart/purchased.html', 
-                                  {'cart': Cart(request), 'purchase': purchase }, 
+                                  {'cart': Cart(request), 'purchase': purchase_objects }, 
                                   context_instance=RequestContext(request) )
     except: 
         return render_to_response('cart/error.html', 
@@ -302,17 +301,10 @@ def wpp_reference_pay(request):
     
     try:
         current_cart = Cart(request)
-        wpp = WePayPayment(request,current_cart,cc_token)
-        wpp.authorizePayment()
-        # wpp.doReferenceTransaction(
-        #                             {'REFERENCEID': cc_token.token, 
-        #                             'AMT': current_cart.grand_total,
-        #                             'IPADDRESS': request.META.get('REMOTE_ADDR', '').split(':')[0],
-        #                             'DESC': 'ShopWithStella',
-        #                             'FIRSTNAME': cc_token.first_name,
-        #                             'LASTNAME': cc_token.last_name})
+        if not current_cart.cart.checked_out:
+            wpp = WePayPayment(request,current_cart,cc_token)
+            wpp.authorizePayment()
 
-        # payment_was_successful.send(params)
     except PayPalFailure:
         raise
         return render_to_response('cart/error.html', 

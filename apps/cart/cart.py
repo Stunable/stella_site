@@ -167,17 +167,12 @@ class Cart:
         for item in self.cart.item_set.all():
             item.delete()
 
-
-    def set_checkout_id(self,wepay_checkout_id):
-        self.cart.checkout_id = wepay_checkout_id
-        self.cart.save()
             
-    def checkout(self):
-        if self.request.GET.get('checkout_id') == self.cart.checkout_id:
-            self.cart.checked_out = True
-            self.cart.save()
-        else:
-            raise
+    def checkout(self):     
+        self.cart.checked_out = True
+        self.cart.ref = str(abs(hash(str(self.cart.pk))))[:10] + str(self.request.user.pk)
+        self.cart.save()
+
 
     def get_items_by_retailer(self):
         out = {}

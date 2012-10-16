@@ -24,7 +24,7 @@ class Cart(models.Model):
     shipping_and_handling_cost = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2)
     shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
 
-    checkout_id = models.CharField(max_length=64,blank=True,null=True)#from WePay
+    ref = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
         verbose_name = _('cart')
@@ -33,6 +33,7 @@ class Cart(models.Model):
 
     def __unicode__(self):
         return unicode(self.creation_date)
+
     
 
 class ItemManager(models.Manager):
@@ -46,6 +47,7 @@ class ItemManager(models.Manager):
 
 class Purchase(models.Model):
     item = models.ForeignKey('Item')
+    cart = models.ForeignKey('Cart')
     purchaser = models.ForeignKey(User)
     transaction = models.ForeignKey(WePayTransaction)
     ref = models.CharField(max_length=250, blank=True, null=True)
@@ -57,7 +59,7 @@ class Purchase(models.Model):
         pk_before_save = self.pk
         
         # generate ref
-        self.ref = str(abs(hash(str(self.item.pk))))[:10] + str(self.purchaser.pk)
+        self.ref = str(abs(hash(str(self.cart.pk))))[:10] + str(self.purchaser.pk)
         super(Purchase, self).save()
         
         if pk_before_save != self.pk:
@@ -264,6 +266,7 @@ def payment_was_successful_callback(sender, **kwargs):
         item = kwargs['item'],
         purchaser = transaction.user,
         transaction = transaction,
+        cart = kwargs['item'].cart
     )
             
     p.save()
