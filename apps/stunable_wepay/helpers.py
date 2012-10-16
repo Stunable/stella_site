@@ -58,6 +58,7 @@ class WePayPayment(object):
 
                 wpt.save()
 
+                print 'authorized payment for ',item
                 payment_was_successful.send(sender=wpt, item=item)
 
         

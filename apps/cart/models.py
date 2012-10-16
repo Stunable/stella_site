@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
+from django.db.models.signals import post_save,pre_save
+
 
 from apps.retailers.models import ShippingType
 from cart import Cart   
@@ -15,6 +17,8 @@ from apps.paypal.pro.helpers import PayPalWPP
 from stunable_wepay.models import WePayTransaction
 
 from accounts.models import CCToken
+
+from apps.notification.models import send_notification_on 
 
 
 class Cart(models.Model):
@@ -44,10 +48,20 @@ class ItemManager(models.Manager):
             del(kwargs['product'])
         return super(ItemManager, self).get(*args, **kwargs)
 
+class Checkout(models.Model):
+    cart = models.ForeignKey('Cart',unique=True)
+    last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
+    complete = models.BooleanField(default=False)
+    ref = models.CharField(max_length=250, blank=True, null=True)
+
+def set_ref(sender, instance, **kwargs):
+    instance.ref =str(abs(hash(str(instance.pk))))[:10] + str(instance.cart.pk)
+pre_save.connect(set_ref, sender=Checkout, dispatch_uid="checkout_set_ref")
 
 class Purchase(models.Model):
     item = models.ForeignKey('Item')
     cart = models.ForeignKey('Cart')
+    checkout = models.ForeignKey(Checkout)
     purchaser = models.ForeignKey(User)
     transaction = models.ForeignKey(WePayTransaction)
     ref = models.CharField(max_length=250, blank=True, null=True)
@@ -59,22 +73,25 @@ class Purchase(models.Model):
         pk_before_save = self.pk
         
         # generate ref
-        self.ref = str(abs(hash(str(self.cart.pk))))[:10] + str(self.purchaser.pk)
+        
         super(Purchase, self).save()
         
         if pk_before_save != self.pk:
             # new order has been made
+            self.ref = str(abs(hash(str(self.pk))))[:10] + str(self.purchaser.pk)
+            self.save()
+            # notify retailer
+            self.notify_retailer()        
             
-            # notify retailer            
-            from apps.notification.models import send_notification_on 
-            url = u"http://%s%s" % (
-                unicode(Site.objects.get_current()),
-                reverse("retailer_order_history"),
-            )
+    def notify_retailer(self):
+        url = u"http://%s%s" % (
+            unicode(Site.objects.get_current()),
+            reverse("retailer_order_history"),
+        )
 
-            send_notification_on("retailer-order-placed", retailer=self.item.product.item.retailers.all()[0],
-                                          recipient=self.item.product.item.retailers.all()[0], shopper=self.purchaser, url=url)
-            print 'notified retailer'
+        send_notification_on("retailer-order-placed", retailer=self.item.product.item.retailers.all()[0],
+                                      recipient=self.item.product.item.retailers.all()[0], shopper=self.purchaser, url=url)
+        print 'notified retailer'
     
     def name(self):
         return "Shopping with Stella"
@@ -256,17 +273,22 @@ class Item(models.Model):
 from stunable_wepay.signals import payment_was_successful
 from django.dispatch import receiver    
 
-@receiver(payment_was_successful)
+@receiver(payment_was_successful,dispatch_uid="payment_authorization_callback")
 def payment_was_successful_callback(sender, **kwargs):
-    print 'payment successful'
+    print 'received signal that payment successful for', kwargs['item']
     transaction = sender
 
-    print transaction
+    try:
+        checkout = Checkout.objects.get(cart=kwargs['item'].cart)
+    except:
+        checkout = Checkout.objects.create(cart=kwargs['item'].cart)
+    
     p = Purchase.objects.create(
         item = kwargs['item'],
         purchaser = transaction.user,
         transaction = transaction,
-        cart = kwargs['item'].cart
+        cart = kwargs['item'].cart,
+        checkout = checkout
     )
             
     p.save()

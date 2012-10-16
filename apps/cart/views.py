@@ -255,12 +255,12 @@ def wpp(request):
         "returnurl": 'http://' + request.META['HTTP_HOST'] + "/cart/wpp" }  # Express checkout return url
     
     try:
-        default_cc = CCToken.objects.filter(user=request.user, is_default=True)[0]
+        default_ccS = CCToken.objects.filter(user=request.user).order_by('-last_modified')
     except:
-        default_cc = None
+        default_ccS = None
     
     kw = {
-      "context": {'default_cc': default_cc,'mode':settings.WEPAY_STAGE,'wepay_client_id':settings.WEPAY_CLIENT_ID},
+      "context": {'default_ccS': default_ccS,'mode':settings.WEPAY_STAGE,'wepay_client_id':settings.WEPAY_CLIENT_ID},
       "item": item,                            # what you're selling
       "payment_template": "cart/payment.html",      # template name for payment
       "confirm_template": "cart/confirm.html", # template name for confirmation
@@ -281,7 +281,7 @@ def wpp_success(request):
         purchase_objects = Purchase.objects.filter(cart=current_cart.cart)
         print 'found ',len(purchase_objects), 'purchase objects'
         return render_to_response('cart/purchased.html', 
-                                  {'cart': Cart(request), 'purchase': purchase_objects }, 
+                                  {'cart': Cart(request), 'purchase': purchase_objects, 'checkout':purchase_objects[0].checkout }, 
                                   context_instance=RequestContext(request) )
     except: 
         return render_to_response('cart/error.html', 
@@ -291,14 +291,20 @@ def wpp_success(request):
         
 @login_required
 def wpp_reference_pay(request):
-    cc_tokens = CCToken.objects.filter(user=request.user, is_default=True)
-    if cc_tokens.count()==0:
-        return render_to_response('cart/error.html', 
-                                  {'error': "You do not have default credit card, default credit card should be availalbe after a first successful transaction" }, 
-                                  context_instance=RequestContext(request))
-    else:
-        cc_token = cc_tokens[0]
-    
+    cc_token = None
+    if request.GET.get('card',None):
+        try:
+            cc_token = CCToken.objects.get(user=request.user, token=request.GET.get('card'))
+        except:
+            print 'evil is afoot?'
+    if not cc_token:
+        cc_tokens = CCToken.objects.filter(user=request.user, is_default=True)
+        if cc_tokens.count()==0:
+            return render_to_response('cart/error.html', 
+                                      {'error': "You do not have default credit card, and you didn't specify one. A Default credit card should be available after a first successful transaction" }, 
+                                      context_instance=RequestContext(request))
+        else:
+            cc_token = cc_tokens[0]
     try:
         current_cart = Cart(request)
         if not current_cart.cart.checked_out:

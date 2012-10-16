@@ -31,15 +31,19 @@
 
 <div>
 
-	{% if default_cc %}
+	{% if default_ccS %}
 	<div class="section-intro">
 		<h2><span>Payment</span></h2>
 	</div>
-	<div class="body-copy bootstrap">
-		You can pay with default credit card {{ default_cc.cc_name }} <a href="/cart/wpp_reference_pay" class="btn btn-primary">Pay</a>		
+	<div class="body-copy bootstrap" style="width:50%;margin-left:0px;text-align:right">
+		<div>You can pay with one of your saved credit cards: </div>
+		{% for c in default_ccS %}
+		<div style="right:0px;clear:both;margin:8px">{{ c.cc_name }} <a href="/cart/wpp_reference_pay?card={{c.token}}" class="btn btn-primary">Pay</a>{% if c.is_default %}<span style="position:absolute;margin-left:5px"> (default)</span>{% endif %}</div>
+		{% endfor %}	
 
-		<p>OR</p>
+		
 	</div>
+	<h3 style="margin-left:40px">OR</h3>
 	
 	{% endif %}
 	

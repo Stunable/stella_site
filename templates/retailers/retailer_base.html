@@ -47,7 +47,7 @@
 
 {% block left_panel %}
 {% if request.user.is_authenticated %}
-<div class="left-panel">
+    <div class="left-panel">
         <div class="panel-header clearfix">
             <div class="panel-tab active my-closet begin-tab clearfix one-tab">
                 <span class="text-link">Retailer Administration</span>
@@ -72,13 +72,13 @@
                 </div>
             </div>
             <div class="fake-tab"></div>
-        <div class="panel-content">
+            <div class="panel-content">
                 <div class="panel-inner-content">
                 </div>
                 <p class="p-bottom"></p>
-        </div>
-    </div> 
-</div>
+            </div>
+        </div> 
+    </div>
 {% endif %}
 {% endblock %}
 
