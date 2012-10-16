@@ -189,16 +189,15 @@ class BillingInfo(Address):
     pass
 
 class CCToken(models.Model):
-    cc_last_four_digits = models.CharField(max_length=4)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    cc_name = models.CharField(max_length=32)
+    user_name = models.CharField(max_length=100)
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
     token = models.CharField(max_length=250) # For paypal, we use the latest transaction id as the token 
     is_default = models.BooleanField(default=False)
     user = models.ForeignKey(User)
     
     def __unicode__(self):
-        return "****%s" % self.cc_last_four_digits
+        return self.user.__unicode__()+'_'+self.cc_name
     
 #    def save(self):
 #        if self.user:

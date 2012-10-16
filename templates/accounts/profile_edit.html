@@ -85,70 +85,7 @@
 {% endblock %}
 
 {% block content %}
-<script>
-	$(document).ready(function() {
-		$(".quest").click(function() {
-			$("#upload_avatar").click();
-		});
-		$('#avatar-upload-form').ajaxForm(function(data) {
-			message = "";
-			console.log(data);
-			if(data.result == "ok") {
-				$('.acct-avatar').attr('src', data.source);
-				$('#avatar-error').css('display', 'none');
-				// message = "Upload Successful!";
-			} else {
-				message = data.error;
-				$('#avatar-error').stop();
-				$('#avatar-error').animate({
-					"opacity" : "1"
-				}, "fast", function() {
-					changeError($('#avatar-error')[0], message);
-					$('#avatar-error').css('display', 'inline');
-				});
-				// message = "There were errors with your image upload. Please try again!";
-			}
-		});
-		$('#upload_avatar').bind('change', function() {
-			var str = "";
-			str = $(this).val();
-			if(str != "" && str.length > 0) {
-				if(str.match(/.*\.(jpg|png|gif)$/)) {
-					$("#avatar-upload-form").submit();
-				} else {
-					$('#avatar-error').stop();
-					$('#avatar-error').animate({
-						"opacity" : "1"
-					}, "fast", function() {
-						changeError($('#avatar-error')[0], "Please Upload a valid image!");
-						$('#avatar-error').css('display', 'inline');
-					});
-				}
-			}
-		}).change();
-		$('.editable').hide();
-		$('.edit').click(function(event) {
-			event.preventDefault();
-			if($(this).html() == 'Edit') {
-				$(this).html("Close");
-			} else {
-				$(this).html("Edit");
-			}
 
-			var stc = $(this).parent().parent().find('.static');
-			var editable = $(this).parent().parent().find('.editable');
-
-			if($(stc).css('display') == 'none') {
-				$(stc).css('display', '');
-				$(editable).css('display', 'none');
-			} else {
-				$(stc).css('display', 'none');
-				$(editable).css('display', '');
-			}
-		});
-	});
-
-</script>
 <div class="section intro clearfix bootstrap">
     <center style="margin-top: 10px">
         <div id="avatar-error" style="display: none" class="alert" ></div>
@@ -324,6 +261,28 @@
     </div>
         
     {% else %}
+    
+    <div class="bootstrap">
+    <form method="POST" action="{% url profile_edit %}" id="mng-account-form" class="form-horizontal" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="control-group">
+            <label class="control-label">{{ field.label }}</label>
+            <div class="controls">
+                {{ field }}
+                <span class="help-inline">{{ field.errors }}</span>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="form-actions">
+            <input type="submit" class="btn btn-primary" value="Save" id="btn-update"/>
+        </div>
+    </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+{% block extra_script %}
     <script>
     jQuery(function($){
         
@@ -381,23 +340,68 @@
         }
     }
 </script>
-    <div class="bootstrap">
-    <form method="POST" action="{% url profile_edit %}" id="mng-account-form" class="form-horizontal" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% for field in form %}
-        <div class="control-group">
-            <label class="control-label">{{ field.label }}</label>
-            <div class="controls">
-                {{ field }}
-                <span class="help-inline">{{ field.errors }}</span>
-            </div>
-        </div>
-        {% endfor %}
-        <div class="form-actions">
-            <input type="submit" class="btn btn-primary" value="Save" id="btn-update"/>
-        </div>
-    </form>
-    </div>
-    {% endif %}
-</div>
-{% endblock %} 
+<script>
+    $(document).ready(function() {
+        $(".quest").click(function() {
+            $("#upload_avatar").click();
+        });
+        $('#avatar-upload-form').ajaxForm(function(data) {
+            message = "";
+            console.log(data);
+            if(data.result == "ok") {
+                $('.acct-avatar').attr('src', data.source);
+                $('#avatar-error').css('display', 'none');
+                // message = "Upload Successful!";
+            } else {
+                message = data.error;
+                $('#avatar-error').stop();
+                $('#avatar-error').animate({
+                    "opacity" : "1"
+                }, "fast", function() {
+                    changeError($('#avatar-error')[0], message);
+                    $('#avatar-error').css('display', 'inline');
+                });
+                // message = "There were errors with your image upload. Please try again!";
+            }
+        });
+        $('#upload_avatar').bind('change', function() {
+            var str = "";
+            str = $(this).val();
+            if(str != "" && str.length > 0) {
+                if(str.match(/.*\.(jpg|png|gif)$/)) {
+                    $("#avatar-upload-form").submit();
+                } else {
+                    $('#avatar-error').stop();
+                    $('#avatar-error').animate({
+                        "opacity" : "1"
+                    }, "fast", function() {
+                        changeError($('#avatar-error')[0], "Please Upload a valid image!");
+                        $('#avatar-error').css('display', 'inline');
+                    });
+                }
+            }
+        }).change();
+        $('.editable').hide();
+        $('.edit').click(function(event) {
+            event.preventDefault();
+            if($(this).html() == 'Edit') {
+                $(this).html("Close");
+            } else {
+                $(this).html("Edit");
+            }
+
+            var stc = $(this).parent().parent().find('.static');
+            var editable = $(this).parent().parent().find('.editable');
+
+            if($(stc).css('display') == 'none') {
+                $(stc).css('display', '');
+                $(editable).css('display', 'none');
+            } else {
+                $(stc).css('display', 'none');
+                $(editable).css('display', '');
+            }
+        });
+    });
+
+</script>
+{% endblock %}

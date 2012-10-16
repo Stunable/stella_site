@@ -14,7 +14,11 @@ from apps.cart.plugins.fedex.base_service import FedexError
 
 from apps.cart.models import Item as CartItem
 from paypal.pro.exceptions import PayPalFailure
-from paypal.pro.views import PayPalPro
+
+from stunable_wepay.views import WePayHandleCC
+#from stunable_wepay.helpers import WePayWPP
+from stunable_wepay.signals import *
+
 from apps.cart.cart import Cart
 from django.template.context import RequestContext
 from accounts.models import UserProfile, CCToken
@@ -30,7 +34,6 @@ except ImportError:
 import logging
 logger = logging.getLogger(__name__)
 
-from wepay import WePay
 
 @login_required
 def add_to_cart(request, product_id, quantity, size=None):
@@ -240,27 +243,10 @@ def shopper_return_item(request):
     
     return HttpResponse(json.dumps(response, ensure_ascii=False), mimetype='application/json')
 
+
 @login_required
-def wpp(request): 
-
-
-    # set production to True for live environments
+def wpp(request):    
     cart = Cart(request)
-    
-    wepay = WePay(settings.WEPAY_PRODUCTION, settings.WEPAY_ACCESS_TOKEN)
-    
-    # create the checkout
-    response = wepay.call('/checkout/create', {
-        'account_id': settings.WEPAY_CLIENT_ID,
-        'amount': cart.grand_total,
-        'short_description': cart.name(),
-        'type': 'GOODS',
-        'mode': 'iframe',
-        'redirect_uri':settings.WWW_ROOT.rstrip('/')+reverse('wpp_success')
-    })
-    # display the response
-    WePay_response = response
-
     
     item = {"amt": cart.grand_total,             # amount to charge for item
         "inv": cart.name(),         # unique tracking variable paypal
@@ -274,18 +260,14 @@ def wpp(request):
         default_cc = None
     
     kw = {
-      "context": {'default_cc': default_cc},
+      "context": {'default_cc': default_cc,'mode':settings.WEPAY_STAGE,'wepay_client_id':settings.WEPAY_CLIENT_ID},
       "item": item,                            # what you're selling
       "payment_template": "cart/payment.html",      # template name for payment
       "confirm_template": "cart/confirm.html", # template name for confirmation
       "success_url": "/cart/wpp_success/"}              # redirect location after success
     
-    # ppp = PayPalPro(**kw)
-    # return ppp(request)
-
-    return render_to_response('cart/payment.html', 
-                              {'wepay': WePay_response }, 
-                              context_instance=RequestContext(request) )
+    ppp = WePayHandleCC(**kw)
+    return ppp(request)
 
 
 @login_required
@@ -313,13 +295,13 @@ def wpp_reference_pay(request):
     cc_tokens = CCToken.objects.filter(user=request.user, is_default=True)
     if cc_tokens.count()==0:
         return render_to_response('cart/error.html', 
-                                  {'error': "You do not have default credit cart, default credit card should be availalbe after a first successful transaction" }, 
+                                  {'error': "You do not have default credit card, default credit card should be availalbe after a first successful transaction" }, 
                                   context_instance=RequestContext(request))
     else:
         cc_token = cc_tokens[0]
     
     try:
-        wpp = PayPalWPP(request)
+
         current_cart = Cart(request)
         wpp.doReferenceTransaction(
                                     {'REFERENCEID': cc_token.token, 
@@ -328,6 +310,8 @@ def wpp_reference_pay(request):
                                     'DESC': 'ShopWithStella',
                                     'FIRSTNAME': cc_token.first_name,
                                     'LASTNAME': cc_token.last_name})
+
+        payment_was_successful.send(params)
     except PayPalFailure:
         return render_to_response('cart/error.html', 
                                   {'error': "Can not proccess payment, please pay by alternative method" }, 

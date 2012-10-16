@@ -29,17 +29,14 @@
 		
 </style>
 
+<div>
 
-
-
-<div id="wepay_iframe">
-
-<!-- 	{% if default_cc %}
+	{% if default_cc %}
 	<div class="section-intro">
 		<h2><span>Payment</span></h2>
 	</div>
 	<div class="body-copy bootstrap">
-		You can pay with default credit card ***{{ default_cc.cc_last_four_digits }} <a href="/cart/wpp_reference_pay" class="btn btn-primary">Pay</a>		
+		You can pay with default credit card {{ default_cc.cc_name }} <a href="/cart/wpp_reference_pay" class="btn btn-primary">Pay</a>		
 
 		<p>OR</p>
 	</div>
@@ -71,23 +68,108 @@
 			<input type="submit" class="btn btn-primary" value="Submit" id="Submit" />
 		</div>
 		</form>
-	</div> -->
+	</div>
 
+	<form id="wepay_info" method="post" action="{% url express_checkout %}">
+		{% csrf_token %}
+		<input id="wepay_id" type="hidden" name="credit_card_id">
+		<input id="wepay_state" type="hidden" name="state">
+	</form>
 
 
 </div>
 
 {% endblock %}
 {% block extra_script %}
-<script type="text/javascript" src="https://www.wepay.com/min/js/iframe.wepay.js">
+<script type="text/javascript" src="https://stage.wepay.com/min/js/tokenization.v2.js">
+</script>
+<script type="text/javascript">
+	WePay.set_endpoint("{{mode}}"); // change to "production" when live
 </script>
 <script>
+	$.fn.serializeObject = function()
+	{
+	    var o = {};
+	    var a = this.serializeArray();
+	    $.each(a, function() {
+	        if (o[this.name] !== undefined) {
+	            if (!o[this.name].push) {
+	                o[this.name] = [o[this.name]];
+	            }
+	            o[this.name].push(this.value || '');
+	        } else {
+	            o[this.name] = this.value || '';
+	        }
+	    });
+	    return o;
+	};
+
 	$(document).ready(function () {
 
-		WePay.iframe_checkout("wepay_iframe", "{{wepay.checkout_uri}}");
+		$('#payment-form').validate({
+			submitHandler:function(form) {
+
+				var d = $(form).serializeObject();
+				console.log(d)
+				var data ={
+					"client_id":"{{wepay_client_id}}",
+					"user_name":d.firstname+' '+d.lastname,
+					"email":'{{request.user.email}}',
+					"cc_number":d.acct,
+					"cvv":d.cvv2,
+					"expiration_month":d.expdate_0,
+					"expiration_year":d.expdate_1,
+					"address":
+						{
+							"address1":d.street,
+							"city":d.city,
+							"state":d.state,
+							"country":d.countrycode,
+							"zip":d.zip
+						}
+				}
+
+				console.log(data)
+
+
+				var response = WePay.credit_card.create( data, function(data) {
+					if (data.error) {
+						console.log(data);
+						// handle error response
+					} else {
+						$('#wepay_id').val(data.credit_card_id)
+						$('#wepay_state').val(data.state)
+						$('#wepay_info').submit()
+					}
+				} );
+
+				if (response.error) {
+					console.log(response);
+					// handle error response
+				}
+			},
+			rules: {
+				firstname: "required",		// simple rule, converted to {required:true}
+				lastname: "required",
+				street: "required",
+				city: "required",
+				state: "required",
+				countrycode: "required",
+				zip: "required",
+				acct: "required",
+				expdate_0: "required",
+				expdate_1: "required",
+				cvv2: "required"
+			
+			},
+			messages: {
+				
+			}
+		});	
 	});
 </script>
 {% endblock %}
+
 
 
 
