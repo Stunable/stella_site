@@ -175,6 +175,7 @@ INSTALLED_APPS = (
     'openpyxl',
     'paypal.standard',
     'paypal.pro',
+    'stunable_wepay',
     'api',
     'gunicorn',
     #'chronograph'

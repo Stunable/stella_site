@@ -179,3 +179,21 @@ class Cart:
         else:
             raise
 
+    def get_items_by_retailer(self):
+        out = {}
+        for item in self.cart.item_set.all():
+            r = item.get_product().item.retailers.all()[0]
+            if out.has_key(r):
+                out[r].append(item)
+            else:
+                out[r] = [item]
+
+        return out
+            #retailer = item.product.item.retailers.all()[0]
+            #retailer_profile = RetailerProfile.objects.get(user=retailer)
+            #retailer_zipcode = retailer_profile.zip_code
+
+
+
+
+

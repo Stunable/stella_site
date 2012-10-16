@@ -11,6 +11,9 @@ from apps.retailers.models import ShippingType
 from cart import Cart   
 from apps.retailers.models import RetailerProfile
 from apps.paypal.pro.helpers import PayPalWPP
+
+from stunable_wepay.models import WePayTransaction
+
 from accounts.models import CCToken
 
 
@@ -42,20 +45,19 @@ class ItemManager(models.Manager):
 
 
 class Purchase(models.Model):
-    cart = models.ForeignKey(Cart)
+    item = models.ForeignKey('Item')
     purchaser = models.ForeignKey(User)
-    purchased_at = models.DateTimeField(auto_now_add=True)
-    tx = models.CharField(max_length=250)
+    transaction = models.ForeignKey(WePayTransaction)
     ref = models.CharField(max_length=250, blank=True, null=True)
     shipping_number = models.CharField(max_length=250, blank=True, null=True)
     shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
-    status = models.CharField(max_length=250, default="ordered")
+
     
-    def save(self):
+    def save(self,*args, **kwargs):
         pk_before_save = self.pk
         
         # generate ref
-        self.ref = str(abs(hash(str(self.cart.pk))))[:10] + str(self.purchaser.pk)
+        self.ref = str(abs(hash(str(self.item.pk))))[:10] + str(self.purchaser.pk)
         super(Purchase, self).save()
         
         if pk_before_save != self.pk:
@@ -68,27 +70,20 @@ class Purchase(models.Model):
                 reverse("retailer_order_history"),
             )
 
-            for order_item in self.cart.item_set.all():
-                try:
-                    send_notification_on("retailer-order-placed", retailer=order_item.product.item.retailers.all()[0],
-                                          recipient=order_item.product.item.retailers.all()[0], shopper=self.purchaser, url=url)
-                except:
-                    # TODO: log error here
-                    pass
+            send_notification_on("retailer-order-placed", retailer=self.item.product.item.retailers.all()[0],
+                                          recipient=self.item.product.item.retailers.all()[0], shopper=self.purchaser, url=url)
+            print 'notified retailer'
     
     def name(self):
         return "Shopping with Stella"
 
     def __iter__(self):
-        for item in self.cart.item_set.all():
+        for item in [self.item]:
             yield item
 
     def add(self, product, unit_price, quantity=1, color=None):
         try:
-            item = Item.objects.get(
-                cart=self.cart,
-                product=product,
-            )
+            item = self.item
         except Item.DoesNotExist:
             item = Item(cart=self.cart, product = product, unit_price=unit_price, quantity=quantity, color=color)
             item.save()
@@ -99,10 +94,8 @@ class Purchase(models.Model):
 
     
     def summary(self):
-        result = 0
-        for item in self.cart.item_set.all():
-            result += item.total_price
-        return result
+        return item.total_price
+
     
     def calculate(self):
         self.total = float(self.summary())
@@ -111,8 +104,7 @@ class Purchase(models.Model):
         self.grand_total = self.tax + self.total + self.shipping_and_handling_cost
 
     def clear(self):
-        for item in self.cart.item_set.all():
-            item.delete()
+        self.item.delete()
             
 
 class Item(models.Model):
@@ -126,7 +118,10 @@ class Item(models.Model):
     content_type = models.ForeignKey(ContentType)
     
     # foreign key to ItemType
-    object_id = models.PositiveIntegerField() 
+    object_id = models.PositiveIntegerField()
+    #product = generic.GenericForeignKey('content_type', 'object_id')
+
+
     objects = ItemManager()
     
     shipping_number = models.CharField(max_length=250, blank=True, null=True)
@@ -256,52 +251,22 @@ class Item(models.Model):
                              shopper=shopper, 
                              recipient=shopper)
 
-from paypal.pro.signals import payment_was_successful
-        
+from stunable_wepay.signals import payment_was_successful
 from django.dispatch import receiver    
-from models import Cart as CartModel
 
 @receiver(payment_was_successful)
-def payment_was_successful_callback(**kwargs):
-    params = kwargs['sender']
-    if 'nvp_obj' in params and 'request' in params:     
-        request = params['request']
-        nvp_obj = params['nvp_obj']
-        
-        cart_id = request.session.get('CART-ID')
-        if cart_id:
-            try:
-                cart = CartModel.objects.get(id=cart_id, checked_out=False)
-                
-                try:
-                    purchase = Purchase.objects.filter(cart=cart)[0]
-                except:
-                    purchase = Purchase(cart=cart, purchaser=request.user, tx=params['nvp_obj'].transactionid)
-                
-                if params.get('acct') and nvp_obj.method=="DoDirectPayment":
-                    try:
-                        # Attempt to save credit token
-                        last_four_digits = params.get('acct')[-4:]
-                        qs = CCToken.objects.filter(user=request.user, cc_last_four_digits=last_four_digits)
-                        
-                        if qs.count() == 0:
-                            cc_token = CCToken(cc_last_four_digits=last_four_digits, 
-                                               user=request.user,
-                                               first_name=params.get('firstname', ""),
-                                               last_name=params.get('lastname', ""),
-                                               token=params['nvp_obj'].transactionid)
-                            cc_token.save()
-                            
-                            if CCToken.objects.filter(user=request.user, is_default=True).count() == 0:
-                                cc_token.is_default = True
-                                cc_token.save()
-                        
-                    except:
-                        pass
-                    
-                purchase.save()
-            except CartModel.DoesNotExist:
-                pass
-        
+def payment_was_successful_callback(sender, **kwargs):
+    print 'payment successful'
+    transaction = sender
+
+    print transaction
+    p = Purchase.objects.create(
+        item = kwargs['item'],
+        purchaser = transaction.user,
+        transaction = transaction,
+    )
+            
+    p.save()
+
         
 

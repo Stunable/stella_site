@@ -16,7 +16,7 @@ from apps.cart.models import Item as CartItem
 from paypal.pro.exceptions import PayPalFailure
 
 from stunable_wepay.views import WePayHandleCC
-#from stunable_wepay.helpers import WePayWPP
+from stunable_wepay.helpers import WePayPayment
 from stunable_wepay.signals import *
 
 from apps.cart.cart import Cart
@@ -279,8 +279,8 @@ def wpp_success(request):
     # update grand total
     
     try:        
-        current_cart.checkout()
-        purchase = Purchase.objects.filter(cart=current_cart.cart)[0]
+        #current_cart.checkout()
+        #purchase = Purchase.objects.filter(cart=current_cart.cart)[0]
         return render_to_response('cart/purchased.html', 
                                   {'cart': Cart(request), 'purchase': purchase }, 
                                   context_instance=RequestContext(request) )
@@ -301,18 +301,20 @@ def wpp_reference_pay(request):
         cc_token = cc_tokens[0]
     
     try:
-
         current_cart = Cart(request)
-        wpp.doReferenceTransaction(
-                                    {'REFERENCEID': cc_token.token, 
-                                    'AMT': current_cart.grand_total,
-                                    'IPADDRESS': request.META.get('REMOTE_ADDR', '').split(':')[0],
-                                    'DESC': 'ShopWithStella',
-                                    'FIRSTNAME': cc_token.first_name,
-                                    'LASTNAME': cc_token.last_name})
+        wpp = WePayPayment(request,current_cart,cc_token)
+        wpp.authorizePayment()
+        # wpp.doReferenceTransaction(
+        #                             {'REFERENCEID': cc_token.token, 
+        #                             'AMT': current_cart.grand_total,
+        #                             'IPADDRESS': request.META.get('REMOTE_ADDR', '').split(':')[0],
+        #                             'DESC': 'ShopWithStella',
+        #                             'FIRSTNAME': cc_token.first_name,
+        #                             'LASTNAME': cc_token.last_name})
 
-        payment_was_successful.send(params)
+        # payment_was_successful.send(params)
     except PayPalFailure:
+        raise
         return render_to_response('cart/error.html', 
                                   {'error': "Can not proccess payment, please pay by alternative method" }, 
                                   context_instance=RequestContext(request))

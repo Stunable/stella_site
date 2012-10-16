@@ -7,6 +7,7 @@ from django.utils.http import urlencode
 
 from django.conf import settings
 from stunable_wepay.forms import PaymentForm, ConfirmForm
+from accounts.models import UserProfile, CCToken
 
 from wepay import WePay
 WEPAY = WePay(settings.WEPAY_PRODUCTION, settings.WEPAY_ACCESS_TOKEN)

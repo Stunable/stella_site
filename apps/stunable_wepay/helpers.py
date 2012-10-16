@@ -13,11 +13,54 @@ from django.utils.datastructures import MergeDict
 from django.utils.http import urlencode
 
 from stunable_wepay.signals import *
-
+from models import *
 
 from wepay import WePay
 WEPAY = WePay(settings.WEPAY_PRODUCTION, settings.WEPAY_ACCESS_TOKEN)
 
+class WePayPayment(object):
+    def __init__(self, request, cart, cc_token):
+        self.request = request
+        self.cart = cart
+        self.cc_token = cc_token
+
+
+    def authorizePayment(self):
+
+        production = False
+        success = []
+        fail = []
+        items = self.cart.cart.item_set.all()
+        for item in items:
+
+            response = WEPAY.call('/checkout/create', {
+                'auto_capture':False,
+                'account_id': settings.WEPAY_ACCOUNT_ID,
+                'amount': str(item.total_price),
+                'short_description': item.get_product().__unicode__(),
+                'type': 'GOODS',
+                'payment_method_id': self.cc_token.token, # the user's credit_card_id 
+                'payment_method_type': 'credit_card'
+            })
+
+            if response['state'] == "authorized":
+                success.append((item,response))
+            else:
+                fail.append((item,response))
+        
+        if len(success) == len(items):
+            for item,transaction in success:
+                wpt = WePayTransaction.objects.create(
+                    checkout_id = transaction['checkout_id'],
+                    state = transaction['state'],
+                    user = self.request.user
+                )
+
+                wpt.save()
+
+                payment_was_successful.send(sender=wpt, item=item)
+
+        
 
 # def paypal_time(time_obj=None):
 #     """Returns a time suitable for PayPal time fields."""
@@ -54,19 +97,7 @@ WEPAY = WePay(settings.WEPAY_PRODUCTION, settings.WEPAY_ACCESS_TOKEN)
 #         self.signature_values = params
 #         self.signature = urlencode(self.signature_values) + "&"
 
-#     def doDirectPayment(self, params):
-#         """Call PayPal DoDirectPayment method."""
-#         defaults = {"method": "DoDirectPayment", "paymentaction": "Sale"}
-#         required = L("creditcardtype acct expdate cvv2 ipaddress firstname lastname street city state countrycode zip amt")
 
-#         nvp_obj = self._fetch(params, required, defaults)
-#         if nvp_obj.flag:
-#             raise PayPalFailure(nvp_obj.flag_info)
-        
-#         params['nvp_obj'] = nvp_obj
-#         params['request'] = self.request
-        
-#         payment_was_successful.send(params)
         
         
 #         # @@@ Could check cvv2match / avscode are both 'X' or '0'
