@@ -13,6 +13,8 @@ from django.conf import settings
 from apps.cart.plugins.fedex.services.rate_service import FedexRateServiceRequest
 
 CONFIG_OBJ = settings.FEDEX_CONFIG
+print CONFIG_OBJ.key
+print CONFIG_OBJ.password
 
 
 def get_rate(**kwargs):
@@ -22,7 +24,7 @@ def get_rate(**kwargs):
     shipping_option = kwargs.get('shipping_option','FEDEX_GROUND')
     
     # Set this to the INFO level to see the response from Fedex printed in stdout.
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
     
     # This is the object that will be handling our tracking request.
     # We're using the FedexConfig object from example_config.py in this dir.
