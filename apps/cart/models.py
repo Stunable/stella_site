@@ -67,6 +67,8 @@ class Purchase(models.Model):
     ref = models.CharField(max_length=250, blank=True, null=True)
     shipping_number = models.CharField(max_length=250, blank=True, null=True)
     shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
+    purchased_at = models.DateTimeField(auto_now=True)
+    retailer = models.ForeignKey(User,related_name="sold_goods")
 
     
     def save(self,*args, **kwargs):
@@ -79,6 +81,7 @@ class Purchase(models.Model):
         if pk_before_save != self.pk:
             # new order has been made
             self.ref = str(abs(hash(str(self.pk))))[:10] + str(self.purchaser.pk)
+            self.retailer = self.item.product.item.retailers.all()[0]
             self.save()
             # notify retailer
             self.notify_retailer()        
@@ -89,8 +92,8 @@ class Purchase(models.Model):
             reverse("retailer_order_history"),
         )
 
-        send_notification_on("retailer-order-placed", retailer=self.item.product.item.retailers.all()[0],
-                                      recipient=self.item.product.item.retailers.all()[0], shopper=self.purchaser, url=url)
+        send_notification_on("retailer-order-placed", retailer=self.retailer,
+                                      recipient=self.retailer, shopper=self.purchaser, url=url)
         print 'notified retailer'
     
     def name(self):
@@ -113,7 +116,7 @@ class Purchase(models.Model):
 
     
     def summary(self):
-        return item.total_price
+        return self.item.total_price
 
     
     def calculate(self):

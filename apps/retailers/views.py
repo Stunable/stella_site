@@ -18,10 +18,13 @@ from apps.racks.forms import item_inventory_form_factory
 from django.forms.models import inlineformset_factory
 from apps.racks.models import ItemType
 from apps.common.forms import AjaxBaseForm
+from apps.accounts.models import ShippingInfo
 from apps.racks.forms import ItemInventoryForm
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.conf import settings
+
+from cart.plugins.create_shipment import ship_it
 
 try:
     import simplejson as json
@@ -249,6 +252,7 @@ def retailer_information(request, name, template="retailers/retailer_information
     shipping_types = ShippingType.objects.all()
     form = RetailerEditForm(instance=retailer_profile)
     ctx = {'retailer_profile': retailer_profile, 'shipping_types': shipping_types, 'form': form}
+
     return direct_to_template(request, template, ctx)
 
 @json_view
@@ -289,23 +293,21 @@ def order_history(request, template='retailers/order_history.html'):
         _to = request.GET.get('to')
         
         items = ItemType.objects.filter(item__retailers=request.user)
-        purchases = Purchase.objects.filter(cart__item__object_id__in=items).distinct()
+        purchases = request.user.sold_goods.all()
         
         if not _from and not _to:
-            today = datetime.date.today()
-            thirty_days_ago = today - datetime.timedelta(days=30)
-            purchases = purchases.filter(purchased_at__gte=thirty_days_ago)
+            purchases = purchases.filter(transaction__state="authorized")
         else:
             if _from:
                 purchases = purchases.filter(purchased_at__gte=_from)
             if _to:
                 purchases = purchases.filter(purchased_at__lte=_to)
                         
-        for purchase in purchases:
-            purchase.this_retailer_items = purchase.cart.item_set.filter(object_id__in=items) 
+
         
         ctx['purchases']= purchases
     except:
+        raise
         #login as regular user
         return redirect(reverse("home"))
     return direct_to_template(request, template, ctx)
@@ -369,4 +371,34 @@ def item_action(request, template="retailers/product_list.html"):
 
         except:    
             return redirect(reverse("product_list"))
-            
+
+@login_required
+def print_shipping_label(request, ref=None, template='retailers/retailer_shipping_label.html'):
+    try:
+        purchase = request.user.sold_goods.filter(ref=ref)[0]
+        retailer_profile = RetailerProfile.objects.get(user=request.user)
+    except:
+        return redirect(reverse("home"))
+
+    ctx = {}
+    if request.method == "POST":
+        l = request.POST.getlist('ship_item')
+        if len(l)<1:
+            ctx['error_message'] = "Select at least one item to ship."
+            print 'error'
+        else:
+            item_count = len(l)
+
+            ship_it(retailer_profile,ShippingInfo.objects.get(customer=purchase.purchaser.get_profile(),is_default=True),item_count)
+
+    try:
+        shipping_types = ShippingType.objects.all()
+        form = RetailerEditForm(instance=retailer_profile)
+        ctx.update({'retailer_profile': retailer_profile, 'shipping_types': shipping_types, 'form': form})
+        purchases = request.user.sold_goods.filter(ref=ref)
+        ctx['purchases']= purchases
+    except:
+        raise
+        #login as regular user
+        return redirect(reverse("home"))
+    return direct_to_template(request, template, ctx)

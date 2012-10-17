@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^(?P<retailer_id>\d+)/terms$', terms, name='retailer_terms'),
     url(r'^(?P<retailer_id>\d+)/terms_complete$', terms_complete, name='retailer_terms_complete'),
     url(r'^order/update/(?P<order_item_id>\d+)', update_order_item, name='retailer_update_order_item'),
+    url(r'^print_shipping_label/(?P<ref>\w+)', print_shipping_label, name='print_shipping_label'),
     url(r'^item_action', item_action)
 )
 
