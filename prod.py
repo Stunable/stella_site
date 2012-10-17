@@ -47,7 +47,7 @@ PAYPAL_PDT_URL = 'https://www.sandbox.paypal.com/au/cgi-bin/webscr'
 WAITLIST_ACTIVE = True 
 THUMBNAIL_DEBUG = False
 
-from apps.cart.plugins.fedex.config import FedexConfig
+from fedex.config import FedexConfig
 
 # Change these values to match your testing account/meter number.
 # Change these values to match your testing account/meter number.
@@ -56,6 +56,7 @@ FEDEX_CONFIG = FedexConfig(key='G9zxZissGIQkOgo4',
                          account_number='510087968',
                          meter_number='118562345',
                          use_test_server=True)
+
 WEPAY_ACCESS_TOKEN = "c1b6ab85a43f00efcd889931df0eae6bfd23399570f9f4fef5dd50fc0c5f6e06"
 WEPAY_CLIENT_ID = "1894410826"
 WEPAY_PRODUCTION = False
