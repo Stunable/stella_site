@@ -11,9 +11,9 @@ import logging
 import binascii
 from django.conf import settings
 import time
-from apps.cart.plugins.fedex.services.ship_service import FedexProcessShipmentRequest
+from st_fedex.services.ship_service import FedexProcessShipmentRequest
 
-from fedex.config import FedexConfig
+from st_fedex.config import FedexConfig
 
 
 CONFIG_OBJ = FedexConfig(key='G9zxZissGIQkOgo4',

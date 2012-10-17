@@ -15,13 +15,16 @@ class WePayTransaction(models.Model):
 
     def capture_funds(self):
         if self.state != 'captured':
-            response = WEPAY.call('/checkout/capture', {
-                'checkout_id': self.checkout_id
-            })
+            try:
+                response = WEPAY.call('/checkout/capture', {
+                    'checkout_id': self.checkout_id
+                })
 
-            if response.has_key('state'):
-                self.state = response['state']
-                self.save()
+                if response.has_key('state'):
+                    self.state = response['state']
+                    self.save()
+            except:
+                pass
         
         return self.state
 
