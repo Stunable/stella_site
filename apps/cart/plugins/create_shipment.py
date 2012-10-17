@@ -13,7 +13,14 @@ from django.conf import settings
 import time
 from apps.cart.plugins.fedex.services.ship_service import FedexProcessShipmentRequest
 
-CONFIG_OBJ = settings.FEDEX_CONFIG
+from fedex.config import FedexConfig
+
+
+CONFIG_OBJ = FedexConfig(key='G9zxZissGIQkOgo4',
+                         password='bX3GkoY0uIQjrIl1m66jT2OTa',
+                         account_number='510087968',
+                         meter_number='118562345',
+                         use_test_server=True)
 
 def ship_it(retailer,customer,item_count):
     # Set this to the INFO level to see the response from Fedex printed in stdout.

@@ -271,15 +271,6 @@ WEPAY_CLIENT_SECRET = "0747ad3f00"
 WEPAY_PRODUCTION = False
 WEPAY_STAGE = "stage"
 
-from apps.cart.plugins.fedex.config import FedexConfig
-
-# Change these values to match your testing account/meter number.
-# Change these values to match your testing account/meter number.
-FEDEX_CONFIG = FedexConfig(key='G9zxZissGIQkOgo4',
-                         password='bX3GkoY0uIQjrIl1m66jT2OTa',
-                         account_number='510087968',
-                         meter_number='118562345',
-                         use_test_server=True)
 
 
 PAYPAL_MECHANT_ACCOUNT_ID ='VR92K8L7B4U7U'

@@ -10,7 +10,7 @@ from apps.accounts.models import ShippingInfo
 from apps.cart.models import Purchase
 from django.contrib.auth.decorators import login_required
 from apps.racks.models import ItemType
-from apps.cart.plugins.fedex.base_service import FedexError
+from fedex.base_service import FedexError
 
 from apps.cart.models import Item as CartItem
 from paypal.pro.exceptions import PayPalFailure

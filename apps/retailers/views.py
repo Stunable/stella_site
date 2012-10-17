@@ -304,7 +304,7 @@ def order_history(request, template='retailers/order_history.html'):
             if _from:
                 checkouts = checkouts.filter(last_modified__gte=_from)
             if _to:
-                checkouts = purchases.filter(last_modified__lte=_to)
+                checkouts = checkouts.filter(last_modified__lte=_to)
                              
         ctx['checkouts']= checkouts.order_by('-last_modified')
     except:

@@ -10,7 +10,7 @@ TIP: Near the bottom of the module, see how to check the if the destination
 """
 import logging
 from django.conf import settings
-from apps.cart.plugins.fedex.services.rate_service import FedexRateServiceRequest
+from fedex.services.rate_service import FedexRateServiceRequest
 
 CONFIG_OBJ = settings.FEDEX_CONFIG
 print CONFIG_OBJ.key
