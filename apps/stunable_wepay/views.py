@@ -36,6 +36,8 @@ class WePayHandleCC(object):
         """Return the appropriate response for the state of the transaction."""
         self.request = request
         if request.method == "GET":
+            if self.should_render_confirm_form():
+                return self.render_confirm_form()
             return self.render_payment_form() 
         else:
             return self.confirm_card_info()
@@ -47,6 +49,9 @@ class WePayHandleCC(object):
         """Display the DirectPayment for entering payment information."""
         self.context[self.form_context_name] = self.payment_form_cls()
         return render_to_response(self.payment_template, self.context, RequestContext(self.request))
+
+    def should_render_confirm_form(self):
+        return 'card' in self.request.GET
 
     def validate_payment_form(self):
         """Try to validate and then process the DirectPayment form."""
@@ -64,42 +69,42 @@ class WePayHandleCC(object):
 
     def confirm_card_info(self):
         """Post:  {credit_card_id: 1339169043, state: "new"}"""
-        ccID = self.request.POST.get('credit_card_id',None)
-        state = self.request.POST.get('state',None)
-        if ccID:
-            if state == "new":
-                # get some useful display data about this credit card and save in our DB
-                
-                WePay_response = WEPAY.call('/credit_card', {
-                          "client_id":settings.WEPAY_CLIENT_ID,
-                          "client_secret":settings.WEPAY_CLIENT_SECRET,
-                          "credit_card_id":ccID
-                        })
-                try:
-                    cc_data = WePay_response
-                    #  {u'state': u'new', u'create_time': 1350343091, 
-                    #  u'credit_card_name': u'Visa xxxxxx4018', 
-                    #  u'credit_card_id': 1391197372, 
-                    #  u'user_name': u'dave sppon', 
-                    #  u'email': u'gdamon@gmail.com'}
+        try:
+            ccID = self.request.POST.get('credit_card_id',None)
+            state = self.request.POST.get('state',None)
+            if ccID:
+                if state == "new":
+                    # get some useful display data about this credit card and save in our DB
+                    
+                    WePay_response = WEPAY.call('/credit_card', {
+                              "client_id":settings.WEPAY_CLIENT_ID,
+                              "client_secret":settings.WEPAY_CLIENT_SECRET,
+                              "credit_card_id":ccID
+                            })
                     try:
-                        CCToken.objects.filter(user=request.user, is_default=True)[0]
-                        no_default=False
+                        cc_data = WePay_response
+                        #  {u'state': u'new', u'create_time': 1350343091, 
+                        #  u'credit_card_name': u'Visa xxxxxx4018', 
+                        #  u'credit_card_id': 1391197372, 
+                        #  u'user_name': u'dave sppon', 
+                        #  u'email': u'gdamon@gmail.com'}
+                        newCC,created = CCToken.objects.get_or_create(
+                            cc_name = cc_data['credit_card_name'],
+                            user_name = cc_data['user_name'],
+                            token = cc_data['credit_card_id'],
+                            user = self.request.user
+                        )
+                        #newCC.save()
+                        self.current_cc = newCC
+                        return self.render_confirm_form()
                     except:
-                        no_default=True
+                        raise
+        except:
+            raise
+            print 'ERRORS:',self.request.POST
+        
+        return self.render_payment_form()
 
-                    newCC = CCToken.objects.create(
-                        cc_name = cc_data['credit_card_name'],
-                        user_name = cc_data['user_name'],
-                        token = cc_data['credit_card_id'],
-                        user = self.request.user,
-                        is_default = no_default,
-                    )
-                    newCC.save()
-                except:
-                    raise
-
-        return self.render_confirm_form()
 
     def render_confirm_form(self):
         """
@@ -107,6 +112,16 @@ class WePayHandleCC(object):
         contains hidden fields with the token / PayerID from PayPal.
         """
         #initial = dict(token=self.request.GET['token'], PayerID=self.request.GET['PayerID'])
+        print 'rendering confirm form'
         print self.item
+
+        if hasattr(self,'current_cc'):
+            cc = self.current_cc
+        else:
+            if self.request.GET.get('card',None):
+                cc = CCToken.objects.get(token=self.request.GET.get('card'))
+
+        self.context['cc'] = cc
+
         self.context[self.form_context_name] = self.confirm_form_cls(initial=None)
         return render_to_response(self.confirm_template, self.context, RequestContext(self.request))

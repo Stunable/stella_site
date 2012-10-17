@@ -2,10 +2,26 @@
 {% block left_panel %}{%endblock%}
 {% block body_class %}common{% endblock %}
 {% block content-class%}round-corner-shadow{%endblock%}
-
+{% load thumbnail %}
 {% block content %}
 
 <style>
+.common td input[type="text"] {
+	width: 40px;
+}
+.common th {
+	border: thin solid #EBEBEB;
+	vertical-align: middle;
+}
+.common table, .common .no-border td {
+	border: none;
+}
+.update-zipcode {
+	display: none;
+	cursor: pointer;
+}
+
+html.wait, html.wait * { cursor: wait !important; }
 	.common #page-content h2{
 		background-color: white;
 		font-family: 'Advent Pro', sans-serif;
@@ -31,13 +47,58 @@
 		<h2><span>Payment confirm</span></h2>
 	</div>
 	<div class="body-copy bootstrap">
-		<form method="POST" id="cart-form" class="form-horizontal">
-		{% csrf_token %}
-        {{ form.as_table }}
-		<div class="form-actions">
-			<input type="submit" class="btn btn-primary" value="Cofirm" id="btn-place-an-order" />
+		<p>Please confirm that you would like to use <strong>{{cc.cc_name}}</strong> to pay for the following items.</p>
+       	<table>
+       			<tr>
+       			    <th style="width: 17%;">retailer</th>
+       			    <th style="width: 35%;">item</th>
+       			    <th style="width: 7%;">size</th>
+
+       			    <th style="width: 15%;">color</th>
+       			    <th style="width: 20%;">quantity</th>
+       			    <th style="width: 10%;">price</th>
+       			</tr>
+               	{% for item in cart %}
+              
+	               <tr id="product-item-{{item.product.pk}}">
+	               	   <td>{{ item.product.item.retailer}}</td>
+	                   <td>{{ item.product.item.name }}</td>
+	                   <td>{{ item.size }}</td>
+	                   <td>{{ item.color }}</td>
+	                   <td align="center">{{ item.quantity }}</td>
+	                   <td>{{item.product.item.price}}</td>
+	               </tr>
+       
+           		{% endfor %}
+           		<tr id="product-item-{{item.product.pk}}">
+           			<td></td>
+           		    <td></td>
+           		    <td></td>
+           		    <td></td>
+           		    <td>total tax:</td>
+           		    <td>${{cart.totals_as_pretty_dict.tax}}</td>
+           		</tr>
+           		<tr id="product-item-{{item.product.pk}}">
+           			<td></td>
+           		    <td></td>
+           		    <td></td>
+           		    <td></td>
+           		    <td>total shipping:</td>
+           		    <td>${{cart.totals_as_pretty_dict.shipping_and_handling}}</td>
+           		</tr>
+           		<tr id="product-item-{{item.product.pk}}">
+           			<td></td>
+           		    <td></td>
+           		    <td></td>
+           		    <td></td>
+           		    <td>grand total:</td>
+           		    <td>${{cart.totals_as_pretty_dict.grand_total}}</td>
+           		</tr>
+           </table>
+           <div style="text-align:right;margin:10px;">
+            <a href="/cart/" class="btn btn-primary">Edit Cart</a>
+			<a href="/cart/wpp_reference_pay?card={{cc.token}}" class="btn btn-primary">Confirm</a>
 		</div>
-		</form>	
 	</div>
 </div>
 

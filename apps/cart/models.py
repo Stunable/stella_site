@@ -55,9 +55,26 @@ class Checkout(models.Model):
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
     complete = models.BooleanField(default=False)
     ref = models.CharField(max_length=250, blank=True, null=True)
+    retailer = models.ForeignKey(User,blank=True,null=True)
+
+    def check_complete(self):
+        try:
+            for p in self.purchase_set.all():
+                if p.transaction.status != 'captured':
+                    return False
+        except:
+            return False
+
+        self.complete = True
+        self.save()
+
+
+
+
 
 def set_ref(sender, instance, **kwargs):
-    instance.ref =str(abs(hash(str(instance.pk))))[:10] + str(instance.cart.pk)
+    if not instance.ref:
+        instance.ref =str(abs(hash(str(instance.retailer.pk))))[:10] + str(instance.cart.pk)
 pre_save.connect(set_ref, sender=Checkout, dispatch_uid="checkout_set_ref")
 
 class Purchase(models.Model):
@@ -70,14 +87,9 @@ class Purchase(models.Model):
     shipping_number = models.CharField(max_length=250, blank=True, null=True)
     shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
     purchased_at = models.DateTimeField(auto_now=True)
-    retailer = models.ForeignKey(User,related_name="sold_goods",blank=True,null=True)
 
-    
     def save(self,*args, **kwargs):
         pk_before_save = self.pk
-        self.retailer = self.item.product.item.retailers.all()[0]
-        # generate ref
-        
         super(Purchase, self).save()
         
         if pk_before_save != self.pk:
@@ -85,7 +97,11 @@ class Purchase(models.Model):
             self.ref = str(abs(hash(str(self.pk))))[:10] + str(self.purchaser.pk)
             self.save()
             # notify retailer
-            self.notify_retailer()        
+            self.notify_retailer()
+
+        if self.shipping_number:
+            if self.transaction.capture_funds() == 'captured':
+                self.checkout.check_complete()
             
     def notify_retailer(self):
         url = u"http://%s%s" % (
@@ -93,8 +109,8 @@ class Purchase(models.Model):
             reverse("retailer_order_history"),
         )
 
-        send_notification_on("retailer-order-placed", retailer=self.retailer,
-                                      recipient=self.retailer, shopper=self.purchaser, url=url)
+        send_notification_on("retailer-order-placed", retailer=self.checkout.retailer,
+                                      recipient=self.checkout.retailer, shopper=self.purchaser, url=url)
         print 'notified retailer'
     
     def name(self):
@@ -285,11 +301,11 @@ from django.dispatch import receiver
 def payment_was_successful_callback(sender, **kwargs):
     print 'received signal that payment successful for', kwargs['item']
     transaction = sender
-
+    retailer = kwargs['item'].product.item.retailers.all()[0]
     try:
-        checkout = Checkout.objects.get(cart=kwargs['item'].cart)
+        checkout = Checkout.objects.get(cart=kwargs['item'].cart, retailer=retailer)
     except:
-        checkout = Checkout.objects.create(cart=kwargs['item'].cart)
+        checkout = Checkout.objects.create(cart=kwargs['item'].cart,retailer=retailer)
     
     p = Purchase.objects.create(
         item = kwargs['item'],

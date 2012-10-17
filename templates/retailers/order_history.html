@@ -61,77 +61,78 @@
     </h2>
 </div>
 <div class="body-copy">
+{% for checkout in checkouts %}
+        <table id="checkout-table">
+            <tr>
+                <th style="width: 17%;">Purchase Date</th>
+                <th style="width: 35%;">Product Name</th>
+                <th style="width: 7%;">Price</th>
+                <th>Size</th>
+                <th>Color</th>
+                <th style="width: 7%;">Quantity</th>
+                <th style="width: 20%;">Status</th>
+                <th style="width: 10%;">Action</th>
+            </tr>
+            <tr><td></td></tr>
+            {% for purchase in checkout.purchase_set.all %}
+            {% with item=purchase.item %}
 
-    <table id="checkout-table">
-        <tr>
-            <th style="width: 17%;">Purchase Date</th>
-            <th style="width: 35%;">Product Name</th>
-            <th style="width: 7%;">Price</th>
-            <th>Size</th>
-            <th>Color</th>
-            <th style="width: 7%;">Quantity</th>
-            <th style="width: 20%;">Status</th>
-            <th style="width: 10%;">Action</th>
-        </tr>
-        <tr><td></td></tr>
-        {% for purchase in purchases %}
-        {% with item=purchase.item %}
-
-        {% ifchanged purchase.purchased_at|date:"YMD" %}
-        <tr>
-            <th style="width: 17%;">{{purchase.purchased_at|date:"D, b d"}}</th>
-            <th style="width: 35%;"></th>
-            <th style="width: 7%;"></th>
-            <th></th>
-            <th></th>
-            <th style="width: 7%;"></th>
-            <th style="width: 20%;"></th>
-            <th style="width: 10%;"></th>
-        </tr>
-        {% endifchanged %}
-       
-        <tr id="product-item-{{item.product.pk}}">
-            <td>{{ purchase.purchased_at}}</td>
-            <td>{{ item.product.item.name }}</td>
-            <td>{{ item.product.item.price }}</td>
-            <td>{{ item.size }}</td>
-            <td>{{ item.color }}</td>
-            <td align="center">{{ item.quantity }}</td>
-            <td><span class="item-status-{{item.pk}}">{{ item.status}}</span><br />
-            	{% if item.status == "shipped" %} tracking no. <span class="item-tracking-no-{{item.pk}}">{% if item.shipping_number %}#{{item.shipping_number}}{% endif %}</span>{% endif %}
-            </td>
-            <td>
-            <input type="hidden" class="item-pk" value="{{item.pk}}" />
-            <input type="hidden" class="total-price" value="{{item.total_price}}" />
-            <input type="hidden" class="purchaser-name" value="shopper" />    
-            	{% if item.actions %}
-            		<select class="order-update">
-            		<option value="">Select</option>
-	            	{% for action in item.actions %}
-	            		<option value="{{action.value}}">{{action.name}}</option>
-	            	{% endfor %}
-					</select>
-            	{% else %}
-            		NA            	
-            	{% endif %}
-            <span>
-                {% if item.status != "shipped" %}
-                <a href="{% url print_shipping_label ref=purchase.ref %}">print label</a>
-                {% else %}
-                <a href="{% url view_shipping_label shipping_number=item.shipping_number %}"><strong>view</strong> label</a>
-                {% endif %}
-            </span>
-            </td>
-        </tr>
-    {% endwith %}
-    
-    <br />
-    {% empty %}
-    <p>
-        There is no entry
-    </p>
-    {% endfor %}
-    </table>
+            {% ifchanged purchase.purchased_at|date:"YMD" %}
+            <tr>
+                <th style="width: 17%;">{{purchase.purchased_at|date:"D, b d"}}</th>
+                <th style="width: 35%;"></th>
+                <th style="width: 7%;"></th>
+                <th></th>
+                <th></th>
+                <th style="width: 7%;"></th>
+                <th style="width: 20%;"></th>
+                <th style="width: 10%;"></th>
+            </tr>
+            {% endifchanged %}
+           
+            <tr id="product-item-{{item.product.pk}}">
+                <td>{{ purchase.purchased_at}}</td>
+                <td>{{ item.product.item.name }}</td>
+                <td>{{ item.product.item.price }}</td>
+                <td>{{ item.size }}</td>
+                <td>{{ item.color }}</td>
+                <td align="center">{{ item.quantity }}</td>
+                <td><span class="item-status-{{item.pk}}">{{ item.status}}</span><br />
+                	{% if item.status == "shipped" %} tracking no. <span class="item-tracking-no-{{item.pk}}">{% if item.shipping_number %}#{{item.shipping_number}}{% endif %}</span>{% endif %}
+                </td>
+                <td>
+                <input type="hidden" class="item-pk" value="{{item.pk}}" />
+                <input type="hidden" class="total-price" value="{{item.total_price}}" />
+                <input type="hidden" class="purchaser-name" value="shopper" />    
+                	{% if item.actions %}
+                		<select class="order-update">
+                		<option value="">Select</option>
+    	            	{% for action in item.actions %}
+    	            		<option value="{{action.value}}">{{action.name}}</option>
+    	            	{% endfor %}
+    					</select>
+                	{% else %}
+                		NA            	
+                	{% endif %}
+                <span>
+                    {% if item.status != "shipped" %}
+                    <a href="{% url print_shipping_label ref=purchase.checkout.ref %}"><strong>get</strong> label</a>
+                    {% else %}
+                    <a href="{% url view_shipping_label shipping_number=item.shipping_number %}"><strong>view</strong> label</a>
+                    {% endif %}
+                </span>
+                </td>
+            </tr>
+        {% endwith %}
+        
+        <br />
+        {% empty %}
+        <p>
+            There is no entry
+        </p>
+        {% endfor %}
+        </table>
+{% endfor %}
 </div>
 
 {% endblock %}

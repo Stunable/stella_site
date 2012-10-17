@@ -163,6 +163,13 @@ class Cart:
             grand_total=self.grand_total
         )
 
+    def totals_as_pretty_dict(self):
+        d = self.totals_as_dict()
+        for k in d.keys():
+            d[k] = '%0.2f'%d[k]
+        return d
+
+
     def clear(self):
         for item in self.cart.item_set.all():
             item.delete()

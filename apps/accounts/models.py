@@ -192,19 +192,22 @@ class CCToken(models.Model):
     cc_name = models.CharField(max_length=32)
     user_name = models.CharField(max_length=100)
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
-    token = models.CharField(max_length=250) # For paypal, we use the latest transaction id as the token 
+    token = models.CharField(max_length=250,unique=True)
     is_default = models.BooleanField(default=False)
     user = models.ForeignKey(User)
     
     def __unicode__(self):
         return self.user.__unicode__()+'_'+self.cc_name
     
-#    def save(self):
-#        if self.user:
-#            if CCToken.objects.filter(user=self.user, is_default=True).count() == 0:
-#                # there is no default cc then the newly created CC should be the default one
-#                self.is_default = True
-#        
-#        super(CCToken, self).save(self)
+    class Meta:
+        unique_together =(('user','cc_name'))
+    
+    def save(self,*args,**kwargs):
+        if self.user:
+            if CCToken.objects.filter(user=self.user, is_default=True).count() == 0:
+                # there is no default cc then the newly created CC should be the default one
+                self.is_default = True
+       
+        super(CCToken, self).save(self)
 
     

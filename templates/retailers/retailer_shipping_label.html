@@ -54,48 +54,22 @@
 
 
 <div class="body-copy">
+    
+
+    
+   
+    
+    {% if checkout %}
     <p>This customer has ordered the following items to be shipped to the same address.  Check the items you will inlcude in this shipment.</p>
     <p>You can ship the rest later.</p>
 
     <p class="error_msg">{{error_message}}</p>
-    <form action="{% url print_shipping_label ref=purchases.0.ref %}" method="post">
-    {% csrf_token %}
-    <table id="checkout-table">
-        <tr>
-            <th>name</th>
-            <th>size</th>
-            <th>color</th>
-            <th>quantity</th>
-            {% if not shipping_label %}
-            <th>shipping<br>now? <input id="select_all" type="checkbox"></th>
-            {% endif %}
-        </tr>
-        
-        {% for purchase in purchases %}
-        {% with item=purchase.item %}   
-            <tr id="product-item-{{item.product.pk}}">
-                <td>{{ item.product.item.name }}</td>
-                <td>{{ item.size }}</td>
-                <td>{{ item.color }}</td>
-                <td align="center">{{ item.quantity }}</td>
-                {% if not shipping_label %}
-                <td><input class="ship_check" name="ship_item" value="{{item.id}}" type="checkbox"></td>
-                {% endif %}
-            </tr>
-        {% endwith %}
-        
-    <br />
-    {% empty %}
-    <p>
-        There is no entry
-    </p>
-    {% endfor %}
-    </table>
-    {% if shipping_label %}
-        <a href="{{shipping_label.image.url}}"><img src="{{shipping_label.image.url}}"></a>
+    <form action="{% url print_shipping_label ref=checkout.ref %}" method="post">
     {% else %}
-    <button class="btn btn-primary" action="submit"><h3>Get Label</h3></button>
+    <a href="">click here for a printable packing slip</a>
     {% endif %}
+
+        {% include 'retailers/packing_slip.html' %}
     </form>
 </div>
 

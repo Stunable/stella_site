@@ -37,8 +37,8 @@
 	</div>
 	<div class="body-copy bootstrap" style="width:50%;margin-left:0px;text-align:right">
 		<div>You can pay with one of your saved credit cards: </div>
-		{% for c in default_ccS %}
-		<div style="right:0px;clear:both;margin:8px">{{ c.cc_name }} <a href="/cart/wpp_reference_pay?card={{c.token}}" class="btn btn-primary">Pay</a>{% if c.is_default %}<span style="position:absolute;margin-left:5px"> (default)</span>{% endif %}</div>
+		{% for cc in default_ccS %}
+		<div style="right:0px;clear:both;margin:8px">{{ cc.cc_name }} <a href="/cart/wpp?card={{cc.token}}" class="btn btn-primary">Pay</a>{% if cc.is_default %}<span style="position:absolute;margin-left:5px"> (default)</span>{% endif %}</div>
 		{% endfor %}	
 
 		

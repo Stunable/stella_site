@@ -1,0 +1,39 @@
+
+{% csrf_token %}
+<br>
+<br>
+<strong>Included Items:</strong>
+<table id="checkout-table">
+    <tr>
+        <th>name</th>
+        <th>size</th>
+        <th>color</th>
+        <th>quantity</th>
+        {% if not shipping_label %}
+        <th>shipping<br>now? <input id="select_all" type="checkbox"></th>
+        {% endif %}
+    </tr>
+    
+    {% for purchase in purchases %}
+    {% if not purchase.shipping_number %}
+        {% with item=purchase.item %} 
+            <tr id="product-item-{{item.product.pk}}">
+                <td>{{ item.product.item.name }}</td>
+                <td>{{ item.size }}</td>
+                <td>{{ item.color }}</td>
+                <td align="center">{{ item.quantity }}</td>
+                {% if not shipping_label %}
+                <td><input class="ship_check" name="ship_purchase" value="{{purchase.id}}" type="checkbox"></td>
+                {% endif %}
+            </tr>
+        {% endwith %}
+    {% endif %}
+
+{% endfor %}
+</table>
+{% if shipping_label %}
+
+<br><br><a href="{{shipping_label.image.url}}">click this label to print it<img src="{{shipping_label.image.url}}"></a>
+{% else %}
+<button class="btn btn-primary" action="submit"><h3>Get Label</h3></button>
+{% endif %}

@@ -260,7 +260,7 @@ def wpp(request):
         default_ccS = None
     
     kw = {
-      "context": {'default_ccS': default_ccS,'mode':settings.WEPAY_STAGE,'wepay_client_id':settings.WEPAY_CLIENT_ID},
+      "context": {'cart':cart, 'default_ccS': default_ccS,'mode':settings.WEPAY_STAGE,'wepay_client_id':settings.WEPAY_CLIENT_ID},
       "item": item,                            # what you're selling
       "payment_template": "cart/payment.html",      # template name for payment
       "confirm_template": "cart/confirm.html", # template name for confirmation

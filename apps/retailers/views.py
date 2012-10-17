@@ -295,21 +295,18 @@ def order_history(request, template='retailers/order_history.html'):
     
         _from = request.GET.get('from')
         _to = request.GET.get('to')
-        
-        items = ItemType.objects.filter(item__retailers=request.user)
-        purchases = request.user.sold_goods.all()
+
+        checkouts = request.user.checkout_set.all()
         
         if not _from and not _to:
-            purchases = purchases.filter(transaction__state="authorized")
+            checkouts = checkouts.filter(complete=False)
         else:
             if _from:
-                purchases = purchases.filter(purchased_at__gte=_from)
+                checkouts = checkouts.filter(last_modified__gte=_from)
             if _to:
-                purchases = purchases.filter(purchased_at__lte=_to)
-                        
-
-        
-        ctx['purchases']= purchases
+                checkouts = purchases.filter(last_modified__lte=_to)
+                             
+        ctx['checkouts']= checkouts.order_by('-last_modified')
     except:
         raise
         #login as regular user
@@ -378,20 +375,24 @@ def item_action(request, template="retailers/product_list.html"):
 
 @login_required
 def print_shipping_label(request, ref=None, template='retailers/retailer_shipping_label.html'):
+    ctx = {}
     try:
-        purchase = request.user.sold_goods.filter(ref=ref)[0]
+        checkout = request.user.checkout_set.all().filter(ref=ref)[0]
+        purchases = checkout.purchase_set.all()
+        purchase = purchases[0]
         retailer_profile = RetailerProfile.objects.get(user=request.user)
+        ctx['checkout'] = checkout
     except:
+        raise
         return redirect(reverse("home"))
 
-    ctx = {}
     if request.method == "POST":
-        item_list = request.POST.getlist('ship_item')
-        if len(item_list)<1:
+        purchase_list = request.POST.getlist('ship_purchase')
+        if len(purchase_list)<1:
             ctx['error_message'] = "Select at least one item to ship."
             print 'error'
         else:
-            item_count = len(item_list)
+            item_count = len(purchase_list)
             tracking_number,label = ship_it(retailer_profile,ShippingInfo.objects.get(customer=purchase.purchaser.get_profile(),is_default=True),item_count)
 
             if os.path.exists(label):
@@ -401,8 +402,12 @@ def print_shipping_label(request, ref=None, template='retailers/retailer_shippin
                 label.tracking_number = tracking_number
                 label.save()
 
-                for item_id in item_list:
-                    item = CartItem.objects.get(id=item_id)
+                for purchase_id in purchase_list:
+                    purchase = purchases.filter(id=purchase_id)[0]
+                    purchase.shipping_number = tracking_number
+                    purchase.save()
+                    
+                    item = purchase.item
                     item.shipping_number = tracking_number
                     item.shipping_label = label
                     item.status = "shipped"
@@ -411,7 +416,6 @@ def print_shipping_label(request, ref=None, template='retailers/retailer_shippin
             ctx['shipping_label'] = label
     try:
         ctx.update({'retailer_profile': retailer_profile})
-        purchases = request.user.sold_goods.filter(ref=ref)
         ctx['purchases']= purchases
     except:
         raise
@@ -423,10 +427,10 @@ def view_shipping_label(request, shipping_number=None,template='retailers/retail
     ctx={}
     try:
         retailer_profile = RetailerProfile.objects.get(user=request.user)
-        shipping_types = ShippingType.objects.all()
-        form = RetailerEditForm(instance=retailer_profile)
-        ctx.update({'retailer_profile': retailer_profile, 'shipping_types': shipping_types, 'form': form})
-        purchases = request.user.sold_goods.filter(item__shipping_number=shipping_number)
+        items = CartItem.objects.filter(shipping_number=shipping_number)
+        purchases = [{'item':each_item} for each_item in items]
+        ctx.update({'retailer_profile': retailer_profile})
+
         ctx['shipping_label'] = ShippingLabel.objects.get(tracking_number=shipping_number)
         ctx['purchases']= purchases
     except:
