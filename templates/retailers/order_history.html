@@ -117,6 +117,8 @@
             <span>
                 {% if item.status != "shipped" %}
                 <a href="{% url print_shipping_label ref=purchase.ref %}">print label</a>
+                {% else %}
+                <a href="{% url view_shipping_label shipping_number=item.shipping_number %}"><strong>view</strong> label</a>
                 {% endif %}
             </span>
             </td>

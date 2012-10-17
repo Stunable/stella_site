@@ -1,5 +1,5 @@
 from django.contrib import admin 
-from apps.cart.models import Cart, Purchase, Checkout
+from apps.cart.models import Cart, Purchase, Checkout,Item,ShippingLabel
 
 
 class CartAdmin(admin.ModelAdmin):
@@ -31,3 +31,7 @@ class CheckoutAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Checkout,CheckoutAdmin)
+
+
+admin.site.register(Item)
+admin.site.register(ShippingLabel)

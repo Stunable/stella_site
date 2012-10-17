@@ -66,7 +66,9 @@
             <th>size</th>
             <th>color</th>
             <th>quantity</th>
+            {% if not shipping_label %}
             <th>shipping<br>now? <input id="select_all" type="checkbox"></th>
+            {% endif %}
         </tr>
         
         {% for purchase in purchases %}
@@ -76,7 +78,9 @@
                 <td>{{ item.size }}</td>
                 <td>{{ item.color }}</td>
                 <td align="center">{{ item.quantity }}</td>
+                {% if not shipping_label %}
                 <td><input class="ship_check" name="ship_item" value="{{item.id}}" type="checkbox"></td>
+                {% endif %}
             </tr>
         {% endwith %}
         
@@ -87,7 +91,11 @@
     </p>
     {% endfor %}
     </table>
+    {% if shipping_label %}
+        <a href="{{shipping_label.image.url}}"><img src="{{shipping_label.image.url}}"></a>
+    {% else %}
     <button class="btn btn-primary" action="submit"><h3>Get Label</h3></button>
+    {% endif %}
     </form>
 </div>
 

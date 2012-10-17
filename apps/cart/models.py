@@ -21,6 +21,8 @@ from accounts.models import CCToken
 from apps.notification.models import send_notification_on 
 
 
+
+
 class Cart(models.Model):
     creation_date = models.DateTimeField(verbose_name=_('creation date'))
     checked_out = models.BooleanField(default=False, verbose_name=_('checked out'))
@@ -68,12 +70,12 @@ class Purchase(models.Model):
     shipping_number = models.CharField(max_length=250, blank=True, null=True)
     shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
     purchased_at = models.DateTimeField(auto_now=True)
-    retailer = models.ForeignKey(User,related_name="sold_goods")
+    retailer = models.ForeignKey(User,related_name="sold_goods",blank=True,null=True)
 
     
     def save(self,*args, **kwargs):
         pk_before_save = self.pk
-        
+        self.retailer = self.item.product.item.retailers.all()[0]
         # generate ref
         
         super(Purchase, self).save()
@@ -81,7 +83,6 @@ class Purchase(models.Model):
         if pk_before_save != self.pk:
             # new order has been made
             self.ref = str(abs(hash(str(self.pk))))[:10] + str(self.purchaser.pk)
-            self.retailer = self.item.product.item.retailers.all()[0]
             self.save()
             # notify retailer
             self.notify_retailer()        
@@ -128,6 +129,9 @@ class Purchase(models.Model):
     def clear(self):
         self.item.delete()
             
+class ShippingLabel(models.Model):
+    image = models.ImageField(upload_to="shipping_labels",null=True,blank=True)
+    tracking_number = models.CharField(max_length=250, blank=True, null=True)
 
 class Item(models.Model):
     cart = models.ForeignKey(Cart, verbose_name=_('cart'))
@@ -148,6 +152,7 @@ class Item(models.Model):
     
     shipping_number = models.CharField(max_length=250, blank=True, null=True)
     shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
+    shipping_label = models.ForeignKey(ShippingLabel,null=True)
     status = models.CharField(max_length=250, default="ordered")
 
     class Meta:

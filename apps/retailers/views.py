@@ -10,8 +10,9 @@ from retailers.models import RetailerProfile, StylistItem, ShippingType
 from racks.models import Item, Rack, Rack_Item
 from apps.common import json_view
 from django.views.decorators.csrf import csrf_exempt
+from django.core.files import File
 
-from cart.models import Item as CartItem, Purchase
+from cart.models import Item as CartItem, Purchase,ShippingLabel
 import datetime
 from django.http import HttpResponse
 from apps.racks.forms import item_inventory_form_factory
@@ -24,12 +25,15 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.conf import settings
 
+
 from cart.plugins.create_shipment import ship_it
 
 try:
     import simplejson as json
 except ImportError:
     import json
+
+import os
 
 
 def create_retailer_profile(request, template="retailers/retailer_profile_create.html"):
@@ -382,19 +386,31 @@ def print_shipping_label(request, ref=None, template='retailers/retailer_shippin
 
     ctx = {}
     if request.method == "POST":
-        l = request.POST.getlist('ship_item')
-        if len(l)<1:
+        item_list = request.POST.getlist('ship_item')
+        if len(item_list)<1:
             ctx['error_message'] = "Select at least one item to ship."
             print 'error'
         else:
-            item_count = len(l)
+            item_count = len(item_list)
+            tracking_number,label = ship_it(retailer_profile,ShippingInfo.objects.get(customer=purchase.purchaser.get_profile(),is_default=True),item_count)
 
-            ship_it(retailer_profile,ShippingInfo.objects.get(customer=purchase.purchaser.get_profile(),is_default=True),item_count)
+            if os.path.exists(label):
+                f = File(open(label,'rb'))
+                label = ShippingLabel.objects.create()
+                label.image.save(tracking_number+'.png', f)
+                label.tracking_number = tracking_number
+                label.save()
 
+                for item_id in item_list:
+                    item = CartItem.objects.get(id=item_id)
+                    item.shipping_number = tracking_number
+                    item.shipping_label = label
+                    item.status = "shipped"
+                    item.save()
+
+            ctx['shipping_label'] = label
     try:
-        shipping_types = ShippingType.objects.all()
-        form = RetailerEditForm(instance=retailer_profile)
-        ctx.update({'retailer_profile': retailer_profile, 'shipping_types': shipping_types, 'form': form})
+        ctx.update({'retailer_profile': retailer_profile})
         purchases = request.user.sold_goods.filter(ref=ref)
         ctx['purchases']= purchases
     except:
@@ -402,3 +418,22 @@ def print_shipping_label(request, ref=None, template='retailers/retailer_shippin
         #login as regular user
         return redirect(reverse("home"))
     return direct_to_template(request, template, ctx)
+
+def view_shipping_label(request, shipping_number=None,template='retailers/retailer_shipping_label.html'):
+    ctx={}
+    try:
+        retailer_profile = RetailerProfile.objects.get(user=request.user)
+        shipping_types = ShippingType.objects.all()
+        form = RetailerEditForm(instance=retailer_profile)
+        ctx.update({'retailer_profile': retailer_profile, 'shipping_types': shipping_types, 'form': form})
+        purchases = request.user.sold_goods.filter(item__shipping_number=shipping_number)
+        ctx['shipping_label'] = ShippingLabel.objects.get(tracking_number=shipping_number)
+        ctx['purchases']= purchases
+    except:
+        raise
+        #login as regular user
+        return redirect(reverse("home"))
+    return direct_to_template(request, template, ctx)
+
+
+

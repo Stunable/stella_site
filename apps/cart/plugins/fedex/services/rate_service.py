@@ -8,6 +8,7 @@ returned with the rates if it is specified in the request.
 from datetime import datetime
 from .. base_service import FedexBaseService
 
+
 class FedexRateServiceRequest(FedexBaseService):
     """
     This class allows you to get the shipping charges for a particular address.

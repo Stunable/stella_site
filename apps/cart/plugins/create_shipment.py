@@ -10,13 +10,14 @@ label data that is returned with the reply.
 import logging
 import binascii
 from django.conf import settings
+import time
 from apps.cart.plugins.fedex.services.ship_service import FedexProcessShipmentRequest
 
 CONFIG_OBJ = settings.FEDEX_CONFIG
 
 def ship_it(retailer,customer,item_count):
     # Set this to the INFO level to see the response from Fedex printed in stdout.
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
 
 
     # This is the object that will be handling our tracking request.
@@ -29,7 +30,7 @@ def ship_it(retailer,customer,item_count):
 
     # See page 355 in WS_ShipService.pdf for a full list. Here are the common ones:
     # STANDARD_OVERNIGHT, PRIORITY_OVERNIGHT, FEDEX_GROUND, FEDEX_EXPRESS_SAVER
-    shipment.RequestedShipment.ServiceType = 'PRIORITY_OVERNIGHT'
+    shipment.RequestedShipment.ServiceType = 'STANDARD_OVERNIGHT'
 
     # What kind of package this will be shipped in.
     # FEDEX_BOX, FEDEX_PAK, FEDEX_TUBE, YOUR_PACKAGING
@@ -117,9 +118,9 @@ def ship_it(retailer,customer,item_count):
     # can call this and parse it just like you would via send_request(). If
     # shipment.response.HighestSeverity == "SUCCESS", your shipment is valid.
     #shipment.send_validation_request()
-    print shipment
+    #print shipment
     # Fires off the request, sets the 'response' attribute on the object.
-    shipment.send_validation_request()
+    #shipment.send_validation_request()
 
 
     shipment.send_request()
@@ -132,7 +133,7 @@ def ship_it(retailer,customer,item_count):
     # Here is the overall end result of the query.
     # print "HighestSeverity:", shipment.response.HighestSeverity
     # # Getting the tracking number from the new shipment.
-    # print "Tracking #:", shipment.response.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].TrackingNumber
+    tracking_number = shipment.response.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].TrackingNumber
     # # Net shipping costs.
     # print "Net Shipping Cost (US$):", shipment.response.CompletedShipmentDetail.CompletedPackageDetails[0].PackageRating.PackageRateDetails[0].NetCharge.Amount
 
@@ -147,28 +148,9 @@ def ship_it(retailer,customer,item_count):
     This is an example of how to dump a label to a PNG file.
     """
     # This will be the file we write the label out to.
-    png_file = open('example_shipment_label.png', 'wb')
+    file_out = 'media/label_temp/%d_.png'%int(round(time.time() * 1000))
+    png_file = open(file_out, 'wb')
     png_file.write(label_binary_data)
     png_file.close()
 
-    """
-    This is an example of how to print the label to a serial printer. This will not
-    work for all label printers, consult your printer's documentation for more
-    details on what formats it can accept.
-    """
-    # Pipe the binary directly to the label printer. Works under Linux
-    # without requiring PySerial. This WILL NOT work on other platforms.
-    #label_printer = open("/dev/ttyS0", "w")
-    #label_printer.write(label_binary_data)
-    #label_printer.close()
-
-    """
-    This is a potential cross-platform solution using pySerial. This has not been
-    tested in a long time and may or may not work. For Windows, Mac, and other
-    platforms, you may want to go this route.
-    """
-    #import serial
-    #label_printer = serial.Serial(0)
-    #print "SELECTED SERIAL PORT: "+ label_printer.portstr
-    #label_printer.write(label_binary_data)
-    #label_printer.close()
+    return tracking_number,file_out
