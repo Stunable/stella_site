@@ -13,6 +13,7 @@ from django.db.models.loading import get_model, get_models
 
 from tasks import *
 from apps.common.utils import *
+from apps.accounts.models import AnonymousProfile
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -154,7 +155,7 @@ class RackManager(models.Manager):
         return Rack.objects.filter(shared_users__username__contains=user)
     
     def SharedRacksForUser(self, user):
-        user_racks = Rack.objects.filter(owner=user)
+        user_racks = Rack.objects.filter(user=user)
         shared_racks = []
         for rack in user_racks:
             if rack.shared_users.all() or rack.publicity == Rack.PUBLIC:
@@ -162,11 +163,11 @@ class RackManager(models.Manager):
         return shared_racks
     
     def PublicRacksForUser(self, user):
-        public_rack = Rack.objects.filter(publicity=Rack.PUBLIC, owner=user)
+        public_rack = Rack.objects.filter(publicity=Rack.PUBLIC, user=user)
         return public_rack;
     
     def PrivateRacksForUser(self, user):
-        user_racks = Rack.objects.filter(owner=user)
+        user_racks = Rack.objects.filter(user=user)
         private_racks = []
         for rack in user_racks:
 #            if not rack.shared_users.all() and rack.publicity == Rack.PRIVATE:
@@ -181,7 +182,7 @@ class RackManager(models.Manager):
         return private_racks
     
     def OwnedRacksForUser(self, user):
-        user_racks = Rack.objects.filter(owner=user)
+        user_racks = Rack.objects.filter(user=user)
         return user_racks
     
 class Rack(models.Model):
@@ -190,7 +191,8 @@ class Rack(models.Model):
     #SHARED = 2
     
     name = models.CharField(max_length=100)
-    owner = models.ForeignKey(User, related_name="owner", null=True, blank=True)
+    user = models.ForeignKey(User, related_name="owned_by_user", null=True, blank=True)
+    anon_user_profile = models.ForeignKey(AnonymousProfile, null=True, blank=True)
     category = models.CharField(max_length=100, null=True, blank=True)
     shared_users = models.ManyToManyField(User, related_name="shared_users", null=True, blank=True)
     rack_items = models.ManyToManyField(Item, through='Rack_Item')
@@ -215,6 +217,22 @@ class Rack(models.Model):
     
     def is_public(self):
         return self.publicity == Rack.PUBLIC
+
+    def get_owner(self):
+        if self.user:
+            return self.user
+        if self.anon_user_profile:
+            return self.anon_user_profile
+
+    def set_owner(self, owner):
+        if 'AnonymousProfile' in str(owner.__class__):
+            self.anon_user_profile = owner
+        else:
+            self.user = owner.user
+        #self.save()
+
+    owner = property(get_owner, set_owner)
+
     
 class Rack_Item(models.Model):
     item = models.ForeignKey(Item)

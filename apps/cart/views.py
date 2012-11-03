@@ -11,6 +11,7 @@ from apps.cart.models import Purchase
 from django.contrib.auth.decorators import login_required
 from apps.racks.models import ItemType
 from fedex.base_service import FedexError
+from apps.cart.plugins.validate_address import validate_this
 
 from apps.cart.models import Item as CartItem
 from paypal.pro.exceptions import PayPalFailure
@@ -133,7 +134,16 @@ def update_info(request, template="cart/info.html"):
             response['errors'].update({'term_and_condition': ['Accepting Term and condition is requred.']})
         
         if response['success']:
+            #now lets check with fedex...
+
+
+
+
+
             shipping_info = shipping_form.save(commit=False)
+            validate_this(shipping_info)
+
+
             shipping_info.customer=user_profile
             if not default_shipping:
                 shipping_info.is_default=True

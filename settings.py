@@ -97,6 +97,9 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
+INITIAL_RACKS = ['A Night Out on the Town', "A day at the Beach"]
+
+
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -173,8 +176,8 @@ INSTALLED_APPS = (
     'ckeditor',
     'registration',
     'openpyxl',
-    'paypal.standard',
-    'paypal.pro',
+    # 'paypal.standard',
+    # 'paypal.pro',
     'stunable_wepay',
     'api',
     'gunicorn',
@@ -241,11 +244,12 @@ FACEBOOK_SCOPE = 'publish_stream'
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
+    'social_auth.backends.google.GoogleBackend',
     'django.contrib.auth.backends.ModelBackend',
     'apps.accounts.backends.EmailAuthenticationBackend',
 )
 
-SOCIAL_AUTH_ENABLE_BACKENDS = ('facebook', 'twitter')
+SOCIAL_AUTH_ENABLE_BACKENDS = ('facebook', 'google')
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
 
 PRODUCT_GROUPS = {
@@ -288,6 +292,14 @@ EXTERNAL_CONTENT_URL = {
                             'blog':"http://stunable.wordpress.com/",
                             'news': "http://stunablenews.wordpress.com/"
                         }
+
+TAX_USE_TAXCLOUD = True
+TAX_USE_TAXCLOUD_AUTHORIZATION = True
+TAX_TAXCLOUD_API_ID = '15B54040'
+TAX_TAXCLOUD_API_KEY = '0D678AA9-B974-44AF-B1E5-6DB714D26E55'
+USPS_ID = '193BURLE8091'
+
+
 try:                        
     from dev import *
 except:

@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
 from django.contrib.auth.decorators import login_required
 from apps.accounts.forms import AccountSettingsForm, WaitlistForm
-from apps.accounts.models import UserProfile, Question, QuestionAnswer, Answer
+from apps.accounts.models import UserProfile, AnonymousProfile, Question, QuestionAnswer, Answer
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from accounts.forms import AccountCreationForm, AvatarUploadForm,\
@@ -202,31 +202,47 @@ def avatar_upload(request):
         return {'result': 'error', 'error': "Errors Occur!"}
 #        raise ValidationError("Errors Occur!")
 
-@login_required
+#@login_required
 def welcome(request, template="accounts/welcome.html"):
     ctx = {}
-    profile = get_or_create_profile(request)
+    if request.user.is_authenticated():
+        profile = get_or_create_profile(request)
+    else:
+
+        if request.session.has_key('anonymous_profile'):
+            profile = request.session.get('anonymous_profile')
+        else:
+            profile = AnonymousProfile.objects.create()
+            request.session['anonymous_profile'] = profile
     retailer_profile = RetailerProfile.objects.filter(email_address=request.user.username)
     if retailer_profile.count() > 0:
         return redirect(reverse('retailer_information', args=[retailer_profile[0].name, ]))
+    
     elif not profile.favourite_designer:
         if request.method == "POST":
             form = FavouriteDesignerForm(request.POST, instance=profile)
             if form.is_valid():
                 profile = form.save()
+                print profile.favourite_designer
+
                 if profile.first_login:
                     # create two default racks for first time login user
-                    Rack.objects.create(name="Night out on the town", publicity=1, owner=request.user)
-                    Rack.objects.create(name="Day at the beach", publicity=1, owner=request.user)
+                    for rack in settings.INITIAL_RACKS:
+                        r = Rack.objects.create(name=rack, publicity=1)
+                        r.owner = profile
+                        r.save()
+
                     profile.first_login = False
+                    profile.save()
                 
                 if profile.favourite_designer: 
                     try:
-                        product_group = Brand.get_product_group_from_brand(request.user.get_profile().favourite_designer)
-                        UserProfile.update_product_group_tag(request.user, product_group)                    
-                    except UserProfile.DoesNotExist:
-                        pass
-                
+                        product_group = Brand.get_product_group_from_brand(profile.favourite_designer)
+                        profile.update_product_group_tag(product_group)                    
+                    except:
+                        raise
+                if not request.user.is_authenticated():
+                    request.session['anonymous_profile'] = profile
                 ctx['success'] = True
                 return redirect(reverse('home'))
         else:

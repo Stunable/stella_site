@@ -5,6 +5,10 @@ from django.conf import settings
 
 CART_ID = 'CART-ID'
 
+
+from apps.retailers.models import RetailerProfile
+
+
 class ItemAlreadyExists(Exception):
     pass
 
@@ -12,6 +16,7 @@ class ItemDoesNotExist(Exception):
     pass
 
 class Cart:
+
     def __init__(self, request, instance=None):
         self.request = request
         self.recipient_zipcode = request.session.get('recipient_zipcode')
@@ -121,7 +126,7 @@ class Cart:
         if not self.recipient_zipcode:
             return
         
-        from apps.retailers.models import RetailerProfile
+        
         self.shipping_and_handling_cost = 0
         
         for item in self.cart.item_set.all():
@@ -146,6 +151,7 @@ class Cart:
         result = 0
         for item in self.cart.item_set.all():
             result += item.total_price
+            #result += item.get_tax_rate(self.request.user.get_profile(), RetailerProfile.objects.get(user=item.product.item.retailers.all()[0]))
         return result
     
     def calculate(self):
@@ -153,6 +159,7 @@ class Cart:
         self.tax = self.total * settings.TAX_RATE        
         self.grand_total = self.tax + self.total + float(self.cart and self.cart.shipping_and_handling_cost or 0)
         self.cart.grand_total = self.grand_total
+
     
     def totals_as_dict(self):
         self.calculate()

@@ -2126,6 +2126,13 @@ function stella_request_refund_item(item_id, transaction) {
   	});
 }
 
+function not_logged_in(){
+	return false
+}
+
+function login_modal(){
+	initFancyBox('#social_login_box ');
+}
 
 
 //$('#fancybox-wrap').transition({ y: '-200px', opacity: 0, easing: 'snap', duration: 500,}, function() {$('#fancybox-overlay').transition({opacity: 0}, 1000);});

@@ -1,5 +1,5 @@
 from django.contrib import admin 
-from apps.accounts.models import UserProfile, Question, QuestionAnswer,\
+from apps.accounts.models import UserProfile, AnonymousProfile, Question, QuestionAnswer,\
             WaitingList, Answer, BillingInfo, ShippingInfo, CCToken
 
 from django.contrib.flatpages.models import FlatPage
@@ -35,6 +35,7 @@ admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
 
 admin.site.register(UserProfile)
+admin.site.register(AnonymousProfile)
 admin.site.register(Question)
 admin.site.register(Answer)
 admin.site.register(QuestionAnswer)

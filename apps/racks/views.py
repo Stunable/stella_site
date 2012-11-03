@@ -40,6 +40,8 @@ else:
     notification = None
 
 def get_context_variables(context, user):
+    if not user.is_authenticated():
+        return context
     context['public_racks'] = Rack.objects.PublicRacksForUser(user)
     context['private_racks'] = Rack.objects.OwnedRacksForUser(user)
     context['friendship_list'] = Friendship.objects.friends_for_user(user)
@@ -419,27 +421,51 @@ def item(request, template='racks/item_management.html'):
     return direct_to_template(request, template, ctx)
 
 
-@login_required
+#@login_required
 def item_modal(request, item_id, template='racks/item_modal.html'):
     
-    if request.user.is_anonymous():
-        template = "racks/view_error.html"
-        return direct_to_template(request, template)
+    # if request.user.is_anonymous():
+    #     template = "racks/view_error.html"
+    #     return direct_to_template(request, template)
     
+
     ctx = {}
     
+
+    item = get_object_or_404(Item, pk=item_id)
+    ctx['item'] = item
+
+
+    
+
+  
+
     if request.GET.get("opt") == "rack_it":
         ctx['show_rack_it'] = True
     
-    admirer_list = Friendship.objects.friends_for_user(request.user)
-    ctx['admirer_list'] = admirer_list
-    
-    rack_list = Rack.objects.filter(owner = request.user)
+
+    if request.user.is_authenticated():
+        rack_list = Rack.objects.filter(owner = request.user) 
+        admirer_list = Friendship.objects.friends_for_user(request.user)
+        ctx['admirer_list'] = admirer_list
+
+        if Rack_Item.objects.filter(item__id=item_id, user=request.user).count() > 0:
+            item.shared_to_this_user = True 
+    else:
+        if request.session.has_key('anonymous_profile'):
+            profile = request.session.get('anonymous_profile')
+            rack_list = Rack.objects.filter(anon_user_profile=profile)
+        else:
+            template = "racks/view_error.html"
+            return direct_to_template(request, template)
+
+
+        
+
     if rack_list:
         ctx['rack_list'] = rack_list
     
-    item = get_object_or_404(Item, pk=item_id)
-    ctx['item'] = item
+
     
     size2color = {}
     for inventory in item.types.all():
@@ -460,8 +486,7 @@ def item_modal(request, item_id, template='racks/item_modal.html'):
                 'colors': set(colors),
                 'inventories': json.dumps(inventories)}) 
                
-    if Rack_Item.objects.filter(item__id=item_id, user=request.user).count() > 0:
-        item.shared_to_this_user = True 
+
     return direct_to_template(request, template, ctx)
 
 def divide_into_list(list_item):
@@ -584,10 +609,19 @@ def new(request, template="racks/carousel.html"):
     return pagination(request, ctx, template, query_set)
 #    return direct_to_template(request, template, ctx)
 
-@login_required
+#@login_required
 def _all(request, template='racks/carousel.html'):
-    profile = get_or_create_profile(request)
-    
+    profile = None
+    if request.user.is_authenticated():
+        profile = get_or_create_profile(request)
+    else:
+        if request.session.has_key('anonymous_profile'):
+            print request.session
+            profile = request.session.get('anonymous_profile')
+            print profile.first_login
+
+    if not profile:
+        return redirect(reverse('welcome'))
     if not profile.favourite_designer:
         return redirect(reverse('welcome'))
     else:

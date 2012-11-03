@@ -43,6 +43,10 @@
 			$('.item-size-list').append("<span><a href='#'>" + inventory.size +"</a></span>");
 			
 			$('.item-size-list span').click(function(e) {
+				if (not_logged_in()){
+					return login_modal();
+				}
+
 				e.preventDefault();
 				$('.item-color-list').html('');
 				for(i in inventories) {

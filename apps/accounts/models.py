@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from tagging.models import Tag
 from django.utils.translation import ugettext_lazy as _
-
+from django.contrib.localflavor.us.us_states import STATE_CHOICES
 
 AGE_RANGE_CHOICE = (
     ('','optional'),
@@ -22,7 +22,16 @@ AGE_RANGE_CHOICE = (
     ('60 or older','60 or older'),
 )
 
-class UserProfile(models.Model):
+class ProfileBase(object):
+
+    def update_product_group_tag(self, product_group):
+        tags = [tag.name for tag in Tag.objects.get_for_object(self) if not tag.name.startswith('product_group_')]
+        if product_group:
+            tags.append(product_group)
+        Tag.objects.update_tags(self, ','.join(tags))
+
+
+class UserProfile(models.Model,ProfileBase):
     """
     User profile model
     """
@@ -50,12 +59,12 @@ class UserProfile(models.Model):
     def location(self):
         return "San Francisco, CA"
         
-    @classmethod
-    def update_product_group_tag(cls, user, product_group):
-        tags = [tag.name for tag in Tag.objects.get_for_object(user) if not tag.name.startswith('product_group_')]
-        if product_group:
-            tags.append(product_group)
-        Tag.objects.update_tags(user, ','.join(tags))
+
+
+class AnonymousProfile(models.Model,ProfileBase):
+    favourite_designer = models.CharField(max_length=100, null=True, blank=True)
+    first_login = models.BooleanField(default=True)
+
 
 def user_new_unicode(self):
     return "Stella's Favorite" if self.get_full_name() == "" else self.get_full_name()
@@ -170,17 +179,17 @@ class Address(models.Model):
     firstname = models.CharField(_("Firstname"), max_length=50)
     lastname = models.CharField(_("Lastname"), max_length=50)
     company_name = models.CharField(_("Company name"), max_length=50, blank=True, null=True)
-    line1 = models.CharField(_("Address 1"), max_length=100)
-    line2 = models.CharField(_("Address 2"), max_length=100, blank=True, null=True)
+    address1 = models.CharField(_("Address 1"), max_length=100)
+    address2 = models.CharField(_("Address 2"), max_length=100, blank=True, null=True)
     city = models.CharField(_("City"), max_length=50)
-    state = models.CharField(_("State"), max_length=50)
+    state = models.CharField(_("State"), max_length=50, choices=STATE_CHOICES)
     zip_code = models.CharField(_("Zip code"), max_length=10)
     country = models.CharField(_("Country"), default='US', choices=(('US', 'United States'), ), max_length=250,)
     phone = models.CharField(_("Phone"), blank=True, max_length=20)
     email = models.EmailField(_("E-Mail"), blank=True, null=True, max_length=50)
 
     def __unicode__(self):
-        return "%s / %s" % (self.line1, self.city)
+        return "%s / %s" % (self.address1, self.city)
     
 class ShippingInfo(Address):
     is_default = models.BooleanField(default=False)

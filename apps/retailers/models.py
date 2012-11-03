@@ -26,8 +26,8 @@ class RetailerProfile(models.Model):
 
     name = models.CharField(max_length=255)
     user = models.ForeignKey(User, blank=True, null=True)
-    address_1 = models.CharField(max_length=255, null=True,blank=True)
-    address_2 = models.CharField(max_length=255, null=True,blank=True)
+    address1 = models.CharField(max_length=255, null=True,blank=True)
+    address2 = models.CharField(max_length=255, null=True,blank=True)
     city = models.CharField(max_length=150, null=True, blank=True)
     state = models.CharField(max_length=150, choices=US_STATES,null=True,blank=True)
     zip_code = models.CharField(max_length=10,null=True,blank=True)

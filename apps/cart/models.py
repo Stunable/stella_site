@@ -14,6 +14,7 @@ from cart import Cart
 from apps.retailers.models import RetailerProfile
 from apps.paypal.pro.helpers import PayPalWPP
 
+from accounts.models import ShippingInfo
 from stunable_wepay.models import WePayTransaction
 
 from accounts.models import CCToken
@@ -21,6 +22,9 @@ from accounts.models import CCToken
 from apps.notification.models import send_notification_on 
 
 
+
+from apps.cart.plugins.get_tax_rate import TaxCloudClient
+TCC = TaxCloudClient()
 
 
 class Cart(models.Model):
@@ -251,7 +255,7 @@ class Item(models.Model):
     def refund(self, request):
         wpp = PayPalWPP(request)          
         
-        purchase = Purchase.objects.filter(cart__item__pk=self.pk)[0]
+        purchase = Purchase.objects.get(item=self)
         response = wpp.refundTransaction({'TRANSACTIONID': purchase.tx, 'REFUNDTYPE': "Partial",  "amt": self.unit_price * self.quantity})
         
         print response
@@ -293,6 +297,17 @@ class Item(models.Model):
                              retailer=self.product.item.retailers.all()[0], 
                              shopper=shopper, 
                              recipient=shopper)
+
+    def get_retailer(self):
+        return Purchase.objects.get(item=self).checkout.retailer
+
+    def get_tax_rate(self, buyer, retailer):
+        print 'getting tax_rate'
+        #return 0
+        self._tax_amount = TCC.get_tax_rate_for_item(ShippingInfo.objects.filter(customer=buyer)[0], retailer, [self])
+        print self._tax_amount
+        return self._tax_amount
+
 
 from stunable_wepay.signals import payment_was_successful
 from django.dispatch import receiver    
