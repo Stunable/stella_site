@@ -58,6 +58,14 @@
 		/*		width: 50px;*/
 		/*		display: inline-block;*/
 	}
+    .form_errors{
+        position:absolute;
+        top:340px;
+        right:0px;
+        text-align:right;
+        margin-right:25%;
+        font-size: 1.2em;
+    }
 </style>
 
 <div id="page-content" class="section clearfix round-corner-shadow">
@@ -70,7 +78,9 @@
 	<div class="section body-copy bootstrap">
 		<form action="" method="POST" class="user-entry" id="account-form" enctype="multipart/form-data">
 			{% csrf_token %}
-
+            <div class="form_errors">
+                {{form.non_field_errors}}
+            </div>
 			<table style="width: 100%">
 				<tbody>
 					<tr>
@@ -122,14 +132,19 @@
 						
 					</tr>
 					<tr>
-						<td><span>State</span></td><td>{{ form.state }} {{form.state.errors}}<span style="margin: 6px; width: 46px; display: inline-block;">Zip</span>
-						<input type="text" class="inline txt" value="{{ form.zip_code.value|default_if_none:'' }}" id="zip_code" name="zip_code"/>
-						{{form.zip_code.errors}}
-						</td>
-						
-						
+						<td><span>State</span></td><td>{{ form.state }} {{form.state.errors}}
+						</td>	
 					</tr>
 				
+                    <tr>
+                        <td>
+                        <span style="margin: 6px; width: 46px; display: inline-block;">Zip</span>
+                        </td>
+                        <td>
+                                                <input type="text" class="inline txt" value="{{ form.zip_code.value|default_if_none:'' }}" id="zip_code" name="zip_code"/>
+                                                {{form.zip_code.errors}}
+                        </td>
+                    </tr>
 					<tr>
 						<td>Phone Number</td>
 						<td>
@@ -144,8 +159,9 @@
 						<td>Email Address</td>
 						<td>
 						<input type="text" class="inline txt" value="{{ form.email_address.value|default_if_none:'' }}" id="email_address" name="email_address"/>
+                        {{form.email_address.errors}}
 						</td>
-						{{form.email_address.errors}}
+						
 					</tr>
 					<tr>
 						<td>Weypay ID</td>
@@ -195,6 +211,7 @@
 					<tr>
 						<td></td>
 						<td>{{ form.accept_refund }} I accept <a href="#return-policy" class="item-ref">Stunable Return Policy</a> 
+                            {{ form.accept_refund.errors }}
 							<!-- <span>{{ form.not_accept_refund }}<span>I do not accept</span> -->
 						</td>
 					</tr>

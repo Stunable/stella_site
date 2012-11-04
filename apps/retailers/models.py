@@ -41,7 +41,7 @@ class RetailerProfile(models.Model):
     wepay_acct = models.CharField(max_length=64,null=True,blank=True)
     shipping_type = models.ManyToManyField(ShippingType, null=True, blank=True)
     accept_refund = models.BooleanField(default=False)
-    not_accept_refund = models.BooleanField(default=False)
+    # not_accept_refund = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
 #    terms = models.BooleanField(default=False, null=True, blank=True)
     

@@ -435,11 +435,6 @@ def item_modal(request, item_id, template='racks/item_modal.html'):
     item = get_object_or_404(Item, pk=item_id)
     ctx['item'] = item
 
-
-    
-
-  
-
     if request.GET.get("opt") == "rack_it":
         ctx['show_rack_it'] = True
     

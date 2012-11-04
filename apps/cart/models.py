@@ -23,7 +23,7 @@ from apps.notification.models import send_notification_on
 
 
 
-from apps.cart.plugins.get_tax_rate import TaxCloudClient
+from apps.cart.plugins.taxcloud import TaxCloudClient
 TCC = TaxCloudClient()
 
 

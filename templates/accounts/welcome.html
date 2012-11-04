@@ -10,11 +10,7 @@
 {% endblock %}
 
 {% block content %}
-<script type="text/javascript">
-    $(document).ready(function(){
-        $('#id_favourite_designer').chosen();
-    });
-</script>
+
     <div class="header upper">
         <h2><span>Welcome</span></h2>
     </div>
@@ -42,4 +38,12 @@
         </p>        
        
     </form><!--/.section.user-entry#signin-form-->
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#id_favourite_designer').chosen();
+    });
+</script>
 {% endblock %}

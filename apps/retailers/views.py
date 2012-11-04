@@ -25,6 +25,10 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.conf import settings
 
+from apps.cart.plugins.taxcloud import TaxCloudClient
+TCC = TaxCloudClient()
+
+
 
 from cart.plugins.create_shipment import ship_it
 
@@ -44,9 +48,8 @@ def create_retailer_profile(request, template="retailers/retailer_profile_create
             new_retailer = form.save()
             template = "accounts/thank-you.html"
             return redirect(reverse('retailer_terms', args=[new_retailer.id]))
-            
         else:
-            print form._errors
+            print form.errors
     else:        
         form = RetailerProfileCreationForm()
     

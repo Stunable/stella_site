@@ -27,6 +27,9 @@ import json
 from paypal.pro.helpers import PayPalWPP
 from django.contrib.sites.models import Site
 
+from apps.cart.plugins.taxcloud import TaxCloudClient
+TCC = TaxCloudClient()
+
 try:
     import simplejson as json
 except ImportError:

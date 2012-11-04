@@ -22,6 +22,9 @@ from tagging.models import Tag
 
 attrs_dict = {}      
 
+from apps.cart.plugins.taxcloud import TaxCloudClient
+TCC = TaxCloudClient()
+
 WAITLIST_MSG = "You have request an invite from stella"
 SUBJECT = "accounts/waitlist_invite_subject.txt"
 EMAIL_MESSAGE = "accounts/waitlist_invite_message.txt"
@@ -46,7 +49,7 @@ class RetailerEditForm(forms.ModelForm):
     
     class Meta:
         model = RetailerProfile
-        exclude =('name', 'user', 'approved', 'phone_number', 'zip_code', 'selling_options', 'accept_refund', 'not_accept_refund', 'more_details') 
+        exclude =('name', 'user', 'approved', 'phone_number', 'zip_code', 'selling_options', 'accept_refund', 'more_details') 
 #        fields = ('email_address', 'address_1', 'address_2',)
     
     def clean_shipping_type(self):
@@ -101,7 +104,21 @@ class RetailerEditForm(forms.ModelForm):
             return self.cleaned_data.get('email_address')
         else:
             return self.instance.email_address
-    
+
+class testAddress(object):
+    def __init__(self,cleaned_data):
+        self.fieldmap = [
+            ('address1','Address1'),
+            ('address2','Address2'),
+            ('city','City'),
+            ('state','State'),
+            ('zip_code','Zip5')
+        ]
+        self.address1 = cleaned_data['address1']
+        self.address2 = cleaned_data['address2']
+        self.city = cleaned_data['city']
+        self.state = cleaned_data['state']
+        self.zip_code = cleaned_data['zip_code']
 
 class RetailerProfileCreationForm(forms.ModelForm):
     first_name = forms.CharField(required=False, error_messages={'required': (u'Stella wants to know your first name')})
@@ -139,12 +156,14 @@ class RetailerProfileCreationForm(forms.ModelForm):
             elif self.cleaned_data['selling_options'] == 'yes yes' and not self.cleaned_data['more_details']:
                 raise forms.ValidationError("Please enter your web address!")
             
-    def clean_not_accept_refund(self):
-        if not self.cleaned_data.get('accept_refund') and not self.cleaned_data['not_accept_refund'] :
-            raise forms.ValidationError("Please Accept or not Accept Refund Policy")
-        return self.cleaned_data['not_accept_refund'] 
+    # def clean_not_accept_refund(self):
+    #     if not self.cleaned_data.get('accept_refund') and not self.cleaned_data['not_accept_refund'] :
+    #         raise forms.ValidationError("Please Accept or not Accept Refund Policy")
+    #     return self.cleaned_data['not_accept_refund'] 
     
     def clean_accept_refund(self):
+        if not self.cleaned_data['accept_refund']:
+            raise forms.ValidationError('you must accept the terms')
         return self.cleaned_data['accept_refund'] 
     
     def clean_selling_options(self):
@@ -167,6 +186,25 @@ class RetailerProfileCreationForm(forms.ModelForm):
         if 'password' in self.cleaned_data and 'password_confirm' in self.cleaned_data:
             if self.cleaned_data['password'] != self.cleaned_data['password_confirm']:
                 raise forms.ValidationError("Your password doesn't match")
+
+        T = testAddress(self.cleaned_data)
+        V = TCC.verify_address(testAddress(self.cleaned_data))
+        print V
+        if V.ErrNumber != "0":
+            if 'City' in V.ErrDescription:
+                # self._errors['city'] = self._errors.get('city', [])
+                self._errors['city']= self.error_class([V.ErrDescription])
+            elif 'Zip Code' in V.ErrDescription:
+                self._errors['zip_code']= self.error_class([V.ErrDescription])
+            else:
+                raise forms.ValidationError(V.ErrDescription)
+        else:
+            for user,test in T.fieldmap:
+                if hasattr(T,user) and hasattr(V,test):
+                    if getattr(T,user).upper() == getattr(V,test).upper():
+                        print getattr(T,user)
+                    else:
+                        print getattr(T,user),':',getattr(V,test)
 
         return self.cleaned_data
     
