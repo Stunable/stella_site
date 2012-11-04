@@ -18,10 +18,11 @@ except:
 from django.contrib.localflavor.us.us_states import US_STATES
 from retailers.models import RetailerProfile, StylistItem, ShippingType
 from racks.models import Item, Rack, Rack_Item
+
 from tagging.models import Tag
 
 attrs_dict = {}      
-
+from apps.common.forms import testAddress
 from apps.cart.plugins.taxcloud import TaxCloudClient
 TCC = TaxCloudClient()
 
@@ -105,20 +106,6 @@ class RetailerEditForm(forms.ModelForm):
         else:
             return self.instance.email_address
 
-class testAddress(object):
-    def __init__(self,cleaned_data):
-        self.fieldmap = [
-            ('address1','Address1'),
-            ('address2','Address2'),
-            ('city','City'),
-            ('state','State'),
-            ('zip_code','Zip5')
-        ]
-        self.address1 = cleaned_data['address1']
-        self.address2 = cleaned_data['address2']
-        self.city = cleaned_data['city']
-        self.state = cleaned_data['state']
-        self.zip_code = cleaned_data['zip_code']
 
 class RetailerProfileCreationForm(forms.ModelForm):
     first_name = forms.CharField(required=False, error_messages={'required': (u'Stella wants to know your first name')})

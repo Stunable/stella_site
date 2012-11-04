@@ -47,7 +47,12 @@ class RetailerProfile(models.Model):
     
     def __unicode__(self):
         return self.name.title()
-    
+    @property
+    def not_accept_refund(self):
+        if self.accept_refund:
+            return False
+        return True
+        
     @property
     def logo_image(self):
         """Gets profile picture as a thumbnail and returns the url or returns the default image"""

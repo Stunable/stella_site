@@ -16,6 +16,11 @@ if "notification" in settings.INSTALLED_APPS:
 else:
     notification = None
     
+
+from apps.common.forms import testAddress
+from apps.cart.plugins.taxcloud import TaxCloudClient
+TCC = TaxCloudClient()
+
 from django.core.mail import send_mail
 from django.contrib.localflavor.us.us_states import US_STATES
 from django.utils.translation import ugettext_lazy as _
@@ -207,10 +212,32 @@ class BillingInfoForm(AjaxModelForm):
     class Meta:
         model = BillingInfo 
         
-class ShippingInfoForm(AjaxModelForm):
+class ShippingInfoForm(forms.ModelForm):
     class Meta:
         model = ShippingInfo        
         exclude = ('email', 'phone', 'company_name', 'is_default', 'customer')
+
+    def clean(self):
+        T = testAddress(self.cleaned_data)
+        V = TCC.verify_address(testAddress(self.cleaned_data))
+        print V
+        if V.ErrNumber != "0":
+            if 'City' in V.ErrDescription:
+                # self._errors['city'] = self._errors.get('city', [])
+                self._errors['city']= self.error_class([V.ErrDescription])
+            elif 'Zip Code' in V.ErrDescription:
+                self._errors['zip_code']= self.error_class([V.ErrDescription])
+            else:
+                raise forms.ValidationError(V.ErrDescription)
+        else:
+            for user,test in T.fieldmap:
+                if hasattr(T,user) and hasattr(V,test):
+                    #if getattr(T,user).upper() == getattr(V,test).upper():
+                    self.cleaned_data[user] = getattr(V,test)
+                    #else:
+                     #   self.cleaned_data[user] = getattr(V,test)
+        return self.cleaned_data
+
         
 class ShippingInfoEditForm(AjaxModelForm):
     class Meta:

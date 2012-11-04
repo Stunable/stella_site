@@ -3,6 +3,22 @@ from django.conf import settings
 from django.template.defaultfilters import striptags
 
 
+class testAddress(object):
+    def __init__(self,cleaned_data):
+        self.fieldmap = [
+            ('address1','Address1'),
+            ('address2','Address2'),
+            ('city','City'),
+            ('state','State'),
+            ('zip_code','Zip5')
+        ]
+        self.address1 = cleaned_data['address1']
+        self.address2 = cleaned_data['address2']
+        self.city = cleaned_data['city']
+        self.state = cleaned_data['state']
+        self.zip_code = cleaned_data['zip_code']
+
+
 class AjaxBaseForm(forms.BaseForm):
     def errors_as_json(self, strip_tags=False):
         error_summary = {}

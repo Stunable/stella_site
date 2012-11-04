@@ -11,6 +11,44 @@
 
 {% block content %}
 <div id="fb-root"></div>
+<div id="fiends-form" class="round-corner-shadow">
+	<h1>Invite Facebook Friends</h1>
+	<div class="fiends-list-header">
+		<table>
+			<td class="friend-col">Friend</td>
+			<td><input type="checkbox" id="fb_friends_all" title="Select all" /></td>
+		</table>
+	</div>
+	<div class="friends-list">
+	    <table>
+	    {% for friend in fb_friends %}
+	    	<tr>
+		    	<td class="thumbnail-col">
+					<img class="fb-thumbnail" src="http://graph.facebook.com/{{ friend.id }}/picture" alt="img"/>
+				</td>
+				<td class="name-col" id="friend_{{ friend.id }}">
+					{{ friend.name }}
+				</td>
+				<td class="checkbox-col">
+					<input class="fb_friends" type="checkbox" value="{{ friend.id }}" />
+				</td>
+			</tr>
+	    {% endfor %}
+	    </table>
+    </div>
+    <div class="bootstrap">
+	    <div id="message-wrapper">
+	        <textarea style="width:390px;" id="message" placeholder="Message..."></textarea>
+	    </div>
+	    <div style="text-align: right;">
+	    	<input type="button" class="btn" id="skip_btn" value="SKIP" />
+	    	<input type="button" class="btn btn-primary" id="send_friends_invite" value="SEND" />
+	    </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block extra_script %}
 <script>
   window.fbAsyncInit = function() {
     FB.init({
@@ -81,14 +119,14 @@
            window.location.href = '/';
         });
        
-   		$('#fb_friends_all').click(function(){
-   			if(this.checked){
-   				$('.fb_friends').attr('checked', 'checked');
-   			} else {
-   				$('.fb_friends').removeAttr('checked');
-   			}
-   		});
-   	       
+      $('#fb_friends_all').click(function(){
+        if(this.checked){
+          $('.fb_friends').attr('checked', 'checked');
+        } else {
+          $('.fb_friends').removeAttr('checked');
+        }
+      });
+           
        $("#send_friends_invite").click(function(){
            var message = $('#message').val();
               var publish = {
@@ -137,41 +175,4 @@
    })
 
 </script>
-
-<div id="fiends-form" class="round-corner-shadow">
-	<h1>Invite Facebook Friends</h1>
-	<div class="fiends-list-header">
-		<table>
-			<td class="friend-col">Friend</td>
-			<td><input type="checkbox" id="fb_friends_all" title="Select all" /></td>
-		</table>
-	</div>
-	<div class="friends-list">
-	    <table>
-	    {% for friend in fb_friends %}
-	    	<tr>
-		    	<td class="thumbnail-col">
-					<img class="fb-thumbnail" src="http://graph.facebook.com/{{ friend.id }}/picture" alt="img"/>
-				</td>
-				<td class="name-col" id="friend_{{ friend.id }}">
-					{{ friend.name }}
-				</td>
-				<td class="checkbox-col">
-					<input class="fb_friends" type="checkbox" value="{{ friend.id }}" />
-				</td>
-			</tr>
-	    {% endfor %}
-	    </table>
-    </div>
-    <div class="bootstrap">
-	    <div id="message-wrapper">
-	        <textarea style="width:390px;" id="message" placeholder="Message..."></textarea>
-	    </div>
-	    <div style="text-align: right;">
-	    	<input type="button" class="btn" id="skip_btn" value="SKIP" />
-	    	<input type="button" class="btn btn-primary" id="send_friends_invite" value="SEND" />
-	    </div>
-    </div>
-</div>
-
 {% endblock %}

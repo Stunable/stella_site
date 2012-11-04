@@ -138,14 +138,7 @@ def update_info(request, template="cart/info.html"):
         
         if response['success']:
             #now lets check with fedex...
-
-
-
-
-
             shipping_info = shipping_form.save(commit=False)
-            validate_this(shipping_info)
-
 
             shipping_info.customer=user_profile
             if not default_shipping:
