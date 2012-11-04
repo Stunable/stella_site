@@ -38,7 +38,7 @@ class RetailerProfile(models.Model):
     description = models.TextField()
     selling_options = models.CharField(max_length=100,null=True,blank=True)
     more_details = models.CharField(max_length=100, blank=True, null=True)
-    paypal_email = models.EmailField(null=True,blank=True)
+    wepay_acct = models.CharField(max_length=64,null=True,blank=True)
     shipping_type = models.ManyToManyField(ShippingType, null=True, blank=True)
     accept_refund = models.BooleanField(default=False)
     not_accept_refund = models.BooleanField(default=False)

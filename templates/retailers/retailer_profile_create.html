@@ -70,103 +70,74 @@
 	<div class="section body-copy bootstrap">
 		<form action="" method="POST" class="user-entry" id="account-form" enctype="multipart/form-data">
 			{% csrf_token %}
-			<ul>
-				{% for error in form.errors.values %}
-				<li class="error_msg">
-					{{error}}
-				</li>
-				{% endfor %}
-			</ul>
+
 			<table style="width: 100%">
 				<tbody>
 					<tr>
 						<td>Company Name</td>
 						<td>
 						<input type="text" class="inline txt" value="{{ form.name.value|default_if_none:'' }}" id="name" name="name"/>
-						</td>
 						{{form.name.errors}}
+						</td>
+						
 					</tr>
 					<tr>
 						<td>First Name</td>
 						<td>
 						<input type="text" class="inline txt" value="{{ form.first_name.value|default_if_none:'' }}" id="first_name" name="first_name"/>
-						</td>
 						{{form.first_name.errors}}
+						</td>
+						
 					</tr>
 					<tr>
 						<td>Last Name</td>
 						<td>
 						<input type="text" class="inline txt" value="{{ form.last_name.value|default_if_none:'' }}" id="last_name" name="last_name"/>
-						</td>
 						{{form.last_name.errors}}
+						</td>
+						
 					</tr>
 					<tr>
 						<td>Address 1</td>
 						<td>
-						<input type="text" class="inline txt" value="{{ form.address_1.value|default_if_none:'' }}" id="address_1" name="address_1"/>
+						<input type="text" class="inline txt" value="{{ form.address1.value|default_if_none:'' }}" id="address1" name="address1"/>
+						{{form.address1.errors}}
 						</td>
-						{{form.address_1.errors}}
+						
 					</tr>
 					<tr>
 						<td>Address 2</td>
 						<td>
-						<input type="text" class="inline txt" value="{{ form.address_2.value|default_if_none:'' }}" id="address_2" name="address_2"/>
+						<input type="text" class="inline txt" value="{{ form.address2.value|default_if_none:'' }}" id="address2" name="address2"/>
+						{{form.address2.errors}}
 						</td>
-						{{form.address_2.errors}}
+						
 					</tr>
 					<tr>
 						<td>City</td>
 						<td>
 						<input type="text" class="inline txt" value="{{ form.city.value|default_if_none:'' }}" id="city" name="city"/>
-						</td>
 						{{form.city.errors}}
+						</td>
+						
 					</tr>
 					<tr>
-						<td><span>State</span></td><td>{{ form.state }} <span style="margin: 6px; width: 46px; display: inline-block;">Zip</span>
+						<td><span>State</span></td><td>{{ form.state }} {{form.state.errors}}<span style="margin: 6px; width: 46px; display: inline-block;">Zip</span>
 						<input type="text" class="inline txt" value="{{ form.zip_code.value|default_if_none:'' }}" id="zip_code" name="zip_code"/>
+						{{form.zip_code.errors}}
 						</td>
-						{{form.state.errors}}
-						{{form.zip.errors}}
+						
+						
 					</tr>
-					<tr>
-						<td>Hours</td>
-						<td>
-						<input type="text" class="inline txt small-size" name="time_picker_1" id="time_picker_1" value="{{ time_picker_1|default_if_none:'' }}"/>
-						<span style="margin: 6px; width: 46px; display: inline-block;">to</span>
-						<input type="text" name="time_picker_2" class="inline txt small-size" id="time_picker_2" value="{{ time_picker_2|default_if_none:'' }}" />
-						<br/>
-						<input type="hidden" id="day_1_hidden" value="{{ day_1 }}"/>
-						<input type="hidden" id="day_2_hidden" value="{{ day_2 }}"/>
-						<select name="day_1" id="day_1">
-							<option value="Monday">Monday</option>
-							<option value="Tuesday">Tuesday</option>
-							<option value="Wednesday">Wednesday</option>
-							<option value="Thursday">Thursday</option>
-							<option value="Friday">Friday</option>
-							<option value="Saturday">Saturday</option>
-							<option value="Sunday">Sunday</option>
-						</select><span style="margin: 6px; width: 50px; display: inline-block;">through</span>
-						<select name="day_2" id="day_2">
-							<option value="Monday">Monday</option>
-							<option value="Tuesday">Tuesday</option>
-							<option value="Wednesday">Wednesday</option>
-							<option value="Thursday">Thursday</option>
-							<option value="Friday" selected="selected">Friday</option>
-							<option value="Saturday">Saturday</option>
-							<option value="Sunday">Sunday</option>
-						</select>
-						<input type="text" class="inline txt" value="{{ form.hours.value|default_if_none:'' }}" type="hidden" id="hours" name="hours"/>
-						</td>
-						{{form.time_picker_1.errors}}
-						{{form.time_picker_2.errors}}
-					</tr>
+				
 					<tr>
 						<td>Phone Number</td>
 						<td>
 						<input type="text" class="inline txt" value="{{ form.phone_number.value|default_if_none:'' }}" id="phone_number" name="phone_number"/>
+						{{form.phone_number.errors}}
 						</td>
 						
-						{{form.phone_number.errors}}
+						
 					    
 					</tr>
 					<tr>
@@ -177,18 +148,21 @@
 						{{form.email_address.errors}}
 					</tr>
 					<tr>
-						<td>Paypal Email</td>
+						<td>Weypay ID</td>
 						<td>
-						<input type="text" class="inline txt" value="{{ form.paypal_email.value|default_if_none:'' }}" id="paypal_email" name="paypal_email"/>
+						<div class="description">if you already are a user of WePay, you can enter your credentials here. If you don't have WePay, no worries, and you will be receiving an email shortly with an account for receiving payments!</div>
+						<input type="text" class="inline txt" value="{{ form.paypal_email.value|default_if_none:'' }}" id="wepay_acct" name="wepay_acct"/>
+						{{form.wepay_acct.errors}}
 						</td>
-						{{form.paypal_email.erros}}
+						
 					</tr>
 					<tr>
 						<td>Company Logo</td>
 						<td>
 						<input type="file" name="company_logo" id="company_logo" />
-						</td>
 						{{form.company_logo.errors}}
+						</td>
+						
 					</tr>
 					<tr>
 						<td>Description</td>
@@ -196,24 +170,33 @@
 						    <textarea class="inline txt" 
 						    placeholder="Tell us a little something about yourself and the products you sell. Hit us with your best elevator pitch in under 600 words!"
 						     id="description" name="description">{{ form.description.value|default_if_none:'' }}</textarea>
+						     {{form.description.errors}}
 						</td>
 					</tr>
 					<tr>
 						<td>Password</td>
 						<td>
-						<input class="inline txt" type="password" id="password" name="password" value="" />
-						</td>
-						{{form.password.errors}}
-					</tr>
-					<tr>
-						<td>Password Confirm</td>
-						<td>
-						<input class="inline txt" type="password" id="password_confirm" name="password_confirm" value="" />
+							<div class="password-container">
+
+										<input class="strong-password" id="password" name="password" type="password" />
+										<br>
+						   				{{form.password.errors}}
+						                <input class="strong-password" id="password_confirm" name="password_confirm" type="password" />
+						                <br>{{form.password_confirm.errors}}
+						            <div class="strength-indicator">
+						                <div class="meter">
+						                </div>
+						                8-16 characters, no common words or names,
+						                and combine uppercase letters, lowercase letters, numbers, and symbols.
+						            </div>
+						    </div>
 						</td>
 					</tr>
 					<tr>
 						<td></td>
-						<td>{{ form.accept_refund }} I accept <a href="#return-policy" class="item-ref">Stunable Return Policy</a> <span>{{ form.not_accept_refund }}<span>I do not accept</span></td>
+						<td>{{ form.accept_refund }} I accept <a href="#return-policy" class="item-ref">Stunable Return Policy</a> 
+							<!-- <span>{{ form.not_accept_refund }}<span>I do not accept</span> -->
+						</td>
 					</tr>
 					<tr>
 						<td></td>
@@ -266,6 +249,101 @@
 {% block extra_script %}
 
 <script type="text/javascript">
+(function ($) {
+    $.fn.extend({
+        pschecker: function (options) {
+            var settings = $.extend({ minlength: 8, maxlength: 16, onPasswordValidate: null, onPasswordMatch: null }, options);
+            return this.each(function () {
+                var wrapper = $('.password-container');
+                var password = $('.strong-password:eq(0)', wrapper);
+                var cPassword = $('.strong-password:eq(1)', wrapper);
+
+                cPassword.removeClass('no-match');
+                password.keyup(validatePassword).blur(validatePassword).focus(validatePassword);
+                cPassword.keyup(validatePassword).blur(validatePassword).focus(validatePassword);
+
+                function validatePassword() {
+                    var pstr = password.val().toString();
+                    var meter = $('.meter');
+                    meter.html("");
+                    //fires password validate event if password meets the min length requirement
+                    if (settings.onPasswordValidate != null)
+                        settings.onPasswordValidate(pstr.length >= settings.minlength);
+
+                    if (pstr.length < settings.maxlength)
+                        meter.removeClass('strong').removeClass('medium').removeClass('week');
+                    if (pstr.length > 0) {
+                        var rx = new RegExp(/^(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,30}$/);
+                        if (rx.test(pstr)) {
+                            meter.addClass('strong');
+                            meter.html("Strong");
+                        }
+                        else {
+                            var alpha = containsAlpha(pstr);
+                            var number = containsNumeric(pstr);
+                            var upper = containsUpperCase(pstr);
+                            var special = containsSpecialCharacter(pstr);
+                            var result = alpha + number + upper + special;
+
+                            if (result > 2) {
+                                meter.addClass('medium');
+                                meter.html("Medium");
+                            }
+                            else {
+                                meter.addClass('week');
+                                meter.html("Week");
+                            }
+                        }
+                        if (cPassword.val().toString().length > 0) {
+                            if (pstr == cPassword.val().toString()) {
+                                cPassword.removeClass('no-match');
+                                if (settings.onPasswordMatch != null)
+                                    settings.onPasswordMatch(true);
+                            }
+                            else {
+                                cPassword.addClass('no-match');
+                                if (settings.onPasswordMatch != null)
+                                    settings.onPasswordMatch(false);
+                            }
+                        }
+                        else {
+                            cPassword.addClass('no-match');
+                            if (settings.onPasswordMatch != null)
+                                settings.onPasswordMatch(false);
+                        }
+                    }
+                }
+
+                function containsAlpha(str) {
+                    var rx = new RegExp(/[a-z]/);
+                    if (rx.test(str)) return 1;
+                    return 0;
+                }
+
+                function containsNumeric(str) {
+                    var rx = new RegExp(/[0-9]/);
+                    if (rx.test(str)) return 1;
+                    return 0;
+                }
+
+                function containsUpperCase(str) {
+                    var rx = new RegExp(/[A-Z]/);
+                    if (rx.test(str)) return 1;
+                    return 0;
+                }
+                function containsSpecialCharacter(str) {
+
+                    var rx = new RegExp(/[\W]/);
+                    if (rx.test(str)) return 1;
+                    return 0;
+                }
+
+
+            });
+        }
+    });
+})(jQuery);
+
 	function get_time_text() {
 		var day_1 = $('#day_1').val();
 		var day_2 = $('#day_2').val();
@@ -278,6 +356,10 @@
 
 
 	$(document).ready(function() {
+
+		$('.password-container').pschecker();
+
+
 		$('input[name=accept_refund], input[name=not_accept_refund]').click( function() {
 			$('input[name=accept_refund], input[name=not_accept_refund]').attr('checked', false);
 			$(this).attr('checked', true);
@@ -302,150 +384,13 @@
 			$(this).parent().parent().append("<input class='more-details inline txt' type='text' name='more_details' placeholder='Where do you currently sell online?' />");
 		}
 
-		if($('#day_1_hidden').val()) {
-			$('#day_1').val($('#day_1_hidden').val());
-		}
-		if($('#day_2_hidden').val()) {
-			$('#day_2').val($('#day_2_hidden').val());
-		}
 
-		$("#time_picker_1, #time_picker_2").timePicker({
-			startTime : "00.00", // Using string. Can take string or Date object.
-			endTime : new Date(0, 0, 0, 23, 30, 0), // Using Date object here.
-			show24Hours : false,
-			separator : '.',
-			step : 30
-		});
-		// Store time used by duration.
-		var oldTime = $.timePicker("#time_picker_1").getTime();
 
-		// Keep the duration between the two inputs.
-		$("#time_pick_1").change(function() {
-			if($("#time_picker_2").val()) {// Only update when second input has a value.
-				// Calculate duration.
-				var duration = ($.timePicker("#time_picker_2").getTime() - oldTime);
-				var time = $.timePicker("#time_picker_1").getTime();
-				// Calculate and update the time in the second input.
-				$.timePicker("#time_picker_1").setTime(new Date(new Date(time.getTime() + duration)));
-				oldTime = time;
-			}
-		});
-		// Validate.
-		$("#time_picker_2").change(function() {
-			if($.timePicker("#time_picker_1").getTime() > $.timePicker(this).getTime()) {
-				$(this).addClass("error");
-			} else {
-				$(this).removeClass("error");
-			}
-			get_time_text();
-		});
-
-		$('.time_picker').change(function() {
-			get_time_text();
-		});
-		get_time_text();
-		// the validation code
-		container = $('#bigform-error');
-		// validate form on keyup and submit
-		validator = $('#account-form').validate({
-			errorLabelContainer : container,
-			//errorClass : 'field-error',
-			errorElement : 'errorlist',
-			invalidHandler : function(form, validator) {
-				//display error on submit
-				var errors = validator.numberOfInvalids();
-				if(errors) {
-					if(validator.errorList[0].message) {
-						$("#bigform-error p").html("");
-						$('#bigform-error').animate({
-							"opacity" : "1"
-						}, "fast", function() {
-							changeError($('#bigform-error')[0], validator.errorList[0].message);
-							$('#bigform-error').css('display', 'inline').css('opacy', '1');
-						});
-						validator.errorList[0].element.focus();
-						$(validator.errorList[0].element).addClass('field-error');
-					}
-				}
-			},
-			showErrors : function(errorMap, errorList) {
-				//display error on blur
-				$("account-form").find("input").each(function() {
-					$(this).removeClass("error");
-				});
-				$("#bigform-error p").html("");
-				if(errorList.length > 0) {
-					$('#bigform-error').animate({
-						"opacity" : "1"
-					}, "fast", function() {
-						changeError($('#bigform-error')[0], errorList[0]['message']);
-						$('#bigform-error').css('display', 'inline').css('opacy', '1');
-					});
-					$(errorList[0]['element']).addClass("field-error");
-				} else {
-					$("#account-form").find("input").each(function() {
-						$(this).removeClass("field-error");
-					});
-				}
-			},
-			submitHandler : function(form) {
-				$(".field-error").removeClass("field-error");
-				form.submit();
-			},
-			rules : {
-				company_name : "required",
-				// first_name : "required",
-				// last_name : "required",
-				// city : "required",
-				// state : "required",
-				// zip_code : "required",
-				// time_picker_1 : 'required',
-				// time_picker_2 : 'required',
-				// phone_number : "required",
-				// company_logo : 'required',
-				email_address : {
-					required : true,
-					email : true
-				},
-				paypal_email : {
-					required : true,
-					email : true
-				},
-				password : {
-					required : true,
-					minlength : 6,
-					maxlength : 12
-				},
-				password_confirm : {
-					required : false,
-					equalTo : "#password",
-				},
-				//selling_options : "required",
-				terms : "required"
-			},
-			messages : {
-				company_name : "Stella wants to know your company name",
-				first_name : "Stella wants to know your first name",
-				last_name : "Stella wants to know your last name",
-				email_address : "Stella can't reach you there",
-				city : "City is required",
-				state : "State is required",
-				zip_code : "Zipcode is required",
-				phone_number : "Phone number is required",
-				company_logo : 'Company logo is required',
-				password : {
-					minlength : "Your password must be at least 6 characters long",
-					maxlength : "Your password must be at most 12 characters long"
-				},
-				password_confirm : "Your password doesn't match",
-				paypal_email : {
-					required : "Paypal email is required",
-					email : "Stella can't reach you there"
-				},
-				selling_options : "Selling Options is required",
-				terms : "You must agree to the terms and conditions"
-			}
-		});
+	
+		
 	})
+
+
+
 </script>
 {% endblock %}

@@ -46,10 +46,7 @@ def create_retailer_profile(request, template="retailers/retailer_profile_create
             return redirect(reverse('retailer_terms', args=[new_retailer.id]))
             
         else:
-            ctx['day_1'] = request.POST.get('day_1')
-            ctx['day_2'] = request.POST.get('day_2')
-            ctx['time_picker_1'] = request.POST.get('time_picker_1')
-            ctx['time_picker_2'] = request.POST.get('time_picker_2')
+            print form._errors
     else:        
         form = RetailerProfileCreationForm()
     
