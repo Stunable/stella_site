@@ -40,18 +40,24 @@
 		$('.item-size-list').html('');
 		for(i in inventories) {
 			var inventory = inventories[i];
-			$('.item-size-list').append("<span><a href='#'>" + inventory.size +"</a></span>");
+			var selectedclass = '';
+			if (inventories.length === 1){
+				selectedclass=' class="selected"'
+				$('.item-color-list').html('');
+				$('.item-color-list').append('<span class="selected"><a href="' + inventories[i].add_cart_url + '" >' + inventories[i].color +"</a></span>");	
+			}
+			$('.item-size-list').append("<span"+selectedclass+"><a href='#'>" + inventory.size +"</a></span>");
 			
 			$('.item-size-list span').click(function(e) {
-				if (not_logged_in()){
-					return login_modal();
-				}
+				// if (not_logged_in()){
+				// 	return login_modal();
+				// }
 
 				e.preventDefault();
 				$('.item-color-list').html('');
 				for(i in inventories) {
 					if (inventories[i].size === $(this).text()) {
-						$('.item-color-list').append("<span><a href='" + inventories[i].add_cart_url + "' >" + inventories[i].color +"</a></span>");						
+						$('.item-color-list').append("<span"+selectedclass+"><a href='" + inventories[i].add_cart_url + "' >" + inventories[i].color +"</a></span>");						
 					}
 				}
 				$('.item-details .item-color-list span').click(function(e) {
@@ -61,6 +67,11 @@
 						$(this).addClass('selected');
 					}
 				});
+
+				if ($('.item-color-list').children().length === 1){
+					$('.item-color-list').find('span').addClass('selected')
+				}
+
 			});
 		}
 		
@@ -93,6 +104,7 @@
 	    
 	    	    
 		function setItemDetailsEvent(){
+			console.log('setItemDetailsEvent')
 			$('.item-details .chzn-container').remove();
 			$('.item-details #friends-select').css('display', 'block').removeClass('chzn-done').chosen();
 			
@@ -112,10 +124,12 @@
 			
 			$('#add-to-cart-link, .buy-now').click(function(e) {
 				e.preventDefault();
+				console.log($('.item-details .item-size-list .selected'))
+				console.log($('.item-details .item-color-list .selected'))
 				if ($('.item-details .item-size-list .selected').length == 0 || $('.item-details .item-color-list .selected').length == 0) {
 					alert('Please select size and color');
 				} else {
-					window.location.href = $('.item-details .item-color-list .selected a').attr('href');
+					window.location = $('.item-details .item-color-list .selected a').attr('href');
 				}
 			});
 		
@@ -362,14 +376,14 @@
 				<div>SELECT SIZE:</div>
 				<div class="item-size-list">
 					{% for size in sizes %}
-						<span><a href="#">{{size}}</a></span>
+						<span {% if sizes|length == 1 %}class="selected"{% endif %}><a href="#">{{size}}</a></span>
 					{% endfor %}
 				</div>
 				
 				<div>COLOR:</div>
 				<div class="item-color-list">
 					{% for color in colors %}
-						<span><a href="#">{{color}}</a></span>
+						<span {% if colors|length == 1 %}class="selected"{% endif %}><a href="#">{{color}}</a></span>
 					{% endfor %}
 				</div>
 
