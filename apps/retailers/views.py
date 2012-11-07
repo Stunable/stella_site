@@ -74,7 +74,7 @@ def setup_wepay(request):
         data = {
           "client_id":settings.WEPAY_CLIENT_ID,
           "client_secret":settings.WEPAY_CLIENT_SECRET,
-          "redirect_uri":'http://local.host:8000/retailers/wepay/',
+          "redirect_uri":'http://shopwithstella.org/retailers/wepay/',
           "code":code,
         }
         url += '?'+urllib.urlencode(data)
@@ -97,7 +97,7 @@ def setup_wepay(request):
 
     else:
 
-        url = 'https://stage.wepay.com/v2/oauth2/authorize?client_id='+settings.WEPAY_CLIENT_ID+'&redirect_uri='+'http://local.host:8000/retailers/wepay/&scope=manage_accounts'
+        url = 'https://stage.wepay.com/v2/oauth2/authorize?client_id='+settings.WEPAY_CLIENT_ID+'&redirect_uri='+'http://shopwithstella.org/retailers/wepay/&scope=manage_accounts'
         return HttpResponseRedirect(url)
 
 
