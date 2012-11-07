@@ -11,8 +11,11 @@ SSL_ENABLED = False
 DOMAIN_NAME = 'localhost:7777'
 WWW_ROOT = 'http://%s/' % DOMAIN_NAME
 
-FACEBOOK_APP_ID              = '397462356974539'
-FACEBOOK_API_SECRET          = 'bdea442bf0c2113602662f7632939d73'
+# FACEBOOK_APP_ID              = '397462356974539'
+# FACEBOOK_API_SECRET          = 'bdea442bf0c2113602662f7632939d73'
+
+FACEBOOK_APP_ID              = '433271660054660'
+FACEBOOK_API_SECRET          = '70e262e87cf8d6e88f9a54613707ac9e'
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/accounts/add_facebook_friend/'
