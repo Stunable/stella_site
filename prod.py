@@ -8,7 +8,7 @@ SSL_ENABLED = False
 # COMPRESS = True   # to test django compressor locally
 
 # domains/hosts etc.
-DOMAIN_NAME = 'localhost:7777'
+DOMAIN_NAME = 'shopwithstella.org'
 WWW_ROOT = 'http://%s/' % DOMAIN_NAME
 
 # FACEBOOK_APP_ID              = '397462356974539'
