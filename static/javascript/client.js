@@ -1208,13 +1208,13 @@ function initDesktopSwipe(){
 	    directionNavAutoHide:false,   // Direction (arrow) navigation auto hide on hover. 
 	                                  // On touch devices arrows are always displayed.
 	    
-	    loopItems: true,             // Loop items (don't disable arrows on last slide and allow autoplay to loop).
+	    loopItems: false,             // Loop items (don't disable arrows on last slide and allow autoplay to loop).
 	    
 	    keyboardNav: true,           // Keyboard arrows navigation.
 	    dragUsingMouse:true,          // Enable drag using mouse.	
 	    
 	    
-	    scrollToLast: false,          // Last item ends at start of carousel wrapper.	
+	    scrollToLast: true,          // Last item ends at start of carousel wrapper.	
 	    
 	    
 	    itemFallbackWidth: 500,       // Default width of the item in pixels. (used if impossible to get item width).
@@ -1232,17 +1232,18 @@ function initDesktopSwipe(){
 
 	    	number_of_slides = this.numItems;
 	    	currentSlideNum = this.getCurrentId();
-
-			if (latest_slide - 2 <= currentSlideNum){
+	    	//console.log(currentSlideNum)
+	    	//console.log(number_of_slides)
+			if (number_of_slides - currentSlideNum <= 6){
 				$.ajax({
-			  		url: '?page=' + 3 + '&item_per_page=' + 3,
+			  		url: '?page=' + 3 + '&item_per_page=' + 6,
 			  		success: function(data) {
-			  			$('.touchcarousel-container').append(data)
-			  			
-			  			// initFancyBox();
-			  			// initDragDrop();
-			  			// fixDragDropIssue();
+			  			var slider = $('.iosSlider').data('touchCarousel')
+			  			var items = $(data).find('.item')
+			  			$('.touchcarousel-container').append(items);
+			  			slider.addItems(items);
 			  		}
+			  		,dataType:'html'
 			  	});
 			}
 	    },         // Callback, triggers after deceleration or transition animation.

@@ -8,41 +8,26 @@
 	<input type="hidden" name="page_id" value="{% if parent_loop_counter == 1 %}{{ request.GET.page }}{% else %}{{ parent_loop_counter }}{% endif %}" />
     <input type="hidden" class="item_per_page" name="item_per_page" value="{{ item_per_page }}" />
 	{% for item in items %}
-		<li class="item some-crazy-class">
-			<h5 class="item-label"><span>{{item.brand}}</span></h5>
-			<h4 class="item-name"><a class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.id %}">{{item.name}}</a></h4>
-			<div class="wp drag_item">
-			<a class="item-ref bottom-ref rel_pos" data-value="{{ item.id }}" href="{% url item_modal item.id %}">
-			    {% if item_per_page == 3 %}
-			    {% thumbnail item.get_image "200x390" as im %}
-                    <img src="{{ im.url }}">
-                    {% empty %}
-                    <img src="{{item.get_image}}" alt="" />
-                {% endthumbnail %}
-                {% else %}
-                {% thumbnail item.get_image "x140" as im %}
-                    <img src="{{ im.url }}">
-                    {% empty %}
-                    <img src="{{item.get_image}}" alt="" />
-                {% endthumbnail %}
-                {% endif %}
-			</a>
-			</div>
-			{% dict_entry_for_item item from vote_dict as vote %}
-			<div class="link-holder" id="item_{{item.pk}}">
-				<p class="icon-link yes-no no {% if vote and vote.is_downvote %}voted{% endif %} no_{{item.pk}}">
-					<a href="{% url item_vote item.pk 'down' %}" class="icon disapprove">No way.</a>
-				</p>
-				<p class="icon-link hanger">
-                    <a href="{% url add_item_from_modal %}" data-value="{{ item.id }}" class="icon rack-icon">Rack it.</a>
-				</p>
-				<p class="icon-link yes-no yes {% if vote and vote.is_upvote %}voted{% endif %} yes_{{item.pk}}">
-					<a href="{% url item_vote item.pk 'up' %}" class="icon approve">Yes, please!</a>
-				</p>
-			</div>
-			<div class="carousel_price_tag">
-				<sup>$</sup>{{item.price}}
-		</li>
+		<li class="touchcarousel-item item some-crazy-class"> <h5 class="item-label"><span>{{item.brand}}</span></h5>
+                                            <h4 class="item-name"><a class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.id %}">{{item.name}}</a></h4>
+                                            <div class="wp drag_item touchable">
+                                                <a class="item-ref bottom-ref rel_pos" data-value="{{ item.id }}" href="{% url item_modal item.id %}"> {% thumbnail item.get_image "200x390" as im %} <img src="{{ im.url }}"> {% empty %} <img src="{{item.get_image}}" alt="" /> {% endthumbnail %} </a>
+                                            </div>
+                                            {% dict_entry_for_item item from vote_dict as vote %}
+                                            <div class="link-holder" id="item_{{item.pk}}">
+                                                <p class="icon-link yes-no no {% if vote and vote.is_downvote %}voted{% endif %} no_{{item.pk}}">
+                                                    <a href="{% url item_vote item.pk 'down' %}" class="icon disapprove">No way.</a>
+                                                </p>
+                                                <p class="icon-link hanger">
+                                                    <a href="{% url add_item_from_modal %}" data-value="{{ item.id }}" class="icon rack-icon">Rack it.</a>
+                                                </p>
+                                                <p class="icon-link yes-no yes {% if vote and vote.is_upvote %}voted{% endif %} yes_{{item.pk}}">
+                                                    <a href="{% url item_vote item.pk 'up' %}" class="icon approve">Yes, please!</a>
+                                                </p>
+                                            </div>
+                                            <div class="carousel_price_tag">
+                                                <sup>$</sup>{{item.price}}</div>
+                                        </li>
 	{% endfor %}
 </ul>
 {% endwith %}

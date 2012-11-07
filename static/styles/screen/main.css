@@ -1544,6 +1544,7 @@ height: 593px;
 	overflow:hidden;
 	border: #EBEBEB 1px solid;
 	border-radius: 6px;
+	display:list-item;
 }
 
 .gallery .item .item-ref, .gallery .share-item-info .item-ref {

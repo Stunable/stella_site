@@ -34,6 +34,10 @@
 		this._dragContainerStyle = this._dragContainer[0].style;
 		
 		this._itemsWrapper = this._dragContainer.wrap($('<div class="touchcarousel-wrapper" />')).parent();		
+		
+
+
+
 		var itemsJQ = this._dragContainer.find(".touchcarousel-item");
 		
 		/* Array item structure: 
@@ -125,74 +129,11 @@
 			}
 			this.settings.loopItems = true;
 		}
-		
-		var	itemObj,
-			jqItem,
-			dataSRC,
-			slideImg,
-			currPosX = 0;
-		
-		
-		
-		itemsJQ.eq(this.numItems - 1).addClass('last');
-		
-		// parse items
-		itemsJQ.each(function(index) {
-			jqItem = $(this);			
-			itemObj = {};
-			itemObj.item = jqItem;
-			itemObj.index = index;
-			itemObj.posX = currPosX;
-			itemObj.width = (jqItem.outerWidth(true) || self.settings.itemFallbackWidth);			
-			currPosX += itemObj.width;
-			
-			// block all links inside slides when dragging
-			if(!this.hasTouch) {
-				jqItem.find('a').bind('click.touchcarousel', function(e) {					
-					if(self._successfullyDragged) {						
-						e.preventDefault();						
-						return false;
-					}						
-				});
-			} else {
-				// Fix preventing link bug on some touch devices
-				var jqLinks = jqItem.find('a');
-				var jqLink;
-				jqLinks.each(function() {
-					jqLink = $(this);
-					jqLink.data('tc-href', jqLink.attr('href'));
-					jqLink.data('tc-target', jqLink.attr('target'));
-					jqLink.attr('href', '#');
-					jqLink.bind('click', function(e) {							
-						e.preventDefault();	
-						if(self._successfullyDragged) {							
-							return false;
-						} else {
-							var linkData = $(this).data('tc-href');							
-							var linkTarget = $(this).data('tc-target');								
-							if(!linkTarget || linkTarget.toLowerCase() === '_self') {
-								window.location.href = linkData;
-							} else {
-								window.open(linkData);
-							}							
-						}					
-					});
-				});		
-			}				
-			
-			// prevent dragging on all elements that have 'non-draggable' class
-			jqItem.find('.no-carousel').bind(self._downEvent, function(e) {	
-			//jqItem.find('.non-draggable').bind(self._downEvent, function(e) {					
-				self._successfullyDragged = false;	
-				//e.stopImmediatePropagation();
-				e.stopImmediatePropagation();
-			});
-			
-			self.items.push(itemObj);
-		});
-		
-		
-		this._maxXPos = this._totalItemsWidth = currPosX;		
+
+	// ITEMS JQ LOOP GOES HERE
+		currPosX = this.addItems(itemsJQ, self)
+	//
+				
 		
 		
 		if(this.settings.itemsPerMove > 0) {
@@ -201,42 +142,10 @@
 			this._itemsPerMove = 1;			
 		}
 		
-		// Setup paging
-		if(this.settings.pagingNav) {
-			this.settings.snapToItems = true;
-			this._pagingEnabled = true;
-			this._numPages = Math.ceil(this.numItems / this._itemsPerMove);
-			this._currPageId = 0;
-			
-			if(this.settings.pagingNavControls) {
-				this._pagingNavContainer = $('<div class="tc-paging-container"><div class="tc-paging-centerer"><div class="tc-paging-centerer-inside"></div></div></div>');
-				var pagingInside = this._pagingNavContainer.find('.tc-paging-centerer-inside');
-				var pagingItem;
-				
-				for(var i = 1; i <= this._numPages; i++ ) {					
-					pagingItem = $('<a class="tc-paging-item" href="#">' + i + '</a>').data('tc-id',i);					
-					if(i === this._currPageId + 1) {
-						pagingItem.addClass('current');
-					}
-					pagingInside.append(pagingItem);	
-				}
-			
-				this._pagingItems = pagingInside.find(".tc-paging-item").click(function(e) {		
-					e.preventDefault();						
-					self.goTo(($(e.currentTarget).data('tc-id') - 1) * self._itemsPerMove);
-				});
-				
-				this._itemsWrapper.after(this._pagingNavContainer);
-			}
-			
-		} else {
-			this._pagingEnabled = false;
-		}
+		this.setupPaging()
 
 		
-		this._dragContainer.css({
-			width:currPosX
-		});
+		
 		
 		
 
@@ -396,7 +305,121 @@
 	
 	TouchCarousel.prototype = {
 			/* Public methods: */
-			goTo:function(id, fromAutoplay) {
+			setupPaging:function(){
+				// Setup paging
+				if(this.settings.pagingNav) {
+					this.settings.snapToItems = true;
+					this._pagingEnabled = true;
+					this._numPages = Math.ceil(this.numItems / this._itemsPerMove);
+					this._currPageId = 0;
+					
+					if(this.settings.pagingNavControls) {
+						this._pagingNavContainer = $('<div class="tc-paging-container"><div class="tc-paging-centerer"><div class="tc-paging-centerer-inside"></div></div></div>');
+						var pagingInside = this._pagingNavContainer.find('.tc-paging-centerer-inside');
+						var pagingItem;
+						
+						for(var i = 1; i <= this._numPages; i++ ) {					
+							pagingItem = $('<a class="tc-paging-item" href="#">' + i + '</a>').data('tc-id',i);					
+							if(i === this._currPageId + 1) {
+								pagingItem.addClass('current');
+							}
+							pagingInside.append(pagingItem);	
+						}
+					
+						this._pagingItems = pagingInside.find(".tc-paging-item").click(function(e) {		
+							e.preventDefault();						
+							self.goTo(($(e.currentTarget).data('tc-id') - 1) * self._itemsPerMove);
+						});
+						
+						this._itemsWrapper.after(this._pagingNavContainer);
+					}
+					
+				} else {
+					this._pagingEnabled = false;
+				}
+			}
+			,addItems:function(itemsJQ,self){
+
+				if (!self){
+					var self = this;
+				}
+
+				var	itemObj,
+					jqItem,
+					dataSRC,
+					slideImg,
+					currPosX = this._totalItemsWidth || 0
+					,numItems = self.items.length;
+				
+				
+				//$('.touchcarousel-item.last').removeClass('last');
+
+				//itemsJQ.eq(this.numItems - 1).addClass('last');
+				
+				// parse items
+				itemsJQ.each(function(index) {
+					// console.log(this)
+					jqItem = $(this);			
+					itemObj = {};
+					itemObj.item = jqItem;
+					itemObj.index = index + numItems;
+					// console.log(itemObj.index)
+					itemObj.posX = currPosX;
+					itemObj.width = (jqItem.outerWidth(true) || self.settings.itemFallbackWidth);			
+					currPosX += itemObj.width;
+					
+					// block all links inside slides when dragging
+					if(!this.hasTouch) {
+						jqItem.find('a').bind('click.touchcarousel', function(e) {					
+							if(self._successfullyDragged) {						
+								e.preventDefault();						
+								return false;
+							}						
+						});
+					} else {
+						// Fix preventing link bug on some touch devices
+						var jqLinks = jqItem.find('a');
+						var jqLink;
+						jqLinks.each(function() {
+							jqLink = $(this);
+							jqLink.data('tc-href', jqLink.attr('href'));
+							jqLink.data('tc-target', jqLink.attr('target'));
+							jqLink.attr('href', '#');
+							jqLink.bind('click', function(e) {							
+								e.preventDefault();	
+								if(self._successfullyDragged) {							
+									return false;
+								} else {
+									var linkData = $(this).data('tc-href');							
+									var linkTarget = $(this).data('tc-target');								
+									if(!linkTarget || linkTarget.toLowerCase() === '_self') {
+										window.location.href = linkData;
+									} else {
+										window.open(linkData);
+									}							
+								}					
+							});
+						});		
+					}				
+					
+					// prevent dragging on all elements that have 'non-draggable' class
+					jqItem.find('.no-carousel').bind(self._downEvent, function(e) {	
+					//jqItem.find('.non-draggable').bind(self._downEvent, function(e) {					
+						self._successfullyDragged = false;	
+						//e.stopImmediatePropagation();
+						e.stopImmediatePropagation();
+					});
+					
+					self.items.push(itemObj);
+				});
+				this.numItems = self.items.length;
+				this._maxXPos = this._totalItemsWidth = currPosX;
+				this._dragContainer.css({
+					width:currPosX
+				});
+				return currPosX
+			}
+			,goTo:function(id, fromAutoplay) {
 				var newItem = this.items[id];
 				
 				if(newItem) {					
@@ -424,6 +447,7 @@
 				if(!this._pagingEnabled) {
 					newItemId = newItemId + this._itemsPerMove;						
 					if(this.settings.loopItems) {
+						console.log(currXPos,this.carouselWidth,this._maxXPos)
 						if(currXPos <= this.carouselWidth - this._maxXPos) {
 							newItemId = 0;
 						}
