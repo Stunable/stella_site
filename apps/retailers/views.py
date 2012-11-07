@@ -14,7 +14,7 @@ from django.core.files import File
 
 from cart.models import Item as CartItem, Purchase,ShippingLabel
 import datetime
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from apps.racks.forms import item_inventory_form_factory
 from django.forms.models import inlineformset_factory
 from apps.racks.models import ItemType
@@ -24,6 +24,9 @@ from apps.racks.forms import ItemInventoryForm
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.conf import settings
+
+import urllib
+import urllib2
 
 from apps.cart.plugins.taxcloud import TaxCloudClient
 TCC = TaxCloudClient()
@@ -63,8 +66,45 @@ def terms(request, retailer_id, template='retailers/terms.html'):
 RETAILER_INFORM_SUBJECT = "retailers/retailer_inform_subject.txt"
 RETAILER_INFORM_MESSAGE = "retailers/retailer_inform_message.txt"
 
+
+def setup_wepay(request):
+    code = request.GET.get('code',None)
+    if code:
+        url = 'https://stage.wepayapi.com/v2/oauth2/token'
+        data = {
+          "client_id":settings.WEPAY_CLIENT_ID,
+          "client_secret":settings.WEPAY_CLIENT_SECRET,
+          "redirect_uri":'http://local.host:8000/retailers/wepay/',
+          "code":code,
+        }
+        url += '?'+urllib.urlencode(data)
+        print url
+        response = urllib2.urlopen(url)
+        resp_data = json.loads(response.read())
+
+
+        #{"user_id":121042660,"access_token":"e4423c3a3a3a3f62aa53151a9b2fca1718af0bc78b40dba6578716b9a2979fa5","token_type":"BEARER"}
+        
+        retailer_profile = RetailerProfile.objects.get(id=request.session.get('retailer_id'))
+        retailer_profile.wepay_acct = resp_data['user_id']
+        retailer_profile.wepay_token = resp_data['access_token']
+        retailer_profile.save()
+
+        template="accounts/thank-you.html"
+        ctx = {'retailer': True}
+        return direct_to_template(request, template, ctx)
+
+
+    else:
+
+        url = 'https://stage.wepay.com/v2/oauth2/authorize?client_id='+settings.WEPAY_CLIENT_ID+'&redirect_uri='+'http://local.host:8000/retailers/wepay/&scope=manage_accounts'
+        return HttpResponseRedirect(url)
+
+
 def terms_complete(request, retailer_id, template="accounts/thank-you.html"):
     ctx = {'retailer': True}
+
+    request.session['retailer_id'] = retailer_id
     
     # send email to notify user
     retailer = get_object_or_404(RetailerProfile, pk=retailer_id)
@@ -72,8 +112,8 @@ def terms_complete(request, retailer_id, template="accounts/thank-you.html"):
     subject = render_to_string(RETAILER_INFORM_SUBJECT, email_ctx)
     email_message = render_to_string(RETAILER_INFORM_MESSAGE, email_ctx)
     send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [retailer.email_address])
-    
-    return direct_to_template(request, template, ctx)
+
+    return setup_wepay(request)
 
 
 @login_required
