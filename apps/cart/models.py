@@ -148,6 +148,11 @@ class Purchase(models.Model):
 
     def clear(self):
         self.item.delete()
+
+
+    def release_funds(self):
+        pass
+
             
 class ShippingLabel(models.Model):
     image = models.ImageField(upload_to="shipping_labels",null=True,blank=True)

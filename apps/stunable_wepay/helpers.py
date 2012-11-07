@@ -14,6 +14,7 @@ from django.utils.http import urlencode
 
 from stunable_wepay.signals import *
 from models import *
+from apps.retailers.models import RetailerProfile
 
 from wepay import WePay
 WEPAY = WePay(settings.WEPAY_PRODUCTION, settings.WEPAY_ACCESS_TOKEN)
@@ -32,15 +33,20 @@ class WePayPayment(object):
         fail = []
         items = self.cart.cart.item_set.all()
         for item in items:
+            inventory = item.get_product()
+            product = inventory.item
+            retailer = product.retailers.all()[0]
+            retailer_profile = RetailerProfile.objects.get(user=retailer)
 
             response = WEPAY.call('/checkout/create', {
                 'auto_capture':False,
-                'account_id': settings.WEPAY_ACCOUNT_ID,
+                'account_id': retailer_profile.wepay_acct,
                 'amount': str(item.total_price),
                 'short_description': item.get_product().__unicode__(),
                 'type': 'GOODS',
                 'payment_method_id': self.cc_token.token, # the user's credit_card_id 
-                'payment_method_type': 'credit_card'
+                'payment_method_type': 'credit_card',
+                'app_fee':str(item.total_price*.2)
             })
 
             if response['state'] == "authorized":
