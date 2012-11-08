@@ -46,7 +46,8 @@ class WePayPayment(object):
                 'type': 'GOODS',
                 'payment_method_id': self.cc_token.token, # the user's credit_card_id 
                 'payment_method_type': 'credit_card',
-                'app_fee':str(item.total_price*.2)
+                'app_fee':str(float(item.total_price)*.2),
+                'fee_payer':'payee',
             })
 
             if response['state'] == "authorized":
