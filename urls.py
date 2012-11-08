@@ -28,7 +28,8 @@ urlpatterns = patterns('',
                        url(r'^login/$', redirect_to, {'url': '/login/facebook'}),
                        url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
                        # export a model to csv
-                       (r'^admin/(?P<app_label>[\d\w]+)/(?P<model_name>[\d\w]+)/csv/', 'common.views.admin_list_export'),                       
+                       (r'^admin/(?P<app_label>[\d\w]+)/(?P<model_name>[\d\w]+)/csv/', 'common.views.admin_list_export'),
+                       (r'^admin/', include("massadmin.urls")),                       
                        url(r'^admin/', include(admin.site.urls)),
                        # Beta pages
                        url(r'^beta/', include('beta_invite.urls')),
@@ -86,6 +87,7 @@ urlpatterns = patterns('',
                     
                        # paypal integration app
                        (r'^purchased/(?P<uid>\d+)/(?P<id>\d+)/$', 'paypal.views.purchased' ), # purchase callback
+
                        )
 
 urlpatterns += patterns('django.contrib.flatpages.views',
