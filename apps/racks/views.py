@@ -440,7 +440,7 @@ def item_modal(request, item_id, template='racks/item_modal.html'):
     
 
     if request.user.is_authenticated():
-        rack_list = Rack.objects.filter(owner = request.user) 
+        rack_list = Rack.objects.filter(user = request.user) 
         admirer_list = Friendship.objects.friends_for_user(request.user)
         ctx['admirer_list'] = admirer_list
 

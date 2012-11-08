@@ -111,8 +111,10 @@ def terms_complete(request, retailer_id, template="accounts/thank-you.html"):
     email_ctx = {"retailer": retailer}
     subject = render_to_string(RETAILER_INFORM_SUBJECT, email_ctx)
     email_message = render_to_string(RETAILER_INFORM_MESSAGE, email_ctx)
-    send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [retailer.email_address])
-
+    if not retailer.welcome_message_sent:
+        send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [retailer.email_address])
+        retailer.welcome_message_sent = True
+        retailer.save()
     return setup_wepay(request)
 
 
