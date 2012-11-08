@@ -55,7 +55,7 @@ def detail(request, rack_id, template='racks/rack_detail.html'):
     user = request.user
     
     # Temporary let user view every rack 
-    if True or user == rack.owner or user in rack.shared_users.all() or rack.is_public():
+    if True or user == rack.user or user in rack.shared_users.all() or rack.is_public():
         private_racks = Rack.objects.PrivateRacksForUser(user)
         shared_racks = Rack.objects.SharedRacksForUser(user)
         ctx['rack'] = rack
@@ -89,7 +89,7 @@ def detail(request, rack_id, template='racks/rack_detail.html'):
         shared_admirers = rack.shared_users.all()
         
         # find non shared admirers
-        friendship_list = Friendship.objects.friends_for_user(rack.owner)
+        friendship_list = Friendship.objects.friends_for_user(rack.user)
         friend_list = []
         for friendship in friendship_list:
             friend_list.append(friendship['friend'])
@@ -162,7 +162,7 @@ def add(request, template='racks/add.html'):
         form = RackForm(request.user, request.POST)
         if form.is_valid():            
             rack = form.save(commit = False)
-            rack.owner = request.user
+            rack.user = request.user
             if request.POST.get('public') == 'True':
                 rack.publicity = 1
             else:
@@ -223,7 +223,7 @@ def rack_item_add_new(request, rack_id, template='racks/add_item.html'):
 def delete(request, rack_id, template="racks/closet.html"):
     #rack = Rack.objects.get(pk=rack_id)
     rack = get_object_or_404(Rack, pk=rack_id)
-    if request.user == rack.owner:   
+    if request.user == rack.user:   
         rack.delete()
         messages.info(request, "Rack has been deleted successfully")
         ret = {'success': True}
@@ -242,7 +242,7 @@ def share_modal_view(request, rack_id, template="racks/share_rack_modal.html"):
     rack = get_object_or_404(Rack, pk=rack_id)
     shared_admirers = rack.shared_users.all()        
     # find non shared admirers
-    friendship_list = Friendship.objects.friends_for_user(rack.owner)
+    friendship_list = Friendship.objects.friends_for_user(rack.user)
     friend_list = []
     for friendship in friendship_list:
         friend_list.append(friendship['friend'])
@@ -339,7 +339,7 @@ def edit(request, rack_id, template="racks/edit.html"):
     #current_rack = Rack.objects.get(pk=rack_id)
     current_rack = get_object_or_404(Rack, pk=rack_id)
     initial_data.update(vars(current_rack))
-    if request.user == current_rack.owner:
+    if request.user == current_rack.user:
         if request.method == 'POST':
             form = RackEditForm(request.user, request.POST)
             if form.is_valid():            
@@ -394,7 +394,7 @@ def edit(request, rack_id, template="racks/edit.html"):
 def add_admirer(request, rack_id, friend_id, template='racks/rack_detail.html'):
     add_admirer = get_object_or_404(User, pk=friend_id)
     current_rack = get_object_or_404(Rack, pk=rack_id)
-    if request.user == current_rack.owner:
+    if request.user == current_rack.user:
         current_rack.shared_users.add(add_admirer)     
         current_rack.save()
         messages.info(request, "Admirer has been added successfully")
@@ -405,7 +405,7 @@ def add_admirer(request, rack_id, friend_id, template='racks/rack_detail.html'):
 @login_required
 def remove_admirer(request, rack_id, friend_id, template='racks/rack_detail.html'):
     current_rack = get_object_or_404(Rack, pk=rack_id)
-    if request.user == current_rack.owner:
+    if request.user == current_rack.user:
         #check of friend exist or not
         current_rack.shared_users.remove(friend_id)
         current_rack.save()
@@ -796,7 +796,7 @@ def search(request, template="racks/rack_detail.html"):
     rack = get_object_or_404(Rack, pk=rack_id)
     user = request.user
     
-    if user == rack.owner or user in rack.shared_users.all() or rack.is_public():
+    if user == rack.user or user in rack.shared_users.all() or rack.is_public():
         private_racks = Rack.objects.PrivateRacksForUser(user)
         shared_racks = Rack.objects.SharedRacksForUser(user)
         ctx['rack'] = rack
@@ -804,7 +804,7 @@ def search(request, template="racks/rack_detail.html"):
         shared_admirers = rack.shared_users.all()
         
         # find non shared admirers
-        friendship_list = Friendship.objects.friends_for_user(rack.owner)
+        friendship_list = Friendship.objects.friends_for_user(rack.user)
         friend_list = []
         for friendship in friendship_list:
             friend_list.append(friendship['friend'])
@@ -968,7 +968,7 @@ def purchased_items(request, template="racks/item_list.html"):
 def steal_rack(request, rack_id):
     try:
         rack = Rack.objects.get(pk=rack_id)
-        rack_owner = rack.owner
+        rack_owner = rack.user
         stolen_rack_name = rack.name + ' ' + (rack_owner.first_name and rack_owner.last_name and (rack_owner.first_name + ' ' + rack_owner.last_name))  
         stolen_rack = Rack(owner=request.user, name=stolen_rack_name, publicity=Rack.PUBLIC)
         stolen_rack.save()

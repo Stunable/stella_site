@@ -154,6 +154,7 @@ INSTALLED_APPS = (
     #'django.contrib.admindocs',
     #'registration',
     #'beta_invite',
+    'massadmin',
     'south',
     'friends',
     'notification',
