@@ -132,9 +132,9 @@ def update_info(request, template="cart/info.html"):
             response.update({'success' : False})
             response['errors'].update(shipping_form.errors)
         
-        if not request.POST.get('term_and_condition'):
-            response.update({'success' : False})
-            response['errors'].update({'term_and_condition': ['Accepting Term and condition is requred.']})
+        # if not request.POST.get('term_and_condition'):
+        #     response.update({'success' : False})
+        #     response['errors'].update({'term_and_condition': ['Accepting Term and condition is requred.']})
         
         if response['success']:
             #now lets check with fedex...
