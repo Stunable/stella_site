@@ -21,6 +21,8 @@ from accounts.models import CCToken
 
 from apps.notification.models import send_notification_on 
 
+from apps.cart.plugins.rate_request import get_rate as fedex_rate_request
+
 
 
 from apps.cart.plugins.taxcloud import TaxCloudClient
@@ -159,13 +161,15 @@ class ShippingLabel(models.Model):
     tracking_number = models.CharField(max_length=250, blank=True, null=True)
 
 class Item(models.Model):
+    weight = 1
+
     cart = models.ForeignKey(Cart, verbose_name=_('cart'))
     quantity = models.PositiveIntegerField(verbose_name=_('quantity'))
     size = models.CharField(max_length=100, blank=True, null=True, verbose_name=_("size"))
     color = models.CharField(max_length=100, blank=True, null=True, verbose_name=_("color"))
     unit_price = models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_('unit price'))
     sales_tax_amount = models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_('sales tax'),null=True,blank=True)
-
+    shipping_amount = models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_('shipping estimate'),null=True,blank=True)
     # product as generic relation
     
     content_type = models.ForeignKey(ContentType)
@@ -306,15 +310,25 @@ class Item(models.Model):
                              recipient=shopper)
 
     def get_retailer(self):
-        return Purchase.objects.get(item=self).checkout.retailer
+        inventory = self.get_product()
+        product = inventory.item
+        retailer = product.retailers.all()[0]
+        return RetailerProfile.objects.get(user=retailer)
 
-    def get_tax_amount(self, buyer, retailer):
-        if self.sales_tax_amount:
-            return self.sales_tax_amount
-        else:
+    def get_tax_amount(self, buyer, refresh=None):
+        retailer = self.get_retailer()
+
+        if not self.sales_tax_amount or refresh:
             self.sales_tax_amount = TCC.get_tax_rate_for_item(ShippingInfo.objects.filter(customer=buyer)[0], retailer, [self])
             self.save()
         return self.sales_tax_amount
+
+    def get_shipping_cost(self,recipient_zipcode,refresh=None):
+        retailer_zipcode = self.get_retailer().zip_code
+        if not self.shipping_amount:
+            self.shipping_amount = fedex_rate_request(weight=self.weight*self.quantity, shipper_zipcode=retailer_zipcode, recipient_zipcode=recipient_zipcode)
+            self.save()
+        return self.shipping_amount
 
 
 from stunable_wepay.signals import payment_was_successful

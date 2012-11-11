@@ -106,8 +106,13 @@ class Cart:
             item.save()
         else: #ItemAlreadyExists
             item.unit_price = unit_price
-            item.quantity = quantity
-            item.clor = color
+            if item.quantity != quantity:
+                item.quantity = quantity
+                item.get_tax_amount(self.request.user.get_profile(),refresh=True)
+                item.get_shipping_cost(self.request.user.get_profile(),refresh=True)
+            item.color = color
+
+
             if size:
                 item.size = size
             item.save()
@@ -133,9 +138,8 @@ class Cart:
             retailer = item.product.item.retailers.all()[0]
             retailer_profile = RetailerProfile.objects.get(user=retailer)
             retailer_zipcode = retailer_profile.zip_code
-            from apps.cart.plugins.rate_request import get_rate
-            print self.recipient_zipcode
-            self.shipping_and_handling_cost += item.quantity * get_rate(weight=1, shipper_zipcode=retailer_zipcode, recipient_zipcode=self.recipient_zipcode)
+
+            self.shipping_and_handling_cost += item.get_shipping_cost(recipient_zipcode=self.recipient_zipcode)
             
         self.cart.shipping_and_handling_cost = self.shipping_and_handling_cost
         
@@ -152,7 +156,7 @@ class Cart:
         tax = 0
         for item in self.cart.item_set.all():
             total += float(item.total_price)
-            tax += float(item.get_tax_amount(self.request.user.get_profile(), RetailerProfile.objects.get(user=item.product.item.retailers.all()[0])))
+            tax += float(item.get_tax_amount(self.request.user.get_profile()))
         return total,tax
     
     def calculate(self):
