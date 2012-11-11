@@ -164,6 +164,8 @@ class Item(models.Model):
     size = models.CharField(max_length=100, blank=True, null=True, verbose_name=_("size"))
     color = models.CharField(max_length=100, blank=True, null=True, verbose_name=_("color"))
     unit_price = models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_('unit price'))
+    sales_tax_amount = models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_('sales tax'),null=True,blank=True)
+
     # product as generic relation
     
     content_type = models.ForeignKey(ContentType)
@@ -306,12 +308,13 @@ class Item(models.Model):
     def get_retailer(self):
         return Purchase.objects.get(item=self).checkout.retailer
 
-    def get_tax_rate(self, buyer, retailer):
-        print 'getting tax_rate'
-        #return 0
-        self._tax_amount = TCC.get_tax_rate_for_item(ShippingInfo.objects.filter(customer=buyer)[0], retailer, [self])
-        print self._tax_amount
-        return self._tax_amount
+    def get_tax_amount(self, buyer, retailer):
+        if self.sales_tax_amount:
+            return self.sales_tax_amount
+        else:
+            self.sales_tax_amount = TCC.get_tax_rate_for_item(ShippingInfo.objects.filter(customer=buyer)[0], retailer, [self])
+            self.save()
+        return self.sales_tax_amount
 
 
 from stunable_wepay.signals import payment_was_successful

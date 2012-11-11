@@ -148,15 +148,17 @@ class Cart:
         return result
         
     def summary(self):
-        result = 0
+        total = 0
+        tax = 0
         for item in self.cart.item_set.all():
-            result += item.total_price
-            #result += item.get_tax_rate(self.request.user.get_profile(), RetailerProfile.objects.get(user=item.product.item.retailers.all()[0]))
-        return result
+            total += float(item.total_price)
+            tax += float(item.get_tax_amount(self.request.user.get_profile(), RetailerProfile.objects.get(user=item.product.item.retailers.all()[0])))
+        return total,tax
     
     def calculate(self):
-        self.total = float(self.summary())
-        self.tax = self.total * settings.TAX_RATE        
+        total, tax = self.summary()
+        self.total = total
+        self.tax = tax        
         self.grand_total = self.tax + self.total + float(self.cart and self.cart.shipping_and_handling_cost or 0)
         self.cart.grand_total = self.grand_total
 
