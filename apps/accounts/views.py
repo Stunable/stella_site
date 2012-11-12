@@ -355,6 +355,14 @@ def add_fb_friends_to_list(list, js):
             add_fb_friends_to_list(list, js)
 
 
+def connect(request):
+    for sa in request.user.social_auth.all():
+        print dir(sa)
+        print sa.provider
+
+
+
+
 def add_facebook_friend(request, template="accounts/add_facebook_friends.html"):
     try:
         if len(Friendship.objects.friends_for_user(request.user)) > 0:

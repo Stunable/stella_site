@@ -103,6 +103,9 @@ class Cart:
             item.clor = color
             if size:
                 item.size = size
+            item.retailer = RetailerProfile.objects.get(item.product.item.retailers.all()[0])
+            item.buyer = self.request.user.get_profile()
+            item.destination_zip_code = self.recipient_zipcode
             item.save()
         else: #ItemAlreadyExists
             item.unit_price = unit_price
@@ -154,16 +157,19 @@ class Cart:
     def summary(self):
         total = 0
         tax = 0
+        processing = 0
         for item in self.cart.item_set.all():
             total += float(item.total_price)
             tax += float(item.get_tax_amount(self.request.user.get_profile()))
-        return total,tax
+            processing += float(item.get_additional_fees())
+        return total,tax,processing
     
     def calculate(self):
-        total, tax = self.summary()
+        total, tax, processing = self.summary()
         self.total = total
-        self.tax = tax        
-        self.grand_total = self.tax + self.total + float(self.cart and self.cart.shipping_and_handling_cost or 0)
+        self.tax = tax
+        self.processing = processing        
+        self.grand_total = self.tax + self.total +self.processing + float(self.cart and self.cart.shipping_and_handling_cost or 0)
         self.cart.grand_total = self.grand_total
 
     

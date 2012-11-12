@@ -30,6 +30,7 @@ urlpatterns = patterns('',
         invite_waitlist,
         name='invite_waitlist'),
     url(r'^new_user_join/(?P<confirmation_key>\w+)', new_user_join, name='new_user_join'),
+    url(r'^connect', connect, name="connect"),
     url(r'^add_facebook_friend', add_facebook_friend, name="add_facebook_friend")
 )
 

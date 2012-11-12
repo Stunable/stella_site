@@ -245,7 +245,7 @@ FACEBOOK_SCOPE = 'publish_stream'
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
-    'social_auth.backends.google.GoogleBackend',
+    'social_auth.backends.google.GoogleOAuth2Backend',
     'django.contrib.auth.backends.ModelBackend',
     'apps.accounts.backends.EmailAuthenticationBackend',
 )
@@ -275,6 +275,9 @@ WEPAY_ACCOUNT_ID = "1894410826"
 WEPAY_CLIENT_SECRET = "0747ad3f00"
 WEPAY_PRODUCTION = False
 WEPAY_STAGE = "stage"
+
+WEPAY_FIXED_FEE = .30
+WEPAY_PERCENTAGE = 2.9
 
 
 

@@ -170,6 +170,8 @@ class Item(models.Model):
     unit_price = models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_('unit price'))
     sales_tax_amount = models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_('sales tax'),null=True,blank=True)
     shipping_amount = models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_('shipping estimate'),null=True,blank=True)
+
+    destination_zip_code = models.CharField(max_length=10,null=True,blank=True)
     # product as generic relation
     
     content_type = models.ForeignKey(ContentType)
@@ -198,6 +200,14 @@ class Item(models.Model):
         return self.quantity * self.unit_price
     total_price = property(total_price)
     
+    @property
+    def sub_total(self):
+        return float(self.total_price) + float(self.shipping_amount) + float(self.sales_tax_amount)
+
+    @property
+    def grand_total(self):
+        return float(self.sub_total) * float(self.get_additional_fees())
+
     def is_refundable(self):
         return self.status != "refunded"
     
@@ -317,7 +327,6 @@ class Item(models.Model):
 
     def get_tax_amount(self, buyer, refresh=None):
         retailer = self.get_retailer()
-
         if not self.sales_tax_amount or refresh:
             self.sales_tax_amount = TCC.get_tax_rate_for_item(ShippingInfo.objects.filter(customer=buyer)[0], retailer, [self])
             self.save()
@@ -325,10 +334,13 @@ class Item(models.Model):
 
     def get_shipping_cost(self,recipient_zipcode,refresh=None):
         retailer_zipcode = self.get_retailer().zip_code
-        if not self.shipping_amount:
+        if not self.shipping_amount or recipient_zipcode != self.destination_zip_code or refresh:
             self.shipping_amount = fedex_rate_request(weight=self.weight*self.quantity, shipper_zipcode=retailer_zipcode, recipient_zipcode=recipient_zipcode)
             self.save()
         return self.shipping_amount
+
+    def get_additional_fees(self):
+        return settings.WEPAY_FIXED_FEE + settings.WEPAY_PERCENTAGE * self.sub_total
 
 
 from stunable_wepay.signals import payment_was_successful
