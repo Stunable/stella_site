@@ -13,5 +13,6 @@ def racks(request):
         context['private_racks'] = Rack.objects.PrivateRacksForUser(user)
         context['friendship_list'] = Friendship.objects.friends_for_user(user)
         context['notices'] = Notice.objects.notices_for(user)
-        context['cart'] = Cart(request)
+        if 'cart' in request.META.get('PATH_INFO'):
+            context['cart'] = Cart(request)
     return context
