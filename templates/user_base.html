@@ -139,7 +139,7 @@
                     {% endblock %}
                     {% block rack %}
 
-                    {% if request.user.is_authenticated %}
+                  
                     {% block left_panel %}
                     <div class="left-panel" id="left-panel">
                         <div class="panel-header clearfix">
@@ -169,7 +169,7 @@
                                     <div class="separator"></div>
                                     <ul class="my-closet-menu link">
                                         <li>
-                                            <a href="{% url trendsetters request.user.id %}">My Closet</a>
+                                            <a href="{% url trendsetters %}">My Closet</a>
                                         </li>
                                         <li>
                                             <a href="{% url my_closet_purchased_items %}">Purchased</a>
@@ -248,7 +248,7 @@
                         </div>
                     </div>
                     {% endblock %}
-                    {% endif %} <!-- end left panel -->
+          
                     <div class="content {% block content-class%}{%endblock%}" id="page-content">
                         <div class="special" id="racks-gallery">
                             <div class="content">

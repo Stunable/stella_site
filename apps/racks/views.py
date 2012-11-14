@@ -39,8 +39,11 @@ if "notification" in settings.INSTALLED_APPS:
 else:
     notification = None
 
-def get_context_variables(context, user):
+def get_context_variables(context, request):
+    user = request.user
     if not user.is_authenticated():
+        context['public_racks'] = Rack.objects.filter(anon_user_profile=request.session.get('anonymous_profile'))
+
         return context
     context['public_racks'] = Rack.objects.PublicRacksForUser(user)
     context['private_racks'] = Rack.objects.OwnedRacksForUser(user)
@@ -115,14 +118,14 @@ def detail(request, rack_id, template='racks/rack_detail.html'):
     return direct_to_template(request, template, ctx)
 
 @login_required
-def trendsetters(request, user_id, template='racks/trendsetters.html'):
-    user = User.objects.get(pk=user_id)
+def trendsetters(request, template='racks/trendsetters.html'):
+    user = request.user
     
     if request.user == user:
-        racks = Rack.objects.filter(Q(shared_users__in=[user, ]) | Q(publicity=Rack.PUBLIC, user=user_id) | 
-                                    Q(publicity=Rack.PRIVATE, user=user_id))
+        racks = Rack.objects.filter(Q(shared_users__in=[user, ]) | Q(publicity=Rack.PUBLIC, user=user.id) | 
+                                    Q(publicity=Rack.PRIVATE, user=user.id))
     else:
-        racks = Rack.objects.filter(Q(shared_users__in=[user, ]) | Q(publicity=Rack.PUBLIC, user=user_id)) 
+        racks = Rack.objects.filter(Q(shared_users__in=[user, ]) | Q(publicity=Rack.PUBLIC, user=user.id)) 
     
     ctx = {'trendsetter': user, 'racks': racks}
     return direct_to_template(request, template, ctx)
@@ -156,53 +159,56 @@ def public(request, template='racks/public.html'):
 
 @login_required
 def add(request, template='racks/add.html'):
-    ctx = {}
-    is_public = request.GET.get('public')
-    if request.method == 'POST':
-        form = RackForm(request.user, request.POST)
-        if form.is_valid():            
-            rack = form.save(commit = False)
-            rack.user = request.user
-            if request.POST.get('public') == 'True':
-                rack.publicity = 1
-            else:
-                rack.publicity = 0 #default publicity is private
-            rack.save()
-            # add notification for created rack
-            user_friends = Friendship.objects.friends_for_user(request.user)
-            
-            # if user sign up/ login using facebook
-            # TODO: cannot post on user news feed. Maybe Facebook bug!  
-            social_users = UserSocialAuth.objects.filter(provider='facebook').filter(user=request.user)
-            if social_users:
-                social_user = social_users[0]
-                access_token = social_user.tokens['access_token']
-                # get user friends
-                url = 'https://graph.facebook.com/me/feed?method=post&client_id=' + settings.FACEBOOK_APP_ID + '&access_token=' + access_token
-                message = request.user.first_name + ' ' + request.user.last_name + ' created a ' + rack.name + ' rack on' +\
-                        ' Stunable'
-                publish = {
-                  'message': message
-                };
-                data = urllib.urlencode(publish)
+    if request.is_ajax():
+        ctx = {}
+        is_public = request.GET.get('public')
+        if request.method == 'POST':
+            form = RackForm(request.user, request.POST)
+            if form.is_valid():            
+                rack = form.save(commit = False)
+                rack.user = request.user
+                if request.POST.get('public') == 'True':
+                    rack.publicity = 1
+                else:
+                    rack.publicity = 0 #default publicity is private
+                rack.save()
+                # add notification for created rack
+                user_friends = Friendship.objects.friends_for_user(request.user)
                 
-                try:
-                    req = urllib2.Request(url, data) 
-                    content = urllib2.urlopen(req)
-                    data = json.load(content)
-                except:
-                    # TODO: log bug here
-                    pass 
-            
-            if notification:
-                for friend in user_friends:                    
-                    notification.send([friend['friend']], "friend_creates_new_rack", {"rack": rack}, True, request.user)
-            ctx['success'] = True
+                # if user sign up/ login using facebook
+                # TODO: cannot post on user news feed. Maybe Facebook bug!  
+                social_users = UserSocialAuth.objects.filter(provider='facebook').filter(user=request.user)
+                if social_users:
+                    social_user = social_users[0]
+                    access_token = social_user.tokens['access_token']
+                    # get user friends
+                    url = 'https://graph.facebook.com/me/feed?method=post&client_id=' + settings.FACEBOOK_APP_ID + '&access_token=' + access_token
+                    message = request.user.first_name + ' ' + request.user.last_name + ' created a ' + rack.name + ' rack on' +\
+                            ' Stunable'
+                    publish = {
+                      'message': message
+                    };
+                    data = urllib.urlencode(publish)
+                    
+                    try:
+                        req = urllib2.Request(url, data) 
+                        content = urllib2.urlopen(req)
+                        data = json.load(content)
+                    except:
+                        # TODO: log bug here
+                        pass 
+                
+                if notification:
+                    for friend in user_friends:                    
+                        notification.send([friend['friend']], "friend_creates_new_rack", {"rack": rack}, True, request.user)
+                ctx['success'] = True
+        else:
+            form = RackForm()
+        ctx['form'] = form
+        ctx['public'] = is_public
+        return direct_to_template(request, template, ctx)
     else:
-        form = RackForm()
-    ctx['form'] = form
-    ctx['public'] = is_public
-    return direct_to_template(request, template, ctx)
+        return redirect(reverse("all"))
 
 @json_view
 @login_required
@@ -516,7 +522,7 @@ def carousel(request, category_id, template='racks/carousel.html'):
         if category_id:
             current_category = get_object_or_404(Category, pk=category_id)
             ctx['current_category'] = current_category
-            get_context_variables(ctx, request.user)
+            get_context_variables(ctx, request)
             
             if settings.IS_PROD:
                 query_set = Item.objects.filter(category=current_category, approved=True)
@@ -531,7 +537,7 @@ def stella_choice(request, template='racks/carousel.html'):
     user = request.user
     ctx['categories'] = Category.objects.all()
     ctx['current'] = "Stella's Choice"
-    get_context_variables(ctx, request.user)
+    get_context_variables(ctx, request)
     begin_date = datetime.date.today() - timedelta(days=14)
     
     if len(Friendship.objects.friends_for_user(user)) < 10:
@@ -592,7 +598,7 @@ def new(request, template="racks/carousel.html"):
     ctx = {}
     ctx['categories'] = Category.objects.all()
     ctx['current'] = "new"
-    get_context_variables(ctx, request.user)
+    get_context_variables(ctx, request)
     
     begin_date = datetime.date.today() - timedelta(days=14)
     
@@ -623,7 +629,7 @@ def _all(request, template='racks/carousel.html'):
         ctx = {}
         ctx['categories'] = Category.objects.all()
         ctx['current'] = "all"
-        get_context_variables(ctx, request.user)
+        get_context_variables(ctx, request)
         
         if settings.IS_PROD:
             print "PROD"

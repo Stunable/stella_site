@@ -359,16 +359,16 @@ def order_history(request, template='retailers/order_history.html'):
 def view_all_products(request, retailer_id):
     retailer = get_object_or_404(RetailerProfile, pk=retailer_id)
     try:
-        user_racks = Rack.objects.filter(owner=request.user, name=retailer.name)
+        user_racks = Rack.objects.filter(user=request.user, name=retailer.name)
         if user_racks.count() > 0:
             pass
         else:
-            new_rack = Rack.objects.create(name=retailer.name, owner=request.user, publicity=0)
+            new_rack = Rack.objects.create(name=retailer.name, user=request.user, publicity=0)
             retailer_items = StylistItem.objects.filter(stylist=retailer.user)
             for retailer_item in retailer_items:
                 Rack_Item.objects.create(item=retailer_item.item, rack=new_rack, user=request.user)
     except:
-        pass
+        raise
     
     return redirect(reverse("racks_detail", args=[user_racks[0].id]))
 
