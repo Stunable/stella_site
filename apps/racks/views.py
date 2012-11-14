@@ -118,16 +118,22 @@ def detail(request, rack_id, template='racks/rack_detail.html'):
     return direct_to_template(request, template, ctx)
 
 @login_required
-def trendsetters(request, template='racks/trendsetters.html'):
+def trendsetters(request, user_id=None, template='racks/trendsetters.html'):
     user = request.user
+    rack_user = user
+    if user_id:
+        requested_user = User.objects.get(id=user_id)
+        if Friendship.objects.are_friends(user,requested_user):
+            rack_user = User.objects.get(id=user_id)
+
     
-    if request.user == user:
-        racks = Rack.objects.filter(Q(shared_users__in=[user, ]) | Q(publicity=Rack.PUBLIC, user=user.id) | 
-                                    Q(publicity=Rack.PRIVATE, user=user.id))
+    if rack_user == user:
+        racks = Rack.objects.filter(Q(shared_users__in=[rack_user, ]) | Q(publicity=Rack.PUBLIC, user=rack_user.id) | 
+                                    Q(publicity=Rack.PRIVATE, user=rack_user.id))
     else:
-        racks = Rack.objects.filter(Q(shared_users__in=[user, ]) | Q(publicity=Rack.PUBLIC, user=user.id)) 
+        racks = Rack.objects.filter(Q(shared_users__in=[requested_user, ]) | Q(publicity=Rack.PUBLIC, user=requested_user.id)) 
     
-    ctx = {'trendsetter': user, 'racks': racks}
+    ctx = {'trendsetter': rack_user, 'racks': racks}
     return direct_to_template(request, template, ctx)
 
 
