@@ -10,11 +10,6 @@
 {% load voting_tags %}
 
 {% votes_by_user request.user on items as vote_dict %}
-<script type="text/javascript">
-	$(function(){
-		$('#left-panel').portamento({wrapper: $('#carousel-wrapper')});
-	});
-</script>
 <div id="item_count" style="display: none">
     {{item_count}}
 </div>
@@ -74,3 +69,10 @@
         </div><!--/.special#item-carousel"-->
     </div><!--/.section#page-content"-->
     {% endblock %}
+{% block extra_script %}
+<script type="text/javascript">
+    $(function(){
+        $('#left-panel').portamento({wrapper: $('#carousel-wrapper')});
+    });
+</script>
+{% endblock %}
