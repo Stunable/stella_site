@@ -1340,8 +1340,9 @@ function initDragDrop() {
 	    },
 		zIndex: 2700,
 		start: function(event, ui) {
-			$('.iosSlider').data('touchCarousel').freeze();
-
+			if ($('.iosSlider').length){
+				$('.iosSlider').data('touchCarousel').freeze();
+			}
 
 			prevs = $(this).parent().parent().prevAll();			
 			$(prevs).each(function(){
@@ -1360,7 +1361,10 @@ function initDragDrop() {
         },
         stop: function(event, ui){
         	// slideNum = calcSlide();
-            $('.iosSlider').data('touchCarousel').unfreeze();
+        	if ($('.iosSlider').length){
+        		$('.iosSlider').data('touchCarousel').unfreeze();
+        	}
+            
             $('.prev').each(function(){
             	$(this).removeClass('prev');
             });

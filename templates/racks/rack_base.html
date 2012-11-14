@@ -53,8 +53,8 @@
 {% block rack_scripts %}
 <script>
 	$(document).ready(function() {
-
-	      initTouch();
+		initDragDrop()
+	    initTouch();
 	      function initAddFriend(){
 	          // unbind the click function just in case
 	          $('.plus-inline').unbind("click");
@@ -163,11 +163,10 @@
 
 	      $('.panel-inner-content').html($('.panel-header .active').find('.tab-content').html()).fadeIn(1000, function() {
 	          initDragDrop();
-            {% if request.user.is_authenticated %}
-                  initFancyBox('#add-rack ');
-                  initFancyBox('#add-friend ');
-            
-	          initFancyBox();
+            	{% if request.user.is_authenticated %}
+                  	initFancyBox('#add-rack ');
+                  	initFancyBox('#add-friend ');
+	          		initFancyBox();
 	          {% endif %}
 	          fixDragDropIssue();
 	      });
