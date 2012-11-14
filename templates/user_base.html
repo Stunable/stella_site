@@ -158,7 +158,7 @@
                                             <td>
                                             <table>
                                                 <tr>
-                                                    <td class="username">{% if request.user.get_full_name %}{{ request.user.get_full_name }}{% else %}Stella's Favorite{% endif %}</td>
+                                                    <td class="username">{% if request.user.get_full_name %}{{ request.user.get_full_name }}{% else %}<a href="{% url auth_login %}">Create an Account</a>{% endif %}</td>
                                                 </tr>
                                                 <tr>
                                                     <!-- <td>{{ request.user.get_profile.location }}</td> -->
