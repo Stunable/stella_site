@@ -17,6 +17,7 @@
 
 	<div onclick="document.location.href='{% url socialauth_begin "facebook" %}{% if next %}?next={{ next }}{%endif%}'" class="input-wrapper" style="cursor:pointer"><input type="button" class="btn" value="Login With Facebook" /></div>
 	<div onclick="document.location.href='{% url socialauth_begin "google-oauth2" %}{% if next %}?next={{ next }}{%endif%}'" class="input-wrapper" style="cursor:pointer"><input type="button" class="btn" value="Login With Google" /></div>
+	<div onclick="document.location.href='{% url socialauth_begin "twitter" %}{% if next %}?next={{ next }}{%endif%}'" class="input-wrapper" style="cursor:pointer"><input type="button" class="btn" value="Login With Twitter" /></div>
 
 <!-- 	<form action="{% url invite_waitlist %}" class="user-entry" id="waitlist-form" method="POST">
 		{% csrf_token %}

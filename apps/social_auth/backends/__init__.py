@@ -24,12 +24,12 @@ from django.utils import simplejson
 from django.utils.importlib import import_module
 
 from social_auth.models import UserSocialAuth
-from social_auth.utils import setting, log, model_to_ctype, ctype_to_model, \
+from apps.social_auth.utils import setting, log, model_to_ctype, ctype_to_model, \
                               clean_partial_pipeline, url_add_parameters, \
                               get_random_string, constant_time_compare, \
                               dsa_urlopen
 from social_auth.store import DjangoOpenIDStore
-from social_auth.backends.exceptions import StopPipeline, AuthException, \
+from apps.social_auth.backends.exceptions import StopPipeline, AuthException, \
                                             AuthFailed, AuthCanceled, \
                                             AuthUnknownError, AuthTokenError, \
                                             AuthMissingParameter, \

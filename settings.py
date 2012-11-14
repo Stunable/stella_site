@@ -246,11 +246,12 @@ FACEBOOK_SCOPE = 'publish_stream'
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
     'social_auth.backends.google.GoogleOAuth2Backend',
+    'apps.social_auth.backends.twitter.TwitterBackend',
     'django.contrib.auth.backends.ModelBackend',
     'apps.accounts.backends.EmailAuthenticationBackend',
 )
 
-SOCIAL_AUTH_ENABLE_BACKENDS = ('facebook', 'google')
+SOCIAL_AUTH_ENABLE_BACKENDS = ('facebook', 'google','twitter')
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
 
 PRODUCT_GROUPS = {

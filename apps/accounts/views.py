@@ -31,6 +31,13 @@ from django.core.files.temp import NamedTemporaryFile
 from django.core.files.base import File
 from social_auth.models import UserSocialAuth
 from friends.models import Friendship
+
+from oauth.oauth import OAuthRequest,OAuthConsumer,OAuthToken,OAuthSignatureMethod_HMAC_SHA1
+import httplib, json, time, datetime
+
+import gdata.contacts.data
+import gdata.contacts.client
+import gdata.gauth
     
 @login_required
 def profile_edit(request, template="accounts/profile_edit.html"):
@@ -357,10 +364,89 @@ def add_fb_friends_to_list(list, js):
 
 def connect(request):
     for sa in request.user.social_auth.all():
-        print dir(sa)
-        print sa.provider
+        try:
+            {
+                'facebook': get_facebook_friends
+                ,'google-oauth2':get_google_contacts
+                ,'twitter':get_twitter_contacts
+            }[sa.provider](sa)
+        except:
+            raise
+            print sa.provider
+
+connection = httplib.HTTPSConnection('api.twitter.com')
+
+def request(url, access_token, parameters=None):
+    """
+    usage: request( '/url/', your_access_token, parameters=dict() )
+    Returns a OAuthRequest object
+    """
+    token = OAuthToken(access_token['oauth_token'], access_token['oauth_token_secret'])
+    consumer = OAuthConsumer(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
+    oauth_request = OAuthRequest.from_consumer_and_token(consumer, token=token, http_url=url, parameters=parameters,
+    )
+    oauth_request.sign_request(OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
+    return oauth_request
+
+def fetch_response(oauth_request, connection):
+    url = oauth_request.to_url()
+    connection.request(oauth_request.http_method,url)
+    response = connection.getresponse()
+    s = response.read()
+    return s
+
+def get_twitter_contacts(social_user):
+    print social_user.tokens
+    
+    oauth_request = request('https://api.twitter.com/1/friends/ids.json', social_user.tokens)
+    json = fetch_response(oauth_request, connection)
+    print json
+    return json
 
 
+def get_google_contacts(social_user):
+    access_token = social_user.tokens['access_token']
+
+    contacts = []
+
+    gd_client = gdata.contacts.client.ContactsClient()
+    feed = gd_client.get_contacts(auth_token=gdata.gauth.AuthSubToken(access_token))
+    for i, entry in enumerate(feed.entry):
+        print entry
+        out = {}
+        if hasattr(entry,'name'):
+            if hasattr(entry.name,'full_name'):
+                out['full_name'] = entry.name.full_name.text
+
+        for email in entry.email:
+            if email.primary:
+                out['email'] = email.address
+
+                contacts.append(out)
+    print contacts
+
+
+
+def get_facebook_friends(social_user):
+
+    access_token = social_user.tokens['access_token']
+    
+    # get user friends
+    url = 'https://graph.facebook.com/me/friends?access_token=' + access_token
+    req = urllib2.Request(url=url)
+    content = urllib2.urlopen(req)
+    fb_friends = json.load(content)
+    friend_list = []
+    id_list = []
+    
+    
+    for x in xrange(0, len(fb_friends['data'])):
+        friend_list.append(fb_friends['data'][x])
+
+    for item in friend_list:
+        id_list.append(item['id'])
+
+    print friend_list
 
 
 def add_facebook_friend(request, template="accounts/add_facebook_friends.html"):
@@ -368,7 +454,6 @@ def add_facebook_friend(request, template="accounts/add_facebook_friends.html"):
         if len(Friendship.objects.friends_for_user(request.user)) > 0:
             return redirect(reverse("home"))
         else:
-            
             social_user = UserSocialAuth.objects.filter(provider='facebook').get(user=request.user)
             access_token = social_user.tokens['access_token']
             

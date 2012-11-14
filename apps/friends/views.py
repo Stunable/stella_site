@@ -264,7 +264,7 @@ def accept_invitation(request, sender_id, notification_id, template="friends/adm
         recipient = request.user
         notice = Notice.objects.get(pk=notification_id)
         if notice.recipient != recipient:
-            raise Exception("Do not authorized!")
+            raise Exception("Not Authorized!")
         
         fsi = FriendshipInvitation.objects.get(from_user=sender, to_user=recipient)
         fsi.accept()

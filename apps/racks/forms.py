@@ -13,7 +13,7 @@ class RackForm(forms.ModelForm):
     
     class Meta:
         model = Rack
-        exclude = ['owner', 'rack_items', 'shared_users', 'category', 'publicity']
+        exclude = ['user', 'rack_items', 'shared_users', 'category', 'publicity']
     
     def __init__(self, user=None, *args, **kwargs):
         self.user = user
@@ -21,7 +21,7 @@ class RackForm(forms.ModelForm):
         
     def clean_name(self):
         new_name = self.cleaned_data.get('name')
-        racks = Rack.objects.filter(owner=self.user, name__iexact=new_name)
+        racks = Rack.objects.filter(user=self.user, name__iexact=new_name)
         
         if racks.count() > 0:
             raise forms.ValidationError("This rack name has already been used! Please choose another one!")
@@ -38,7 +38,7 @@ class RackEditForm(forms.ModelForm):
     
     class Meta:
         model = Rack
-        exclude = ['owner', 'category', 'publicity']
+        exclude = ['user', 'category', 'publicity']
     
     def __init__(self, user=None, *args, **kwargs):
         self.user = user
@@ -48,7 +48,7 @@ class InsertExistingItemToRackForm(forms.ModelForm):
     rack_items = forms.ModelMultipleChoiceField(queryset=Item.objects.all(), required=False, widget=forms.SelectMultiple)
     class Meta:
         model = Rack
-        exclude = ['name', 'owner', 'shared_users', 'category', 'publicity']
+        exclude = ['name', 'user', 'shared_users', 'category', 'publicity']
     
     def __init__(self, rack=None, *args, **kwargs):
         self.current_rack = rack

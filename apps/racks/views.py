@@ -119,10 +119,10 @@ def trendsetters(request, user_id, template='racks/trendsetters.html'):
     user = User.objects.get(pk=user_id)
     
     if request.user == user:
-        racks = Rack.objects.filter(Q(shared_users__in=[user, ]) | Q(publicity=Rack.PUBLIC, owner=user_id) | 
-                                    Q(publicity=Rack.PRIVATE, owner=user_id))
+        racks = Rack.objects.filter(Q(shared_users__in=[user, ]) | Q(publicity=Rack.PUBLIC, user=user_id) | 
+                                    Q(publicity=Rack.PRIVATE, user=user_id))
     else:
-        racks = Rack.objects.filter(Q(shared_users__in=[user, ]) | Q(publicity=Rack.PUBLIC, owner=user_id)) 
+        racks = Rack.objects.filter(Q(shared_users__in=[user, ]) | Q(publicity=Rack.PUBLIC, user=user_id)) 
     
     ctx = {'trendsetter': user, 'racks': racks}
     return direct_to_template(request, template, ctx)
@@ -673,13 +673,13 @@ def add_item_from_modal(request):
         item = Item.objects.get(pk=item_id)
         # create a private rack name custom if user do not have any rack
 #        if rack.lower()=='custom':            
-#            add_to_rack = Rack(name='Custom', owner=request.user, publicity=0)
+#            add_to_rack = Rack(name='Custom', user=request.user, publicity=0)
 #            add_to_rack.save()
         if rack.lower() == 'myrack':
             try:
-                add_to_rack = Rack.objects.get(name="My Rack", owner=request.user)
+                add_to_rack = Rack.objects.get(name="My Rack", user=request.user)
             except Rack.DoesNotExist:
-                add_to_rack = Rack(name='My Rack', owner=request.user, publicity=0)
+                add_to_rack = Rack(name='My Rack', user=request.user, publicity=0)
                 add_to_rack.save()
                 result['new_rack_id'] = add_to_rack.id
         else:
@@ -970,7 +970,7 @@ def steal_rack(request, rack_id):
         rack = Rack.objects.get(pk=rack_id)
         rack_owner = rack.user
         stolen_rack_name = rack.name + ' ' + (rack_owner.first_name and rack_owner.last_name and (rack_owner.first_name + ' ' + rack_owner.last_name))  
-        stolen_rack = Rack(owner=request.user, name=stolen_rack_name, publicity=Rack.PUBLIC)
+        stolen_rack = Rack(user=request.user, name=stolen_rack_name, publicity=Rack.PUBLIC)
         stolen_rack.save()
         
         for item in rack.rack_items.all():
