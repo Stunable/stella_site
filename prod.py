@@ -47,7 +47,7 @@ PAYPAL_URL = 'https://www.sandbox.paypal.com/au/cgi-bin/webscr'
 PAYPAL_PDT_URL = 'https://www.sandbox.paypal.com/au/cgi-bin/webscr'
 
 
-WAITLIST_ACTIVE = True 
+WAITLIST_ACTIVE = False 
 THUMBNAIL_DEBUG = False
 
 from fedex.config import FedexConfig
