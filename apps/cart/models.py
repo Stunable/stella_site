@@ -168,8 +168,8 @@ class Item(models.Model):
     size = models.CharField(max_length=100, blank=True, null=True, verbose_name=_("size"))
     color = models.CharField(max_length=100, blank=True, null=True, verbose_name=_("color"))
     unit_price = models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_('unit price'))
-    sales_tax_amount = models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_('sales tax'),null=True,blank=True)
-    shipping_amount = models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_('shipping estimate'),null=True,blank=True)
+    sales_tax_amount = models.DecimalField(default=0, max_digits=18, decimal_places=2, verbose_name=_('sales tax'),null=True,blank=True)
+    shipping_amount = models.DecimalField(default=0, max_digits=18, decimal_places=2, verbose_name=_('shipping estimate'),null=True,blank=True)
 
     destination_zip_code = models.CharField(max_length=10,null=True,blank=True)
     # product as generic relation
@@ -202,7 +202,10 @@ class Item(models.Model):
     
     @property
     def sub_total(self):
-        return float(self.total_price) + float(self.shipping_amount) + float(self.sales_tax_amount)
+        try:
+            return float(self.total_price) + float(self.shipping_amount) + float(self.sales_tax_amount)
+        except:
+            return float(self.total_price)
 
     @property
     def grand_total(self):

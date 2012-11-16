@@ -101,9 +101,9 @@ def order_history(request, template='cart/order_history.html'):
 def update_info(request, template="cart/info.html"):
     cart = Cart(request)
     
-    if cart.cart and not cart.cart.shipping_and_handling_cost:
-        return redirect(reverse('get_cart'))
-    
+    # if cart.cart and not cart.cart.shipping_and_handling_cost:
+    #     return redirect(reverse('get_cart'))
+    print cart
     ctx = {}
 
     try:
@@ -122,30 +122,18 @@ def update_info(request, template="cart/info.html"):
                                               initial={'customer':user_profile, 
                                                        'zip_code':request.session.get('recipient_zipcode')}), 
         })
-
     else:
-        response = {'success' : True, 'errors': {}}            
-        form_data = request.POST.copy()
-        shipping_form = ShippingInfoForm(form_data, prefix="shipping", instance=default_shipping)
-        
-        if not shipping_form.is_valid():
-            response.update({'success' : False})
-            response['errors'].update(shipping_form.errors)
-        
-        # if not request.POST.get('term_and_condition'):
-        #     response.update({'success' : False})
-        #     response['errors'].update({'term_and_condition': ['Accepting Term and condition is requred.']})
-        
-        if response['success']:
-            #now lets check with fedex...
+        shipping_form = ShippingInfoForm(request.POST, prefix="shipping", instance=default_shipping)
+        if shipping_form.is_valid():
             shipping_info = shipping_form.save(commit=False)
-
             shipping_info.customer=user_profile
             if not default_shipping:
                 shipping_info.is_default=True
             shipping_info.save()
+        else:
+            ctx['shipping'] = shipping_form
                                 
-        return HttpResponse(json.dumps(response, ensure_ascii=False), mimetype='application/json')
+        # return HttpResponse(json.dumps(response, ensure_ascii=False), mimetype='application/json')
     
     return direct_to_template(request, template, ctx)
 

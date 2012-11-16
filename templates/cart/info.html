@@ -31,15 +31,15 @@
 		<h2><span>Shipping Information</span></h2>
 	</div>
 	<div class="body-copy bootstrap">
-		<form method="POST" id="cart-form" class="form-horizontal">
+		<form action="/cart/update_info" method="POST" id="cart-form" class="form-horizontal">
 		{% csrf_token %}
-		
+
 		{% for field in shipping %}
 		<div class="control-group">
 			<label class="control-label">{{ field.label }}</label>
 			<div class="controls">
 				<input type="text" name="shipping-{{ field.name }}" value="{{field.value|default_if_none:''}}" />
-				<span class="help-inline">{{ field.errors }}</span>
+				{{ field.errors }}
 			</div>
 		</div>
 		{% endfor %}
@@ -67,63 +67,5 @@
 
 {% endblock %}
 {% block extra_script %}
-<script>
-    jQuery(function($){
-        
-        var login_form = $('#cart-form');
-        
-        //$('input[name="shipping-zip_code"]').prop('readonly', true);
-        
-        login_form.ajaxForm({
-            url : this.action,
-            dataType : 'json',
-            success : function(json)
-            {
-                if (json.success == false && json.errors != undefined)
-                    process_form_errors(json, login_form)
-                else {
-                    //do something if there aren't errors
-                    
-                    window.location.href = "/cart/wpp"; 
-                }
-            }
-        }); 
-    });
-    
-    
 
-    function hide_form_errors()
-    {
-        $('.errorlist').remove();
-    }
-
-    function process_form_errors(json, form)
-    {
-        var curField;
-        
-        hide_form_errors();
-        //form.clearForm();
-        errors = json.errors;
-    
-        if (errors.__all__ != undefined)
-            form.append(errors.__all__);
-
-        prefix = form.find(":hidden[name='prefix']").val();
-
-        prefix == undefined ? prefix = '' : prefix = prefix + '-';
-        $('.error').removeClass('error');
-        $('.help-inline').text('');
-        for (field in errors) {
-            if(errors.hasOwnProperty(field)){
-                curField = $('[name=shipping-' + field + '], [name=' + field + ']');
-                if(curField.attr('type') === 'checkbox'){
-                    curField.parent().siblings('.help-inline').text(errors[field][0]);
-                } else {
-                    curField.siblings('.help-inline').text(errors[field][0]);
-                }
-                curField.parents('.control-group:first').addClass('error')
-            }
-        }
-    }
-</script>
 {% endblock %}

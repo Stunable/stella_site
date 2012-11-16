@@ -32,6 +32,10 @@ from django.core.files.base import File
 from social_auth.models import UserSocialAuth
 from friends.models import Friendship
 
+from StringIO import StringIO
+from PIL import Image
+from django.core.files.temp import NamedTemporaryFile
+
 from oauth.oauth import OAuthRequest,OAuthConsumer,OAuthToken,OAuthSignatureMethod_HMAC_SHA1
 import httplib, json, time, datetime
 
@@ -363,18 +367,30 @@ def add_fb_friends_to_list(list, js):
 
 
 def connect(request):
-    for sa in request.user.social_auth.all():
-        try:
-            {
-                'facebook': get_facebook_friends
-                ,'google-oauth2':get_google_contacts
-                ,'twitter':get_twitter_contacts
-            }[sa.provider](sa)
-        except:
-            raise
-            print sa.provider
+    for sa in request.user.social_auth.filter(provider='facebook'):
+        friends = get_facebook_friends(sa)
+        P = request.user.get_profile()
+        if P.first_login:
+            I = get_fb_avatar_image(sa)
+            if I:
+                temp = NamedTemporaryFile(delete=True)
+                I.save(temp.name+str(P.id),'jpeg')
+                P.avatar.save("%d_avatar.jpg"%P.id, File(open(temp.name+str(P.id),'rb')))
+                P.first_login = False
+                P.save()
+
+                
+
+    request.session['friends'] = friends
+    if request.session.has_key('next'):
+        return redirect(session['next'])
+    # elif request.user.get_profile().first_login:
+    #     return redirect(reverse("accounts.urls.profile_edit"))
+
+    return redirect(reverse("home"))
 
 connection = httplib.HTTPSConnection('api.twitter.com')
+
 
 def request(url, access_token, parameters=None):
     """
@@ -395,36 +411,50 @@ def fetch_response(oauth_request, connection):
     s = response.read()
     return s
 
-def get_twitter_contacts(social_user):
-    print social_user.tokens
+# def get_twitter_contacts(social_user):
+#     print social_user.tokens
     
-    oauth_request = request('https://api.twitter.com/1/friends/ids.json', social_user.tokens)
-    json = fetch_response(oauth_request, connection)
-    print json
-    return json
+#     oauth_request = request('https://api.twitter.com/1/friends/ids.json', social_user.tokens)
+#     json = fetch_response(oauth_request, connection)
+#     print json
+#     return json
 
 
-def get_google_contacts(social_user):
+# def get_google_contacts(social_user):
+#     access_token = social_user.tokens['access_token']
+
+#     contacts = []
+
+#     gd_client = gdata.contacts.client.ContactsClient()
+#     feed = gd_client.get_contacts(auth_token=gdata.gauth.AuthSubToken(access_token))
+#     for i, entry in enumerate(feed.entry):
+#         print entry
+#         out = {}
+#         if hasattr(entry,'name'):
+#             if hasattr(entry.name,'full_name'):
+#                 out['full_name'] = entry.name.full_name.text
+
+#         for email in entry.email:
+#             if email.primary:
+#                 out['email'] = email.address
+
+#                 contacts.append(out)
+#     print contacts
+
+def get_fb_avatar_image(social_user):
     access_token = social_user.tokens['access_token']
+    url = 'https://graph.facebook.com/me/?access_token=' + access_token
+    req = urllib2.Request(url=url)
+    content = urllib2.urlopen(req)
+    d = json.loads(content.read())
 
-    contacts = []
-
-    gd_client = gdata.contacts.client.ContactsClient()
-    feed = gd_client.get_contacts(auth_token=gdata.gauth.AuthSubToken(access_token))
-    for i, entry in enumerate(feed.entry):
-        print entry
-        out = {}
-        if hasattr(entry,'name'):
-            if hasattr(entry.name,'full_name'):
-                out['full_name'] = entry.name.full_name.text
-
-        for email in entry.email:
-            if email.primary:
-                out['email'] = email.address
-
-                contacts.append(out)
-    print contacts
-
+    url = 'https://graph.facebook.com/me/picture?access_token=' + access_token
+    print url
+    req = urllib2.Request(url=url)
+    content = urllib2.urlopen(req)
+    I = Image.open(StringIO(content.read()))
+    return I
+   
 
 
 def get_facebook_friends(social_user):
@@ -443,10 +473,9 @@ def get_facebook_friends(social_user):
     for x in xrange(0, len(fb_friends['data'])):
         friend_list.append(fb_friends['data'][x])
 
-    for item in friend_list:
-        id_list.append(item['id'])
+    add_fb_friends_to_list(friend_list, fb_friends)
 
-    print friend_list
+    return friend_list
 
 
 def add_facebook_friend(request, template="accounts/add_facebook_friends.html"):
@@ -471,23 +500,14 @@ def add_facebook_friend(request, template="accounts/add_facebook_friends.html"):
                 
             add_fb_friends_to_list(friend_list, fb_friends)
             
-            # user_id list
-            for item in friend_list:
-                id_list.append(item['id'])
+            return fb_friends
             
-            # TODO:remove friends that have already joined stella
-            all_social_users = UserSocialAuth.objects.filter(provider='facebook')
-            for user in all_social_users:
-                if user.uid in id_list:
-                    # auto add joined users as friends
-                    Friendship.objects.create(to_user=request.user, from_user=user.user)
-            
-            return direct_to_template(request, template, {'fb_friends': friend_list, 
-                                                          'access_token': access_token, 
-                                                          'uid': social_user.uid,
-                                                          'FB_APP_ID': settings.FACEBOOK_APP_ID})
+            # return direct_to_template(request, template, {'fb_friends': friend_list, 
+            #                                               'access_token': access_token, 
+            #                                               'uid': social_user.uid,
+            #                                               'FB_APP_ID': settings.FACEBOOK_APP_ID})
     except:
-        pass
+        raise
 
 @login_required
 @csrf_exempt

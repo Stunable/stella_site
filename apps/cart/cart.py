@@ -160,6 +160,7 @@ class Cart:
         processing = 0
         for item in self.cart.item_set.all():
             total += float(item.total_price)
+            print self.request.user.get_profile()
             tax += float(item.get_tax_amount(self.request.user.get_profile()))
             processing += float(item.get_additional_fees())
         return total,tax,processing

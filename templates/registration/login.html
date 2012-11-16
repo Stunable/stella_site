@@ -13,11 +13,25 @@
 
 {% block content %}
 
+{% if form.errors %}
+<p id="bigform-error3">
+	Your username and password didn't match. Please try again.
+</p>
+{% endif %}
+	<form action="{% url auth_login %}" class="user-entry php-form" id="signin-form" method="POST">
+		{% csrf_token %}
+		<input required id="tester" class="txt" name="email" type="text" placeholder="EMAIL"/>
+		<div class="separator"></div>
+		<input required class="txt pass" name="password" type="password" placeholder="PASSWORD"/>
+		<div class="separator"></div>
+		<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{% url welcome %}{% endif %}" />
+		<input type="submit" class="btn" value="Login" />
+		<div onclick="document.location.href='{% url login_with_fb %}'" class="input-wrapper" style="cursor:pointer"><input type="button" class="btn" value="Login With Facebook" /></div>
+		<div class="forgot-pass">
+			<a href="{% url auth_password_reset %}" title="Click here to retrieve your password."><span style="display: block">-- FORGOT PASSWORD? --</span></a>
+		</div>
+	</form><!--/.section.user-entry#signin-form-->
 
-
-	<div onclick="document.location.href='{% url socialauth_begin "facebook" %}{% if next %}?next={{ next }}{%endif%}'" class="input-wrapper" style="cursor:pointer"><input type="button" class="btn" value="Login With Facebook" /></div>
-	<div onclick="document.location.href='{% url socialauth_begin "google-oauth2" %}{% if next %}?next={{ next }}{%endif%}'" class="input-wrapper" style="cursor:pointer"><input type="button" class="btn" value="Login With Google" /></div>
-	<div onclick="document.location.href='{% url socialauth_begin "twitter" %}{% if next %}?next={{ next }}{%endif%}'" class="input-wrapper" style="cursor:pointer"><input type="button" class="btn" value="Login With Twitter" /></div>
 
 <!-- 	<form action="{% url invite_waitlist %}" class="user-entry" id="waitlist-form" method="POST">
 		{% csrf_token %}
@@ -25,33 +39,44 @@
 		<input type="submit" class="btn" value="Send Request"/>
 	</form><!--/.user-entry#waitlist-form --> 
 
-				
+	<center>
+		<p id="bigform-error1"></p>
+	</center>
 
+	<form class="clearfix">
+
+	<div class="sign-up first">
+		<div class="sign-up-header clearfix">
+			SIGN UP
+		</div>
+		<a class="big-icon sign-up-icon" href="{% url account_create %}">
+		<!--<a class="big-icon sign-up-icon" href="{% url invite_waitlist %}">-->
+		</a>
+	</div>
+	<div class="sign-up">
+		<div class="sign-up-header clearfix">
+			SIGN UP WITH
+		</div>
+		<a class="big-icon sign-up-fb-icon" href="{% url login_with_fb %}">
+<!-- 		<a class="big-icon sign-up-fb-icon" href="{% url invite_waitlist %}"> -->
+		</a>
+	</div>
+	<div class="sign-up last">
+		<div class="sign-up-header clearfix">
+		  REQUEST INVITE	
+		</div>
+		<a class="big-icon sign-up-request-icon" href="{% url invite_waitlist %}">
+		</a>
+	</div>
 	<div class="sub-form" >
 		<p class="own-show">
-			Stylists:
+			Run your own show
 		</p>
-		<form action="{% url auth_login %}" class="user-entry php-form" method="POST">
-			{% csrf_token %}
-			<input required id="tester" name="email" class="txt" type="text" placeholder="EMAIL"/>
-			<div class="separator"></div>
-			<input required name="password" class="txt" class="login_pw" type="password" placeholder="PASSWORD"/>
-			<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{% url welcome %}{% endif %}" />
-			<input type="submit" class="btn" value="Stylist login" />
-			<div class="forgot-pass">
-				<a href="{% url auth_password_reset %}" title="Click here to retrieve your password."><span style="display: block">-- FORGOT PASSWORD? --</span></a>
-			</div>
-		</form><!--/.section.user-entry#signin-form-->
-		
-
-		<p class="own-show">
-			
-		</p>
-		<input type="button" class="btn become-stylelist" value="Become a Stunable Stylist" onclick="document.location.href='{% url create_retailer_profile %}'"/>
-
+		<input type="button" class="btn become-stylelist"  value="Become a Stunable Stylist" onclick="document.location.href='{% url create_retailer_profile %}'"/>
 	</div>
-	
-	
+	</form>
+
+
 {% endblock %} 
 {% block extra_script %}
 <script>

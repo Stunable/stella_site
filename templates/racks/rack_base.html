@@ -114,12 +114,12 @@
 	              // from the jquery document, the change event is fired 
 	              // only if the input loses focus, so we need to compare
 	              // the old and new value of the input box after it loses
-	              // focus, so we can decide to init the plus icon or just ignore
-	              
+	              // focus, so we can decide to init the plus icon or just ignor 
 	              var filter = $(this).val();
 	              if (filter != oldFilter){
 	                  var link = href + '?q=' + filter;           
 	                  $.get(link, function(returnValue){
+	                  	$('#result-list').children().remove();
 	                      $.each(list, function(){
 	                          $(this).html(returnValue);
 	                      });

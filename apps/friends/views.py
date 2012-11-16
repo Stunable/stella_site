@@ -114,6 +114,10 @@ def add(request, user_id):
     return result
 
 @login_required
+def fb_add(request, fb_id):
+    return add(request,fb_id)
+
+@login_required
 def invite(request, template="friends/invite_friends.html"):
     ctx = {}
     if request.method == 'POST':
@@ -161,7 +165,16 @@ def invite_modal(request, template="friends/invite_friends_dialog.html"):
         ctx['form'] = form
     
     return direct_to_template(request, template, ctx)
-        
+  
+@login_required
+def query_friends(request, q):
+    out = []
+    if request.session.has_key('friends'):
+        out = [f for f in request.session['friends'] if f['name'].lower().startswith(q.lower())]
+    #return HttpResponse(json.dumps(out, ensure_ascii=False), mimetype='application/json')
+    return out
+
+
 @login_required
 def search(request, template="friends/admirers.html"):
     search_string = request.GET.get('q', '')
@@ -199,7 +212,7 @@ def search(request, template="friends/admirers.html"):
         
 #        result_list = list(result)
         template = "friends/partial_user_list.html"
-        return direct_to_template(request, template, {'user_list': user_list, 'pending_from_list': pending_from_list, 'pending_to_list': pending_to_list})
+        return direct_to_template(request, template, {'friend_list': query_friends(request,search_string),  'user_list': user_list, 'pending_from_list': pending_from_list, 'pending_to_list': pending_to_list})
     else:
         for fs_u in user_friends:
             if filter_by == "first_name" and search_string in fs_u['friend'].first_name:

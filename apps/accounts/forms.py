@@ -225,6 +225,9 @@ class ShippingInfoForm(forms.ModelForm):
             if 'City' in V.ErrDescription:
                 # self._errors['city'] = self._errors.get('city', [])
                 self._errors['city']= self.error_class([V.ErrDescription])
+            elif 'Address Not Found.' in V.ErrDescription:
+                pass
+                #self._errors['city']= self.error_class("We could not verify this as an existing address.")
             elif 'Zip Code' in V.ErrDescription:
                 self._errors['zip_code']= self.error_class([V.ErrDescription])
             else:

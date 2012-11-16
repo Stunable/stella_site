@@ -37,3 +37,29 @@ orders per retailer
         retailer location specific info
             sales tax
             shipping info
+
+
+
+
+Friendship:
+    User Logs in with FB
+        check for stunable users who are facebook friends
+            add stunable friendships for each one found
+
+        Can share Items with any (facebook or stunable) friend:
+            on share:
+                if not a stunable user:
+                    Send facebook-facebook invite
+                else:
+                    Send trend notification thing and/or facebook
+    User logs in NOT facebook:
+        Sharing is diminished but email invite still works
+                   
+    Relationships:        
+
+        Stunable - Stunable
+
+                
+
+
+
