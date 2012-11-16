@@ -11,17 +11,29 @@ SSL_ENABLED = False
 DOMAIN_NAME = 'shopwithstella.org'
 WWW_ROOT = 'http://%s/' % DOMAIN_NAME
 
-# FACEBOOK_APP_ID              = '397462356974539'
-# FACEBOOK_API_SECRET          = 'bdea442bf0c2113602662f7632939d73'
+FACEBOOK_APP_ID              = '537064456307013'
+FACEBOOK_API_SECRET          = '54c48f76bfe77d4ed0cd0a5c306815ec'
 
-FACEBOOK_APP_ID              = '433271660054660'
-FACEBOOK_API_SECRET          = '70e262e87cf8d6e88f9a54613707ac9e'
+GOOGLE_OAUTH2_CLIENT_SECRET = 'C0mx2xzyvx8Xi5As3aEGL5nX'
+GOOGLE_OAUTH2_CLIENT_ID = '426462526110.apps.googleusercontent.com'
+GOOGLE_OAUTH_EXTRA_SCOPE = ['https://www.google.com/m8/feeds','https://www.googleapis.com/auth/plus.me']
+
+TWITTER_CONSUMER_KEY = 'Fl9NGVMMdhpT2OTOKj9pvw'
+TWITTER_CONSUMER_SECRET = '6YCE4XTamJXgjBXunWYMMgpqMo4Oj0chCiNvt3758'
+
+
+WEPAY_ACCESS_TOKEN = "c1b6ab85a43f00efcd889931df0eae6bfd23399570f9f4fef5dd50fc0c5f6e06"
+WEPAY_CLIENT_ID = "85798"
+WEPAY_ACCOUNT_ID = "1894410826"
+WEPAY_CLIENT_SECRET = "0747ad3f00"
+WEPAY_PRODUCTION = False
+WEPAY_STAGE = "stage"
 
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/accounts/add_facebook_friend/'
+LOGIN_REDIRECT_URL = '/accounts/connect/'
 LOGIN_ERROR_URL = '/login/'
 
-SOCIAL_AUTH_ENABLE_BACKENDS = ('facebook')
+SOCIAL_AUTH_ENABLE_BACKENDS = ('facebook','google-oauth2','twitter')
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
 
 #registration
