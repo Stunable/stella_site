@@ -28,6 +28,28 @@
         </style>
     </head>
     <body class="internal {% block body_class %}account{% endblock %} gallery" id="{% block body_id %}gallery{% endblock %}">
+        <div id="fb-root"></div>
+        <script>
+          window.fbAsyncInit = function() {
+            FB.init({
+              appId      : {{FACEBOOK_APPID}}, // App ID from the App Dashboard
+              channelUrl : 'http://stunable.com/channel.html', // Channel File for x-domain communication
+              status     : true, // check the login status upon init?
+              cookie     : true, // set sessions cookies to allow your server to access the session?
+              xfbml      : true  // parse XFBML tags on this page?
+            });
+            // Additional initialization code such as adding Event Listeners goes here
+          };
+
+          // Load the SDK's source Asynchronously
+          (function(d, debug){
+             var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+             if (d.getElementById(id)) {return;}
+             js = d.createElement('script'); js.id = id; js.async = true;
+             js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+             ref.parentNode.insertBefore(js, ref);
+           }(document, /*debug*/ false));
+        </script>
         <!--[if IE]>
         <div class="container ie8 ie">
         <![endif]-->
@@ -220,7 +242,7 @@
                                     {% include "notification/friend_requests_notes.html" %}
                                     {% endif %} <div class="separator"></div>
                                     <form id="search-friend-form" method="GET" action="{% url friend_search %}" class="bootstrap">
-                                        <input type="text" id="friend-search-box" autocomplete="off" name="q" class="friend-search-box" placeholder="FIND STUNABLE USERS" />
+                                        <input type="text" id="friend-search-box" autocomplete="off" name="q" class="friend-search-box" placeholder="FIND FRIENDS" />
                                     </form>
                                     <div class="separator"></div>
                                     <ul class="friend-list" id="friend-list">
@@ -229,13 +251,19 @@
                                             <div class="friend-img-item">
                                                 {% thumbnail friendship.friend.get_profile.avatar_image "21x21" as im %} <img src="{{ im.url }}">
                                                 {% empty %} <img class="friend-img" src="{{ friendship.friend.get_profile.avatar_image }}"/>
-                                                {% endthumbnail %} <a data-value={{ friendship.friend.id }} class="friend-name" href="{% url trendsetters friendship.friend.pk %}" style="color: #888" >{{ friendship.friend }}</a>
+                                                {% endthumbnail %} <a data-value={{ friendship.friend.id }} date-type="stunable" class="friend-name" href="{% url trendsetters friendship.friend.pk %}" style="color: #888" >{{ friendship.friend }}</a>
                                             </div>
                                         </li>
                                         {% endfor %}
                                     </ul>
                                     <div class="separator"></div>
-                                    <div class="search-result"></div>
+                                    <div class="search-result">
+                                    <ul class="friend-list" id="result-list">
+                                        {% for f in fb_friend_list %}
+                                            {% include "friends/fb_friend_in_list.html" %}
+                                        {% endfor %}
+                                    </ul>
+                                    </div>
                                     <p id="add-friend">
                                         <a href="{% url friend_invite %}" class="icon plus-icon item-ref" title="Invite a Trendsetter">Add Stunner</a>
                                     </p>
@@ -282,6 +310,8 @@
                         <textarea name="message" id="reduced_message" placeholder="PERSONAL MESSAGE: Less then 160 characters"></textarea>
                         <input type="hidden" id="reduced_item_id" name="item_id" value="" />
                         <input type="hidden" id="reduced_admirer_id" name="admirer" value=""/>
+                        <input type="hidden" id="reduced_admirer_type" name="admirer_type" value=""/>
+                        <input type="hidden" id="reduced_admirer_name" name="admirer_name" value=""/>
                         <div class="btn-wrap bootstrap" style="margin-bottom: 0">
                             <input type="button" class="btn btn-primary" id="send_it_to_admirer_reduced" value="Send It" />
                         </div>
@@ -322,7 +352,6 @@
         {% endblock %}
         {% block extra_script %}
         {% endblock %}
-
     </body>
 
 </html>

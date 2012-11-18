@@ -1441,8 +1441,8 @@ function initFriendDragDrop() {
 			if(!$(next).hasClass('nxt')){
 				$(next).addClass('nxt');
 			}
-            $('.iosSlider').iosSlider('destroy', false);
-            $('.iosSlider').css('overflow','visible');
+            // $('.iosSlider').iosSlider('destroy', false);
+            // $('.iosSlider').css('overflow','visible');
             $('#prev').on('nxt');
             $('#next').on('nxt');
         },
@@ -1461,61 +1461,69 @@ function initFriendDragDrop() {
 		accept : ".drag_item",
 		hoverClass : "drop_item_hover",
 		drop : function(event, ui) {
+			console.log($(this))
 			var item_id = $(ui.draggable).find('a').attr('data-value');
 			// var rack_id = $(this).find('span').attr('data-value');
 			var admirer_id = $(this).find('a').attr('data-value');
+			var admirer_type = $(this).find('a').attr('data-type');
 			var droppable = $(this).find('a');
 			
+
 			$('#reduced_item_id').val(item_id);
 			$('#reduced_admirer_id').val(admirer_id);
+			$('#reduced_admirer_type').val(admirer_type)
+			$('#reduced_admirer_name').val($(this).find('a').attr('data-name'));
 			
-			$.fancybox({
-				'speedIn' : 1000,
-				'speedOut' : 500,
-				'overlayShow' : true,
-				'overlayOpacity' : 0.85,
-				'titleShow' : false,
-				'overlayColor' : '#000',
-				'transitionIn' : 'elastic',
-				'transitionOut' : 'elastic',
-				'easingIn' : 'easeOutBack',
-				'easingOut' : 'easeInBack',
-			     'href' : '#send_to_admirer_reduced_form',
-			     'onStart' : function() {
-			     	$('#loading2').hide();
-					$('#send_to_admirer_reduced_form').css('opacity', '0').show().delay(200).animate({
-							opacity : 1
-						}, 800);
-						$('#send_item_confirmation_reduced').hide();
-				 },
-				 'onCleanup' : function() {
-					$('#reduced_item_id').val("");
-					$('#reduced_admirer_id').val("");
-					$('#reduced_message').val("");
-				},
-				'onClosed': function(){
-					$('#send_to_admirer_reduced_form').css('opacity', '0').css('display','none');
-				}
-			  });
-			  
-			  $('#send_it_to_admirer_reduced').click(function(){
-			  		$('#loading2').css('display', 'inline');
-			  		$.getJSON('/racks/sent_to_admirer?'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
-			  			$('#loading2').css('display', 'none');
-						$("#send_item_confirmation_reduced").css('opacity','1').text(data.result == 'ok' ? "Sent" : "Error").show();
-						
-						if(data.result != 'ok') {
-							// do nothing here
-						} else {
-							// close fancy box after 2 second on success
-							setTimeout("parent.$.fancybox.close()", 2000);
-						}
-					});
-			  });
-			  
-			return false;
-			// alert("You have dragged " + item_name + " into " + rack_name);
-		}
+			if (admirer_type!='facebook'){
+				$.fancybox({
+					'speedIn' : 1000,
+					'speedOut' : 500,
+					'overlayShow' : true,
+					'overlayOpacity' : 0.85,
+					'titleShow' : false,
+					'overlayColor' : '#000',
+					'transitionIn' : 'elastic',
+					'transitionOut' : 'elastic',
+					'easingIn' : 'easeOutBack',
+					'easingOut' : 'easeInBack',
+				     'href' : '#send_to_admirer_reduced_form',
+				     'onStart' : function() {
+				     	$('#loading2').hide();
+						$('#send_to_admirer_reduced_form').css('opacity', '0').show().delay(200).animate({
+								opacity : 1
+							}, 800);
+							$('#send_item_confirmation_reduced').hide();
+					 },
+					 'onCleanup' : function() {
+						$('#reduced_item_id').val("");
+						$('#reduced_admirer_id').val("");
+						$('#reduced_message').val("");
+						$('#reduced_admirer_type').val("")
+					},
+					'onClosed': function(){
+						$('#send_to_admirer_reduced_form').css('opacity', '0').css('display','none');
+					}
+				  });
+				  
+				  $('#send_it_to_admirer_reduced').click(function(){
+				  		$('#loading2').css('display', 'inline');
+				  		$.getJSON('/racks/sent_to_admirer?'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
+				  			$('#loading2').css('display', 'none');
+							$("#send_item_confirmation_reduced").css('opacity','1').text(data.result == 'ok' ? "Sent" : "Error").show();
+							
+							if(data.result != 'ok') {
+								// do nothing here
+							} else {
+								// close fancy box after 2 second on success
+								setTimeout("parent.$.fancybox.close()", 2000);
+							}
+						});
+				  });
+			}else{
+				$.getJSON('/racks/sent_to_admirer?'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
+					FB.ui(data)
+				})
+			}}
 	});
 }
 

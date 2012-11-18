@@ -380,8 +380,9 @@ def connect(request):
                 P.save()
 
                 
-
+    print 'saving friends'
     request.session['friends'] = friends
+    request.session['fb_token'] = sa.tokens['access_token']
     if request.session.has_key('next'):
         return redirect(session['next'])
     # elif request.user.get_profile().first_login:

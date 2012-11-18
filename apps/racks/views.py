@@ -33,6 +33,9 @@ from racks.models import PriceCategory
 from social_auth.models import UserSocialAuth
 import urllib
 
+import random
+
+
 
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
@@ -43,12 +46,18 @@ def get_context_variables(context, request):
     user = request.user
     if not user.is_authenticated():
         context['public_racks'] = Rack.objects.filter(anon_user_profile=request.session.get('anonymous_profile'))
-
         return context
+
     context['public_racks'] = Rack.objects.PublicRacksForUser(user)
     context['private_racks'] = Rack.objects.OwnedRacksForUser(user)
     context['friendship_list'] = Friendship.objects.friends_for_user(user)
     context['notices'] = Notice.objects.notices_for(user)
+    if request.session.has_key('friends'):
+        friends = request.session['friends']
+        offset =random.randint(0,len(friends)-20)
+        context['fb_friend_list']  = friends[offset:offset+20]
+        context['fb_token'] = request.session['fb_token']
+        context['FACEBOOK_APPID'] = settings.FACEBOOK_APP_ID
     return context
 
 @login_required
@@ -618,6 +627,10 @@ def new(request, template="racks/carousel.html"):
 
 #@login_required
 def _all(request, template='racks/carousel.html'):
+    query_set = None
+    if request.GET.get('item_id', None):
+        linked_item = Item.objects.filter(id=request.GET.get('item_id'))
+        query_set =  linked_item #| Item.objects.filter(brand=linked_item[0].brand).filter(~Q(id =linked_item[0].id))
     profile = None
     if request.user.is_authenticated():
         profile = get_or_create_profile(request)
@@ -637,11 +650,12 @@ def _all(request, template='racks/carousel.html'):
         ctx['current'] = "all"
         get_context_variables(ctx, request)
         
-        if settings.IS_PROD:
-            print "PROD"
-            query_set = Item.objects.filter(approved=True).order_by('?')
-        else:
-            query_set = Item.objects.all().order_by('?')
+        if not query_set:
+            if settings.IS_PROD:
+                #print "PROD"
+                query_set = Item.objects.filter(approved=True).order_by('?')
+            else:
+                query_set = Item.objects.all().order_by('?')
         
         return pagination(request, ctx, template, query_set)
             
@@ -718,73 +732,80 @@ def send_item_to_admirer(request):
     admirers = request.GET.getlist('admirer')
     message = request.GET.get('message', None)
     item_id = request.GET.get('item_id', None)
+    admirer_type = request.GET.get('admirer_type', None)
+    admirer_name = request.GET.get('admirer_name', None)
     user_friendship_list = Friendship.objects.friends_for_user(request.user)
     ads = []
-    
-    if item_id and admirers and message:
+
+    if item_id and admirers:
+
         item = get_object_or_404(Item, pk=item_id)
         for admirer in admirers:
-            to_user = User.objects.get(pk=admirer)
-            ads.append(to_user)
-            # TODO: implement the link to trend here
-            trend_url = u"http://%s%s" % (
-                unicode(Site.objects.get_current()),
-                unicode(reverse("auth_login"))
-            )
-            try:
-                if notification:
-                    notification.send([to_user], "share_item", {"item": item, 'text': message}, True, request.user)
-                    notification.send_notification_on("share-item", sender=request.user, recipient=to_user, trend_url=trend_url, item=item)
+            if admirer_type == 'facebook': #if the item was dropped on a facebook friend ui
+            #check to see if this facebook user has also logged into stunable using their facebook account
+                fb_stunable_users = UserSocialAuth.objects.filter(provider='facebook',uid=admirer)
+                if len(fb_stunable_users)>0:
+                    to_user = fb_stunable_users[0].user
                 else:
-                    ctx  = {'sender':request.user, 'recipient': to_user, 'item': item, 'trend_url': trend_url}
+                    to_user=None
+            else:
+                to_user = User.objects.get(pk=admirer)
+
+            if to_user:
+                print 'to user'
+                # TODO: implement the link to trend here
+                trend_url = u"http://%s%s" % (
+                    unicode(Site.objects.get_current()),
+                    unicode(reverse("auth_login"))
+                )
+                try:
+                    if notification:
+                        notification.send([to_user], "share_item", {"item": item, 'text': message}, True, request.user)
+                        notification.send_notification_on("share-item", sender=request.user, recipient=to_user, trend_url=trend_url, item=item)
+                    else:
+                        ctx  = {'sender':request.user, 'recipient': to_user, 'item': item, 'trend_url': trend_url}
+                        
+                        # send email to notify
+                        subject = render_to_string(ITEM_SHARED_SUBJECT, ctx)
+                        email_message = render_to_string(ITEM_SHARED_MESSAGE, ctx)
+                        send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [to_user.email])
+                except:
+                    # TODO: log error here
+                    pass
                     
-                    # send email to notify
-                    subject = render_to_string(ITEM_SHARED_SUBJECT, ctx)
-                    email_message = render_to_string(ITEM_SHARED_MESSAGE, ctx)
-                    send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [to_user.email])
-            except:
-                # TODO: log error here
-                pass
-                
-            # send notification for users when friends share product with other friends
-            admirer_friendship_list = Friendship.objects.friends_for_user(admirer)
-            # add Trendser shares rack with another trendsetter notification
-            for fs_u in admirer_friendship_list:
-                for f in user_friendship_list:
-                    if f['friend'] == fs_u['friend']:
-                        notification.send([f['friend']], "friend_share_item_with_others", {'send': request.user, 'item': item, 'receive': to_user}, True, request.user)
-        # if user sign up/ login using facebook
-        # send facebook notification only once!
-        
-        # TODO: cannot post on user news feed. Maybe Facebook bug!  
-        social_users = UserSocialAuth.objects.filter(provider='facebook').filter(user=request.user)
-        if social_users and ads:
-            social_user = social_users[0]
-            access_token = social_user.tokens['access_token']
-            # get user friends
-            url = 'https://graph.facebook.com/me/feed?method=post&client_id=' + settings.FACEBOOK_APP_ID + '&access_token=' + access_token
-            msg = '%s shared a ' %(request.user.get_full_name() or "Stella's Favorite")
-            message = msg + item.brand + '_' + item.name + ' with '
-            
-            for i, admirer in enumerate(ads):
-                if i == len(admirers)-1:
-                    name = admirer.get_full_name() or "Stella's Favorite"
-                else:
-                    name = '%s, ' %(admirer.get_full_name() or "Stella's Favorite")
-                message += name
-                
-            publish = {
-              'message': message
-            };
-            data = urllib.urlencode(publish)
-            
-            try:
-                req = urllib2.Request(url, data) 
-                content = urllib2.urlopen(req)
-                data = json.load(content)
-            except:
-                # TODO: log bug here
-                pass      
+                # send notification for users when friends share product with other friends
+                admirer_friendship_list = Friendship.objects.friends_for_user(admirer)
+                # add Trendser shares rack with another trendsetter notification
+                for fs_u in admirer_friendship_list:
+                    for f in user_friendship_list:
+                        if f['friend'] == fs_u['friend']:
+                            notification.send([f['friend']], "friend_share_item_with_others", {'send': request.user, 'item': item, 'receive': to_user}, True, request.user)
+
+            else:
+                print 'doing fb'
+                social_users = UserSocialAuth.objects.filter(provider='facebook').filter(user=request.user)
+                if social_users and admirer_type == 'facebook':
+                    social_user = social_users[0]
+                    access_token = social_user.tokens['access_token']
+                    # get user friends
+                    url = 'https://graph.facebook.com/me/feed?method=post&client_id=' + settings.FACEBOOK_APP_ID + '&access_token=' + access_token+'&'
+                    # msg = '%s shared a ' %request.user.get_full_name()
+                    # message = msg + item.brand + ' ' + item.name + ' with '
+                    # message += admirer_name
+                    message = 'Hey, I thought you might like this...\n'
+                    message += item.brand + ' ' + item.name
+                        
+                    publish = {
+                      'method': 'feed'
+                      ,'link': settings.WWW_ROOT+'racks/carousel/all?item_id='+str(item.id)
+                      ,'description': message
+                      ,'name':"check out what I found on stunable"
+                      ,'to':admirer
+                      ,'picture':settings.WWW_ROOT+item.get_image().url.lstrip('/')
+                      ,'caption': 'Check this out!'
+                    }
+                    return publish
+                 
 
     else:
         raise Exception("Please choose Admirer or input message")

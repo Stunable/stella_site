@@ -169,9 +169,10 @@ def invite_modal(request, template="friends/invite_friends_dialog.html"):
 @login_required
 def query_friends(request, q):
     out = []
-    if request.session.has_key('friends'):
-        out = [f for f in request.session['friends'] if f['name'].lower().startswith(q.lower())]
-    #return HttpResponse(json.dumps(out, ensure_ascii=False), mimetype='application/json')
+    if q:
+        if request.session.has_key('friends'):
+            out = [f for f in request.session['friends'] if f['name'].lower().startswith(q.lower())]
+        #return HttpResponse(json.dumps(out, ensure_ascii=False), mimetype='application/json')
     return out
 
 

@@ -106,26 +106,30 @@
 	      }
 	      
 	      var oldFilter = "";
-	      
+	      var original_friends=$('#result-list').clone()
 	      function getUserlist(input, list){
 	          var form = $(input).parent();
 	          var href = $(form).attr('action');
+
 	          $(input).change(function(){
 	              // from the jquery document, the change event is fired 
 	              // only if the input loses focus, so we need to compare
 	              // the old and new value of the input box after it loses
 	              // focus, so we can decide to init the plus icon or just ignor 
 	              var filter = $(this).val();
-	              if (filter != oldFilter){
+	              if (filter != oldFilter && filter != ""){
 	                  var link = href + '?q=' + filter;           
 	                  $.get(link, function(returnValue){
 	                  	$('#result-list').children().remove();
 	                      $.each(list, function(){
 	                          $(this).html(returnValue);
 	                      });
+	                      initFriendDragDrop();
 	                      initAddFriend();
 	                      oldFilter = filter;
 	                  });
+	              }else{
+	              	$('#result-list').append(original_friends.children())
 	              }
 	              // else ignore it for god sake
 	          }).keyup(function() {
