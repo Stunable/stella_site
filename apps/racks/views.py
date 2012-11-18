@@ -792,8 +792,9 @@ def send_item_to_admirer(request):
                     # msg = '%s shared a ' %request.user.get_full_name()
                     # message = msg + item.brand + ' ' + item.name + ' with '
                     # message += admirer_name
-                    message = 'Hey, I thought you might like this...\n'
+                    message = 'come and see more stuff like %s '%({True:'these',False:'this'}[item.name.endswith('s') and not item.name.endswith('ss')])
                     message += item.brand + ' ' + item.name
+                    message += ' at Stunable!'
                         
                     publish = {
                       'method': 'feed'
@@ -802,7 +803,6 @@ def send_item_to_admirer(request):
                       ,'name':"check out what I found on stunable"
                       ,'to':admirer
                       ,'picture':settings.WWW_ROOT+item.get_image().url.lstrip('/')
-                      ,'caption': 'Check this out!'
                     }
                     return publish
                  

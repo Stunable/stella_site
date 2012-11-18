@@ -1291,10 +1291,6 @@ height: 593px;
 	vertical-align: middle;
 	cursor: pointer;
 	width:90px;
-	height:1em;
-	overflow:nowrap;
-	/*overflow: hidden;*/
-	text-overflow: ellipsis;
 }
 
 .left-panel .friend-img-item {
@@ -2866,8 +2862,13 @@ filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/js/fancybox-1.3
 	background: transparent url(/static/images/gui/icons.png) no-repeat -257px -147px;
 }
 
+#friend-list{
+	height:150px;
+	overflow:auto;
+}
+
 #result-list.friend-list{
-	max-height:440px;
+	height:280px;
 	overflow:auto;
 }
 
@@ -3460,7 +3461,11 @@ outline: none;
 }
 
 .friend-img-item{
-	position:relative;
+	position: relative;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+
 }
 .friend-img-item .friend_adder{
 	position:absolute;

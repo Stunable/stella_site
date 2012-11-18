@@ -241,10 +241,9 @@
                                     {% if notice_unseen_count|default_if_none:0 != 0 %}
                                     {% include "notification/friend_requests_notes.html" %}
                                     {% endif %} <div class="separator"></div>
-                                    <form id="search-friend-form" method="GET" action="{% url friend_search %}" class="bootstrap">
-                                        <input type="text" id="friend-search-box" autocomplete="off" name="q" class="friend-search-box" placeholder="FIND FRIENDS" />
-                                    </form>
+                                    
                                     <div class="separator"></div>
+                                    <p>&nbsp;Stunable Friends</p>
                                     <ul class="friend-list" id="friend-list">
                                         {% for friendship in friendship_list %}
                                         <li class="share_item">
@@ -257,6 +256,13 @@
                                         {% endfor %}
                                     </ul>
                                     <div class="separator"></div>
+                                    <br>
+                                    {% if fb_token %}
+                                        <div class="separator"></div>
+                                        <form id="search-friend-form" method="GET" action="{% url friend_search %}" class="bootstrap">
+                                            <input type="text" id="friend-search-box" autocomplete="off" name="q" class="friend-search-box" placeholder="Search Facebook" />
+                                        </form>
+                                    {% endif %}
                                     <div class="search-result">
                                     <ul class="friend-list" id="result-list">
                                         {% for f in fb_friend_list %}
@@ -265,7 +271,7 @@
                                     </ul>
                                     </div>
                                     <p id="add-friend">
-                                        <a href="{% url friend_invite %}" class="icon plus-icon item-ref" title="Invite a Trendsetter">Add Stunner</a>
+                                        <a style="display:inline-block" href="{% url friend_invite %}" class="icon plus-icon item-ref" title="Invite a Trendsetter">Add Stunner</a><span style="display:inline">Invite by Email</span>
                                     </p>
                                 </div>
                             </div>
