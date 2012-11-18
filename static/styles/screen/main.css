@@ -1348,6 +1348,10 @@ height: 593px;
 	padding: 0;
 }
 
+.left-panel p{
+	margin:4px;
+}
+
 #tab-choice #current-tab {
 	background:transparent;
 }

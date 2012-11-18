@@ -243,7 +243,7 @@
                                     {% endif %} <div class="separator"></div>
                                     
                                     <div class="separator"></div>
-                                    <p>&nbsp;Stunable Friends</p>
+                                    <p>Stunable Friends</p>
                                     <ul class="friend-list" id="friend-list">
                                         {% for friendship in friendship_list %}
                                         <li class="share_item">
@@ -262,7 +262,10 @@
                                         <form id="search-friend-form" method="GET" action="{% url friend_search %}" class="bootstrap">
                                             <input type="text" id="friend-search-box" autocomplete="off" name="q" class="friend-search-box" placeholder="Search Facebook" />
                                         </form>
+                                    {% else %}
+                                    <p><a href="{% url socialauth_begin "facebook" %}">Login with Facebook</a> to see who else uses Stunable! </p>
                                     {% endif %}
+
                                     <div class="search-result">
                                     <ul class="friend-list" id="result-list">
                                         {% for f in fb_friend_list %}
@@ -271,7 +274,7 @@
                                     </ul>
                                     </div>
                                     <p id="add-friend">
-                                        <a style="display:inline-block" href="{% url friend_invite %}" class="icon plus-icon item-ref" title="Invite a Trendsetter">Add Stunner</a><span style="display:inline">Invite by Email</span>
+                                        <a style="display:inline-block" href="{% url friend_invite %}" class="icon plus-icon item-ref" title="Invite a Trendsetter">Add Stunner</a><span style="display:inline">Invite Friends by Email</span>
                                     </p>
                                 </div>
                             </div>

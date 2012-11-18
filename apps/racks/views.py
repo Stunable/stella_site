@@ -797,7 +797,7 @@ def send_item_to_admirer(request):
                     message += ' at Stunable!'
                         
                     publish = {
-                      'method': 'feed'
+                      'method': 'feed'#send but then we can only send the link to facebook page
                       ,'link': settings.WWW_ROOT+'racks/carousel/all?item_id='+str(item.id)
                       ,'description': message
                       ,'name':"check out what I found on stunable"
