@@ -210,7 +210,7 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
         item_instance = Item.objects.get(pk=item_id)
     else:
         item_instance = Item()
-        
+    
     post = request.POST.copy()
     if request.method == 'POST':
         response = {'success' : True, 'errors': {}}
@@ -259,9 +259,12 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
     else:
         try:
             initial = {'Colors': [i.pk for i in item_instance.colors.all()], 
-                                 'Sizes': [i.pk for i in item_instance.sizes.all()]}
+                       'Sizes': [i.pk for i in item_instance.sizes.all()],
+                       'brand': RetailerProfile.objects.get(user=request.user).namee
+                       }
         except:
-            initial={}
+            
+            initial={'brand': RetailerProfile.objects.get(user=request.user).name}
         form = ItemForm(instance=item_instance, initial=initial)
     
     if request.is_ajax():

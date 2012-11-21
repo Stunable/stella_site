@@ -80,16 +80,19 @@
                         <th>INVENTORY</th>
                         <th>STATUS</th>
                     </thead>
+
                     <tbody>
                         <tr>
                             <td>
-                                {% for size in product.item.sizes.all %}
-                                {{ size }},
+                                {% for it in product.item.types.all %}
+                                {{ it.size }}{% if not forloop.last%},{% endif %}
                                 {% endfor %}                                
                             </td>
                             <td>{{ product.item.price }}</td>
                             <td>{{ product.item.retailer }}</td>
-                            <td>{{ product.item.inventory }}</td>
+                            <td>{% for it in product.item.types.all %}
+                                {{ it.inventory }}{% if not forloop.last%},{% endif %}
+                                {% endfor %}   </td>
                             <td>{{ product.item.status }}</td>
                         </tr>
                     </tbody>

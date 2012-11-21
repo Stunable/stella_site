@@ -70,20 +70,15 @@
         <div class="wrapper">
             <div class="company_address" style="float: left">
                 <h3>Company Address</h3>
-                <p>
-                   <a class="edit">Edit</a> 
-                </p>
-                <div class="static">
-                    <p>
-                        {{ retailer_profile.name }}
-                    </p>
-                    <p>
-                        {{ retailer_profile.address1 }}
-                    </p>
-                    <p>
-                        {{ retailer_profile.address2 }}
-                    </p>
-                </div>
+                <ul>
+                    <li style="display:inline">{{retailer_profile.address1}}</li>
+                    <li style="display:inline">{{retailer_profile.address2}}</li>
+                    <li>{{retailer_profile.city}}</li>
+                    <li style="display:inline">{{retailer_profile.state}}</li>
+                    <li style="display:inline">{{retailer_profile.zip_code}}</li>
+
+
+                </ul>
                 <div class="editable">
                     <form action="" method="POST">
                     <p>
@@ -99,9 +94,7 @@
             </div>
             <div class="billing_information" style="float: left; margin-left: 100px;">
                 <h3>Billing information</h3>
-                <p>
-                   <a class="edit">Edit</a> 
-                </p>
+    
                 <div class="static">
                     <p style="display: inline">
                         WePay Account #: <a href="http://wepay.com">{{ retailer_profile.wepay_acct }}</a>

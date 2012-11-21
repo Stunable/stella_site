@@ -49,8 +49,8 @@ class RetailerEditForm(forms.ModelForm):
     
     class Meta:
         model = RetailerProfile
-        exclude =('name', 'user', 'approved', 'phone_number', 'zip_code', 'selling_options', 'accept_refund', 'more_details','wepay_acct','wepay_token','Welcome message sent') 
-#       fields = ('email_address', 'address_1', 'address_2',)
+    
+        fields = ('email_address', 'city', 'state','password', 'description')
     
     def clean_shipping_type(self):
         if self.cleaned_data.get('shipping_type') and len(self.cleaned_data.get('shipping_type')) > 0:
