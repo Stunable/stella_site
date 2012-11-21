@@ -191,28 +191,28 @@ def add(request, template='racks/add.html'):
                 # add notification for created rack
                 user_friends = Friendship.objects.friends_for_user(request.user)
                 
-                # if user sign up/ login using facebook
-                # TODO: cannot post on user news feed. Maybe Facebook bug!  
-                social_users = UserSocialAuth.objects.filter(provider='facebook').filter(user=request.user)
-                if social_users:
-                    social_user = social_users[0]
-                    access_token = social_user.tokens['access_token']
-                    # get user friends
-                    url = 'https://graph.facebook.com/me/feed?method=post&client_id=' + settings.FACEBOOK_APP_ID + '&access_token=' + access_token
-                    message = request.user.first_name + ' ' + request.user.last_name + ' created a ' + rack.name + ' rack on' +\
-                            ' Stunable'
-                    publish = {
-                      'message': message
-                    };
-                    data = urllib.urlencode(publish)
+                # # if user sign up/ login using facebook
+                # # TODO: cannot post on user news feed. Maybe Facebook bug!  
+                # social_users = UserSocialAuth.objects.filter(provider='facebook').filter(user=request.user)
+                # if social_users:
+                #     social_user = social_users[0]
+                #     access_token = social_user.tokens['access_token']
+                #     # get user friends
+                #     url = 'https://graph.facebook.com/me/feed?method=post&client_id=' + settings.FACEBOOK_APP_ID + '&access_token=' + access_token
+                #     message = request.user.first_name + ' ' + request.user.last_name + ' created a ' + rack.name + ' rack on' +\
+                #             ' Stunable'
+                #     publish = {
+                #       'message': message
+                #     };
+                #     data = urllib.urlencode(publish)
                     
-                    try:
-                        req = urllib2.Request(url, data) 
-                        content = urllib2.urlopen(req)
-                        data = json.load(content)
-                    except:
-                        # TODO: log bug here
-                        pass 
+                #     try:
+                #         req = urllib2.Request(url, data) 
+                #         content = urllib2.urlopen(req)
+                #         data = json.load(content)
+                #     except:
+                #         # TODO: log bug here
+                #         pass 
                 
                 if notification:
                     for friend in user_friends:                    
@@ -321,34 +321,34 @@ def share(request, rack_id, template="racks/share_rack_modal.html"):
         # if user sign up/ login using facebook
         # send facebook notification only once!
         
-        # TODO: cannot post on user news feed. Maybe Facebook bug!  
-        social_users = UserSocialAuth.objects.filter(provider='facebook').filter(user=request.user)
-        if social_users and admirers:
-            social_user = social_users[0]
-            access_token = social_user.tokens['access_token']
-            # get user friends
-            url = 'https://graph.facebook.com/me/feed?method=post&client_id=' + settings.FACEBOOK_APP_ID + '&access_token=' + access_token
-            message = request.user.first_name + ' ' + request.user.last_name + ' shared ' + rack.name.upper() + ' with '
+        # # TODO: cannot post on user news feed. Maybe Facebook bug!  
+        # social_users = UserSocialAuth.objects.filter(provider='facebook').filter(user=request.user)
+        # if social_users and admirers:
+        #     social_user = social_users[0]
+        #     access_token = social_user.tokens['access_token']
+        #     # get user friends
+        #     url = 'https://graph.facebook.com/me/feed?method=post&client_id=' + settings.FACEBOOK_APP_ID + '&access_token=' + access_token
+        #     message = request.user.first_name + ' ' + request.user.last_name + ' shared ' + rack.name.upper() + ' with '
             
-            for i, admirer in enumerate(admirers):
-                if i == len(admirers)-1:
-                    name = admirer.first_name + ' ' + admirer.last_name
-                else:
-                    name = admirer.first_name + ' ' + admirer.last_name + ', '
-                message += name
+        #     for i, admirer in enumerate(admirers):
+        #         if i == len(admirers)-1:
+        #             name = admirer.first_name + ' ' + admirer.last_name
+        #         else:
+        #             name = admirer.first_name + ' ' + admirer.last_name + ', '
+        #         message += name
                 
-            publish = {
-              'message': message
-            };
-            data = urllib.urlencode(publish)
+        #     publish = {
+        #       'message': message
+        #     };
+        #     data = urllib.urlencode(publish)
             
-            try:
-                req = urllib2.Request(url, data) 
-                content = urllib2.urlopen(req)
-                data = json.load(content)
-            except:
-                # TODO: log bug here
-                pass            
+        #     try:
+        #         req = urllib2.Request(url, data) 
+        #         content = urllib2.urlopen(req)
+        #         data = json.load(content)
+        #     except:
+        #         # TODO: log bug here
+        #         pass            
             
     else:
         raise Exception("Please Enter Rack Name")
@@ -742,7 +742,7 @@ def send_item_to_admirer(request):
 
         item = get_object_or_404(Item, pk=item_id)
         for admirer in admirers:
-            if admirer_type == 'facebook': #if the item was dropped on a facebook friend ui
+            if admirer_type in ['facebook','both']: #if the item was dropped on a facebook friend ui
             #check to see if this facebook user has also logged into stunable using their facebook account
                 fb_stunable_users = UserSocialAuth.objects.filter(provider='facebook',uid=admirer)
                 if len(fb_stunable_users)>0:

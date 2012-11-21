@@ -5,6 +5,7 @@ def trend_count(request):
     # Notice type. Would be much better to add this functionality to notifications app (and as a
     # template tag instead of a context processor)
     if request.user.is_authenticated():
+        print request.user
         return {
             'trends_unseen_count': Notice.objects.notices_for(request.user, on_site=True, unseen=True).filter(notice_type__label='share_item').count()
         }

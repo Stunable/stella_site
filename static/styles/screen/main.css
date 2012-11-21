@@ -1286,11 +1286,11 @@ height: 593px;
 
 .left-panel li .friend-name  {
 	display: inline-block;
-	width: 65%;
+	width: 60%;
 	cursor: pointer;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	max-height: 2.5em;
+	max-height: 3em;
 	line-height: 16px;
 }
 
@@ -3472,11 +3472,7 @@ outline: none;
 .friend-img-item{
 	position: relative;
 }
-.friend-img-item .friend_adder{
-	position: absolute;
-	right: -4px;
-	top: 8px;
-}
+
 .devs h2 span {
 	font-size: 40px;
 	vertical-align: bottom;
@@ -3763,6 +3759,10 @@ outline: none;
 .drag_item :hover{
 	cursor: move;
 }
+.left-panel ul.my-closet-menu{
+	max-height:150px;
+	overflow:auto;
+}
 .left-panel .my-closet-menu li{
 	border-bottom: 0px #E9E9E9 dashed;
 	white-space: nowrap;
@@ -3924,7 +3924,9 @@ background-color: white;
 	height: 26px;
 	display: block;
 	background: transparent url(/static/images/hanger_icon.png) no-repeat;
-	
+	position: absolute;
+	right: 0px;
+	top: 8px;
 }
 
 

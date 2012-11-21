@@ -2,6 +2,6 @@
     <div class="friend-img-item">
             <img src="https://graph.facebook.com/{{f.id}}/picture">
         <div class="friend-name">{{f.name}}</div>
-        <a href="#" data-value="{{ f.id }}" data-name="{{f.name}}" data-type="facebook" onclick="alert('coming soon!')" class="icon {% if f.user %}stfb_friend-icon{% else%}plus-icon friend_adder{% endif %} plus-inline" title="Add Friend">Add Trendsetter</a>
+        <a href="#" data-value="{{ f.id }}" data-name="{{f.name}}" data-type="{% if f.user %}both{%else%}facebook{% endif %}" onclick="alert('coming soon!')" class="icon {% if f.user %}stfb_friend-icon{% else%}friend_adder{% endif %} plus-inline plus-icon" title="Add Friend">Add Trendsetter</a>
     </div>
 </li>
