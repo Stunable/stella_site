@@ -27,7 +27,8 @@
 			}
         </style>
     </head>
-    <body class="internal {% block body_class %}account{% endblock %} gallery" id="{% block body_id %}gallery{% endblock %}">
+    <body class="internal {% block body_class %}account{% endblock %} gallery" id="{% block body_id %}gallery{% endblock %}">   
+        {% if fb_token %}
         <div id="fb-root"></div>
         <script>
           window.fbAsyncInit = function() {
@@ -60,6 +61,7 @@
         <div class="container ie6 ie">
         <![endif]-->
         <!--[if !IE]><!-->
+        {% endif %}
         <div class="container non-ie">
             <!--<![endif]-->
             <div class="section content" id="header">
@@ -75,6 +77,10 @@
                             </li>
                             <li class="navlink">
                                 <a href="http://facebook.com/stunable" title="Subscribe to Stunable on Facebook." class="icon" id="nav-facebook">Facebook</a>
+                            </li>
+                            <li class="navlink">
+                                11111111111
+                                {{fb_token}}
                             </li>
                         </ul><!--/.horizontal-list -->
                         <!--NAVIGATION LINKS -->
@@ -241,9 +247,8 @@
                                     {% if notice_unseen_count|default_if_none:0 != 0 %}
                                     {% include "notification/friend_requests_notes.html" %}
                                     {% endif %} <div class="separator"></div>
-                                    
+                                {% if not fb_token %}
                                     <div class="separator"></div>
-                                    <p>Stunable Friends</p>
                                     <ul class="friend-list" id="friend-list">
                                         {% for friendship in friendship_list %}
                                         <li class="share_item">
@@ -257,14 +262,12 @@
                                     </ul>
                                     <div class="separator"></div>
                                     <br>
-                                    {% if fb_token %}
+                                    <p><a href="{% url socialauth_begin "facebook" %}">Login with Facebook</a> to see who else is on Stunable! </p> 
+                                    {% else %}
                                         <div class="separator"></div>
                                         <form id="search-friend-form" method="GET" action="{% url friend_search %}" class="bootstrap">
                                             <input type="text" id="friend-search-box" autocomplete="off" name="q" class="friend-search-box" placeholder="Search Facebook" />
                                         </form>
-                                    {% else %}
-                                    <p><a href="{% url socialauth_begin "facebook" %}">Login with Facebook</a> to see who else uses Stunable! </p>
-                                    {% endif %}
 
                                     <div class="search-result">
                                     <ul class="friend-list" id="result-list">
@@ -273,6 +276,8 @@
                                         {% endfor %}
                                     </ul>
                                     </div>
+
+                                    {% endif %}
                                     <p id="add-friend">
                                         <a style="display:inline-block" href="{% url friend_invite %}" class="icon plus-icon item-ref" title="Invite a Trendsetter">Add Stunner</a><span style="display:inline">Invite Friends by Email</span>
                                     </p>

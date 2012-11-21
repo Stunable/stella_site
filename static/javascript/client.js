@@ -1524,7 +1524,7 @@ function initFriendDragDrop() {
 					FB.ui(data)
 				})
 			}}
-	});
+		});
 }
 
 //Custom jQuery Code

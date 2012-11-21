@@ -170,8 +170,8 @@ def invite_modal(request, template="friends/invite_friends_dialog.html"):
 def query_friends(request, q):
     out = []
     if q:
-        if request.session.has_key('friends'):
-            out = [f for f in request.session['friends'] if f['name'].lower().startswith(q.lower())]
+        if request.session.has_key('fb_friends'):
+            out = [f for f in request.session['fb_friends']+request.session['fb_stunable_friends'] if f['name'].lower().startswith(q.lower())]
         #return HttpResponse(json.dumps(out, ensure_ascii=False), mimetype='application/json')
     return out
 

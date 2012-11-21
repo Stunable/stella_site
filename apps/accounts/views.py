@@ -391,15 +391,16 @@ def connect(request):
             f = Friendship.objects.create(from_user=request.user,to_user=u.user)
         fb_friend_users[u.uid] = u
 
-    for f in friends:
+    for index,f in enumerate(friends):
         if f['id'] in fb_friend_users.keys():
             f['user'] = fb_friend_users[f['id']]
             fb_stunable_friends.append(f)
+            friends.pop(index)
 
 
     request.session['fb_friends'] = friends
     request.session['fb_stunable_friends'] = fb_stunable_friends
-    
+
     request.session['fb_token'] = sa.tokens['access_token']
     if request.session.has_key('next'):
         return redirect(session['next'])

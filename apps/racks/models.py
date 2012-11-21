@@ -74,7 +74,7 @@ class Item(models.Model):
     image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product Image")
     pretty_image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product pretty Image",storage=OverwriteStorage())
     bg_color = models.CharField(max_length=32,default='white',blank=True,null=True)
-
+    gender = models.CharField(max_length=1,default='F',choices=[('F','F'),('M','M'),('B','B')])
     brand = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(max_length=200, verbose_name='Product Name')
     price = models.DecimalField(max_digits=19, decimal_places=2, verbose_name='Retail Price')

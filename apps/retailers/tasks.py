@@ -112,6 +112,9 @@ def process_upload(upload,throughModel):
                 errors.append(str(e))
         else:
             errors.append('No Image Found for Item: '+name)
+            
+    upload.processed = True
+    upload.save()
 
 
 def find_xls(path):
