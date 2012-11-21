@@ -43,6 +43,7 @@
         <p class="static">
             {{ retailer_profile.description }}
         </p>
+        
         <div class="editable">
             <form action='{% url update_retailer_profile %}' method="POST">
                 <textarea name="description">{{ retailer_profile.description }}</textarea>
@@ -84,12 +85,10 @@
     </div>
     <div class="shipping_options">
         <div>
-            <h3 class="inline">Shipping Options</h3><a class="edit" href="#">Edit</a>
+            <h3 class="inline">Shipping</h3>
         </div>
         <p class="static">
-            {% for type in retailer_profile.shipping_type.all %}
-            {{ type }},
-            {% endfor %}
+            We currently offer shipping exclusively through Fedex.  Customers may choose from a limited selection of options which are subject to change at our discretion.  If this is not acceptable to you, please don't hesitate to <a href="mailto:stylists@stunable.com"><span style="font-size:1em;font-weight:bold">Email Us</span></a> 
         </p>
         <div class="editable">
             <form action="{% url update_retailer_profile %}" method="POST">

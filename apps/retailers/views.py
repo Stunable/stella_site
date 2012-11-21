@@ -127,6 +127,7 @@ def update_retailer_profile(request, template="retailers/account_information.htm
         if request.method == "POST":
             form = RetailerEditForm(request.POST, instance=retailer_profile)
             if form.is_valid():
+                print 'VALID'
                 user = request.user
                 # TODO: check and fix bug here
                 if form.cleaned_data.get('shipping_type'):
@@ -151,7 +152,8 @@ def update_retailer_profile(request, template="retailers/account_information.htm
                         new_shipping_type.save()
                         retailer_profile.shipping_type.add(new_shipping_type.id)
                         retailer_profile.save();
-                    
+            else:
+                print form.errors
                 
         else:        
             form = RetailerEditForm(instance=retailer_profile)
@@ -159,6 +161,7 @@ def update_retailer_profile(request, template="retailers/account_information.htm
         ctx['form']=form
         ctx['retailer_profile'] = retailer_profile
     except:
+        raise
         #login as user
         return redirect(reverse("home"))
     return direct_to_template(request, template, ctx)

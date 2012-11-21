@@ -43,7 +43,6 @@ class RetailerEditForm(forms.ModelForm):
     email_address = forms.EmailField(required=False)
     city = forms.CharField(required=False)
     state = forms.CharField(required=False)
-    paypal_email = forms.EmailField(required=False)
     password = forms.CharField(widget=forms.PasswordInput(), required=False)
     description = forms.CharField(widget=forms.Textarea, required=False)
     shipping_type = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple, queryset=ShippingType.objects.all(), required=False)
@@ -89,12 +88,7 @@ class RetailerEditForm(forms.ModelForm):
         else:
             return self.instance.state
     
-    def clean_paypal_email(self):
-        if self.cleaned_data.get('paypal_email') and len(self.cleaned_data.get('paypal_email')) > 0:
-            return self.cleaned_data.get('paypal_email')
-        else:
-            return self.instance.paypal_email
-    
+   
     
     def clean_email_address(self):
         if self.cleaned_data.get('email_address'):
