@@ -163,15 +163,7 @@
 						</td>
 						
 					</tr>
-					<tr>
-						<td>Weypay ID</td>
-						<td>
-						<div class="description">if you already are a user of WePay, you can enter your credentials here. If you don't have WePay, no worries, and you will be receiving an email shortly with an account for receiving payments!</div>
-						<input type="text" class="inline txt" value="{{ form.paypal_email.value|default_if_none:'' }}" id="wepay_acct" name="wepay_acct"/>
-						{{form.wepay_acct.errors}}
-						</td>
-						
-					</tr>
+
 					<tr>
 						<td>Company Logo</td>
 						<td>
@@ -227,7 +219,7 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-						<div style="float:right;">
+						<div>
 							<input type="submit" class="btn btn-primary" value="Sign Up" />
 						</div></td>
 					</tr>
@@ -376,11 +368,6 @@
 
 		$('.password-container').pschecker();
 
-
-		$('input[name=accept_refund], input[name=not_accept_refund]').click( function() {
-			$('input[name=accept_refund], input[name=not_accept_refund]').attr('checked', false);
-			$(this).attr('checked', true);
-		});
 				
 		$('input[name=selling_options]').change(function() {
 			$('input[name="selling_options"]').attr('checked', false);

@@ -135,6 +135,7 @@ class RetailerProfileCreationForm(forms.ModelForm):
             return self.cleaned_data['email_address']
     
     def clean_more_details(self):
+        return
         if 'selling_options' in self.cleaned_data:
             if self.cleaned_data['selling_options'] == 'no yes' and not self.cleaned_data['more_details']:
                 raise forms.ValidationError("Please enter your web address!")
