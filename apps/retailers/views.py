@@ -24,8 +24,7 @@ from apps.racks.forms import ItemInventoryForm
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.conf import settings
-from django.forms import FileField,Form
-
+from django.forms.models import modelform_factory
 import urllib
 import urllib2
 
@@ -277,20 +276,21 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
 def add_item(request, item_id=None, template='retailers/add_item.html'):
     return edit_item(request, item_id, template)
 
-
-class StunableBulkUploadForm(Form):
-    def __init__(self, *args, **kwargs):
-        super(StunableBulkUploadForm, self).__init__(*args, **kwargs)
-
-    # data_types = (("mats", "MATS"), ("frames", "FRAMES"), ("art", "ART"), ("products", "STANDALONE PRODUCTS"))
-    zip_file = FileField(required=True, error_messages={'required':u'Choose a zip file to upload'})
-    # archive_type = forms.ChoiceField(choices=data_types, widget=RadioSelect)
-    # auto_crop = forms.BooleanField(initial=True,required=False)
+def bulk_upload(request):
+    try:
+        retailer_profile = RetailerProfile.objects.get(user=request.user)
+        if request.method == 'POST':
+            form = modelform_factory(ProductUpload,fields=['uploaded_zip'])(request.POST)
+            if form.is_valid():
+                form.save()
+    except:
+        return redirect(reverse("home"))
+    return product_list(request)
 
 @login_required 
 def product_list(request, template="retailers/product_list.html"):
     try:
-        form = StunableBulkUploadForm
+        form = modelform_factory(ProductUpload,fields=['uploaded_zip'])()
         retailer_profile = RetailerProfile.objects.get(user=request.user)
         pl = []
         s = set()
@@ -301,6 +301,7 @@ def product_list(request, template="retailers/product_list.html"):
         
         ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form}
     except:
+        raise
         return redirect(reverse("home"))
     return direct_to_template(request, template, ctx)
 
