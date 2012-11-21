@@ -43,3 +43,4 @@ zope.interface==4.0.1
 python-memcached
 wepay
 fedex
+xlrd
