@@ -29,6 +29,72 @@ h2 span {
 }
 	
 </style>
+
+<div id="page-content" class="section clearfix round-corner-shadow">
+<div class="page-header">
+	<div class="section intro clearfix">
+		<h2><span class="identity">create an account with Stunable</span></h2>
+		<p>
+			creating an account provides you with a personal closet where you can save <span class="identity">Stunable's</span> recommendations and check out what she suggests for your admirers. Your closet also gives you access to retailer discounts and provides you with the chance to have your wardrobe featured to millions of admirers as one of <span class="identity">Stunable's</span> leading stylists.
+		</p>
+		<p></p>
+	</div>
+</div>
+{% block left_panel %}
+{% endblock %}
+<form action="" method="POST" class="user-entry acct bootstrap" id="account-form">
+	{% csrf_token %}
+	<ul>
+		{% for error in form.errors.values %}
+		<li class="error_msg">
+			{{error}}
+		</li>
+		{% endfor %}
+	</ul>
+	<p class="name-field">
+		<label for="firstname" class="inline">First Name</label>
+		<input class="txt inline required" id="firstname" name="firstname" type="text" placeholder="required" tabindex="1"/>
+	</p>
+	<p class="name-field">
+		<label for="lastname" class="inline">Last Name</label>
+		<input class="txt inline required" id="lastname" name="lastname" type="text" placeholder="required" tabindex="2"/>
+	</p>
+	<p class="email-field">
+		<label for="email" class="inline">Email</label>
+		<input class="txt inline required" id="email" name="email" type="text" placeholder="required" tabindex="3"/>
+	</p>
+	<p class="email-field">
+		<label for="validate-email" class="inline">Re-type Email</label>
+		<input class="txt inline required" id="email_again" name="email_again" type="text" placeholder="required" tabindex="4"/>
+	</p>
+	<p class="zip-field">
+		<label for="postal-code" class="inline">[*]Zip Code</label>
+		<input class="txt inline optional" name="zipcode" type="text" placeholder="required" value="" tabindex="5"/>
+	</p>
+	<p class="age-field">
+		<label for="age-range" class="inline">[*]Age Range</label>
+		{{ form.age_range }}
+	</p>
+	<p class="password-field">
+		<label for="password" class="inline">Password</label>
+		<input class="txt inline" id="password1" name="password1" type="password" value="" placeholder="required" tabindex="7"/>
+	</p>
+	<p class="password-field">
+		<label for="validate-password" class="inline">Re-type Password</label>
+		<input class="txt inline" id="password2" name="password2" type="password" value="" placeholder="required" tabindex="8"/>
+	</p>
+	<p style="margin-left: auto; margin-right: auto; text-align: center; width: 100%;height: auto;">
+		<span id="bigform-error" class="alert" style="opacity: 1; display: inline; display: none;">We can't reach you there</span>
+	</p>
+	{{ form.non_field_errors|escape }}
+	{{ form.email.errors }}
+	<p style="height: auto;float:right;">
+	<input type="submit" class="btn btn-primary right" style="margin-right: 150px;" value="Create Account" tabindex="9" />
+	</p>
+</form>
+</div>
+{% endblock %} 
+{% block extra_script %}
 <script>
 	$(document).ready(function() {
 		// the validation code
@@ -100,13 +166,13 @@ h2 span {
 				}
 			},
 			messages : {
-				firstname : "Stella wants to know you on a first name basis",
-				lastname : "Stella wants to know you on a last name basis",
+				firstname : "We want to know you on a first name basis",
+				lastname : "We want to know you on a last name basis",
 				password1 : {
 					minlength : "Your password must be at least 6 characters long",
 					maxlength : "Your password must be at most 12 characters long"
 				},
-				email : "Stella can't reach you there",
+				email : "We can't reach you there",
 				email_again : "Your email address doesn't match",
 				password2 : "Your password doesn't match",
 			}
@@ -123,65 +189,4 @@ h2 span {
 	});
 
 </script>
-<div id="page-content" class="section clearfix round-corner-shadow">
-<div class="page-header">
-	<div class="section intro clearfix">
-		<h2><span class="identity">create an account with stella</span></h2>
-		<p>
-			creating an account provides you with a personal closet where you can save <span class="identity">Stella's</span> recommendations and check out what she suggests for your admirers. Your closet also gives you access to retailer discounts and provides you with the chance to have your wardrobe featured to millions of admirers as one of <span class="identity">Stella's</span> leading stylists.
-		</p>
-		<p></p>
-	</div>
-</div>
-<form action="" method="POST" class="user-entry acct bootstrap" id="account-form">
-	{% csrf_token %}
-	<ul>
-		{% for error in form.errors.values %}
-		<li class="error_msg">
-			{{error}}
-		</li>
-		{% endfor %}
-	</ul>
-	<p class="name-field">
-		<label for="firstname" class="inline">First Name</label>
-		<input class="txt inline required" id="firstname" name="firstname" type="text" placeholder="required" tabindex="1"/>
-	</p>
-	<p class="name-field">
-		<label for="lastname" class="inline">Last Name</label>
-		<input class="txt inline required" id="lastname" name="lastname" type="text" placeholder="required" tabindex="2"/>
-	</p>
-	<p class="email-field">
-		<label for="email" class="inline">Email</label>
-		<input class="txt inline required" id="email" name="email" type="text" placeholder="required" tabindex="3"/>
-	</p>
-	<p class="email-field">
-		<label for="validate-email" class="inline">Re-type Email</label>
-		<input class="txt inline required" id="email_again" name="email_again" type="text" placeholder="required" tabindex="4"/>
-	</p>
-	<p class="zip-field">
-		<label for="postal-code" class="inline">[*]Zip Code</label>
-		<input class="txt inline optional" name="zipcode" type="text" placeholder="required" value="" tabindex="5"/>
-	</p>
-	<p class="age-field">
-		<label for="age-range" class="inline">[*]Age Range</label>
-		{{ form.age_range }}
-	</p>
-	<p class="password-field">
-		<label for="password" class="inline">Password</label>
-		<input class="txt inline" id="password1" name="password1" type="password" value="" placeholder="required" tabindex="7"/>
-	</p>
-	<p class="password-field">
-		<label for="validate-password" class="inline">Re-type Password</label>
-		<input class="txt inline" id="password2" name="password2" type="password" value="" placeholder="required" tabindex="8"/>
-	</p>
-	<p style="margin-left: auto; margin-right: auto; text-align: center; width: 100%;height: auto;">
-		<span id="bigform-error" class="alert" style="opacity: 1; display: inline; display: none;">Stella can't reach you there</span>
-	</p>
-	{{ form.non_field_errors|escape }}
-	{{ form.email.errors }}
-	<p style="height: auto;float:right;">
-	<input type="submit" class="btn btn-primary right" style="margin-right: 150px;" value="Create Account" tabindex="9" />
-	</p>
-</form>
-</div>
-{% endblock %} 
+{% endblock %}
