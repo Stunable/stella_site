@@ -781,30 +781,29 @@ def send_item_to_admirer(request):
                         if f['friend'] == fs_u['friend']:
                             notification.send([f['friend']], "friend_share_item_with_others", {'send': request.user, 'item': item, 'receive': to_user}, True, request.user)
 
-           
-            print 'doing fb'
-            social_users = UserSocialAuth.objects.filter(provider='facebook').filter(user=request.user)
-            if social_users and admirer_type == 'facebook':
-                social_user = social_users[0]
-                access_token = social_user.tokens['access_token']
-                # get user friends
-                url = 'https://graph.facebook.com/me/feed?method=post&client_id=' + settings.FACEBOOK_APP_ID + '&access_token=' + access_token+'&'
-                # msg = '%s shared a ' %request.user.get_full_name()
-                # message = msg + item.brand + ' ' + item.name + ' with '
-                # message += admirer_name
-                message = 'come and see more stuff like %s '%({True:'these',False:'this'}[item.name.endswith('s') and not item.name.endswith('ss')])
-                message += item.brand + ' ' + item.name
-                message += ' at Stunable!'
-                    
-                publish = {
-                  'method': 'feed'#send but then we can only send the link to facebook page
-                  ,'link': settings.WWW_ROOT+'racks/carousel/all?item_id='+str(item.id)
-                  ,'description': message
-                  ,'name':"check out what I found on stunable"
-                  ,'to':admirer
-                  ,'picture':settings.WWW_ROOT+item.get_image().url.lstrip('/')
-                }
-                return publish
+            else:
+                social_users = UserSocialAuth.objects.filter(provider=admirer_type).filter(user=request.user)
+                if social_users and admirer_type == 'facebook':
+                    social_user = social_users[0]
+                    access_token = social_user.tokens['access_token']
+                    # get user friends
+                    url = 'https://graph.facebook.com/me/feed?method=post&client_id=' + settings.FACEBOOK_APP_ID + '&access_token=' + access_token+'&'
+                    # msg = '%s shared a ' %request.user.get_full_name()
+                    # message = msg + item.brand + ' ' + item.name + ' with '
+                    # message += admirer_name
+                    message = 'come and see more stuff like %s '%({True:'these',False:'this'}[item.name.endswith('s') and not item.name.endswith('ss')])
+                    message += item.brand + ' ' + item.name
+                    message += ' at Stunable!'
+                        
+                    publish = {
+                      'method': 'feed'#send but then we can only send the link to facebook page
+                      ,'link': settings.WWW_ROOT+'racks/carousel/all?item_id='+str(item.id)
+                      ,'description': message
+                      ,'name':"check out what I found on stunable"
+                      ,'to':admirer
+                      ,'picture':settings.WWW_ROOT+item.get_image().url.lstrip('/')
+                    }
+                    return publish
              
 
     else:

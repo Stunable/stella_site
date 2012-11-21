@@ -14571,7 +14571,7 @@
             "publicity": 1, 
             "name": "Night out on the town", 
             "shared_users": [], 
-            "owner": 1
+            "user": 1
         }
     }, 
     {
@@ -14582,7 +14582,7 @@
             "publicity": 1, 
             "name": "Day at the beach", 
             "shared_users": [], 
-            "owner": 1
+            "user": 1
         }
     }, 
     {

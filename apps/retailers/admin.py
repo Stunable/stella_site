@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.retailers.models import RetailerProfile, StylistItem, ShippingType
+from apps.retailers.models import RetailerProfile, StylistItem, ShippingType, ProductUpload
 
 
 
@@ -17,3 +17,4 @@ admin.site.register(RetailerProfile, RetailerProfileAdmin)
 
 admin.site.register(StylistItem)
 admin.site.register(ShippingType)
+admin.site.register(ProductUpload)

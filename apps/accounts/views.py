@@ -369,7 +369,12 @@ def add_fb_friends_to_list(list, js):
 def connect(request):
     for sa in request.user.social_auth.filter(provider='facebook'):
         friends = get_facebook_friends(sa)
-        P = request.user.get_profile()
+        P = None
+        try:
+            P = request.user.get_profile()
+        except:
+            P = UserProfile.objects.create(user=request.user)
+
         if P.first_login:
             I = get_fb_avatar_image(sa)
             if I:
@@ -379,14 +384,21 @@ def connect(request):
                 P.first_login = False
                 P.save()
 
-                
-    print 'saving friends'
+    fb_friend_users = {}
+
+    for u in UserSocialAuth.objects.filter(provider='facebook',uid__in=[f['id'] for f in friends]):
+        if not Friendship.objects.are_friends(request.user,u.user):
+            f = Friendship.objects.create(from_user=request.user,to_user=u.user)
+        fb_friend_users[u.uid] = u
+
+    for f in friends:
+        if f['id'] in fb_friend_users.keys():
+            f['user'] = fb_friend_users[f['id']]
+
     request.session['friends'] = friends
     request.session['fb_token'] = sa.tokens['access_token']
     if request.session.has_key('next'):
         return redirect(session['next'])
-    # elif request.user.get_profile().first_login:
-    #     return redirect(reverse("accounts.urls.profile_edit"))
 
     return redirect(reverse("home"))
 

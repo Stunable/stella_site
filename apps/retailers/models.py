@@ -9,6 +9,8 @@ from django.contrib.localflavor.us.us_states import US_STATES
 from django.contrib.localflavor.us.models import PhoneNumberField
 from racks.models import Item
 
+from tasks import process_upload
+
 RETAILER_SUBJECT = 'accounts/retailer_welcome_subject.txt'
 RETAILER_MESSAGE = 'accounts/retailer_welcome_message.txt'
     
@@ -18,6 +20,20 @@ class ShippingType(models.Model):
     
     def __unicode__(self):
         return self.name
+
+class ProductUpload(models.Model):
+    uploaded_zip = models.FileField(upload_to='product_uploads')
+    retailer = models.ForeignKey('RetailerProfile')
+    processed = models.BooleanField(default=False)
+
+
+    def save(self,*args,**kwargs):
+        super(ProductUpload, self).save()
+        process_upload(self,StylistItem)
+
+class UploadError(models.Model):
+    text = models.TextField()
+    upload = models.ForeignKey(ProductUpload)
 
 class RetailerProfile(models.Model):
     """
