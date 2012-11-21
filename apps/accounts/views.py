@@ -385,7 +385,7 @@ def connect(request):
                 P.save()
 
     fb_friend_users = {}
-
+    fb_stunable_friends = []
     for u in UserSocialAuth.objects.filter(provider='facebook',uid__in=[f['id'] for f in friends]):
         if not Friendship.objects.are_friends(request.user,u.user):
             f = Friendship.objects.create(from_user=request.user,to_user=u.user)
@@ -394,8 +394,12 @@ def connect(request):
     for f in friends:
         if f['id'] in fb_friend_users.keys():
             f['user'] = fb_friend_users[f['id']]
+            fb_stunable_friends.append(f)
 
-    request.session['friends'] = friends
+
+    request.session['fb_friends'] = friends
+    request.session['fb_stunable_friends'] = fb_stunable_friends
+    
     request.session['fb_token'] = sa.tokens['access_token']
     if request.session.has_key('next'):
         return redirect(session['next'])

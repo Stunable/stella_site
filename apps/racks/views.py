@@ -52,10 +52,11 @@ def get_context_variables(context, request):
     context['private_racks'] = Rack.objects.OwnedRacksForUser(user)
     context['friendship_list'] = Friendship.objects.friends_for_user(user)
     context['notices'] = Notice.objects.notices_for(user)
-    if request.session.has_key('friends'):
-        friends = request.session['friends']
-        offset =random.randint(0,len(friends)-20)
-        context['fb_friend_list']  = friends[offset:offset+20]
+    if request.session.has_key('fb_friends'):
+        fb_friends = request.session['fb_friends']
+        fb_stunable_friends = request.session['fb_stunable_friends']
+        offset =random.randint(0,len(fb_friends)-20)
+        context['fb_friend_list']  = fb_stunable_friends+fb_friends[offset:offset+20-len(fb_stunable_friends)]
         context['fb_token'] = request.session['fb_token']
         context['FACEBOOK_APPID'] = settings.FACEBOOK_APP_ID
     return context
