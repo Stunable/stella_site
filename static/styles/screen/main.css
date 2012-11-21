@@ -3877,13 +3877,13 @@ outline: none;
 #id_uploaded_zip{
 	font-size:.5em;
 	text-align: left;
-	border: 1px dashed #CC0000;
+	border: 1px dashed #EC67F0;
 	border-radius:8px;
-	width:140px;
+	width:160px;
 	height:60px;
 	position:absolute;
 	padding:10px;
-	top:130px;
+	top:220px;
 	left:20px;
 
 }
