@@ -62,7 +62,7 @@
                     <a href="{% url share_modal_view rack.id %}" class="head-link item-ref">{% if shared_admirers %} Send It Again {% else %} Share this rack {% endif %}</a>
                     <a href="{% url rack_delete rack.id %}" class="head-link" onclick="return confirm('Are you sure you want to delete this rack?')">Delete this rack</a>
                     {% endif %}
-                    <a href="#" class="head-link" onclick="return confirm('Are you sure you want to buy this rack?')">Buy this rack</a>
+                    <a href="/cart/buy_rack/{{rack.id}}" class="head-link buy_rack_click" >Buy this rack</a>
                     <div style="text-align: center">
                     <a href="?order_by=brand-ascending" {% if order_by == 'brand-ascending' %}class="highlighted"{% endif %}><img src="{{ STATIC_URL }}images/gui/sg_arrow_down.png"/></a>
                     Brand

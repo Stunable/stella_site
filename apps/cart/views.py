@@ -20,6 +20,8 @@ from stunable_wepay.views import WePayHandleCC
 from stunable_wepay.helpers import WePayPayment
 from stunable_wepay.signals import *
 
+from racks.models import Rack
+
 from apps.cart.cart import Cart
 from django.template.context import RequestContext
 from accounts.models import UserProfile, CCToken
@@ -38,6 +40,21 @@ except ImportError:
 import logging
 logger = logging.getLogger(__name__)
 
+
+@login_required
+def buy_rack(request, rack_id):
+
+    item_types = []
+    R = Rack.objects.get(id=rack_id)
+    for I in R.get_rack_items():
+        it = ItemType.objects.filter(item=I)
+        if len(it):
+            item_types.append(it[0])
+    for inventory in item_types: 
+        product = inventory.item
+        cart = Cart(request)    
+        cart.add(inventory, product.price, 1, inventory.size.size, inventory.color.name)
+    return redirect(reverse('get_cart'))
 
 @login_required
 def add_to_cart(request, product_id, quantity, size=None):

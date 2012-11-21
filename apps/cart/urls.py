@@ -2,6 +2,10 @@ from django.conf.urls.defaults import *
 
 
 urlpatterns = patterns('cart.views',
+    url(r'^buy_rack/(?P<rack_id>\d+)$',
+        view='buy_rack',
+        name='buy_rack'
+    ), 
     url(r'^add_to_cart/(?P<product_id>\d+)/(?P<quantity>\d+)/(?P<size>.*)$',
         view='add_to_cart',
         name='add_to_cart'

@@ -296,6 +296,7 @@ def share(request, rack_id, template="racks/share_rack_modal.html"):
             rack.shared_users.add(admirer)
             
             admirer_friendship_list = Friendship.objects.friends_for_user(admirer)
+
             # add Trendser shares rack with another trendsetter notification
             for fs_u in admirer_friendship_list:
                 for f in user_friendship_list:
