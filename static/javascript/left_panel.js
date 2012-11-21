@@ -6,11 +6,11 @@ $(document).ready(function(){
       $(window).scroll(function () {
           if ($(document).scrollTop() == 0) {
               var offset = menuYloc+$(document).scrollTop()+"px";
-              $(name).animate({top:offset},{duration:500,queue:false});  
+              $(name).animate({top:offset},{duration:250,queue:false});  
           }
           if ($(document).scrollTop() > 400) {
               var offset = menuYloc-100+$(document).scrollTop()+"px";
-              $(name).animate({top:offset},{duration:500,queue:false});  
+              $(name).animate({top:offset},{duration:250,queue:false});  
           } 
       });
 });

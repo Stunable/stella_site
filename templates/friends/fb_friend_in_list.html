@@ -2,6 +2,6 @@
     <div class="friend-img-item">
         <img src="https://graph.facebook.com/{{f.id}}/picture">
         <div class="friend-name"><a href="{%if f.user %}{% url trendsetters f.user.id %}{% endif %}">{{f.name}}</a></div>
-        <a href="{%if f.user %}{% url trendsetters f.user.id %}{% endif %}" data-value="{{ f.id }}" data-name="{{f.name}}" data-type="{% if f.user %}both{%else%}facebook{% endif %}" class="icon {% if f.user %}stfb_friend-icon{% else%}friend_adder{% endif %} plus-inline plus-icon" title="Add Friend">Add Trendsetter</a>
+        <a href="{%if f.user %}{% url trendsetters f.user.id %}{% else %}#{% endif %}" data-value="{{ f.id }}" data-name="{{f.name}}" data-type="{% if f.user %}both{%else%}facebook{% endif %}" class="icon {% if f.user %}stfb_friend-icon{% else%}friend_adder{% endif %} plus-inline plus-icon" title="Add Friend">Add Trendsetter</a>
     </div>
 </li>

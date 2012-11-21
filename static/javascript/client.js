@@ -2148,5 +2148,24 @@ function login_modal(){
 	initFancyBox('#social_login_box ');
 }
 
+function hookupFBMessages(static_root,link){
+   	console.log(static_root,link)
+    $('.friend_adder').click(function(e){
+        console.log(this)
+
+        publish = {
+          'method': 'feed'
+          ,'link': 'http://blah.stunabledev:8000'
+          ,'description': 'Hi, Check out Stunable'
+          ,'name':"Stunable Invite"
+          ,'to':$(this).attr('data-value')
+          ,'picture':'http://blah.stunabledev:8000/'+static_root+'/images/logo-small.png'
+        }
+
+        FB.ui(publish)
+
+        return false;
+    })
+}
 
 //$('#fancybox-wrap').transition({ y: '-200px', opacity: 0, easing: 'snap', duration: 500,}, function() {$('#fancybox-overlay').transition({opacity: 0}, 1000);});

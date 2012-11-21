@@ -357,9 +357,62 @@
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/portamento-min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.touchcarousel-1.1.js"></script>
         <script src="{{ STATIC_URL }}javascript/jquery.spritely-0.6.1.js" type="text/javascript"></script>
-        
+        <script type="text/javascript" src="{{STATIC_URL}}javascript/client.js"></script>
         <script type="text/javascript" src="{{STATIC_URL}}javascript/client.js"></script>
         <script>
+            $(document).ready(function() {
+                function initAddFriend(){
+                    // unbind the click function just in case
+                    $('.plus-inline').unbind("click");
+                    // when click on the add friend icon
+                    $('.plus-inline').click(function(){
+                        var current_item = $(this).parent().parent();
+                        var span = $(this).parent().find("span");
+                        var spinner = $('<div class="spinner" style="float:right;"></div>');
+                        var plusBtn = $(this);
+                        plusBtn.hide();         
+                        spinner.appendTo(plusBtn.parent());
+                        spinner.sprite({ fps: 10, no_of_frames: 12 });
+                        
+                        $.getJSON($(this).attr('href'), function(result){
+                            // remove the plus icon when invitation is sent
+                            plusBtn.remove();
+                            spinner.remove();
+                            // plusBtn.show();
+                            
+                            if(result['result'] == true){
+                                // notice user
+                                var temp = $(span).html();
+                                $(span).html("Request Sent!").delay(3000).fadeOut(500, function() {
+                                    $(span).html(temp);
+                                    $(span).fadeIn(500);
+                                });
+                            }else{
+                                alert(result['error']);
+                            }
+                        });
+                        return false;
+                    });
+                }
+                
+                function listFilter(input, list) {
+                    $(input).change(function() {
+                        var filter = $(this).val();
+                        // get the value of the input, which we filter on
+                        if(filter) {
+                            $(list).find("span:not(:contains(" + filter + "))").parent().parent().slideUp();
+                            $(list).find("span:contains(" + filter + ")").parent().parent().slideDown();
+                        } else {
+                            $(list).find("li").slideDown();
+                        }
+                    }).keyup(function() {
+                        // fire the above change event after every letter
+                        $(this).change();
+                    });
+                }
+                var oldFilter = "";
+                var original_friends=$('#result-list').clone()
+
                     function getUserlist(input, list){
                         var form = $(input).parent();
                         var href = $(form).attr('action');
@@ -377,10 +430,11 @@
                                     $.each(list, function(){
                                         $(this).html(returnValue);
                                     });
+                                    hookupFBMessages("{{STATIC_URL}}","{{WWW_ROOT}}");
                                     initFriendDragDrop();
                                     initAddFriend();
                                     initDragDrop();
-                                    fixDragDropIssue();
+                                    fixDragDropIssue()
                                     oldFilter = filter;
                                 });
                             }else{
@@ -391,8 +445,10 @@
                             // fire the above change event after every letter
                             $(this).change();
                         });
+
+
                     }
-                    
+
                   $('.panel-tab').click(function() {
                       if(!$(this).hasClass('active')) {
                           $('.panel-tab').removeClass('active');
@@ -412,6 +468,7 @@
                                   // listFilter($('.friend-search-box')[1], $('.friend-list')[1]);
                                   getUserlist($('.friend-search-box')[1], $('.search-result'));
                                   initFriendDragDrop();
+                                  hookupFBMessages("{{STATIC_URL}}","{{WWW_ROOT}}");
                               }
                           });
                       }
@@ -423,10 +480,13 @@
                             initFancyBox('#add-rack ');
                             initFancyBox('#add-friend ');
                             initFancyBox();
+                            hookupFBMessages("{{STATIC_URL}}","{{WWW_ROOT}}");
                       {% endif %}
                       fixDragDropIssue();
                   });
-        </script>
+
+              })
+                </script>
         {% block rack_scripts %}
         {% endblock %}
         {% block extra_script %}
