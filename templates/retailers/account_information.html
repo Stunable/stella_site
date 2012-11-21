@@ -78,10 +78,10 @@
                         {{ retailer_profile.name }}
                     </p>
                     <p>
-                        {{ retailer_profile.address_1 }}
+                        {{ retailer_profile.address1 }}
                     </p>
                     <p>
-                        {{ retailer_profile.address_2 }}
+                        {{ retailer_profile.address2 }}
                     </p>
                 </div>
                 <div class="editable">
@@ -89,9 +89,9 @@
                     <p>
                         {{ retailer_profile.name }}
                     </p>
-                    <input type="text" name="address_1" value="{{ retailer_profile.address_1 }}"/>
+                    <input type="text" name="address1" value="{{ retailer_profile.address1 }}"/>
                     <br>
-                    <input type="text" name="address_2" value="{{ retailer_profile.address_2 }}"/>
+                    <input type="text" name="address2" value="{{ retailer_profile.address2 }}"/>
                     <br/>
                     <input type="submit" class="btn btn-primary" value="Save"/>
                     </form>
@@ -103,11 +103,8 @@
                    <a class="edit">Edit</a> 
                 </p>
                 <div class="static">
-                    <p>
-                        {{ retailer_profile.name }}
-                    </p>
                     <p style="display: inline">
-                        Paypal Account: {{ retailer_profile.paypal_email }}
+                        WePay Account #: <a href="http://wepay.com">{{ retailer_profile.wepay_acct }}</a>
                     </p>
                 </div>
                 <div class="editable">
@@ -116,7 +113,6 @@
                         {{ retailer_profile.name }}
                     </p>
                     <div class="control-group">
-	                    <input type="text" class="txt" name="paypal_email" value="{{ retailer_profile.paypal_email }}" />
 	                    <input type="submit" class="btn btn-primary" value="Save"/>
                     </div>
                     </form>

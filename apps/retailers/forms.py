@@ -49,8 +49,8 @@ class RetailerEditForm(forms.ModelForm):
     
     class Meta:
         model = RetailerProfile
-        exclude =('name', 'user', 'approved', 'phone_number', 'zip_code', 'selling_options', 'accept_refund', 'more_details') 
-#        fields = ('email_address', 'address_1', 'address_2',)
+        exclude =('name', 'user', 'approved', 'phone_number', 'zip_code', 'selling_options', 'accept_refund', 'more_details','wepay_acct','wepay_token','Welcome message sent') 
+#       fields = ('email_address', 'address_1', 'address_2',)
     
     def clean_shipping_type(self):
         if self.cleaned_data.get('shipping_type') and len(self.cleaned_data.get('shipping_type')) > 0:
@@ -99,6 +99,9 @@ class RetailerEditForm(forms.ModelForm):
             return self.cleaned_data.get('email_address')
         else:
             return self.instance.email_address
+
+
+
 
 
 class RetailerProfileCreationForm(forms.ModelForm):
