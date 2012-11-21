@@ -1285,48 +1285,48 @@ function initDesktopSwipe(){
 var sliderInstance;
 
 function initSwipe(selector){
-
 				// Temporarily replacing with swipe.js for demo
 	initDesktopSwipe();
-	sliderInstance = $('.iosSlider').data('touchCarousel');
-	sliderInstance.swipeStart = new Date();
-	function handle(delta) {
-		
-		//var c = sliderInstance._getXPos();
-		if (delta > 0){
-			//sliderInstance.animateTo(-80, sliderInstance.settings.transitionSpeed, "easeInOutSine");	
-			sliderInstance.prev()
+	if($('.iosSlider').length){
+		sliderInstance = $('.iosSlider').data('touchCarousel');
+		sliderInstance.swipeStart = new Date();
+		function handle(delta) {
+			
+			//var c = sliderInstance._getXPos();
+			if (delta > 0){
+				//sliderInstance.animateTo(-80, sliderInstance.settings.transitionSpeed, "easeInOutSine");	
+				sliderInstance.prev()
 
-		}else{
-			sliderInstance.next()
-			//sliderInstance.animateTo(-80, sliderInstance.settings.transitionSpeed, "easeInOutSine");	
-		}
-	}
-
-	function wheel(event){
-		var delta = 0;
-		//if (!event) event = window.event;
-		if (event.originalEvent.wheelDelta) {
-			delta = event.originalEvent.wheelDelta/120; 
-		} else if (event.originalEvent.detail) {
-			delta = -event.originalEvent.detail/3;
-		}
-		//console.log(delta)
-		var now = new Date()
-		if (! sliderInstance._isAnimating && now - sliderInstance.swipeStart > (sliderInstance.settings.transitionSpeed*1.5)){
-			handle(delta);
-			sliderInstance.swipeStart = now;
+			}else{
+				sliderInstance.next()
+				//sliderInstance.animateTo(-80, sliderInstance.settings.transitionSpeed, "easeInOutSine");	
+			}
 		}
 
-	    if (event.preventDefault)
-	            event.preventDefault();
-	    event.originalEvent.returnValue = false;
-	}
+		function wheel(event){
+			var delta = 0;
+			//if (!event) event = window.event;
+			if (event.originalEvent.wheelDelta) {
+				delta = event.originalEvent.wheelDelta/120; 
+			} else if (event.originalEvent.detail) {
+				delta = -event.originalEvent.detail/3;
+			}
+			//console.log(delta)
+			var now = new Date()
+			if (! sliderInstance._isAnimating && now - sliderInstance.swipeStart > (sliderInstance.settings.transitionSpeed*1.5)){
+				handle(delta);
+				sliderInstance.swipeStart = now;
+			}
 
-	if (selector){
-		$(selector).on( "mousewheel DOMMouseScroll", wheel);
-	}
+		    if (event.preventDefault)
+		            event.preventDefault();
+		    event.originalEvent.returnValue = false;
+		}
 
+		if (selector){
+			$(selector).on( "mousewheel DOMMouseScroll", wheel);
+		}
+	}
 }
 
 function initDragDrop() {	
