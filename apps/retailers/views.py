@@ -276,16 +276,33 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
 def add_item(request, item_id=None, template='retailers/add_item.html'):
     return edit_item(request, item_id, template)
 
-def bulk_upload(request):
+def bulk_upload(request,template="retailers/product_list.html"):
+
     try:
         retailer_profile = RetailerProfile.objects.get(user=request.user)
+        form = modelform_factory(ProductUpload,fields=['uploaded_zip'])()
         if request.method == 'POST':
-            form = modelform_factory(ProductUpload,fields=['uploaded_zip'])(request.POST)
+            print request.POST
+            form = modelform_factory(ProductUpload,fields=['uploaded_zip'])(request.POST,request.FILES)
             if form.is_valid():
-                form.save()
+                print 'valid form'
+                up = form.save(commit=False)
+                up.retailer = retailer_profile
+                up.save()
+
+
+        pl = []
+        s = set()
+        for si in StylistItem.objects.filter(stylist=request.user):
+            if si.item.pk not in s:
+                pl.append(si)
+                s.add(si.item.pk)
+
+        ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form}
     except:
+        raise
         return redirect(reverse("home"))
-    return product_list(request)
+    return direct_to_template(request, template, ctx)
 
 @login_required 
 def product_list(request, template="retailers/product_list.html"):

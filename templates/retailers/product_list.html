@@ -34,8 +34,9 @@
     {% else %}
     <div style="padding:3px;border-radius:5px;border:1px solid #ccc;width:300px;float:right;margin:10px;position:relative;">
         <p>If you have many items to sell, and would like to upload them in large batches, download <a href="{{ STATIC_URL }}/upload_example.zip" target="blank">this example file </a> and format your upload the same way.  Then upload it here and fire away.  Email us if you have questions</p>
-        <form style="float:right" action="/retailers/item/bulk_upload" method="POST" class="row" enctype="multipart/form-data">
+        <form style="float:right" action="/retailers/item/bulk_upload" method="POST"enctype="multipart/form-data">
             {{bulk_upload_form.as_p}}
+            {{bulk_upload_form.errors}}
             {% csrf_token %}
         <input type="submit" value="Submit">
         </form>

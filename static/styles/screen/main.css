@@ -3874,6 +3874,20 @@ outline: none;
 	margin-top: 60px;
 }
 
+#id_uploaded_zip{
+	font-size:.5em;
+	text-align: left;
+	border: 1px dashed #CC0000;
+	border-radius:8px;
+	width:140px;
+	height:60px;
+	position:absolute;
+	padding:10px;
+	top:130px;
+	left:20px;
+
+}
+
 .privacy h2 {
 text-transform: uppercase;
 margin: 20px auto;
