@@ -389,7 +389,7 @@ def connect(request):
     for u in UserSocialAuth.objects.filter(provider='facebook',uid__in=[f['id'] for f in friends]):
         if not Friendship.objects.are_friends(request.user,u.user):
             f = Friendship.objects.create(from_user=request.user,to_user=u.user)
-        fb_friend_users[u.uid] = u
+        fb_friend_users[u.uid] = u.user
 
     for index,f in enumerate(friends):
         if f['id'] in fb_friend_users.keys():
