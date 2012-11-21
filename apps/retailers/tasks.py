@@ -74,13 +74,15 @@ def process_upload(upload,throughModel):
                     image=pic,
                 )
             except Exception, e:
+                raise Exception
                 errors.append(str(e))
                 return errors
 
-            si = throughModel.objects.create(
-                stylist = upload.retailer.user,
-                item = I
-            )
+            if upload.retailer.user:
+                si = throughModel.objects.create(
+                    stylist = upload.retailer.user,
+                    item = I
+                )
 
     #Do ItemTypes
             try:
@@ -109,6 +111,7 @@ def process_upload(upload,throughModel):
                         inventory=int(invsizes[i])
                     )
             except Exception,e:
+                raise Exception
                 errors.append(str(e))
         else:
             errors.append('No Image Found for Item: '+name)

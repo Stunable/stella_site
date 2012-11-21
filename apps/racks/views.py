@@ -311,6 +311,9 @@ def share(request, rack_id, template="racks/share_rack_modal.html"):
             if notification:
                 notification.send([admirer], "trend_received", {"rack": rack}, True, request.user)
                 notification.send_notification_on("share-rack", sender=request.user, recipient=admirer, rack_url=rack_url)
+            
+            # this is really strange... the only reason the following would execute
+            # is if the "notification" app was not in installed apps.... which it IS... so... i dunno.
             else:
                 ctx = {'sender': request.user, "recipient": admirer, "rack_url": rack_url}
                 subject = render_to_string(RACK_SHARED_SUBJECT, ctx)

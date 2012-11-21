@@ -25,6 +25,25 @@
         max-height: 95px;
     }
 </style>
+
+<div class="section intro clearfix">
+    <h2><span>{{ retailer_profile.name }}</span></h2>
+    <h3>Edit a Product in your Inventory</h3>
+</div>
+<div class="section body-copy">
+<form action="" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{ form.non_field_errors }}
+	<table>
+	{{ form.as_table }}
+	</table>
+	<p>
+		<input type="submit" class="btn" value="Update" />
+	</p>
+</form>
+	{% endblock %} 
+
+{% block extra_script %}
 <script type="text/javascript">
     function hide_form_errors()
     {
@@ -72,19 +91,4 @@
         
     })
 </script>
-<div class="section intro clearfix">
-    <h2><span>{{ retailer_profile.name }}</span></h2>
-    <h3>Edit a Product in your Inventory</h3>
-</div>
-<div class="section body-copy">
-<form action="" method="post" enctype="multipart/form-data">
-	{% csrf_token %}
-	{{ form.non_field_errors }}
-	<table>
-	{{ form.as_table }}
-	</table>
-	<p>
-		<input type="submit" class="btn" value="Update" />
-	</p>
-</form>
-	{% endblock %} 
+{% endblock %}

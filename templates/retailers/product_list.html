@@ -20,23 +20,26 @@
 	      width: 20%;
 	  }
 </style>
-<script type="text/javascript">
-    $(document).ready(function(){
-    	$('#product-inventory-menu-item').addClass('active-menu');
-    });
-</script>
+
 <div class="section intro clearfix">
     <h2><span>Product List</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
 </div>
 <div class="section body-copy bootstrap">
     
-        
     {% if confirm %}
     <form class="action_submit" action="/retailers/item_action?next={% url product_list %}" method="post">
         <p> Are you sure you want to delete the following items?</p>
         <input type="hidden" name="confirm_{{confirm.action_name}}" value="True">
         <input type="hidden" name="action_name" value="{{confirm.action_name}}">
     {% else %}
+    <div style="padding:3px;border-radius:5px;border:1px solid #ccc;width:300px;float:right;margin:10px;position:relative;">
+        <p>If you have many items to sell, and would like to upload them in large batches, download <a href="{{ STATIC_URL }}/upload_example.zip" target="blank">this example file </a> and format your upload the same way.  Then upload it here and fire away.  Email us if you have questions</p>
+        <form style="float:right" action="/retailers/bulk_upload" method="POST" class="row" enctype="multipart/form-data">
+            {{bulk_upload_form.as_p}}
+            {% csrf_token %}
+        <input style="display:none" type="submit" value="Submit">
+        </form>
+    </div>
     <form class="action_submit" action="/retailers/item_action?next={% url product_list %}" method="post">
         <select name="action_name">
             <option value="-------------">-------------</option>

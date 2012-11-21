@@ -58,6 +58,69 @@
 		margin-right: 10px;
 	}
 </style>
+
+<div class="section intro clearfix">
+	<h2><span>{{ retailer_profile.name }}</span></h2>
+	<h3>Add a Product to your Inventory</h3>
+</div>
+
+<div class="add-color-dlg" style="display: none">
+	<form class="add-color-form" method="post" action="{% url add_color %}">
+	{% csrf_token %}
+	<h3>New color</h3>
+	<input type="text" name="name" placeholder="Name"/>
+	<input type="text" name="color_css" placeholder="csss value"/>
+	<input type="submit" class="btn btn-primary btn-save" value="Submit"/><input type="button" class="btn btn-cancel" value="Cancel"/>
+	<p class="alert-message"></p>
+	</form>
+</div>
+
+<div class="add-size-dlg" style="display: none">
+	<form class="add-size-form" method="post" action="{% url add_size %}">
+	{% csrf_token %}
+	<h3>New size</h3>
+	<input type="text" name="size" placeholder="Name"/>
+	<input type="submit" class="btn btn-primary btn-save" value="Submit"/><input type="button" class="btn btn-cancel" value="Cancel"/>
+	<p class="alert-message"></p>
+	</form>
+</div>
+
+<div class="section body-copy bootstrap">
+	<form action="" method="post" id="add-item-form" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<table>
+			{{ form.as_table }}
+			<tr align="top" >
+				<th style="vertical-align: top !important;">Inventory Options: <span title="List available
+				inventory options for all color and
+				size combinations.  Choose a color
+				and corresponding size option then
+				allocate inventory (eg. Color:
+				Chocolate, Size: 2, Quantity Available:
+				10)" class="inventory" >?</span></th>
+				<td> {% for f in inventory_forms.management_form %}
+				{{ f }}
+				{% endfor %}
+				{% for inventory_form in inventory_forms.forms %}
+				<table cellpadding="10" class="inventory-item-entry" style="{% if forloop.counter > 1 %}display: none;{% endif %}" id="tbl-{{forloop.counter}}">
+					{% include "retailers/inventory_item_form_partial.html" %}
+				</table> {% endfor %} <a id="add-more-option" href="javascript:void()">Add another "color, size, inventory" option for this product</span> </td>
+			</tr>
+			<tr>
+				<th></th>
+				<td align="left">
+				<input type="submit" class="btn btn-primary" value="{% if item_pk %}Save{% else %}Add{% endif %}" />
+				</td>
+			</tr>
+		</table>
+		<br />
+		<br />
+	</form>
+</div>
+{% endblock %} 
+
+{% block extra_script %}
 <script type="text/javascript">
 	function hide_form_errors() {
 		$('.errorlist').remove();
@@ -165,63 +228,4 @@
 
 	})
 </script>
-<div class="section intro clearfix">
-	<h2><span>{{ retailer_profile.name }}</span></h2>
-	<h3>Add a Product to your Inventory</h3>
-</div>
-
-<div class="add-color-dlg" style="display: none">
-	<form class="add-color-form" method="post" action="{% url add_color %}">
-	{% csrf_token %}
-	<h3>New color</h3>
-	<input type="text" name="name" placeholder="Name"/>
-	<input type="text" name="color_css" placeholder="csss value"/>
-	<input type="submit" class="btn btn-primary btn-save" value="Submit"/><input type="button" class="btn btn-cancel" value="Cancel"/>
-	<p class="alert-message"></p>
-	</form>
-</div>
-
-<div class="add-size-dlg" style="display: none">
-	<form class="add-size-form" method="post" action="{% url add_size %}">
-	{% csrf_token %}
-	<h3>New size</h3>
-	<input type="text" name="size" placeholder="Name"/>
-	<input type="submit" class="btn btn-primary btn-save" value="Submit"/><input type="button" class="btn btn-cancel" value="Cancel"/>
-	<p class="alert-message"></p>
-	</form>
-</div>
-
-<div class="section body-copy bootstrap">
-	<form action="" method="post" id="add-item-form" enctype="multipart/form-data">
-		{% csrf_token %}
-		{{ form.non_field_errors }}
-		<table>
-			{{ form.as_table }}
-			<tr align="top" >
-				<th style="vertical-align: top !important;">Inventory Options: <span title="List available
-				inventory options for all color and
-				size combinations.  Choose a color
-				and corresponding size option then
-				allocate inventory (eg. Color:
-				Chocolate, Size: 2, Quantity Available:
-				10)" class="inventory" >?</span></th>
-				<td> {% for f in inventory_forms.management_form %}
-				{{ f }}
-				{% endfor %}
-				{% for inventory_form in inventory_forms.forms %}
-				<table cellpadding="10" class="inventory-item-entry" style="{% if forloop.counter > 1 %}display: none;{% endif %}" id="tbl-{{forloop.counter}}">
-					{% include "retailers/inventory_item_form_partial.html" %}
-				</table> {% endfor %} <a id="add-more-option" href="javascript:void()">Add another "color, size, inventory" option for this product</span> </td>
-			</tr>
-			<tr>
-				<th></th>
-				<td align="left">
-				<input type="submit" class="btn btn-primary" value="{% if item_pk %}Save{% else %}Add{% endif %}" />
-				</td>
-			</tr>
-		</table>
-		<br />
-		<br />
-	</form>
-</div>
-{% endblock %} 
+{% endblock %}

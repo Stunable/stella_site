@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from retailers.forms import RetailerProfileCreationForm, RetailerEditForm, ItemForm,\
                             ItemEditForm, LogoUploadForm
-from retailers.models import RetailerProfile, StylistItem, ShippingType
+from retailers.models import RetailerProfile, StylistItem, ShippingType,ProductUpload
 from racks.models import Item, Rack, Rack_Item
 from apps.common import json_view
 from django.views.decorators.csrf import csrf_exempt
@@ -24,6 +24,7 @@ from apps.racks.forms import ItemInventoryForm
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.conf import settings
+from django.forms import FileField,Form
 
 import urllib
 import urllib2
@@ -276,9 +277,20 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
 def add_item(request, item_id=None, template='retailers/add_item.html'):
     return edit_item(request, item_id, template)
 
+
+class StunableBulkUploadForm(Form):
+    def __init__(self, *args, **kwargs):
+        super(StunableBulkUploadForm, self).__init__(*args, **kwargs)
+
+    # data_types = (("mats", "MATS"), ("frames", "FRAMES"), ("art", "ART"), ("products", "STANDALONE PRODUCTS"))
+    zip_file = FileField(required=True, error_messages={'required':u'Choose a zip file to upload'})
+    # archive_type = forms.ChoiceField(choices=data_types, widget=RadioSelect)
+    # auto_crop = forms.BooleanField(initial=True,required=False)
+
 @login_required 
 def product_list(request, template="retailers/product_list.html"):
     try:
+        form = StunableBulkUploadForm
         retailer_profile = RetailerProfile.objects.get(user=request.user)
         pl = []
         s = set()
@@ -287,7 +299,7 @@ def product_list(request, template="retailers/product_list.html"):
                 pl.append(si)
                 s.add(si.item.pk)
         
-        ctx = {'retailer_profile': retailer_profile, 'product_list': pl}
+        ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form}
     except:
         return redirect(reverse("home"))
     return direct_to_template(request, template, ctx)

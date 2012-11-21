@@ -21,34 +21,7 @@
         width: 150px;
     }
 </style>
-<script type="text/javascript">
-    $(document).ready(function(){
-    	$('#account-information-menu-item').addClass('active-menu');
-    	
-        // make inline edit
-    $('.editable').hide();
-        
-    $('.edit').click(function(event){
-        event.preventDefault();
-        if ($(this).html() == 'Edit'){
-            $(this).html("Close");
-        }else{
-            $(this).html("Edit");
-        }
-        
-        var stc = $(this).parent().parent().find('.static');
-        var editable = $(this).parent().parent().find('.editable');
-        
-        if ($(stc).css('display')=='none'){
-            $(stc).css('display', '');
-            $(editable).css('display', 'none');
-        }else{
-            $(stc).css('display', 'none');
-            $(editable).css('display','');
-        }
-    });
-    })
-</script>
+
 <div class="section intro clearfix">
     <h2><span>Account Information</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
 </div>
@@ -152,3 +125,34 @@
         </div>
 </div>
 {% endblock %} 
+
+{% block extra_script %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#account-information-menu-item').addClass('active-menu');
+        
+        // make inline edit
+    $('.editable').hide();
+        
+    $('.edit').click(function(event){
+        event.preventDefault();
+        if ($(this).html() == 'Edit'){
+            $(this).html("Close");
+        }else{
+            $(this).html("Edit");
+        }
+        
+        var stc = $(this).parent().parent().find('.static');
+        var editable = $(this).parent().parent().find('.editable');
+        
+        if ($(stc).css('display')=='none'){
+            $(stc).css('display', '');
+            $(editable).css('display', 'none');
+        }else{
+            $(stc).css('display', 'none');
+            $(editable).css('display','');
+        }
+    });
+    })
+</script>
+{% endblock %}
