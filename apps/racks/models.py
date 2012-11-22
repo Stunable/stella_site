@@ -174,15 +174,15 @@ class RackManager(models.Manager):
             # new logic for private rack
             if rack.publicity == Rack.PRIVATE:
                 private_racks.append(rack)
-        # get shared racks for current user too
-        shared_racks = Rack.objects.filter(shared_users__in = [user])
-        for rack in shared_racks:
-            private_racks.append(rack)
+        # # get shared racks for current user too
+        # shared_racks = Rack.objects.filter(shared_users__in = [user])
+        # for rack in shared_racks:
+        #     private_racks.append(rack)
         
         return private_racks
     
     def OwnedRacksForUser(self, user):
-        user_racks = Rack.objects.filter(user=user)
+        user_racks = Rack.objects.filter(user=user,publicity=0)
         return user_racks
     
 class Rack(models.Model):
