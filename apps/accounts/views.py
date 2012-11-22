@@ -367,6 +367,7 @@ def add_fb_friends_to_list(list, js):
 
 
 def connect(request):
+    print 'connecting'
     for sa in request.user.social_auth.filter(provider='facebook'):
         friends = get_facebook_friends(sa)
         P = None
