@@ -37,7 +37,9 @@ class ExternalPost(models.Model):
         url = self.source + self.date.strftime('%Y/%m/%d')
         try:
             temp = NamedTemporaryFile(delete=True)
-            temp.write(urllib2.urlopen(url).read())
+            content = urllib2.urlopen(url).read()
+            print content
+            temp.write(content)
             temp.flush()
 
             self.text.save(url.replace('/','_')+'.html', File(temp))

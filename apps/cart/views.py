@@ -101,6 +101,7 @@ def remove_from_cart(request, product_id):
 
 @login_required
 def get_cart(request, template="cart/cart.html"):
+    print request
     return direct_to_template(request, template, {})
 
 @login_required

@@ -2157,11 +2157,11 @@ function hookupFBMessages(static_root,link){
 
         publish = {
           'method': 'feed'
-          ,'link': 'http://blah.stunabledev:8000'
+          ,'link': 'http://shopwithstella.org'
           ,'description': 'Hi, Check out Stunable'
           ,'name':"Stunable Invite"
           ,'to':$(this).attr('data-value')
-          ,'picture':'http://blah.stunabledev:8000/'+static_root+'/images/logo_small.jpg'
+          ,'picture':'http://shopwithstella.org/'+static_root+'/images/logo_small.jpg'
         }
 
         FB.ui(publish)
