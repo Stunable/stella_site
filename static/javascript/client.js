@@ -1455,7 +1455,7 @@ function initFriendDragDrop() {
             $('#prev').on('hover');
             $('#next').on('hover');
         }
-	});
+	});	
 	var temp = "";
 	
 	$('.panel-content').find('.share_item').droppable({
@@ -1468,8 +1468,6 @@ function initFriendDragDrop() {
 			var admirer_id = $(this).find('a').attr('data-value');
 			var admirer_type = $(this).find('a').attr('data-type');
 			var droppable = $(this).find('a');
-			
-			console.log(admirer_id)
 
 			$('#reduced_item_id').val(item_id);
 			$('#reduced_admirer_id').val(admirer_id);

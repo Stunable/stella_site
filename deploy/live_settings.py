@@ -31,7 +31,7 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/accounts/connect/'
 LOGIN_ERROR_URL = '/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
