@@ -1457,6 +1457,7 @@ function initFriendDragDrop() {
         }
 	});
 	var temp = "";
+	
 	$('.panel-content').find('.share_item').droppable({
 		accept : ".drag_item",
 		hoverClass : "drop_item_hover",
@@ -1468,11 +1469,14 @@ function initFriendDragDrop() {
 			var admirer_type = $(this).find('a').attr('data-type');
 			var droppable = $(this).find('a');
 			
+			console.log(admirer_id)
 
 			$('#reduced_item_id').val(item_id);
 			$('#reduced_admirer_id').val(admirer_id);
 			$('#reduced_admirer_type').val(admirer_type)
 			$('#reduced_admirer_name').val($(this).find('a').attr('data-name'));
+
+			console.log($('#reduced_admirer_type'))
 			
 			if (admirer_type!='facebook'){
 				$.fancybox({
