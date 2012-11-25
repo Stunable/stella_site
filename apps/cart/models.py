@@ -12,7 +12,6 @@ from django.db.models.signals import post_save,pre_save
 from apps.retailers.models import ShippingType
 from cart import Cart   
 from apps.retailers.models import RetailerProfile
-from apps.paypal.pro.helpers import PayPalWPP
 
 from accounts.models import ShippingInfo
 from stunable_wepay.models import WePayTransaction

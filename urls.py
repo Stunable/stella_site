@@ -85,8 +85,8 @@ urlpatterns = patterns('',
                        (r'^ckeditor/', include('ckeditor.urls')),
                        (r'^api/', include('api.urls')),
                     
-                       # paypal integration app
-                       (r'^purchased/(?P<uid>\d+)/(?P<id>\d+)/$', 'paypal.views.purchased' ), # purchase callback
+                       # # paypal integration app
+                       # (r'^purchased/(?P<uid>\d+)/(?P<id>\d+)/$', 'paypal.views.purchased' ), # purchase callback
 
                        )
 

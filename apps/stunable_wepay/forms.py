@@ -4,8 +4,7 @@ from django import forms
 from django.contrib.localflavor.us.us_states import STATE_CHOICES
 
 
-from paypal.pro.fields import CreditCardField, CreditCardExpiryField, CreditCardCVV2Field, CountryField
-from paypal.pro.exceptions import PayPalFailure
+from paypal_fields import CreditCardField, CreditCardExpiryField, CreditCardCVV2Field, CountryField
 
 class PaymentForm(forms.Form):
     """Form used to process direct payments."""
@@ -22,7 +21,7 @@ class PaymentForm(forms.Form):
 
     def process(self, request, item):
         """Process a PayPal direct payment."""
-        from paypal.pro.helpers import PayPalWPP
+        # from paypal.pro.helpers import PayPalWPP
         wpp = PayPalWPP(request) 
         params = self.cleaned_data
         params['creditcardtype'] = self.fields['acct'].card_type
@@ -37,7 +36,7 @@ class PaymentForm(forms.Form):
             # Create recurring payment:
             else:
                 nvp_obj = wpp.createRecurringPaymentsProfile(params, direct=True)
-        except PayPalFailure:
+        except:
             return False
         return True
 

@@ -14,7 +14,7 @@ from fedex.base_service import FedexError
 from apps.cart.plugins.validate_address import validate_this
 
 from apps.cart.models import Item as CartItem
-from paypal.pro.exceptions import PayPalFailure
+# from paypal.pro.exceptions import PayPalFailure
 
 from stunable_wepay.views import WePayHandleCC
 from stunable_wepay.helpers import WePayPayment
@@ -26,7 +26,7 @@ from apps.cart.cart import Cart
 from django.template.context import RequestContext
 from accounts.models import UserProfile, CCToken
 import json
-from paypal.pro.helpers import PayPalWPP
+# from paypal.pro.helpers import PayPalWPP
 from django.contrib.sites.models import Site
 
 from apps.cart.plugins.taxcloud import TaxCloudClient
@@ -172,7 +172,7 @@ def update_zipcode(request):
     return HttpResponse(json.dumps(ret, ensure_ascii=False), mimetype='application/json')
     
     
-from apps.paypal.models import refund_transaction
+# from apps.paypal.models import refund_transaction
 
 @login_required
 def shopper_return_purchase(request):

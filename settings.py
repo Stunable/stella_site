@@ -169,7 +169,7 @@ INSTALLED_APPS = (
     'news',
     'social_auth',
     'retailers',
-    'paypal',
+    # 'paypal',
     'cart',
     'contact_form',
     'bootstrap',
