@@ -358,10 +358,9 @@
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.touchcarousel-1.1.js"></script>
         <script src="{{ STATIC_URL }}javascript/jquery.spritely-0.6.1.js" type="text/javascript"></script>
         <script type="text/javascript" src="{{STATIC_URL}}javascript/client.js"></script>
-        <script type="text/javascript" src="{{STATIC_URL}}javascript/client.js"></script>
         <script>
             $(document).ready(function() {
-                function initAddFriend(){
+                    function initAddFriend(){
                     // unbind the click function just in case
                     $('.plus-inline').unbind("click");
                     // when click on the add friend icon
@@ -430,7 +429,7 @@
                                     $.each(list, function(){
                                         $(this).html(returnValue);
                                     });
-                                    hookupFBMessages("{{STATIC_URL}}","{{WWW_ROOT}}");
+                                    hookupFBMessages("{{STATIC_URL}}","{{URL}}");
                                     initFriendDragDrop();
                                     initAddFriend();
                                     initDragDrop();
@@ -468,7 +467,7 @@
                                   // listFilter($('.friend-search-box')[1], $('.friend-list')[1]);
                                   getUserlist($('.friend-search-box')[1], $('.search-result'));
                                   initFriendDragDrop();
-                                  hookupFBMessages("{{STATIC_URL}}","{{WWW_ROOT}}");
+                                  hookupFBMessages("{{STATIC_URL}}","{{URL}}");
                               }
                           });
                       }
@@ -480,7 +479,7 @@
                             initFancyBox('#add-rack ');
                             initFancyBox('#add-friend ');
                             initFancyBox();
-                            hookupFBMessages("{{STATIC_URL}}","{{WWW_ROOT}}");
+                            hookupFBMessages("{{STATIC_URL}}","{{URL}}");
                       {% endif %}
                       fixDragDropIssue();
                   });

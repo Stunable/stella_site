@@ -6,7 +6,7 @@ import random
 from django.conf import settings
 
 def racks(request):
-    context = {}
+    context = {'URL':settings.WWW_ROOT,'STATIC_URL':settings.STATIC_URL}
     user = request.user
     if not user.is_authenticated():
         context['public_racks'] = Rack.objects.filter(anon_user_profile=request.session.get('anonymous_profile'))

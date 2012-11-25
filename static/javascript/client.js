@@ -2150,18 +2150,15 @@ function login_modal(){
 	initFancyBox('#social_login_box ');
 }
 
-function hookupFBMessages(static_root,link){
-   	console.log(static_root,link)
+function hookupFBMessages(STATIC_URL,URL){
     $('.friend_adder').click(function(e){
-        console.log(this)
-
         publish = {
           'method': 'feed'
-          ,'link': 'http://shopwithstella.org'
+          ,'link': URL
           ,'description': 'Hi, Check out Stunable'
           ,'name':"Stunable Invite"
           ,'to':$(this).attr('data-value')
-          ,'picture':'http://shopwithstella.org/'+static_root+'/images/logo_small.jpg'
+          ,'picture':URL+STATIC_URL+'/images/logo_small.jpg'
         }
 
         FB.ui(publish)
