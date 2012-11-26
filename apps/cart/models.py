@@ -340,7 +340,7 @@ class Item(models.Model):
         retailer = self.get_retailer()
         if self.sales_tax_amount is None or refresh:
             self.sales_tax_amount = TCC.get_tax_rate_for_item(shipping_address, retailer, [self])
-            if self.sales_tax_amount != 0:
+            if self.sales_tax_amount != 0.00:
                 self.save()
             else:
                 return float(self.total_price) * .05

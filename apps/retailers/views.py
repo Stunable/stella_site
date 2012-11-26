@@ -86,8 +86,10 @@ def setup_wepay(request):
         print resp_data
 
         #{"user_id":121042660,"access_token":"e4423c3a3a3a3f62aa53151a9b2fca1718af0bc78b40dba6578716b9a2979fa5","token_type":"BEARER"}
-
-        retailer_profile = RetailerProfile.objects.get(user=request.user)
+        if request.session.get('retailer_id',None):
+            retailer_profile = RetailerProfile.objects.get(id=request.session.get('retailer_id'))
+        else:
+            retailer_profile = RetailerProfile.objects.get(user=request.user)
         # retailer_profile.wepay_acct = resp_data['user_id']
         retailer_profile.wepay_token = resp_data['access_token']
 
