@@ -38,15 +38,14 @@
 		<div class="control-group">
 			<label class="control-label">{{ field.label }}</label>
 			<div class="controls">
-				<input type="text" name="shipping-{{ field.name }}" value="{{field.value|default_if_none:''}}" />
-				{{ field.errors }}
+				{{field}}
 			</div>
 		</div>
 		{% endfor %}
 		
 		<div class="control-group">
 			<div class="controls">
-				<h2 style="margin: 0;">Total: ${{cart.grand_total}}</h2>
+				<h2 style="margin: 0;">Total: ${{cart.grand_total|floatformat:2}}</h2>
 			</div>
 		</div>		
 <!-- 		<div class="control-group">

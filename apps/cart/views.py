@@ -101,7 +101,6 @@ def remove_from_cart(request, product_id):
 
 @login_required
 def get_cart(request, template="cart/cart.html"):
-    print request
     return direct_to_template(request, template, {})
 
 @login_required
@@ -140,7 +139,7 @@ def update_info(request, template="cart/info.html"):
                                               initial={'customer':user_profile, 
                                                        'zip_code':request.session.get('recipient_zipcode')}), 
         })
-    else:
+    else:#request == POST
         shipping_form = ShippingInfoForm(request.POST, prefix="shipping", instance=default_shipping)
         if shipping_form.is_valid():
             shipping_info = shipping_form.save(commit=False)
@@ -148,9 +147,10 @@ def update_info(request, template="cart/info.html"):
             if not default_shipping:
                 shipping_info.is_default=True
             shipping_info.save()
+            return HttpResponseRedirect(reverse('express_checkout'))
         else:
             ctx['shipping'] = shipping_form
-                                
+                                     
         # return HttpResponse(json.dumps(response, ensure_ascii=False), mimetype='application/json')
     
     return direct_to_template(request, template, ctx)
@@ -323,10 +323,10 @@ def wpp_reference_pay(request):
             wpp = WePayPayment(request,current_cart,cc_token)
             wpp.authorizePayment()
 
-    except PayPalFailure:
+    except:
         raise
         return render_to_response('cart/error.html', 
-                                  {'error': "Can not proccess payment, please pay by alternative method" }, 
+                                  {'error': "Can not proccess payment, please contact us at payment@stunable.com" }, 
                                   context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect(reverse('wpp_success'))

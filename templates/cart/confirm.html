@@ -70,7 +70,15 @@ html.wait, html.wait * { cursor: wait !important; }
 	               </tr>
        
            		{% endfor %}
-           		<tr id="product-item-{{item.product.pk}}">
+                <tr >
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>subtotal:</td>
+                    <td>${{cart.totals_as_pretty_dict.total}}</td>
+                </tr>
+           		<tr>
            			<td></td>
            		    <td></td>
            		    <td></td>
@@ -78,7 +86,7 @@ html.wait, html.wait * { cursor: wait !important; }
            		    <td>total tax:</td>
            		    <td>${{cart.totals_as_pretty_dict.tax}}</td>
            		</tr>
-           		<tr id="product-item-{{item.product.pk}}">
+           		<tr>
            			<td></td>
            		    <td></td>
            		    <td></td>
@@ -86,7 +94,15 @@ html.wait, html.wait * { cursor: wait !important; }
            		    <td>total shipping:</td>
            		    <td>${{cart.totals_as_pretty_dict.shipping_and_handling}}</td>
            		</tr>
-           		<tr id="product-item-{{item.product.pk}}">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>processing fees:</td>
+                    <td>${{cart.totals_as_pretty_dict.processing}}</td>
+                </tr>
+           		<tr>
            			<td></td>
            		    <td></td>
            		    <td></td>

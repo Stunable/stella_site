@@ -25,6 +25,8 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.conf import settings
 from django.forms.models import modelform_factory
+from wepay import WePay
+
 import urllib
 import urllib2
 
@@ -81,13 +83,38 @@ def setup_wepay(request):
         print url
         response = urllib2.urlopen(url)
         resp_data = json.loads(response.read())
-
+        print resp_data
 
         #{"user_id":121042660,"access_token":"e4423c3a3a3a3f62aa53151a9b2fca1718af0bc78b40dba6578716b9a2979fa5","token_type":"BEARER"}
-        
-        retailer_profile = RetailerProfile.objects.get(id=request.session.get('retailer_id'))
-        retailer_profile.wepay_acct = resp_data['user_id']
+
+        retailer_profile = RetailerProfile.objects.get(user=request.user)
+        # retailer_profile.wepay_acct = resp_data['user_id']
         retailer_profile.wepay_token = resp_data['access_token']
+
+        WEPAY = WePay(settings.WEPAY_PRODUCTION, resp_data['access_token'])
+
+
+        # response = WEPAY.call('/account/find', {
+        #     'name': 'stunable payments account',
+        # })
+
+        # if type(response) == type([]):
+        #     if len(response):
+        #         retailer_profile.wepay_acct = response[-1]['account_id']
+        #     else:
+        try:
+            response = WEPAY.call('/account/create', {
+                'reference_id': 'stunable_payment_account_001',
+                'name': 'stunable payments account',
+                'description': 'your account for transactions with Stunable.com. Email payment@stunable.com for any questions.'
+            })
+
+            retailer_profile.wepay_acct = response['account_id']
+        except:
+            print 'user already had stunable_payment_account_001'
+
+
+
         retailer_profile.save()
 
         template="accounts/thank-you.html"
@@ -96,8 +123,7 @@ def setup_wepay(request):
 
 
     else:
-
-        url = 'https://stage.wepay.com/v2/oauth2/authorize?client_id='+settings.WEPAY_CLIENT_ID+'&redirect_uri='+settings.WWW_ROOT+'retailers/wepay/&scope=manage_accounts'
+        url = 'https://stage.wepay.com/v2/oauth2/authorize?client_id='+settings.WEPAY_CLIENT_ID+'&redirect_uri='+settings.WWW_ROOT+'retailers/wepay/&scope=manage_accounts,collect_payments,refund_payments,preapprove_payments,send_money'
         return HttpResponseRedirect(url)
 
 

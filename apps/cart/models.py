@@ -184,7 +184,7 @@ class Item(models.Model):
     
     shipping_number = models.CharField(max_length=250, blank=True, null=True)
     shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
-    shipping_label = models.ForeignKey(ShippingLabel,null=True)
+    shipping_label = models.ForeignKey(ShippingLabel,null=True,blank=True)
     status = models.CharField(max_length=250, default="ordered")
 
     class Meta:
@@ -193,9 +193,14 @@ class Item(models.Model):
         ordering = ('cart',)
 
     def __unicode__(self):
-        return u'%d units of %s' % (self.quantity, self.product.__class__.__name__)
+        try:
+            return u'%d units of %s' % (self.quantity, self.product.__class__.__name__)
+        except:
+            return 'error item'
 
     def total_price(self):
+        print 'q:',type(self.quantity)
+        print 'p:',self.unit_price
         return self.quantity * self.unit_price
     total_price = property(total_price)
     
@@ -327,11 +332,18 @@ class Item(models.Model):
         retailer = product.retailers.all()[0]
         return RetailerProfile.objects.get(user=retailer)
 
-    def get_tax_amount(self, buyer, refresh=None):
+    def get_tax_amount(self, buyer, zip_code, refresh=None):
+        try:
+            shipping_address = ShippingInfo.objects.get(customer=buyer,is_default=True)
+        except:
+            return float(self.total_price) * .05
         retailer = self.get_retailer()
-        if not self.sales_tax_amount or refresh:
-            self.sales_tax_amount = TCC.get_tax_rate_for_item(ShippingInfo.objects.filter(customer=buyer)[0], retailer, [self])
-            self.save()
+        if self.sales_tax_amount is None or refresh:
+            self.sales_tax_amount = TCC.get_tax_rate_for_item(shipping_address, retailer, [self])
+            if self.sales_tax_amount != 0:
+                self.save()
+            else:
+                return float(self.total_price) * .05
         return self.sales_tax_amount
 
     def get_shipping_cost(self,recipient_zipcode,refresh=None):
@@ -342,7 +354,7 @@ class Item(models.Model):
         return self.shipping_amount
 
     def get_additional_fees(self):
-        return settings.WEPAY_FIXED_FEE + settings.WEPAY_PERCENTAGE * self.sub_total
+        return settings.WEPAY_FIXED_FEE + settings.WEPAY_PERCENTAGE*.01 * self.sub_total
 
 
 from stunable_wepay.signals import payment_was_successful

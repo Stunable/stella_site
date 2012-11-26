@@ -219,7 +219,6 @@ def welcome(request, template="accounts/welcome.html"):
     if request.user.is_authenticated():
         profile = get_or_create_profile(request)
     else:
-
         if request.session.has_key('anonymous_profile'):
             profile = request.session.get('anonymous_profile')
         else:

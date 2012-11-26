@@ -70,7 +70,7 @@
                     <td>Before Tax:</td><td><strong><span id='cart-total'>{{cart.total|floatformat:2}}</span></strong></td>
                 </tr>
                 <tr>
-                    <td>Tax: </td><td><strong><span id='cart-tax'>{{cart.tax|floatformat:2}}</span></strong></td>
+                    <td>(estimated) Tax: </td><td><strong><span id='cart-tax'>{{cart.tax|floatformat:2}}</span></strong></td>
                 </tr>
                 <tr>
                     <td>Shipping method</td><td>
@@ -92,6 +92,7 @@
                     <td><strong><span id='cart-shipping'>{{cart.cart.shipping_and_handling_cost|floatformat:2 }}</span></strong></td>
                 </tr>
                 <tr>
+                    
                     <td>Grand total:</td><td><strong><span id='cart-grand-total'>{{cart.grand_total|floatformat:2}}</span></strong></td>
                 </tr>
                 <tr>

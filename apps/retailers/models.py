@@ -108,4 +108,7 @@ class StylistItem(models.Model):
     item = models.ForeignKey(Item)
     
     def __unicode__(self):
-        return self.stylist.username + ' ' + self.item.name
+        try:
+            return self.stylist.username + ' ' + self.item.name
+        except:
+            return '-deleted- '+self.item.name

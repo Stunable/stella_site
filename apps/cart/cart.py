@@ -99,7 +99,7 @@ class Cart:
             item.product = product
             if unit_price:
                 item.unit_price = unit_price
-            item.quantity = quantity
+            item.quantity = int(quantity)
             item.clor = color
             if size:
                 item.size = size
@@ -110,9 +110,9 @@ class Cart:
         else: #ItemAlreadyExists
             item.unit_price = unit_price
             if item.quantity != quantity:
-                item.quantity = quantity
-                item.get_tax_amount(self.request.user.get_profile(),refresh=True)
-                item.get_shipping_cost(self.request.user.get_profile(),refresh=True)
+                item.quantity = int(quantity)
+                item.get_tax_amount(self.request.user.get_profile(),self.recipient_zipcode,refresh=True)
+                item.get_shipping_cost(self.recipient_zipcode,refresh=True)
             item.color = color
 
 
@@ -133,7 +133,6 @@ class Cart:
     def update_shipping_and_handling_cost(self):
         if not self.recipient_zipcode:
             return
-        
         
         self.shipping_and_handling_cost = 0
         
@@ -161,11 +160,12 @@ class Cart:
         for item in self.cart.item_set.all():
             try:
                 total += float(item.total_price)
-                print self.request.user.get_profile()
-                tax += float(item.get_tax_amount(self.request.user.get_profile()))
+                tax += float(item.get_tax_amount(self.request.user.get_profile(),self.recipient_zipcode))
+                # print 'total without additional:',total
                 processing += float(item.get_additional_fees())
             except Exception, e:
-                print e
+                print 'cart processing error:',e
+        print 'summary:',total,tax,processing
         return total,tax,processing
     
     def calculate(self):
@@ -174,7 +174,6 @@ class Cart:
         self.tax = tax
         self.processing = processing        
         self.grand_total = self.tax + self.total +self.processing + float(self.cart and self.cart.shipping_and_handling_cost or 0)
-        self.cart.grand_total = self.grand_total
 
     
     def totals_as_dict(self):
@@ -183,6 +182,7 @@ class Cart:
             total=self.total,
             tax=self.tax,
             shipping_and_handling=float(self.cart.shipping_and_handling_cost),
+            processing=float(self.processing),
             grand_total=self.grand_total
         )
 

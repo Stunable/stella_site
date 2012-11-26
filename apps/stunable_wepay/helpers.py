@@ -38,15 +38,23 @@ class WePayPayment(object):
             retailer = product.retailers.all()[0]
             retailer_profile = RetailerProfile.objects.get(user=retailer)
 
+            WEPAY = WePay(settings.WEPAY_PRODUCTION, retailer_profile.wepay_token)
+
+            app_fee = float(item.total_price)*.2
+            price_minus_fee = item.grand_total - app_fee
+
+            print price_minus_fee
+            print app_fee
+
             response = WEPAY.call('/checkout/create', {
                 'auto_capture':False,
                 'account_id': retailer_profile.wepay_acct,
-                'amount': str(item.total_price),
+                'amount': str(price_minus_fee),
                 'short_description': item.get_product().__unicode__(),
                 'type': 'GOODS',
                 'payment_method_id': self.cc_token.token, # the user's credit_card_id 
                 'payment_method_type': 'credit_card',
-                'app_fee':str(float(item.total_price)*.2),
+                'app_fee':str(app_fee),
                 'fee_payer':'payee',
             })
 

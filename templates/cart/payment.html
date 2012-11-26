@@ -139,6 +139,7 @@
 				var response = WePay.credit_card.create( data, function(data) {
 					if (data.error) {
 						console.log(data);
+						alert(data.error_description)
 						// handle error response
 					} else {
 						$('#wepay_id').val(data.credit_card_id)

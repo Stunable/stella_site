@@ -12,9 +12,11 @@ class TaxCloudClient(object):
     def get_tax_rate_for_item(self, source_address, destination_address, item_list):
         self.index = 0
         cartItem_list = self.prep_cartItems(item_list)
-
+        print 'items:',cartItem_list
         origin = self.convert_verified_address(self.verify_address(source_address))
+        print 'tcc origin:',origin
         dest  = self.verify_address(destination_address)
+        print 'tcc dest:',dest
 
         l = self.client.factory.create('Lookup')
         l.apiLoginID = settings.TAX_TAXCLOUD_API_ID
@@ -26,7 +28,10 @@ class TaxCloudClient(object):
         l.destination = dest
         l.deliveredBySeller = False
 
-        return self.client.service.Lookup(l).CartItemsResponse.CartItemResponse[0].TaxAmount
+        print 'calling tax_cloud'
+        response = self.client.service.Lookup(l).CartItemsResponse.CartItemResponse
+        print response
+        return response[0].TaxAmount
 
 
     def verify_address(self,address_object):
