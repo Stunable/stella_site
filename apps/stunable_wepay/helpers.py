@@ -41,12 +41,9 @@ class WePayPayment(object):
             WEPAY = WePay(settings.WEPAY_PRODUCTION, retailer_profile.wepay_token)
 
             app_fee = float(item.total_price)*.2
-            price_minus_fee = item.grand_total - app_fee
+            price_minus_fee = item.grand_total
 
-            print price_minus_fee
-            print app_fee
-
-            response = WEPAY.call('/checkout/create', {
+            data = {
                 'auto_capture':False,
                 'account_id': retailer_profile.wepay_acct,
                 'amount': str(price_minus_fee),
@@ -56,7 +53,11 @@ class WePayPayment(object):
                 'payment_method_type': 'credit_card',
                 'app_fee':str(app_fee),
                 'fee_payer':'payee',
-            })
+            }
+
+            print data
+
+            response = WEPAY.call('/checkout/create',data)
 
             if response['state'] == "authorized":
                 success.append((item,response))

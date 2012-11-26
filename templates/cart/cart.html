@@ -88,11 +88,16 @@
                     <td colspan="2"><span class="btn btn-primary update-zipcode" style="display:none">Re-calculate shipping cost</span></td>
                 </tr> -->
                 <tr>
+                    <td>Processing fee:</td>
+                    <td><strong><span id='cart-processing'>{{cart.processing|floatformat:2 }}</span></strong></td>
+                </tr>
+                <tr>
+                <tr>
                     <td>Shipping and handling:</td>
                     <td><strong><span id='cart-shipping'>{{cart.cart.shipping_and_handling_cost|floatformat:2 }}</span></strong></td>
                 </tr>
                 <tr>
-                    
+                
                     <td>Grand total:</td><td><strong><span id='cart-grand-total'>{{cart.grand_total|floatformat:2}}</span></strong></td>
                 </tr>
                 <tr>

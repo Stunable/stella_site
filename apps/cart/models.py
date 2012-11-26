@@ -213,7 +213,7 @@ class Item(models.Model):
 
     @property
     def grand_total(self):
-        return float(self.sub_total) * float(self.get_additional_fees())
+        return float(self.sub_total) + float(self.get_additional_fees())
 
     def is_refundable(self):
         return self.status != "refunded"
@@ -344,7 +344,10 @@ class Item(models.Model):
                 self.save()
             else:
                 return float(self.total_price) * .05
-        return self.sales_tax_amount
+        if self.sales_tax_amount:
+            return self.sales_tax_amount
+        else:
+            return float(self.total_price) * .05
 
     def get_shipping_cost(self,recipient_zipcode,refresh=None):
         retailer_zipcode = self.get_retailer().zip_code
