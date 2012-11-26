@@ -56,7 +56,7 @@
                     Color: <span class='cart-item-size'>{{ item.color }}</span>
                 </p>
                 <p class='quantity'>
-                    Quantity: <span class='cart-item-quantity'>{{ item.quantity }}</span><a class='cart-change-quantity' href="{% url update_cart product_id=item.product.pk %}">change</a>
+                    Quantity: <span class='cart-item-quantity'>{{ item.quantity }}</span><a class='cart-change-quantity' href="cart/update_cart/{{item.product.pk}}">change</a>
                 </p>
                 <input type="hidden" class="path" value="/cart/update_cart/{{item.product.pk}}/"/>
                 <a class='cart-remove' href="{% url remove_from_cart product_id=item.product.pk %}">remove item</a>
