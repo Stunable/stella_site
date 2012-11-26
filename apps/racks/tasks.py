@@ -23,7 +23,7 @@ def prettify(instance):
 
     temp = NamedTemporaryFile(delete=True)
      
-    grad = Image.open(os.path.join(settings.MEDIA_ROOT,'item_grad.jpg'))
+    grad = Image.open(os.path.join(settings.PROJECT_ROOT,'static','item_grad.jpg'))
     gradsize = grad.resize(outpic.size)
     try:
         outpic = ImageChops.add(outpic,gradsize)
