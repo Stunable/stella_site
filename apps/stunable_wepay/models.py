@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from apps.retailers.models import RetailerProfile
 
 from django.conf import settings
 
@@ -16,16 +17,22 @@ class WePayTransaction(models.Model):
     def capture_funds(self):
         if self.state != 'captured':
             try:
+                WEPAY = WePay(settings.WEPAY_PRODUCTION, self.get_retailer().wepay_token)
+
                 response = WEPAY.call('/checkout/capture', {
                     'checkout_id': self.checkout_id
                 })
-
+                print response
                 if response.has_key('state'):
                     self.state = response['state']
                     self.save()
             except:
-                pass
+                raise
         
         return self.state
 
 
+    def get_retailer(self):
+        P = self.purchase_set.all()[0]
+        R = RetailerProfile.objects.get(user=P.checkout.retailer)
+        return R

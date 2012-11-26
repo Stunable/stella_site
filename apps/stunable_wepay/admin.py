@@ -5,8 +5,11 @@ from django.contrib import admin
 from apps.stunable_wepay.models import *
 
 
-admin.site.register(WePayTransaction)
+class WePayTransactionAdmin(admin.ModelAdmin):
+    actions = ('capture_funds',)
 
-# class WePayTransactionAdmin(admin.ModelAdmin):
+    def capture_funds(self,request,queryset):
+        for obj in queryset:
+            obj.capture_funds()
 #     pass
-# admin.site.register(WePayTransaction, WePayTransactionAdmin)
+admin.site.register(WePayTransaction, WePayTransactionAdmin)
