@@ -105,8 +105,8 @@ class Purchase(models.Model):
             self.notify_retailer()
 
         if self.shipping_number:
-            if self.transaction.capture_funds() == 'captured':
-                self.checkout.check_complete()
+            #if self.transaction.capture_funds() == 'captured':
+            self.checkout.check_complete()
             
     def notify_retailer(self):
         url = u"http://%s%s" % (
