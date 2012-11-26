@@ -76,6 +76,8 @@ class WePayPayment(object):
                 print 'authorized payment for ',item
                 payment_was_successful.send(sender=wpt, item=item)
 
+            return True
+
         
 
 # def paypal_time(time_obj=None):
