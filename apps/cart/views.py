@@ -321,7 +321,7 @@ def wpp_reference_pay(request):
         current_cart = Cart(request)
         if not current_cart.cart.checked_out:
             wpp = WePayPayment(request,current_cart,cc_token)
-            wpp.authorizePayment():
+            wpp.authorizePayment()
     except:
         raise
         return render_to_response('cart/error.html', 
