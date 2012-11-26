@@ -213,7 +213,8 @@ class Item(models.Model):
 
     @property
     def grand_total(self):
-        return float(self.sub_total) + float(self.get_additional_fees())
+
+        return float(self.sub_total) + self.get_tax_amount() + float(self.get_additional_fees())
 
     def is_refundable(self):
         return self.status != "refunded"
@@ -332,7 +333,7 @@ class Item(models.Model):
         retailer = product.retailers.all()[0]
         return RetailerProfile.objects.get(user=retailer)
 
-    def get_tax_amount(self, buyer, zip_code, refresh=None):
+    def get_tax_amount(self, buyer=None, zipcode=None, refresh=None):
         try:
             shipping_address = ShippingInfo.objects.get(customer=buyer,is_default=True)
         except:

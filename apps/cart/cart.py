@@ -111,7 +111,7 @@ class Cart:
             item.unit_price = unit_price
             if item.quantity != quantity:
                 item.quantity = int(quantity)
-                item.get_tax_amount(self.request.user.get_profile(),self.recipient_zipcode,refresh=True)
+                item.get_tax_amount(buyer=self.request.user.get_profile(),zipcode=self.recipient_zipcode,refresh=True)
                 item.get_shipping_cost(self.recipient_zipcode,refresh=True)
             item.color = color
 
@@ -160,7 +160,7 @@ class Cart:
         for item in self.cart.item_set.all():
             try:
                 total += float(item.total_price)
-                tax += float(item.get_tax_amount(self.request.user.get_profile(),self.recipient_zipcode))
+                tax += float(item.get_tax_amount(buyer=self.request.user.get_profile(),zipcode=self.recipient_zipcode))
                 # print 'total without additional:',total
                 processing += float(item.get_additional_fees())
             except Exception, e:
