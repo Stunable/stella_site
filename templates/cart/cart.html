@@ -59,7 +59,7 @@
                     Quantity: <span class='cart-item-quantity'>{{ item.quantity }}</span><a class='cart-change-quantity' href="/cart/update_cart/{{item.product.pk}}">change</a>
                 </p>
                 <input type="hidden" class="path" value="/cart/update_cart/{{item.product.pk}}/"/>
-                <a class='cart-remove' href="/cart/remove_from_cart/{{item.product.pk}}">remove item</a>
+                <a class='cart-remove' href="/cart/remove_from_cart/{{item.product.pk}}/">remove item</a>
             </div>
             {% endfor %}
         </div>

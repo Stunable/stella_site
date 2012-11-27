@@ -90,6 +90,7 @@ class Purchase(models.Model):
     transaction = models.ForeignKey(WePayTransaction)
     ref = models.CharField(max_length=250, blank=True, null=True)
     shipping_number = models.CharField(max_length=250, blank=True, null=True)
+    delivery_date = models.DateTimeField(blank=True,null=True)
     shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
     purchased_at = models.DateTimeField(auto_now=True)
 
@@ -194,7 +195,7 @@ class Item(models.Model):
 
     def __unicode__(self):
         try:
-            return u'%d units of %s' % (self.quantity, self.product.__class__.__name__)
+            return u'%d - %s' % (self.quantity, self.product)
         except:
             return 'error item'
 

@@ -7,11 +7,15 @@ class CartAdmin(admin.ModelAdmin):
 admin.site.register(Cart,CartAdmin)
 
 class PurchaseAdmin(admin.ModelAdmin):
-    list_display=('cart','checkout','transaction_status')
-    actions = ('track_package',)
+    list_display=('cart','checkout','transaction_status','item','delivery_date')
+    actions = ('track_package','capture_payment')
 
     def transaction_status(self,instance):
         return instance.transaction.state
+
+    def capture_payment(self,request,queryset):
+        for obj in queryset:
+            obj.transaction.capture_funds()
 
     def track_package(self,request,queryset):
         for obj in queryset:
