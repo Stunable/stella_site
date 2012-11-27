@@ -35,7 +35,7 @@ class Cart:
                 
             self.cart = cart
             self.set_shipping_option(request.session.get('shipping_method'))
-            
+
             self.cart.shipping_and_handling_cost = cart.shipping_and_handling_cost
             
         self.calculate()
@@ -220,7 +220,6 @@ class Cart:
             self.cart.shipping_method = option
             self.cart.save()
         except Exception,e:
-            raise
             print 'error setting shipping',e
 
         self.shipping_method = self.cart.shipping_method
