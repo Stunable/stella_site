@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 from tagging.models import Tag
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.localflavor.us.us_states import STATE_CHOICES
+from django.contrib.localflavor.us.models import PhoneNumberField
 
 AGE_RANGE_CHOICE = (
     ('','optional'),
@@ -185,7 +186,7 @@ class Address(models.Model):
     state = models.CharField(_("State"), max_length=50, choices=STATE_CHOICES)
     zip_code = models.CharField(_("Zip code"), max_length=10)
     country = models.CharField(_("Country"), default='US', choices=(('US', 'United States'), ), max_length=250,)
-    phone = models.CharField(_("Phone"), blank=True, max_length=20)
+    phone = PhoneNumberField(_("Phone"))
     email = models.EmailField(_("E-Mail"), blank=True, null=True, max_length=50)
 
     def __unicode__(self):

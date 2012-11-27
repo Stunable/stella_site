@@ -215,7 +215,7 @@ class BillingInfoForm(AjaxModelForm):
 class ShippingInfoForm(forms.ModelForm):
     class Meta:
         model = ShippingInfo        
-        exclude = ('email', 'phone', 'company_name', 'is_default', 'customer')
+        exclude = ('email', 'company_name', 'is_default', 'customer')
 
     def clean(self):
         T = testAddress(self.cleaned_data)
@@ -245,7 +245,7 @@ class ShippingInfoForm(forms.ModelForm):
 class ShippingInfoEditForm(AjaxModelForm):
     class Meta:
         model = ShippingInfo
-        exclude = ('is_default', 'compnay_name', 'customer', 'country', 'phone', 'email')
+        exclude = ('is_default', 'compnay_name', 'customer', 'country', 'email')
 
 class LoginForm(forms.Form):
     email = forms.CharField()
