@@ -66,10 +66,10 @@ from fedex.config import FedexConfig
 
 # Change these values to match your testing account/meter number.
 # Change these values to match your testing account/meter number.
-FEDEX_CONFIG = FedexConfig(key='G9zxZissGIQkOgo4',
-                         password='bX3GkoY0uIQjrIl1m66jT2OTa',
-                         account_number='510087968',
-                         meter_number='118562345',
+FEDEX_CONFIG = FedexConfig(key='zA9Z6uz3gHNKkU3L',
+                         password='8TA1Z49ZTJztPJ8a6uPqsjqKF',
+                         account_number='147593830',
+                         meter_number='104573181',
                          use_test_server=True)
 
 WEPAY_ACCESS_TOKEN = "c1b6ab85a43f00efcd889931df0eae6bfd23399570f9f4fef5dd50fc0c5f6e06"

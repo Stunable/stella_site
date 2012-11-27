@@ -6,7 +6,7 @@ from django.conf import settings
 CART_ID = 'CART-ID'
 
 
-from apps.retailers.models import RetailerProfile
+from apps.retailers.models import RetailerProfile,ShippingType
 
 
 class ItemAlreadyExists(Exception):
@@ -34,6 +34,8 @@ class Cart:
                 cart = self.new(request)
                 
             self.cart = cart
+            self.set_shipping_option(request.session.get('shipping_method'))
+            
             self.cart.shipping_and_handling_cost = cart.shipping_and_handling_cost
             
         self.calculate()
@@ -137,9 +139,12 @@ class Cart:
         self.shipping_and_handling_cost = 0
         
         for item in self.cart.item_set.all():
-            retailer = item.product.item.retailers.all()[0]
-            retailer_profile = RetailerProfile.objects.get(user=retailer)
-            retailer_zipcode = retailer_profile.zip_code
+            try:
+                retailer = item.product.item.retailers.all()[0]
+                retailer_profile = RetailerProfile.objects.get(user=retailer)
+                retailer_zipcode = retailer_profile.zip_code
+            except:
+                pass
 
             self.shipping_and_handling_cost += item.get_shipping_cost(recipient_zipcode=self.recipient_zipcode)
             
@@ -203,6 +208,22 @@ class Cart:
         self.cart.ref = str(abs(hash(str(self.cart.pk))))[:10] + str(self.request.user.pk)
         self.cart.save()
 
+    def get_shipping_options(self):
+        return ShippingType.objects.all()
+
+    def get_shipping_method(self):
+        return self.cart.shipping_method
+
+    def set_shipping_option(self,name):
+        try:
+            option = self.get_shipping_options().filter(name=name)[0]
+            self.cart.shipping_method = option
+            self.cart.save()
+        except Exception,e:
+            raise
+            print 'error setting shipping',e
+
+        self.shipping_method = self.cart.shipping_method
 
     def get_items_by_retailer(self):
         out = {}

@@ -21,7 +21,8 @@ def get_rate(**kwargs):
     weight = kwargs['weight']
     shipper_zipcode = kwargs['shipper_zipcode']
     recipient_zipcode = kwargs['recipient_zipcode']
-    shipping_option = kwargs.get('shipping_option','FEDEX_GROUND')
+    # shipping_option = kwargs.get('shipping_option','FEDEX_GROUND')
+    shipping_option = kwargs.get('shipping_option','STANDARD_OVERNIGHT')
     
     # Set this to the INFO level to see the response from Fedex printed in stdout.
     logging.basicConfig(level=logging.DEBUG)

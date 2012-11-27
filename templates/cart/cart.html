@@ -74,8 +74,10 @@
                 </tr>
                 <tr>
                     <td>Shipping method</td><td>
-                    <select name="shipping-method" style="width:auto;">
-                        <option value="fedex">Fedex</option>
+                    <select id="shipping_option_select" name="shipping-method" style="width:auto;">
+                        {% for option in cart.get_shipping_options %}
+                            <option {% if option.name == cart.get_shipping_method.name %}selected="selected"{%endif%}value="{{option.name}}">{{option.name}}</option>
+                        {% endfor %}
                     </select></td>
                 </tr>
                 <tr>
@@ -126,7 +128,7 @@
 <script type="text/javascript">
     valid_shipping_info = false;
 
-    $(function() {
+    $(function(){
         function updateCartTotals(totals) {
             $("#cart-total").html(totals.total.toFixed(2));
             $("#cart-tax").html(totals.tax.toFixed(2));
@@ -204,6 +206,8 @@
 
         update_shipping_handling_fee();
         $('input[name="zipcode"]').keyup(update_shipping_handling_fee);
+
+        $('#shipping_option_select').change(update_shipping_handling_fee);
 
         $(".cart-item").on('submit', '.item-change-form', function(event) {         
             event.preventDefault();

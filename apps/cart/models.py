@@ -33,7 +33,7 @@ class Cart(models.Model):
     checked_out = models.BooleanField(default=False, verbose_name=_('checked out'))
     grand_total = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2)
     shipping_and_handling_cost = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2)
-    shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
+    shipping_method = models.ForeignKey(ShippingType, blank=True, null=True, default=4)
 
     ref = models.CharField(max_length=250, blank=True, null=True)
 
@@ -207,14 +207,17 @@ class Item(models.Model):
     @property
     def sub_total(self):
         try:
-            return float(self.total_price) + float(self.shipping_amount) + float(self.sales_tax_amount)
+            return float(self.total_price) + float(self.shipping_amount)
         except:
             return float(self.total_price)
+
+    def price_with_shipping(self):
+        float(self.total_price) + float(self.shipping_amount)
 
     @property
     def grand_total(self):
 
-        return float(self.sub_total) + self.get_tax_amount() + float(self.get_additional_fees())
+        return float(self.price_with_shipping) + self.get_tax_amount() + float(self.get_additional_fees())
 
     def is_refundable(self):
         return self.status != "refunded"
@@ -330,7 +333,11 @@ class Item(models.Model):
     def get_retailer(self):
         inventory = self.get_product()
         product = inventory.item
-        retailer = product.retailers.all()[0]
+        try:
+            retailer = product.retailers.all()[0]
+        except:
+            print 'could not get retailer for item:',product
+            return None
         return RetailerProfile.objects.get(user=retailer)
 
     def get_tax_amount(self, buyer=None, zipcode=None, refresh=None):
@@ -339,21 +346,27 @@ class Item(models.Model):
         except:
             return float(self.total_price) * .05
         retailer = self.get_retailer()
-        if self.sales_tax_amount is None or refresh:
-            self.sales_tax_amount = TCC.get_tax_rate_for_item(shipping_address, retailer, [self])
-            if self.sales_tax_amount != 0.00:
-                self.save()
-            else:
-                return float(self.total_price) * .05
+        if retailer:
+            if self.sales_tax_amount is None or refresh:
+                self.sales_tax_amount = TCC.get_tax_rate_for_item(shipping_address, retailer, [self])
+                if self.sales_tax_amount != 0.00:
+                    self.save()
+                else:
+                    return float(self.total_price) * .05
         if self.sales_tax_amount:
             return self.sales_tax_amount
         else:
             return float(self.total_price) * .05
 
     def get_shipping_cost(self,recipient_zipcode,refresh=None):
-        retailer_zipcode = self.get_retailer().zip_code
+        retailer= self.get_retailer()
+        if retailer:
+            retailer_zipcode = self.get_retailer().zip_code
+        else:
+            retailer_zipcode = u'10014'
+
         if not self.shipping_amount or recipient_zipcode != self.destination_zip_code or refresh:
-            self.shipping_amount = fedex_rate_request(weight=self.weight*self.quantity, shipper_zipcode=retailer_zipcode, recipient_zipcode=recipient_zipcode)
+            self.shipping_amount = fedex_rate_request(shipping_option=self.cart.shipping_method.vendor_tag,weight=self.weight*self.quantity, shipper_zipcode=retailer_zipcode, recipient_zipcode=recipient_zipcode)
             self.save()
         return self.shipping_amount
 

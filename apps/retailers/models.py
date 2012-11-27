@@ -16,6 +16,8 @@ RETAILER_MESSAGE = 'accounts/retailer_welcome_message.txt'
     
 class ShippingType(models.Model):
     name = models.CharField(max_length=100)
+    vendor_tag = models.CharField(max_length=64)
+    vendor = models.CharField(max_length=64)
     description = models.TextField(null=True, blank=True)
     
     def __unicode__(self):

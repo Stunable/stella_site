@@ -160,6 +160,7 @@ def update_zipcode(request):
     ret = {'success': False }
     if request.POST:
         request.session['recipient_zipcode'] = request.POST.get('recipient_zipcode')
+        request.session['shipping_method'] = request.POST.get('shipping_method')
         cart = Cart(request)        
         try:
             cart.update_shipping_and_handling_cost()
