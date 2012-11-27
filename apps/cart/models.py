@@ -212,7 +212,7 @@ class Item(models.Model):
             return float(self.total_price)
 
     def price_with_shipping(self):
-        float(self.total_price) + float(self.shipping_amount)
+        return float(self.total_price) + float(self.shipping_amount)
 
     @property
     def grand_total(self):
