@@ -2152,6 +2152,7 @@ function login_modal(){
 
 function hookupFBMessages(STATIC_URL,URL){
     $('.friend_adder').click(function(e){
+    	e.preventDefault();
         publish = {
           'method': 'feed'
           ,'link': URL
@@ -2160,9 +2161,8 @@ function hookupFBMessages(STATIC_URL,URL){
           ,'to':$(this).attr('data-value')
           ,'picture':URL+STATIC_URL+'/images/logo_small.jpg'
         }
-
-        FB.ui(publish)
-
+        FB.ui(publish);
+        $('.spinner').hide()
         return false;
     })
 }

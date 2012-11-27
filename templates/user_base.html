@@ -362,9 +362,9 @@
             $(document).ready(function() {
                     function initAddFriend(){
                     // unbind the click function just in case
-                    $('.plus-inline').unbind("click");
+                    $('.plus-inline:not(.friend_adder)').unbind("click");
                     // when click on the add friend icon
-                    $('.plus-inline').click(function(){
+                    $('.plus-inline:not(.friend_adder)').click(function(){
                         var current_item = $(this).parent().parent();
                         var span = $(this).parent().find("span");
                         var spinner = $('<div class="spinner" style="float:right;"></div>');
@@ -429,11 +429,12 @@
                                     $.each(list, function(){
                                         $(this).html(returnValue);
                                     });
-                                    hookupFBMessages("{{STATIC_URL}}","{{URL}}");
+                                    
                                     initFriendDragDrop();
                                     initAddFriend();
                                     initDragDrop();
                                     fixDragDropIssue()
+                                    hookupFBMessages("{{STATIC_URL}}","{{URL}}");
                                     oldFilter = filter;
                                 });
                             }else{

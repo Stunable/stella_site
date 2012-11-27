@@ -289,7 +289,7 @@ def deploy_build():
     with cd(env.venv_home):
         with project():
             git = True
-            run("git pull -f" if git else "hg pull && hg up -C")
+            run("git pull" if git else "hg pull && hg up -C")
             if env.reqs_path:
                 pip("-r %s/%s" % (env.proj_path, env.reqs_path))
             manage("syncdb --noinput")
@@ -436,7 +436,7 @@ def deploy():
         upload_template_and_reload(name)
     with project():
         git = ".git" in env.repo_url
-        run("git pull -f" if git else "hg pull && hg up -C")
+        run("git pull " if git else "hg pull && hg up -C")
         if env.reqs_path:
             pip("-r %s/%s" % (env.proj_path, env.reqs_path))
         manage("syncdb --noinput")
