@@ -44,8 +44,15 @@ from django.core.files import File
 # StylistItem
 # stylist = models.ForeignKey(User)
 # item = models.ForeignKey(Item)
+def find_image(folder,image):
+    for ext in ['jpg','jpeg']:
+        if os.path.exists(os.path.join(folder,image+'.'+ext)):
+            print os.path.join(folder,image+'.'+ext)
+            return os.path.join(folder,image+'.'+ext)
+    return False
 
-def process_upload(upload,throughModel):
+
+def process_upload(upload,throughModel,errorClass):
 
     errors = []
 
@@ -55,11 +62,13 @@ def process_upload(upload,throughModel):
     folder = os.path.dirname(xls)
 
 
-    for d in getXLSdata(xls):
+    for i,d in enumerate(getXLSdata(xls)):
+        if i == 0:
+            continue
         #BRAND', u'PRODUCT NAME', u'PRODUCT IMAGE', u'PRODUCT DESCRIPTION', u'COLORWAY(S)', u'SIZES', u'INV_SIZES', u'MSRP (US DOLLARS)'
         brand,name,image,description,colorways,sizes,inv_sizes,msrp = d
-        imgpath = os.path.join(folder,image+'.jpg')
-        if os.path.exists(imgpath):
+        imgpath = find_image(folder,image)
+        if imgpath:
             try:
                 pic = File(open(imgpath,'rb'))
             except:
@@ -74,9 +83,7 @@ def process_upload(upload,throughModel):
                     image=pic,
                 )
             except Exception, e:
-                raise Exception
                 errors.append(str(e))
-                return errors
 
             if upload.retailer.user:
                 si = throughModel.objects.create(
@@ -111,11 +118,14 @@ def process_upload(upload,throughModel):
                         inventory=int(invsizes[i])
                     )
             except Exception,e:
-                raise Exception
                 errors.append(str(e))
         else:
             errors.append('No Image Found for Item: '+name)
-            
+    
+    for error in errors:
+        print error
+        errorClass.objects.create(text=error,upload=upload)
+
     upload.processed = True
     upload.save()
 

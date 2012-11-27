@@ -50,7 +50,4 @@ def getXLSdata(infile,numsheet=0):
 
     for data in readXLS(wSheet):
         yield data
-        # result_file.write((separator).join(data))
-        # result_file.write("\n")
 
-    # result_file.close()

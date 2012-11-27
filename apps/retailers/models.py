@@ -30,7 +30,7 @@ class ProductUpload(models.Model):
     def save(self,*args,**kwargs):
         super(ProductUpload, self).save()
         if not self.processed:
-            process_upload(self,StylistItem)
+            process_upload(self,StylistItem,UploadError)
 
 class UploadError(models.Model):
     text = models.TextField()

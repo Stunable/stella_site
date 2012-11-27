@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.retailers.models import RetailerProfile, StylistItem, ShippingType, ProductUpload
+from apps.retailers.models import RetailerProfile, StylistItem, ShippingType, ProductUpload,UploadError
 
 
 
@@ -18,3 +18,4 @@ admin.site.register(RetailerProfile, RetailerProfileAdmin)
 admin.site.register(StylistItem)
 admin.site.register(ShippingType)
 admin.site.register(ProductUpload)
+admin.site.register(UploadError)
