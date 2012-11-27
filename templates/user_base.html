@@ -407,6 +407,8 @@
                     }).keyup(function() {
                         // fire the above change event after every letter
                         $(this).change();
+                    }).keydown(function(e){
+                        console.log(e)
                     });
                 }
                 var oldFilter = "";
@@ -441,10 +443,14 @@
                                 $('#result-list').append(original_friends.children())
                             }
                             // else ignore it for god sake
+                        }).keydown(function(e){
+                            if (e.which == 13){
+                                return false;
+                            }
                         }).keyup(function() {
                             // fire the above change event after every letter
                             $(this).change();
-                        });
+                        })
 
 
                     }

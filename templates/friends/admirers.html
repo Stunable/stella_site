@@ -171,10 +171,10 @@
 	<ul class="admirers clearfix">
 		{% for fs_u in friends_list %}
 		<li class="admirer">
-			{% autoescape on %} <a href="{% url profile_edit %}?user_id={{fs_u.friend.id}}" title="Go to {{fs_u.friend.first_name}}'s profile." class="avatar"><img src="{% if fs_u.friend.get_profile %}{{ fs_u.friend.get_profile.avatar_image }}{% else %}  {{ STATIC_URL}}images/default_avatar.gif {% endif %}" alt="{{fs_u.friend.first_name}}'s Avatar"/></a>
-			<div><a href="{% url profile_edit %}?user_id={{fs_u.friend.id}}" title="Go to {{fs_u.friend.get_full_name }}'s profile." class="name">{{ fs_u.friend.get_full_name }}</a></div>
+			<a href="/racks/trendsetters/{{fs_u.friend.id}}" title="Go to {{fs_u.friend.first_name}}'s closet." class="avatar"><img src="{% if fs_u.friend.get_profile %}{{ fs_u.friend.get_profile.avatar_image }}{% else %}  {{ STATIC_URL}}images/default_avatar.gif {% endif %}" alt="{{fs_u.friend.first_name}}'s Avatar"/></a>
+			<div><a href="/racks/trendsetters/{{fs_u.friend.id}}" title="Go to {{fs_u.friend.get_full_name }}'s profile." class="name">{{ fs_u.friend.get_full_name }}</a></div>
 			<a href="{% url friend_delete fs_u.friend.id %}" onclick="return confirm('Are you sure you want to delete?')" title="Remove {{fs_u.friend.get_full_name}} from your admirers." class="icon x">(remove from admirers)</a>
-			{% endautoescape %}
+
 		</li>
 		{% endfor %}
 	</ul>

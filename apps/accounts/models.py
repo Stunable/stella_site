@@ -205,6 +205,7 @@ class CCToken(models.Model):
     token = models.CharField(max_length=250,unique=True)
     is_default = models.BooleanField(default=False)
     user = models.ForeignKey(User)
+    is_authorized = models.BooleanField(default=False)
     
     def __unicode__(self):
         return self.user.__unicode__()+'_'+self.cc_name
@@ -219,5 +220,9 @@ class CCToken(models.Model):
                 self.is_default = True
        
         super(CCToken, self).save(self)
+
+    def authorize(self):
+        pass
+
 
     
