@@ -7,7 +7,7 @@ class CartAdmin(admin.ModelAdmin):
 admin.site.register(Cart,CartAdmin)
 
 class PurchaseAdmin(admin.ModelAdmin):
-    list_display=('cart','checkout','transaction_status','item','delivery_date')
+    list_display=('cart','checkout','transaction_status','item','shipping_number','delivery_date')
     actions = ('track_package','capture_payment')
 
     def transaction_status(self,instance):
