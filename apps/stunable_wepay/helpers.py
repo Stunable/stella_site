@@ -40,7 +40,7 @@ class WePayPayment(object):
 
             WEPAY = WePay(settings.WEPAY_PRODUCTION, retailer_profile.wepay_token)
 
-            app_fee = float(item.price_with_shipping)*.2
+            app_fee = float(item.price_with_shipping())*.2
             price_minus_fee = item.grand_total
 
             data = {
