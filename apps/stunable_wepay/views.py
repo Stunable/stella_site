@@ -98,7 +98,6 @@ class WePayHandleCC(object):
                                                             user = self.request.user
                                                         )
                         except:
-                            raise
                             newCC,created = CCToken.objects.get_or_create(
                                 cc_name = cc_data['credit_card_name'],
                                 user_name = cc_data['user_name'],
