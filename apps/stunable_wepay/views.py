@@ -89,11 +89,16 @@ class WePayHandleCC(object):
                         #  u'user_name': u'dave sppon', 
                         #  u'email': u'gdamon@gmail.com'}
                         try:
-                            newCC = CCToken.objects.get(cc_name=cc_data['credit_card_name'],user=self.request.user)
-                            newCC.token = cc_data['credit_card_id']
-                            newCC.user_name = cc_data['user_name']
-                            newCC.save()
+                            exCC = CCToken.objects.get(cc_name=cc_data['credit_card_name'],user=self.request.user)
+                            exCC.delete()
+                            newCC = CCToken.objects.create(
+                                                            cc_name = cc_data['credit_card_name'],
+                                                            user_name = cc_data['user_name'],
+                                                            token = cc_data['credit_card_id'],
+                                                            user = self.request.user
+                                                        )
                         except:
+                            raise
                             newCC,created = CCToken.objects.get_or_create(
                                 cc_name = cc_data['credit_card_name'],
                                 user_name = cc_data['user_name'],
