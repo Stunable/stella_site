@@ -95,7 +95,7 @@ class Checkout(models.Model):
 
         super(Checkout, self).save()
         if not self.ref:
-            self.ref =base35encode(self.retailer.id)+'S'+base35encode(self.id)
+            self.ref =base35encode(self.retailer.id+10000)+'S'+base35encode(self.id+10000)
             super(Checkout, self).save()   
 
 
