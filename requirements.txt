@@ -44,3 +44,4 @@ python-memcached
 wepay
 fedex
 xlrd
+django-sslify
