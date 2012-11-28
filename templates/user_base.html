@@ -28,7 +28,8 @@
         </style>
     </head>
     <body class="internal {% block body_class %}account{% endblock %} gallery" id="{% block body_id %}gallery{% endblock %}">   
-        {% if fb_token %}
+        {% block facebook %}
+        {% if fb_token %}        
         <div id="fb-root"></div>
         <script>
           window.fbAsyncInit = function() {
@@ -62,6 +63,7 @@
         <![endif]-->
         <!--[if !IE]><!-->
         {% endif %}
+        {% endblock %}
         <div class="container non-ie">
             <!--<![endif]-->
             <div class="section content" id="header">
