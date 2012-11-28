@@ -70,7 +70,7 @@ FEDEX_CONFIG = FedexConfig(key='zA9Z6uz3gHNKkU3L',
                          password='8TA1Z49ZTJztPJ8a6uPqsjqKF',
                          account_number='147593830',
                          meter_number='104573181',
-                         use_test_server=True)
+                         use_test_server=False)
 
 WEPAY_ACCESS_TOKEN = "c1b6ab85a43f00efcd889931df0eae6bfd23399570f9f4fef5dd50fc0c5f6e06"
 WEPAY_CLIENT_ID = "85798"
