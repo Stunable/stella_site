@@ -8,11 +8,11 @@ SSL_ENABLED = False
 # COMPRESS = True   # to test django compressor locally
 
 # domains/hosts etc.
-DOMAIN_NAME = 'shopwithstella.org'
+DOMAIN_NAME = 'stunable.com'
 WWW_ROOT = 'http://%s/' % DOMAIN_NAME
 
-FACEBOOK_APP_ID              = '433271660054660'
-FACEBOOK_API_SECRET          = '70e262e87cf8d6e88f9a54613707ac9e'
+FACEBOOK_APP_ID              = '396733507047008'
+FACEBOOK_API_SECRET          = '642be492d594607d661a6517b5529050'
 
 GOOGLE_OAUTH2_CLIENT_SECRET = 'C0mx2xzyvx8Xi5As3aEGL5nX'
 GOOGLE_OAUTH2_CLIENT_ID = '426462526110.apps.googleusercontent.com'
