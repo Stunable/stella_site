@@ -28,6 +28,24 @@ from apps.cart.plugins.taxcloud import TaxCloudClient
 TCC = TaxCloudClient()
 
 
+
+def base35encode(number):
+    if not isinstance(number, (int, long)):
+        raise TypeError('number must be an integer')
+    if number < 0:
+        raise ValueError('number must be positive')
+
+    alphabet = '0123456789ABCDEFGHIJKLMNOPQRTUVWXYZ'
+
+    base36 = ''
+    while number:
+        number, i = divmod(number, 36)
+        base36 = alphabet[i] + base36
+
+    return base36 or alphabet[0]
+
+
+
 class Cart(models.Model):
     creation_date = models.DateTimeField(verbose_name=_('creation date'))
     checked_out = models.BooleanField(default=False, verbose_name=_('checked out'))
@@ -75,11 +93,10 @@ class Checkout(models.Model):
 
 
 
-
-
 def set_ref(sender, instance, **kwargs):
     if not instance.ref:
-        instance.ref =str(abs(hash(str(instance.retailer.pk))))[:10] + str(instance.cart.pk)
+        instance.ref =base35encode(instance.retailer.id*100)+'S'+base36encode(instance.id*100)
+
 pre_save.connect(set_ref, sender=Checkout, dispatch_uid="checkout_set_ref")
 
 class Purchase(models.Model):
