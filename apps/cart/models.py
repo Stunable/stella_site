@@ -91,13 +91,13 @@ class Checkout(models.Model):
         self.complete = True
         self.save()
 
+    def save(self,*args,**kwargs):
 
+        super(Checkout, self).save()
+        if not self.ref:
+            instance.ref =base35encode(self.retailer.id)+'S'+base35encode(self.id)
+        super(Checkout, self).save()   
 
-def set_ref(sender, instance, **kwargs):
-    if not instance.ref:
-        instance.ref =base35encode(instance.cart.id*100)+'S'+base35encode(instance.id*100)
-
-pre_save.connect(set_ref, sender=Checkout, dispatch_uid="checkout_set_ref")
 
 class Purchase(models.Model):
     item = models.ForeignKey('Item')
