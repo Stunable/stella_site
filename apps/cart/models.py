@@ -95,7 +95,7 @@ class Checkout(models.Model):
 
 def set_ref(sender, instance, **kwargs):
     if not instance.ref:
-        instance.ref =base35encode(instance.retailer.id*100)+'S'+base36encode(instance.id*100)
+        instance.ref =base35encode(instance.retailer.id*100)+'S'+base35encode(instance.id*100)
 
 pre_save.connect(set_ref, sender=Checkout, dispatch_uid="checkout_set_ref")
 
