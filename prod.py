@@ -9,7 +9,7 @@ SSL_ENABLED = False
 
 # domains/hosts etc.
 DOMAIN_NAME = 'stunable.com'
-WWW_ROOT = 'http://%s/' % DOMAIN_NAME
+WWW_ROOT = 'https://%s/' % DOMAIN_NAME
 
 FACEBOOK_APP_ID              = '396733507047008'
 FACEBOOK_API_SECRET          = '642be492d594607d661a6517b5529050'

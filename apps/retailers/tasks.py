@@ -47,7 +47,6 @@ from django.core.files import File
 def find_image(folder,image):
     for ext in ['jpg','jpeg']:
         if os.path.exists(os.path.join(folder,image+'.'+ext)):
-            print os.path.join(folder,image+'.'+ext)
             return os.path.join(folder,image+'.'+ext)
     return False
 
