@@ -22,7 +22,7 @@ def get_rate(**kwargs):
     shipper_zipcode = kwargs['shipper_zipcode']
     recipient_zipcode = kwargs['recipient_zipcode']
     # shipping_option = kwargs.get('shipping_option','FEDEX_GROUND')
-    shipping_option = kwargs.get('shipping_option','STANDARD_OVERNIGHT')
+    shipping_option = kwargs.get('shipping_option','FEDEX_GROUND')
     
     # Set this to the INFO level to see the response from Fedex printed in stdout.
     logging.basicConfig(level=logging.DEBUG)
@@ -62,7 +62,7 @@ def get_rate(**kwargs):
     
     # Who pays for the rate_request?
     # RECIPIENT, SENDER or THIRD_PARTY
-    rate_request.RequestedShipment.ShippingChargesPayment.PaymentType = 'SENDER' 
+    rate_request.RequestedShipment.ShippingChargesPayment.PaymentType = 'THIRD_PARTY' 
     
     package1_weight = rate_request.create_wsdl_object_of_type('Weight')
     # Weight, in LB.

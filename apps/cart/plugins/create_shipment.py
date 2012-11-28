@@ -61,7 +61,7 @@ def ship_it(retailer,customer,item_count,shipping_method):
 
     # Recipient contact info.
     shipment.RequestedShipment.Recipient.Contact.PersonName = '%s %s'%(customer.firstname,customer.lastname)
-    shipment.RequestedShipment.Recipient.Contact.CompanyName = {True:customer.company_name,False:"No Company"}[customer.company_name != '']
+    shipment.RequestedShipment.Recipient.Contact.CompanyName = {True:customer.company_name,False:"%s %s"%(customer.firstname,customer.lastname)}[customer.company_name != '']
     shipment.RequestedShipment.Recipient.Contact.PhoneNumber = customer.phone
 
     # Recipient address
@@ -71,7 +71,7 @@ def ship_it(retailer,customer,item_count,shipping_method):
     shipment.RequestedShipment.Recipient.Address.PostalCode = customer.zip_code
     shipment.RequestedShipment.Recipient.Address.CountryCode = 'US'
     # This is needed to ensure an accurate rate quote with the response.
-    shipment.RequestedShipment.Recipient.Address.Residential = True
+    shipment.RequestedShipment.Recipient.Address.Residential = {False:False,True:True}[shipping_method=='FEDEX_2_DAY']
 
     # Who pays for the shipment?
     # RECIPIENT, SENDER or THIRD_PARTY
@@ -97,7 +97,7 @@ def ship_it(retailer,customer,item_count,shipping_method):
 
     package1_weight = shipment.create_wsdl_object_of_type('Weight')
     # Weight, in pounds.
-    package1_weight.Value = 1.0
+    package1_weight.Value = 1.0 * float(item_count)
     package1_weight.Units = "LB"
 
     package1 = shipment.create_wsdl_object_of_type('RequestedPackageLineItem')
