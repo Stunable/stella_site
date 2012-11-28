@@ -41,7 +41,7 @@ def ship_it(retailer,customer,item_count,shipping_method):
 
     # What kind of package this will be shipped in.
     # FEDEX_BOX, FEDEX_PAK, FEDEX_TUBE, YOUR_PACKAGING
-    shipment.RequestedShipment.PackagingType = 'FEDEX_PAK'
+    shipment.RequestedShipment.PackagingType = 'YOUR_PACKAGING'
 
     # No idea what this is.
     # INDIVIDUAL_PACKAGES, PACKAGE_GROUPS, PACKAGE_SUMMARY 
