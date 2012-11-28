@@ -22,7 +22,7 @@ CONFIG_OBJ = FedexConfig(key='G9zxZissGIQkOgo4',
                          meter_number='118562345',
                          use_test_server=True)
 
-def ship_it(retailer,customer,item_count):
+def ship_it(retailer,customer,item_count,shipping_method):
     # Set this to the INFO level to see the response from Fedex printed in stdout.
     logging.basicConfig(level=logging.INFO)
 
@@ -37,7 +37,7 @@ def ship_it(retailer,customer,item_count):
 
     # See page 355 in WS_ShipService.pdf for a full list. Here are the common ones:
     # STANDARD_OVERNIGHT, PRIORITY_OVERNIGHT, FEDEX_GROUND, FEDEX_EXPRESS_SAVER
-    shipment.RequestedShipment.ServiceType = 'STANDARD_OVERNIGHT'
+    shipment.RequestedShipment.ServiceType = shipping_method
 
     # What kind of package this will be shipped in.
     # FEDEX_BOX, FEDEX_PAK, FEDEX_TUBE, YOUR_PACKAGING

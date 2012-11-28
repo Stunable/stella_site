@@ -393,7 +393,8 @@ def payment_was_successful_callback(sender, **kwargs):
         purchaser = transaction.user,
         transaction = transaction,
         cart = kwargs['item'].cart,
-        checkout = checkout
+        checkout = checkout,
+        shipping_method=kwargs['item'].cart.shipping_method
     )
             
     p.save()

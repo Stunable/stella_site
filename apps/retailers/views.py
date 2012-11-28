@@ -499,7 +499,7 @@ def print_shipping_label(request, ref=None, template='retailers/retailer_shippin
             print 'error'
         else:
             item_count = len(purchase_list)
-            tracking_number,label = ship_it(retailer_profile,ShippingInfo.objects.get(customer=purchase.purchaser.get_profile(),is_default=True),item_count)
+            tracking_number,label = ship_it(retailer_profile,ShippingInfo.objects.get(customer=purchase.purchaser.get_profile(),is_default=True),item_count,purchase.shipping_method.vendor_tag)
 
             if os.path.exists(label):
                 f = File(open(label,'rb'))
