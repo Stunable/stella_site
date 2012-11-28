@@ -74,7 +74,7 @@ class ItemManager(models.Manager):
         return super(ItemManager, self).get(*args, **kwargs)
 
 class Checkout(models.Model):
-    cart = models.ForeignKey('Cart',unique=True)
+    cart = models.ForeignKey('Cart')
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
     complete = models.BooleanField(default=False)
     ref = models.CharField(max_length=250, blank=True, null=True)
@@ -96,7 +96,7 @@ class Checkout(models.Model):
         super(Checkout, self).save()
         if not self.ref:
             self.ref =base35encode(self.retailer.id)+'S'+base35encode(self.id)
-        super(Checkout, self).save()   
+            super(Checkout, self).save()   
 
 
 class Purchase(models.Model):
