@@ -62,7 +62,7 @@ def get_rate(**kwargs):
     
     # Who pays for the rate_request?
     # RECIPIENT, SENDER or THIRD_PARTY
-    rate_request.RequestedShipment.ShippingChargesPayment.PaymentType = 'THIRD_PARTY' 
+    rate_request.RequestedShipment.ShippingChargesPayment.PaymentType = 'SENDER' 
     
     package1_weight = rate_request.create_wsdl_object_of_type('Weight')
     # Weight, in LB.
