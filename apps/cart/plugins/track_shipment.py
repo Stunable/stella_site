@@ -10,7 +10,7 @@ CONFIG_OBJ = settings.FEDEX_CONFIG
 
 
 # Set this to the INFO level to see the response from Fedex printed in stdout.
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 
 
@@ -32,5 +32,6 @@ def track_it(package_identifier,package_type='TRACKING_NUMBER_OR_DOORTAG'):
     # query), and show a few details about each shipment.
     print "== Results =="
     for match in track.response.TrackDetails:
+        print match
         print "Tracking #:", match.TrackingNumber
         print "Status:", match.StatusDescription
