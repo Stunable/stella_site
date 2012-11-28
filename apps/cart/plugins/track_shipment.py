@@ -5,12 +5,12 @@ This example shows how to track shipments.
 import logging
 from django.conf import settings
 from fedex.services.track_service import FedexTrackRequest
-
+import datetime
 CONFIG_OBJ = settings.FEDEX_CONFIG
 
 
 # Set this to the INFO level to see the response from Fedex printed in stdout.
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 
 
@@ -26,12 +26,14 @@ def track_it(package_identifier,package_type='TRACKING_NUMBER_OR_DOORTAG'):
     track.send_request()
 
     # See the response printed out.
-    print track.response
+    # print track.response
 
     # Look through the matches (there should only be one for a tracking number
     # query), and show a few details about each shipment.
     print "== Results =="
     for match in track.response.TrackDetails:
-        print match
-        print "Tracking #:", match.TrackingNumber
-        print "Status:", match.StatusDescription
+        logging.info(match)
+        if match.StatusDescription == 'Delivered':                                                                     #2012-10-19 08:40:00
+            return match.ActualDeliveryTimestamp
+        else:
+            return None

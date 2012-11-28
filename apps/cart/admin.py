@@ -9,6 +9,7 @@ admin.site.register(Cart,CartAdmin)
 class PurchaseAdmin(admin.ModelAdmin):
     list_display=('cart','transaction_status','item','shipping_number','delivery_date')
     actions = ('track_package','capture_payment')
+    list_filter=('shipping_number','delivery_date')
 
     def transaction_status(self,instance):
         return instance.transaction.state
@@ -21,7 +22,10 @@ class PurchaseAdmin(admin.ModelAdmin):
         for obj in queryset:
             if obj.shipping_number:
                 try:
-                    track_it(obj.shipping_number)
+                    delivery_date = track_it(obj.shipping_number)
+                    if delivery_date:
+                        obj.delivery_date = delivery_date
+                        obj.save()
                 except Exception,e:
                     print e
 
