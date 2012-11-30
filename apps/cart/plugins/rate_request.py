@@ -13,9 +13,6 @@ from django.conf import settings
 from fedex.services.rate_service import FedexRateServiceRequest
 
 CONFIG_OBJ = settings.FEDEX_CONFIG
-print CONFIG_OBJ.key
-print CONFIG_OBJ.password
-
 
 def get_rate(**kwargs):
     weight = kwargs['weight']

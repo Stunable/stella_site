@@ -10,14 +10,7 @@ from django.conf import settings
 
 from st_fedex.services.address_validation_service import FedexAddressValidationRequest
 
-from st_fedex.config import FedexConfig
-
-
-CONFIG_OBJ = FedexConfig(key='G9zxZissGIQkOgo4',
-                         password='bX3GkoY0uIQjrIl1m66jT2OTa',
-                         account_number='510087968',
-                         meter_number='118562345',
-                         use_test_server=True)
+CONFIG_OBJ = settings.FEDEX_CONFIG
 
 def validate_this(address):
     # Set this to the INFO level to see the response from Fedex printed in stdout.
