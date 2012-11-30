@@ -80,13 +80,6 @@ FEDEX_CONFIG = FedexConfig(key='zA9Z6uz3gHNKkU3L',
 #                          meter_number='118562345',
 #                          use_test_server=True)
 
-WEPAY_ACCESS_TOKEN = "c1b6ab85a43f00efcd889931df0eae6bfd23399570f9f4fef5dd50fc0c5f6e06"
-WEPAY_CLIENT_ID = "85798"
-WEPAY_ACCOUNT_ID = "1894410826"
-WEPAY_CLIENT_SECRET = "0747ad3f00"
-WEPAY_PRODUCTION = False
-WEPAY_STAGE = "stage"
-
 
 PAYPAL_TEST = True           # Testing mode on
 PAYPAL_WPP_USER = "thanh_1346909527_biz_api1.simpleunion.com"      # Get from PayPal
