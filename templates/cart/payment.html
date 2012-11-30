@@ -482,7 +482,7 @@
 
 {% endblock %}
 {% block extra_script %}
-<script type="text/javascript" src="https://stage.wepay.com/min/js/tokenization.v2.js">
+<script type="text/javascript" src="https://wepay.com/min/js/tokenization.v2.js">
 </script>
 <script type="text/javascript">
 	WePay.set_endpoint("{{mode}}"); // change to "production" when live
@@ -564,7 +564,6 @@
 				expdate_0: "required",
 				expdate_1: "required",
 				cvv2: "required"
-			
 			},
 			messages: {
 				
