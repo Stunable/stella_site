@@ -16,6 +16,13 @@ from django.conf import settings
 from apps.common.utils import OverwriteStorage
 
 # Create your models here.
+class SiteTextContent(models.Model):
+    def __unicode__(self):
+        return self.item_name
+
+    item_name = models.CharField(help_text="something like this: 'a_name_with_no_spaces_or_funny_symbols'", max_length = 64)
+    html = models.TextField(help_text="html tags work in this field", default="cms content placeholder", blank=True,null=True)
+    component = models.CharField(help_text="what part of the site is this for?  ex:'retailers' or 'cart'",max_length=32,default='All')
 
 
 

@@ -225,7 +225,9 @@ TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
     "apps.friends.context_processors.friend_notice_count",
     "racks.context_processors.racks",
     #'apps.common.context_processors.seo' # in case we do this...
-    "django.core.context_processors.request",)
+    "django.core.context_processors.request",
+    "apps.cms.context_processors.CMS"
+    )
 
 
 SITE_NAME = "STELLA"

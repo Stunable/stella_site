@@ -16,3 +16,4 @@ class Ext_News_Admin(admin.ModelAdmin):
             obj.refresh_content()
 
 admin.site.register(ExternalPost,Ext_News_Admin)
+admin.site.register(SiteTextContent)

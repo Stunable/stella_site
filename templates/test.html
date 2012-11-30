@@ -1,0 +1,18 @@
+{% extends "user_base.html" %}
+
+{% block body_class %}help{% endblock %}
+
+{% block content %}
+{% for obj in list %}
+	<hr>
+	<ul>
+		begin: {{obj.item_name}}  -------------------------------------------------------------------------- 
+		<li>{{obj.html|safe}}</li>
+		end: {{obj.item_name}}  -------------------------------------------------------------------------- 
+	</ul>
+	<hr>
+	<hr>
+
+	
+{% endfor %}
+{% endblock %}
