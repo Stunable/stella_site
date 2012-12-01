@@ -72,7 +72,7 @@ RETAILER_INFORM_MESSAGE = "retailers/retailer_inform_message.txt"
 def setup_wepay(request):
     code = request.GET.get('code',None)
     if code:
-        url = 'https://stage.wepayapi.com/v2/oauth2/token'
+        url = 'https://wepayapi.com/v2/oauth2/token'
         data = {
           "client_id":settings.WEPAY_CLIENT_ID,
           "client_secret":settings.WEPAY_CLIENT_SECRET,
@@ -125,7 +125,7 @@ def setup_wepay(request):
 
 
     else:
-        url = 'https://stage.wepay.com/v2/oauth2/authorize?client_id='+settings.WEPAY_CLIENT_ID+'&redirect_uri='+settings.WWW_ROOT+'retailers/wepay/&scope=manage_accounts,collect_payments,refund_payments,preapprove_payments,send_money'
+        url = 'https://wepay.com/v2/oauth2/authorize?client_id='+settings.WEPAY_CLIENT_ID+'&redirect_uri='+settings.WWW_ROOT+'retailers/wepay/&scope=manage_accounts,collect_payments,refund_payments,preapprove_payments,send_money'
         return HttpResponseRedirect(url)
 
 
