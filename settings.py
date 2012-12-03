@@ -199,11 +199,25 @@ LOGIN_REDIRECT_URL = "/accounts/login/"
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+            'verbose': {
+                'format': '%(levelname)s %(asctime)s %(module)s.%(funcName)s line: %(lineno)d : %(message)s'
+            },
+            'simple': {
+                'format': '%(levelname)s %(message)s'
+            },
+    },
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler'
         }
+        ,
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
     },
     'loggers': {
         'django.request': {
@@ -211,8 +225,14 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'stunable_debug':{
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     }
 }
+
 
 TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",

@@ -35,7 +35,8 @@ import urllib
 
 import random
 
-
+import logging
+logger = logging.getLogger('stunable_debug')
 
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
@@ -741,11 +742,13 @@ def send_item_to_admirer(request):
 
             if to_user:
                 print 'to user'
+                logger.info(to_user)
                 # TODO: implement the link to trend here
                 trend_url = u"https://%s%s" % (
                     unicode(Site.objects.get_current()),
                     unicode(reverse("auth_login"))
                 )
+                logger.info(trend_url)
                 try:
                     if notification:
                         notification.send([to_user], "share_item", {"item": item, 'text': message}, True, request.user)
@@ -754,11 +757,16 @@ def send_item_to_admirer(request):
                         ctx  = {'sender':request.user, 'recipient': to_user, 'item': item, 'trend_url': trend_url}
                         
                         if admirer_type == 'stunable':# I don't think we have email addresses if this is a facebook friend
+                            logger.info('sending email')
                             # send email to notify
-                            subject = render_to_string(ITEM_SHARED_SUBJECT, ctx)
-                            email_message = render_to_string(ITEM_SHARED_MESSAGE, ctx)
-                            send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [to_user.email])
-                except:
+                            try:
+                                subject = render_to_string(ITEM_SHARED_SUBJECT, ctx)
+                                email_message = render_to_string(ITEM_SHARED_MESSAGE, ctx)
+                                send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [to_user.email])
+                            except Exception, e:
+                                logger.error(e)
+                except Exception, e:
+                    logger.error(e)
                     # TODO: log error here
                     pass
                     
@@ -771,7 +779,7 @@ def send_item_to_admirer(request):
                             if f['friend'] == fs_u['friend']:
                                 notification.send([f['friend']], "friend_share_item_with_others", {'send': request.user, 'item': item, 'receive': to_user}, True, request.user)
                 except Exception, e:
-                    print e
+                    logger.error(e)
             else:
                 social_users = UserSocialAuth.objects.filter(provider=admirer_type).filter(user=request.user)
                 if social_users and admirer_type == 'facebook':

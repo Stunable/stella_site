@@ -1473,8 +1473,6 @@ function initFriendDragDrop() {
 			$('#reduced_admirer_id').val(admirer_id);
 			$('#reduced_admirer_type').val(admirer_type)
 			$('#reduced_admirer_name').val($(this).find('a').attr('data-name'));
-
-			console.log($('#reduced_admirer_type'))
 			
 			if (admirer_type!='facebook'){
 				$.fancybox({
@@ -1509,7 +1507,7 @@ function initFriendDragDrop() {
 				  
 				  $('#send_it_to_admirer_reduced').click(function(){
 				  		$('#loading2').css('display', 'inline');
-				  		$.getJSON('/racks/sent_to_admirer?'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
+				  		$.get('/racks/sent_to_admirer?'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
 				  			$('#loading2').css('display', 'none');
 							$("#send_item_confirmation_reduced").css('opacity','1').text(data.result == 'ok' ? "Sent" : "Error").show();
 							
@@ -1519,10 +1517,10 @@ function initFriendDragDrop() {
 								// close fancy box after 2 second on success
 								setTimeout("parent.$.fancybox.close()", 2000);
 							}
-						});
+						},'json');
 				  });
 			}else{
-				$.getJSON('/racks/sent_to_admirer?'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
+				$.get('/racks/sent_to_admirer?'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
 					FB.ui(data)
 				})
 			}}
@@ -1538,7 +1536,7 @@ $(function() {
 		//$(this).closest('.item').fadeOut(800);
 		item_to_remove = $(this);
 		var href = $(this).attr('href');
-		$.getJSON(href, function(data) {
+		$.get(href, function(data) {
 			if(data.result == 'ok')
 				item_to_remove.closest('.item').fadeOut(800);
 			else
@@ -1837,7 +1835,7 @@ $(function() {
 	var someOtherAvailableTags = ['True Religion', 'Levis', 'Diesel', 'Joes', 'Calvin', 'Jeans'];
 
 	if($('#admirers-auto-complete').length > 0) {
-		$.getJSON('/admirers/get_friends', function(data) {
+		$.get('/admirers/get_friends', function(data) {
 			$('#admirers-auto-complete').autocomplete({
 
 				//select a field
@@ -1865,7 +1863,7 @@ $(function() {
 	}
 
 	if($('#welcome-auto-complete').length > 0) {
-		$.getJSON('/racks/brands', function(data) {
+		$.get('/racks/brands', function(data) {
 			$('#welcome-auto-complete').autocomplete({
 
 				//select a field
@@ -1990,7 +1988,7 @@ $(document).ready(function() {
 
 // setup ajax call for notification table
   function callNoticeAjax(){
-	$.getJSON('/racks/get_new_notifications/', function(returnData){
+	$.get('/racks/get_new_notifications/', function(returnData){
 		if (returnData['success'] == true && returnData['has_new'] == true ){
 			$('#happening-events').trigger("click");
 		}
@@ -2049,7 +2047,7 @@ function setupRackIt(){
 		}
 		
 		var link = href + '?item_id=' + item_id +'&rack=' + rack_id;
-		$.getJSON(link, function(result){
+		$.get(link, function(result){
 			if(result['result'] == 'ok'){
 				alert("Item Added!");
 				if(result['new_rack_id']){
