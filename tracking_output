@@ -1,0 +1,139 @@
+INFO:root:
+
+Events[] = 
+   (TrackEvent){
+   Timestamp = 2012-11-30 19:32:00
+   EventType = "PU"
+   EventDescription = "Picked up"
+   StatusExceptionCode = "A3"
+   StatusExceptionDescription = "Tendered at FedEx Office"
+   Address = 
+   (Address){
+      City = "NEW YORK"
+      StateOrProvinceCode = "NY"
+      PostalCode = "10014"
+      CountryCode = "US"
+      Residential = False
+   }
+   ArrivalLocation = "FEDEX_OFFICE_LOCATION"
+   }
+
+   
+======================================
+
+
+(TrackDetail){
+   Notification = 
+      (Notification){
+         Severity = "SUCCESS"
+         Source = "trck"
+         Code = "0"
+         Message = "Request was successfully processed."
+         LocalizedMessage = "Request was successfully processed."
+      }
+   TrackingNumber = "794195998293"
+   TrackingNumberUniqueIdentifier = "2456263000~794195998293~FX"
+   StatusCode = "AR"
+   StatusDescription = "Arrived at FedEx location"
+   CarrierCode = "FDXE"
+   ServiceInfo = "FedEx 2Day Service"
+   ServiceType = "FEDEX_2_DAY"
+   PackageWeight = 
+      (Weight){
+         Units = "LB"
+         Value = 1.0
+      }
+   ShipmentWeight = 
+      (Weight){
+         Units = "LB"
+         Value = 1.0
+      }
+   Packaging = "Your Packaging"
+   PackageSequenceNumber = 1
+   PackageCount = 1
+   ShipTimestamp = 2012-11-30 19:32:00
+   DestinationAddress = 
+      (Address){
+         City = "NEW YORK"
+         StateOrProvinceCode = "NY"
+         CountryCode = "US"
+         Residential = False
+      }
+   EstimatedDeliveryTimestamp = 2012-12-04 19:00:00
+   SignatureProofOfDeliveryAvailable = False
+   ProofOfDeliveryNotificationsAvailable = True
+   ExceptionNotificationsAvailable = True
+   Events[] = 
+      (TrackEvent){
+         Timestamp = 2012-12-01 01:35:00
+         EventType = "AR"
+         EventDescription = "Arrived at FedEx location"
+         Address = 
+            (Address){
+               City = "NEWARK"
+               StateOrProvinceCode = "NJ"
+               PostalCode = "07114"
+               CountryCode = "US"
+               Residential = False
+            }
+         ArrivalLocation = "FEDEX_FACILITY"
+      },
+ }
+ ====================
+ INFO:root:(TrackDetail){
+    Notification =
+       (Notification){
+          Severity = "SUCCESS"
+          Source = "trck"
+          Code = "0"
+          Message = "Request was successfully processed."
+          LocalizedMessage = "Request was successfully processed."
+       }
+    TrackingNumber = "794195998293"
+    TrackingNumberUniqueIdentifier = "2456263000~794195998293~FX"
+    StatusCode = "FD"
+    StatusDescription = "At FedEx destination facility"
+    CarrierCode = "FDXE"
+    ServiceInfo = "FedEx 2Day Service"
+    ServiceType = "FEDEX_2_DAY"
+    PackageWeight =
+       (Weight){
+          Units = "LB"
+          Value = 1.0
+       }
+    ShipmentWeight =
+       (Weight){
+          Units = "LB"
+          Value = 1.0
+       }
+    Packaging = "Your Packaging"
+    PackageSequenceNumber = 1
+    PackageCount = 1
+    ShipTimestamp = 2012-11-30 19:32:00
+    DestinationAddress =
+       (Address){
+          City = "NEW YORK"
+          StateOrProvinceCode = "NY"
+          CountryCode = "US"
+          Residential = False
+       }
+    EstimatedDeliveryTimestamp = 2012-12-04 19:00:00
+    SignatureProofOfDeliveryAvailable = False
+    ProofOfDeliveryNotificationsAvailable = True
+    ExceptionNotificationsAvailable = True
+    Events[] =
+       (TrackEvent){
+          Timestamp = 2012-12-03 10:02:00
+          EventType = "AR"
+          EventDescription = "At local FedEx facility"
+          Address =
+             (Address){
+                City = "NEW YORK"
+                StateOrProvinceCode = "NY"
+                PostalCode = "10014"
+                CountryCode = "US"
+                Residential = False
+             }
+          ArrivalLocation = "DESTINATION_FEDEX_FACILITY"
+       },
+  }

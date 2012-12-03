@@ -3549,16 +3549,18 @@ outline: none;
 }
 
 #happening-events .event-table {
-    background-color: white;
-    border: 1px solid #EBEBEB;
-    border-radius: 6px 6px 6px 6px;
-    float: right;
-    font-size: 13px;
-    letter-spacing: 1px;
-    min-height: 35px;
-    width: 220px;
-    z-index: 1000;
-    margin-right: 15px;
+	background-color: white;
+	border: 3px solid #c44599;
+	border-radius: 6px 6px 6px 6px;
+	float: right;
+	font-size: 13px;
+	letter-spacing: 1px;
+	min-height: 35px;
+	width: 220px;
+	z-index: 1000;
+	margin-right: 15px;
+	max-height: 600px;
+	overflow: auto;
 }
 
 #happening-events .event-table .header {

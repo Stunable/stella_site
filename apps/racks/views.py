@@ -742,7 +742,7 @@ def send_item_to_admirer(request):
             if to_user:
                 print 'to user'
                 # TODO: implement the link to trend here
-                trend_url = u"http://%s%s" % (
+                trend_url = u"https://%s%s" % (
                     unicode(Site.objects.get_current()),
                     unicode(reverse("auth_login"))
                 )
@@ -753,10 +753,11 @@ def send_item_to_admirer(request):
                     else:
                         ctx  = {'sender':request.user, 'recipient': to_user, 'item': item, 'trend_url': trend_url}
                         
-                        # send email to notify
-                        subject = render_to_string(ITEM_SHARED_SUBJECT, ctx)
-                        email_message = render_to_string(ITEM_SHARED_MESSAGE, ctx)
-                        send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [to_user.email])
+                        if admirer_type == 'stunable':# I don't think we have email addresses if this is a facebook friend
+                            # send email to notify
+                            subject = render_to_string(ITEM_SHARED_SUBJECT, ctx)
+                            email_message = render_to_string(ITEM_SHARED_MESSAGE, ctx)
+                            send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [to_user.email])
                 except:
                     # TODO: log error here
                     pass
@@ -764,11 +765,13 @@ def send_item_to_admirer(request):
                 # send notification for users when friends share product with other friends
                 admirer_friendship_list = Friendship.objects.friends_for_user(admirer)
                 # add Trendser shares rack with another trendsetter notification
-                for fs_u in admirer_friendship_list:
-                    for f in user_friendship_list:
-                        if f['friend'] == fs_u['friend']:
-                            notification.send([f['friend']], "friend_share_item_with_others", {'send': request.user, 'item': item, 'receive': to_user}, True, request.user)
-
+                try:
+                    for fs_u in admirer_friendship_list:
+                        for f in user_friendship_list:
+                            if f['friend'] == fs_u['friend']:
+                                notification.send([f['friend']], "friend_share_item_with_others", {'send': request.user, 'item': item, 'receive': to_user}, True, request.user)
+                except Exception, e:
+                    print e
             else:
                 social_users = UserSocialAuth.objects.filter(provider=admirer_type).filter(user=request.user)
                 if social_users and admirer_type == 'facebook':
@@ -792,8 +795,6 @@ def send_item_to_admirer(request):
                       ,'picture':settings.WWW_ROOT+item.get_image().url.lstrip('/')
                     }
                     return publish
-             
-
     else:
         raise Exception("Please choose Admirer or input message")
     return {'result': 'ok'}
