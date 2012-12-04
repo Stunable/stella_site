@@ -46,8 +46,8 @@ from django.core.files import File
 # item = models.ForeignKey(Item)
 def find_image(folder,image):
     for ext in ['jpg','jpeg']:
-        if os.path.exists(os.path.join(folder,image+'.'+ext)):
-            return os.path.join(folder,image+'.'+ext)
+        if os.path.exists(os.path.join(folder,image.replace('.'+ext,'')+'.'+ext)):
+            return os.path.join(folder,image.replace('.'+ext,'')+'.'+ext)
     return False
 
 

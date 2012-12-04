@@ -1834,7 +1834,7 @@ $(function() {
 	var someOtherAvailableTags = ['True Religion', 'Levis', 'Diesel', 'Joes', 'Calvin', 'Jeans'];
 
 	if($('#admirers-auto-complete').length > 0) {
-		$.get('/admirers/get_friends', function(data) {
+		$.get('/admirers/get_friends/', function(data) {
 			$('#admirers-auto-complete').autocomplete({
 
 				//select a field
@@ -1862,7 +1862,7 @@ $(function() {
 	}
 
 	if($('#welcome-auto-complete').length > 0) {
-		$.get('/racks/brands', function(data) {
+		$.get('/racks/brands/', function(data) {
 			$('#welcome-auto-complete').autocomplete({
 
 				//select a field

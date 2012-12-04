@@ -151,7 +151,7 @@
 					$('#loading').css('position', 'relative');
 					$('#loading').css('top', '-35px');
 					$('#loading').css('left', '190px');
-					$.getJSON('/racks/add_item?' + $('#rack_it_form').serialize(), function(data) {
+					$.getJSON('/racks/add_item/?' + $('#rack_it_form').serialize(), function(data) {
 						$("#rack_confirmation").text(data.result == 'ok' ? "Sent" : "Error").show();
 						if(data.result != 'ok') {
 							//alert(data.text);
@@ -165,7 +165,7 @@
 			});
 			$('#send_it_to_admirer').click(function() {
 				if($('#send_to_admirer_form').valid()) {
-					$.getJSON('/racks/sent_to_admirer?' + $('#send_to_admirer_form').serialize(), function(data) {
+					$.getJSON('/racks/sent_to_admirer/?' + $('#send_to_admirer_form').serialize(), function(data) {
 						$("#send_item_confirmation").text(data.result == 'ok' ? "Sent" : "Error").show();
 						if(data.result != 'ok') {
 							//alert(data.text);
