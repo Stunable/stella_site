@@ -1462,7 +1462,6 @@ function initFriendDragDrop() {
 		accept : ".drag_item",
 		hoverClass : "drop_item_hover",
 		drop : function(event, ui) {
-			console.log($(this))
 			var item_id = $(ui.draggable).find('a').attr('data-value');
 			// var rack_id = $(this).find('span').attr('data-value');
 			var admirer_id = $(this).find('a').attr('data-value');
