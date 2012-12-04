@@ -1,24 +1,117 @@
-INFO:root:
+INFO:root:(TrackDetail){
+   Notification = 
+      (Notification){
+         Severity = "SUCCESS"
+         Source = "trck"
+         Code = "0"
+         Message = "Request was successfully processed."
+         LocalizedMessage = "Request was successfully processed."
+      }
+   TrackingNumber = "794195998293"
+   TrackingNumberUniqueIdentifier = "2456263000~794195998293~FX"
+   StatusCode = "OC"
+   StatusDescription = "Shipment information sent to FedEx"
+   ServiceCommitMessage = "Please check back later for shipment status or subscribe for e-mail notifications"
+   CarrierCode = "FDXE"
+   ServiceInfo = "FedEx 2Day Service"
+   ServiceType = "FEDEX_2_DAY"
+   PackageWeight = 
+      (Weight){
+         Units = "LB"
+         Value = 1.0
+      }
+   ShipmentWeight = 
+      (Weight){
+         Units = "LB"
+         Value = 1.0
+      }
+   Packaging = "Your Packaging"
+   PackageSequenceNumber = 1
+   PackageCount = 1
+   ShipTimestamp = 2012-11-30 00:00:00
+   DestinationAddress = 
+      (Address){
+         City = "NEW YORK"
+         StateOrProvinceCode = "NY"
+         CountryCode = "US"
+         Residential = False
+      }
+   EstimatedDeliveryTimestamp = 2012-12-04 19:00:00
+   SignatureProofOfDeliveryAvailable = False
+   ProofOfDeliveryNotificationsAvailable = True
+   ExceptionNotificationsAvailable = True
+   Events[] = 
+      (TrackEvent){
+         Timestamp = 2012-11-30 19:19:48
+         EventType = "OC"
+         EventDescription = "Shipment information sent to FedEx"
+         Address = 
+            (Address){
+               Residential = False
+            }
+         ArrivalLocation = "CUSTOMER"
+      },
+ }
 
-Events[] = 
-   (TrackEvent){
-   Timestamp = 2012-11-30 19:32:00
-   EventType = "PU"
-   EventDescription = "Picked up"
-   StatusExceptionCode = "A3"
-   StatusExceptionDescription = "Tendered at FedEx Office"
-   Address = 
-   (Address){
-      City = "NEW YORK"
-      StateOrProvinceCode = "NY"
-      PostalCode = "10014"
-      CountryCode = "US"
-      Residential = False
-   }
-   ArrivalLocation = "FEDEX_OFFICE_LOCATION"
-   }
-
-   
+ INFO:root:(TrackDetail){
+    Notification = 
+       (Notification){
+          Severity = "SUCCESS"
+          Source = "trck"
+          Code = "0"
+          Message = "Request was successfully processed."
+          LocalizedMessage = "Request was successfully processed."
+       }
+    TrackingNumber = "794195998293"
+    TrackingNumberUniqueIdentifier = "2456263000~794195998293~FX"
+    StatusCode = "PU"
+    StatusDescription = "Picked up"
+    CarrierCode = "FDXE"
+    ServiceInfo = "FedEx 2Day Service"
+    ServiceType = "FEDEX_2_DAY"
+    PackageWeight = 
+       (Weight){
+          Units = "LB"
+          Value = 1.0
+       }
+    ShipmentWeight = 
+       (Weight){
+          Units = "LB"
+          Value = 1.0
+       }
+    Packaging = "Your Packaging"
+    PackageSequenceNumber = 1
+    PackageCount = 1
+    ShipTimestamp = 2012-11-30 19:32:00
+    DestinationAddress = 
+       (Address){
+          City = "NEW YORK"
+          StateOrProvinceCode = "NY"
+          CountryCode = "US"
+          Residential = False
+       }
+    EstimatedDeliveryTimestamp = 2012-12-04 19:00:00
+    SignatureProofOfDeliveryAvailable = False
+    ProofOfDeliveryNotificationsAvailable = True
+    ExceptionNotificationsAvailable = True
+    Events[] = 
+       (TrackEvent){
+          Timestamp = 2012-11-30 19:32:00
+          EventType = "PU"
+          EventDescription = "Picked up"
+          StatusExceptionCode = "A3"
+          StatusExceptionDescription = "Tendered at FedEx Office"
+          Address = 
+             (Address){
+                City = "NEW YORK"
+                StateOrProvinceCode = "NY"
+                PostalCode = "10014"
+                CountryCode = "US"
+                Residential = False
+             }
+          ArrivalLocation = "FEDEX_OFFICE_LOCATION"
+       },
+  }
 ======================================
 
 

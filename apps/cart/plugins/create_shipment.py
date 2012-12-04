@@ -59,7 +59,10 @@ def ship_it(retailer,customer,item_count,shipping_method):
     shipment.RequestedShipment.Shipper.Contact.PhoneNumber = retailer.phone_number
 
     # Shipper address.
-    shipment.RequestedShipment.Shipper.Address.StreetLines = retailer.address1
+    origin_address = retailer.address1
+    if retailer.address2:
+        origin_address = retailer.address1 + ', ' + retailer.address2
+    shipment.RequestedShipment.Shipper.Address.StreetLines = origin_address
     shipment.RequestedShipment.Shipper.Address.City = retailer.city
     shipment.RequestedShipment.Shipper.Address.StateOrProvinceCode = retailer.state
     shipment.RequestedShipment.Shipper.Address.PostalCode = retailer.zip_code
@@ -72,7 +75,10 @@ def ship_it(retailer,customer,item_count,shipping_method):
     shipment.RequestedShipment.Recipient.Contact.PhoneNumber = customer.phone
 
     # Recipient address
-    shipment.RequestedShipment.Recipient.Address.StreetLines = customer.address1
+    dest_address = customer.address1
+    if customer.address2:
+        dest_address customer.address1 + ', ' + customer.address2
+    shipment.RequestedShipment.Recipient.Address.StreetLines = address
     shipment.RequestedShipment.Recipient.Address.City = customer.city
     shipment.RequestedShipment.Recipient.Address.StateOrProvinceCode = customer.state
     shipment.RequestedShipment.Recipient.Address.PostalCode = customer.zip_code
