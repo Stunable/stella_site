@@ -77,7 +77,7 @@ def ship_it(retailer,customer,item_count,shipping_method):
     # Recipient address
     dest_address = customer.address1
     if customer.address2:
-        dest_address customer.address1 + ', ' + customer.address2
+        dest_address = customer.address1 + ', ' + customer.address2
     shipment.RequestedShipment.Recipient.Address.StreetLines = address
     shipment.RequestedShipment.Recipient.Address.City = customer.city
     shipment.RequestedShipment.Recipient.Address.StateOrProvinceCode = customer.state
