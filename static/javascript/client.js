@@ -1519,7 +1519,7 @@ function initFriendDragDrop() {
 						},'json');
 				  });
 			}else{
-				$.get('/racks/sent_to_admirer'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
+				$.get('/racks/sent_to_admirer/?'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
 					FB.ui(data)
 				})
 			}}
