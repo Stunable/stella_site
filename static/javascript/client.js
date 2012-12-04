@@ -1390,7 +1390,7 @@ function initDragDrop() {
 			var item_id = $(ui.draggable).find('a').attr('data-value');
 			var rack_id = $(this).find('span').attr('data-value');
 			var droppable = $(this).find('span');
-			$.get('/racks/add_item?item_id=' + item_id + '&rack=' + rack_id, function(returnData) {
+			$.post('/racks/add_item?item_id=' + item_id + '&rack=' + rack_id, function(returnData) {
 				if (temp != "Item Added!"){
 					temp = $(droppable).html();
 				}				 
@@ -1506,7 +1506,7 @@ function initFriendDragDrop() {
 				  
 				  $('#send_it_to_admirer_reduced').click(function(){
 				  		$('#loading2').css('display', 'inline');
-				  		$.get('/racks/sent_to_admirer?'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
+				  		$.post('/racks/sent_to_admirer?'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
 				  			$('#loading2').css('display', 'none');
 							$("#send_item_confirmation_reduced").css('opacity','1').text(data.result == 'ok' ? "Sent" : "Error").show();
 							
@@ -1519,7 +1519,7 @@ function initFriendDragDrop() {
 						},'json');
 				  });
 			}else{
-				$.get('/racks/sent_to_admirer?'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
+				$.post('/racks/sent_to_admirer?'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
 					FB.ui(data)
 				})
 			}}
