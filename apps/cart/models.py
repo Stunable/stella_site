@@ -236,7 +236,7 @@ class Item(models.Model):
 
     @property
     def cost_minus_shipping(self):
-        return float(self.total_price + self.get_tax_amount() + float(self.get_additional_fees())        
+        return float(self.total_price) + self.get_tax_amount() + float(self.get_additional_fees())   
 
     def is_refundable(self):
         return self.status != "refunded"
