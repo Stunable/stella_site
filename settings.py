@@ -19,7 +19,7 @@ AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
 ADMINS = (
     ('Dev Alerts', 'gdamon@gmail.com'),
-    ('More Dev Alerts', 'admin@stunable.com')
+    ('More Dev Alerts', 'admin@stunable.com'),
 )
 
 CONTACT_LIST = (
