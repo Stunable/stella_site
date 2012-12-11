@@ -216,12 +216,10 @@ class Item(models.Model):
         except:
             return 'error item'
 
+    @property
     def total_price(self):
-        print 'q:',type(self.quantity)
-        print 'p:',self.unit_price
         return self.quantity * self.unit_price
-    total_price = property(total_price)
-    
+
     @property
     def sub_total(self):
         try:
@@ -234,8 +232,11 @@ class Item(models.Model):
 
     @property
     def grand_total(self):
-
         return float(self.price_with_shipping()) + self.get_tax_amount() + float(self.get_additional_fees())
+
+    @property
+    def cost_minus_shipping(self):
+        return float(self.total_price()) + self.get_tax_amount() + float(self.get_additional_fees())        
 
     def is_refundable(self):
         return self.status != "refunded"

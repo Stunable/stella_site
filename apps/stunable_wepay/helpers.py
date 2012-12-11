@@ -12,6 +12,8 @@ from django.forms.models import fields_for_model
 from django.utils.datastructures import MergeDict
 from django.utils.http import urlencode
 
+from django.core.mail import send_mail
+
 from stunable_wepay.signals import *
 from models import *
 from apps.retailers.models import RetailerProfile
@@ -40,8 +42,8 @@ class WePayPayment(object):
 
             WEPAY = WePay(settings.WEPAY_PRODUCTION, retailer_profile.wepay_token)
 
-            app_fee = float(item.price_with_shipping())*.2
-            price_minus_fee = item.grand_total
+            app_fee = float(item.total_price)*.2
+            price_minus_fee = item.cost_minus_shipping
 
             data = {
                 'auto_capture':False,
@@ -55,8 +57,6 @@ class WePayPayment(object):
                 'fee_payer':'payee',
                 'shipping_fee':str(item.shipping_amount)
             }
-
-            print data
 
             response = WEPAY.call('/checkout/create',data)
 
@@ -79,6 +79,13 @@ class WePayPayment(object):
                 payment_was_successful.send(sender=wpt, item=item)
 
             return True
+
+            email_message = """
+                a new checkout has been created:
+                %s
+            """%str(data)
+
+            send_mail('new checkout', email_message, settings.DEFAULT_FROM_EMAIL, settings.ADMINS)
 
         
 
