@@ -18,11 +18,9 @@ class WePayTransaction(models.Model):
         if self.state != 'captured':
             try:
                 WEPAY = WePay(settings.WEPAY_PRODUCTION, self.get_retailer().wepay_token)
-
                 response = WEPAY.call('/checkout/capture', {
                     'checkout_id': self.checkout_id
                 })
-                print response
                 if response.has_key('state'):
                     self.state = response['state']
                     self.save()
