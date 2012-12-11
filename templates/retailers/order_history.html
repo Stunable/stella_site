@@ -104,7 +104,7 @@
                 <input type="hidden" class="item-pk" value="{{item.pk}}" />
                 <input type="hidden" class="total-price" value="{{item.total_price}}" />
                 <input type="hidden" class="purchaser-name" value="shopper" />    
-                	{% if item.actions %}
+                	<!-- {% if item.actions %}
                 		<select class="order-update">
                 		<option value="">Select</option>
     	            	{% for action in item.actions %}
@@ -113,7 +113,7 @@
     					</select>
                 	{% else %}
                 		NA            	
-                	{% endif %}
+                	{% endif %} -->
                 <span>
                     {% if item.status != "shipped" %}
                     <a href="{% url print_shipping_label ref=purchase.checkout.ref %}"><strong>get</strong> label</a>

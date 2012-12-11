@@ -36,3 +36,19 @@ class WePayTransaction(models.Model):
         P = self.purchase_set.all()[0]
         R = RetailerProfile.objects.get(user=P.checkout.retailer)
         return R
+
+
+    def get_status(self):
+        WEPAY = WePay(settings.WEPAY_PRODUCTION, self.get_retailer().wepay_token)
+
+        response = WEPAY.call('/checkout/', {
+            'checkout_id': self.checkout_id
+        })
+
+        print response
+        self.state = response['state']
+        self.save()
+
+
+
+

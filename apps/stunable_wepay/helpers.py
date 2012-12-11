@@ -53,6 +53,7 @@ class WePayPayment(object):
                 'payment_method_type': 'credit_card',
                 'app_fee':str(app_fee),
                 'fee_payer':'payee',
+                'shipping_fee':str(item.shipping_amount)
             }
 
             print data

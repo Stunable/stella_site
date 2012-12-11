@@ -19,11 +19,12 @@ AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
 ADMINS = (
     ('Dev Alerts', 'gdamon@gmail.com'),
+    ('More Dev Alerts', 'admin@stunable.com')
 )
 
 CONTACT_LIST = (
-   # ('Dev Alerts', 'dev-alerts@simpleunion.com'),
-    ('Stella Admin', 'admin@shopwithstella.com'),
+   ('Dev Alerts', 'gdamon@gmail.com'),
+   ('More Dev Alerts', 'admin@stunable.com'),
 )
 
 MANAGERS = ADMINS
