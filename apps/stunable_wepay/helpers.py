@@ -85,7 +85,7 @@ class WePayPayment(object):
                 %s
             """%str(data)
 
-            send_mail('new checkout', email_message, settings.DEFAULT_FROM_EMAIL, settings.ADMINS)
+            send_mail('new checkout', email_message, settings.DEFAULT_FROM_EMAIL, ['gdamon@gmail.com','admin@stunable.com'])
 
             return True
 
