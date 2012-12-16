@@ -38,4 +38,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
 DOMAIN_NAME = "%(live_host)s"
-WWW_ROOT = 'https://%s/' % DOMAIN_NAME
+WWW_ROOT = 'https://%(live_host)s/'
