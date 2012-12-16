@@ -41,10 +41,11 @@ conf = {
         "HOSTS": ['ec2-50-17-52-193.compute-1.amazonaws.com',], # List of hosts to deploy to
         "VIRTUALENV_HOME":  "/data", # Absolute remote path for virtualenvs
         "PROJECT_NAME": "stunable", # Unique identifier for project
+        "DB_USER":"stella",
         "REQUIREMENTS_PATH": "requirements.txt", # Path to pip requirements, relative to project
         "GUNICORN_PORT": 8000, # Port gunicorn will listen on
         "LOCALE": "en_US.utf8", # Should end with ".utf8"
-        "LIVE_HOSTNAME": "shopwithstella.org", # Host for public site.
+        "LIVE_HOSTNAME": "dev.stunable.com", # Host for public site.
         "REPO_URL": "https://github.com/Stunable/stella_site.git", # Git or Mercurial remote repo URL for the project
         "DB_PASS": "123456", # Live database password
         "ADMIN_PASS": "123456", # Live admin user password
@@ -60,6 +61,7 @@ env.key_filename = conf[MODE].get("SSH_KEY_PATH", None)
 env.hosts = conf[MODE].get("HOSTS", [])
 
 env.proj_name = conf[MODE].get("PROJECT_NAME", os.getcwd().split(os.sep)[-1])
+env.db_user = conf[MODE].get("DB_USER")
 env.venv_home = conf[MODE].get("VIRTUALENV_HOME", "/home/%s" % env.user)
 env.venv_path = "%s/%s" % (env.venv_home, env.proj_name)
 env.proj_dirname = "project"
@@ -480,7 +482,7 @@ def db_setup():
     
     # Create DB and DB user.
     pw = db_pass()
-    user_sql_args = (env.proj_name, env.proj_name, pw.replace("'", "\'"))    
+    user_sql_args = (env.db_user, env.db_user, pw.replace("'", "\'"))    
     user_sql = "GRANT ALL PRIVILEGES ON %s.* To '%s' IDENTIFIED BY '%s';" % user_sql_args
     psql(user_sql, show=False)
     shadowed = "*" * len(pw)

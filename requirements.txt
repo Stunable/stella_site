@@ -46,3 +46,5 @@ fedex
 xlrd
 django-sslify
 django-mass-edit
+oauth
+gdata

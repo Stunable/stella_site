@@ -17,3 +17,5 @@ local_settings.py
 dev.py
 
 hack.py
+
+*.sql
