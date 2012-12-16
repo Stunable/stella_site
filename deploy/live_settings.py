@@ -36,3 +36,6 @@ LOGIN_ERROR_URL = '/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+
+DOMAIN_NAME = "%(live_host)s"
+WWW_ROOT = 'https://%s/' % DOMAIN_NAME
