@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.localflavor.us.us_states import US_STATES
 from django.contrib.localflavor.us.models import PhoneNumberField
-from racks.models import Item
+from racks.models import Item,ProductImage
 
 from tasks import process_upload
 
@@ -24,6 +24,13 @@ class ShippingType(models.Model):
         return self.name
 
 class ProductUpload(models.Model):
+
+    def __unicode__(self):
+        try:
+            return str(self.retailer)+' | '+str(self.uploaded_zip)
+        except:
+            return super(ProductUpload,self).__unicode__()
+
     uploaded_zip = models.FileField(upload_to='product_uploads')
     retailer = models.ForeignKey('RetailerProfile')
     processed = models.BooleanField(default=False)

@@ -70,10 +70,24 @@ class Color(models.Model):
         if not VALID_COLOR_REGEX.match(self.color_css):
             raise ValidationError("%s is not a valid CSS color" % self.color_css)    
 
-class Item(models.Model):
+class ProductImage(models.Model):
     image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product Image")
     pretty_image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product pretty Image",storage=OverwriteStorage())
     bg_color = models.CharField(max_length=32,default='white',blank=True,null=True)
+
+    def generate_pretty_picture(self):
+        prettify(self)
+
+    def save(self,*args,**kwargs):
+        this_id = self.id
+        super(ProductImage,self).save()
+
+        if not this_id:
+            self.generate_pretty_picture()
+
+
+class Item(models.Model):
+    image = models.ForeignKey(ProductImage,null=True,blank=True)
     gender = models.CharField(max_length=1,default='F',choices=[('F','F'),('M','M'),('B','B')])
     brand = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(max_length=200, verbose_name='Product Name')
@@ -101,10 +115,11 @@ class Item(models.Model):
         return self.name
     
     def get_image(self):
-        if self.pretty_image:
-            return self.pretty_image
         if self.image:
-            return self.image
+            if self.image.pretty_image:
+                return self.image.pretty_image
+        if self.image:
+            return self.image.image
         elif self.image_urls:
             return self.image_urls.split(',')[0].replace('.jpg', '_150x296.jpg')
         else:
@@ -120,14 +135,11 @@ class Item(models.Model):
         
     def get_full_size_image(self):
         if self.image:
-            return self.image
+            return self.image.image
         elif self.image_urls:
             return self.image_urls.split(',')[0]
         else: 
             return "upload/agjea1.254x500.jpg"
-
-    def generate_pretty_picture(self):
-        prettify(self)
 
 
     def list_image(self):
@@ -137,12 +149,19 @@ class Item(models.Model):
 
 
 class ItemType(models.Model):
+    image = models.ForeignKey(ProductImage,null=True)
     item = models.ForeignKey('Item', related_name='types')
     color = models.ForeignKey('Color')
     size = models.ForeignKey('Size')
     custom_color_name = models.CharField(max_length=100, blank=True, null=True,
                                          help_text="An optional custom name for the color of this item")
     inventory = models.PositiveIntegerField(default=0)
+
+    def get_image(self):
+        if self.image:
+            return self.image.image
+        else:
+            return self.item.get_image()
     
     def __unicode__(self):
         color = self.custom_color_name or self.color.name

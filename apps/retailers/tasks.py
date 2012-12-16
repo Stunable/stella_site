@@ -1,8 +1,9 @@
 from utils import getXLSdata
 import zipfile
 import os
+import copy
 
-from racks.models import Item,ItemType,Color,Size
+from racks.models import Item,ItemType,Color,Size,ProductImage
 from django.core.files import File
 
 # Item
@@ -59,68 +60,77 @@ def process_upload(upload,throughModel,errorClass):
     xls = find_xls(path)
 
     folder = os.path.dirname(xls)
+    current = [None for i in range(0,8)]
+    prev = copy.copy(current)
 
 
     for i,d in enumerate(getXLSdata(xls)):
         if i == 0:
             continue
-        #BRAND', u'PRODUCT NAME', u'PRODUCT IMAGE', u'PRODUCT DESCRIPTION', u'COLORWAY(S)', u'SIZES', u'INV_SIZES', u'MSRP (US DOLLARS)'
-        brand,name,image,description,colorways,sizes,inv_sizes,msrp = d
-        imgpath = find_image(folder,image)
-        if imgpath:
-            try:
-                pic = File(open(imgpath,'rb'))
-            except:
-                errors.append('Problem dealing with picture: %s'%os.path.basename(imgpath))
+        #BRAND', u'PRODUCT NAME', u'PRODUCT IMAGE', u'PRODUCT DESCRIPTION', u'COLOR', u'SIZE', u'INVENTORY', u'MSRP'
+           #0           1                 2                     3                 4        5          6           7
 
-            try:
+        if d[2] != prev[2]:#the image
+            imgpath = find_image(folder,d[2])
+            if imgpath:
+                pic = File(open(imgpath,'rb'))
+                Picture = ProductImage.objects.create(image=pic)
+
+        if Picture:
+            # print prev
+            # print Picture.image.url
+            for i in range(0,len(d)):
+                # print i, current[i], d[i]
+                if d[i].lstrip().rstrip():
+                    current[i] = d[i]
+
+            brand,name,image,description,color,size,inventory,msrp = current
+
+            print prev[0],prev[1]
+            print brand,name
+
+            if brand != prev[0] or name != prev[1]:
+                print 'creating item:'
+                print brand
+                print name
+
                 I = Item.objects.create(
                     brand=brand,
                     name =name,
                     price=msrp,
                     description=description,
-                    image=pic,
-                )
-            except Exception, e:
-                errors.append(str(e))
-
-            if upload.retailer.user:
-                si = throughModel.objects.create(
-                    stylist = upload.retailer.user,
-                    item = I
+                    image=Picture
                 )
 
-    #Do ItemTypes
-            try:
-                sizelist = []
-                invsizes = inv_sizes.split(',')
+                if upload.retailer.user:
+                    si = throughModel.objects.create(
+                        stylist = upload.retailer.user,
+                        item = I)
 
-                c,created = Color.objects.get_or_create(
-                    retailer = upload.retailer.user,
-                    name = colorways
-                )
+            c,created = Color.objects.get_or_create(
+                retailer = upload.retailer.user,
+                name = color
+            )
 
-
-                for s in sizes.split(','):
-                    s,created = Size.objects.get_or_create(
-                        size=s,
-                        retailer = upload.retailer.user,
-                    )
-                    sizelist.append(s)
-
-                for i,sz in enumerate(sizelist):
-                    ItemType.objects.create(
-                        item=I,
-                        color=c,
-                        size=sz,
-                        custom_color_name=colorways,
-                        inventory=int(invsizes[i])
-                    )
-            except Exception,e:
-                errors.append(str(e))
+            s,created = Size.objects.get_or_create(
+                size=size,
+                retailer = upload.retailer.user,
+            )
+            
+            ItemType.objects.create(
+                item=I,
+                color=c,
+                size=s,
+                custom_color_name=color,
+                inventory=int(inventory),
+                image = Picture
+            )
+            
         else:
             errors.append('No Image Found for Item: '+name)
-    
+        for i,f in enumerate(current):
+            prev[i] = current[i]
+
     for error in errors:
         print error
         errorClass.objects.create(text=error,upload=upload)

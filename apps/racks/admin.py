@@ -84,7 +84,7 @@ class ColorAdmin(admin.ModelAdmin):
         return qs
     
 
-class ItemTypeInline(admin.StackedInline):
+class ItemTypeInline(admin.TabularInline):
     model = ItemType
     extra = 1
     
