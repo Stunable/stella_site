@@ -76,7 +76,6 @@
                     <thead>
                         <th>SIZE</th>
                         <th>PRICE</th>
-                        <th>RETAILER</th>
                         <th>INVENTORY</th>
                         <th>STATUS</th>
                     </thead>
@@ -89,7 +88,6 @@
                                 {% endfor %}                                
                             </td>
                             <td>{{ product.item.price }}</td>
-                            <td>{{ product.item.retailer }}</td>
                             <td>{% for it in product.item.types.all %}
                                 {{ it.inventory }}{% if not forloop.last%},{% endif %}
                                 {% endfor %}   </td>

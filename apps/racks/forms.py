@@ -5,7 +5,12 @@ from django.contrib.auth.models import User
 from apps.racks.models import Item
 from django.db.models import Q
 from apps.common.forms import AjaxModelForm
-from apps.racks.models import ItemType
+from apps.racks.models import ItemType,ProductImage
+
+from django.forms.util import flatatt
+from django.utils.safestring import mark_safe
+
+import types
 
 class RackForm(forms.ModelForm):    
     #shared_users = forms.ModelMultipleChoiceField(queryset=User.objects.all(),required=False, widget=forms.SelectMultiple)
@@ -93,7 +98,23 @@ class AddColorForm(forms.ModelForm):
             return name
         else:
             raise forms.ValidationError("Please enter a color name")
-        
+
+def addPlus(widget,name,selection,queryset,url,label):
+
+    def render_with_plus(self, name, value, attrs=None, choices=()):
+        if value is None: value = ''
+        final_attrs = self.build_attrs(attrs, name=name)
+        output = [u'<select%s>' % flatatt(final_attrs)]
+        options = self.render_options(choices, [value])
+        if options:
+            output.append(options)
+        output.append(u'</select>')
+        output.append('<div style="margin-left: 150px;margin-top: 5px;"> <a class="addProductImage" target="blank" href="%s"><span>+</span> Add %s</a></div>'%(url,label))
+        print output
+        return mark_safe(u'\n'.join(output))
+
+    widget.render = types.MethodType(render_with_plus,widget)
+    return widget
 
 class ItemInventoryForm(AjaxModelForm):
     class Meta:
@@ -104,6 +125,7 @@ def item_inventory_form_factory(retailer):
         item = forms.ModelChoiceField(queryset=Item.objects.all(), widget=forms.HiddenInput())
         color = forms.ModelChoiceField(queryset=Color.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
         size = forms.ModelChoiceField(queryset=Size.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
+        image = forms.ModelChoiceField(queryset=ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
         
         class Meta:
             model = ItemType
@@ -113,6 +135,20 @@ def item_inventory_form_factory(retailer):
             if int(inventory) < 1:
                 raise forms.ValidationError("Inventory must be positive!")
             return self.cleaned_data.get('inventory')
+
+        def __init__(self,*args,**kwargs):
+            super(ItemInventoryForm,self).__init__(*args,**kwargs)
+            print self.fields['image']
+
+
+            addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)),'#','Product Image')
+
+
+            self.fields['image'].widget.attrs['class'] = "imageselector"
+            self.fields['image'].empty_label = '/static/images/choosepic.png'
+
+
+
 
     return ItemInventoryForm
 

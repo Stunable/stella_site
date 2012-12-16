@@ -1,8 +1,16 @@
 <!--{{ inventory_form.as_table  }}-->
-
-
+{% load thumbnail %}
 	<tr>
-		<td colspan="2">Color<br />
+		<td colspan="2">
+			Image for this variation
+			</br>
+			{{inventory_form.image}}
+		</div>
+		</td>
+	</tr>
+	<tr>		
+		<td colspan="2">
+		Color<br />
 		{% for hidden in inventory_form.hidden_fields %}
     		{{ hidden }}
     	{% endfor %}
@@ -11,6 +19,9 @@
 		Carousel color name </span> {{ inventory_form.custom_color_name }} <!--<a class='icon plus-icon item-ref' href='{% url add_color %}'>Add a custom color to this item</a>-->
 		</div>
 		</td>
+	</tr>
+	<tr>
+		<td>Price for this size/color</td><td>{{inventory_form.price}}</td>
 	</tr>
 	<tr>
 		<td>Size</td>

@@ -74,25 +74,18 @@ def process_upload(upload,throughModel,errorClass):
             imgpath = find_image(folder,d[2])
             if imgpath:
                 pic = File(open(imgpath,'rb'))
-                Picture = ProductImage.objects.create(image=pic)
+                Picture = ProductImage.objects.create(image=pic,retailer=upload.retailer.user)
 
         if Picture:
-            # print prev
-            # print Picture.image.url
             for i in range(0,len(d)):
-                # print i, current[i], d[i]
                 if d[i].lstrip().rstrip():
                     current[i] = d[i]
 
             brand,name,image,description,color,size,inventory,msrp = current
 
-            print prev[0],prev[1]
-            print brand,name
-
             if brand != prev[0] or name != prev[1]:
-                print 'creating item:'
-                print brand
-                print name
+
+                brand,name,image,description,color,size,inventory,msrp = d
 
                 I = Item.objects.create(
                     brand=brand,
@@ -106,6 +99,8 @@ def process_upload(upload,throughModel,errorClass):
                     si = throughModel.objects.create(
                         stylist = upload.retailer.user,
                         item = I)
+
+
 
             c,created = Color.objects.get_or_create(
                 retailer = upload.retailer.user,
@@ -123,7 +118,8 @@ def process_upload(upload,throughModel,errorClass):
                 size=s,
                 custom_color_name=color,
                 inventory=int(inventory),
-                image = Picture
+                image = Picture,
+                price = msrp
             )
             
         else:

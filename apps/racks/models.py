@@ -11,6 +11,8 @@ from django.db.models import Avg
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.loading import get_model, get_models
 
+from sorl.thumbnail import ImageField,get_thumbnail
+
 from tasks import *
 from apps.common.utils import *
 from apps.accounts.models import AnonymousProfile
@@ -71,9 +73,18 @@ class Color(models.Model):
             raise ValidationError("%s is not a valid CSS color" % self.color_css)    
 
 class ProductImage(models.Model):
-    image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product Image")
+
+    def __unicode__(self):
+        if self.image:
+            return self.thumbnail
+        else:
+            return self.__class__.__name__
+
+    image = ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product Image")
     pretty_image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product pretty Image",storage=OverwriteStorage())
     bg_color = models.CharField(max_length=32,default='white',blank=True,null=True)
+    retailer = models.ForeignKey(User,null=True,blank=True)
+
 
     def generate_pretty_picture(self):
         prettify(self)
@@ -84,6 +95,11 @@ class ProductImage(models.Model):
 
         if not this_id:
             self.generate_pretty_picture()
+
+    @property
+    def thumbnail(self):
+        return get_thumbnail(self.pretty_image, '120x120',  quality=100).url
+
 
 
 class Item(models.Model):
@@ -156,6 +172,7 @@ class ItemType(models.Model):
     custom_color_name = models.CharField(max_length=100, blank=True, null=True,
                                          help_text="An optional custom name for the color of this item")
     inventory = models.PositiveIntegerField(default=0)
+    price = models.DecimalField(max_digits=19, decimal_places=2, verbose_name='Special Price for this color/size/inventory')
 
     def get_image(self):
         if self.image:

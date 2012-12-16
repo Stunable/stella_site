@@ -1,6 +1,7 @@
 {% extends "user_base.html" %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{{ STATIC_URL }}styles/imageselect.css" type="text/css"/>
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/retailers.css" type="text/css" media="screen, projection" />
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/blitzer/jquery-ui.css" type="text/css" media="all" />
 {% endblock %}
@@ -86,5 +87,16 @@
 {% block content %}
 {% endblock %}
 {% block extra_script%}
+<script type="text/javascript" src="{{ STATIC_URL }}javascript/imageselect.js"></script>
+
+<script>
+$(document).ready(function(){
+    console.log($('select[name=image]'))
+   $('select[name=image]').ImageSelect(); 
+   $('.imageselector').ImageSelect();
+})
+
+</script>
+
 
 {% endblock %}

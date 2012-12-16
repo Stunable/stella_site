@@ -200,7 +200,7 @@ def inventory_type_formset_factory(retailer, data=None, instance=None):
     # by passing the retailer (instance of User) to it's constructor.
 #    form = ItemInventoryForm(retailer)
     form = item_inventory_form_factory(retailer)
-    formset_class = inlineformset_factory(Item, ItemType, form=form, extra=5, can_delete=True)
+    formset_class = inlineformset_factory(Item, ItemType, form=form, extra=1, can_delete=True)
     
     def errors_as_json(self, strip_tags=False):
         error_summary = {}
@@ -288,7 +288,7 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
         try:
             initial = {'Colors': [i.pk for i in item_instance.colors.all()], 
                        'Sizes': [i.pk for i in item_instance.sizes.all()],
-                       'brand': RetailerProfile.objects.get(user=request.user).namee
+                       'brand': RetailerProfile.objects.get(user=request.user).name
                        }
         except:
             
@@ -298,7 +298,8 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
     if request.is_ajax():
         template = 'racks/size_input.html'
     
-    
+
+    ctx['item'] = item_instance
     ctx['form'] = form #MyForm()
     ctx['inventory_forms'] = inventory_type_formset_factory(request.user, None, item_instance)
     ctx['retailer_profile'] = RetailerProfile.objects.get(email_address=request.user.email)
@@ -316,7 +317,6 @@ def bulk_upload(request,template="retailers/product_list.html"):
         retailer_profile = RetailerProfile.objects.get(user=request.user)
         form = modelform_factory(ProductUpload,fields=['uploaded_zip'])()
         if request.method == 'POST':
-            print request.POST
             form = modelform_factory(ProductUpload,fields=['uploaded_zip'])(request.POST,request.FILES)
             if form.is_valid():
                 print 'valid form'
@@ -335,7 +335,7 @@ def bulk_upload(request,template="retailers/product_list.html"):
         ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form}
     except:
         raise
-        return redirect(reverse("home"))
+        # e redirect(reverse("home"))
     return direct_to_template(request, template, ctx)
 
 @login_required 

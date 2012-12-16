@@ -120,4 +120,4 @@ class StylistItem(models.Model):
         try:
             return self.stylist.username + ' ' + self.item.name
         except:
-            return '-deleted- '+self.item.name
+            return '-deleted- '

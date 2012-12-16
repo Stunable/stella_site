@@ -1,5 +1,4 @@
 {% extends "retailers/retailer_base.html" %}
-
 {% block title %} Stunable | Add items {% endblock %}
 
 {% block body_class %}common large_common others{% endblock %}
@@ -28,6 +27,11 @@
 	}
 	.others td input {
 		width: 210px;
+	}
+	.inventory_forms table{
+		margin-top:30px;
+		margin-bottom:20px;
+		/*border:1px solid black;*/
 	}
 	.fixed-popup {
 		position: absolute;
@@ -102,10 +106,12 @@
 				<td> {% for f in inventory_forms.management_form %}
 				{{ f }}
 				{% endfor %}
+				<div class="inventory_forms">
 				{% for inventory_form in inventory_forms.forms %}
-				<table cellpadding="10" class="inventory-item-entry" style="{% if forloop.counter > 1 %}display: none;{% endif %}" id="tbl-{{forloop.counter}}">
+				<table cellpadding="10" class="inventory-item-entry" style="{#% if forloop.counter > 1 %}display: none;{% endif %#}" id="tbl-{{forloop.counter}}">
 					{% include "retailers/inventory_item_form_partial.html" %}
-				</table> {% endfor %} <a id="add-more-option" href="javascript:void()">Add another "color, size, inventory" option for this product</span> </td>
+				</table> {% endfor %} <a id="add-more-option" href="">Add another "color, size, inventory" option for this product</span> </td>
+				</div>
 			</tr>
 			<tr>
 				<th></th>
@@ -201,6 +207,7 @@
 		$('#add-more-option').click(function() {
 			inventory_option_counter++;
 			$('#tbl-' + inventory_option_counter).show('fast');
+			return false
 		});
 
 		$('#id_tags').chosen();
@@ -227,5 +234,17 @@
 		});
 
 	})
+
+</script>
+<script type="text/javascript" src="{{ STATIC_URL }}javascript/imageselect.js"></script>
+
+<script>
+$(document).ready(function(){
+    console.log($('select[name=image]'))
+   $('select[name=image]').ImageSelect(); 
+   $('.imageselector').ImageSelect();
+})
+
+
 </script>
 {% endblock %}
