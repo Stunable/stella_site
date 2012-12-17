@@ -221,6 +221,7 @@ class ItemForm(AjaxModelForm):
         self.user = user
         super(ItemForm, self).__init__(*args, **(kwargs))
         self.fields['tags'].label = "Tags Related to your Product"
+        self.fields['image'].empty_label = '/static/images/choosepic.png'
 
 
     def clean_colors(self):
@@ -266,6 +267,7 @@ class ItemEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ItemEditForm, self).__init__(*args, **(kwargs))
         self.fields['image'].required = False
+        self.fields['image'].empty_label = '/static/images/choosepic.png'
     
     def clean_price(self):
         price = self.cleaned_data.get('price')
