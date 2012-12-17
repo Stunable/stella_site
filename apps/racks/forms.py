@@ -100,7 +100,6 @@ class AddColorForm(forms.ModelForm):
             raise forms.ValidationError("Please enter a color name")
 
 def addPlus(widget,name,selection,queryset,url,label):
-
     def render_with_plus(self, name, value, attrs=None, choices=()):
         if value is None: value = ''
         final_attrs = self.build_attrs(attrs, name=name)

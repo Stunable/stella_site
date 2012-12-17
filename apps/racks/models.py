@@ -72,7 +72,19 @@ class Color(models.Model):
         if not VALID_COLOR_REGEX.match(self.color_css):
             raise ValidationError("%s is not a valid CSS color" % self.color_css)    
 
-class ProductImage(models.Model):
+class listImageMixin(object):
+
+    @property
+    def thumbnail(self):
+        return self.get_image().url
+        #get_thumbnail(self.get_image(), '120x120',  quality=100).url
+
+    def list_image(self):
+        return '<img style="width:60px" src="%s"/>' % self.thumbnail
+    list_image.allow_tags = True
+
+
+class ProductImage(models.Model,listImageMixin):
 
     def __unicode__(self):
         if self.image:
@@ -85,6 +97,8 @@ class ProductImage(models.Model):
     bg_color = models.CharField(max_length=32,default='white',blank=True,null=True)
     retailer = models.ForeignKey(User,null=True,blank=True)
 
+    def get_image(self):
+        return self.pretty_image
 
     def generate_pretty_picture(self):
         prettify(self)
@@ -96,13 +110,8 @@ class ProductImage(models.Model):
         if not this_id:
             self.generate_pretty_picture()
 
-    @property
-    def thumbnail(self):
-        return get_thumbnail(self.pretty_image, '120x120',  quality=100).url
 
-
-
-class Item(models.Model):
+class Item(models.Model,listImageMixin):
     image = models.ForeignKey(ProductImage,null=True,blank=True)
     gender = models.CharField(max_length=1,default='F',choices=[('F','F'),('M','M'),('B','B')])
     brand = models.CharField(max_length=200, null=True, blank=True)
@@ -156,12 +165,6 @@ class Item(models.Model):
             return self.image_urls.split(',')[0]
         else: 
             return "upload/agjea1.254x500.jpg"
-
-
-    def list_image(self):
-        return '<img style="width:60px" src="/media/%s"/>' % self.get_image()
-    list_image.allow_tags = True
-
 
 
 class ItemType(models.Model):

@@ -17,7 +17,7 @@ import datetime
 from django.http import HttpResponse,HttpResponseRedirect
 from apps.racks.forms import item_inventory_form_factory
 from django.forms.models import inlineformset_factory
-from apps.racks.models import ItemType
+from apps.racks.models import ItemType,ProductImage
 from apps.common.forms import AjaxBaseForm
 from apps.accounts.models import ShippingInfo
 from apps.racks.forms import ItemInventoryForm
@@ -238,6 +238,9 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
         item_instance = Item.objects.get(pk=item_id)
     else:
         item_instance = Item()
+
+
+    retailer = RetailerProfile.objects.get(user=request.user)
     
     post = request.POST.copy()
     if request.method == 'POST':
@@ -292,17 +295,17 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                        }
         except:
             
-            initial={'brand': RetailerProfile.objects.get(user=request.user).name}
+            initial={'brand': retailer.name}
         form = ItemForm(instance=item_instance, initial=initial)
     
     if request.is_ajax():
         template = 'racks/size_input.html'
-    
-
+    ctx['next']=request.get_full_path()
+    ctx['image_upload_form'] = modelform_factory(ProductImage,fields=["image"])(initial={'retailer':retailer.id})
     ctx['item'] = item_instance
     ctx['form'] = form #MyForm()
     ctx['inventory_forms'] = inventory_type_formset_factory(request.user, None, item_instance)
-    ctx['retailer_profile'] = RetailerProfile.objects.get(email_address=request.user.email)
+    ctx['retailer_profile'] = retailer
     ctx['item_pk'] = item_id
 
     return direct_to_template(request, template, ctx)

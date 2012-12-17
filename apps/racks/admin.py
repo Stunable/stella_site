@@ -116,6 +116,12 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
 class SizeAdmin(admin.ModelAdmin):
     list_display = ['size']
     #readonly_fields = ['retailer']
+
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ['image','retailer','list_image']
+    #readonly_fields = ['retailer']
+
+
     
 
 admin.site.register(Size, SizeAdmin)
@@ -126,7 +132,7 @@ admin.site.register(Category)
 admin.site.register(Brand)
 admin.site.register(Color, ColorAdmin)
 admin.site.register(PriceCategory)
-admin.site.register(ProductImage)
+admin.site.register(ProductImage,ProductImageAdmin)
 
 
 

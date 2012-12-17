@@ -5,6 +5,7 @@ from apps.racks.views import _all
 urlpatterns = patterns('',
                        url(r'^add_size', add_size, name="add_size"),
                        url(r'^add_color', add_color, name="add_color"),
+                       url(r'^add_product_image', add_product_image, name="add_product_image"),
                        url(r'^detail/(?P<rack_id>\d+)', detail, name="racks_detail"),
                        url(r'^carousel/stella_choice', stella_choice, name="stella_choice"),
                        url(r'^carousel/all', _all, name='all'),

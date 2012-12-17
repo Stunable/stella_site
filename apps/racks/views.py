@@ -11,7 +11,7 @@ from django.core.urlresolvers import reverse
 from apps.racks.forms import *
 from friends.models import Friendship
 from django.contrib.auth.models import User
-from apps.racks.models import Rack, Rack_Item, Item, Category
+from apps.racks.models import Rack, Rack_Item, Item, Category,ProductImage
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from apps.friends.views import json_view
@@ -29,9 +29,13 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
+from django.forms.models import modelform_factory
 from racks.models import PriceCategory
 from social_auth.models import UserSocialAuth
 import urllib
+
+from apps.retailers.models import RetailerProfile
+
 
 import random
 
@@ -970,6 +974,25 @@ def add_color(request, template="racks/add_color_dialog.html"):
     
     ctx['form'] = form
     return direct_to_template(request, template, ctx)
+
+@login_required
+def add_product_image(request):
+
+    retailer = RetailerProfile.objects.get(user=request.user)
+
+    form = modelform_factory(ProductImage,fields=["image"])(request.POST,request.FILES)
+
+    if form.is_valid():
+        im = form.save(commit=False)
+        im.retailer = retailer.user
+        im.save()
+
+        print im
+
+        ret = {'html':'<option value="'+str(im.id)+'">'+im.thumbnail+'</option>','message':None,'success':True}
+    else:
+        ret = {'message':form.errors}
+    return HttpResponse(json.dumps(ret), mimetype="application/json")
 
 @login_required
 def sale_items(request, template="racks/item_list.html"):

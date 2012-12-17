@@ -63,6 +63,7 @@
 	}
 </style>
 
+
 <div class="section intro clearfix">
 	<h2><span>{{ retailer_profile.name }}</span></h2>
 	<h3>Add a Product to your Inventory</h3>
@@ -124,6 +125,12 @@
 		<br />
 	</form>
 </div>
+
+<div id="new_image_form">
+	<form action="{% url add_product_image %}">{{image_upload_form}}
+		<br><input type="submit" value="Go"></form>
+</div>
+
 {% endblock %} 
 
 {% block extra_script %}
@@ -232,6 +239,33 @@
 				}
 			}
 		});
+
+		$('.addProductImage').click(function(){
+
+			$('.clonedform').remove();
+			var cln = $('#new_image_form').clone();
+
+			$(this).after(cln.addClass('clonedform').show())
+
+			cln.find('form').ajaxForm({
+							url : this.action,
+							// dataType : 'json',
+							success : function(json) {
+								if (json.success) {
+									$('.imageselector,  select[name=image]').append($(json.html))
+									$('.imageselector,  select[name=image]').ImageSelect('remove');
+									$('.imageselector,  select[name=image]').ImageSelect();
+									$(cln).fadeOut(1000).remove()
+								} else {
+									$('.fixed-popup .alert-message').text(json.message);						
+								}
+							}
+						});
+
+
+
+			return false
+		})
 
 	})
 
