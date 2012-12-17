@@ -5,6 +5,7 @@ from django.forms.widgets import CheckboxSelectMultiple
 
 from django.conf import settings
 from apps.racks.models import Color, Size
+from apps.racks.forms import addPlus
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
 else:
@@ -17,7 +18,7 @@ except:
 
 from django.contrib.localflavor.us.us_states import US_STATES
 from retailers.models import RetailerProfile, StylistItem, ShippingType
-from racks.models import Item, Rack, Rack_Item
+from racks.models import Item, Rack, Rack_Item,ProductImage
 
 from tagging.models import Tag
 
@@ -223,6 +224,9 @@ class ItemForm(AjaxModelForm):
         self.fields['tags'].label = "Tags Related to your Product"
         self.fields['image'].empty_label = '/static/images/choosepic.png'
 
+        addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(retailer=user),'#','Product Image')
+
+
 
     def clean_colors(self):
         return None
@@ -268,6 +272,9 @@ class ItemEditForm(forms.ModelForm):
         super(ItemEditForm, self).__init__(*args, **(kwargs))
         self.fields['image'].required = False
         self.fields['image'].empty_label = '/static/images/choosepic.png'
+
+        addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(retailer=retailer),'#','Product Image')
+
     
     def clean_price(self):
         price = self.cleaned_data.get('price')
