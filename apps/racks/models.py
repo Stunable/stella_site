@@ -101,7 +101,6 @@ class ProductImage(models.Model,listImageMixin):
         if self.pretty_image:
             return self.pretty_image
         else:
-            self.generate_pretty_picture()
             return self.image
 
     def generate_pretty_picture(self):
