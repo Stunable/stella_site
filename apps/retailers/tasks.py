@@ -126,7 +126,7 @@ def process_upload(upload,throughModel,errorClass):
             )
             
         else:
-            errors.append('No Image Found for Item: '+name)
+            errors.append('No Image Found for Row: '+str(i))
         for i,f in enumerate(current):
             prev[i] = current[i]
 
