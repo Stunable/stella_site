@@ -46,7 +46,7 @@ from django.core.files import File
 # stylist = models.ForeignKey(User)
 # item = models.ForeignKey(Item)
 def find_image(folder,image):
-    for ext in ['jpg','jpeg']:
+    for ext in ['jpg','jpeg','png']:
         if os.path.exists(os.path.join(folder,image.replace('.'+ext,'')+'.'+ext)):
             return os.path.join(folder,image.replace('.'+ext,'')+'.'+ext)
     return False
@@ -60,32 +60,35 @@ def process_upload(upload,throughModel,errorClass):
     xls = find_xls(path)
 
     folder = os.path.dirname(xls)
-    current = [None for i in range(0,8)]
+    current = [None for i in range(0,9)]
     prev = copy.copy(current)
 
 
     for i,d in enumerate(getXLSdata(xls)):
         if i == 0:
             continue
-        #BRAND', u'PRODUCT NAME', u'PRODUCT IMAGE', u'PRODUCT DESCRIPTION', u'COLOR', u'SIZE', u'INVENTORY', u'MSRP'
-           #0           1                 2                     3                 4        5          6           7
+        #BRAND', u'PRODUCT NAME', u'PRODUCT IMAGE', u'PRODUCT DESCRIPTION', u'COLOR', u'SIZE', u'INVENTORY', u'MSRP', 'SKU'
+           #0           1                 2                     3                 4        5          6           7     8
 
-        if d[2] != prev[2]:#the image
+        if d[2] != prev[2]:#the image is different
             imgpath = find_image(folder,d[2])
             if imgpath:
                 pic = File(open(imgpath,'rb'))
                 Picture = ProductImage.objects.create(image=pic,retailer=upload.retailer.user)
+                # a new image has been created and is now the picture for the following items
 
-        if Picture:
-            for i in range(0,len(d)):
+        if Picture: # we don't proceed if there's no picture
+            for i in range(0,len(d)):  #update our working info to use all the fields from the current row that aren't empty
                 if d[i].lstrip().rstrip():
                     current[i] = d[i]
 
-            brand,name,image,description,color,size,inventory,msrp = current
+            brand,name,image,description,color,size,inventory,msrp,SKU = current
+            msrp = msrp.lstrip('$')
 
             if brand != prev[0] or name != prev[1]:
 
-                brand,name,image,description,color,size,inventory,msrp = d
+                brand,name,image,description,color,size,inventory,msrp,SKU = d
+                msrp = msrp.lstrip('$')
 
                 I = Item.objects.create(
                     brand=brand,
@@ -113,13 +116,13 @@ def process_upload(upload,throughModel,errorClass):
             )
             
             ItemType.objects.create(
-                item=I,
-                color=c,
-                size=s,
-                custom_color_name=color,
-                inventory=int(inventory),
+                item = I,
+                size = s,
+                custom_color_name = color,
+                inventory = int(inventory),
                 image = Picture,
-                price = msrp
+                price = msrp,
+                SKU = SKU
             )
             
         else:

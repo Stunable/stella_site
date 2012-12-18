@@ -258,6 +258,8 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
             inventory_form = inventory_type_formset_factory(request.user, post, item_instance)        
     
             if not inventory_form.is_valid():
+                print 'invalid'
+                print inventory_form.errors
                 response.update({'success' : False})
                 response['errors'].update(inventory_form.errors_as_json()['errors'])
             else:

@@ -122,7 +122,6 @@ class ItemInventoryForm(AjaxModelForm):
 def item_inventory_form_factory(retailer):
     class ItemInventoryForm(AjaxModelForm):
         item = forms.ModelChoiceField(queryset=Item.objects.all(), widget=forms.HiddenInput())
-        color = forms.ModelChoiceField(queryset=Color.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
         size = forms.ModelChoiceField(queryset=Size.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
         image = forms.ModelChoiceField(queryset=ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
         
@@ -137,9 +136,6 @@ def item_inventory_form_factory(retailer):
 
         def __init__(self,*args,**kwargs):
             super(ItemInventoryForm,self).__init__(*args,**kwargs)
-            print self.fields['image']
-
-
             addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)),'#','Product Image')
 
 

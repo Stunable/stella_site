@@ -92,8 +92,8 @@ class ProductImage(models.Model,listImageMixin):
         else:
             return self.__class__.__name__
 
-    image = ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product Image")
-    pretty_image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product pretty Image",storage=OverwriteStorage())
+    image = ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product Image")
+    pretty_image = models.ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product pretty Image",storage=OverwriteStorage())
     bg_color = models.CharField(max_length=32,default='white',blank=True,null=True)
     retailer = models.ForeignKey(User,null=True,blank=True)
 
@@ -127,10 +127,10 @@ class Item(models.Model,listImageMixin):
     
     retailers = models.ManyToManyField(User, through='retailers.StylistItem', null=True, blank=True)
     sizes = models.ManyToManyField(Size, through='racks.ItemType', null=True, blank=True)
-    colors = models.ManyToManyField(Color, through='racks.ItemType', null=True, blank=True)
+    colors = models.ManyToManyField(Color,blank=True)
     created_date = models.DateField(auto_now=True, auto_now_add=True, default=datetime.date.today)
     
-    approved = models.BooleanField(default=False)
+    approved = models.NullBooleanField(default=None)
     
     tags = TagField()
     
@@ -166,16 +166,56 @@ class Item(models.Model,listImageMixin):
         else: 
             return "upload/agjea1.254x500.jpg"
 
+    def price_range(self):
+        seq = [it.price for it in self.types.all()]
+        return {'min':min(seq),'max':max(seq)}
+
+    def total_inventory(self):
+        """ returns the total inventory available of all item variations for this product"""
+
+        return reduce(lambda x, y: x+y, [it.inventory for it in self.types.all()], 0)
+
+    def display_approval_status(self):
+        if self.approved is False:
+            return """<a href="mailto:stylists@stunable.com?subject=Why wasn't Item #%d (%s) approved?">email us</a>"""%(self.id,self.name)
+        if self.approved is True:
+            return 'Approved'
+        return "Pending"
+
+    def types_by_color(self):
+        styles = {}
+        for it in self.types.all().order_by('size'):
+            if styles.has_key(it.custom_color_name):
+                styles[it.custom_color_name].append(it)
+            else:
+                styles[it.custom_color_name] = [it]
+        
+        out = []
+        longest = 0
+
+        for key,val in styles.items():
+            out.append(
+                {
+                 'color':key,
+                 'list':[{'size':it.size,'inv':it.inventory,'pic':it.get_image()} for it in val]
+                }
+            )
+            longest = max(longest,len(val))
+
+        return {'styles':out,'longest':longest}
 
 class ItemType(models.Model):
     image = models.ForeignKey(ProductImage,null=True)
     item = models.ForeignKey('Item', related_name='types')
-    color = models.ForeignKey('Color')
     size = models.ForeignKey('Size')
+    SKU = models.CharField(max_length=64,null=True,blank=True)
+
     custom_color_name = models.CharField(max_length=100, blank=True, null=True,
-                                         help_text="An optional custom name for the color of this item")
-    inventory = models.PositiveIntegerField(default=0)
-    price = models.DecimalField(max_digits=19, decimal_places=2, verbose_name='Special Price for this color/size/inventory')
+                                         help_text="An optional name for the style of this item",verbose_name="Style Name")
+    inventory = models.PositiveIntegerField(default=0,verbose_name="inventory quantity")
+    price = models.DecimalField(blank=True,max_digits=19, decimal_places=2, verbose_name='Special Price for this color/size/inventory')
+    sale_price = models.DecimalField(blank=True,null=True,max_digits=19, decimal_places=2, verbose_name='Sale Price for this color/size/inventory')
+
 
     def get_image(self):
         if self.image:

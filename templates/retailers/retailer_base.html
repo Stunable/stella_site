@@ -94,6 +94,12 @@ $(document).ready(function(){
     console.log($('select[name=image]'))
    $('select[name=image]').ImageSelect(); 
    $('.imageselector').ImageSelect();
+
+   $('.deetsclick').click(function(){
+    console.log(this)
+    $(this).closest('.product_row').toggleClass('nodeets')
+   })
+
 })
 
 </script>

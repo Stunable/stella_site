@@ -22,6 +22,28 @@
     .big.red{
         font-size:1.4em;
     }
+    .small{
+        font-size:.9em;
+    }
+    .product_list_table th,td{
+        text-align: center
+    }
+    .nodeets .variation{
+        display: none;
+        border-bottom:none;
+    }
+    .item_pic{
+        display:none;
+    }
+    .nodeets .item_pic{
+        display:block;
+    }
+
+    .deetsclick{
+        color:#EC67F0;
+        cursor:pointer;
+    }
+  
 </style>
 
 <div class="section intro clearfix">
@@ -59,50 +81,68 @@
         <a href="{% url add_item %}">Add Item</a>
     {% endif %}
     {% csrf_token %}
-    <table>
+    <table class="product_list_table">
         <tbody>
             {% for product in product_list %}
-            <tr>
-                {% if confirm %}
+            <tr class="product_row nodeets">
+            {% if confirm %}
                 <input type="hidden" value="{{product.item.pk}}" name="selected_items">
                 {% else %}
                 <td class="action-checkbox"><input type="checkbox" value="{{product.item.pk}}" name="selected_items">
                     <a class="edit-link" href="{% url edit_item product.item.pk %}">Edit</a>
                 </td>
-                {% endif %}
-                <td>
+            {% endif %}
+                <td >
                     {% load thumbnail %}
                     {% thumbnail product.item.get_image "50" as im %}
-                        <img src="{{ im.url }}">
+                        <img class="item_pic" src="{{ im.url }}">
                         {% empty %}
-                        <img src="{{ product.item.get_image }}" style="width: 50px;" alt=""/>
+                        <img class="item_pic" src="{{ product.item.get_image }}" style="width: 50px;" alt=""/>
                     {% endthumbnail %}
                     
                 </td>
                 <td>
-                <table class="inner-table">
-                    <thead>
-                        <th>SIZE</th>
-                        <th>PRICE</th>
-                        <th>INVENTORY</th>
-                        <th>STATUS</th>
-                    </thead>
+                    <table class="inner-table">
+                        <thead>
+                            <th>PRODUCT NAME</th>
+                            <th>RETAIL PRICE RANGE</th>
+                            <th class="small">INVENTORY QUANTITY</th>
+                            <th>STATUS</th>
+                            <th>DATE ADDED</th>
+                        </thead>
 
-                    <tbody>
-                        <tr>
-                            <td>
-                                {% for it in product.item.types.all %}
-                                {{ it.size }}{% if not forloop.last%},{% endif %}
-                                {% endfor %}                                
-                            </td>
-                            <td>{{ product.item.price }}</td>
-                            <td>{% for it in product.item.types.all %}
-                                {{ it.inventory }}{% if not forloop.last%},{% endif %}
-                                {% endfor %}   </td>
-                            <td>{{ product.item.status }}</td>
-                        </tr>
-                    </tbody>
-                </table></td>
+                        <tbody>
+                            <tr>
+                                <td>{{product.item.name}}</td>
+                                <td>${{product.item.price_range.min}}{% if not product.item.price_range.max == product.item.price_range.min %} - ${{product.item.price_range.max}}{%endif%}</td>
+                                <td>{{product.item.total_inventory}}</td>
+                                <td>{{product.item.display_approval_status|safe}}</td>
+                                <td>{{product.item.created_date}}</td>
+                            </tr>
+                            <tr class="deetsclick"><td colspan=5>Click to Show/Hide Details</td></tr>
+                            {% with product.item.types_by_color as styles %}
+                                {% for it in styles.styles %} 
+                                <tr class="variation">
+                                    <td><img class="var_pic" src="{% thumbnail it.list.0.pic "50" as im %}{{im.url}}{% endthumbnail %}"></td>
+                                    <td colspan=4>
+                                        <table>
+                                            <tr><td>Color</td>
+                                                <td colspan={{styles.longest}}>{{it.color}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Size</td>{% for s in it.list %}<td>{{s.size}}</td>{% endfor %}
+                                            </tr>
+                                            <tr>
+                                                <td>Quantity Available</td>{% for s in it.list %}<td>{{s.inv}}</td>{% endfor %}
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% endwith %}
+                        </tbody>
+                    </table>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
