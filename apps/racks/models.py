@@ -98,7 +98,11 @@ class ProductImage(models.Model,listImageMixin):
     retailer = models.ForeignKey(User,null=True,blank=True)
 
     def get_image(self):
-        return self.pretty_image
+        if self.pretty_image:
+            return self.pretty_image
+        else:
+            self.generate_pretty_picture()
+            return self.image
 
     def generate_pretty_picture(self):
         prettify(self)
