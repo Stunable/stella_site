@@ -46,10 +46,13 @@ from django.core.files import File
 # stylist = models.ForeignKey(User)
 # item = models.ForeignKey(Item)
 def find_image(folder,image):
-    for ext in ['jpg','jpeg','png']:
-        if os.path.exists(os.path.join(folder,image.replace('.'+ext,'')+'.'+ext)):
-            return os.path.join(folder,image.replace('.'+ext,'')+'.'+ext)
-    return False
+    for f in os.listdir(folder):
+        # print f.lower()
+        for ext in ['jpg','jpeg','png']:
+            print image.replace('.'+ext,'')+'.'+ext
+            if f.lower() == image.lower().replace('.'+ext,'')+'.'+ext:
+                print 'GOT IT' , image.lower().replace('.'+ext,'')+'.'+ext
+                return os.path.join(folder,f)
 
 
 def process_upload(upload,throughModel,errorClass):
