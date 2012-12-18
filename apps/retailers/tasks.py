@@ -62,7 +62,7 @@ def process_upload(upload,throughModel,errorClass):
     folder = os.path.dirname(xls)
     current = [None for i in range(0,9)]
     prev = copy.copy(current)
-
+    Picture = None
 
     for i,d in enumerate(getXLSdata(xls)):
         if i == 0:
