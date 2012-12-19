@@ -123,7 +123,9 @@ def item_inventory_form_factory(retailer):
         item = forms.ModelChoiceField(queryset=Item.objects.all(), widget=forms.HiddenInput())
         size = forms.ModelChoiceField(required=True,queryset=Size.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
         image = forms.ModelChoiceField(required=True,queryset=ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
-        
+
+
+
         class Meta:
             model = ItemType
             
@@ -136,8 +138,6 @@ def item_inventory_form_factory(retailer):
         def __init__(self,*args,**kwargs):
             super(ItemInventoryForm,self).__init__(*args,**kwargs)
             addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)),'#','Product Image')
-
-
             self.fields['image'].widget.attrs['class'] = "imageselector"
             self.fields['image'].empty_label = '/static/images/choosepic.png'
 
