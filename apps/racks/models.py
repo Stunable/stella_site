@@ -171,6 +171,8 @@ class Item(models.Model,listImageMixin):
 
     def price_range(self):
         seq = [it.price for it in self.types.all()]
+        if not len(seq):
+            return
         return {'min':min(seq),'max':max(seq)}
 
     def total_inventory(self):

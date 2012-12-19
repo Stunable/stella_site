@@ -252,7 +252,7 @@ class ItemForm(AjaxModelForm):
     def save(self, force_insert=False, force_update=False, commit=True):
         item = super(ItemForm, self).save()
         # create relationship
-        StylistItem.objects.create(stylist=self.user, item=item)
+        si = StylistItem.objects.get_or_create(stylist=self.user, item=item)
         
         # add item to default racks
         try:
