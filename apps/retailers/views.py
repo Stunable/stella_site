@@ -262,7 +262,9 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                 response['errors'].update(inventory_form.errors_as_json()['errors'])
             else:
                 instances = inventory_form.save(commit=False)
-                if not instances and not item_instance.pk:
+                print 'variation instances:',instances
+                if not instances:
+                    print 'NO VARIATIONS'
                     response.update({'success' : False})
                     response['errors'].update({'types-0-inventory': '<ul class="errorlist"><li>This field is required.</li></ul>'})
             
@@ -276,6 +278,7 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                         inventory_form.save()
                 except IndexError, e:
                     # TODO
+                    raise
                     pass
                 except:
                     # TODO
@@ -284,6 +287,7 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                 item_instance.save()
                 
         except Exception, e:
+            raise
             response.update({'success' : False, 'message': str(e)})
                    
         return HttpResponse(json.dumps(response, ensure_ascii=False), mimetype='application/json')

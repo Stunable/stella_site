@@ -122,8 +122,8 @@ class ItemInventoryForm(AjaxModelForm):
 def item_inventory_form_factory(retailer):
     class ItemInventoryForm(AjaxModelForm):
         item = forms.ModelChoiceField(queryset=Item.objects.all(), widget=forms.HiddenInput())
-        size = forms.ModelChoiceField(queryset=Size.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
-        image = forms.ModelChoiceField(queryset=ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
+        size = forms.ModelChoiceField(required=True,queryset=Size.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
+        image = forms.ModelChoiceField(required=True,queryset=ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
         
         class Meta:
             model = ItemType
