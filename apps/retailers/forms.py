@@ -220,7 +220,6 @@ class ItemForm(AjaxModelForm):
     
     def __init__(self, user=None, *args, **kwargs):
         self.user = user
-        print 'itemformuser:',user
         super(ItemForm, self).__init__(*args, **(kwargs))
         self.fields['tags'].label = "Tags Related to your Product"
         self.fields['image'].empty_label = '/static/images/choosepic.png'
@@ -250,19 +249,21 @@ class ItemForm(AjaxModelForm):
         return self.cleaned_data.get('inventory')
     
     def save(self, force_insert=False, force_update=False, commit=True):
-        item = super(ItemForm, self).save()
-        # create relationship
-        si = StylistItem.objects.get_or_create(stylist=self.user, item=item)
-        
+        self.item = super(ItemForm, self).save(commit=commit)
+        if commit:
+            self.finish_save()
+        return self.item
+
+    def finish_save(self):
+        self.item.save()
+        si = StylistItem.objects.get_or_create(stylist=self.user, item=self.item)
         # add item to default racks
         try:
-            rack = Rack.objects.get(name=item.category)
-            rack_item = Rack_Item(rack=rack, item=item)
-            rack_item.save()
+            rack = Rack.objects.get(name=self.item.category)
+            rack_item = Rack_Item.objects.get_or_create(user=self.user, rack=rack, item=self.item)
         except:
             # log bug here
             pass
-        return item
 
 class ItemEditForm(forms.ModelForm):
     class Meta:
@@ -303,7 +304,7 @@ class ItemEditForm(forms.ModelForm):
                 old_rack = Rack.objects.get(name=old_item.category)
                 old_rack_item = Rack_Item.objects.get(rack=old_rack, item=old_item)
                 old_rack_item.delete()
-            item = super(ItemEditForm, self).save()
+            item = super(ItemEditForm, self).save(commit=commit)
             
             if category_update:
                 new_rack = Rack.objects.get(name=item.category)

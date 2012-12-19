@@ -252,8 +252,9 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                 response.update({'success' : False})
                 response['errors'].update(form.errors_as_json()['errors'])
             else:
+                print 'saving item form'
                 item_instance = form.save(commit=False)  
-    
+            print 'after save item form'
             
             inventory_form = inventory_type_formset_factory(request.user, post, item_instance)        
     
@@ -263,14 +264,12 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
             else:
                 instances = inventory_form.save(commit=False)
                 print 'variation instances:',instances
-                if not instances:
-                    print 'NO VARIATIONS'
+                if not len(instances) and not item_instance.pk:
                     response.update({'success' : False})
                     response['errors'].update({'types-0-inventory': '<ul class="errorlist"><li>This field is required.</li></ul>'})
             
             if response['success']:
-                if not item_instance.pk:
-                    item_instance.save()
+                form.finish_save()
                 
                 try:
                     inventory_form = inventory_type_formset_factory(request.user, post, item_instance)
@@ -283,8 +282,8 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                 except:
                     # TODO
                     pass
+                print 'saving instance line 287'
                 
-                item_instance.save()
                 
         except Exception, e:
             raise

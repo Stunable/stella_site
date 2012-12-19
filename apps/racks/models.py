@@ -209,6 +209,10 @@ class Item(models.Model,listImageMixin):
 
         return {'styles':out,'longest':longest}
 
+    def save(self,*args,**kwargs):
+        print 'saving item'
+        super(Item,self).save()
+
 class ItemType(models.Model):
     image = models.ForeignKey(ProductImage,null=True)
     item = models.ForeignKey('Item', related_name='types')

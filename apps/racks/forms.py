@@ -109,7 +109,6 @@ def addPlus(widget,name,selection,queryset,url,label):
             output.append(options)
         output.append(u'</select>')
         output.append('<div style="margin-left: 150px;margin-top: 5px;"> <a class="addProductImage" target="blank" href="%s"><span>+</span> Add %s</a></div>'%(url,label))
-        print output
         return mark_safe(u'\n'.join(output))
 
     widget.render = types.MethodType(render_with_plus,widget)
