@@ -175,7 +175,7 @@ class RetailerProfileCreationForm(forms.ModelForm):
 
         T = testAddress(self.cleaned_data)
         V = TCC.verify_address(testAddress(self.cleaned_data))
-        print V
+
         if V.ErrNumber != "0":
             if 'City' in V.ErrDescription:
                 # self._errors['city'] = self._errors.get('city', [])
@@ -220,10 +220,11 @@ class ItemForm(AjaxModelForm):
     
     def __init__(self, user=None, *args, **kwargs):
         self.user = user
+        print 'itemformuser:',user
         super(ItemForm, self).__init__(*args, **(kwargs))
         self.fields['tags'].label = "Tags Related to your Product"
         self.fields['image'].empty_label = '/static/images/choosepic.png'
-
+        self.fields['image'].queryset = ProductImage.objects.filter(retailer=user)
         addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(retailer=user),'#','Product Image')
 
 
@@ -272,7 +273,7 @@ class ItemEditForm(forms.ModelForm):
         super(ItemEditForm, self).__init__(*args, **(kwargs))
         self.fields['image'].required = False
         self.fields['image'].empty_label = '/static/images/choosepic.png'
-
+        self.fields['image'].queryset = ProductImage.objects.filter(retailer=user)
         addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(retailer=retailer),'#','Product Image')
 
     

@@ -298,7 +298,7 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
         except:
             
             initial={'brand': retailer.name}
-        form = ItemForm(instance=item_instance, initial=initial)
+        form = ItemForm(user=request.user,instance=item_instance, initial=initial)
     
     if request.is_ajax():
         template = 'racks/size_input.html'
