@@ -273,7 +273,7 @@ class Item(models.Model):
         # send money to this retailer
         inventory = self.get_product()
         product = inventory.item
-        retailer = product.retailers.all()[0]
+        retailer = product.retailers.all()[0]#TODO
         retailer_profile = RetailerProfile.objects.get(user=retailer)
         
         wpp = PayPalWPP(request)
@@ -400,11 +400,12 @@ from django.dispatch import receiver
 def payment_was_successful_callback(sender, **kwargs):
     print 'received signal that payment successful for', kwargs['item']
     transaction = sender
-    retailer = kwargs['item'].product.item.retailers.all()[0]
+    retailer = kwargs['item'].product.item.retailers.all()[0]#TODO this is totally ghetto...
 
     itemtype = kwargs['item'].product
     itemtype.inventory = min(0,itemtype.inventory-kwargs['item'].quantity)
     itemtype.save()
+    itemtype.item.save() # this is to trigger a check for total remaining inventory on this item
 
     try:
         checkout = Checkout.objects.get(cart=kwargs['item'].cart, retailer=retailer)
