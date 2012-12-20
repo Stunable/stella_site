@@ -117,7 +117,7 @@ class Purchase(models.Model):
         
         if pk_before_save != self.pk:
             # new order has been made
-            self.ref = str(abs(hash(str(self.pk))))[:10] + str(self.purchaser.pk)
+            self.ref = base35encode(self.purchaser.id+10000)+'S'+base35encode(self.id+10000)
             self.save()
             # notify retailer
             self.notify_retailer()
@@ -137,7 +137,7 @@ class Purchase(models.Model):
         print 'notified retailer'
     
     def name(self):
-        return "Shopping with Stella"
+        return "Stunable.com"
 
     def __iter__(self):
         for item in [self.item]:
@@ -401,6 +401,11 @@ def payment_was_successful_callback(sender, **kwargs):
     print 'received signal that payment successful for', kwargs['item']
     transaction = sender
     retailer = kwargs['item'].product.item.retailers.all()[0]
+
+    itemtype = kwargs['item'].product
+    itemtype.inventory = min(0,itemtype.inventory-kwargs['item'].quantity)
+    itemtype.save()
+
     try:
         checkout = Checkout.objects.get(cart=kwargs['item'].cart, retailer=retailer)
     except:

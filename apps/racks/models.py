@@ -134,6 +134,7 @@ class Item(models.Model,listImageMixin):
     created_date = models.DateField(auto_now=True, auto_now_add=True, default=datetime.date.today)
     
     approved = models.NullBooleanField(default=None)
+    is_available = models.BooleanField(default=True)
     
     tags = TagField()
     
@@ -210,15 +211,21 @@ class Item(models.Model,listImageMixin):
         return {'styles':out,'longest':longest}
 
     def save(self,*args,**kwargs):
-        print 'saving item'
+        if self.total_inventory() < 1:
+            self.is_available = False
         super(Item,self).save()
 
 class ItemType(models.Model):
+
+    class Meta:
+        unique_together = (('item', 'size','custom_color_name'))
+
+
     image = models.ForeignKey(ProductImage,null=True)
     item = models.ForeignKey('Item', related_name='types')
-    size = models.ForeignKey('Size')
+    size = models.ForeignKey('Size',default=1)
     SKU = models.CharField(max_length=64,null=True,blank=True)
-    custom_color_name = models.CharField(max_length=100, default="One Color",
+    custom_color_name = models.CharField(max_length=100, default="White",
                                          help_text="An optional name for the style of this item",verbose_name="Style Name")
     inventory = models.PositiveIntegerField(default=0,verbose_name="inventory quantity")
     price = models.DecimalField(blank=True,max_digits=19, decimal_places=2, verbose_name='Special Price for this color/size/inventory')
@@ -241,6 +248,10 @@ class ItemType(models.Model):
                 setattr(self,attr,getattr(self.item,attr))
 
         super(ItemType,self).save()
+
+    @property
+    def color(self):
+        return Color(name=self.custom_color_name)
 
     
 

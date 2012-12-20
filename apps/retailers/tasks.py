@@ -68,68 +68,72 @@ def process_upload(upload,throughModel,errorClass):
     Picture = None
 
     for i,d in enumerate(getXLSdata(xls)):
-        if i == 0:
-            continue
-        #BRAND', u'PRODUCT NAME', u'PRODUCT IMAGE', u'PRODUCT DESCRIPTION', u'COLOR', u'SIZE', u'INVENTORY', u'MSRP', 'SKU'
-           #0           1                 2                     3                 4        5          6           7     8
+        try:
+            if i == 0:
+                continue
+            #BRAND', u'PRODUCT NAME', u'PRODUCT IMAGE', u'PRODUCT DESCRIPTION', u'COLOR', u'SIZE', u'INVENTORY', u'MSRP', 'SKU'
+               #0           1                 2                     3                 4        5          6           7     8
 
-        if d[2] != prev[2]:#the image is different
-            imgpath = find_image(folder,d[2])
-            if imgpath:
-                pic = File(open(imgpath,'rb'))
-                Picture = ProductImage.objects.create(image=pic,retailer=upload.retailer.user)
-                # a new image has been created and is now the picture for the following items
+            if d[2] != prev[2]:#the image is different
+                imgpath = find_image(folder,d[2])
+                if imgpath:
+                    pic = File(open(imgpath,'rb'))
+                    Picture = ProductImage.objects.create(image=pic,retailer=upload.retailer.user)
+                    # a new image has been created and is now the picture for the following items
 
-        if Picture: # we don't proceed if there's no picture
-            for i in range(0,len(d)):  #update our working info to use all the fields from the current row that aren't empty
-                if d[i].lstrip().rstrip():
-                    current[i] = d[i]
+            if Picture: # we don't proceed if there's no picture
+                for i in range(0,len(d)):  #update our working info to use all the fields from the current row that aren't empty
+                    if d[i].lstrip().rstrip():
+                        current[i] = d[i]
 
-            brand,name,image,description,color,size,inventory,msrp,SKU = current
-            msrp = msrp.lstrip('$')
-
-            if brand != prev[0] or name != prev[1]:
-
-                brand,name,image,description,color,size,inventory,msrp,SKU = d
+                brand,name,image,description,color,size,inventory,msrp,SKU = current
                 msrp = msrp.lstrip('$')
 
-                I = Item.objects.create(
-                    brand=brand,
-                    name =name,
-                    price=msrp,
-                    description=description,
-                    image=Picture
+                if brand != prev[0] or name != prev[1]:
+
+                    brand,name,image,description,color,size,inventory,msrp,SKU = d
+                    msrp = msrp.lstrip('$')
+
+                    I = Item.objects.create(
+                        brand=brand,
+                        name =name,
+                        price=msrp,
+                        description=description,
+                        image=Picture
+                    )
+
+                    if upload.retailer.user:
+                        si = throughModel.objects.create(
+                            stylist = upload.retailer.user,
+                            item = I)
+
+
+
+                c,created = Color.objects.get_or_create(
+                    retailer = upload.retailer.user,
+                    name = color
                 )
 
-                if upload.retailer.user:
-                    si = throughModel.objects.create(
-                        stylist = upload.retailer.user,
-                        item = I)
-
-
-
-            c,created = Color.objects.get_or_create(
-                retailer = upload.retailer.user,
-                name = color
-            )
-
-            s,created = Size.objects.get_or_create(
-                size=size,
-                retailer = upload.retailer.user,
-            )
-            
-            ItemType.objects.create(
-                item = I,
-                size = s,
-                custom_color_name = color,
-                inventory = int(inventory),
-                image = Picture,
-                price = msrp,
-                SKU = SKU
-            )
-            
-        else:
-            errors.append('No Image Found for Row: '+str(i))
+                s,created = Size.objects.get_or_create(
+                    size=size,
+                    retailer = upload.retailer.user,
+                )
+                
+                ItemType.objects.create(
+                    item = I,
+                    size = s,
+                    custom_color_name = color,
+                    inventory = int(inventory),
+                    image = Picture,
+                    price = msrp,
+                    SKU = SKU
+                )
+                
+            else:
+                errors.append('No Image Found for Row: '+str(i))
+        except Exception,e:
+            errors.append('Error in Row '+i+':'+str(e))
+        
         for i,f in enumerate(current):
             prev[i] = current[i]
 

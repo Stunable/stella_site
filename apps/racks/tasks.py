@@ -33,6 +33,5 @@ def prettify(instance):
 
     outpic.save(temp.name+str(instance.id),'jpeg')
 
-
     instance.pretty_image.save("%d_pretty.jpg"%instance.id, File(open(temp.name+str(instance.id),'rb')))
     instance.save()

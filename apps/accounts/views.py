@@ -218,17 +218,19 @@ def welcome(request, template="accounts/welcome.html"):
     ctx = {}
     if request.user.is_authenticated():
         profile = get_or_create_profile(request)
+
+        retailer_profile = RetailerProfile.objects.filter(user=request.user)
+        if retailer_profile.count() > 0:
+            return redirect(reverse('retailer_information', args=[retailer_profile[0].name, ]))
     else:
         if request.session.has_key('anonymous_profile'):
             profile = request.session.get('anonymous_profile')
         else:
             profile = AnonymousProfile.objects.create()
             request.session['anonymous_profile'] = profile
-    retailer_profile = RetailerProfile.objects.filter(email_address=request.user.username)
-    if retailer_profile.count() > 0:
-        return redirect(reverse('retailer_information', args=[retailer_profile[0].name, ]))
     
-    elif not profile.favourite_designer:
+    
+    if not profile.favourite_designer:
         if request.method == "POST":
             form = FavouriteDesignerForm(request.POST, instance=profile)
             if form.is_valid():

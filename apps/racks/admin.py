@@ -92,7 +92,7 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
     inlines = [ItemTypeInline]
     list_display = ('name','category','approved','list_image',)
     actions = ('approve','unapprove')
-    list_filter = ('approved',)
+    list_filter = ('approved','created_date')
     search_fields = ('name','description')
 
     def unapprove(self,request,queryset):
@@ -102,8 +102,9 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
 
     def approve(self,request,queryset):
         for obj in queryset:
-            obj.approved = True
-            obj.save()
+            if obj.types.all().count():
+                obj.approved = True
+                obj.save()
 
 
     def make_pretty(self,request,queryset):
@@ -120,6 +121,11 @@ class SizeAdmin(admin.ModelAdmin):
 class ProductImageAdmin(admin.ModelAdmin):
     list_display = ['image','retailer','list_image']
     #readonly_fields = ['retailer']
+    actions = ('make_pretty',)
+
+    def make_pretty(self,request,queryset):
+        for obj in queryset:
+            obj.generate_pretty_picture()
 
 
     

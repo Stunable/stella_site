@@ -76,11 +76,7 @@ class AddSizeForm(forms.ModelForm):
         
     def clean_size(self):
         size = self.cleaned_data.get('size') 
-        if size:
-            sizes = Size.objects.filter(size=size) 
-            if sizes.count() > 0:
-                raise forms.ValidationError("This Size had already existed")                
-            
+        if size:            
             return size
         else:
             raise forms.ValidationError("Please enter a size number")
@@ -140,6 +136,8 @@ def item_inventory_form_factory(retailer):
             addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)),'#','Product Image')
             self.fields['image'].widget.attrs['class'] = "imageselector"
             self.fields['image'].empty_label = '/static/images/choosepic.png'
+            self.fields['size'].initial = 1
+            self.fields['size'].empty_label = None
 
 
 
