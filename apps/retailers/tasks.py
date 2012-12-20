@@ -66,6 +66,7 @@ def process_upload(upload,throughModel,errorClass):
     current = [None for i in range(0,9)]
     prev = copy.copy(current)
     Picture = None
+    I = None # the item in question
 
     for i,d in enumerate(getXLSdata(xls)):
         try:
@@ -128,6 +129,9 @@ def process_upload(upload,throughModel,errorClass):
                     price = msrp,
                     SKU = SKU
                 )
+
+                if I:
+                    I.save()
                 
             else:
                 errors.append('No Image Found for Row: '+str(i))
