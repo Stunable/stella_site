@@ -484,7 +484,7 @@ def item_modal(request, item_id, template='racks/item_modal.html'):
             size2color[inventory.size.size]= [inventory.custom_color_name,]
     
     inventories = [{'size': i.size.size, 'color': i.custom_color_name, 'id': i.id, 'stock': i.inventory,
-                    'add_cart_url': reverse('add_to_cart',kwargs={'product_id':i.pk, 'quantity':1, 'size':''})} for i in item.types.filter(inventory_gte=1)]
+                    'add_cart_url': reverse('add_to_cart',kwargs={'product_id':i.pk, 'quantity':1, 'size':''})} for i in item.types.filter(inventory__gte=1)]
     
     colors = []
     for color_list in size2color.values():

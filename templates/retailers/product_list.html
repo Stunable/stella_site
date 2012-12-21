@@ -70,6 +70,7 @@
             {% csrf_token %}
         <input type="submit" value="Submit">
         </form>
+        
     </div>
     <form class="action_submit" action="/retailers/item_action?next={% url product_list %}" method="post">
         <select name="action_name">

@@ -318,7 +318,7 @@ def add_item(request, item_id=None, template='retailers/add_item.html'):
     return edit_item(request, item_id, template)
 
 def bulk_upload(request,template="retailers/product_list.html"):
-
+    uploadObject = None
     try:
         retailer_profile = RetailerProfile.objects.get(user=request.user)
         form = modelform_factory(ProductUpload,fields=['uploaded_zip'])()
@@ -329,7 +329,7 @@ def bulk_upload(request,template="retailers/product_list.html"):
                 up = form.save(commit=False)
                 up.retailer = retailer_profile
                 up.save()
-
+                uploadObject = up
 
         pl = []
         s = set()
@@ -338,7 +338,7 @@ def bulk_upload(request,template="retailers/product_list.html"):
                 pl.append(si)
                 s.add(si.item.pk)
 
-        ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form}
+        ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form,'upload':uploadObject}
     except:
         raise
         # e redirect(reverse("home"))
