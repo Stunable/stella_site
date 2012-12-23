@@ -15,7 +15,7 @@ from fabric.colors import yellow, green, blue, red
 # Config setup #
 ################
 
-MODE = 'dev'
+MODE = 'live'
 
 
 conf = {
@@ -452,8 +452,8 @@ def deploy():
             print "\nAborting!"
             return False
         create()
-    for name in get_templates():
-        upload_template_and_reload(name)
+    # for name in get_templates():
+    #     upload_template_and_reload(name)
     with project():
         git = ".git" in env.repo_url
         run("git pull " if git else "hg pull && hg up -C")

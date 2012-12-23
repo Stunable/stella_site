@@ -138,6 +138,10 @@
 
         $('#checkout-btn').click(function(e) {
             e.preventDefault();
+
+            alert("Hang in there, we're not quite ready to go there yet.  Soon!")
+            return false;
+
             var zipcode = $('input[name="zipcode"]').val();
             
             if (valid_shipping_info && zipcode.length > 0)
