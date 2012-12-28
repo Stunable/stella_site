@@ -2249,7 +2249,7 @@ body{
 .container {
 	min-height: 100%;
 	position: relative;	
-	width:120%;
+	min-width:1200px;
 }
 
 #homepage #footer {
