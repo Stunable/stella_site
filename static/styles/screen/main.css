@@ -836,6 +836,7 @@ body {
 	text-transform: uppercase;
 }
 
+
 #global {
 	position:absolute;
 	top:0;
@@ -2248,6 +2249,7 @@ body{
 .container {
 	min-height: 100%;
 	position: relative;	
+	width:120%;
 }
 
 #homepage #footer {
