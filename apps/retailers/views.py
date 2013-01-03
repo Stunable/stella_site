@@ -317,30 +317,41 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
 def add_item(request, item_id=None, template='retailers/add_item.html'):
     return edit_item(request, item_id, template)
 
-def bulk_upload(request,template="retailers/product_list.html"):
+def bulk_upload(request,upload_id=None,template="retailers/product_list.html"):
     uploadObject = None
     try:
         retailer_profile = RetailerProfile.objects.get(user=request.user)
-        form = modelform_factory(ProductUpload,fields=['uploaded_zip'])()
-        if request.method == 'POST':
-            form = modelform_factory(ProductUpload,fields=['uploaded_zip'])(request.POST,request.FILES)
-            if form.is_valid():
-                print 'valid form'
-                up = form.save(commit=False)
-                up.retailer = retailer_profile
-                up.save()
-                uploadObject = up
-
-        pl = []
-        s = set()
-        for si in StylistItem.objects.filter(stylist=request.user):
-            if si.item.pk not in s:
-                pl.append(si)
-                s.add(si.item.pk)
-
-        ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form,'upload':uploadObject}
     except:
         raise
+
+    if upload_id:
+        up = ProductUpload.objects.get(id=upload_id)
+        pl = up.item_set.all()
+        print pl
+        ctx = {'retailer_profile': retailer_profile, 'product_list': pl, 'upload':up}    
+    else:            
+        try:
+            form = modelform_factory(ProductUpload,fields=['uploaded_zip'])()
+            if request.method == 'POST':
+                form = modelform_factory(ProductUpload,fields=['uploaded_zip'])(request.POST,request.FILES)
+                if form.is_valid():
+                    print 'valid form'
+                    up = form.save(commit=False)
+                    up.retailer = retailer_profile
+                    up.save()
+                    uploadObject = up
+                    return redirect(reverse('bulk_upload',kwargs={'upload_id':up.id}))
+
+            pl = []
+            s = set()
+            for si in StylistItem.objects.filter(stylist=request.user):
+                if si.item.pk not in s:
+                    pl.append(si)
+                    s.add(si.item.pk)
+
+            ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form,'upload':uploadObject}
+        except:
+            raise
         # e redirect(reverse("home"))
     return direct_to_template(request, template, ctx)
 
@@ -353,9 +364,8 @@ def product_list(request, template="retailers/product_list.html"):
         s = set()
         for si in StylistItem.objects.filter(stylist=request.user):
             if si.item.pk not in s:
-                pl.append(si)
+                pl.append(si.item)
                 s.add(si.item.pk)
-        
         ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form}
     except:
         raise
@@ -469,7 +479,7 @@ def item_action(request, template="retailers/product_list.html"):
             s = set()
             for si in StylistItem.objects.filter(stylist=request.user):
                 if si.item.pk not in s and si.item.pk in [int(pk) for pk in request.POST.getlist('selected_items')]:
-                    pl.append(si)
+                    pl.append(si.item)
                     s.add(si.item.pk)
             if request.POST.get('action_name','None') and request.POST.get('confirm_%s'%request.POST.get('action_name')):
                 for i in pl:

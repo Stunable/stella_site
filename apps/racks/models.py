@@ -114,6 +114,8 @@ class ProductImage(models.Model,listImageMixin):
             self.generate_pretty_picture()
 
 
+
+
 class Item(models.Model,listImageMixin):
     image = models.ForeignKey(ProductImage,null=True,blank=True)
     gender = models.CharField(max_length=1,default='F',choices=[('F','F'),('M','M'),('B','B')])
@@ -135,6 +137,8 @@ class Item(models.Model,listImageMixin):
     
     approved = models.NullBooleanField(default=None)
     is_available = models.BooleanField(default=True)
+
+    upload = models.ForeignKey('retailers.ProductUpload',null=True)
     
     tags = TagField()
     

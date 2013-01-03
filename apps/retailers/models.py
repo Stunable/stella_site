@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -41,7 +43,13 @@ class ProductUpload(models.Model):
         if not self.processed:
             process_upload(self,StylistItem,UploadError)
 
+    def filename(self):
+        return os.path.basename(self.uploaded_zip.name)
+
 class UploadError(models.Model):
+    def __unicode__(self):
+        return self.text
+        
     text = models.TextField()
     upload = models.ForeignKey(ProductUpload)
 

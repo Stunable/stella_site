@@ -49,9 +49,9 @@ def find_image(folder,image):
     for f in os.listdir(folder):
         # print f.lower()
         for ext in ['jpg','jpeg','png']:
-            print image.replace('.'+ext,'')+'.'+ext
+            # print image.replace('.'+ext,'')+'.'+ext
             if f.lower() == image.lower().replace('.'+ext,'')+'.'+ext:
-                print 'GOT IT' , image.lower().replace('.'+ext,'')+'.'+ext
+                # print 'GOT IT' , image.lower().replace('.'+ext,'')+'.'+ext
                 return os.path.join(folder,f)
 
 
@@ -74,8 +74,14 @@ def process_upload(upload,throughModel,errorClass):
                 continue
             #BRAND', u'PRODUCT NAME', u'PRODUCT IMAGE', u'PRODUCT DESCRIPTION', u'COLOR', u'SIZE', u'INVENTORY', u'MSRP', 'SKU'
                #0           1                 2                     3                 4        5          6           7     8
+            
+            fullrow = ''.join([cel for cel in d if cel.lstrip().rstrip()])
+            if not fullrow.lstrip().rstrip():
+                continue
+            # if not fullrow
 
             if d[2] != prev[2]:#the image is different
+                Picture = None
                 imgpath = find_image(folder,d[2])
                 if imgpath:
                     pic = File(open(imgpath,'rb'))
@@ -83,9 +89,9 @@ def process_upload(upload,throughModel,errorClass):
                     # a new image has been created and is now the picture for the following items
 
             if Picture: # we don't proceed if there's no picture
-                for i in range(0,len(d)):  #update our working info to use all the fields from the current row that aren't empty
-                    if d[i].lstrip().rstrip():
-                        current[i] = d[i]
+                for j in range(0,len(d)):  #update our working info to use all the fields from the current row that aren't empty
+                    if d[j].lstrip().rstrip():
+                        current[j] = d[j]
 
                 brand,name,image,description,color,size,inventory,msrp,SKU = current
                 msrp = msrp.lstrip('$')
@@ -100,7 +106,8 @@ def process_upload(upload,throughModel,errorClass):
                         name =name,
                         price=msrp,
                         description=description,
-                        image=Picture
+                        image=Picture,
+                        upload=upload
                     )
 
                     if upload.retailer.user:
@@ -115,6 +122,7 @@ def process_upload(upload,throughModel,errorClass):
                     name = color
                 )
 
+                # print 'row:'+str(i)+', size:',size
                 s,created = Size.objects.get_or_create(
                     size=size,
                     retailer = upload.retailer.user,
@@ -134,15 +142,19 @@ def process_upload(upload,throughModel,errorClass):
                     I.save()
                 
             else:
-                errors.append('No Image Found for Row: '+str(i))
+                errors.append('Could not find a picture for Row: '+str(i)+ ' (looking for a file called <strong>%s</strong>)'%d[2])
         except Exception,e:
-            errors.append('Error in Row '+str(i)+':'+str(e))
+            if 'unique' in str(e):
+                error = str(e) + '... looks like you might have two of the same color/size/item.'
+            else:
+                error = str(e)
+            errors.append('Row '+str(i)+':'+error)
         
-        for i,f in enumerate(current):
-            prev[i] = current[i]
+        for k,f in enumerate(current):
+            prev[k] = current[k]
 
     for error in errors:
-        print error
+        # print error
         errorClass.objects.create(text=error,upload=upload)
 
     upload.processed = True

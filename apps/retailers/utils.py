@@ -11,6 +11,7 @@ def readXLS(wSheet):
 
             if((cellType == xlrd.XL_CELL_BOOLEAN) or (cellType == xlrd.XL_CELL_NUMBER)):
                 try:
+                    assert int(cellValue) == float(cellValue)
                     outlist.append(str(int(cellValue)))
                 except: 
                     try:
