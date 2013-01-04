@@ -113,7 +113,15 @@ def setup_wepay(request):
 
             retailer_profile.wepay_acct = response['account_id']
         except:
-            print 'user already had stunable_payment_account_001'
+            try:
+                response  = WEPAY.call('/account/find',{
+                    'reference_id': 'stunable_payment_account_001',
+                    'name': 'stunable payments account',
+                })[0]
+                retailer_profile.wepay_acct = response['account_id']
+                print 'user already had stunable_payment_account_001'
+            except:
+                raise
 
 
 
