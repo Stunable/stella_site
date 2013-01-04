@@ -553,6 +553,23 @@ def print_shipping_label(request, ref=None, template='retailers/retailer_shippin
         return redirect(reverse("home"))
     return direct_to_template(request, template, ctx)
 
+@login_required
+def print_packing_slip(request, shipping_number=None, template='retailers/print_packing_slip.html'):
+    ctx={}
+    try:
+        retailer_profile = RetailerProfile.objects.get(user=request.user)
+        items = CartItem.objects.filter(shipping_number=shipping_number)
+        purchases = [{'item':each_item} for each_item in items]
+        ctx.update({'retailer_profile': retailer_profile})
+
+        ctx['shipping_label'] = ShippingLabel.objects.get(tracking_number=shipping_number)
+        ctx['purchases']= purchases
+    except:
+        raise
+        #login as regular user
+        return redirect(reverse("home"))
+    return direct_to_template(request, template, ctx)
+
 def view_shipping_label(request, shipping_number=None,template='retailers/retailer_shipping_label.html'):
     ctx={}
     try:

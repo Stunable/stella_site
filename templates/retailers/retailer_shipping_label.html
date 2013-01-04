@@ -59,16 +59,17 @@
     
    
     
-    {% if checkout %}
-    <p>This customer has ordered the following items to be shipped to the same address.  Check the items you will inlcude in this shipment.</p>
-    <p>You can ship the rest later.</p>
+{% if checkout %}
+    <p>This customer has ordered the following items to be shipped to the same address.  Check the items you will include in this shipment.</p>
+    <p>Please attempt to ship all items in one shipment.</p>
 
     <p class="error_msg">{{error_message}}</p>
     <form action="{% url print_shipping_label ref=checkout.ref %}" method="post">
     {% else %}
-    <a href="">click here for a printable packing slip</a>
+    {% if shipping_label %}
+    <a href="{% url print_packing_slip shipping_number=shipping_label.tracking_number %}">click here for a printable packing slip</a>
     {% endif %}
-
+    {% endif %}
         {% include 'retailers/packing_slip.html' %}
     </form>
 </div>
