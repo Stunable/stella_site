@@ -215,8 +215,11 @@ class Item(models.Model,listImageMixin):
         return {'styles':out,'longest':longest}
 
     def save(self,*args,**kwargs):
+        print self, 'inventory:', self.total_inventory()
         if self.total_inventory() < 1:
             self.is_available = False
+        else:
+            self.is_available = True
         super(Item,self).save()
 
 class ItemType(models.Model):

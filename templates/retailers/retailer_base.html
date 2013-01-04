@@ -100,7 +100,13 @@ $(document).ready(function(){
     $(this).closest('.product_row').toggleClass('nodeets')
    })
 
+   $('.select_all').click(function () {
+       $($(this).data('target')).attr('checked', this.checked);
+   });
+
 })
+
+
 
 </script>
 

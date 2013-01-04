@@ -102,12 +102,25 @@
     {% csrf_token %}
     <table class="product_list_table">
         <tbody>
+            {% if not confirm %}
+            <!-- This is the "select all" checkbox -->
+            <tr>
+                <td>
+                    <input class="select_all" data-target=".item_selector" type="checkbox">
+                </td>
+                <td>
+                    select all
+                </td>
+                <td colspan=5>
+                </td>
+            </tr>
+            {% endif %}
             {% for item in product_list %}
             <tr class="product_row nodeets">
             {% if confirm %}
                 <input type="hidden" value="{{item.pk}}" name="selected_items">
                 {% else %}
-                <td class="action-checkbox"><input type="checkbox" value="{{item.pk}}" name="selected_items">
+                <td class="action-checkbox"><input class="item_selector" type="checkbox" value="{{item.pk}}" name="selected_items">
                     <a class="edit-link" href="{% url edit_item item.pk %}">Edit</a>
                 </td>
             {% endif %}
@@ -172,4 +185,5 @@
     {% endif %}
 </form>
 </div>
-{% endblock %} 
+{% endblock %}
+

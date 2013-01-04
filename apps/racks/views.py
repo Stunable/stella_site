@@ -478,7 +478,8 @@ def item_modal(request, item_id, template='racks/item_modal.html'):
     
     size2color = {}
     for inventory in item.types.all():
-        if inventory.size.size in size2color:
+        # print inventory
+        if size2color.has_key(inventory.size.size):
             size2color[inventory.size.size].append(inventory.custom_color_name)
         else:
             size2color[inventory.size.size]= [inventory.custom_color_name,]
@@ -490,6 +491,7 @@ def item_modal(request, item_id, template='racks/item_modal.html'):
     for color_list in size2color.values():
         colors += color_list
 
+    print 's2c:',size2color
 
     ctx.update({'size2color': json.dumps(size2color),     
                 'sizes': set(size2color.keys()),
