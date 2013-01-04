@@ -78,7 +78,8 @@ class Checkout(models.Model):
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
     complete = models.BooleanField(default=False)
     ref = models.CharField(max_length=250, blank=True, null=True)
-    retailer = models.ForeignKey(User,blank=True,null=True)
+    retailer = models.ForeignKey(User,blank=True,null=True,related_name="retailer_checkout_set")
+    purchaser = models.ForeignKey(User,blank=True,null=True,related_name="purchaser_checkout_set")
 
     def check_complete(self):
         try:
@@ -410,7 +411,7 @@ def payment_was_successful_callback(sender, **kwargs):
     try:
         checkout = Checkout.objects.get(cart=kwargs['item'].cart, retailer=retailer)
     except:
-        checkout = Checkout.objects.create(cart=kwargs['item'].cart,retailer=retailer)
+        checkout = Checkout.objects.create(cart=kwargs['item'].cart,retailer=retailer,purchaser=transaction.user)
     
     p = Purchase.objects.create(
         item = kwargs['item'],

@@ -426,7 +426,7 @@ def order_history(request, template='retailers/order_history.html'):
         _from = request.GET.get('from')
         _to = request.GET.get('to')
 
-        checkouts = request.user.checkout_set.all()
+        checkouts = request.user.retailer_checkout_set.all()
         
         if not _from and not _to:
             checkouts = checkouts.filter(complete=False)
@@ -507,7 +507,7 @@ def item_action(request, template="retailers/product_list.html"):
 def print_shipping_label(request, ref=None, template='retailers/retailer_shipping_label.html'):
     ctx = {}
     try:
-        checkout = request.user.checkout_set.all().filter(ref=ref)[0]
+        checkout = request.user.retailer_checkout_set.all().filter(ref=ref)[0]
         purchases = checkout.purchase_set.all()
         purchase = purchases[0]
         retailer_profile = RetailerProfile.objects.get(user=request.user)

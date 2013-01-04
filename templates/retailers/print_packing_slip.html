@@ -73,9 +73,6 @@ ol li{
                     <td>{{ item.size }}</td>
                     <td>{{ item.color }}</td>
                     <td align="center">{{ item.quantity }}</td>
-                    {% if not shipping_label %}
-                    <td><input class="ship_check" name="ship_purchase" value="{{purchase.id}}" type="checkbox"></td>
-                    {% endif %}
                 </tr>
             {% endwith %}
         {% endif %}
