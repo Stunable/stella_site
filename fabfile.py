@@ -73,6 +73,7 @@ env.repo_url = conf[MODE].get("REPO_URL", None)
 env.reqs_path = conf[MODE].get("REQUIREMENTS_PATH", None)
 env.gunicorn_port = conf[MODE].get("GUNICORN_PORT", 8000)
 env.locale = conf[MODE].get("LOCALE", "en_US.UTF-8")
+env.mode = MODE
 
 
 ##################
@@ -315,7 +316,8 @@ def deploy_build():
             manage("syncdb --noinput")
             manage("migrate --noinput")
 #            manage("collectstatic -v 0 --noinput")
-#            upload_template_and_reload("settings")
+            if not MODE == 'live':
+                upload_template_and_reload("settings")
             restart()
 
 def test():
@@ -452,8 +454,9 @@ def deploy():
             print "\nAborting!"
             return False
         create()
-    # for name in get_templates():
-    #     upload_template_and_reload(name)
+    if not MODE == 'live':
+        for name in get_templates():
+            upload_template_and_reload(name)
     with project():
         git = ".git" in env.repo_url
         run("git pull " if git else "hg pull && hg up -C")

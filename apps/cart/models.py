@@ -39,7 +39,7 @@ def base35encode(number):
 
     base36 = ''
     while number:
-        number, i = divmod(number, 36)
+        number, i = divmod(number, 35)
         base36 = alphabet[i] + base36
 
     return base36 or alphabet[0]
