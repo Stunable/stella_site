@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -7,7 +9,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.localflavor.us.us_states import US_STATES
 from django.contrib.localflavor.us.models import PhoneNumberField
-from racks.models import Item
+from racks.models import Item,ProductImage
 
 from tasks import process_upload
 
@@ -24,6 +26,13 @@ class ShippingType(models.Model):
         return self.name
 
 class ProductUpload(models.Model):
+
+    def __unicode__(self):
+        try:
+            return str(self.retailer)+' | '+str(self.uploaded_zip)
+        except:
+            return super(ProductUpload,self).__unicode__()
+
     uploaded_zip = models.FileField(upload_to='product_uploads')
     retailer = models.ForeignKey('RetailerProfile')
     processed = models.BooleanField(default=False)
@@ -34,7 +43,13 @@ class ProductUpload(models.Model):
         if not self.processed:
             process_upload(self,StylistItem,UploadError)
 
+    def filename(self):
+        return os.path.basename(self.uploaded_zip.name)
+
 class UploadError(models.Model):
+    def __unicode__(self):
+        return self.text
+        
     text = models.TextField()
     upload = models.ForeignKey(ProductUpload)
 
@@ -113,4 +128,4 @@ class StylistItem(models.Model):
         try:
             return self.stylist.username + ' ' + self.item.name
         except:
-            return '-deleted- '+self.item.name
+            return '-deleted- '

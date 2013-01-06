@@ -11,7 +11,7 @@ from django.core.urlresolvers import reverse
 from apps.racks.forms import *
 from friends.models import Friendship
 from django.contrib.auth.models import User
-from apps.racks.models import Rack, Rack_Item, Item, Category
+from apps.racks.models import Rack, Rack_Item, Item, Category,ProductImage
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from apps.friends.views import json_view
@@ -29,9 +29,13 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
+from django.forms.models import modelform_factory
 from racks.models import PriceCategory
 from social_auth.models import UserSocialAuth
 import urllib
+
+from apps.retailers.models import RetailerProfile
+
 
 import random
 
@@ -474,20 +478,23 @@ def item_modal(request, item_id, template='racks/item_modal.html'):
     
     size2color = {}
     for inventory in item.types.all():
-        if inventory.size.size in size2color:
-            size2color[inventory.size.size].append(inventory.color.name)
+        # print inventory
+        if size2color.has_key(inventory.size.size):
+            size2color[inventory.size.size].append(inventory.custom_color_name)
         else:
-            size2color[inventory.size.size]= [inventory.color.name, ]
+            size2color[inventory.size.size]= [inventory.custom_color_name,]
     
-    inventories = [{'size': i.size.size, 'color': i.color.name, 'id': i.id, 'stock': i.inventory,
-                    'add_cart_url': reverse('add_to_cart',kwargs={'product_id':i.pk, 'quantity':1, 'size':''})} for i in item.types.all()]
+    inventories = [{'size': i.size.size, 'color': i.custom_color_name, 'id': i.id, 'stock': i.inventory,
+                    'add_cart_url': reverse('add_to_cart',kwargs={'product_id':i.pk, 'quantity':1, 'size':''})} for i in item.types.filter(inventory__gte=1)]
     
     colors = []
     for color_list in size2color.values():
         colors += color_list
-    
+
+    print 's2c:',size2color
+
     ctx.update({'size2color': json.dumps(size2color),     
-                'sizes': size2color.keys(),
+                'sizes': set(size2color.keys()),
                 'colors': set(colors),
                 'inventories': json.dumps(inventories)}) 
                
@@ -640,11 +647,11 @@ def _all(request, template='racks/carousel.html'):
         get_context_variables(ctx, request)
         
         if not query_set:
-            if settings.IS_PROD:
+            # if settings.IS_PROD:
                 #print "PROD"
-                query_set = Item.objects.filter(approved=True).order_by('?')
-            else:
-                query_set = Item.objects.all().order_by('?')
+                query_set = Item.objects.filter(approved=True,is_available=True).order_by('?')
+            # else:
+                # query_set = Item.objects.all().order_by('?')
         
         return pagination(request, ctx, template, query_set)
             
@@ -970,6 +977,25 @@ def add_color(request, template="racks/add_color_dialog.html"):
     
     ctx['form'] = form
     return direct_to_template(request, template, ctx)
+
+@login_required
+def add_product_image(request):
+
+    retailer = RetailerProfile.objects.get(user=request.user)
+
+    form = modelform_factory(ProductImage,fields=["image"])(request.POST,request.FILES)
+
+    if form.is_valid():
+        im = form.save(commit=False)
+        im.retailer = retailer.user
+        im.save()
+
+        print im
+
+        ret = {'html':'<option value="'+str(im.id)+'">'+im.thumbnail+'</option>','message':None,'success':True}
+    else:
+        ret = {'message':form.errors}
+    return HttpResponse(json.dumps(ret), mimetype="application/json")
 
 @login_required
 def sale_items(request, template="racks/item_list.html"):

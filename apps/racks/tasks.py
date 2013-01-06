@@ -19,7 +19,7 @@ def get_dominant_color(image):
 def prettify(instance):
     pic = Image.open(instance.image.file)
     enhancer  = ImageEnhance.Contrast(pic)
-    outpic = enhancer.enhance(1.5)
+    outpic = enhancer.enhance(1.1)
 
     temp = NamedTemporaryFile(delete=True)
      
@@ -32,7 +32,6 @@ def prettify(instance):
 
 
     outpic.save(temp.name+str(instance.id),'jpeg')
-
 
     instance.pretty_image.save("%d_pretty.jpg"%instance.id, File(open(temp.name+str(instance.id),'rb')))
     instance.save()

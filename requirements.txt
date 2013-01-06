@@ -45,3 +45,9 @@ wepay
 fedex
 xlrd
 django-sslify
+<<<<<<< HEAD
+=======
+django-mass-edit
+oauth
+gdata
+>>>>>>> ca5e664ce4d56c43286a471de0e9dfa1bc5c8fbc

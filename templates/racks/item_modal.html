@@ -33,25 +33,29 @@
 	var inventories = {{inventories|safe}};
 	var add_selected_product_variant_url = undefined;
 	
+	console.log(inventories)
 	
 	$(document).ready(function() {
 		$('.spinner').sprite({ fps: 10, no_of_frames: 12 });		
-		
+		var added_sizes = [];
 		$('.item-size-list').html('');
 		for(i in inventories) {
+
 			var inventory = inventories[i];
 			var selectedclass = '';
+			
 			if (inventories.length === 1){
 				selectedclass=' class="selected"'
 				$('.item-color-list').html('');
 				$('.item-color-list').append('<span class="selected"><a href="' + inventories[i].add_cart_url + '" >' + inventories[i].color +"</a></span>");	
 			}
-			$('.item-size-list').append("<span"+selectedclass+"><a href='#'>" + inventory.size +"</a></span>");
-			
+
+			if (added_sizes.indexOf(inventory.size) === -1){
+				$('.item-size-list').append("<span"+selectedclass+"><a href='#'>" + inventory.size +"</a></span>");
+				added_sizes.push(inventory.size)
+			}
+
 			$('.item-size-list span').click(function(e) {
-				// if (not_logged_in()){
-				// 	return login_modal();
-				// }
 
 				e.preventDefault();
 				$('.item-color-list').html('');
@@ -73,6 +77,7 @@
 				}
 
 			});
+			console.log(added_sizes)
 		}
 		
 	    function aboutDetailsClicked(e){

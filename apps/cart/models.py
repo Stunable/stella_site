@@ -39,7 +39,7 @@ def base35encode(number):
 
     base36 = ''
     while number:
-        number, i = divmod(number, 36)
+        number, i = divmod(number, 35)
         base36 = alphabet[i] + base36
 
     return base36 or alphabet[0]
@@ -78,7 +78,8 @@ class Checkout(models.Model):
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
     complete = models.BooleanField(default=False)
     ref = models.CharField(max_length=250, blank=True, null=True)
-    retailer = models.ForeignKey(User,blank=True,null=True)
+    retailer = models.ForeignKey(User,blank=True,null=True,related_name="retailer_checkout_set")
+    purchaser = models.ForeignKey(User,blank=True,null=True,related_name="purchaser_checkout_set")
 
     def check_complete(self):
         try:
@@ -117,7 +118,7 @@ class Purchase(models.Model):
         
         if pk_before_save != self.pk:
             # new order has been made
-            self.ref = str(abs(hash(str(self.pk))))[:10] + str(self.purchaser.pk)
+            self.ref = base35encode(self.purchaser.id+10000)+'S'+base35encode(self.id+10000)
             self.save()
             # notify retailer
             self.notify_retailer()
@@ -137,7 +138,7 @@ class Purchase(models.Model):
         print 'notified retailer'
     
     def name(self):
-        return "Shopping with Stella"
+        return "Stunable.com"
 
     def __iter__(self):
         for item in [self.item]:
@@ -273,7 +274,7 @@ class Item(models.Model):
         # send money to this retailer
         inventory = self.get_product()
         product = inventory.item
-        retailer = product.retailers.all()[0]
+        retailer = product.retailers.all()[0]#TODO
         retailer_profile = RetailerProfile.objects.get(user=retailer)
         
         wpp = PayPalWPP(request)
@@ -400,11 +401,17 @@ from django.dispatch import receiver
 def payment_was_successful_callback(sender, **kwargs):
     print 'received signal that payment successful for', kwargs['item']
     transaction = sender
-    retailer = kwargs['item'].product.item.retailers.all()[0]
+    retailer = kwargs['item'].product.item.retailers.all()[0]#TODO this is totally ghetto...
+
+    itemtype = kwargs['item'].product
+    itemtype.inventory = min(0,itemtype.inventory-kwargs['item'].quantity)
+    itemtype.save()
+    itemtype.item.save() # this is to trigger a check for total remaining inventory on this item
+
     try:
         checkout = Checkout.objects.get(cart=kwargs['item'].cart, retailer=retailer)
     except:
-        checkout = Checkout.objects.create(cart=kwargs['item'].cart,retailer=retailer)
+        checkout = Checkout.objects.create(cart=kwargs['item'].cart,retailer=retailer,purchaser=transaction.user)
     
     p = Purchase.objects.create(
         item = kwargs['item'],

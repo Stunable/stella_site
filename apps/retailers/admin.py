@@ -18,4 +18,9 @@ admin.site.register(RetailerProfile, RetailerProfileAdmin)
 admin.site.register(StylistItem)
 admin.site.register(ShippingType)
 admin.site.register(ProductUpload)
-admin.site.register(UploadError)
+
+class UploadErrorAdmin(admin.ModelAdmin):
+    list_display = ('text','upload')
+
+
+admin.site.register(UploadError,UploadErrorAdmin)

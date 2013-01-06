@@ -1,5 +1,4 @@
 {% extends "retailers/retailer_base.html" %}
-
 {% block title %} Stunable | Add items {% endblock %}
 
 {% block body_class %}common large_common others{% endblock %}
@@ -28,6 +27,11 @@
 	}
 	.others td input {
 		width: 210px;
+	}
+	.inventory_forms table{
+		margin-top:30px;
+		margin-bottom:20px;
+		/*border:1px solid black;*/
 	}
 	.fixed-popup {
 		position: absolute;
@@ -58,6 +62,7 @@
 		margin-right: 10px;
 	}
 </style>
+
 
 <div class="section intro clearfix">
 	<h2><span>{{ retailer_profile.name }}</span></h2>
@@ -102,10 +107,12 @@
 				<td> {% for f in inventory_forms.management_form %}
 				{{ f }}
 				{% endfor %}
+				<div class="inventory_forms">
 				{% for inventory_form in inventory_forms.forms %}
-				<table cellpadding="10" class="inventory-item-entry" style="{% if forloop.counter > 1 %}display: none;{% endif %}" id="tbl-{{forloop.counter}}">
+				<table cellpadding="10" class="inventory-item-entry" style="{#% if forloop.counter > 1 %}display: none;{% endif %#}" id="tbl-{{forloop.counter}}">
 					{% include "retailers/inventory_item_form_partial.html" %}
-				</table> {% endfor %} <a id="add-more-option" href="javascript:void()">Add another "color, size, inventory" option for this product</span> </td>
+				</table> {% endfor %} <a id="add-more-option" href="">Add another "color, size, inventory" option for this product</span> </td>
+				</div>
 			</tr>
 			<tr>
 				<th></th>
@@ -118,6 +125,12 @@
 		<br />
 	</form>
 </div>
+
+<div style="display:none" id="new_image_form">
+	<form action="{% url add_product_image %}">{{image_upload_form}}
+		<br><input type="submit" value="Go"></form>
+</div>
+
 {% endblock %} 
 
 {% block extra_script %}
@@ -201,6 +214,7 @@
 		$('#add-more-option').click(function() {
 			inventory_option_counter++;
 			$('#tbl-' + inventory_option_counter).show('fast');
+			return false
 		});
 
 		$('#id_tags').chosen();
@@ -226,6 +240,45 @@
 			}
 		});
 
+		$('.addProductImage').click(function(){
+
+			$('.clonedform').remove();
+			var cln = $('#new_image_form').clone();
+
+			$(this).after(cln.addClass('clonedform').show())
+
+			cln.find('form').ajaxForm({
+							url : this.action,
+							// dataType : 'json',
+							success : function(json) {
+								if (json.success) {
+									$('.imageselector,  select[name=image]').append($(json.html))
+									$('.imageselector,  select[name=image]').ImageSelect('remove');
+									$('.imageselector,  select[name=image]').ImageSelect();
+									$(cln).fadeOut(1000).remove()
+								} else {
+									$('.fixed-popup .alert-message').text(json.message);						
+								}
+							}
+						});
+
+
+
+			return false
+		})
+
 	})
+
+</script>
+<script type="text/javascript" src="{{ STATIC_URL }}javascript/imageselect.js"></script>
+
+<script>
+$(document).ready(function(){
+    console.log($('select[name=image]'))
+   $('select[name=image]').ImageSelect(); 
+   $('.imageselector').ImageSelect();
+})
+
+
 </script>
 {% endblock %}

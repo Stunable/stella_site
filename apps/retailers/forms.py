@@ -5,6 +5,7 @@ from django.forms.widgets import CheckboxSelectMultiple
 
 from django.conf import settings
 from apps.racks.models import Color, Size
+from apps.racks.forms import addPlus
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
 else:
@@ -17,7 +18,7 @@ except:
 
 from django.contrib.localflavor.us.us_states import US_STATES
 from retailers.models import RetailerProfile, StylistItem, ShippingType
-from racks.models import Item, Rack, Rack_Item
+from racks.models import Item, Rack, Rack_Item,ProductImage
 
 from tagging.models import Tag
 
@@ -174,7 +175,7 @@ class RetailerProfileCreationForm(forms.ModelForm):
 
         T = testAddress(self.cleaned_data)
         V = TCC.verify_address(testAddress(self.cleaned_data))
-        print V
+
         if V.ErrNumber != "0":
             if 'City' in V.ErrDescription:
                 # self._errors['city'] = self._errors.get('city', [])
@@ -215,12 +216,16 @@ class ItemForm(AjaxModelForm):
     
     class Meta:
         model = Item
-        exclude = ('fabrics', 'image_urls', 'order', 'retailers', 'tags', 'sizes', 'colors', 'approved','pretty_image','is_deleted','bg_color')
+        exclude = ('fabrics', 'image_urls', 'order', 'retailers', 'tags', 'sizes', 'colors', 'approved','is_deleted','bg_color')
     
     def __init__(self, user=None, *args, **kwargs):
         self.user = user
         super(ItemForm, self).__init__(*args, **(kwargs))
         self.fields['tags'].label = "Tags Related to your Product"
+        self.fields['image'].empty_label = '/static/images/choosepic.png'
+        self.fields['image'].queryset = ProductImage.objects.filter(retailer=user)
+        addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(retailer=user),'#','Product Image')
+
 
 
     def clean_colors(self):
@@ -244,19 +249,21 @@ class ItemForm(AjaxModelForm):
         return self.cleaned_data.get('inventory')
     
     def save(self, force_insert=False, force_update=False, commit=True):
-        item = super(ItemForm, self).save()
-        # create relationship
-        StylistItem.objects.create(stylist=self.user, item=item)
-        
+        self.item = super(ItemForm, self).save(commit=commit)
+        if commit:
+            self.finish_save()
+        return self.item
+
+    def finish_save(self):
+        self.item.save()
+        si = StylistItem.objects.get_or_create(stylist=self.user, item=self.item)
         # add item to default racks
         try:
-            rack = Rack.objects.get(name=item.category)
-            rack_item = Rack_Item(rack=rack, item=item)
-            rack_item.save()
+            rack = Rack.objects.get(name=self.item.category)
+            rack_item = Rack_Item.objects.get_or_create(user=self.user, rack=rack, item=self.item)
         except:
             # log bug here
             pass
-        return item
 
 class ItemEditForm(forms.ModelForm):
     class Meta:
@@ -266,6 +273,10 @@ class ItemEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ItemEditForm, self).__init__(*args, **(kwargs))
         self.fields['image'].required = False
+        self.fields['image'].empty_label = '/static/images/choosepic.png'
+        self.fields['image'].queryset = ProductImage.objects.filter(retailer=user)
+        addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(retailer=retailer),'#','Product Image')
+
     
     def clean_price(self):
         price = self.cleaned_data.get('price')
@@ -293,7 +304,7 @@ class ItemEditForm(forms.ModelForm):
                 old_rack = Rack.objects.get(name=old_item.category)
                 old_rack_item = Rack_Item.objects.get(rack=old_rack, item=old_item)
                 old_rack_item.delete()
-            item = super(ItemEditForm, self).save()
+            item = super(ItemEditForm, self).save(commit=commit)
             
             if category_update:
                 new_rack = Rack.objects.get(name=item.category)

@@ -140,6 +140,9 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
+SOUTH_TESTS_MIGRATE = False # To disable migrations and use syncdb instead
+SKIP_SOUTH_TESTS = True # To disable South's own unit tests
+
 INSTALLED_APPS = (
     'longerusername',
     'django.contrib.admin',

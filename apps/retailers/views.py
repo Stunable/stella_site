@@ -17,7 +17,7 @@ import datetime
 from django.http import HttpResponse,HttpResponseRedirect
 from apps.racks.forms import item_inventory_form_factory
 from django.forms.models import inlineformset_factory
-from apps.racks.models import ItemType
+from apps.racks.models import ItemType,ProductImage
 from apps.common.forms import AjaxBaseForm
 from apps.accounts.models import ShippingInfo
 from apps.racks.forms import ItemInventoryForm
@@ -72,7 +72,7 @@ RETAILER_INFORM_MESSAGE = "retailers/retailer_inform_message.txt"
 def setup_wepay(request):
     code = request.GET.get('code',None)
     if code:
-        url = 'https://wepayapi.com/v2/oauth2/token'
+        url = 'https://'+{'stage':'stage.','production':'' }[settings.WEPAY_STAGE]+'wepayapi.com/v2/oauth2/token'
         data = {
           "client_id":settings.WEPAY_CLIENT_ID,
           "client_secret":settings.WEPAY_CLIENT_SECRET,
@@ -113,7 +113,15 @@ def setup_wepay(request):
 
             retailer_profile.wepay_acct = response['account_id']
         except:
-            print 'user already had stunable_payment_account_001'
+            try:
+                response  = WEPAY.call('/account/find',{
+                    'reference_id': 'stunable_payment_account_001',
+                    'name': 'stunable payments account',
+                })[0]
+                retailer_profile.wepay_acct = response['account_id']
+                print 'user already had stunable_payment_account_001'
+            except:
+                raise
 
 
 
@@ -125,7 +133,7 @@ def setup_wepay(request):
 
 
     else:
-        url = 'https://wepay.com/v2/oauth2/authorize?client_id='+settings.WEPAY_CLIENT_ID+'&redirect_uri='+settings.WWW_ROOT+'retailers/wepay/&scope=manage_accounts,collect_payments,refund_payments,preapprove_payments,send_money'
+        url = 'https://'+{'stage':'stage.','production':'' }[settings.WEPAY_STAGE]+'wepay.com/v2/oauth2/authorize?client_id='+settings.WEPAY_CLIENT_ID+'&redirect_uri='+settings.WWW_ROOT+'retailers/wepay/&scope=manage_accounts,collect_payments,refund_payments,preapprove_payments,send_money'
         return HttpResponseRedirect(url)
 
 
@@ -200,7 +208,7 @@ def inventory_type_formset_factory(retailer, data=None, instance=None):
     # by passing the retailer (instance of User) to it's constructor.
 #    form = ItemInventoryForm(retailer)
     form = item_inventory_form_factory(retailer)
-    formset_class = inlineformset_factory(Item, ItemType, form=form, extra=5, can_delete=True)
+    formset_class = inlineformset_factory(Item, ItemType, form=form, extra=1, can_delete=True)
     
     def errors_as_json(self, strip_tags=False):
         error_summary = {}
@@ -238,6 +246,9 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
         item_instance = Item.objects.get(pk=item_id)
     else:
         item_instance = Item()
+
+
+    retailer = RetailerProfile.objects.get(user=request.user)
     
     post = request.POST.copy()
     if request.method == 'POST':
@@ -249,8 +260,9 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                 response.update({'success' : False})
                 response['errors'].update(form.errors_as_json()['errors'])
             else:
+                print 'saving item form'
                 item_instance = form.save(commit=False)  
-    
+            print 'after save item form'
             
             inventory_form = inventory_type_formset_factory(request.user, post, item_instance)        
     
@@ -259,13 +271,13 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                 response['errors'].update(inventory_form.errors_as_json()['errors'])
             else:
                 instances = inventory_form.save(commit=False)
-                if not instances and not item_instance.pk:
+                print 'variation instances:',instances
+                if not len(instances) and not item_instance.pk:
                     response.update({'success' : False})
                     response['errors'].update({'types-0-inventory': '<ul class="errorlist"><li>This field is required.</li></ul>'})
             
             if response['success']:
-                if not item_instance.pk:
-                    item_instance.save()
+                form.finish_save()
                 
                 try:
                     inventory_form = inventory_type_formset_factory(request.user, post, item_instance)
@@ -273,14 +285,16 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                         inventory_form.save()
                 except IndexError, e:
                     # TODO
+                    raise
                     pass
                 except:
                     # TODO
                     pass
+                print 'saving instance line 287'
                 
-                item_instance.save()
                 
         except Exception, e:
+            raise
             response.update({'success' : False, 'message': str(e)})
                    
         return HttpResponse(json.dumps(response, ensure_ascii=False), mimetype='application/json')
@@ -288,20 +302,21 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
         try:
             initial = {'Colors': [i.pk for i in item_instance.colors.all()], 
                        'Sizes': [i.pk for i in item_instance.sizes.all()],
-                       'brand': RetailerProfile.objects.get(user=request.user).namee
+                       'brand': RetailerProfile.objects.get(user=request.user).name
                        }
         except:
             
-            initial={'brand': RetailerProfile.objects.get(user=request.user).name}
-        form = ItemForm(instance=item_instance, initial=initial)
+            initial={'brand': retailer.name}
+        form = ItemForm(user=request.user,instance=item_instance, initial=initial)
     
     if request.is_ajax():
         template = 'racks/size_input.html'
-    
-    
+    ctx['next']=request.get_full_path()
+    ctx['image_upload_form'] = modelform_factory(ProductImage,fields=["image"])(initial={'retailer':retailer.id})
+    ctx['item'] = item_instance
     ctx['form'] = form #MyForm()
     ctx['inventory_forms'] = inventory_type_formset_factory(request.user, None, item_instance)
-    ctx['retailer_profile'] = RetailerProfile.objects.get(email_address=request.user.email)
+    ctx['retailer_profile'] = retailer
     ctx['item_pk'] = item_id
 
     return direct_to_template(request, template, ctx)
@@ -310,32 +325,42 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
 def add_item(request, item_id=None, template='retailers/add_item.html'):
     return edit_item(request, item_id, template)
 
-def bulk_upload(request,template="retailers/product_list.html"):
-
+def bulk_upload(request,upload_id=None,template="retailers/product_list.html"):
+    uploadObject = None
     try:
         retailer_profile = RetailerProfile.objects.get(user=request.user)
-        form = modelform_factory(ProductUpload,fields=['uploaded_zip'])()
-        if request.method == 'POST':
-            print request.POST
-            form = modelform_factory(ProductUpload,fields=['uploaded_zip'])(request.POST,request.FILES)
-            if form.is_valid():
-                print 'valid form'
-                up = form.save(commit=False)
-                up.retailer = retailer_profile
-                up.save()
-
-
-        pl = []
-        s = set()
-        for si in StylistItem.objects.filter(stylist=request.user):
-            if si.item.pk not in s:
-                pl.append(si)
-                s.add(si.item.pk)
-
-        ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form}
     except:
         raise
-        return redirect(reverse("home"))
+
+    if upload_id:
+        up = ProductUpload.objects.get(id=upload_id)
+        pl = up.item_set.all()
+        print pl
+        ctx = {'retailer_profile': retailer_profile, 'product_list': pl, 'upload':up}    
+    else:            
+        try:
+            form = modelform_factory(ProductUpload,fields=['uploaded_zip'])()
+            if request.method == 'POST':
+                form = modelform_factory(ProductUpload,fields=['uploaded_zip'])(request.POST,request.FILES)
+                if form.is_valid():
+                    print 'valid form'
+                    up = form.save(commit=False)
+                    up.retailer = retailer_profile
+                    up.save()
+                    uploadObject = up
+                    return redirect(reverse('bulk_upload',kwargs={'upload_id':up.id}))
+
+            pl = []
+            s = set()
+            for si in StylistItem.objects.filter(stylist=request.user):
+                if si.item.pk not in s:
+                    pl.append(si)
+                    s.add(si.item.pk)
+
+            ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form,'upload':uploadObject}
+        except:
+            raise
+        # e redirect(reverse("home"))
     return direct_to_template(request, template, ctx)
 
 @login_required 
@@ -347,9 +372,8 @@ def product_list(request, template="retailers/product_list.html"):
         s = set()
         for si in StylistItem.objects.filter(stylist=request.user):
             if si.item.pk not in s:
-                pl.append(si)
+                pl.append(si.item)
                 s.add(si.item.pk)
-        
         ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form}
     except:
         raise
@@ -402,7 +426,7 @@ def order_history(request, template='retailers/order_history.html'):
         _from = request.GET.get('from')
         _to = request.GET.get('to')
 
-        checkouts = request.user.checkout_set.all()
+        checkouts = request.user.retailer_checkout_set.all()
         
         if not _from and not _to:
             checkouts = checkouts.filter(complete=False)
@@ -463,7 +487,7 @@ def item_action(request, template="retailers/product_list.html"):
             s = set()
             for si in StylistItem.objects.filter(stylist=request.user):
                 if si.item.pk not in s and si.item.pk in [int(pk) for pk in request.POST.getlist('selected_items')]:
-                    pl.append(si)
+                    pl.append(si.item)
                     s.add(si.item.pk)
             if request.POST.get('action_name','None') and request.POST.get('confirm_%s'%request.POST.get('action_name')):
                 for i in pl:
@@ -483,7 +507,7 @@ def item_action(request, template="retailers/product_list.html"):
 def print_shipping_label(request, ref=None, template='retailers/retailer_shipping_label.html'):
     ctx = {}
     try:
-        checkout = request.user.checkout_set.all().filter(ref=ref)[0]
+        checkout = request.user.retailer_checkout_set.all().filter(ref=ref)[0]
         purchases = checkout.purchase_set.all()
         purchase = purchases[0]
         retailer_profile = RetailerProfile.objects.get(user=request.user)
@@ -522,6 +546,23 @@ def print_shipping_label(request, ref=None, template='retailers/retailer_shippin
             ctx['shipping_label'] = label
     try:
         ctx.update({'retailer_profile': retailer_profile})
+        ctx['purchases']= purchases
+    except:
+        raise
+        #login as regular user
+        return redirect(reverse("home"))
+    return direct_to_template(request, template, ctx)
+
+@login_required
+def print_packing_slip(request, shipping_number=None, template='retailers/print_packing_slip.html'):
+    ctx={}
+    try:
+        retailer_profile = RetailerProfile.objects.get(user=request.user)
+        items = CartItem.objects.filter(shipping_number=shipping_number)
+        purchases = [{'item':each_item} for each_item in items]
+        ctx.update({'retailer_profile': retailer_profile})
+
+        ctx['shipping_label'] = ShippingLabel.objects.get(tracking_number=shipping_number)
         ctx['purchases']= purchases
     except:
         raise

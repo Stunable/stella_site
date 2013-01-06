@@ -11,6 +11,8 @@ from django.db.models import Avg
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.loading import get_model, get_models
 
+from sorl.thumbnail import ImageField,get_thumbnail
+
 from tasks import *
 from apps.common.utils import *
 from apps.accounts.models import AnonymousProfile
@@ -70,10 +72,52 @@ class Color(models.Model):
         if not VALID_COLOR_REGEX.match(self.color_css):
             raise ValidationError("%s is not a valid CSS color" % self.color_css)    
 
-class Item(models.Model):
-    image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product Image")
-    pretty_image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product pretty Image",storage=OverwriteStorage())
+class listImageMixin(object):
+
+    @property
+    def thumbnail(self):
+        return self.get_image().url
+        #get_thumbnail(self.get_image(), '120x120',  quality=100).url
+
+    def list_image(self):
+        return '<img style="width:60px" src="%s"/>' % self.thumbnail
+    list_image.allow_tags = True
+
+
+class ProductImage(models.Model,listImageMixin):
+
+    def __unicode__(self):
+        if self.image:
+            return self.thumbnail
+        else:
+            return self.__class__.__name__
+
+    image = ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product Image")
+    pretty_image = models.ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product pretty Image",storage=OverwriteStorage())
     bg_color = models.CharField(max_length=32,default='white',blank=True,null=True)
+    retailer = models.ForeignKey(User,null=True,blank=True)
+
+    def get_image(self):
+        if self.pretty_image:
+            return self.pretty_image
+        else:
+            return self.image
+
+    def generate_pretty_picture(self):
+        prettify(self)
+
+    def save(self,*args,**kwargs):
+        this_id = self.id
+        super(ProductImage,self).save()
+
+        if not this_id:
+            self.generate_pretty_picture()
+
+
+
+
+class Item(models.Model,listImageMixin):
+    image = models.ForeignKey(ProductImage,null=True,blank=True)
     gender = models.CharField(max_length=1,default='F',choices=[('F','F'),('M','M'),('B','B')])
     brand = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(max_length=200, verbose_name='Product Name')
@@ -88,10 +132,13 @@ class Item(models.Model):
     
     retailers = models.ManyToManyField(User, through='retailers.StylistItem', null=True, blank=True)
     sizes = models.ManyToManyField(Size, through='racks.ItemType', null=True, blank=True)
-    colors = models.ManyToManyField(Color, through='racks.ItemType', null=True, blank=True)
+    colors = models.ManyToManyField(Color,blank=True)
     created_date = models.DateField(auto_now=True, auto_now_add=True, default=datetime.date.today)
     
-    approved = models.BooleanField(default=False)
+    approved = models.NullBooleanField(default=None)
+    is_available = models.BooleanField(default=True)
+
+    upload = models.ForeignKey('retailers.ProductUpload',null=True)
     
     tags = TagField()
     
@@ -101,10 +148,11 @@ class Item(models.Model):
         return self.name
     
     def get_image(self):
-        if self.pretty_image:
-            return self.pretty_image
         if self.image:
-            return self.image
+            if self.image.pretty_image:
+                return self.image.pretty_image
+        if self.image:
+            return self.image.image
         elif self.image_urls:
             return self.image_urls.split(',')[0].replace('.jpg', '_150x296.jpg')
         else:
@@ -120,33 +168,98 @@ class Item(models.Model):
         
     def get_full_size_image(self):
         if self.image:
-            return self.image
+            return self.image.image
         elif self.image_urls:
             return self.image_urls.split(',')[0]
         else: 
             return "upload/agjea1.254x500.jpg"
 
-    def generate_pretty_picture(self):
-        prettify(self)
+    def price_range(self):
+        seq = [it.price for it in self.types.all()]
+        if not len(seq):
+            return
+        return {'min':min(seq),'max':max(seq)}
 
+    def total_inventory(self):
+        """ returns the total inventory available of all item variations for this product"""
 
-    def list_image(self):
-        return '<img style="width:60px" src="/media/%s"/>' % self.get_image()
-    list_image.allow_tags = True
+        return reduce(lambda x, y: x+y, [it.inventory for it in self.types.all()], 0)
 
+    def display_approval_status(self):
+        if self.approved is False:
+            return """<a href="mailto:stylists@stunable.com?subject=Why wasn't Item #%d (%s) approved?">email us</a>"""%(self.id,self.name)
+        if self.approved is True:
+            return 'Approved'
+        return "Pending"
 
+    def types_by_color(self):
+        styles = {}
+        for it in self.types.all().order_by('size'):
+            if styles.has_key(it.custom_color_name):
+                styles[it.custom_color_name].append(it)
+            else:
+                styles[it.custom_color_name] = [it]
+        
+        out = []
+        longest = 0
+
+        for key,val in styles.items():
+            out.append(
+                {
+                 'color':key,
+                 'list':[{'size':it.size,'inv':it.inventory,'pic':it.get_image()} for it in val]
+                }
+            )
+            longest = max(longest,len(val))
+
+        return {'styles':out,'longest':longest}
+
+    def save(self,*args,**kwargs):
+        print self, 'inventory:', self.total_inventory()
+        if self.total_inventory() < 1:
+            self.is_available = False
+        else:
+            self.is_available = True
+        super(Item,self).save()
 
 class ItemType(models.Model):
+
+    class Meta:
+        unique_together = (('item', 'size','custom_color_name'))
+
+
+    image = models.ForeignKey(ProductImage,null=True)
     item = models.ForeignKey('Item', related_name='types')
-    color = models.ForeignKey('Color')
-    size = models.ForeignKey('Size')
-    custom_color_name = models.CharField(max_length=100, blank=True, null=True,
-                                         help_text="An optional custom name for the color of this item")
-    inventory = models.PositiveIntegerField(default=0)
+    size = models.ForeignKey('Size',default=1)
+    SKU = models.CharField(max_length=64,null=True,blank=True)
+    custom_color_name = models.CharField(max_length=100, default="White",
+                                         help_text="An optional name for the style of this item",verbose_name="Style Name")
+    inventory = models.PositiveIntegerField(default=0,verbose_name="inventory quantity")
+    price = models.DecimalField(blank=True,max_digits=19, decimal_places=2, verbose_name='Special Price for this color/size/inventory')
+    sale_price = models.DecimalField(blank=True,null=True,max_digits=19, decimal_places=2, verbose_name='Sale Price for this color/size/inventory')
+
+
+    def get_image(self):
+        if self.image:
+            return self.image.image
+        else:
+            return self.item.get_image()
     
     def __unicode__(self):
-        color = self.custom_color_name or self.color.name
+        color = self.custom_color_name
         return "%s %s, Size %s" % (color, self.item.name, self.size.size)
+
+    def save(self,*args,**kwargs):
+        for attr in ['price','image']:
+            if getattr(self,attr) is None:
+                setattr(self,attr,getattr(self.item,attr))
+
+        super(ItemType,self).save()
+
+    @property
+    def color(self):
+        return Color(name=self.custom_color_name)
+
     
 
 class RackManager(models.Manager):

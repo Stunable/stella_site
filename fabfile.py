@@ -15,44 +15,65 @@ from fabric.colors import yellow, green, blue, red
 # Config setup #
 ################
 
-
+MODE = 'dev'
 
 
 conf = {
-    "SSH_USER": "ubuntu", # SSH username
-    "SSH_PASS":  "", # SSH password (consider key-based authentication)
-    "SSH_KEY_PATH":  "", # Local path to SSH key file, for key-based auth
-    "HOSTS": ['198.74.59.175',], # List of hosts to deploy to
-    "VIRTUALENV_HOME":  "/home/ubuntu", # Absolute remote path for virtualenvs
-    "PROJECT_NAME": "stella", # Unique identifier for project
-    "REQUIREMENTS_PATH": "requirements.txt", # Path to pip requirements, relative to project
-    "GUNICORN_PORT": 8000, # Port gunicorn will listen on
-    "LOCALE": "en_US.utf8", # Should end with ".utf8"
-    "LIVE_HOSTNAME": "stunable.com", # Host for public site.
-    "REPO_URL": "https://github.com/Stunable/stella_site.git", # Git or Mercurial remote repo URL for the project
-    "DB_PASS": "123456", # Live database password
-    "ADMIN_PASS": "123456", # Live admin user password
+    'live': {
+        "SSH_USER": "ubuntu", # SSH username
+        "SSH_PASS":  "", # SSH password (consider key-based authentication)
+        "SSH_KEY_PATH":  "", # Local path to SSH key file, for key-based auth
+        "HOSTS": ['198.74.59.175',], # List of hosts to deploy to
+        "VIRTUALENV_HOME":  "/home/ubuntu", # Absolute remote path for virtualenvs
+        "PROJECT_NAME": "stella", # Unique identifier for project
+        "REQUIREMENTS_PATH": "requirements.txt", # Path to pip requirements, relative to project
+        "GUNICORN_PORT": 8000, # Port gunicorn will listen on
+        "LOCALE": "en_US.utf8", # Should end with ".utf8"
+        "LIVE_HOSTNAME": "stunable.com", # Host for public site.
+        "REPO_URL": "https://github.com/Stunable/stella_site.git", # Git or Mercurial remote repo URL for the project
+        "DB_PASS": "123456", # Live database password
+        "ADMIN_PASS": "123456", # Live admin user password
+    },
+    'dev':{
+        "SSH_USER": "ubuntu", # SSH username
+        "SSH_PASS":  "", # SSH password (consider key-based authentication)
+        "SSH_KEY_PATH":  "", # Local path to SSH key file, for key-based auth
+        "HOSTS": ['ec2-50-17-52-193.compute-1.amazonaws.com',], # List of hosts to deploy to
+        "VIRTUALENV_HOME":  "/data", # Absolute remote path for virtualenvs
+        "PROJECT_NAME": "stunable", # Unique identifier for project
+        "DB_USER":"stella",
+        "REQUIREMENTS_PATH": "requirements.txt", # Path to pip requirements, relative to project
+        "GUNICORN_PORT": 8000, # Port gunicorn will listen on
+        "LOCALE": "en_US.utf8", # Should end with ".utf8"
+        "LIVE_HOSTNAME": "dev.stunable.com", # Host for public site.
+        "REPO_URL": "https://github.com/Stunable/stella_site.git", # Git or Mercurial remote repo URL for the project
+        "DB_PASS": "123456", # Live database password
+        "ADMIN_PASS": "123456", # Live admin user password
+    }
+
 }
 
-env.db_pass = conf.get("DB_PASS", None)
-env.admin_pass = conf.get("ADMIN_PASS", None)
-env.user = conf.get("SSH_USER", getuser())
-env.password = conf.get("SSH_PASS", None)
-env.key_filename = conf.get("SSH_KEY_PATH", None)
-env.hosts = conf.get("HOSTS", [])
+env.db_pass = conf[MODE].get("DB_PASS", None)
+env.admin_pass = conf[MODE].get("ADMIN_PASS", None)
+env.user = conf[MODE].get("SSH_USER", getuser())
+env.password = conf[MODE].get("SSH_PASS", None)
+env.key_filename = conf[MODE].get("SSH_KEY_PATH", None)
+env.hosts = conf[MODE].get("HOSTS", [])
 
-env.proj_name = conf.get("PROJECT_NAME", os.getcwd().split(os.sep)[-1])
-env.venv_home = conf.get("VIRTUALENV_HOME", "/home/%s" % env.user)
+env.proj_name = conf[MODE].get("PROJECT_NAME", os.getcwd().split(os.sep)[-1])
+env.db_user = conf[MODE].get("DB_USER")
+env.venv_home = conf[MODE].get("VIRTUALENV_HOME", "/home/%s" % env.user)
 env.venv_path = "%s/%s" % (env.venv_home, env.proj_name)
 env.proj_dirname = "project"
 env.proj_path = "%s/%s" % (env.venv_path, env.proj_dirname)
 env.manage = "%s/bin/python %s/project/manage.py" % (env.venv_path,
                                                      env.venv_path)
-env.live_host = conf.get("LIVE_HOSTNAME", env.hosts[0] if env.hosts else None)
-env.repo_url = conf.get("REPO_URL", None)
-env.reqs_path = conf.get("REQUIREMENTS_PATH", None)
-env.gunicorn_port = conf.get("GUNICORN_PORT", 8000)
-env.locale = conf.get("LOCALE", "en_US.UTF-8")
+env.live_host = conf[MODE].get("LIVE_HOSTNAME", env.hosts[0] if env.hosts else None)
+env.repo_url = conf[MODE].get("REPO_URL", None)
+env.reqs_path = conf[MODE].get("REQUIREMENTS_PATH", None)
+env.gunicorn_port = conf[MODE].get("GUNICORN_PORT", 8000)
+env.locale = conf[MODE].get("LOCALE", "en_US.UTF-8")
+env.mode = MODE
 
 
 ##################
@@ -295,7 +316,8 @@ def deploy_build():
             manage("syncdb --noinput")
             manage("migrate --noinput")
 #            manage("collectstatic -v 0 --noinput")
-#            upload_template_and_reload("settings")
+            if not MODE == 'live':
+                upload_template_and_reload("settings")
             restart()
 
 def test():
@@ -432,8 +454,9 @@ def deploy():
             print "\nAborting!"
             return False
         create()
-    for name in get_templates():
-        upload_template_and_reload(name)
+    if not MODE == 'live':
+        for name in get_templates():
+            upload_template_and_reload(name)
     with project():
         git = ".git" in env.repo_url
         run("git pull " if git else "hg pull && hg up -C")
@@ -462,7 +485,7 @@ def db_setup():
     
     # Create DB and DB user.
     pw = db_pass()
-    user_sql_args = (env.proj_name, env.proj_name, pw.replace("'", "\'"))    
+    user_sql_args = (env.db_user, env.db_user, pw.replace("'", "\'"))    
     user_sql = "GRANT ALL PRIVILEGES ON %s.* To '%s' IDENTIFIED BY '%s';" % user_sql_args
     psql(user_sql, show=False)
     shadowed = "*" * len(pw)

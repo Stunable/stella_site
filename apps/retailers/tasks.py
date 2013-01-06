@@ -1,8 +1,9 @@
 from utils import getXLSdata
 import zipfile
 import os
+import copy
 
-from racks.models import Item,ItemType,Color,Size
+from racks.models import Item,ItemType,Color,Size,ProductImage
 from django.core.files import File
 
 # Item
@@ -45,10 +46,13 @@ from django.core.files import File
 # stylist = models.ForeignKey(User)
 # item = models.ForeignKey(Item)
 def find_image(folder,image):
-    for ext in ['jpg','jpeg']:
-        if os.path.exists(os.path.join(folder,image.replace('.'+ext,'')+'.'+ext)):
-            return os.path.join(folder,image.replace('.'+ext,'')+'.'+ext)
-    return False
+    for f in os.listdir(folder):
+        # print f.lower()
+        for ext in ['jpg','jpeg','png']:
+            # print image.replace('.'+ext,'')+'.'+ext
+            if f.lower() == image.lower().replace('.'+ext,'')+'.'+ext:
+                # print 'GOT IT' , image.lower().replace('.'+ext,'')+'.'+ext
+                return os.path.join(folder,f)
 
 
 def process_upload(upload,throughModel,errorClass):
@@ -59,70 +63,98 @@ def process_upload(upload,throughModel,errorClass):
     xls = find_xls(path)
 
     folder = os.path.dirname(xls)
-
+    current = [None for i in range(0,9)]
+    prev = copy.copy(current)
+    Picture = None
+    I = None # the item in question
 
     for i,d in enumerate(getXLSdata(xls)):
-        if i == 0:
-            continue
-        #BRAND', u'PRODUCT NAME', u'PRODUCT IMAGE', u'PRODUCT DESCRIPTION', u'COLORWAY(S)', u'SIZES', u'INV_SIZES', u'MSRP (US DOLLARS)'
-        brand,name,image,description,colorways,sizes,inv_sizes,msrp = d
-        imgpath = find_image(folder,image)
-        if imgpath:
-            try:
-                pic = File(open(imgpath,'rb'))
-            except:
-                errors.append('Problem dealing with picture: %s'%os.path.basename(imgpath))
+        try:
+            if i == 0:
+                continue
+            #BRAND', u'PRODUCT NAME', u'PRODUCT IMAGE', u'PRODUCT DESCRIPTION', u'COLOR', u'SIZE', u'INVENTORY', u'MSRP', 'SKU'
+               #0           1                 2                     3                 4        5          6           7     8
+            
+            fullrow = ''.join([cel for cel in d if cel.lstrip().rstrip()])
+            if not fullrow.lstrip().rstrip():
+                continue
+            # if not fullrow
 
-            try:
-                I = Item.objects.create(
-                    brand=brand,
-                    name =name,
-                    price=msrp,
-                    description=description,
-                    image=pic,
-                )
-            except Exception, e:
-                errors.append(str(e))
+            if d[2] != prev[2]:#the image is different
+                Picture = None
+                imgpath = find_image(folder,d[2])
+                if imgpath:
+                    pic = File(open(imgpath,'rb'))
+                    Picture = ProductImage.objects.create(image=pic,retailer=upload.retailer.user)
+                    # a new image has been created and is now the picture for the following items
 
-            if upload.retailer.user:
-                si = throughModel.objects.create(
-                    stylist = upload.retailer.user,
-                    item = I
-                )
+            if Picture: # we don't proceed if there's no picture
+                for j in range(0,len(d)):  #update our working info to use all the fields from the current row that aren't empty
+                    if d[j].lstrip().rstrip():
+                        current[j] = d[j]
 
-    #Do ItemTypes
-            try:
-                sizelist = []
-                invsizes = inv_sizes.split(',')
+                brand,name,image,description,color,size,inventory,msrp,SKU = current
+                msrp = msrp.lstrip('$')
+
+                if brand != prev[0] or name != prev[1]:
+
+                    brand,name,image,description,color,size,inventory,msrp,SKU = d
+                    msrp = msrp.lstrip('$')
+
+                    I = Item.objects.create(
+                        brand=brand,
+                        name =name,
+                        price=msrp,
+                        description=description,
+                        image=Picture,
+                        upload=upload
+                    )
+
+                    if upload.retailer.user:
+                        si = throughModel.objects.create(
+                            stylist = upload.retailer.user,
+                            item = I)
+
+
 
                 c,created = Color.objects.get_or_create(
                     retailer = upload.retailer.user,
-                    name = colorways
+                    name = color
                 )
 
+                # print 'row:'+str(i)+', size:',size
+                s,created = Size.objects.get_or_create(
+                    size=size,
+                    retailer = upload.retailer.user,
+                )
+                
+                ItemType.objects.create(
+                    item = I,
+                    size = s,
+                    custom_color_name = color,
+                    inventory = int(inventory),
+                    image = Picture,
+                    price = msrp,
+                    SKU = SKU
+                )
 
-                for s in sizes.split(','):
-                    s,created = Size.objects.get_or_create(
-                        size=s,
-                        retailer = upload.retailer.user,
-                    )
-                    sizelist.append(s)
+                if I:
+                    I.save()
+                
+            else:
+                errors.append('Could not find a picture for Row: '+str(i)+ ' (looking for a file called <strong>%s</strong>)'%d[2])
+        except Exception,e:
+            if 'unique' in str(e):
+                error = str(e) + '... looks like you might have two of the same color/size/item.'
+            else:
+                error = str(e)
+            errors.append('Row '+str(i)+':'+error)
+        
+        for k,f in enumerate(current):
+            prev[k] = current[k]
 
-                for i,sz in enumerate(sizelist):
-                    ItemType.objects.create(
-                        item=I,
-                        color=c,
-                        size=sz,
-                        custom_color_name=colorways,
-                        inventory=int(invsizes[i])
-                    )
-            except Exception,e:
-                errors.append(str(e))
-        else:
-            errors.append('No Image Found for Item: '+name)
-    
     for error in errors:
-        print error
+        # print error
         errorClass.objects.create(text=error,upload=upload)
 
     upload.processed = True

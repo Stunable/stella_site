@@ -1,0 +1,101 @@
+
+<style>
+
+body{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 12px;
+    background: #fff;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+table{
+    width:50%;
+    margin-left:25%;
+}
+
+
+th
+{
+    font-size: 14px;
+    font-weight: normal;
+    padding: 10px 8px;
+    border-bottom: 2px solid black;
+}
+td
+{
+    padding: 9px 8px 0px 8px;
+}
+
+.dashes {
+    border-top: 3px dashed #000000;
+    margin:50px;
+}
+
+.left{
+    margin-left:15%;
+    width:70%;
+    text-align: left;
+}
+
+ol{
+    margin-left:15%;
+}
+ol li{
+    text-align: left;
+}
+
+</style>
+
+
+<div>
+
+    <p>
+        <h3>Please find the following items in this shipment.</h3>
+    </p>
+
+    <table id="checkout-table">
+        <tr>
+            <th>item name</th>
+            <th>size</th>
+            <th>color</th>
+            <th>quantity</th>
+            {% if not shipping_label %}
+            <th>shipping<br>now? <input id="select_all" type="checkbox"></th>
+            {% endif %}
+        </tr>
+        
+        {% for purchase in purchases %}
+        {% if not purchase.shipping_number %}
+            {% with item=purchase.item %} 
+                <tr id="product-item-{{item.product.pk}}">
+                    <td>{{ item.product.item.name }}</td>
+                    <td>{{ item.size }}</td>
+                    <td>{{ item.color }}</td>
+                    <td align="center">{{ item.quantity }}</td>
+                </tr>
+            {% endwith %}
+        {% endif %}
+
+    {% endfor %}
+    </table>
+
+    <hr class='dashes'>
+
+    <h3>Stunable</h3>
+    <h4>Thank you for shopping with us</h4>
+
+    <div class="left">Making a return or exchange is easy. You have 14 days to decide whether to keep your items. If you would like to return them, simply follow the instructions below:</div>
+    <ol>
+    <li>) Log in to your Stunable.com account and navigate to your order history page at: http://stunable.com{% url order_history %}</li>
+    <li>) Print the shipping label for the product you wish to return</li>
+    <li>) Drop off your package at a local FedEx ship center or feel free to arrange a pickup at fedex.com</li>
+    </ol>
+
+    For more information on our returns policy, please refer to http://stunable.com/returns
+
+    <p><strong>NEED HELP?</strong> Call 1 860 966 4332 or email support@stunable.com 24 hours a day, seven days a week</p>
+
+</div>
+
+

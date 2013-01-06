@@ -16,11 +16,11 @@ from st_fedex.services.ship_service import FedexProcessShipmentRequest
 from st_fedex.config import FedexConfig
 
 if settings.DEBUG:
-    FEDEX_CONFIG = FedexConfig(key='zA9Z6uz3gHNKkU3L',
-                             password='8TA1Z49ZTJztPJ8a6uPqsjqKF',
-                             account_number='147593830',
-                             meter_number='104573181',
-                             use_test_server=True)
+    CONFIG_OBJ = FedexConfig(key='zA9Z6uz3gHNKkU3L',
+                         password='8TA1Z49ZTJztPJ8a6uPqsjqKF',
+                         account_number='147593830',
+                         meter_number='104573181',
+                         use_test_server=False)
 
 else:
     CONFIG_OBJ = FedexConfig(key='zA9Z6uz3gHNKkU3L',
@@ -78,7 +78,7 @@ def ship_it(retailer,customer,item_count,shipping_method):
     dest_address = customer.address1
     if customer.address2:
         dest_address = customer.address1 + ', ' + customer.address2
-    shipment.RequestedShipment.Recipient.Address.StreetLines = address
+    shipment.RequestedShipment.Recipient.Address.StreetLines = dest_address
     shipment.RequestedShipment.Recipient.Address.City = customer.city
     shipment.RequestedShipment.Recipient.Address.StateOrProvinceCode = customer.state
     shipment.RequestedShipment.Recipient.Address.PostalCode = customer.zip_code

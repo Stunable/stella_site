@@ -1,5 +1,5 @@
 from django.contrib import admin 
-from apps.racks.models import Rack, Item, Rack_Item, Category, Size, Brand, Color, ItemType, PriceCategory
+from apps.racks.models import Rack, Item, Rack_Item, Category, Size, Brand, Color, ItemType, PriceCategory,ProductImage
 
 import os
 from PIL import Image
@@ -84,15 +84,15 @@ class ColorAdmin(admin.ModelAdmin):
         return qs
     
 
-class ItemTypeInline(admin.StackedInline):
+class ItemTypeInline(admin.TabularInline):
     model = ItemType
     extra = 1
     
 class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
     inlines = [ItemTypeInline]
-    list_display = ('name','category','approved','list_image',)
-    actions = ('make_pretty','approve','unapprove')
-    list_filter = ('approved',)
+    list_display = ('name','category','approved','is_available','list_image',)
+    actions = ('approve','unapprove')
+    list_filter = ('approved','is_available','created_date')
     search_fields = ('name','description')
 
     def unapprove(self,request,queryset):
@@ -102,8 +102,9 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
 
     def approve(self,request,queryset):
         for obj in queryset:
-            obj.approved = True
-            obj.save()
+            if obj.types.all().count():
+                obj.approved = True
+                obj.save()
 
 
     def make_pretty(self,request,queryset):
@@ -116,6 +117,17 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
 class SizeAdmin(admin.ModelAdmin):
     list_display = ['size']
     #readonly_fields = ['retailer']
+
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ['image','retailer','list_image']
+    #readonly_fields = ['retailer']
+    actions = ('make_pretty',)
+
+    def make_pretty(self,request,queryset):
+        for obj in queryset:
+            obj.generate_pretty_picture()
+
+
     
 
 admin.site.register(Size, SizeAdmin)
@@ -126,6 +138,7 @@ admin.site.register(Category)
 admin.site.register(Brand)
 admin.site.register(Color, ColorAdmin)
 admin.site.register(PriceCategory)
+admin.site.register(ProductImage,ProductImageAdmin)
 
 
 

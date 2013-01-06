@@ -59,9 +59,8 @@ def buy_rack(request, rack_id):
 @login_required
 def add_to_cart(request, product_id, quantity, size=None):
     inventory = ItemType.objects.get(id=product_id)
-    product = inventory.item
     cart = Cart(request)    
-    cart.add(inventory, product.price, quantity, inventory.size.size, inventory.color.name)
+    cart.add(inventory, inventory.price, quantity, inventory.size.size, inventory.color.name)
     
     return redirect(reverse('get_cart'))
 

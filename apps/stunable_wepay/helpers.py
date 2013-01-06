@@ -32,6 +32,7 @@ class WePayPayment(object):
 
         production = False
         success = []
+        data_success = []
         fail = []
         items = self.cart.cart.item_set.all()
         for item in items:
@@ -42,26 +43,33 @@ class WePayPayment(object):
 
             WEPAY = WePay(settings.WEPAY_PRODUCTION, retailer_profile.wepay_token)
 
-            app_fee = float(item.total_price)*.2
-            price_minus_fee = item.cost_minus_shipping
+            app_fee = (float(item.total_price)*.2) + float(item.shipping_amount)
 
             data = {
                 'auto_capture':False,
                 'account_id': retailer_profile.wepay_acct,
-                'amount': str(price_minus_fee),
+                'amount': str(item.grand_total),
                 'short_description': item.get_product().__unicode__(),
                 'type': 'GOODS',
                 'payment_method_id': self.cc_token.token, # the user's credit_card_id 
                 'payment_method_type': 'credit_card',
                 'app_fee':str(app_fee),
-                'fee_payer':'payee',
-                'shipping_fee':str(item.shipping_amount)
+                'fee_payer':'payee'
             }
 
             response = WEPAY.call('/checkout/create',data)
 
             if response['state'] == "authorized":
                 success.append((item,response))
+                data.update({
+                    'subtotal': item.sub_total,
+                    'grand_total': item.grand_total,
+                    'unit_price':item.unit_price,
+                    'quantity':item.quantity,
+                    'shipping_amount':item.shipping_amount,
+                    'wepay_fees': item.get_additional_fees()
+                }) 
+                data_success.append(data)
             else:
                 fail.append((item,response))
         
@@ -79,11 +87,12 @@ class WePayPayment(object):
                 payment_was_successful.send(sender=wpt, item=item)
 
             
+                       
 
             email_message = """
                 a new checkout has been created:
                 %s
-            """%str(data)
+            """%str(data_success)
 
             send_mail('new checkout', email_message, settings.DEFAULT_FROM_EMAIL, ['gdamon@gmail.com','admin@stunable.com'])
 

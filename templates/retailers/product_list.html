@@ -19,10 +19,35 @@
 	  .inner-table td{
 	      width: 20%;
 	  }
+    .big.red{
+        font-size:1.4em;
+    }
+    .small{
+        font-size:.9em;
+    }
+    .product_list_table th,td{
+        text-align: center
+    }
+    .nodeets .variation{
+        display: none;
+        border-bottom:none;
+    }
+    .item_pic{
+        display:none;
+    }
+    .nodeets .item_pic{
+        display:block;
+    }
+
+    .deetsclick{
+        color:#EC67F0;
+        cursor:pointer;
+    }
+  
 </style>
 
 <div class="section intro clearfix">
-    <h2><span>Product List</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
+    <h2><span>{% if upload %}Upload: {{upload.filename}}{% else %}Product List{% endif %}</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
 </div>
 <div class="section body-copy bootstrap">
     
@@ -32,15 +57,40 @@
         <input type="hidden" name="confirm_{{confirm.action_name}}" value="True">
         <input type="hidden" name="action_name" value="{{confirm.action_name}}">
     {% else %}
+    {% if upload %}
+        <p>
+            Here are the results of your upload.
+            {% if upload.uploaderror_set.all|length %}
+            <p> Looks like there were a few issues:</p>
+            <div style="margin-left:25px;background-color:#eee;padding:5px">
+                {% for error in upload.uploaderror_set.all %}
+                    <p>{{error|safe}}</p>
+                {% endfor %}
+            {% endif %}
+            </div>
+  
+            <p>If you're having trouble with any part of the product upload process, just <a href="mailto:stylists@stunable.com?subject=Upload Trouble ({{upload.id}})">email us</a> at stylists@stunable.com and we'll help you out.</p>
+
+        </p>
+    {% endif %}
+    {% if bulk_upload_form %}
     <div style="padding:8px;border-radius:5px;border:1px solid #ccc;width:300px;float:right;margin:10px;position:relative;">
-        <p style="margin:10px">If you have lots items to sell, and would like to upload them in large batches, download <a href="{{ STATIC_URL }}/upload_example.zip" target="blank"><strong>this example file </strong></a> and <strong style="color:#ff6666">format your upload the same way</strong>.</p>  <p>Uploads need to be <strong>.zip</strong> files with a .XLS file and then an image for each item.  Upload it here and you'll know what to do next.  Email us if you have questions</p>
-        <form style="float:right" action="/retailers/item/bulk_upload" method="POST"enctype="multipart/form-data">
+        <p style="margin:10px">If you have lots items to sell, and would like to upload them in large batches,  just follow these two steps:<br><br>
+            1.&nbsp <a href="{{ STATIC_URL }}stunable_upload_example.zip" target="blank"><strong class="big red">download this example file </strong></a> <br><br>
+
+            2.&nbsp unzip it, put your own files and information in it, and send it back right here.
+
+              <p>Uploads need to be <strong>.zip</strong> files with a .XLS file and then an image for each item.  Upload it here and you'll know what to do next.  Email us if you have questions</p>
+        <form style="float:right" action="/retailers/item/bulk_upload/" method="POST"enctype="multipart/form-data">
             {{bulk_upload_form.as_p}}
             {{bulk_upload_form.errors}}
             {% csrf_token %}
         <input type="submit" value="Submit">
-        </form>
+        </form>    
     </div>
+    <a href="{% url add_item %}">Add Item</a>
+    <br><br>
+    {% endif %}
     <form class="action_submit" action="/retailers/item_action?next={% url product_list %}" method="post">
         <select name="action_name">
             <option value="-------------">-------------</option>
@@ -48,55 +98,83 @@
         </select>
 
         <input style="display:inline;margin-right:20px;margin-bottom:5px" type="submit" value="Go">
-        <a href="{% url add_item %}">Add Item</a>
     {% endif %}
     {% csrf_token %}
-    <table>
+    <table class="product_list_table">
         <tbody>
-            {% for product in product_list %}
+            {% if not confirm %}
+            <!-- This is the "select all" checkbox -->
             <tr>
-                {% if confirm %}
-                <input type="hidden" value="{{product.item.pk}}" name="selected_items">
-                {% else %}
-                <td class="action-checkbox"><input type="checkbox" value="{{product.item.pk}}" name="selected_items">
-                    <a class="edit-link" href="{% url edit_item product.item.pk %}">Edit</a>
-                </td>
-                {% endif %}
                 <td>
+                    <input class="select_all" data-target=".item_selector" type="checkbox">
+                </td>
+                <td>
+                    select all
+                </td>
+                <td colspan=5>
+                </td>
+            </tr>
+            {% endif %}
+            {% for item in product_list %}
+            <tr class="product_row nodeets">
+            {% if confirm %}
+                <input type="hidden" value="{{item.pk}}" name="selected_items">
+                {% else %}
+                <td class="action-checkbox"><input class="item_selector" type="checkbox" value="{{item.pk}}" name="selected_items">
+                    <a class="edit-link" href="{% url edit_item item.pk %}">Edit</a>
+                </td>
+            {% endif %}
+                <td >
                     {% load thumbnail %}
-                    {% thumbnail product.item.get_image "50" as im %}
-                        <img src="{{ im.url }}">
+                    {% thumbnail item.get_image "50" as im %}
+                        <img class="item_pic" src="{{ im.url }}">
                         {% empty %}
-                        <img src="{{ product.item.get_image }}" style="width: 50px;" alt=""/>
+                        <img class="item_pic" src="{{ item.get_image }}" style="width: 50px;" alt=""/>
                     {% endthumbnail %}
                     
                 </td>
                 <td>
-                <table class="inner-table">
-                    <thead>
-                        <th>SIZE</th>
-                        <th>PRICE</th>
-                        <th>RETAILER</th>
-                        <th>INVENTORY</th>
-                        <th>STATUS</th>
-                    </thead>
+                    <table class="inner-table">
+                        <thead>
+                            <th>PRODUCT NAME</th>
+                            <th>RETAIL PRICE RANGE</th>
+                            <th class="small">INVENTORY QUANTITY</th>
+                            <th>STATUS</th>
+                            <th>DATE ADDED</th>
+                        </thead>
 
-                    <tbody>
-                        <tr>
-                            <td>
-                                {% for it in product.item.types.all %}
-                                {{ it.size }}{% if not forloop.last%},{% endif %}
-                                {% endfor %}                                
-                            </td>
-                            <td>{{ product.item.price }}</td>
-                            <td>{{ product.item.retailer }}</td>
-                            <td>{% for it in product.item.types.all %}
-                                {{ it.inventory }}{% if not forloop.last%},{% endif %}
-                                {% endfor %}   </td>
-                            <td>{{ product.item.status }}</td>
-                        </tr>
-                    </tbody>
-                </table></td>
+                        <tbody>
+                            <tr>
+                                <td>{{item.name}}</td>
+                                <td>${{item.price_range.min}}{% if not item.price_range.max == item.price_range.min %} - ${{item.price_range.max}}{%endif%}</td>
+                                <td>{{item.total_inventory}}</td>
+                                <td>{{item.display_approval_status|safe}}</td>
+                                <td>{{item.created_date}}</td>
+                            </tr>
+                            <tr class="deetsclick"><td colspan=5>Click to Show/Hide Details</td></tr>
+                            {% with item.types_by_color as styles %}
+                                {% for it in styles.styles %} 
+                                <tr class="variation">
+                                    <td><img class="var_pic" src="{% thumbnail it.list.0.pic "50" as im %}{{im.url}}{% endthumbnail %}"></td>
+                                    <td colspan=4>
+                                        <table>
+                                            <tr><td>Color</td>
+                                                <td colspan={{styles.longest}}>{{it.color}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Size</td>{% for s in it.list %}<td>{{s.size}}</td>{% endfor %}
+                                            </tr>
+                                            <tr>
+                                                <td>Quantity Available</td>{% for s in it.list %}<td>{{s.inv}}</td>{% endfor %}
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% endwith %}
+                        </tbody>
+                    </table>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -107,4 +185,5 @@
     {% endif %}
 </form>
 </div>
-{% endblock %} 
+{% endblock %}
+
