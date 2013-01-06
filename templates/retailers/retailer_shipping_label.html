@@ -57,7 +57,7 @@
     
 
     
-   
+
     
 {% if checkout %}
     <p>This customer has ordered the following items to be shipped to the same address.  Check the items you will include in this shipment.</p>
@@ -65,6 +65,7 @@
 
     <p class="error_msg">{{error_message}}</p>
     <form action="{% url print_shipping_label ref=checkout.ref %}" method="post">
+    {% csrf_token %}
     {% else %}
     {% if shipping_label %}
     <a href="{% url print_packing_slip shipping_number=shipping_label.tracking_number %}">click here for a printable packing slip</a>

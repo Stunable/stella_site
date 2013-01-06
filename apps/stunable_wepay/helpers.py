@@ -32,6 +32,7 @@ class WePayPayment(object):
 
         production = False
         success = []
+        data_success = []
         fail = []
         items = self.cart.cart.item_set.all()
         for item in items:
@@ -60,6 +61,15 @@ class WePayPayment(object):
 
             if response['state'] == "authorized":
                 success.append((item,response))
+                data.update({
+                    'subtotal': item.sub_total,
+                    'grand_total': item.grand_total,
+                    'unit_price':item.unit_price,
+                    'quantity':item.quantity,
+                    'shipping_amount':item.shipping_amount,
+                    'wepay_fees': item.get_additional_fees()
+                }) 
+                data_success.append(data)
             else:
                 fail.append((item,response))
         
@@ -77,19 +87,12 @@ class WePayPayment(object):
                 payment_was_successful.send(sender=wpt, item=item)
 
             
-            data.update({
-                'subtotal': item.sub_total,
-                'grand_total': item.grand_total,
-                'unit_price':item.unit_price,
-                'quantity':item.quantity,
-                'shipping_amount':item.shipping_amount,
-                'wepay_fees': item.get_additional_fees()
-            })            
+                       
 
             email_message = """
                 a new checkout has been created:
                 %s
-            """%str(data)
+            """%str(data_success)
 
             send_mail('new checkout', email_message, settings.DEFAULT_FROM_EMAIL, ['gdamon@gmail.com','admin@stunable.com'])
 
