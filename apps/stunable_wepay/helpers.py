@@ -78,7 +78,7 @@ class WePayPayment(object):
 
             
             data.update({
-                'subtotal': item.subtotal,
+                'subtotal': item.sub_total,
                 'grand_total': item.grand_total,
                 'unit_price':item.unit_price,
                 'quantity':item.quantity,
