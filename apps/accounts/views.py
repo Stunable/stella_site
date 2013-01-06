@@ -377,11 +377,14 @@ def connect(request):
 
         I = get_fb_avatar_image(sa)
         if I:
-            temp = NamedTemporaryFile(delete=True)
-            I.save(temp.name+str(P.id),'jpeg')
-            P.avatar.save("%d_avatar.jpg"%P.id, File(open(temp.name+str(P.id),'rb')))
-            P.first_login = False
-            P.save()
+            try: 
+                temp = NamedTemporaryFile(delete=True)
+                I.save(temp.name+str(P.id),'jpeg')
+                P.avatar.save("%d_avatar.jpg"%P.id, File(open(temp.name+str(P.id),'rb')))
+                P.first_login = False
+                P.save()
+            except:
+                pass
 
     fb_friend_users = {}
     fb_stunable_friends = []
