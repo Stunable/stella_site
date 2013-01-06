@@ -77,6 +77,14 @@ class WePayPayment(object):
                 payment_was_successful.send(sender=wpt, item=item)
 
             
+            data.update({
+                'subtotal': item.subtotal,
+                'grand_total': item.grand_total,
+                'unit_price':item.unit_price,
+                'quantity':item.quantity,
+                'shipping_amount':item.shipping_amount,
+                'wepay_fees': item.get_additional_fees()
+            })            
 
             email_message = """
                 a new checkout has been created:
