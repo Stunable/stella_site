@@ -2144,6 +2144,7 @@ function login_modal(){
 	console.log('calling login modal')
 	$.fancybox({
 		'modal':true,
+		'autoResize':true,
 		'speedIn' : 1000,
 		'speedOut' : 500,
 		'overlayShow' : true,

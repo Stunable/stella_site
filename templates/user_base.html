@@ -26,20 +26,65 @@
 				display: none;
 			}
 
+            body>#login_box{
+                display:none;
+            }
             #login_box{
-                width:500px;
+                width:566px;
+                height:350px;
                 border:1px solid white;
                 border-radius:20px;
-                padding:80px;
-                padding-left:40px;
-                padding-top:40px;
+                overflow:hidden;
+                background-color:rgba(0,0,0,.2);
             }
-            .facebooklogin{
-                border-radius: 8px;
-                width:278px;
-                height:59px;
-                background: url('/static/images/login_with_facebook.png') no-repeat 0px 0px;
-            }
+                #login_box .inner_content{
+                    padding:60px;
+                    padding-left:40px;
+                    padding-right:40px;
+                    height:200px;
+                }
+                    #login_options{
+                        margin-top:50px;
+                        width:100%;
+                        text-align: center;
+                    }
+                        #login_options>div{
+                            display:inline-block;
+                        }
+                        #login_options div{
+                            border-radius: 8px;
+                            width:278px;
+                            height:59px;
+                        }
+                        .facebooklogin{
+
+                            background: url('/static/images/login_with_facebook.png') no-repeat 0px 0px;
+                        }
+
+
+                #login_box .foot{
+                    /*background-color:rgba(255,255,255,.7);*/
+                    border-top:1px solid white;
+                    height:30px;
+                    width:100%;
+                    overflow:hidden;
+                }
+
+                    #login_box .foot a{
+                        vertical-align: middle;
+                        margin:3px 10px 0px 19px;
+                        float:right;
+                        /*background-color:rgba(255,255,255,.1);*/
+                        border-radius: 6px;
+                        padding-left:6px;
+                        padding-right:6px;
+                        font-size:.8em;
+                        /*color:black;*/
+                    }
+                    #login_box .foot a:hover{
+                        color:inherit;
+                    }
+
         </style>
         <script>
             {% if request.user.is_authenticated %}
@@ -362,13 +407,18 @@
         </div>
 
         <div class="special" id="login_box">
-            <div class="content">                           
-            <div id="login_options">
-                <div><a href="/login/facebook/"><div class="facebooklogin" style="cursor:pointer"></div></a></div>
+            <div class="inner_content">
+                <div>
+                    {{CMS.login_explain|safe}}
+                </div>                
+                <div id="login_options">
+                    <div><a href="/login/facebook/"><div class="facebooklogin" style="cursor:pointer"></div></a></div>
+                </div>
             </div>
-                <input type="button" class="btn become-stylelist" value="Become a Stunable Stylist" onclick="document.location.href='/retailers/create_profile'">
+            <div class="foot">
+                <a href="/retailers/create_profile">become a stunable stylist</a>
+                <a href="/accounts/login">stylist login</a>
             </div>
-            </form>
          </div>
         </div>
 
@@ -522,11 +572,12 @@
                       {% endif %}
                       fixDragDropIssue();
                   });
-
+                  {% block login_modal %}
                     if (!logged_in){
                         console.log('not logged in')
                         login_modal()
                     }
+                  {% endblock %}
               })
                 </script>
         {% block rack_scripts %}
