@@ -250,17 +250,17 @@ class Item(models.Model):
 
     @property
     def total_price(self):
-        return self.quantity * self.unit_price
+        return float(self.quantity * self.unit_price)
 
     @property
     def sub_total(self):
         try:
-            return float(self.total_price) + float(self.shipping_amount)
+            return self.total_price + float(self.get_shipping_cost())
         except:
-            return float(self.total_price)
+            return self.total_price
 
     def price_with_shipping(self):
-        return float(self.total_price) + float(self.shipping_amount)
+        return float(self.total_price) + float(self.get_shipping_cost())
 
     @property
     def grand_total(self):
@@ -269,6 +269,19 @@ class Item(models.Model):
     @property
     def cost_minus_shipping(self):
         return float(self.total_price) + self.get_tax_amount() + float(self.get_additional_fees())   
+
+    def get_wepay_amounts(self):
+        wepay_amount = self.total_price
+        # print 'tax amount',self.get_tax_amount()
+        wepay_amount += self.get_tax_amount()
+        wepay_amount += self.get_shipping_cost()
+
+        wepay_order_amount = wepay_amount + self.get_additional_fees(amount=float(wepay_amount))
+        real_wepay_fee = self.get_additional_fees(amount=float(wepay_order_amount))
+        amount_customer_pays = wepay_amount + real_wepay_fee
+
+        return (float(wepay_order_amount),float(amount_customer_pays),float(real_wepay_fee))
+
 
     def is_refundable(self):
         return self.status != "refunded"
@@ -409,20 +422,22 @@ class Item(models.Model):
         else:
             return float(self.total_price) * .05
 
-    def get_shipping_cost(self,recipient_zipcode,refresh=None):
-        retailer= self.get_retailer()
-        if retailer:
-            retailer_zipcode = self.get_retailer().zip_code
-        else:
-            retailer_zipcode = u'10014'
-
+    def get_shipping_cost(self,recipient_zipcode=None,refresh=None):
+        
         if not self.shipping_amount or recipient_zipcode != self.destination_zip_code or refresh:
+            retailer= self.get_retailer()
+            if retailer:
+                retailer_zipcode = self.get_retailer().zip_code
+            else:
+                retailer_zipcode = u'10014'
             self.shipping_amount = fedex_rate_request(shipping_option=self.cart.shipping_method.vendor_tag,weight=self.weight*self.quantity, shipper_zipcode=retailer_zipcode, recipient_zipcode=recipient_zipcode)
             self.save()
-        return self.shipping_amount
+        return float(self.shipping_amount)
 
-    def get_additional_fees(self):
-        return settings.WEPAY_FIXED_FEE + settings.WEPAY_PERCENTAGE*.01 * self.sub_total
+    def get_additional_fees(self, amount=None):
+        if not amount:
+            amount = self.sub_total
+        return settings.WEPAY_FIXED_FEE + settings.WEPAY_PERCENTAGE*.01 * amount
 
 
 from stunable_wepay.signals import payment_was_successful
