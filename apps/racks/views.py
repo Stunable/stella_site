@@ -1000,7 +1000,7 @@ def add_product_image(request):
 @login_required
 def sale_items(request, template="racks/item_list.html"):
     qs = Item.objects.filter(is_onsale=True)
-    ctx = {'items': qs, "title": "Sale items"}
+    ctx = {'items': qs, "title": "On Sale"}
     return direct_to_template(request, template, ctx)
 
 @login_required
@@ -1008,7 +1008,7 @@ def recent_added_items(request, template="racks/item_list.html"):
     today = datetime.date.today()
     thirty_days_ago = today - datetime.timedelta(days=30)
     qs = Item.objects.filter(rack_item__created_date__gte=thirty_days_ago)
-    ctx = {'items': qs, "title": "Your recent added items"}
+    ctx = {'items': qs, "title": "recently added"}
     return direct_to_template(request, template, ctx)
 
 from cart.models import Item as CartItem
@@ -1016,7 +1016,7 @@ from cart.models import Item as CartItem
 @login_required
 def purchased_items(request, template="racks/item_list.html"):
     qs = Item.objects.filter(pk__in=[ci.object_id for ci in CartItem.objects.filter(cart__purchase__purchaser=request.user)])
-    ctx = {'items': qs, "title": "Your purchased items"}
+    ctx = {'items': qs, "title": "purchased"}
     return direct_to_template(request, template, ctx)
 
 @login_required
