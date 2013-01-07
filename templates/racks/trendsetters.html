@@ -67,25 +67,25 @@
                             <input type="text" value="{{ rack.name }}" name="name" />
                             <input type="submit" value="Save" />
                         </form>
+                        {% if request.user == rack.owner %}
+                        <a href="{% url rack_delete rack.id %}" type="button" class="btn" onclick="return confirm('Are you sure you want to delete this rack?')">Delete</a>
+                        {% else %}
+                        <a href="{% url steal_rack rack.pk %}" type="button"class="btn" onclick="return confirm('Are you sure you want to steal this rack?')">Steal</a>
+                        {% endif %}					
+                        <a href="/cart/buy_rack/{{rack.id}}" type="button" class="btn" >Buy</a>
+                           <!--  <div style="text-align: right"> -->
+                            <!-- <a href="{% url racks_detail rack.pk %}?order_by=brand-ascending" {% if order_by == 'brand-ascending' %}class="highlighted"{% endif %}><img src="{{ STATIC_URL }}images/gui/sg_arrow_down.png"/></a>
+                            <span>Brand</span>
+                            <a {% if order_by == 'brand-descending' %}class="highlighted" {% endif %} href="{% url racks_detail rack.pk %}?order_by=brand-descending"><img src="{{ STATIC_URL }}images/gui/sg_arrow_up.png"/> </a>
+                            <a href="{% url racks_detail rack.pk %}?order_by=price-ascending"><img src="{{ STATIC_URL }}images/gui/sg_arrow_down.png"/></a>
+                            <span>Price</span>
+                            <a href="{% url racks_detail rack.pk %}?order_by=price-descending"><img src="{{ STATIC_URL }}images/gui/sg_arrow_up.png"/> </a> -->
+                            <!-- <form action="{% url racks_detail rack.pk %}" method="GET" id="item-filter-form" class="bootstrap">
+                            <input type="text" name="q" id="filter" placeholder="Filter Keyword" style="margin-bottom: 0" />
+                            <input type="submit" value="View" class="btn btn-primary" />
+                            </form> -->
+                         <!--    </div> -->
                         </div>
-                    </div>
-                    {% if request.user == rack.owner %}
-                    <a href="{% url rack_delete rack.id %}" type="button" class="btn" onclick="return confirm('Are you sure you want to delete this rack?')">Delete</a>
-                    {% else %}
-                    <a href="{% url steal_rack rack.pk %}" type="button"class="btn" onclick="return confirm('Are you sure you want to steal this rack?')">Steal</a>
-                    {% endif %}					
-                    <a href="/cart/buy_rack/{{rack.id}}" type="button" class="btn" >Buy</a>
-                    <div style="text-align: center">
-                    <a href="{% url racks_detail rack.pk %}?order_by=brand-ascending" {% if order_by == 'brand-ascending' %}class="highlighted"{% endif %}><img src="{{ STATIC_URL }}images/gui/sg_arrow_down.png"/></a>
-                    <span>Brand</span>
-                    <a {% if order_by == 'brand-descending' %}class="highlighted" {% endif %} href="{% url racks_detail rack.pk %}?order_by=brand-descending"><img src="{{ STATIC_URL }}images/gui/sg_arrow_up.png"/> </a>
-                    <a href="{% url racks_detail rack.pk %}?order_by=price-ascending"><img src="{{ STATIC_URL }}images/gui/sg_arrow_down.png"/></a>
-                    <span>Price</span>
-                    <a href="{% url racks_detail rack.pk %}?order_by=price-descending"><img src="{{ STATIC_URL }}images/gui/sg_arrow_up.png"/> </a>
-                    <form action="{% url racks_detail rack.pk %}" method="GET" id="item-filter-form" class="bootstrap">
-                    <input type="text" name="q" id="filter" placeholder="Filter Keyword" style="margin-bottom: 0" />
-                    <input type="submit" value="View" class="btn btn-primary" />
-                    </form>
                     </div>
                     <div class="separator"></div>
                     <ul class="item-list">
