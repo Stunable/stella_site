@@ -71,11 +71,11 @@
                         </div>
                     </div>
                     {% if request.user == rack.owner %}
-                    <a href="{% url rack_delete rack.id %}" class="head-link delete-link" onclick="return confirm('Are you sure you want to delete this rack?')">Delete this rack</a>
+                    <a href="{% url rack_delete rack.id %}" type="button" class="btn" onclick="return confirm('Are you sure you want to delete this rack?')">Delete</a>
                     {% else %}
-                    <a href="{% url steal_rack rack.pk %}" class="head-link steal-rack-link" onclick="return confirm('Are you sure you want to steal this rack?')">Steal this rack</a>
+                    <a href="{% url steal_rack rack.pk %}" type="button"class="btn" onclick="return confirm('Are you sure you want to steal this rack?')">Steal</a>
                     {% endif %}					
-                    <a href="/cart/buy_rack/{{rack.id}}" class="head-link buy_rack_click" >Buy this rack</a>
+                    <a href="/cart/buy_rack/{{rack.id}}" type="button" class="btn" >Buy</a>
                     <div style="text-align: center">
                     <a href="{% url racks_detail rack.pk %}?order_by=brand-ascending" {% if order_by == 'brand-ascending' %}class="highlighted"{% endif %}><img src="{{ STATIC_URL }}images/gui/sg_arrow_down.png"/></a>
                     <span>Brand</span>
