@@ -52,7 +52,7 @@ body {
 }
 /* Custom sans-serif font = "play" */
 .btn, #global .text-link, form p, label, .tab .text, .rack-list h4, .rack-list li, .share-info .admirers .name, .help .seed p, .static .body-copy p, .static .body-copy li, .feed #page-content .hgroup h3 {
-	font-family:'Play', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family:'Helvetica', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 /* Custom handwriting font = "Nothing You Could Do" */
 h1, h2, h3, p, input.txt, .acct label, .acct .quest, .customStyleSelectBox, #local-nav .text-link, .tab .text-link, .item-actions label, #invitation-form label, #invitation-form1 label, .item-actions .confirmation {
