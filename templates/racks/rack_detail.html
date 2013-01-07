@@ -48,22 +48,21 @@
                 <div class="views" id="rotator">
                     <div class="header">
                         <h1 style="font-size: 2em;text-transform: capitalize;">Your Rack</h1>
-                        <div class="bootstrap">
-                        <h2 class="static" style="font-size: 1.5em;text-transform: uppercase;color: #888;text-align: left;font-weight: 200; padding-bottom:10px">{% if request.user == rack.owner %}<a class="edit" href="#">{{rack.name}}</a>{% endif %}</h2>
+                        <div class="header">
+                        <h2 class="static" style="font-size: 1.5em;text-transform: uppercase;color: #888;text-align: left;font-weight: 100; padding-bottom:10px">{% if request.user == rack.owner %}<a class="edit" href="#">{{rack.name}}</a>{% endif %}</h2>
                         <form action="{% url update_rack_name rack.id %}" method="POST" class="editable form-horizontal" >
                             {% csrf_token %}
                             <input type="text" value="{{ rack.name }}" name="name" />
                             <input type="submit" value="Save" class="btn btn-primary" />
                         </form>
+                        {% if user.username == rack.owner.username %}
+                        <a href="{% url share_modal_view rack.id %}" type="button" class="btn">{% if shared_admirers %} Send It Again {% else %} Share{% endif %}</a>
+                        <a href="{% url rack_delete rack.id %}" type="button" class="btn" onclick="return confirm('Are you sure you want to delete this rack?')">Delete</a>
+                        {% endif %}
+                        <a href="/cart/buy_rack/{{rack.id}}" type="button" class="btn" >Buy</a>
                         </div>
                     </div>
-                    {% if user.username == rack.owner.username %}
-                    <a href="{% url share_modal_view rack.id %}" type="button" class="btn">{% if shared_admirers %} Send It Again {% else %} Share{% endif %}</a>
-                    <a href="{% url rack_delete rack.id %}" type="button" class="btn" onclick="return confirm('Are you sure you want to delete this rack?')">Delete</a>
-                    {% endif %}
-                    <a href="/cart/buy_rack/{{rack.id}}" type="button" class="btn" >Buy</a>
-                    <div style="text-align: center">
-                    <a href="?order_by=brand-ascending" {% if order_by == 'brand-ascending' %}class="highlighted"{% endif %}><img src="{{ STATIC_URL }}images/gui/sg_arrow_down.png"/></a>
+                   <!--  <a href="?order_by=brand-ascending" {% if order_by == 'brand-ascending' %}class="highlighted"{% endif %}><img src="{{ STATIC_URL }}images/gui/sg_arrow_down.png"/></a>
                     Brand
                     <a {% if order_by == 'brand-descending' %}class="highlighted" {% endif %} href="?order_by=brand-descending"><img src="{{ STATIC_URL }}images/gui/sg_arrow_up.png"/> </a>
                     <a href="?order_by=price-ascending"><img src="{{ STATIC_URL }}images/gui/sg_arrow_down.png"/></a>
@@ -73,7 +72,7 @@
                     <input type="text" name="q" id="filter" placeholder="Filter Keyword" style="margin-bottom: 0" />
                     <input type="submit" value="View" class="btn btn-primary" />
                     </form>
-                    </div>
+                    </div> -->
                     <div class="separator"></div>
                     <ul class="item-list">
                         {# for item in rack.rack_items.all #}
