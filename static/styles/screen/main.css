@@ -1228,11 +1228,12 @@ height: 593px;
 
 .left-panel .my-closet-menu li a, .left-panel .list-header a {
 	margin: 0;
-	font-size: 13px;
+	font-size: 14px;
 	color: #F05C68;
 	letter-spacing: 1px;
 	line-height: 20px;
 	font-weight: normal;
+	text-transform: lowercase;
 }
 
 .left-panel .my-closet-menu li a:hover, .left-panel .list-header a:hover {
@@ -1259,7 +1260,7 @@ height: 593px;
 }
 
 .left-panel .friend-search-box[placeholder]  {
-	font-family: 'Advent Pro', sans-serif;
+	font-family: 'Helvetica', sans-serif;
 }
 
 .left-panel .bootstrap .friend-search-box {
