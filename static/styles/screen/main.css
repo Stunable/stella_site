@@ -258,7 +258,7 @@ label {
 	display:block;
 	margin-bottom:10px;
 	/* text-transform:lowercase; */
-	font-family: 'Advent Pro', sans-serif;
+	font-family: 'Helvetica', sans-serif;
 }
 label .identity {
 	text-transform:none;
@@ -272,7 +272,7 @@ input, textarea, option, .customStyleSelectBox {
 input[type="text"], select {
 	text-shadow:none;
 	text-transform:none;
-	font-family: 'Advent Pro', sans-serif;
+	font-family: 'Helvetica', sans-serif;
 	min-height: 20px;
 	border-radius: 8px;
 	border-color: #EEE1EF;
@@ -1155,12 +1155,13 @@ top: 62px;*/
 }
 
 .panel-tab .text-link{
-	font-family: 'Advent Pro', sans-serif;
-	font-size: 13px;
-	font-weight: 500;
+	font-family: 'Helvetica', sans-serif;
+	font-size: 12px;
+	font-weight: 600;
 	color: #7E6A79;
 	cursor: pointer;
 	display: block;
+	text-transform: lowercase;
 }
 
 .active .text-link{
@@ -4175,7 +4176,7 @@ background-color: white;
 .bootstrap button,
 .bootstrap select,
 .bootstrap textarea {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: normal;
   line-height: 18px;
 }

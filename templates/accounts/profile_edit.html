@@ -122,7 +122,7 @@
                 <!-- <a href="#">Take my picture</a> -->
             </p>
             <p>
-                <a class="quest">Select a Profile Photo</a>
+                <!-- <a class="quest">Select a Profile Photo</a> -->
             </p>
         </div>
     </div>
@@ -167,13 +167,13 @@
                 </div></td>
             </tr>
             <tr>
-                <td class="first"><label>Would you like to see Happenings?</label></td>
+                <td class="first"><label>View Happenings?</label></td>
                 <td>
                 <p>
                     <a class="edit">Edit</a>
                 </p>
                 <p class="static">
-                    {% if profile.view_happenings %} Yes, please!{% else %} No, thanks {% endif %}
+                    {% if profile.view_happenings %} On {% else %} Off {% endif %}
                 </p>
                 <div class="editable" style="margin-left: 10px;">
                     <form action="{% url update_profile %}" class="form-horizontal" method="POST" >
