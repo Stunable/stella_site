@@ -114,6 +114,33 @@ def order_history(request, template='cart/order_history.html'):
     return direct_to_template(request, template, ctx)
 
 @login_required
+def order_history(request, template='orders/order_history.html'):
+    ctx = {'purchase_actions': 'orders/user_purchase_actions.html'}
+    try:
+        # shipping_types = ShippingType.objects.all()
+        # ctx = {'retailer_profile': retailer_profile, 'shipping_types': shipping_types, 'form': form}
+    
+        _from = request.GET.get('from')
+        _to = request.GET.get('to')
+
+        checkouts = request.user.purchaser_checkout_set.all()
+        
+        if not _from and not _to:
+            checkouts = checkouts.filter(complete=False)
+        else:
+            if _from:
+                checkouts = checkouts.filter(last_modified__gte=_from)
+            if _to:
+                checkouts = checkouts.filter(last_modified__lte=_to)
+                             
+        ctx['checkouts']= checkouts.order_by('-last_modified')
+    except:
+        raise
+        #login as regular user
+        return redirect(reverse("home"))
+    return direct_to_template(request, template, ctx)
+
+@login_required
 def update_info(request, template="cart/info.html"):
     cart = Cart(request)
     

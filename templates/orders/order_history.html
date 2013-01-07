@@ -7,49 +7,49 @@
 
 {% block content %}
 <style>
-	.common #page-content {
-/*		margin: 41px 10px 200px auto;*/
-		position: relative;
-		padding-bottom: 0;
-		float: right;
-		min-height: 667px;
-	}
-	.common .body-copy {
-		font-family: 'Advent Pro', sans-serif;
-		margin: 0px 40px;
-	}
-	.common td input[type="text"] {
-		width: 40px;
-	}
-	.common th {
-		border: thin solid #EBEBEB;
-		vertical-align: middle;
-		text-align: center;
-		background-color: #eee;
-		font-weight: 600;
-	}
-	.common table, .common .no-border td {
-		border: none;
-	}
-	h3 {
-		text-transform: uppercase;
-		text-align: center;
-	}
-	
-	.bootstrap input {
-		width: 100px;
-	}
-	.order-action ul {
-		position:absolute;top: 0; left:0;display:none;background-color: white;width: 200px;cursor: pointer;
-		border: gray 1px solid;
-	}
-	
-	.order-action ul li {
-	}
-	
-	.order-action {
-		position:relative; cursor: pointer;
-	}
+    .common #page-content {
+/*      margin: 41px 10px 200px auto;*/
+        position: relative;
+        padding-bottom: 0;
+        float: right;
+        min-height: 667px;
+    }
+    .common .body-copy {
+        font-family: 'Advent Pro', sans-serif;
+        margin: 0px 40px;
+    }
+    .common td input[type="text"] {
+        width: 40px;
+    }
+    .common th {
+        border: thin solid #EBEBEB;
+        vertical-align: middle;
+        text-align: center;
+        background-color: #eee;
+        font-weight: 600;
+    }
+    .common table, .common .no-border td {
+        border: none;
+    }
+    h3 {
+        text-transform: uppercase;
+        text-align: center;
+    }
+    
+    .bootstrap input {
+        width: 100px;
+    }
+    .order-action ul {
+        position:absolute;top: 0; left:0;display:none;background-color: white;width: 200px;cursor: pointer;
+        border: gray 1px solid;
+    }
+    
+    .order-action ul li {
+    }
+    
+    .order-action {
+        position:relative; cursor: pointer;
+    }
 </style>
 
 <div class="section-intro">
@@ -97,30 +97,11 @@
                 <td>{{ item.size }}</td>
                 <td>{{ item.color }}</td>
                 <td align="center">{{ item.quantity }}</td>
-                <td><span class="item-status-{{item.pk}}">{{ item.status}}</span><br />
-                	{% if item.status == "shipped" %} tracking no. <span class="item-tracking-no-{{item.pk}}">{% if item.shipping_number %}#{{item.shipping_number}}{% endif %}</span>{% endif %}
+                <td><span class="item-status-{{item.pk}}">{{ purchase.status}}</span><br />
+                    {% if purchase.status == "shipped" %} tracking no. <span class="item-tracking-no-{{item.pk}}">{% if purchase.most_recent_shipment %}#{{purchase.last_tracking_number}}{% endif %}</span>{% endif %}
                 </td>
                 <td>
-                <input type="hidden" class="item-pk" value="{{item.pk}}" />
-                <input type="hidden" class="total-price" value="{{item.total_price}}" />
-                <input type="hidden" class="purchaser-name" value="shopper" />    
-                	<!-- {% if item.actions %}
-                		<select class="order-update">
-                		<option value="">Select</option>
-    	            	{% for action in item.actions %}
-    	            		<option value="{{action.value}}">{{action.name}}</option>
-    	            	{% endfor %}
-    					</select>
-                	{% else %}
-                		NA            	
-                	{% endif %} -->
-                <span>
-                    {% if item.status != "shipped" %}
-                        <a href="{% url print_shipping_label ref=purchase.checkout.ref %}"><strong>get</strong> label</a>
-                    {% else %}
-                        <a href="{% url view_shipping_label shipping_number=item.shipping_number %}"><strong>view</strong> label</a>
-                    {% endif %}
-                </span>
+                    {% include purchase_actions %}
                 </td>
             </tr>
         {% endwith %}

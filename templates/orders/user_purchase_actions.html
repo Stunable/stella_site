@@ -1,0 +1,28 @@
+<input type="hidden" class="item-pk" value="{{item.pk}}" />
+<input type="hidden" class="total-price" value="{{item.total_price}}" />
+<input type="hidden" class="purchaser-name" value="shopper" />    
+    <!-- {% if item.actions %}
+        <select class="order-update">
+        <option value="">Select</option>
+        {% for action in item.actions %}
+            <option value="{{action.value}}">{{action.name}}</option>
+        {% endfor %}
+        </select>
+    {% else %}
+        NA              
+    {% endif %} -->
+<span>
+    {% if purchase.most_recent_shipment.originator == request.user %}
+        {% if purchase.status == "return requested" %}
+            <a href="{% url user_view_shipping_label shipping_number=purchase.last_tracking_number %}"><strong>view</strong> return&nbsplabel</a>
+        {% else %}
+            {{purchase.status}}
+        {% endif %}
+    {% else %}
+        {% if purchase.status == "delivered" %}
+            <a href="{% url user_print_shipping_label ref=purchase.checkout.ref %}">return&nbspitem</a>
+        {% else %}
+            {{purchase.status}}
+        {% endif %}
+    {% endif %}
+</span>

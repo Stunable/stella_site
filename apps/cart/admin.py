@@ -1,5 +1,5 @@
 from django.contrib import admin 
-from apps.cart.models import Cart, Purchase, Checkout,Item,ShippingLabel
+from apps.cart.models import Cart, Purchase, Checkout,Item,Shipment
 from plugins.track_shipment import track_it
 class CartAdmin(admin.ModelAdmin):
     list_display=('__unicode__','checked_out','ref','grand_total')
@@ -7,9 +7,9 @@ class CartAdmin(admin.ModelAdmin):
 admin.site.register(Cart,CartAdmin)
 
 class PurchaseAdmin(admin.ModelAdmin):
-    list_display=('cart','transaction_status','item','shipping_number','delivery_date')
+    list_display=('cart','item','status','last_tracking_number','delivery_date','transaction_status')
     actions = ('track_package','check_payment_status','capture_payment')
-    list_filter=('shipping_number','delivery_date')
+    list_filter=('status',)
 
     def transaction_status(self,instance):
         return instance.transaction.state
@@ -55,4 +55,4 @@ admin.site.register(Checkout,CheckoutAdmin)
 
 
 admin.site.register(Item)
-admin.site.register(ShippingLabel)
+admin.site.register(Shipment)

@@ -99,6 +99,16 @@ class Checkout(models.Model):
             self.ref =base35encode(self.retailer.id+10000)+'S'+base35encode(self.id+10000)
             super(Checkout, self).save()   
 
+PURCHASE_STATUS_CHOICES = (
+    ('placed','placed'), #payment confirmed
+    ('shipped','shipped'), #label printed, fedex confirms drop off
+    ('delivered','delivered'), #fedex confirms delivery at purchaser address
+    ('completed','completed'), #payment captured (should happen settings.ITEM_RETURN_LIMIT days after delivery date)
+    # AFTER THIS CANNOT HAPPEN IF STATUS == COMPLETED
+    ('return requested','return_requested'), #buyer has generated a return shipment label
+    ('return shipped','return_delivered'), #fedex confirmed dropoff/pickup of return shipment
+    ('return completed','return_completed') #fedex confirmed delivery of return item
+)
 
 class Purchase(models.Model):
     item = models.ForeignKey('Item')
@@ -107,10 +117,9 @@ class Purchase(models.Model):
     purchaser = models.ForeignKey(User)
     transaction = models.ForeignKey(WePayTransaction)
     ref = models.CharField(max_length=250, blank=True, null=True)
-    shipping_number = models.CharField(max_length=250, blank=True, null=True)
-    delivery_date = models.DateTimeField(blank=True,null=True)
-    shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
     purchased_at = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=32,choices=PURCHASE_STATUS_CHOICES,default="placed")
+    shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
 
     def save(self,*args, **kwargs):
         pk_before_save = self.pk
@@ -123,9 +132,7 @@ class Purchase(models.Model):
             # notify retailer
             self.notify_retailer()
 
-        if self.shipping_number:
-            #if self.transaction.capture_funds() == 'captured':
-            self.checkout.check_complete()
+        self.checkout.check_complete()
             
     def notify_retailer(self):
         url = u"http://%s%s" % (
@@ -173,14 +180,42 @@ class Purchase(models.Model):
     def release_funds(self):
         pass
 
-            
-class ShippingLabel(models.Model):
-    image = models.ImageField(upload_to="shipping_labels",null=True,blank=True)
+    @property
+    def most_recent_shipment(self):
+        try:
+            return self.shipment_set.all().order_by('-id')[:1][0]
+        except:
+            pass
+
+    @property
+    def last_tracking_number(self):
+        try:
+            return self.most_recent_shipment.tracking_number
+        except:
+            pass
+
+    def delivery_date(self):
+        if self.most_recent_shipment:
+            return self.most_recent_shipment.delivery_date
+
+
+
+class Shipment(models.Model):
+    purchases = models.ManyToManyField('Purchase',blank=True)
     tracking_number = models.CharField(max_length=250, blank=True, null=True)
+    delivery_date = models.DateTimeField(blank=True,null=True)
+    ship_date = models.DateTimeField(blank=True,null=True)
+    label = models.ImageField(upload_to="shipping_labels",null=True,blank=True)
+    status = models.CharField(max_length=128)#this should be taken straight from the shipping vendor
+    originator = models.ForeignKey(User,null=True,blank=True)
+
+    @property
+    def image(self):
+        return self.label
+
 
 class Item(models.Model):
     weight = 1
-
     cart = models.ForeignKey(Cart, verbose_name=_('cart'))
     quantity = models.PositiveIntegerField(verbose_name=_('quantity'))
     size = models.CharField(max_length=100, blank=True, null=True, verbose_name=_("size"))
@@ -200,10 +235,6 @@ class Item(models.Model):
 
 
     objects = ItemManager()
-    
-    shipping_number = models.CharField(max_length=250, blank=True, null=True)
-    shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
-    shipping_label = models.ForeignKey(ShippingLabel,null=True,blank=True)
     status = models.CharField(max_length=250, default="ordered")
 
     class Meta:

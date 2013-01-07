@@ -29,7 +29,7 @@ else:
                              meter_number='104573181',
                              use_test_server=False)
 
-def ship_it(retailer,customer,item_count,shipping_method):
+def ship_it(FROM_address,TO_address,item_count,shipping_method):
     # Set this to the INFO level to see the response from Fedex printed in stdout.
     logging.basicConfig(level=logging.INFO)
 
@@ -54,34 +54,34 @@ def ship_it(retailer,customer,item_count,shipping_method):
     # INDIVIDUAL_PACKAGES, PACKAGE_GROUPS, PACKAGE_SUMMARY 
     #shipment.RequestedShipment.PackageDetail = 'INDIVIDUAL_PACKAGES'
     # Shipper contact info.
-    shipment.RequestedShipment.Shipper.Contact.PersonName = '%s %s'%(retailer.user.first_name,retailer.user.last_name)
-    shipment.RequestedShipment.Shipper.Contact.CompanyName = retailer.name
-    shipment.RequestedShipment.Shipper.Contact.PhoneNumber = retailer.phone_number
+    shipment.RequestedShipment.Shipper.Contact.PersonName = '%s %s'%(FROM_address.firstname,FROM_address.lastname)
+    shipment.RequestedShipment.Shipper.Contact.CompanyName = FROM_address.company_name
+    shipment.RequestedShipment.Shipper.Contact.PhoneNumber = FROM_address.phone
 
     # Shipper address.
-    origin_address = retailer.address1
-    if retailer.address2:
-        origin_address = retailer.address1 + ', ' + retailer.address2
+    origin_address = FROM_address.address1
+    if FROM_address.address2:
+        origin_address = FROM_address.address1 + ', ' + FROM_address.address2
     shipment.RequestedShipment.Shipper.Address.StreetLines = origin_address
-    shipment.RequestedShipment.Shipper.Address.City = retailer.city
-    shipment.RequestedShipment.Shipper.Address.StateOrProvinceCode = retailer.state
-    shipment.RequestedShipment.Shipper.Address.PostalCode = retailer.zip_code
+    shipment.RequestedShipment.Shipper.Address.City = FROM_address.city
+    shipment.RequestedShipment.Shipper.Address.StateOrProvinceCode = FROM_address.state
+    shipment.RequestedShipment.Shipper.Address.PostalCode = FROM_address.zip_code
     shipment.RequestedShipment.Shipper.Address.CountryCode = 'US'
     shipment.RequestedShipment.Shipper.Address.Residential = True
 
     # Recipient contact info.
-    shipment.RequestedShipment.Recipient.Contact.PersonName = '%s %s'%(customer.firstname,customer.lastname)
-    shipment.RequestedShipment.Recipient.Contact.CompanyName = {True:customer.company_name,False:"%s %s"%(customer.firstname,customer.lastname)}[customer.company_name != '']
-    shipment.RequestedShipment.Recipient.Contact.PhoneNumber = customer.phone
+    shipment.RequestedShipment.Recipient.Contact.PersonName = '%s %s'%(TO_address.firstname,TO_address.lastname)
+    shipment.RequestedShipment.Recipient.Contact.CompanyName = {True:TO_address.company_name,False:"%s %s"%(TO_address.firstname,TO_address.lastname)}[TO_address.company_name != '']
+    shipment.RequestedShipment.Recipient.Contact.PhoneNumber = TO_address.phone
 
     # Recipient address
-    dest_address = customer.address1
-    if customer.address2:
-        dest_address = customer.address1 + ', ' + customer.address2
+    dest_address = TO_address.address1
+    if TO_address.address2:
+        dest_address = TO_address.address1 + ', ' + TO_address.address2
     shipment.RequestedShipment.Recipient.Address.StreetLines = dest_address
-    shipment.RequestedShipment.Recipient.Address.City = customer.city
-    shipment.RequestedShipment.Recipient.Address.StateOrProvinceCode = customer.state
-    shipment.RequestedShipment.Recipient.Address.PostalCode = customer.zip_code
+    shipment.RequestedShipment.Recipient.Address.City = TO_address.city
+    shipment.RequestedShipment.Recipient.Address.StateOrProvinceCode = TO_address.state
+    shipment.RequestedShipment.Recipient.Address.PostalCode = TO_address.zip_code
     shipment.RequestedShipment.Recipient.Address.CountryCode = 'US'
     # This is needed to ensure an accurate rate quote with the response.
     shipment.RequestedShipment.Recipient.Address.Residential = {False:False,True:True}[shipping_method=='FEDEX_2_DAY']
