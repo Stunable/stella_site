@@ -25,44 +25,66 @@
 			.hidden {
 				display: none;
 			}
+
+            #login_box{
+                width:500px;
+                border:1px solid white;
+                border-radius:20px;
+                padding:80px;
+                padding-left:40px;
+                padding-top:40px;
+            }
+            .facebooklogin{
+                border-radius: 8px;
+                width:278px;
+                height:59px;
+                background: url('/static/images/login_with_facebook.png') no-repeat 0px 0px;
+            }
         </style>
+        <script>
+            {% if request.user.is_authenticated %}
+                var logged_in = true;
+            {% else %}
+                var logged_in = null;
+            {% endif %}
+        </script>
     </head>
     <body class="internal {% block body_class %}account{% endblock %} gallery" id="{% block body_id %}gallery{% endblock %}">
         {% block facebook %}
-        {% if fb_token %}        
-        <div id="fb-root"></div>
-        <script>
-          window.fbAsyncInit = function() {
-            FB.init({
-              appId      : {{FACEBOOK_APPID}}, // App ID from the App Dashboard
-              channelUrl : 'http://stunable.com/channel.html', // Channel File for x-domain communication
-              status     : true, // check the login status upon init?
-              cookie     : true, // set sessions cookies to allow your server to access the session?
-              xfbml      : true  // parse XFBML tags on this page?
-            });
-            // Additional initialization code such as adding Event Listeners goes here
-          };
+            {% if fb_token %}        
+                <div id="fb-root"></div>
+                <script>
+                  window.fbAsyncInit = function() {
+                    FB.init({
+                      appId      : {{FACEBOOK_APPID}}, // App ID from the App Dashboard
+                      channelUrl : 'http://stunable.com/channel.html', // Channel File for x-domain communication
+                      status     : true, // check the login status upon init?
+                      cookie     : true, // set sessions cookies to allow your server to access the session?
+                      xfbml      : true  // parse XFBML tags on this page?
+                    });
+                    // Additional initialization code such as adding Event Listeners goes here
+                  };
 
-          // Load the SDK's source Asynchronously
-          (function(d, debug){
-             var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-             if (d.getElementById(id)) {return;}
-             js = d.createElement('script'); js.id = id; js.async = true;
-             js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
-             ref.parentNode.insertBefore(js, ref);
-           }(document, /*debug*/ false));
-        </script>
-        <!--[if IE]>
-        <div class="container ie8 ie">
-        <![endif]-->
-        <!--[if IE 7]>
-        <div class="container ie7 ie">
-        <![endif]-->
-        <!--[if lt IE 7]>
-        <div class="container ie6 ie">
-        <![endif]-->
-        <!--[if !IE]><!-->
-        {% endif %}
+                  // Load the SDK's source Asynchronously
+                  (function(d, debug){
+                     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+                     if (d.getElementById(id)) {return;}
+                     js = d.createElement('script'); js.id = id; js.async = true;
+                     js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+                     ref.parentNode.insertBefore(js, ref);
+                   }(document, /*debug*/ false));
+                </script>
+                <!--[if IE]>
+                <div class="container ie8 ie">
+                <![endif]-->
+                <!--[if IE 7]>
+                <div class="container ie7 ie">
+                <![endif]-->
+                <!--[if lt IE 7]>
+                <div class="container ie6 ie">
+                <![endif]-->
+                <!--[if !IE]><!-->
+            {% endif %}
         {% endblock %}
         <div class="container non-ie">
             <!--<![endif]-->
@@ -339,6 +361,17 @@
             </div>
         </div>
 
+        <div class="special" id="login_box">
+            <div class="content">                           
+            <div id="login_options">
+                <div><a href="/login/facebook/"><div class="facebooklogin" style="cursor:pointer"></div></a></div>
+            </div>
+                <input type="button" class="btn become-stylelist" value="Become a Stunable Stylist" onclick="document.location.href='/retailers/create_profile'">
+            </div>
+            </form>
+         </div>
+        </div>
+
 
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/swipe.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/modernizr.js"></script>
@@ -490,6 +523,10 @@
                       fixDragDropIssue();
                   });
 
+                    if (!logged_in){
+                        console.log('not logged in')
+                        login_modal()
+                    }
               })
                 </script>
         {% block rack_scripts %}

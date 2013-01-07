@@ -522,7 +522,7 @@ def divide_into_list(list_item):
     return rack_items_list
 
 @login_required
-def carousel(request, category_id, template='racks/carousel.html'):
+def carousel(request, category_id=None, template='racks/carousel.html'):
     ctx = {}
     profile = get_or_create_profile(request)
     

@@ -269,7 +269,8 @@ CKEDITOR_UPLOAD_PATH = MEDIA_ROOT
 
 FACEBOOK_APP_ID = "397462356974539"
 FACEBOOK_SECRET_KEY = "bdea442bf0c2113602662f7632939d73"
-FACEBOOK_SCOPE = 'publish_stream'
+FACEBOOK_EXTENDED_PERMISSIONS = ['email']
+# FACEBOOK_SCOPE = 'publish_stream'
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
@@ -312,7 +313,7 @@ WAITLIST_ACTIVE = True
 
 NOTICE_TIME_DIFF = 2 #minutes
 
-FACEBOOK_EXTENDED_PERMISSIONS = ['publish_stream, email']
+
 
 EXTERNAL_CONTENT_URL = {
                             'blog':"http://stunable.wordpress.com/",
