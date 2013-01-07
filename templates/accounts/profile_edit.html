@@ -94,14 +94,14 @@
     <h3> {% if profile.user.first_name %}
     <div>
         <span class="static">{{ profile.user.get_full_name }}</span>
-        <div class="editable edit_name" style="margin-left: 10px;">
+        <!-- <div class="editable edit_name" style="margin-left: 10px;">
             <form action="{% url update_profile %}" class="form-horizontal" style="display: inline" method="POST">
                 <input type="text" id="first_name" name="first_name" value="{{ profile.user.first_name }}" />
                 <input type="text" id="last_name" name="last_name" value="{{ profile.user.last_name }}" />
                 <input type="submit" class="btn btn-primary" value="Save"/>
             </form>
         </div>
-        <span> <a style="float: none; font-size: 16px;" class="edit">Edit</a> </span>
+        <span> <a style="float: none; font-size: 16px;" class="edit">Edit</a> </span> -->
     </div> {% endif %} </h3>
 </div>
 <div class="section body-copy bootstrap">

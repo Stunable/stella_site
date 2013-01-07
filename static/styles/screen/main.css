@@ -91,7 +91,7 @@ textarea,
 h2 {
 	margin:0 0 0.25em 0;
 	font-size:2.5em;
-	font-weight: bold;
+/*	font-weight: bold;*/
 	line-height:1;
 	text-align:center;
 }
@@ -3984,8 +3984,8 @@ background-color: white;
 }
 .common h2 span{
 	background-color: white;
-	font-family: 'Advent Pro', sans-serif;
-	font-weight: 600;
+	font-family: 'Helvetica', sans-serif;
+	font-weight: 200;
 	font-size: 25px;
 	color: gray;
 }
