@@ -30,7 +30,7 @@ WEPAY_CLIENT_SECRET = "cf356f0e63"
 WEPAY_PRODUCTION = True
 WEPAY_STAGE = "production"
 
-LOGIN_URL = '/accounts/login/'
+LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/accounts/connect/'
 LOGIN_ERROR_URL = '/login/'
 
