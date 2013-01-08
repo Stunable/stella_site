@@ -12,7 +12,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-size: 100%;
+	font-size: 80%;
 	font: inherit;
 	vertical-align: baseline;
 }
@@ -137,7 +137,8 @@ input.btn {
 	font-size:0.85em;
 }
 #footer p {
-	margin:0 30px;
+	margin:0 450px;
+	font-size: 10px;
 }
 strong {
 	color: #444;
@@ -1111,8 +1112,8 @@ top: 62px;*/
 	text-align:center;
 	text-transform:uppercase;
 	font-size: 13.2px;
-	font-weight: 500;
-	letter-spacing:2px;
+	font-weight: 200;
+	letter-spacing:.5px;
 }
 .tab .text-link .identity, .tab .text .identity, .tab form .identity { 
 	text-transform:uppercase;
@@ -1155,13 +1156,13 @@ top: 62px;*/
 }
 
 .panel-tab .text-link{
-	font-family: 'Helvetica', sans-serif;
-	font-size: 12px;
-	font-weight: 600;
+	font-family: 'Advent Pro', sans-serif;
+	font-size: 12.5px;
+	font-weight: 500;
 	color: #7E6A79;
 	cursor: pointer;
 	display: block;
-	text-transform: lowercase;
+	text-transform: uppercase;
 }
 
 .active .text-link{
@@ -1635,7 +1636,7 @@ a.friend-name{
 
 #fancybox-outer .item-details .description{
 	margin-top: 30px;
-	text-transform: uppercase;
+/*	text-transform: uppercase;*/
 	color: #0a0a0a;
 	min-height: 149px;
 }
