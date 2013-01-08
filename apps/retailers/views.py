@@ -16,6 +16,9 @@ from cart.models import Item as CartItem, Purchase,Shipment,Checkout
 import datetime
 from django.http import HttpResponse,HttpResponseRedirect
 from apps.racks.forms import item_inventory_form_factory
+
+from apps.cms.models import SiteTextContent
+
 from django.forms.models import inlineformset_factory
 from apps.racks.models import ItemType,ProductImage
 from apps.common.forms import AjaxBaseForm
@@ -575,6 +578,12 @@ def print_packing_slip(request, shipping_number=None, template='retailers/print_
         # items = [p.item for p in shipment.purchases.all()]
         purchases = shipment.purchases.all()
         # ctx.update({'retailer_profile': retailer_profile})
+        try:
+            retailer_profile = RetailerProfile.objects.get(user=request.user)
+            ctx['packing_slip_text'] = SiteTextContent.objects.get(item_name='packing_slip_retailer')
+        except:
+            ctx['packing_slip_text'] = SiteTextContent.objects.get(item_name='packing_slip_customer')
+
 
         ctx['shipping_label'] = shipment
         ctx['purchases']= purchases

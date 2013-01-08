@@ -83,18 +83,10 @@ ol li{
     <hr class='dashes'>
 
     <h3>Stunable</h3>
-    <h4>Thank you for shopping with us</h4>
-
-    <div class="left">Making a return or exchange is easy. You have 14 days to decide whether to keep your items. If you would like to return them, simply follow the instructions below:</div>
-    <ol>
-    <li>) Log in to your Stunable.com account and navigate to your order history page at: http://stunable.com{% url order_history %}</li>
-    <li>) Print the shipping label for the product you wish to return</li>
-    <li>) Drop off your package at a local FedEx ship center or feel free to arrange a pickup at fedex.com</li>
-    </ol>
-
-    For more information on our returns policy, please refer to http://stunable.com/returns
-
-    <p><strong>NEED HELP?</strong> Call 1 860 966 4332 or email support@stunable.com 24 hours a day, seven days a week</p>
+    <div id="packing_slip_text">
+        {{ packing_slip_text.html|safe }}
+    </div>
+    
 
 </div>
 
