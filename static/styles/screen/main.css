@@ -12,7 +12,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-size: 100%;
+	font-size: 80%;
 	font: inherit;
 	vertical-align: baseline;
 }
@@ -52,12 +52,12 @@ body {
 }
 /* Custom sans-serif font = "play" */
 .btn, #global .text-link, form p, label, .tab .text, .rack-list h4, .rack-list li, .share-info .admirers .name, .help .seed p, .static .body-copy p, .static .body-copy li, .feed #page-content .hgroup h3 {
-	font-family:'Play', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family:'Helvetica', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 /* Custom handwriting font = "Nothing You Could Do" */
 h1, h2, h3, p, input.txt, .acct label, .acct .quest, .customStyleSelectBox, #local-nav .text-link, .tab .text-link, .item-actions label, #invitation-form label, #invitation-form1 label, .item-actions .confirmation {
 /*	font-family:'Nothing You Could Do', Georgia, serif;*/
-	font-family: 'Advent Pro', sans-serif;
+	font-family: 'Helvetica', sans-serif;
 }
 /* Standard sans-serif font = "Helvetica Neue/Helvetica" */
 textarea,
@@ -91,7 +91,7 @@ textarea,
 h2 {
 	margin:0 0 0.25em 0;
 	font-size:2.5em;
-	font-weight: bold;
+/*	font-weight: bold;*/
 	line-height:1;
 	text-align:center;
 }
@@ -137,7 +137,8 @@ input.btn {
 	font-size:0.85em;
 }
 #footer p {
-	margin:0 30px;
+	margin:0 450px;
+	font-size: 10px;
 }
 strong {
 	color: #444;
@@ -258,7 +259,7 @@ label {
 	display:block;
 	margin-bottom:10px;
 	/* text-transform:lowercase; */
-	font-family: 'Advent Pro', sans-serif;
+	font-family: 'Helvetica', sans-serif;
 }
 label .identity {
 	text-transform:none;
@@ -272,7 +273,7 @@ input, textarea, option, .customStyleSelectBox {
 input[type="text"], select {
 	text-shadow:none;
 	text-transform:none;
-	font-family: 'Advent Pro', sans-serif;
+	font-family: 'Helvetica', sans-serif;
 	min-height: 20px;
 	border-radius: 8px;
 	border-color: #EEE1EF;
@@ -954,10 +955,10 @@ body {
 	color: #8E788D;
 	text-transform: uppercase;
 	font-size: 12px;
-	font-weight: 500;
+	font-weight: 100;
 	line-height: 26px;
 	vertical-align: middle;
-	letter-spacing: 2px;
+	letter-spacing: 1px;
 }
 .landing #local-nav .text-link {
 	color:#E84E4B;
@@ -1111,8 +1112,8 @@ top: 62px;*/
 	text-align:center;
 	text-transform:uppercase;
 	font-size: 13.2px;
-	font-weight: 500;
-	letter-spacing:2px;
+	font-weight: 200;
+	letter-spacing:.5px;
 }
 .tab .text-link .identity, .tab .text .identity, .tab form .identity { 
 	text-transform:uppercase;
@@ -1156,11 +1157,12 @@ top: 62px;*/
 
 .panel-tab .text-link{
 	font-family: 'Advent Pro', sans-serif;
-	font-size: 13px;
+	font-size: 12.5px;
 	font-weight: 500;
 	color: #7E6A79;
 	cursor: pointer;
 	display: block;
+	text-transform: uppercase;
 }
 
 .active .text-link{
@@ -1228,11 +1230,12 @@ height: 593px;
 
 .left-panel .my-closet-menu li a, .left-panel .list-header a {
 	margin: 0;
-	font-size: 13px;
+	font-size: 14px;
 	color: #F05C68;
 	letter-spacing: 1px;
 	line-height: 20px;
 	font-weight: normal;
+	text-transform: lowercase;
 }
 
 .left-panel .my-closet-menu li a:hover, .left-panel .list-header a:hover {
@@ -1259,7 +1262,7 @@ height: 593px;
 }
 
 .left-panel .friend-search-box[placeholder]  {
-	font-family: 'Advent Pro', sans-serif;
+	font-family: 'Helvetica', sans-serif;
 }
 
 .left-panel .bootstrap .friend-search-box {
@@ -1633,7 +1636,7 @@ a.friend-name{
 
 #fancybox-outer .item-details .description{
 	margin-top: 30px;
-	text-transform: uppercase;
+/*	text-transform: uppercase;*/
 	color: #0a0a0a;
 	min-height: 149px;
 }
@@ -3983,8 +3986,8 @@ background-color: white;
 }
 .common h2 span{
 	background-color: white;
-	font-family: 'Advent Pro', sans-serif;
-	font-weight: 600;
+	font-family: 'Helvetica', sans-serif;
+	font-weight: 200;
 	font-size: 25px;
 	color: gray;
 }
@@ -4089,7 +4092,9 @@ background-color: white;
 }
 .user_info .username {
 	font-size: 13px;
+	text-transform: lowercase;
 	font-weight: bold;
+
 }
 .user_info table tr {
 	line-height: 15px;
@@ -4172,7 +4177,7 @@ background-color: white;
 .bootstrap button,
 .bootstrap select,
 .bootstrap textarea {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: normal;
   line-height: 18px;
 }

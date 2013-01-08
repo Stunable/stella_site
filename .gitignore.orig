@@ -18,4 +18,14 @@ dev.py
 
 hack.py
 
+<<<<<<< HEAD
+sqlite_data.sql
+
 *.sql
+
+*.sql
+
+sqlite_data.sql
+=======
+*.sql
+>>>>>>> ca5e664ce4d56c43286a471de0e9dfa1bc5c8fbc

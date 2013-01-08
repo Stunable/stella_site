@@ -1,6 +1,6 @@
 {% extends "retailers/retailer_base.html" %}
 
-{% block title %} Stunable | Retailer Administration {% endblock %}
+{% block title %} Stunable | Stylist Administration {% endblock %}
 
 {% block body_class %}common large_common pad-bottom{% endblock %}
 {% block content-class%}round-corner-shadow{%endblock%}
@@ -47,7 +47,7 @@
 </style>
 
 <div class="section intro clearfix">
-    <h2><span>{% if upload %}Upload: {{upload.filename}}{% else %}Product List{% endif %}</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
+    <h2><span>{% if upload %}Upload: {{upload.filename}}{% else %}Product Inventory{% endif %}</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
 </div>
 <div class="section body-copy bootstrap">
     
