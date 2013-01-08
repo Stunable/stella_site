@@ -26,7 +26,7 @@
 		<div class="separator"></div>
 		<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{% url welcome %}{% endif %}" />
 		<input type="submit" class="btn" value="Login" />
-		<div onclick="document.location.href='{% url socialauth_begin "facebook" %}{% if next %}?next={{ next }}{%endif%}'" class="input-wrapper" style="cursor:pointer"><input type="button" class="btn" value="Login With Facebook" /></div>
+		
 		<div class="forgot-pass">
 			<a href="{% url auth_password_reset %}" title="Click here to retrieve your password."><span style="display: block">-- FORGOT PASSWORD? --</span></a>
 		</div>
@@ -44,30 +44,6 @@
 	</center>
 
 	<form class="clearfix">
-
-	<div class="sign-up first">
-		<div class="sign-up-header clearfix">
-			SIGN UP
-		</div>
-		<a class="big-icon sign-up-icon" href="{% url account_create %}">
-		<!--<a class="big-icon sign-up-icon" href="{% url invite_waitlist %}">-->
-		</a>
-	</div>
-	<div class="sign-up">
-		<div class="sign-up-header clearfix">
-			SIGN UP WITH
-		</div>
-		<a class="big-icon sign-up-fb-icon" href="{% url socialauth_begin "facebook" %}{% if next %}?next={{ next }}{%endif%}">
-<!-- 		<a class="big-icon sign-up-fb-icon" href="{% url invite_waitlist %}"> -->
-		</a>
-	</div>
-	<div class="sign-up last">
-		<div class="sign-up-header clearfix">
-		  REQUEST INVITE	
-		</div>
-		<a class="big-icon sign-up-request-icon" href="{% url invite_waitlist %}">
-		</a>
-	</div>
 	<div class="sub-form" >
 		<p class="own-show">
 			Run your own show
@@ -141,4 +117,7 @@
 		});
 	})
 </script>
+{% endblock %}
+
+{% block login_modal %}
 {% endblock %}

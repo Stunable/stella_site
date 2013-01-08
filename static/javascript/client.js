@@ -1005,7 +1005,7 @@ function getCookie(name) {
 		for(var i = 0; i < cookies.length; i++) {
 			var cookie = jQuery.trim(cookies[i]);
 			// Does this cookie string begin with the name we want?
-			if(cookie.substring(0, name.length + 1) == (name + '=')) {
+			if(cookie.substring(0, name.length + 1) == (name + '=')){
 				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
 				break;
 			}
@@ -2139,12 +2139,33 @@ function stella_request_refund_item(item_id, transaction) {
   	});
 }
 
-function not_logged_in(){
-	return false
-}
 
 function login_modal(){
-	initFancyBox('#social_login_box ');
+	console.log('calling login modal')
+	$.fancybox({
+		'modal':true,
+		'autoResize':true,
+		'speedIn' : 1000,
+		'speedOut' : 500,
+		'overlayShow' : true,
+		'overlayOpacity' : 0.85,
+		'titleShow' : false,
+		'overlayColor' : '#000',
+		'transitionIn' : 'elastic',
+		'transitionOut' : 'elastic',
+		'easingIn' : 'easeOutBack',
+		'easingOut' : 'easeInBack',
+	     'href' : '#login_box',
+	     'onStart' : function() {
+
+		 },
+		 'onCleanup' : function() {
+			
+		},
+		'onClosed': function(){
+			
+		}
+	  });
 }
 
 function hookupFBMessages(STATIC_URL,URL){

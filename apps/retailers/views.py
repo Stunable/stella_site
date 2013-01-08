@@ -12,10 +12,13 @@ from apps.common import json_view
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files import File
 
-from cart.models import Item as CartItem, Purchase,ShippingLabel
+from cart.models import Item as CartItem, Purchase,Shipment,Checkout
 import datetime
 from django.http import HttpResponse,HttpResponseRedirect
 from apps.racks.forms import item_inventory_form_factory
+
+from apps.cms.models import SiteTextContent
+
 from django.forms.models import inlineformset_factory
 from apps.racks.models import ItemType,ProductImage
 from apps.common.forms import AjaxBaseForm
@@ -415,13 +418,13 @@ def retailer_modal(request, item_id, template="retailers/retailer_information_mo
     return direct_to_template(request, template, {'retailer_profile': retailer_profile})    
 
 @login_required
-def order_history(request, template='retailers/order_history.html'):
-    ctx = {}
+def order_history(request, template='orders/order_history.html'):
+    ctx = {'purchase_actions': 'orders/retailer_purchase_actions.html'}
     try:
         retailer_profile = RetailerProfile.objects.get(user=request.user)
         shipping_types = ShippingType.objects.all()
         form = RetailerEditForm(instance=retailer_profile)
-        ctx = {'retailer_profile': retailer_profile, 'shipping_types': shipping_types, 'form': form}
+        ctx.update({'retailer_profile': retailer_profile, 'shipping_types': shipping_types, 'form': form})
     
         _from = request.GET.get('from')
         _to = request.GET.get('to')
@@ -504,13 +507,25 @@ def item_action(request, template="retailers/product_list.html"):
             return redirect(reverse("product_list"))
 
 @login_required
-def print_shipping_label(request, ref=None, template='retailers/retailer_shipping_label.html'):
+def create_shipping_label(request, ref=None, template='retailers/retailer_shipping_label.html'):
     ctx = {}
     try:
-        checkout = request.user.retailer_checkout_set.all().filter(ref=ref)[0]
+        checkout = Checkout.objects.get(ref=ref)
+
+        if request.user == checkout.purchaser:
+            sender = ShippingInfo.objects.get(customer=request.user.get_profile(),is_default=True)
+            receiver = RetailerProfile.objects.get(user=checkout.retailer)
+            purchase_status = 'return requested'
+            redirect_url = "order_history"
+        elif request.user == checkout.retailer:
+            sender = RetailerProfile.objects.get(user=checkout.retailer)
+            receiver = ShippingInfo.objects.get(customer=checkout.purchaser.get_profile(),is_default=True)
+            purchase_status = 'placed'
+            redirect_url = "retailer_order_history"
+        else:
+            raise
+
         purchases = checkout.purchase_set.all()
-        purchase = purchases[0]
-        retailer_profile = RetailerProfile.objects.get(user=request.user)
         ctx['checkout'] = checkout
     except:
         raise
@@ -523,29 +538,30 @@ def print_shipping_label(request, ref=None, template='retailers/retailer_shippin
             print 'error'
         else:
             item_count = len(purchase_list)
-            tracking_number,label = ship_it(retailer_profile,ShippingInfo.objects.get(customer=purchase.purchaser.get_profile(),is_default=True),item_count,purchase.shipping_method.vendor_tag)
+            tracking_number,label = ship_it(sender,receiver,item_count,purchases[0].shipping_method.vendor_tag)
 
             if os.path.exists(label):
                 f = File(open(label,'rb'))
-                label = ShippingLabel.objects.create()
-                label.image.save(tracking_number+'.png', f)
-                label.tracking_number = tracking_number
-                label.save()
+                shipment = Shipment.objects.create()
+                shipment.originator = request.user
+                shipment.label.save(tracking_number+'.png', f)
+                shipment.tracking_number = tracking_number
+                
 
                 for purchase_id in purchase_list:
                     purchase = purchases.filter(id=purchase_id)[0]
-                    purchase.shipping_number = tracking_number
+                    purchase.status = purchase_status
                     purchase.save()
-                    
-                    item = purchase.item
-                    item.shipping_number = tracking_number
-                    item.shipping_label = label
-                    item.status = "shipped"
-                    item.save()
 
-            ctx['shipping_label'] = label
+                    shipment.purchases.add(purchase)
+                    print 'adding purchase to shipment',purchase,shipment
+
+                shipment.save()
+
+                return redirect(reverse(redirect_url))
+
+            ctx['shipment'] = shipment
     try:
-        ctx.update({'retailer_profile': retailer_profile})
         ctx['purchases']= purchases
     except:
         raise
@@ -557,12 +573,19 @@ def print_shipping_label(request, ref=None, template='retailers/retailer_shippin
 def print_packing_slip(request, shipping_number=None, template='retailers/print_packing_slip.html'):
     ctx={}
     try:
-        retailer_profile = RetailerProfile.objects.get(user=request.user)
-        items = CartItem.objects.filter(shipping_number=shipping_number)
-        purchases = [{'item':each_item} for each_item in items]
-        ctx.update({'retailer_profile': retailer_profile})
+        # retailer_profile = RetailerProfile.objects.get(user=request.user)
+        shipment = Shipment.objects.get(tracking_number = shipping_number)
+        # items = [p.item for p in shipment.purchases.all()]
+        purchases = shipment.purchases.all()
+        # ctx.update({'retailer_profile': retailer_profile})
+        try:
+            retailer_profile = RetailerProfile.objects.get(user=request.user)
+            ctx['packing_slip_text'] = SiteTextContent.objects.get(item_name='packing_slip_retailer')
+        except:
+            ctx['packing_slip_text'] = SiteTextContent.objects.get(item_name='packing_slip_customer')
 
-        ctx['shipping_label'] = ShippingLabel.objects.get(tracking_number=shipping_number)
+
+        ctx['shipping_label'] = shipment
         ctx['purchases']= purchases
     except:
         raise
@@ -573,12 +596,12 @@ def print_packing_slip(request, shipping_number=None, template='retailers/print_
 def view_shipping_label(request, shipping_number=None,template='retailers/retailer_shipping_label.html'):
     ctx={}
     try:
-        retailer_profile = RetailerProfile.objects.get(user=request.user)
-        items = CartItem.objects.filter(shipping_number=shipping_number)
-        purchases = [{'item':each_item} for each_item in items]
-        ctx.update({'retailer_profile': retailer_profile})
+        shipment = Shipment.objects.get(tracking_number = shipping_number)
+        # items = [p.item for p in shipment.purchases.all()]
+        purchases = shipment.purchases.all()
+        # ctx.update({'retailer_profile': retailer_profile})
 
-        ctx['shipping_label'] = ShippingLabel.objects.get(tracking_number=shipping_number)
+        ctx['shipping_label'] = shipment
         ctx['purchases']= purchases
     except:
         raise

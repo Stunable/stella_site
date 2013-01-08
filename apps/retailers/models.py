@@ -119,6 +119,22 @@ class RetailerProfile(models.Model):
 #                send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [self.email_address])
                 send_mail(subject, email_message, settings.STELLA_DEFAULT_EMAIL, [self.email_address])
         super(RetailerProfile, self).save()
+
+    @property
+    def firstname(self):
+        return self.user.first_name
+
+    @property
+    def lastname(self):
+        return self.user.last_name
+
+    @property
+    def company_name(self):
+        return self.name
+
+    @property
+    def phone(self):
+        return self.phone_number
         
 class StylistItem(models.Model):
     stylist = models.ForeignKey(User)

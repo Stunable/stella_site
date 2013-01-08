@@ -1,0 +1,20 @@
+<input type="hidden" class="item-pk" value="{{item.pk}}" />
+<input type="hidden" class="total-price" value="{{item.total_price}}" />
+<input type="hidden" class="purchaser-name" value="shopper" />    
+    <!-- {% if item.actions %}
+        <select class="order-update">
+        <option value="">Select</option>
+        {% for action in item.actions %}
+            <option value="{{action.value}}">{{action.name}}</option>
+        {% endfor %}
+        </select>
+    {% else %}
+        NA              
+    {% endif %} -->
+<span>
+    {% if purchase.last_tracking_number %}
+        <a href="{% url view_shipping_label shipping_number=purchase.last_tracking_number %}"><strong>view</strong> label</a>  
+    {% else %}
+        <a href="{% url print_shipping_label ref=purchase.checkout.ref %}"><strong>get</strong> label</a>
+    {% endif %}
+</span>

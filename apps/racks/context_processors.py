@@ -7,6 +7,7 @@ from django.conf import settings
 
 def racks(request):
     context = {'URL':settings.WWW_ROOT,'STATIC_URL':settings.STATIC_URL}
+    context['FACEBOOK_APPID'] = settings.FACEBOOK_APP_ID
     user = request.user
     if not user.is_authenticated():
         context['public_racks'] = Rack.objects.filter(anon_user_profile=request.session.get('anonymous_profile'))
@@ -25,7 +26,6 @@ def racks(request):
         else:
             context['fb_friend_list'] = fb_stunable_friends+fb_friends
         context['fb_token'] = request.session['fb_token']
-        context['FACEBOOK_APPID'] = settings.FACEBOOK_APP_ID
     if 'cart' in request.META.get('PATH_INFO'):
         context['cart'] = Cart(request)
     return context

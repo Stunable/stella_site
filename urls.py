@@ -20,8 +20,7 @@ admin.autodiscover() # enables admin
 
 urlpatterns = patterns('',
                        url(r'^$', 
-                           redirect_to,
-                           {'url': '/racks/carousel/all', 'permanent': False},
+                           'apps.racks.views._all',
                            name="home"),
                        url(r'', include('social_auth.urls')),
                        url(r'^registration/', include('apps.registration.urls')),

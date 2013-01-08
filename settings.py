@@ -269,7 +269,8 @@ CKEDITOR_UPLOAD_PATH = MEDIA_ROOT
 
 FACEBOOK_APP_ID = "397462356974539"
 FACEBOOK_SECRET_KEY = "bdea442bf0c2113602662f7632939d73"
-FACEBOOK_SCOPE = 'publish_stream'
+FACEBOOK_EXTENDED_PERMISSIONS = ['email']
+# FACEBOOK_SCOPE = 'publish_stream'
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
@@ -301,7 +302,7 @@ PAYPAL_RECEIVER_EMAIL = "thanh_1346909527_biz@simpleunion.com"
 WEPAY_FIXED_FEE = .30
 WEPAY_PERCENTAGE = 2.9
 
-
+ITEM_RETURN_LIMIT = 14#days
 
 PAYPAL_MECHANT_ACCOUNT_ID ='VR92K8L7B4U7U'
 TAX_RATE = 0.1
@@ -312,7 +313,7 @@ WAITLIST_ACTIVE = True
 
 NOTICE_TIME_DIFF = 2 #minutes
 
-FACEBOOK_EXTENDED_PERMISSIONS = ['publish_stream, email']
+
 
 EXTERNAL_CONTENT_URL = {
                             'blog':"http://stunable.wordpress.com/",

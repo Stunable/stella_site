@@ -522,25 +522,25 @@ def divide_into_list(list_item):
     return rack_items_list
 
 @login_required
-def carousel(request, category_id, template='racks/carousel.html'):
+def carousel(request, category_id=None, template='racks/carousel.html'):
     ctx = {}
     profile = get_or_create_profile(request)
     
-    if not profile.favourite_designer:
-        return redirect(reverse('welcome'))
-    else:
-        ctx['categories'] = Category.objects.all()
-        if category_id:
-            current_category = get_object_or_404(Category, pk=category_id)
-            ctx['current_category'] = current_category
-            get_context_variables(ctx, request)
-            
-            if settings.IS_PROD:
-                query_set = Item.objects.filter(category=current_category, approved=True)
-            else:
-                query_set = Item.objects.filter(category=current_category)
-            
-            return pagination(request, ctx, template, query_set)
+    # if not profile.favourite_designer:
+    #     return redirect(reverse('welcome'))
+    # else:
+    ctx['categories'] = Category.objects.all()
+    if category_id:
+        current_category = get_object_or_404(Category, pk=category_id)
+        ctx['current_category'] = current_category
+        get_context_variables(ctx, request)
+        
+        if settings.IS_PROD:
+            query_set = Item.objects.filter(category=current_category, approved=True)
+        else:
+            query_set = Item.objects.filter(category=current_category)
+        
+        return pagination(request, ctx, template, query_set)
 
 @login_required
 def stella_choice(request, template='racks/carousel.html'):
@@ -636,24 +636,24 @@ def _all(request, template='racks/carousel.html'):
             profile = request.session.get('anonymous_profile')
             print profile.first_login
 
-    if not profile:
-        return redirect(reverse('welcome'))
-    if not profile.favourite_designer:
-        return redirect(reverse('welcome'))
-    else:
-        ctx = {}
-        ctx['categories'] = Category.objects.all()
-        ctx['current'] = "all"
-        get_context_variables(ctx, request)
-        
-        if not query_set:
-            # if settings.IS_PROD:
-                #print "PROD"
-                query_set = Item.objects.filter(approved=True,is_available=True).order_by('?')
-            # else:
-                # query_set = Item.objects.all().order_by('?')
-        
-        return pagination(request, ctx, template, query_set)
+    # if not profile:
+    #     return redirect(reverse('welcome'))
+    # if not profile.favourite_designer:
+    #     return redirect(reverse('welcome'))
+    # else:
+    ctx = {}
+    ctx['categories'] = Category.objects.all()
+    ctx['current'] = "all"
+    get_context_variables(ctx, request)
+    
+    if not query_set:
+        # if settings.IS_PROD:
+            #print "PROD"
+            query_set = Item.objects.filter(approved=True,is_available=True).order_by('?')
+        # else:
+            # query_set = Item.objects.all().order_by('?')
+    
+    return pagination(request, ctx, template, query_set)
             
 #    return direct_to_template(request, template, ctx)
 

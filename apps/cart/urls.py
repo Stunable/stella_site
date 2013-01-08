@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from apps.retailers.views import create_shipping_label,view_shipping_label,print_packing_slip
 
 
 urlpatterns = patterns('cart.views',
@@ -58,4 +59,8 @@ urlpatterns = patterns('cart.views',
         view='wpp_reference_pay',
         name='wpp_reference_pay'
     ),
+    url(r'^print_shipping_label/(?P<ref>\w+)', create_shipping_label, name='user_print_shipping_label'),
+    url(r'^view_shipping_label/(?P<shipping_number>\w+)', view_shipping_label, name='user_view_shipping_label'),
+    url(r'^print_packing_slip/(?P<shipping_number>\w+)',print_packing_slip, name='user_print_packing_slip'),
+
 )
