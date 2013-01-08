@@ -35,7 +35,7 @@
                 border:1px solid white;
                 border-radius:20px;
                 overflow:hidden;
-                background-color:rgba(0,0,0,.2);
+                background-color:rgba(255,255,255,1);
             }
                 #login_box .inner_content{
                     padding:60px;
@@ -96,7 +96,7 @@
     </head>
     <body class="internal {% block body_class %}account{% endblock %} gallery" id="{% block body_id %}gallery{% endblock %}">
         {% block facebook %}
-            {% if fb_token %}        
+             
                 <div id="fb-root"></div>
                 <script>
                   window.fbAsyncInit = function() {
@@ -129,7 +129,7 @@
                 <div class="container ie6 ie">
                 <![endif]-->
                 <!--[if !IE]><!-->
-            {% endif %}
+            
         {% endblock %}
         <div class="container non-ie">
             <!--<![endif]-->
@@ -407,13 +407,17 @@
         </div>
 
         <div class="special" id="login_box">
+            
             <div class="inner_content">
                 <div>
                     {{CMS.login_explain|safe}}
                 </div>                
                 <div id="login_options">
-                    <div><a href="/login/facebook/"><div class="facebooklogin" style="cursor:pointer"></div></a></div>
+                    <div><a href="/login/facebook/"><div class="facebooklogin" style="cursor:pointer"></div></a>
+                    </div>
+                    <div class="fb-login-button" data-show-faces="true" data-width="500" data-max-rows="1"></div>
                 </div>
+                
             </div>
             <div class="foot">
                 <a href="/retailers/create_profile">become a stunable stylist</a>

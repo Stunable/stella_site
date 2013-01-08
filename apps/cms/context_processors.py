@@ -13,6 +13,6 @@ def CMS(request):
     for e in cms_entries:
         out[e.item_name] = e.html
         if e.html == 'cms content placeholder':
-            out[e.item_name] = e.html+ ':<a href="/admin/cms/sitetextcontent/'+str(e.id)+'/">'+e.item_name+'</a>'
+            out[e.item_name] = e.html+ ':<a href="/admin/CMS/sitetextcontent/'+str(e.id)+'/">'+e.item_name+'</a>'
     
     return {'CMS':out}
