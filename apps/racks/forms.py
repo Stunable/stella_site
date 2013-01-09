@@ -126,13 +126,14 @@ def item_inventory_form_factory(retailer):
             
         def clean_inventory(self):
             inventory = self.cleaned_data.get('inventory')
-            if int(inventory) < 1:
-                raise forms.ValidationError("Inventory must be positive number.")
+            if int(inventory) < 0:
+                raise forms.ValidationError("Inventory must be positive number or zero.")
             return self.cleaned_data.get('inventory')
 
         def clean_is_onsale(self):
             if self.cleaned_data.get('is_onsale'):
                 self.fields['sale_price'].required = True
+            return self.cleaned_data.get('is_onsale')
 
         # def clean_inventory(self):
         #     inventory = self.cleaned_data.get('inventory')
