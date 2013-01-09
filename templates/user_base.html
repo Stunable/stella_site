@@ -405,8 +405,8 @@
                 </form>
             </div>
         </div>
-
-        <div class="special" id="login_box">
+        {% block login_modal_box %}
+         <div class="special" id="login_box">
             
             <div class="inner_content">
                 <div>
@@ -424,6 +424,7 @@
                 <a href="/accounts/login">stylist login</a>
             </div>
          </div>
+        {% endblock %}
         </div>
 
 
@@ -576,7 +577,7 @@
                       {% endif %}
                       fixDragDropIssue();
                   });
-                  {% block login_modal %}
+                  {% block login_modal_script %}
                     if (!logged_in){
                         console.log('not logged in')
                         login_modal()
