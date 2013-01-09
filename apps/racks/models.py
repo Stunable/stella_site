@@ -175,15 +175,20 @@ class Item(models.Model,listImageMixin):
             return "upload/agjea1.254x500.jpg"
 
     def price_range(self):
-        seq = [it.price for it in self.types.all()]
+        seq = [it.get_current_price() for it in self.types.all()]
         if not len(seq):
             return
         return {'min':min(seq),'max':max(seq)}
 
     def total_inventory(self):
         """ returns the total inventory available of all item variations for this product"""
-
         return reduce(lambda x, y: x+y, [it.inventory for it in self.types.all()], 0)
+
+    def all_inv_in_stock(self):
+        for it in self.types.all():
+            if not it.inventory >= 1:
+                return False
+        return True
 
     def display_approval_status(self):
         if self.approved is False:
@@ -207,7 +212,7 @@ class Item(models.Model,listImageMixin):
             out.append(
                 {
                  'color':key,
-                 'list':[{'size':it.size,'inv':it.inventory,'pic':it.get_image()} for it in val]
+                 'list':[{'size':it.size,'inv':it.inventory,'pic':it.get_image(),'price':it.get_current_price(),'onsale':it.is_onsale} for it in val]
                 }
             )
             longest = max(longest,len(val))
@@ -246,6 +251,11 @@ class ItemType(models.Model):
             return self.image.image
         else:
             return self.item.get_image()
+    
+    def get_current_price(self):
+        if self.is_onsale:
+            return self.sale_price
+        return self.price
     
     def __unicode__(self):
         color = self.custom_color_name

@@ -206,7 +206,7 @@ def update_retailer_profile(request, template="retailers/account_information.htm
     return direct_to_template(request, template, ctx)
 
 
-def inventory_type_formset_factory(retailer, data=None, instance=None,extra=0):
+def inventory_type_formset_factory(retailer, data=None, instance=None,extra=1):
     # All so we can limit the Color and Size choices on the ItemInventoryForm
     # by passing the retailer (instance of User) to it's constructor.
 #    form = ItemInventoryForm(retailer)
@@ -267,7 +267,7 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                 item_instance = form.save(commit=False)  
             print 'after save item form'
             
-            inventory_form = inventory_type_formset_factory(request.user, post, item_instance,extra=2)        
+            inventory_form = inventory_type_formset_factory(request.user, post, item_instance)        
     
             if not inventory_form.is_valid():
                 response.update({'success' : False})
@@ -283,9 +283,10 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                 form.finish_save()
                 
                 try:
-                    inventory_form = inventory_type_formset_factory(request.user, post, item_instance,extra=2)
+                    inventory_form = inventory_type_formset_factory(request.user, post, item_instance)
                     if inventory_form:
-                        inventory_form.save()
+                        new_thing = inventory_form.save()
+                        print new_thing
                 except IndexError, e:
                     # TODO
                     raise
