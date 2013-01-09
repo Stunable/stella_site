@@ -52,6 +52,7 @@ class Cart(models.Model):
     grand_total = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2)
     shipping_and_handling_cost = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2)
     shipping_method = models.ForeignKey(ShippingType, blank=True, null=True, default=4)
+    destination_zip_code = models.CharField(max_length=10,null=True,blank=True,default='60606')
 
     ref = models.CharField(max_length=250, blank=True, null=True)
 
@@ -224,7 +225,6 @@ class Item(models.Model):
     sales_tax_amount = models.DecimalField(default=0, max_digits=18, decimal_places=2, verbose_name=_('sales tax'),null=True,blank=True)
     shipping_amount = models.DecimalField(default=0, max_digits=18, decimal_places=2, verbose_name=_('shipping estimate'),null=True,blank=True)
     retailer = models.ForeignKey(RetailerProfile)
-    destination_zip_code = models.CharField(max_length=10,null=True,blank=True)
     # product as generic relation
     
     content_type = models.ForeignKey(ContentType)
@@ -415,11 +415,11 @@ class Item(models.Model):
         else:
             return float(self.total_price) * .05
 
-    def get_shipping_cost(self,recipient_zipcode=None,refresh=None):
+    def get_shipping_cost(self,refresh=None):
         
-        if not self.shipping_amount or recipient_zipcode != self.destination_zip_code or refresh:
+        if not self.shipping_amount or refresh:
             retailer_zipcode = self.retailer.zip_code
-            self.shipping_amount = fedex_rate_request(shipping_option=self.cart.shipping_method.vendor_tag,weight=self.weight*self.quantity, shipper_zipcode=retailer_zipcode, recipient_zipcode=recipient_zipcode)
+            self.shipping_amount = fedex_rate_request(shipping_option=self.cart.shipping_method.vendor_tag,weight=self.weight*self.quantity, shipper_zipcode=retailer_zipcode, recipient_zipcode=self.cart.destination_zip_code)
             self.save()
         return float(self.shipping_amount)
 
@@ -444,9 +444,9 @@ def payment_was_successful_callback(sender, **kwargs):
     itemtype.item.save() # this is to trigger a check for total remaining inventory on this item
 
     try:
-        checkout = Checkout.objects.get(cart=kwargs['item'].cart, retailer=retailer)
+        checkout = Checkout.objects.get(cart=kwargs['item'].cart, retailer=retailer.user)
     except:
-        checkout = Checkout.objects.create(cart=kwargs['item'].cart,retailer=retailer,purchaser=transaction.user)
+        checkout = Checkout.objects.create(cart=kwargs['item'].cart,retailer=retailer.user,purchaser=transaction.user)
     
     p = Purchase.objects.create(
         item = kwargs['item'],

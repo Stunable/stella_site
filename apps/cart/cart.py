@@ -20,7 +20,7 @@ class Cart:
 
     def __init__(self, request, instance=None):
         self.request = request
-        self.recipient_zipcode = request.session.get('recipient_zipcode')
+        self.recipient_zipcode = request.session.get('recipient_zipcode','60611')
 
         if instance:
             self.cart = instance
@@ -38,7 +38,6 @@ class Cart:
             self.set_shipping_option(request.session.get('shipping_method'))
 
             self.cart.shipping_and_handling_cost = cart.shipping_and_handling_cost
-            
         self.calculate()
         
     def name(self):
@@ -49,7 +48,7 @@ class Cart:
             yield item
 
     def new(self, request):
-        cart = models.Cart(creation_date=datetime.datetime.now())
+        cart = models.Cart(creation_date=datetime.datetime.now(),destination_zip_code = self.recipient_zipcode)
         cart.save()
         request.session[CART_ID] = cart.id
         #self.recipient_zipcode = request.session['recipient_zipcode']
@@ -68,7 +67,7 @@ class Cart:
                                quantity = quantity,
                                size = size,
                                color = color,
-                               retailer = RetailerProfile.objects.get(user = product.item.retailers.all()[0])
+                               retailer = RetailerProfile.objects.get(user = product.item.retailers.all()[0]),
                             )
             item.save()
         else: #ItemAlreadyExists
@@ -109,14 +108,13 @@ class Cart:
             if size:
                 item.size = size
             item.buyer = self.request.user.get_profile()
-            item.destination_zip_code = self.recipient_zipcode
             item.save()
         else: #ItemAlreadyExists
             item.unit_price = unit_price
             if item.quantity != quantity:
                 item.quantity = int(quantity)
-                item.get_tax_amount(buyer=self.request.user.get_profile(),zipcode=self.recipient_zipcode,refresh=True)
-                item.get_shipping_cost(recipient_zipcode=self.recipient_zipcode,refresh=True)
+                item.get_tax_amount(buyer=self.request.user.get_profile(),refresh=True)
+                item.get_shipping_cost(refresh=True)
             item.color = color
 
 
@@ -135,9 +133,14 @@ class Cart:
         self.cart.save()
         
     def update_shipping_and_handling_cost(self):
+
         if not self.recipient_zipcode:
             return
         
+        if not self.cart.destination_zip_code == self.recipient_zipcode:
+            self.cart.destination_zip_code = self.recipient_zipcode
+            self.cart.save()
+            
         self.shipping_and_handling_cost = 0
         
         for item in self.cart.item_set.all():
@@ -147,7 +150,7 @@ class Cart:
             except:
                 pass
 
-            self.shipping_and_handling_cost += item.get_shipping_cost(recipient_zipcode=self.recipient_zipcode)
+            self.shipping_and_handling_cost += item.get_shipping_cost()
             
         self.cart.shipping_and_handling_cost = self.shipping_and_handling_cost
         
