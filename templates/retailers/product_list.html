@@ -43,9 +43,14 @@
     .confirm .deetsclick{
         display:none;
     }
+
     .notconfirm .deetsclick{
         color:#EC67F0;
         cursor:pointer;
+    }
+
+    .confirm .action_submit{
+        display:none;
     }
 
     .product_list_table th,td.heading{
@@ -78,6 +83,8 @@
         cursor:pointer;
     }
 
+
+
 </style>
 
 <div class="section intro clearfix">
@@ -85,7 +92,7 @@
 </div>
 <div class="section body-copy bootstrap {% if not confirm %}not{% endif %}confirm">
     
-    {% if confirm %}
+    {% if action %}
     <form class="action_submit" action="/retailers/item_action?next={% url product_list %}" method="post">
         <p> Are you sure you want to delete the following items?</p>
         <input type="hidden" name="confirm_{{confirm.action_name}}" value="True">
@@ -127,12 +134,15 @@
     <br><br>
     {% endif %}
     <form class="action_submit" action="/retailers/item_action?next={% url product_list %}" method="post">
+        {% if not confirm %}
         <select id="action_select" name="action_name">
             <option value="-------------">-------------</option>
             <option name="action" value="delete">Delete Selected</option>
         </select>
-
         <input style="display:inline;margin-right:20px;margin-bottom:5px" type="submit" value="Go">
+        {% endif %}
+
+        
     {% endif %}
     {% csrf_token %}
     <table class="product_list_table">
@@ -187,7 +197,9 @@
                                 <td>{{item.display_approval_status|safe|lower}}</td>
                                 <td>{{item.created_date}}</td>
                             </tr>
+                            {% if not confirm %}
                             <tr class="deetsclick"><td colspan=5>Click to Show/Hide Details</td></tr>
+                            {% endif %}
                             {% with item.types_by_color as styles %}
                                 {% for it in styles.styles %} 
                                 <tr class="variation">
@@ -219,8 +231,11 @@
         </tbody>
     </table>
     {% if confirm %}
-    <a href="{% url product_list %}"><input type="button" value="Cancel"></a>
-    <input style="display:inline;margin-right:20px;margin-top:15px" type="submit" value="Yes. I'm sure.">
+   
+        {% if action %}
+        <a href="{% url product_list %}"><input type="button" value="Cancel"></a>
+        <input style="display:inline;margin-right:20px;margin-top:15px" type="submit" value="Yes. I'm sure.">
+        {% endif %}
     {% endif %}
 </form>
 </div>
