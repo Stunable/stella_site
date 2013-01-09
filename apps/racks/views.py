@@ -991,7 +991,7 @@ def add_product_image(request):
 
     retailer = RetailerProfile.objects.get(user=request.user)
 
-    form = modelform_factory(ProductImage,fields=["image"])(request.POST,request.FILES)
+    form = modelform_factory(ProductImage,fields=["image"])(request.POST,request.FILES,prefix="new")
 
     if form.is_valid():
         im = form.save(commit=False)
