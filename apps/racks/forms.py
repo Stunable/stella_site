@@ -121,7 +121,6 @@ def item_inventory_form_factory(retailer):
         image = forms.ModelChoiceField(required=True,queryset=ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
 
 
-
         class Meta:
             model = ItemType
             
@@ -130,6 +129,16 @@ def item_inventory_form_factory(retailer):
             if int(inventory) < 1:
                 raise forms.ValidationError("Inventory must be positive number.")
             return self.cleaned_data.get('inventory')
+
+        def clean_is_onsale(self):
+            if self.cleaned_data.get('is_onsale'):
+                self.fields['sale_price'].required = True
+
+        # def clean_inventory(self):
+        #     inventory = self.cleaned_data.get('inventory')
+        #     if int(inventory) < 1:
+        #         raise forms.ValidationError("Inventory must be positive number.")
+        #     return self.cleaned_data.get('inventory')
 
         def __init__(self,*args,**kwargs):
             super(ItemInventoryForm,self).__init__(*args,**kwargs)

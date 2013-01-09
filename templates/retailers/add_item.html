@@ -36,6 +36,7 @@
 	.inventory_forms table:last-of-type{
 		display:none;
 	}
+
 	.fixed-popup {
 		position: absolute;
 		opacity: 0.9;
@@ -69,6 +70,13 @@
 	}
 	.clonedform{
 		padding:20px;
+	}
+	.heading{
+		font-size:1.5em;
+		line-height: 2em;
+	}
+	.heading td{
+		margin:20px;
 	}
 </style>
 
@@ -105,14 +113,17 @@
 		{{ form.non_field_errors }}
 		<table>
 			{{ form.as_table }}
+			<tr></tr>
+			<tr></tr>
+			<tr class="heading"><td colspan="2">Item Color/Size Variations</td></tr>
 			<tr align="top" >
-				<th style="vertical-align: top !important;">Inventory Options: <span title="List available
+				<th style="vertical-align: top !important;"><span title="List available
 				inventory options for all color and
 				size combinations.  Choose a color
 				and corresponding size option then
 				allocate inventory (eg. Color:
 				Chocolate, Size: 2, Quantity Available:
-				10)" class="inventory" >?</span></th>
+				10)" class="inventory" ></span></th>
 				<td> {% for f in inventory_forms.management_form %}
 				{{ f }}
 				{% endfor %}
@@ -217,7 +228,16 @@
 			$('.fixed-popup .btn-cancel').click(function() {
 				$('.fixed-popup').hide('fast');
 			});
+
 		});
+
+		$('.onsale_check').find('input').click(function(e){
+			if ($(this).is(':checked')){
+				$(this).closest('table').find('.sale_price_field').show()
+			}else{
+				$(this).closest('table').find('.sale_price_field').hide()
+			}
+		})
 
 		$('#add-more-option').click(function() {
 			$('#tbl-' + inventory_option_counter).show('fast');
