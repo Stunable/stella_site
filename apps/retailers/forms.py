@@ -216,7 +216,7 @@ class ItemForm(AjaxModelForm):
     
     class Meta:
         model = Item
-        exclude = ('fabrics', 'image_urls', 'order', 'retailers', 'tags', 'sizes', 'colors', 'approved','is_deleted','bg_color')
+        exclude = ('fabrics', 'image_urls', 'order', 'retailers', 'tags', 'sizes', 'colors','upload','price','is_onsale','is_available', 'approved','is_deleted','bg_color')
     
     def __init__(self, user=None, *args, **kwargs):
         self.user = user

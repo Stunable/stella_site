@@ -1,5 +1,7 @@
 <!--{{ inventory_form.as_table  }}-->
 {% load thumbnail %}
+	<col width="150">
+	 <col width="400">
 	<tr>
 		<td colspan="2">
 			Image for this variation
@@ -18,6 +20,9 @@
 		<td>Price for this size/color</td><td>$ {{inventory_form.price}}</td>
 	</tr>
 	<tr>
+		<td>Is this color/size on sale?</td><td class="onsale_check">{{inventory_form.is_onsale}}</td>
+	</tr>
+	<tr class="sale_price_field" {% if not inventory_form.is_onsale.value %}style="display:none;"{% endif %}>
 		<td>Sale price for this size/color (optional)</td><td>$ {{inventory_form.sale_price}}</td>
 	</tr>
 	<tr>

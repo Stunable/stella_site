@@ -236,6 +236,8 @@ class ItemType(models.Model):
                                          help_text="An optional name for the color of this item",verbose_name="Style Name")
     inventory = models.PositiveIntegerField(default=0,verbose_name="inventory quantity")
     price = models.DecimalField(blank=True,max_digits=19, decimal_places=2, verbose_name='Special Price for this color/size/inventory')
+    
+    is_onsale = models.BooleanField(default=False, verbose_name='Currently On Sale?')
     sale_price = models.DecimalField(blank=True,null=True,max_digits=19, decimal_places=2, verbose_name='Sale Price for this color/size/inventory')
 
 
