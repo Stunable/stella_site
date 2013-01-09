@@ -128,7 +128,7 @@ def item_inventory_form_factory(retailer):
         def clean_inventory(self):
             inventory = self.cleaned_data.get('inventory')
             if int(inventory) < 1:
-                raise forms.ValidationError("Inventory must be positive!")
+                raise forms.ValidationError("Inventory must be positive number.")
             return self.cleaned_data.get('inventory')
 
         def __init__(self,*args,**kwargs):

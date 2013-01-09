@@ -206,12 +206,12 @@ def update_retailer_profile(request, template="retailers/account_information.htm
     return direct_to_template(request, template, ctx)
 
 
-def inventory_type_formset_factory(retailer, data=None, instance=None):
+def inventory_type_formset_factory(retailer, data=None, instance=None,extra=0):
     # All so we can limit the Color and Size choices on the ItemInventoryForm
     # by passing the retailer (instance of User) to it's constructor.
 #    form = ItemInventoryForm(retailer)
     form = item_inventory_form_factory(retailer)
-    formset_class = inlineformset_factory(Item, ItemType, form=form, extra=0, can_delete=True)
+    formset_class = inlineformset_factory(Item, ItemType, form=form, extra=extra, can_delete=True)
     
     def errors_as_json(self, strip_tags=False):
         error_summary = {}
@@ -267,7 +267,7 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                 item_instance = form.save(commit=False)  
             print 'after save item form'
             
-            inventory_form = inventory_type_formset_factory(request.user, post, item_instance)        
+            inventory_form = inventory_type_formset_factory(request.user, post, item_instance,extra=2)        
     
             if not inventory_form.is_valid():
                 response.update({'success' : False})
@@ -283,7 +283,7 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                 form.finish_save()
                 
                 try:
-                    inventory_form = inventory_type_formset_factory(request.user, post, item_instance)
+                    inventory_form = inventory_type_formset_factory(request.user, post, item_instance,extra=2)
                     if inventory_form:
                         inventory_form.save()
                 except IndexError, e:
@@ -315,10 +315,10 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
     if request.is_ajax():
         template = 'racks/size_input.html'
     ctx['next']=request.get_full_path()
-    ctx['image_upload_form'] = modelform_factory(ProductImage,fields=["image"])(initial={'retailer':retailer.id})
+    ctx['image_upload_form'] = modelform_factory(ProductImage,fields=["image"])(initial={'retailer':retailer.id},prefix="new")
     ctx['item'] = item_instance
     ctx['form'] = form #MyForm()
-    ctx['inventory_forms'] = inventory_type_formset_factory(request.user, None, item_instance)
+    ctx['inventory_forms'] = inventory_type_formset_factory(request.user, None, item_instance,extra=1)
     ctx['retailer_profile'] = retailer
     ctx['item_pk'] = item_id
 

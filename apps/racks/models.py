@@ -232,8 +232,8 @@ class ItemType(models.Model):
     item = models.ForeignKey('Item', related_name='types')
     size = models.ForeignKey('Size',default=1)
     SKU = models.CharField(max_length=64,null=True,blank=True)
-    custom_color_name = models.CharField(max_length=100, default="White",
-                                         help_text="An optional name for the style of this item",verbose_name="Style Name")
+    custom_color_name = models.CharField(max_length=100, 
+                                         help_text="An optional name for the color of this item",verbose_name="Style Name")
     inventory = models.PositiveIntegerField(default=0,verbose_name="inventory quantity")
     price = models.DecimalField(blank=True,max_digits=19, decimal_places=2, verbose_name='Special Price for this color/size/inventory')
     sale_price = models.DecimalField(blank=True,null=True,max_digits=19, decimal_places=2, verbose_name='Sale Price for this color/size/inventory')
