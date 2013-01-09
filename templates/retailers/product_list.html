@@ -26,7 +26,9 @@
         font-size:.9em;
     }
     .product_list_table th,td{
-        text-align: center
+        text-align: center;
+        font-weight: lighter;
+        color:#888;
     }
     .nodeets .variation{
         display: none;
@@ -42,6 +44,12 @@
     .deetsclick{
         color:#EC67F0;
         cursor:pointer;
+    }
+
+    .product_list_table th,td.heading{
+        font-weight: 600;
+        font-size:.8em;
+        color:#777;
     }
   
 </style>
@@ -139,17 +147,17 @@
                         <thead>
                             <th>PRODUCT NAME</th>
                             <th>RETAIL PRICE RANGE</th>
-                            <th class="small">INVENTORY QUANTITY</th>
+                            <th class="small">TOTAL INVENTORY</th>
                             <th>STATUS</th>
                             <th>DATE ADDED</th>
                         </thead>
 
                         <tbody>
                             <tr>
-                                <td>{{item.name}}</td>
+                                <td>{{item.name|lower}}</td>
                                 <td>${{item.price_range.min}}{% if not item.price_range.max == item.price_range.min %} - ${{item.price_range.max}}{%endif%}</td>
                                 <td>{{item.total_inventory}}</td>
-                                <td>{{item.display_approval_status|safe}}</td>
+                                <td>{{item.display_approval_status|safe|lower}}</td>
                                 <td>{{item.created_date}}</td>
                             </tr>
                             <tr class="deetsclick"><td colspan=5>Click to Show/Hide Details</td></tr>
@@ -159,14 +167,14 @@
                                     <td><img class="var_pic" src="{% thumbnail it.list.0.pic "50" as im %}{{im.url}}{% endthumbnail %}"></td>
                                     <td colspan=4>
                                         <table>
-                                            <tr><td>Color</td>
-                                                <td colspan={{styles.longest}}>{{it.color}}</td>
+                                            <tr><td class="heading">COLOR</td>
+                                                <td colspan={{styles.longest}}>{{it.color|lower}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Size</td>{% for s in it.list %}<td>{{s.size}}</td>{% endfor %}
+                                                <td class="heading">SIZE</td>{% for s in it.list %}<td>{{s.size|lower}}</td>{% endfor %}
                                             </tr>
                                             <tr>
-                                                <td>Quantity Available</td>{% for s in it.list %}<td>{{s.inv}}</td>{% endfor %}
+                                                <td class="heading">QUANTITY AVAILABLE</td>{% for s in it.list %}<td>{{s.inv|lower}}</td>{% endfor %}
                                             </tr>
                                         </table>
                                     </td>
