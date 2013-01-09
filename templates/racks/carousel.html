@@ -18,6 +18,10 @@
 	.nxt {
 		visibility: hidden;
 	}
+    .carousel_price_tag{
+        font-size:1.1em;
+        color:#888;
+    }
 </style>
 {% load thumbnail %}
 {% load voting_tags %} {% votes_by_user request.user on user_items as vote_dict %}
@@ -101,7 +105,7 @@
                                         </p>
                                     </div>
                                     <div class="carousel_price_tag">
-                                        <sup>$</sup>{{item.price}}</div>
+                                        ${{item.price_range.min}}{% if not item.price_range.max == item.price_range.min %} - ${{item.price_range.max}}{%endif%}</div>
                                 </li>
                             {% endfor %}
                             {% endfor %}
