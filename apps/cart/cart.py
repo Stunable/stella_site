@@ -176,7 +176,7 @@ class Cart:
 
             try:
                 total += float(item.total_price)
-                tax += float(item.get_tax_amount(buyer=self.request.user.get_profile(),zipcode=self.recipient_zipcode))
+                tax += float(item.get_tax_amount(buyer=self.request.user.get_profile(),zipcode=self.cart.destination_zip_code))
                 # print 'total without additional:',total
                 processing += item.get_wepay_amounts()[2]
             except Exception, e:
