@@ -29,7 +29,7 @@
         text-align: center;
         font-weight: lighter;
     }
-    .nodeets .variation{
+    .notconfirm .nodeets .variation{
         display: none;
         border-bottom:none;
     }
@@ -40,7 +40,10 @@
         display:block;
     }
 
-    .deetsclick{
+    .confirm .deetsclick{
+        display:none;
+    }
+    .notconfirm .deetsclick{
         color:#EC67F0;
         cursor:pointer;
     }
@@ -50,19 +53,37 @@
         font-size:.8em;
         color:#777;
     }
-    .product_list_table td.saleprice,td.warning{
+    .product_list_table td.saleprice{
+        color:red;
+    }
+    .product_list_table td.warning{
         color:orange;
     }
     .product_list_table td.inventory0{
         color:red;
     }
-  
+    .product_list_table .action-checkbox{
+        text-align: center;
+    }
+    .product_list_table .action-checkbox {
+        /*text-align: center;*/
+        font-size: .8em;
+    }
+    .product_list_table .action-checkbox input{
+        /*text-align: center;*/
+        margin-left:40%;
+    }
+    .product_list_table .action-checkbox>div{
+        margin-top:16px;
+        cursor:pointer;
+    }
+
 </style>
 
 <div class="section intro clearfix">
     <h2><span>{% if upload %}Upload: {{upload.filename}}{% else %}Product Inventory{% endif %}</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
 </div>
-<div class="section body-copy bootstrap">
+<div class="section body-copy bootstrap {% if not confirm %}not{% endif %}confirm">
     
     {% if confirm %}
     <form class="action_submit" action="/retailers/item_action?next={% url product_list %}" method="post">
@@ -106,7 +127,7 @@
     <br><br>
     {% endif %}
     <form class="action_submit" action="/retailers/item_action?next={% url product_list %}" method="post">
-        <select name="action_name">
+        <select id="action_select" name="action_name">
             <option value="-------------">-------------</option>
             <option name="action" value="delete">Delete Selected</option>
         </select>
@@ -135,7 +156,8 @@
                 <input type="hidden" value="{{item.pk}}" name="selected_items">
                 {% else %}
                 <td class="action-checkbox"><input class="item_selector" type="checkbox" value="{{item.pk}}" name="selected_items">
-                    <a class="edit-link" href="{% url edit_item item.pk %}">Edit</a>
+                    <div><a class="edit-link" href="{% url edit_item item.pk %}">Edit</a></div>
+                    <div><a class="delete-link">delete</a></div>
                 </td>
             {% endif %}
                 <td >
