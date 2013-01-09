@@ -121,7 +121,7 @@ class Item(models.Model,listImageMixin):
     gender = models.CharField(max_length=1,default='F',choices=[('F','F'),('M','M'),('B','B')])
     brand = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(max_length=200, verbose_name='Product Name')
-    price = models.DecimalField(max_digits=19, decimal_places=2, verbose_name='Retail Price')
+    price = models.DecimalField(max_digits=19, decimal_places=2, verbose_name='Retail Price',null=True,blank=True)
     is_onsale = models.BooleanField(default=False, verbose_name='Currently On Sale?')
     description = models.TextField()
     category = models.ForeignKey(Category, verbose_name='Product Category', null=True, blank=True)
