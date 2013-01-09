@@ -107,6 +107,12 @@ $(document).ready(function(){
        $($(this).data('target')).attr('checked', this.checked);
    });
 
+   $('.delete-link').click(function(){
+        $(this).closest('td').find('.item_selector').attr('checked','checked');
+        $('#action_select').val('delete');
+        $('.action_submit').submit();
+   })
+
 })
 
 
