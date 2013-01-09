@@ -419,6 +419,7 @@ class Item(models.Model):
         
         if not self.shipping_amount or refresh:
             retailer_zipcode = self.retailer.zip_code
+            print 'recipient zip:',self.cart.destination_zip_code
             self.shipping_amount = fedex_rate_request(shipping_option=self.cart.shipping_method.vendor_tag,weight=self.weight*self.quantity, shipper_zipcode=retailer_zipcode, recipient_zipcode=self.cart.destination_zip_code)
             self.save()
         return float(self.shipping_amount)

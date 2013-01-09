@@ -140,7 +140,7 @@ class Cart:
         if not self.cart.destination_zip_code == self.recipient_zipcode:
             self.cart.destination_zip_code = self.recipient_zipcode
             self.cart.save()
-            
+
         self.shipping_and_handling_cost = 0
         
         for item in self.cart.item_set.all():
@@ -150,7 +150,7 @@ class Cart:
             except:
                 pass
 
-            self.shipping_and_handling_cost += item.get_shipping_cost()
+            self.shipping_and_handling_cost += item.get_shipping_cost(refresh=True)
             
         self.cart.shipping_and_handling_cost = self.shipping_and_handling_cost
         
