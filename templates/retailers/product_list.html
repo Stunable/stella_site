@@ -88,7 +88,8 @@
         <input type="submit" value="Submit">
         </form>    
     </div>
-    <a href="{% url add_item %}">Add Item</a>
+    <div>
+    <a href="{% url add_item %}"type="button" class="btn">Add Item</a>
     <br><br>
     {% endif %}
     <form class="action_submit" action="/retailers/item_action?next={% url product_list %}" method="post">
