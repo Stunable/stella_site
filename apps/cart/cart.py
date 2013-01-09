@@ -2,7 +2,8 @@ import datetime
 import models
 from django.conf import settings
 
-
+import sys
+import os
 CART_ID = 'CART-ID'
 
 
@@ -66,7 +67,9 @@ class Cart:
                                unit_price = unit_price,
                                quantity = quantity,
                                size = size,
-                               color = color)
+                               color = color,
+                               retailer = RetailerProfile.objects.get(user = product.item.retailers.all()[0])
+                            )
             item.save()
         else: #ItemAlreadyExists
             item.unit_price = unit_price
@@ -105,7 +108,6 @@ class Cart:
             item.clor = color
             if size:
                 item.size = size
-            item.retailer = RetailerProfile.objects.get(item.product.item.retailers.all()[0])
             item.buyer = self.request.user.get_profile()
             item.destination_zip_code = self.recipient_zipcode
             item.save()
@@ -128,8 +130,8 @@ class Cart:
         self.cart.save()
     
     def clear_shipping_and_handling_cost(self):    
-        # Force re-calculate shipping fee 
-        self.cart.shipping_and_handling_cost = 0.0;
+        # Force re-calculate shipping fee
+        self.cart.shipping_and_handling_cost = 0.0
         self.cart.save()
         
     def update_shipping_and_handling_cost(self):
@@ -140,8 +142,7 @@ class Cart:
         
         for item in self.cart.item_set.all():
             try:
-                retailer = item.product.item.retailers.all()[0]
-                retailer_profile = RetailerProfile.objects.get(user=retailer)
+                retailer_profile = item.retailer
                 retailer_zipcode = retailer_profile.zip_code
             except:
                 pass
@@ -162,14 +163,23 @@ class Cart:
         total = 0
         tax = 0
         processing = 0
+        self.items_by_retailer = {}
+
         for item in self.cart.item_set.all():
+            if self.items_by_retailer.has_key(item.retailer):
+                self.items_by_retailer[item.retailer].append(item)
+            else:
+                self.items_by_retailer[item.retailer] = [item]
+
             try:
                 total += float(item.total_price)
                 tax += float(item.get_tax_amount(buyer=self.request.user.get_profile(),zipcode=self.recipient_zipcode))
                 # print 'total without additional:',total
                 processing += item.get_wepay_amounts()[2]
             except Exception, e:
-                print 'cart processing error:',e
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]      
+                print('cart processing error:',exc_type, fname, exc_tb.tb_lineno)
         print 'summary:',total,tax,processing
         return total,tax,processing
     
@@ -179,10 +189,11 @@ class Cart:
         self.tax = tax
         self.processing = processing        
         self.grand_total = self.tax + self.total +self.processing + float(self.cart and self.cart.shipping_and_handling_cost or 0)
+        self.checkout_ok = self.check_fee_cost_per_retailer()
 
     
     def totals_as_dict(self):
-        self.calculate()
+        # self.calculate()
         return dict(
             total=self.total,
             tax=self.tax,
@@ -224,10 +235,24 @@ class Cart:
 
         self.shipping_method = self.cart.shipping_method
 
+    def check_fee_cost_per_retailer(self):
+        for ret,itemlist in self.items_by_retailer.items():
+            appfee = 0
+            amount = 0
+            for item in itemlist:
+                appfee += item.get_app_fee()
+                amount += item.get_wepay_amounts()[0]
+            print appfee/amount
+            if appfee/amount > .5:
+                return False
+
+        return True
+
+
     def get_items_by_retailer(self):
         out = {}
         for item in self.cart.item_set.all():
-            r = item.get_product().item.retailers.all()[0]
+            r = item.retailer
             if out.has_key(r):
                 out[r].append(item)
             else:

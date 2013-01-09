@@ -68,7 +68,7 @@ textarea,
 .article .article-footer h5,
 .article p, 
 .widget li, .widget p {
-	font-family:'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, sans-serif;
+	/*font-family:'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, sans-serif;*/
 	font-size:0.8em;
 	text-shadow:none;
 }
@@ -4445,8 +4445,7 @@ background-color: white;
 .bootstrap .btn.active,
 .bootstrap .btn.disabled,
 .bootstrap .btn[disabled] {
-  background-color: #e6e6e6;
-  *background-color: #d9d9d9;
+ 	color:#777;
 }
 
 .bootstrap .btn:hover {
@@ -4513,7 +4512,7 @@ background-color: white;
 }
 
 .bootstrap .btn-primary,
-.bootstrap .btn-primary:hover,
+.bootstrap .btn-primary:hover:not(.disabled),
 .bootstrap .btn-warning,
 .bootstrap .btn-warning:hover,
 .bootstrap .btn-danger,

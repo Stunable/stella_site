@@ -43,7 +43,7 @@ class WePayPayment(object):
 
             WEPAY = WePay(settings.WEPAY_PRODUCTION, retailer_profile.wepay_token)
 
-            app_fee = item.total_price*.2 + item.get_shipping_cost()
+            
 
             data = {
                 'auto_capture':"False",
@@ -53,7 +53,7 @@ class WePayPayment(object):
                 'type': 'GOODS',
                 'payment_method_id': self.cc_token.token, # the user's credit_card_id 
                 'payment_method_type': 'credit_card',
-                'app_fee':str(app_fee),
+                'app_fee':str(item.get_app_fee()),
                 'fee_payer':'payee'
             }
 

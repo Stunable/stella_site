@@ -162,7 +162,7 @@ def terms_complete(request, retailer_id, template="accounts/thank-you.html"):
 def update_retailer_profile(request, template="retailers/account_information.html"):
     ctx = {}
     try:
-        retailer_profile = RetailerProfile.objects.get(user=request.user)
+        retailer_profile = RetailerProfile.objects.filter(user=request.user)[0]
         if request.method == "POST":
             form = RetailerEditForm(request.POST, instance=retailer_profile)
             if form.is_valid():
@@ -385,7 +385,7 @@ def product_list(request, template="retailers/product_list.html"):
 
 @login_required
 def retailer_information(request, name, template="retailers/retailer_information.html"):
-    retailer_profile = RetailerProfile.objects.get(user=request.user)
+    retailer_profile = RetailerProfile.objects.filter(user=request.user)[0]
     shipping_types = ShippingType.objects.all()
     form = RetailerEditForm(instance=retailer_profile)
     ctx = {'retailer_profile': retailer_profile, 'shipping_types': shipping_types, 'form': form}
