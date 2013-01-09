@@ -405,7 +405,7 @@ class Item(models.Model):
         except:
             return float(self.total_price) * .05
         if self.sales_tax_amount is None or refresh:
-            self.sales_tax_amount = TCC.get_tax_rate_for_item(shipping_address, self.retailer, [self])
+            self.sales_tax_amount = float(self.total_price) * .05#TCC.get_tax_rate_for_item(shipping_address, self.retailer, [self])
             if self.sales_tax_amount != 0.00:
                 self.save()
             else:
@@ -416,10 +416,9 @@ class Item(models.Model):
             return float(self.total_price) * .05
 
     def get_shipping_cost(self,refresh=None):
-        
         if not self.shipping_amount or refresh:
             retailer_zipcode = self.retailer.zip_code
-            print 'recipient zip:',self.cart.destination_zip_code
+            # print 'recipient zip:',self.cart.destination_zip_code
             self.shipping_amount = fedex_rate_request(shipping_option=self.cart.shipping_method.vendor_tag,weight=self.weight*self.quantity, shipper_zipcode=retailer_zipcode, recipient_zipcode=self.cart.destination_zip_code)
             self.save()
         return float(self.shipping_amount)
