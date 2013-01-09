@@ -340,7 +340,7 @@ def bulk_upload(request,upload_id=None,template="retailers/product_list.html"):
         up = ProductUpload.objects.get(id=upload_id)
         pl = up.item_set.all()
         print pl
-        ctx = {'retailer_profile': retailer_profile, 'product_list': pl, 'upload':up}    
+        ctx = {'retailer_profile': retailer_profile, 'product_list': pl, 'upload':up,'confirm':True}    
     else:            
         try:
             form = modelform_factory(ProductUpload,fields=['uploaded_zip'])()
@@ -501,7 +501,7 @@ def item_action(request, template="retailers/product_list.html"):
                 data = {
                     'action_name': request.POST.get('action_name')
                 }
-                ctx = {'retailer_profile': retailer_profile, 'product_list': pl, 'confirm': data}
+                ctx = {'retailer_profile': retailer_profile, 'product_list': pl, 'confirm': data,'action':True}
                 return direct_to_template(request, template, ctx)
 
         except:    
