@@ -20,7 +20,7 @@ admin.autodiscover() # enables admin
 
 urlpatterns = patterns('',
                        url(r'^$', 
-                           'apps.racks.views._all',
+                           'apps.racks.views.gethome',
                            name="home"),
                        url(r'', include('social_auth.urls')),
                        url(r'^registration/', include('apps.registration.urls')),

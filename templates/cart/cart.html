@@ -25,7 +25,10 @@
 		display: none;
 		cursor: pointer;
 	}
-	
+
+	.cart-items p{
+        font-size:.9em;
+    }
 	html.wait, html.wait * { cursor: wait !important; }
 	
 </style>
@@ -47,7 +50,7 @@
                     by {{ item.product.item.retailer }}
                 </p>
                 <p class="price-each">
-                    {{ item.product.item.price }}
+                    ${{ item.product.item.price|floatformat:2 }}
                 </p>
                 <p class='size'>
                     Size: <span class='cart-item-size'>{{ item.size }}</span>
@@ -104,7 +107,7 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                    	<a href="#" id="checkout-btn" class="btn btn-primary">Checkout</a>
+                    	<a href="#" id="checkout-btn" class="btn btn-primary {% if not cart.checkout_ok %}disabled{% endif %}">Checkout</a>
                     	<a href="/" class="btn btn-primary">Continue Shopping</a></td>
                 </tr>
                 
@@ -139,6 +142,9 @@
         $('#checkout-btn').click(function(e) {
             e.preventDefault();
 
+            if ($(this).hasClass('disabled')){
+                return false;
+            }
             // alert("Hang in there, we're not quite ready to go there yet.  Soon!")
             // return false;
 

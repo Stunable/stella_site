@@ -47,6 +47,14 @@ if "notification" in settings.INSTALLED_APPS:
 else:
     notification = None
 
+def gethome(request):
+    try:
+        RetailerProfile.objects.get(user=request.user)
+        return redirect(reverse("retailer_information"))
+    except:
+        return _all(request)
+
+
 def get_context_variables(context, request):
     return context
 

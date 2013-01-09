@@ -223,7 +223,7 @@ class Item(models.Model):
     unit_price = models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_('unit price'))
     sales_tax_amount = models.DecimalField(default=0, max_digits=18, decimal_places=2, verbose_name=_('sales tax'),null=True,blank=True)
     shipping_amount = models.DecimalField(default=0, max_digits=18, decimal_places=2, verbose_name=_('shipping estimate'),null=True,blank=True)
-
+    retailer = models.ForeignKey(RetailerProfile)
     destination_zip_code = models.CharField(max_length=10,null=True,blank=True)
     # product as generic relation
     
@@ -282,6 +282,8 @@ class Item(models.Model):
 
         return (float(wepay_order_amount),float(amount_customer_pays),float(real_wepay_fee))
 
+    def get_app_fee(self):
+        return self.total_price * .2 + self.get_shipping_cost()
 
     def is_refundable(self):
         return self.status != "refunded"
@@ -375,7 +377,7 @@ class Item(models.Model):
             reverse("order_history"),
         )
         send_notification_on("retailer-item-returned", 
-                             retailer=self.product.item.retailers.all()[0], 
+                             retailer=self.retailer.user, 
                              shopper=shopper, 
                              recipient=shopper,
                              order_ref=url)
@@ -390,33 +392,24 @@ class Item(models.Model):
         from apps.cart.models import Purchase
         shopper = Purchase.objects.filter(cart__item__pk=self.pk)[0].purchaser
         send_notification_on("retailer-forced-refund", 
-                             retailer=self.product.item.retailers.all()[0], 
+                             retailer=self.retailer.user, 
                              shopper=shopper, 
                              recipient=shopper)
 
     def get_retailer(self):
-        inventory = self.get_product()
-        product = inventory.item
-        try:
-            retailer = product.retailers.all()[0]
-        except:
-            print 'could not get retailer for item:',product
-            return None
-        return RetailerProfile.objects.get(user=retailer)
+        return self.retailer
 
     def get_tax_amount(self, buyer=None, zipcode=None, refresh=None):
         try:
             shipping_address = ShippingInfo.objects.get(customer=buyer,is_default=True)
         except:
             return float(self.total_price) * .05
-        retailer = self.get_retailer()
-        if retailer:
-            if self.sales_tax_amount is None or refresh:
-                self.sales_tax_amount = TCC.get_tax_rate_for_item(shipping_address, retailer, [self])
-                if self.sales_tax_amount != 0.00:
-                    self.save()
-                else:
-                    return float(self.total_price) * .05
+        if self.sales_tax_amount is None or refresh:
+            self.sales_tax_amount = TCC.get_tax_rate_for_item(shipping_address, self.retailer, [self])
+            if self.sales_tax_amount != 0.00:
+                self.save()
+            else:
+                return float(self.total_price) * .05
         if self.sales_tax_amount:
             return self.sales_tax_amount
         else:
@@ -425,11 +418,7 @@ class Item(models.Model):
     def get_shipping_cost(self,recipient_zipcode=None,refresh=None):
         
         if not self.shipping_amount or recipient_zipcode != self.destination_zip_code or refresh:
-            retailer= self.get_retailer()
-            if retailer:
-                retailer_zipcode = self.get_retailer().zip_code
-            else:
-                retailer_zipcode = u'10014'
+            retailer_zipcode = self.retailer.zip_code
             self.shipping_amount = fedex_rate_request(shipping_option=self.cart.shipping_method.vendor_tag,weight=self.weight*self.quantity, shipper_zipcode=retailer_zipcode, recipient_zipcode=recipient_zipcode)
             self.save()
         return float(self.shipping_amount)
@@ -447,7 +436,7 @@ from django.dispatch import receiver
 def payment_was_successful_callback(sender, **kwargs):
     print 'received signal that payment successful for', kwargs['item']
     transaction = sender
-    retailer = kwargs['item'].product.item.retailers.all()[0]#TODO this is totally ghetto...
+    retailer = kwargs['item'].retailer#TODO this is totally ghetto...
 
     itemtype = kwargs['item'].product
     itemtype.inventory = min(0,itemtype.inventory-kwargs['item'].quantity)

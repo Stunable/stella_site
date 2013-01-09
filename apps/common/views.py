@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.template.defaultfilters import slugify
 from django.db.models.loading import get_model
 
+
 def export(qs, fields=None):
     model = qs.model
     response = HttpResponse(mimetype='text/csv')
