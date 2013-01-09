@@ -268,7 +268,7 @@ class ItemForm(AjaxModelForm):
 class ItemEditForm(forms.ModelForm):
     class Meta:
         model = Item
-        exclude = ('colors', 'fabrics', 'image_urls', 'order', 'approved')
+        exclude = ('colors', 'fabrics', 'image_urls', 'order', 'upload', 'is_available', 'price', 'approved')
     
     def __init__(self, *args, **kwargs):
         super(ItemEditForm, self).__init__(*args, **(kwargs))

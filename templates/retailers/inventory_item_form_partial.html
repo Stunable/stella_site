@@ -18,7 +18,7 @@
 		<td>Price for this size/color</td><td>$ {{inventory_form.price}}</td>
 	</tr>
 	<tr>
-		<td>Sale price for this size/color</td><td>$ {{inventory_form.sale_price}}</td>
+		<td>Sale price for this size/color (optional)</td><td>$ {{inventory_form.sale_price}}</td>
 	</tr>
 	<tr>
 		<td>Size</td>
@@ -29,7 +29,7 @@
 		<td>{{ inventory_form.inventory }}</td>
 	</tr>
 	<tr>
-		<td>SKU Number</td> 
+		<td>SKU Number (optional)</td> 
 		<td>{{ inventory_form.SKU }}</td>
 	</tr>
 	{% if inventory_form.inventory.value %}
