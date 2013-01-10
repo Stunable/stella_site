@@ -38,9 +38,9 @@
 	$(document).ready(function() {
 		$('.spinner').sprite({ fps: 10, no_of_frames: 12 });		
 		var added_sizes = [];
+		var added_colors = [];
 		$('.item-size-list').html('');
 		for(i in inventories) {
-
 			var inventory = inventories[i];
 			var selectedclass = '';
 			
@@ -54,9 +54,12 @@
 				$('.item-size-list').append("<span"+selectedclass+"><a href='#'>" + inventory.size +"</a></span>");
 				added_sizes.push(inventory.size)
 			}
+			if (added_colors.indexOf(inventory.color) === -1){
+			$('.item-color-list').append("<span"+selectedclass+"><a href='" + inventory.add_cart_url + "' >" + inventory.color +"</a></span>");		
+				added_colors.push(inventory.color)
+			}
 
 			$('.item-size-list span').click(function(e) {
-
 				e.preventDefault();
 				$('.item-color-list').html('');
 				for(i in inventories) {
@@ -73,7 +76,7 @@
 				});
 
 				if ($('.item-color-list').children().length === 1){
-					$('.item-color-list').find('span').addClass('selected')
+					$('.item-color-list').find('span').addClass('selected');
 				}
 
 			});
@@ -129,8 +132,7 @@
 			
 			$('#add-to-cart-link, .buy-now').click(function(e) {
 				e.preventDefault();
-				console.log($('.item-details .item-size-list .selected'))
-				console.log($('.item-details .item-color-list .selected'))
+
 				if ($('.item-details .item-size-list .selected').length == 0 || $('.item-details .item-color-list .selected').length == 0) {
 					alert('Please select size and color');
 				} else {
@@ -342,8 +344,7 @@
 						{{item.name}}
 					</div>
 					<div class="item-price">
-						<span class="dollard-sign">$</span>
-						<span>{{item.price}}</span>
+						<span id="modal_item_price">{{item.price_range_text|safe}}</span>
 					</div>
 				</div>
 			</div>
@@ -381,14 +382,14 @@
 				<div>SELECT SIZE:</div>
 				<div class="item-size-list">
 					{% for size in sizes %}
-						<span {% if sizes|length == 1 %}class="selected"{% endif %}><a href="#">{{size}}</a></span>
+						<!-- <span {% if sizes|length == 1 %}class="selected"{% endif %}><a href="#">{{size}}</a></span> -->
 					{% endfor %}
 				</div>
 				
 				<div>COLOR:</div>
 				<div class="item-color-list">
 					{% for color in colors %}
-						<span {% if colors|length == 1 %}class="selected"{% endif %}><a href="#">{{color}}</a></span>
+						<!-- <span {% if colors|length == 1 %}class="selected"{% endif %}><a href="#">{{color}}</a></span> -->
 					{% endfor %}
 				</div>
 

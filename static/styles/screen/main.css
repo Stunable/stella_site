@@ -1614,7 +1614,7 @@ a.friend-name{
 }
 
 #fancybox-outer .item-price {
-	font-size: 4.3em;
+	font-size: 2.5em;
 	float: right;
 /*	width: 190px;*/
 	width: 230px;
@@ -1622,17 +1622,23 @@ a.friend-name{
 	overflow: hidden;
 	font-weight: 200;
 	text-align: right;
+	white-space: nowrap;
+	/*background: url(../../images/x_sm.png) no-repeat 155px -9px;*/
 }
 
-#fancybox-outer .item-price span{
-	display: inline-block;
-	vertical-align: top;
-	margin-top: -10px;
+#fancybox-outer .item-price{
+	white-space: nowrap;
 }
 
 #fancybox-outer .item-price span.dollard-sign{
 	font-size: .7em;
 	margin: -3px -10px 0 0;
+}
+
+
+#fancybox-outer .item-price span.dollar{
+	font-size: .9em;
+	vertical-align: top;
 }
 
 #fancybox-outer .item-details .description{

@@ -212,7 +212,7 @@
                                                 <td class="heading">QUANTITY AVAILABLE</td>{% for s in it.list %}<td class="inventory{{ s.inv }}">{{s.inv|lower}}</td>{% endfor %}
                                             </tr>
                                             <tr>
-                                                <td class="heading">PRICE</td>{% for s in it.list %}<td {% if s.onsale %}class="saleprice"{% endif %}>${{s.price|lower}}</td>{% endfor %}
+                                                <td class="heading">PRICE</td>{% for s in it.list %}<td>${{s.price|lower}}{% if s.onsale %}<sup>*</sup>{% endif %}</td>{% endfor %}
                                             </tr>
                                         </table>
                                     </td>
