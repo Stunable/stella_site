@@ -180,6 +180,12 @@ class Item(models.Model,listImageMixin):
             return
         return {'min':min(seq),'max':max(seq)}
 
+    def price_range_text(self):
+        r = self.price_range()
+        if not r['min'] == r['max']:
+            return '<span class="dollar">$</span>%(min)s - <span class="dollar">$</span>%(max)s'%r
+        return '<span class="dollar">'+str(r['min'])
+
     def total_inventory(self):
         """ returns the total inventory available of all item variations for this product"""
         return reduce(lambda x, y: x+y, [it.inventory for it in self.types.all()], 0)
