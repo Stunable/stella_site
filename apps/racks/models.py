@@ -184,7 +184,7 @@ class Item(models.Model,listImageMixin):
         r = self.price_range()
         if not r['min'] == r['max']:
             return '<span class="dollar">$</span>%(min)s - <span class="dollar">$</span>%(max)s'%r
-        return '<span class="dollar">'+str(r['min'])
+        return '<span class="dollar">$</span>%(min)s'%r
 
     def total_inventory(self):
         """ returns the total inventory available of all item variations for this product"""
