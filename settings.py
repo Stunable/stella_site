@@ -128,7 +128,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-
+    'shopify_app.middleware.LoginProtection',
 )
 
 ROOT_URLCONF = 'urls'
@@ -188,6 +188,8 @@ INSTALLED_APPS = (
     'stunable_wepay',
     'api',
     'gunicorn',
+    'stunable_shopify',
+    'shopify_app',
     #'chronograph'
 )
 
@@ -250,7 +252,8 @@ TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
     "racks.context_processors.racks",
     #'apps.common.context_processors.seo' # in case we do this...
     "django.core.context_processors.request",
-    "apps.cms.context_processors.CMS"
+    "apps.cms.context_processors.CMS",
+    'shopify_app.context_processors.current_shop',
     )
 
 

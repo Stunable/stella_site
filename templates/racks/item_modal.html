@@ -33,8 +33,27 @@
 	var inventories = {{inventories|safe}};
 	var add_selected_product_variant_url = undefined;
 	
-	console.log(inventories)
+	// console.log(inventories)
 	
+	function formatPrice(element){
+		$e = $(element);
+		var d = {
+			'onsale':$e.data('onsale'),
+			'regprice':$e.data('regprice'),
+			'saleprice':$e.data('saleprice')
+		};
+
+		if (d.onsale){
+			return '<span class="dim"><span class="dollar">$</span><span class="struck">'+
+					d.regprice+
+					'</span></span><br><span class="sale"><span class="dollar">$</span>'+
+					d.saleprice+
+					'</span>'
+		}else{
+			return '<span class="dollar">$</span>'+d.regprice;
+		}
+	}
+
 	$(document).ready(function() {
 		$('.spinner').sprite({ fps: 10, no_of_frames: 12 });		
 		var added_sizes = [];
@@ -51,11 +70,22 @@
 			}
 
 			if (added_sizes.indexOf(inventory.size) === -1){
-				$('.item-size-list').append("<span"+selectedclass+"><a href='#'>" + inventory.size +"</a></span>");
+				var el = $("<span"+selectedclass+"><a href='#'>" + inventory.size +"</a></span>")
+				if (inventory.is_onsale){
+					el.addClass('onsale')
+				}
+				$('.item-size-list').append(el);
+				
 				added_sizes.push(inventory.size)
 			}
 			if (added_colors.indexOf(inventory.color) === -1){
-			$('.item-color-list').append("<span"+selectedclass+'><a data-regularprice="'+inventory.regularprice+'" data-onsale="'+inventory.is_onsale+'" data-price="'+inventory.sale_price +"\" href='" + inventory.add_cart_url + "' >" + inventory.color +"</a></span>");		
+				var t = "<span"+selectedclass+'><a data-saleprice="'+inventory.saleprice+'" data-regprice="'+inventory.regularprice+'" data-onsale="'+inventory.is_onsale+"\" href='" + inventory.add_cart_url + "' >" + inventory.color +"</a></span>"
+				var el = $(t)
+
+				if (inventory.is_onsale){
+					el.addClass('onsale')
+				}
+			$('.item-color-list').append(el);		
 				added_colors.push(inventory.color)
 			}
 
@@ -63,8 +93,16 @@
 				e.preventDefault();
 				$('.item-color-list').html('');
 				for(i in inventories) {
+					var inventory = inventories[i]
 					if (inventories[i].size === $(this).text()) {
-						$('.item-color-list').append("<span"+selectedclass+'><a data-regularprice="'+inventories[i].regularprice+'" data-onsale="'+inventories[i].is_onsale+'" data-price="'+inventories[i].sale_price +"\" href='" + inventories[i].add_cart_url + "' >" + inventories[i].color +"</a></span>");						
+						console.log(inventories[i])
+						var t = "<span"+selectedclass+'><a data-saleprice="'+inventories[i].saleprice+'" data-regprice="'+inventories[i].regularprice+'" data-onsale="'+inventories[i].is_onsale+"\" href='" + inventories[i].add_cart_url + "' >" + inventories[i].color +"</a></span>"
+						var el = $(t)
+
+						if (inventories[i].is_onsale){
+							el.addClass('onsale')
+						}
+						$('.item-color-list').append(el);				
 					}
 				}
 				$('.item-details .item-color-list span').click(function(e) {
@@ -72,15 +110,14 @@
 					if (!$(this).hasClass('selected')) {						
 						$('.item-details .item-color-list span').removeClass('selected');
 						$(this).addClass('selected');
-						$('#modal_item_price').html('<span class="dollar">$</span>'+$(this).find('a').data('price'))
-						console.log($(this).find('a').data('price'))
+						$('#modal_item_price').html(formatPrice($(this).find('a')))
 					}
 				});
 
-				if ($('.item-color-list').children().length === 1){
-					$('.item-color-list').find('span').addClass('selected');
-					$('#modal_item_price').html('<span class="dollar">$</span>'+$(this).find('a').data('price'))
-				}
+				// if ($('.item-color-list').children().length === 1){
+					$('.item-color-list').find('span').first().addClass('selected');
+					$('#modal_item_price').html(formatPrice($('.item-color-list').find('a')))
+				// }
 
 			});
 		}

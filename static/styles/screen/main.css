@@ -1623,6 +1623,7 @@ a.friend-name{
 	font-weight: 200;
 	text-align: right;
 	white-space: nowrap;
+	line-height: :.5em;
 	/*background: url(../../images/x_sm.png) no-repeat 155px -9px;*/
 }
 
@@ -1640,6 +1641,20 @@ a.friend-name{
 	font-size: .9em;
 	vertical-align: top;
 }
+
+#fancybox-outer .item-price span.dim{
+	font-size: .7em;
+}
+
+#fancybox-outer .item-price .struck{
+	text-decoration: line-through;
+}
+
+#fancybox-outer .item-price .sale{
+	line-height: .9em;
+	font-weight: 400;
+}
+
 
 #fancybox-outer .item-details .description{
 	margin-top: 30px;
@@ -1749,6 +1764,10 @@ a.friend-name{
 	min-width: 22px;
 	text-align: center;
 	border-radius: 5px;
+}
+
+#fancybox-outer .item-size-list span.onsale{
+	border: 1px solid red;
 }
 
 #fancybox-outer .item-size-list span.selected, #fancybox-outer .item-size-list span:hover{
@@ -4811,6 +4830,10 @@ max-width: 94%;
 #carousel .items-9 .link-holder, #carousel .items-9 .carousel_price_tag{
 	width: 65px;
 	float: right;
+}
+
+.carousel_price_tag .sale{
+	color:red;
 }
 
 #carousel .items-9 .link-holder {

@@ -231,6 +231,12 @@ class Item(models.Model,listImageMixin):
             self.is_available = False
         else:
             self.is_available = True
+
+        self.is_onsale = False
+        for i in self.types.all():
+            if i.is_onsale:
+                self.is_onsale = True
+
         super(Item,self).save()
 
 class ItemType(models.Model):
@@ -271,7 +277,6 @@ class ItemType(models.Model):
         for attr in ['price','image']:
             if getattr(self,attr) is None:
                 setattr(self,attr,getattr(self.item,attr))
-
         super(ItemType,self).save()
 
     @property
