@@ -6,6 +6,7 @@
 {% block content-class%}round-corner-shadow{%endblock%}
 
 {% block content %}
+
 <style type="text/css">
 	.account #page-content {
 		margin-top: 0px;
@@ -79,6 +80,44 @@
         cursor:pointer;
     }
 
+    #bulk_add_box{
+        padding:8px;
+        border-radius:5px;
+        border:1px solid #ccc;
+        width:300px;
+ /*       float:right;*/
+        margin:10px;
+        position:relative;
+        font-size:15px;
+        height:420px;
+    }
+
+    #bulk_add_box.collapsed{
+        height:30px;
+        overflow:hidden;
+        width:180px;
+        border:none;
+        padding:0px;
+    }
+
+    #addbuttons div{
+        margin:20px;
+    }
+
+    #id_uploaded_zip{
+        font-size:.5em;
+        text-align: left;
+        border: 1px dashed #EC67F0;
+        border-radius:8px;
+        width:160px;
+        height:60px;
+        position:absolute;
+        padding:10px;
+        top:330px;
+        left:20px;
+
+    }
+
 
 
 </style>
@@ -111,34 +150,37 @@
         </p>
     {% endif %}
     {% if bulk_upload_form %}
-    <div style="padding:8px;border-radius:5px;border:1px solid #ccc;width:300px;float:right;margin:10px;position:relative;font-size:15px;">
-        <p style="margin:10px">If you have lots of items to sell, and would like to upload them in large batches,  just follow these two steps:<br><br>
-            1.&nbsp <a href="{{ STATIC_URL }}stunable_upload_example.zip" target="blank"><strong class="big red">download this example file </strong></a> <br><br>
-
-            2.&nbsp unzip it, put your own files and information in it, and send it back right here.
-
-              <p>Uploads need to be <strong>.zip</strong> files with a .XLS file and then an image for each item.  Upload it here and you'll know what to do next.  Email us if you have questions</p>
-        <form style="float:right" action="/retailers/item/bulk_upload/" method="POST"enctype="multipart/form-data">
-            {{bulk_upload_form.as_p}}
-            {{bulk_upload_form.errors}}
-            {% csrf_token %}
-        <input type="submit" value="Submit">
-        </form>    
-    </div>
     <div>
-    <a href="{% url add_item %}"type="button" class="btn">Add Item</a>
+
+    <div id="addbuttons">
+        <div><a href="{% url add_item %}"type="button" class="btn">Add Item</a></div>
+        <div id="bulk_add_box" class="collapsed">
+            <a href="" type="button" class="btn click_to_expand">Add Lots of Items</a>
+            <p style="margin:10px">If you have lots of items to sell, and would like to upload them in large batches,  just follow these two steps:<br><br>
+                1.&nbsp <a href="{{ STATIC_URL }}stunable_upload_example.zip" target="blank"><strong class="big red">download this example file </strong></a> <br><br>
+
+                2.&nbsp unzip it, put your own files and information in it, and send it back right here.
+
+                  <p>Uploads need to be <strong>.zip</strong> files with a .XLS file and then an image for each item.  Upload it here and you'll know what to do next.  Email us if you have questions</p>
+            <form style="float:right" action="/retailers/item/bulk_upload/" method="POST"enctype="multipart/form-data">
+                {{bulk_upload_form.as_p}}
+                {{bulk_upload_form.errors}}
+                {% csrf_token %}
+            <input type="submit" value="Submit">
+            </form>    
+        </div>
+    </div>
     <br><br>
     {% endif %}
     <form class="action_submit" action="/retailers/item_action?next={% url product_list %}" method="post">
         {% if not confirm %}
-        <select id="action_select" name="action_name">
+        <select style="display:none" id="action_select" name="action_name">
             <option value="-------------">-------------</option>
             <option name="action" value="delete">Delete Selected</option>
         </select>
-        <input style="display:inline;margin-right:20px;margin-bottom:5px" type="submit" value="Go">
+        <input style="display:none;margin-right:20px;margin-bottom:5px" type="submit" value="Go">
         {% endif %}
 
-        
     {% endif %}
     {% csrf_token %}
     <table class="product_list_table">
@@ -163,7 +205,7 @@
                 {% else %}
                 <td class="action-checkbox"><input class="item_selector" type="checkbox" value="{{item.pk}}" name="selected_items">
                     <div><a class="edit-link" href="{% url edit_item item.pk %}">Edit</a></div>
-                    <div><a class="delete-link">delete</a></div>
+                    <div><a class="delete-link">Delete</a></div>
                 </td>
             {% endif %}
                 <td >
@@ -233,7 +275,9 @@
         <input style="display:inline;margin-right:20px;margin-top:15px" type="submit" value="Yes. I'm sure.">
         {% endif %}
     {% endif %}
+{% if action or confirm %}
 </form>
+{% endif %}
 </div>
 {% endblock %}
 

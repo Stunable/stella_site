@@ -113,6 +113,11 @@ $(document).ready(function(){
         $('.action_submit').submit();
    })
 
+   $('.click_to_expand').click(function(e){
+      $(this).parent().toggleClass('collapsed')
+      return false
+   })
+
 })
 
 

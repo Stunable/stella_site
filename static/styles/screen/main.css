@@ -726,7 +726,7 @@ body {
 	height: 150px;
 	width: 100%;
 	position: absolute;
-	bottom: 0;
+	/*bottom: 0;*/
 	left: 0;
 }
 .section {
@@ -3914,19 +3914,6 @@ outline: none;
 	margin-top: 60px;
 }
 
-#id_uploaded_zip{
-	font-size:.5em;
-	text-align: left;
-	border: 1px dashed #EC67F0;
-	border-radius:8px;
-	width:160px;
-	height:60px;
-	position:absolute;
-	padding:10px;
-	top:280px;
-	left:20px;
-
-}
 
 .privacy h2 {
 text-transform: uppercase;
@@ -4079,7 +4066,7 @@ background-color: white;
 	display: inline;
 }
 .large_common .edit {
-	float: right;
+	margin:20px;
 }
 .large_common p {
 	width: 98%;
