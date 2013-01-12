@@ -1000,7 +1000,7 @@ def add_product_image(request):
 
         print im
 
-        ret = {'html':'<option value="'+str(im.id)+'">'+im.thumbnail+'</option>','message':None,'success':True}
+        ret = {'html':'<option class="new_image_'+str(im.id)+'" value="'+str(im.id)+'">'+im.thumbnail+'</option>','message':None,'success':True}
     else:
         ret = {'message':form.errors}
     return HttpResponse(json.dumps(ret), mimetype="application/json")

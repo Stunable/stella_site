@@ -183,6 +183,11 @@
 			inventory_option_counter++;
 			// $('#tbl-' + inventory_option_counter).show();
 		}
+		if (inventory_option_counter == 1){
+			$('#add-more-option').hide()
+			$('#tbl-1').show()
+		}
+		
 		
 		$('.add-color-popup-btn .plus-icon').click(function() {
 			$('.fixed-popup').remove();
@@ -273,7 +278,7 @@
 				}
 			}
 		});
-
+		var active_image_form = null;
 		$('.addProductImage').click(function(){
 
 			$('.clonedform').remove();
@@ -287,10 +292,13 @@
 							// dataType : 'json',
 							success : function(json) {
 								if (json.success) {
-									$('.imageselector,  select[name=image]').append($(json.html))
+									var $newel = $(json.html)
+									$('.imageselector,  select[name=image]').append($newel)
 									$('.imageselector,  select[name=image]').ImageSelect('remove');
 									$('.imageselector,  select[name=image]').ImageSelect();
 									$(cln).fadeOut(1000).remove()
+									console.log(active_image_form)
+									active_image_form.find('.new_image_'+json.message).attr('selected','selected')
 								} else {
 									$('.fixed-popup .alert-message').text(json.message);						
 								}
@@ -299,6 +307,7 @@
 
 			$('#id_new-image').change(function(){
 				cln.find('form').submit()
+				active_image_form = cln.find('form');
 			})
 			return false
 		})
@@ -310,7 +319,6 @@
 
 <script>
 $(document).ready(function(){
-    console.log($('select[name=image]'))
    $('select[name=image]').ImageSelect(); 
    $('.imageselector').ImageSelect();
 })

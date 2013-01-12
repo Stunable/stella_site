@@ -401,7 +401,7 @@ def retailer_logo_upload(request):
         if request.method == "POST":
             form = LogoUploadForm(request.POST, request.FILES, instance=retailer_profile)
             form.save()
-            return {'result': 'ok', 'source': retailer_profile.logo_image}
+            return {'result': 'ok', 'source': retailer_profile.logo_image.url}
         else:
             raise ValidationError("Errors Occur!")
     except:

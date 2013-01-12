@@ -31,7 +31,7 @@
                 <td class="first"><label>Email: </label></td>
                 <td>
                     <p>
-                       <a class="edit">Edit</a> 
+                       <!-- <a class="edit">Edit</a>  -->
                     </p>
                     <p class="static">
                         {{ retailer_profile.email_address }} 
@@ -51,19 +51,11 @@
                 <td class="first"><label>Password: </label></td>
                 <td>
                     <p>
-                       <a class="edit">Edit</a> 
+                       <a href="/accounts/password/reset/">Reset Password</a> 
                     </p>
                     <p class="static">
                         *****
                     </p>
-                    <div class="editable" style="margin-left: 10px;">
-                        <form action="" class="form-horizontal" method="POST">
-                        	<div class="control-group">
-                            	<input type="password" name="password">{{ retailer_profile.password }}</input>
-                            	<input type="submit" class="btn btn-primary" value="Save"/>
-                            </div>
-                        </form>
-                    </div>
                 </td>
             </tr>
         </table>
