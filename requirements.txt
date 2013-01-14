@@ -48,3 +48,4 @@ django-sslify
 django-mass-edit
 oauth
 gdata
+ShopifyAPI
