@@ -114,9 +114,9 @@ class JoinInvitationManager(models.Manager):
         salt = sha_constructor(str(random())).hexdigest()[:5]
         confirmation_key = sha_constructor(salt + to_email).hexdigest()
         
-        accept_url = u"http://%s%s" % (
+        accept_url = u"http://%s" % (
             unicode(Site.objects.get_current()),
-            reverse("friend_accept_join", args=(confirmation_key,)),
+            # reverse("friend_accept_join", args=(confirmation_key,)),
         )
         
         ctx = {
