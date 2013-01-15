@@ -103,17 +103,6 @@ def get_cart(request, template="cart/cart.html"):
     return direct_to_template(request, template, {})
 
 @login_required
-def order_history(request, template='cart/order_history.html'):
-    try:
-        ctx = {
-               'purchases': Purchase.objects.filter(purchaser=request.user).order_by('-purchased_at')
-        }
-    except:
-        ctx = {}
-    
-    return direct_to_template(request, template, ctx)
-
-@login_required
 def order_history(request, template='orders/order_history.html'):
     ctx = {'purchase_actions': 'orders/user_purchase_actions.html'}
     try:
