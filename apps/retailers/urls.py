@@ -5,6 +5,7 @@ from retailers.views import *
 urlpatterns = patterns('',
     url(r'^create_profile$', create_retailer_profile, name='create_retailer_profile'),
     url(r'^update_profile$', update_retailer_profile, name='update_retailer_profile'),
+    url(r'^shopify/', include('apps.shopify_app.urls')),
     url(r'^product_list$', product_list, name='product_list'),
     url(r'^info/(?P<name>\w+)?', retailer_information, name='retailer_information'),
     url(r'^item/bulk_upload/(?P<upload_id>\d+)?$', bulk_upload, name='bulk_upload'),

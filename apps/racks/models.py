@@ -9,6 +9,7 @@ from rec_managers import RecommenderManager
 from tagging.fields import TagField
 from django.db.models import Avg
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 from django.db.models.loading import get_model, get_models
 
 from sorl.thumbnail import ImageField,get_thumbnail
@@ -76,7 +77,10 @@ class listImageMixin(object):
 
     @property
     def thumbnail(self):
-        return self.get_image().url
+        try:
+            return self.get_image().url
+        except:
+            return 'pic'
         #get_thumbnail(self.get_image(), '120x120',  quality=100).url
 
     def list_image(self):
@@ -87,10 +91,13 @@ class listImageMixin(object):
 class ProductImage(models.Model,listImageMixin):
 
     def __unicode__(self):
-        if self.image:
-            return self.thumbnail
-        else:
-            return self.__class__.__name__
+        try:
+            if self.image:
+                return self.thumbnail
+            else:
+                return self.__class__.__name__
+        except:
+            self.__class__.__name__
 
     image = ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product Image")
     pretty_image = models.ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product pretty Image",storage=OverwriteStorage())
@@ -138,7 +145,11 @@ class Item(models.Model,listImageMixin):
     approved = models.NullBooleanField(default=None)
     is_available = models.BooleanField(default=True)
 
-    upload = models.ForeignKey('retailers.ProductUpload',null=True)
+    upload = models.ForeignKey('retailers.ProductUpload',null=True,blank=True)
+
+    api_type    = models.ForeignKey(ContentType,related_name='item_api_set',null=True,blank=True)
+    object_id       = models.PositiveIntegerField(null=True,blank=True)
+    api_connection             = generic.GenericForeignKey('api_type', 'object_id')
     
     tags = TagField()
     
@@ -257,6 +268,9 @@ class ItemType(models.Model):
     is_onsale = models.BooleanField(default=False, verbose_name='Currently On Sale?')
     sale_price = models.DecimalField(blank=True,null=True,max_digits=19, decimal_places=2, verbose_name='Sale Price for this color/size/inventory')
 
+    api_type    = models.ForeignKey(ContentType,related_name='variation_api_set',null=True,blank=True)
+    object_id       = models.PositiveIntegerField(null=True,blank=True)
+    api_connection  = generic.GenericForeignKey('api_type', 'object_id')
 
     def get_image(self):
         if self.image:
