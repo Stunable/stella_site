@@ -1234,14 +1234,18 @@ function initDesktopSwipe(){
 	    	currentSlideNum = this.getCurrentId();
 	    	//console.log(currentSlideNum)
 	    	//console.log(number_of_slides)
+	    	var slider = this;
 			if (number_of_slides - currentSlideNum <= 6){
 				$.ajax({
-			  		url: '?page=' + 3 + '&item_per_page=' + 6,
+			  		url: '?page=' + slider._page + '&item_per_page=' + 6,
 			  		success: function(data) {
-			  			var slider = $('.iosSlider').data('touchCarousel')
 			  			var items = $(data).find('.item')
 			  			$('.touchcarousel-container').append(items);
 			  			slider.addItems(items);
+			  			slider._page += 1
+			  			// console.log(slider)
+			  			initFancyBox();
+			  			initDragDrop();
 			  		}
 			  		,dataType:'html'
 			  	});
@@ -1582,7 +1586,7 @@ $(function() {
 			dataType : 'json',
 			url : $(this).children().attr('href'),
 			success : function(data) {
-				console.log(data.text);
+				// console.log(data.text);
 				if(data.success == true) {
 					
 				} else {
@@ -2141,7 +2145,7 @@ function stella_request_refund_item(item_id, transaction) {
 
 
 function login_modal(){
-	console.log('calling login modal')
+	// console.log('calling login modal')
 	$.fancybox({
 		'modal':true,
 		'autoResize':true,
