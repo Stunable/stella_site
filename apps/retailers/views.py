@@ -609,6 +609,12 @@ def view_shipping_label(request, shipping_number=None,template='retailers/retail
         purchases = shipment.purchases.all()
         # ctx.update({'retailer_profile': retailer_profile})
 
+        try:
+            retailer_profile = RetailerProfile.objects.get(user=request.user)
+            ctx['advice_text'] = SiteTextContent.objects.get(item_name='shipping_label_instructions')
+        except:
+            ctx['advice_text'] = SiteTextContent.objects.get(item_name='return_label_instructions')
+
         ctx['shipping_label'] = shipment
         ctx['purchases']= purchases
     except:

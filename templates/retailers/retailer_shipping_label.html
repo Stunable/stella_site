@@ -60,7 +60,7 @@
 
     
 {% if checkout %}
-    <p>This customer has ordered the following items to be shipped to the same address.  Check the items you will include in this shipment.</p>
+    <p> {{advice_text.html|safe}} </p>
     <p>Please attempt to ship all items in one shipment.</p>
 
     <p class="error_msg">{{error_message}}</p>
