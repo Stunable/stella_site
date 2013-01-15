@@ -1007,6 +1007,12 @@ def add_product_image(request):
 
 @login_required
 def sale_items(request, template="racks/item_list.html"):
+
+    # private_racks = Rack.objects.PrivateRacksForUser(user)
+    # shared_racks = Rack.objects.SharedRacksForUser(user)
+
+
+
     qs = Item.objects.filter(is_onsale=True)
     ctx = {'items': qs, "title": "On Sale"}
     return direct_to_template(request, template, ctx)

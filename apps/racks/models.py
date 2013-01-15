@@ -294,6 +294,7 @@ class ItemType(models.Model):
             if getattr(self,attr) is None:
                 setattr(self,attr,getattr(self.item,attr))
         super(ItemType,self).save()
+        self.item.save()
 
     @property
     def color(self):
