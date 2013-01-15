@@ -49,11 +49,18 @@ import os
 
 
 def retailer_help(request,  template="retailers/retailer_help.html"):
+<<<<<<< HEAD
     ctx = {}
+=======
+
+    retailer_profile = RetailerProfile.objects.get(user=request.user)
+
+    ctx = {'retailer_profile':retailer_profile}
+>>>>>>> 93163e5968b6183cc6ebe4578b2a9d64261e18bc
     return direct_to_template(request, template, ctx)
 
 def create_retailer_profile(request, template="retailers/retailer_profile_create.html"):
-    ctx = {}
+
     if request.method == "POST":
         form = RetailerProfileCreationForm(request.POST, request.FILES)
         if form.is_valid():

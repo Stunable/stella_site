@@ -1032,7 +1032,7 @@ def steal_rack(request, rack_id):
     try:
         rack = Rack.objects.get(pk=rack_id)
         rack_owner = rack.user
-        stolen_rack_name = rack.name + ' ' + (rack_owner.first_name and rack_owner.last_name and (rack_owner.first_name + ' ' + rack_owner.last_name))  
+        stolen_rack_name = rack.name + ' by ' + (rack_owner.first_name and rack_owner.last_name and (rack_owner.first_name + ' ' + rack_owner.last_name))  
         stolen_rack = Rack(user=request.user, name=stolen_rack_name, publicity=Rack.PUBLIC)
         stolen_rack.save()
         

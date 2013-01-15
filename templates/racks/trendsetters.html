@@ -61,7 +61,7 @@
                 <div class="views clearfix" id="rotator">
                     <div class="header">
                         <div>
-                        <h2 class="static" style="font-size: 1.5em;text-transform: lowercase; color: #888;text-align: left;font-weight: 200; padding-bottom:10px">{% if request.user == rack.owner %}<a class="edit" href="#">{{rack.name}}</a>{% endif %}</h2>
+                        <h1 class="static" style="font-size: 1.5em;text-transform: lowercase; color: #888;text-align: left;font-weight: 200; padding-bottom:10px">{% if request.user == rack.owner %}<a class="edit" href="#">{{rack.name}}</a>{% else %}{{rack.name}}{% endif %}</h1>
                         <form action="{% url update_rack_name rack.id %}" method="POST" class="editable" >
                             {% csrf_token %}
                             <input type="text" value="{{ rack.name }}" name="name" />
@@ -70,7 +70,7 @@
                         {% if request.user == rack.owner %}
                    <!--      <a href="{% url rack_delete rack.id %}" type="button" class="btn" onclick="return confirm('Are you sure you want to delete this rack?')">Delete</a> -->
                         {% else %}
-                        <a href="{% url steal_rack rack.pk %}" type="button"class="btn" onclick="return confirm('Are you sure you want to steal this rack?')">Steal</a>
+                        <a href="{% url steal_rack rack.pk %}" type="button"class="btn steal-rack-link" onclick="return confirm('Are you sure you want to steal this rack?')">Steal</a>
                         {% endif %}					
                         <a href="/cart/buy_rack/{{rack.id}}" type="button" class="btn" >Buy</a>
                            <!--  <div style="text-align: right"> -->
