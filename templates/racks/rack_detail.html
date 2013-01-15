@@ -147,6 +147,16 @@
             });
             
             $('#left-panel').portamento({wrapper: $('#carousel-wrapper')});
+
+            $('.remove').click(function(e){
+                var $item = $(this).closest('.item')
+                e.preventDefault();
+                $.post($(this).attr('href'),function(data){
+                    if (data.result === true){
+                        $item.fadeOut('slow')
+                    }
+                })
+            })
         })
     </script>
     {% endblock %}
