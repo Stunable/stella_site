@@ -120,12 +120,23 @@
 
 
 
+    .productlist .errorlist ul{
+        position:absolute;
+        left:40px;
+        top:360px;
+    }
+    .productlist .errorlist li{
+        margin:5px;
+    }
+
+
+
 </style>
 
 <div class="section intro clearfix">
     <h2><span>{% if upload %}Upload: {{upload.filename}}{% else %}Product Inventory{% endif %}</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
 </div>
-<div class="section body-copy bootstrap {% if not confirm %}not{% endif %}confirm">
+<div class="section productlist body-copy bootstrap {% if not confirm %}not{% endif %}confirm">
     
     {% if action %}
     <form class="action_submit" action="/retailers/item_action?next={% url product_list %}" method="post">
@@ -162,11 +173,13 @@
                 2.&nbsp unzip it, put your own files and information in it, and send it back right here.
 
                   <p>Uploads need to be <strong>.zip</strong> files with a .XLS file and then an image for each item.  Upload it here and you'll know what to do next.  Email us if you have questions</p>
-            <form style="float:right" action="/retailers/item/bulk_upload/" method="POST"enctype="multipart/form-data">
+            <form class="long_process_submit_form" style="float:right" action="/retailers/item/bulk_upload/" method="POST"enctype="multipart/form-data">
                 {{bulk_upload_form.as_p}}
                 {{bulk_upload_form.errors}}
                 {% csrf_token %}
+            <div class="submit_holder">
             <input type="submit" value="Submit">
+            </div>
             </form>    
         </div>
         <div><a href="/retailers/shopify/load" type="button" class="btn">Load Your Shopify Inventory</a></div>

@@ -48,6 +48,10 @@ except ImportError:
 import os
 
 
+def retailer_help(request,  template="retailers/retailer_help.html"):
+    ctx = {}
+    return direct_to_template(request, template, ctx)
+
 def create_retailer_profile(request, template="retailers/retailer_profile_create.html"):
     ctx = {}
     if request.method == "POST":

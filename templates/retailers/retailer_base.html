@@ -69,8 +69,9 @@
                     <h4 class="list-header" id="order-history-menu-item">
                     	<a href="{% url retailer_order_history %}">Order history</a></h4>
 
-                    
                     <div class="separator"></div>
+                    <h4 class="list-header" id="order-history-menu-item">
+                      <a href="{% url retailer_help %}">Help</a></h4>
                 </div>
             </div>
             <div class="fake-tab"></div>
@@ -117,6 +118,15 @@ $(document).ready(function(){
       $(this).parent().toggleClass('collapsed')
       return false
    })
+
+   $('#id_uploaded_zip').change(function(){
+    $('.long_process_submit_form').submit(function(){
+     $(this).find('.submit_holder').html('<img src="/static/images/gui/loading.gif">');
+     return false;
+    })
+   })
+
+   
 
 })
 
