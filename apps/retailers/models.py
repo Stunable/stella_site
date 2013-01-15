@@ -145,3 +145,59 @@ class StylistItem(models.Model):
             return self.stylist.username + ' ' + self.item.name
         except:
             return '-deleted- '
+
+
+
+
+
+class APIConnection(models.Model):
+
+    class Meta:
+        abstract=True
+
+    source_id = models.IntegerField()
+
+    @staticmethod
+    def field_mapping():
+        return {}
+
+
+class ShopifyProduct(APIConnection):
+    pass
+
+    @staticmethod
+    def field_mapping(pd):
+        out = {
+            'API':{
+                'source_id':'id'
+
+            },
+            'item':{
+                'source':'root',
+                'fields':{
+                    'name':'title',
+                    'category':'product_type',
+                    'tags':'tags',
+                }
+            },
+            'itemtype':{
+                'source':'variants',
+                'fields':{
+                    'SKU':'sku',
+                    'inventory':'inventory_quantity',
+                    'price':'price'
+                }
+            }
+
+        }
+        for o in pd['options']:
+            if o['name'] == 'Size':
+                out['itemtype']['fields']['size'] = 'option'+str(o['position'])
+            if o['name'] == 'Color':
+                out['itemtype']['fields']['custom_color_name'] = 'option'+str(o['position'])
+
+        return out
+
+
+
+        

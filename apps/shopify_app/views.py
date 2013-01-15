@@ -4,6 +4,22 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.conf import settings
 import shopify
+from decorators import shop_login_required
+
+from racks.models import Item,ItemType,Color,Size,ProductImage
+from retailers.models import ShopifyProduct,StylistItem
+
+
+from django.core.files import File
+import urllib
+
+import pprint
+
+import tempfile
+import os
+
+
+PP = pprint.PrettyPrinter(indent=4)
 
 def _return_address(request):
     return request.session.get('return_to') or reverse('shopify_root_path')
@@ -51,3 +67,76 @@ def logout(request):
     messages.info(request, "Successfully logged out.")
 
     return redirect(reverse('shopify_app.views.login'))
+
+
+    from django.shortcuts import render_to_response
+    from django.template import RequestContext
+    import shopify
+    from decorators import shop_login_required
+
+    import pprint
+
+    PP = pprint.PrettyPrinter(indent=4)
+
+
+@shop_login_required
+def load(request):
+    products = shopify.Product.find()
+
+    for product in products:
+        d = product.to_dict()
+        PP.pprint(product.to_dict())
+
+        shopify_object,created = ShopifyProduct.objects.get_or_create(source_id=d['id'])
+
+        mapping = ShopifyProduct.field_mapping(d)
+
+        print mapping
+
+
+
+        if created:
+            if len(d['images']):
+                url =  d['images'][0]['src']
+
+                out = tempfile.NamedTemporaryFile()
+                out.write(urllib.urlopen(url).read())
+
+                Picture = ProductImage.objects.create(image=File(out, os.path.basename(url)),retailer=request.user)
+
+
+
+            I = Item.objects.create(
+                # brand=brand,
+                name =d['title'],
+                # description=description,
+                image=Picture,
+                api_connection = shopify_object
+            )
+
+            StylistItem.objects.create(
+                                        stylist = request.user,
+                                        item = I)
+
+
+
+        # if upload.retailer.user:
+        #     si = throughModel.objects.create(
+        #         stylist = upload.retailer.user,
+        #         item = I)
+    # for p in products:
+    #     PP.pprint(p.to_dict())
+
+    #     print dir(p.variants[0])
+    #     v = p.variants[0].to_dict()
+    #     v['inventory_quantity'] = 123
+    #     p.variants[0] = v
+
+    #     p.save()
+       
+    # print variations
+    orders = shopify.Order.find(limit=3, order="created_at DESC")
+    return render_to_response('home/index.html', {
+        'products': products,
+        'orders': orders,
+    }, context_instance=RequestContext(request))
