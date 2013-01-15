@@ -1,6 +1,6 @@
 Dear {{ recipient.first_name }}:
 
-{{ sender.first_name }} {{ sender.last_name}} has shared {{ rack.name }} with you. To view this rack and the rest of {{ sender.first_name }}'s closet, click here {{ rack_url }}
+{{ sender.first_name }} {{ sender.last_name}} has shared {{ rack.name }} with you. To view this rack and the rest of {{ sender.first_name }}'s closet, click here https://stunable.com
 
 Cheers!
 
