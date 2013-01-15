@@ -83,15 +83,19 @@ def logout(request):
 def load(request):
     products = shopify.Product.find()
 
+    
+
+
     for product in products:
         d = product.to_dict()
-        PP.pprint(product.to_dict())
+        # PP.pprint(product.to_dict())
 
-        shopify_object,created = ShopifyProduct.objects.get_or_create(source_id=d['id'])
+        Map = ShopifyProduct.field_mapping(d)
 
-        mapping = ShopifyProduct.field_mapping(d)
+        PP.pprint(mapping)
+        shopify_object,created = ShopifyProduct.objects.get_or_create(source_id=d[Map['API']['source_id']])
 
-        print mapping
+        
 
 
 
@@ -117,6 +121,17 @@ def load(request):
             StylistItem.objects.create(
                                         stylist = request.user,
                                         item = I)
+
+
+            ItemType.objects.create(
+                item = I,
+                size = s,
+                custom_color_name = color,
+                inventory = int(inventory),
+                image = Picture,
+                price = msrp,
+                SKU = SKU
+            )
 
 
 
