@@ -250,6 +250,7 @@ def delete_item(request, item_id, template='racks/item_management.html'):
 @login_required
 def edit_item(request, item_id=None, template='retailers/add_item.html'):
     ctx = {}
+    initial = None
     
     if item_id:
         item_instance = Item.objects.get(pk=item_id)
@@ -312,11 +313,11 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
         try:
             initial = {'Colors': [i.pk for i in item_instance.colors.all()], 
                        'Sizes': [i.pk for i in item_instance.sizes.all()],
-                       'brand': RetailerProfile.objects.get(user=request.user).name
+                       # 'brand': RetailerProfile.objects.get(user=request.user).name
                        }
         except:
-            
-            initial={'brand': retailer.name}
+            pass
+            # initial={'brand': retailer.name}
         form = ItemForm(user=request.user,instance=item_instance, initial=initial)
     
     if request.is_ajax():
