@@ -1,0 +1,65 @@
+{% extends "retailers/retailer_base.html" %}
+
+{% block title %} Stunable | Stylist Administration {% endblock %}
+
+{% block body_class %}common large_common{% endblock %}
+{% block content-class%}round-corner-shadow{%endblock%}
+
+{% block content %}
+<style>
+	.common #page-content {
+/*		margin: 41px 10px 200px auto;*/
+		position: relative;
+		padding-bottom: 0;
+		float: right;
+		min-height: 667px;
+	}
+	.common .body-copy {
+		font-family: 'Advent Pro', sans-serif;
+		margin: 0px 40px;
+	}
+	.common td input[type="text"] {
+		width: 40px;
+	}
+	.common th {
+		border: thin solid #EBEBEB;
+		vertical-align: middle;
+		text-align: center;
+		background-color: #eee;
+		font-weight: 600;
+	}
+	.common table, .common .no-border td {
+		border: none;
+	}
+	h3 {
+		text-transform: uppercase;
+		text-align: center;
+	}
+	
+    h1{
+        font-size:2em;
+    }
+	.bootstrap input {
+		width: 100px;
+	}
+	.order-action ul {
+		position:absolute;top: 0; left:0;display:none;background-color: white;width: 200px;cursor: pointer;
+		border: gray 1px solid;
+	}
+	
+	.order-action ul li {
+	}
+	
+	.order-action {
+		position:relative; cursor: pointer;
+	}
+</style>
+
+<div class="section-intro">
+    <h1> Help </h1>
+</div>
+<div class="body-copy">
+    {{CMS.retailer_help|safe}}
+</div>
+
+{% endblock %}

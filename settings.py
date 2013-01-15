@@ -27,6 +27,15 @@ CONTACT_LIST = (
    ('More Dev Alerts', 'admin@stunable.com'),
 )
 
+
+SHOPIFY_API_KEY = "a9dca1e81ac8554c181100b5a47de622"
+SHOPIFY_API_SECRET = "bc1b2b77901a3d1cd0ec408eb33fe315"
+# See http://api.shopify.com/authentication.html for available scopes
+# to determine the permisssions your app will need.
+SHOPIFY_API_SCOPE = ['read_products', 'read_orders', 'write_products' 
+]
+
+
 MANAGERS = ADMINS
 
 # project root and add "apps" to the path
