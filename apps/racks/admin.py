@@ -86,7 +86,7 @@ class ColorAdmin(admin.ModelAdmin):
 
 class ItemTypeInline(admin.TabularInline):
     model = ItemType
-    extra = 1
+    extra = 0
     
 class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
     inlines = [ItemTypeInline]
