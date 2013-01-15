@@ -958,7 +958,11 @@ function initFancyBox(container) {
 		e.preventDefault();
 	});
 	//Fancybox initializer
-	itemLink.fancybox({
+	createFancy(itemLink)
+}
+
+function createFancy(selection){
+	selection.fancybox({
 		'speedIn' : 1000,
 		'speedOut' : 500,
 		'overlayShow' : true,
@@ -994,6 +998,7 @@ function initFancyBox(container) {
 			$('.item-info,.item-actions,#invitation-form').fadeOut(300).delay(350).fadeIn();
 		}
 	});
+
 }
 
 
@@ -1245,7 +1250,7 @@ function initDesktopSwipe(){
 			  			slider._page += 1
 			  			// console.log(slider)
 			  			initFancyBox();
-			  			initDragDrop();
+			  			initDragDrop(items);
 			  		}
 			  		,dataType:'html'
 			  	});
@@ -1333,8 +1338,11 @@ function initSwipe(selector){
 	}
 }
 
-function initDragDrop() {	
-	$('.drag_item').draggable({
+function initDragDrop(selection) {
+	if (! selection){
+		var selection = $('.drag_item')
+	}	
+	selection.draggable({
 		helper : "clone",
 		appendTo : 'body',
 		opacity : 0.6,
