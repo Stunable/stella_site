@@ -262,6 +262,8 @@ class ItemType(models.Model):
     SKU = models.CharField(max_length=64,null=True,blank=True)
     custom_color_name = models.CharField(max_length=100, 
                                          help_text="An optional name for the color of this item",verbose_name="Style Name")
+    position = models.IntegerField(default=0,blank=True,null=True)
+
     inventory = models.PositiveIntegerField(default=0,verbose_name="inventory quantity")
     price = models.DecimalField(blank=True,max_digits=19, decimal_places=2, verbose_name='Special Price for this color/size/inventory')
     
@@ -292,6 +294,7 @@ class ItemType(models.Model):
             if getattr(self,attr) is None:
                 setattr(self,attr,getattr(self.item,attr))
         super(ItemType,self).save()
+        self.item.save()
 
     @property
     def color(self):

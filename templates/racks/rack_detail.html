@@ -56,7 +56,7 @@
                             <input type="submit" value="Save" class="btn btn-primary" />
                         </form>
                         {% if user.username == rack.owner.username %}
-                        <a href="{% url share_modal_view rack.id %}" type="button" class="btn">{% if shared_admirers %} Send It Again {% else %} Share{% endif %}</a>
+                        <a href="{% url share_modal_view rack.id %}" type="button" class="btn head-link item-ref">{% if shared_admirers %} Send It Again {% else %} Share{% endif %}</a>
                         <a href="{% url rack_delete rack.id %}" type="button" class="btn" onclick="return confirm('Are you sure you want to delete this rack?')">Delete</a>
                         {% endif %}
                         <a href="/cart/buy_rack/{{rack.id}}" type="button" class="btn" >Buy</a>
@@ -147,6 +147,16 @@
             });
             
             $('#left-panel').portamento({wrapper: $('#carousel-wrapper')});
+
+            $('.remove').click(function(e){
+                var $item = $(this).closest('.item')
+                e.preventDefault();
+                $.post($(this).attr('href'),function(data){
+                    if (data.result === true){
+                        $item.fadeOut('slow')
+                    }
+                })
+            })
         })
     </script>
     {% endblock %}

@@ -100,9 +100,9 @@ def add(request, user_id):
             notices = Notice.objects.filter(recipient=new_friend, sender=request.user, notice_type=3).order_by('-added')
             if notices:
                 notice = notices[0]
-                accept_url = u"http://%s%s" % (
+                accept_url = u"http://%s" % (
                     unicode(Site.objects.get_current()),
-                    unicode(reverse("accept_invitation", args=[request.user.id, notice.id]))
+                    # unicode(reverse("accept_invitation", args=[request.user.id, notice.id]))
                 )                    
                 notification.send_notification_on("friend-invite-sent", sender=request.user, recipient=new_friend, approval_link=accept_url)
         

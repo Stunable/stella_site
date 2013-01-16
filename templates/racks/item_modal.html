@@ -66,7 +66,7 @@
 			if (inventories.length === 1){
 				selectedclass=' class="selected"'
 				$('.item-color-list').html('');
-				$('.item-color-list').append('<span class="selected"><a href="' + inventories[i].add_cart_url + '" >' + inventories[i].color +"</a></span>");	
+				// $('.item-color-list').append('<span class="selected"><a href="' + inventories[i].add_cart_url + '" >' + inventories[i].color +"</a></span>");	
 			}
 
 			if (added_sizes.indexOf(inventory.size) === -1){
@@ -78,6 +78,7 @@
 				
 				added_sizes.push(inventory.size)
 			}
+			console.log(inventory.color)
 			if (added_colors.indexOf(inventory.color) === -1){
 				var t = "<span"+selectedclass+'><a data-saleprice="'+inventory.saleprice+'" data-regprice="'+inventory.regularprice+'" data-onsale="'+inventory.is_onsale+"\" href='" + inventory.add_cart_url + "' >" + inventory.color +"</a></span>"
 				var el = $(t)
@@ -85,6 +86,7 @@
 				if (inventory.is_onsale){
 					el.addClass('onsale')
 				}
+			console.log('adding ',el)
 			$('.item-color-list').append(el);		
 				added_colors.push(inventory.color)
 			}
@@ -95,7 +97,6 @@
 				for(i in inventories) {
 					var inventory = inventories[i]
 					if (inventories[i].size === $(this).text()) {
-						console.log(inventories[i])
 						var t = "<span"+selectedclass+'><a data-saleprice="'+inventories[i].saleprice+'" data-regprice="'+inventories[i].regularprice+'" data-onsale="'+inventories[i].is_onsale+"\" href='" + inventories[i].add_cart_url + "' >" + inventories[i].color +"</a></span>"
 						var el = $(t)
 

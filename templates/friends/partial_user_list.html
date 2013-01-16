@@ -1,12 +1,13 @@
 {% load thumbnail %}
 <h4 class="list-header">Search Results</h4>
 <ul class="friend-list" id="result-list">
-
+{% comment %}
 {% for user in user_list %}
     {% ifchanged user %}
     {% include "friends/friend_in_list.html" %}
     {% endifchanged %}
 {% endfor %}
+{% endcomment %}
 {% for f in friend_list %}
     {% include "friends/fb_friend_in_list.html" %}
 {% endfor %}

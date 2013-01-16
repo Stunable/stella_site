@@ -110,9 +110,9 @@ class InviteFriendForm(forms.Form):
                 notices = Notice.objects.filter(recipient=to_user, sender=self.user, notice_type=3).order_by('-added')
                 if notices:
                     notice = notices[0]
-                    accept_url = u"http://%s%s" % (
+                    accept_url = u"http://%s" % (
                         unicode(Site.objects.get_current()),
-                        unicode(reverse("accept_invitation", args=[self.user.id, notice.id]))
+                        # unicode(reverse("accept_invitation", args=[self.user.id, notice.id]))
                     )
                     # send email
                     email_ctx['recipient'] = to_user

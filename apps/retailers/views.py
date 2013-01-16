@@ -49,14 +49,9 @@ import os
 
 
 def retailer_help(request,  template="retailers/retailer_help.html"):
-<<<<<<< HEAD
-    ctx = {}
-=======
-
     retailer_profile = RetailerProfile.objects.get(user=request.user)
 
     ctx = {'retailer_profile':retailer_profile}
->>>>>>> 93163e5968b6183cc6ebe4578b2a9d64261e18bc
     return direct_to_template(request, template, ctx)
 
 def create_retailer_profile(request, template="retailers/retailer_profile_create.html"):
@@ -255,6 +250,7 @@ def delete_item(request, item_id, template='racks/item_management.html'):
 @login_required
 def edit_item(request, item_id=None, template='retailers/add_item.html'):
     ctx = {}
+    initial = None
     
     if item_id:
         item_instance = Item.objects.get(pk=item_id)
@@ -317,11 +313,11 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
         try:
             initial = {'Colors': [i.pk for i in item_instance.colors.all()], 
                        'Sizes': [i.pk for i in item_instance.sizes.all()],
-                       'brand': RetailerProfile.objects.get(user=request.user).name
+                       # 'brand': RetailerProfile.objects.get(user=request.user).name
                        }
         except:
-            
-            initial={'brand': retailer.name}
+            pass
+            # initial={'brand': retailer.name}
         form = ItemForm(user=request.user,instance=item_instance, initial=initial)
     
     if request.is_ajax():
@@ -612,6 +608,12 @@ def view_shipping_label(request, shipping_number=None,template='retailers/retail
         # items = [p.item for p in shipment.purchases.all()]
         purchases = shipment.purchases.all()
         # ctx.update({'retailer_profile': retailer_profile})
+
+        try:
+            retailer_profile = RetailerProfile.objects.get(user=request.user)
+            ctx['advice_text'] = SiteTextContent.objects.get(item_name='shipping_label_instructions')
+        except:
+            ctx['advice_text'] = SiteTextContent.objects.get(item_name='return_label_instructions')
 
         ctx['shipping_label'] = shipment
         ctx['purchases']= purchases
