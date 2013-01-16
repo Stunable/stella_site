@@ -182,7 +182,4 @@ def load(request,ITEM_API_CLASS=ShopifyProduct,VARIATION_API_CLASS= ShopifyVaria
        
     # print variations
     # orders = shopify.Order.find(limit=3, order="created_at DESC")
-    return render_to_response('home/index.html', {
-        'products': products,
-        # 'orders': orders,
-    }, context_instance=RequestContext(request))
+    return redirect(reverse("product_list"))
