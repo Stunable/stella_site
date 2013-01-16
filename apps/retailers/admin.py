@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.retailers.models import RetailerProfile, StylistItem, ShippingType, ProductUpload,UploadError,ShopifyProduct
+from apps.retailers.models import *
 
 
 
@@ -18,7 +18,9 @@ admin.site.register(RetailerProfile, RetailerProfileAdmin)
 admin.site.register(StylistItem)
 admin.site.register(ShippingType)
 admin.site.register(ProductUpload)
+
 admin.site.register(ShopifyProduct)
+admin.site.register(ShopifyVariation)
 
 class UploadErrorAdmin(admin.ModelAdmin):
     list_display = ('text','upload')

@@ -2,12 +2,14 @@ from django.shortcuts import render_to_response, redirect
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
+from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 import shopify
 from decorators import shop_login_required
 
 from racks.models import Item,ItemType,Color,Size,ProductImage
-from retailers.models import ShopifyProduct,StylistItem
+from retailers.models import ShopifyProduct,ShopifyVariation,StylistItem
+from django.db import transaction
 
 
 from django.core.files import File
@@ -79,79 +81,108 @@ def logout(request):
     PP = pprint.PrettyPrinter(indent=4)
 
 
+@transaction.commit_on_success
 @shop_login_required
-def load(request):
+def load(request,ITEM_API_CLASS=ShopifyProduct,VARIATION_API_CLASS= ShopifyVariation):
     products = shopify.Product.find()
 
-    
-
-
     for product in products:
-        d = product.to_dict()
-        # PP.pprint(product.to_dict())
+        try:
+            d = product.to_dict()
+            
 
-        Map = ShopifyProduct.field_mapping(d)
+            PP.pprint(product.to_dict())
+            Map = ITEM_API_CLASS.field_mapping(d)
 
-        PP.pprint(mapping)
-        shopify_object,created = ShopifyProduct.objects.get_or_create(source_id=d[Map['API']['source_id']])
-
-        
-
+            # PP.pprint(Map)
+            api_item_object,created = ITEM_API_CLASS.objects.get_or_create(source_id=d[Map['API']['source_id']])
 
 
-        if created:
+            # if created:
             if len(d['images']):
                 url =  d['images'][0]['src']
-
                 out = tempfile.NamedTemporaryFile()
                 out.write(urllib.urlopen(url).read())
-
                 Picture = ProductImage.objects.create(image=File(out, os.path.basename(url)),retailer=request.user)
 
-
-
-            I = Item.objects.create(
+            I,created = Item.objects.get_or_create(
                 # brand=brand,
                 name =d['title'],
                 # description=description,
-                image=Picture,
-                api_connection = shopify_object
+                # image=Picture,
+                api_type = ContentType.objects.get_for_model(api_item_object),
+                object_id = api_item_object.id,
+                # api_connection = shopify_object
             )
+            I.brand = d[Map['item']['fields']['brand']]
+            I.image = Picture
+            I.save()
 
-            StylistItem.objects.create(
+            StylistItem.objects.get_or_create(
                                         stylist = request.user,
                                         item = I)
 
+            for v in d[Map['itemtype']['source']]:
 
-            ItemType.objects.create(
-                item = I,
-                size = s,
-                custom_color_name = color,
-                inventory = int(inventory),
-                image = Picture,
-                price = msrp,
-                SKU = SKU
-            )
+                # PP.pprint(v)
+
+                api_variation_object,created = ShopifyVariation.objects.get_or_create(source_id=v[Map['itemtype']['fields']['source_id']])
+                size_string = 'ONE SIZE'
+                color_string = 'ONE COLOR'
+
+                # PP.pprint( Map['itemtype']['fields'])
+                if Map['itemtype']['fields'].has_key('size'):
+                    size_string = v[Map['itemtype']['fields']['size']]
+
+                s,created = Size.objects.get_or_create(
+                    size=size_string,
+                    retailer = request.user,
+                )
+
+                if Map['itemtype']['fields'].has_key('custom_color_name'):
+                    color_string =v[Map['itemtype']['fields']['custom_color_name']]
+                
+
+                try:
+                    it = ItemType.objects.get(
+                        item = I,
+                        size = s,
+                        custom_color_name = color_string
+                    )
+                except:
+                    it = ItemType.objects.create(
+                        item = I,
+                        size = s,
+                        custom_color_name = color_string
+                    )
 
 
+                it.api_type = ContentType.objects.get_for_model(api_variation_object)
+                it.object_id = api_variation_object.id
+                it.inventory = v[Map['itemtype']['fields']['inventory']]
+                it.price = v[Map['itemtype']['fields']['price']]
+                it.SKU = v[Map['itemtype']['fields']['SKU']]
+                it.image = Picture
 
-        # if upload.retailer.user:
-        #     si = throughModel.objects.create(
-        #         stylist = upload.retailer.user,
-        #         item = I)
-    # for p in products:
-    #     PP.pprint(p.to_dict())
+                it.save()
 
-    #     print dir(p.variants[0])
-    #     v = p.variants[0].to_dict()
-    #     v['inventory_quantity'] = 123
-    #     p.variants[0] = v
 
-    #     p.save()
+                # print it
+                # print 'created:',created
+
+                # try:
+                #     it.save()
+                # except Exception, e:
+                #     print 'SAVE ERROR:',str(e)
+
+
+        except Exception,e:
+            raise
+            print 'ERROR:',e
        
     # print variations
-    orders = shopify.Order.find(limit=3, order="created_at DESC")
+    # orders = shopify.Order.find(limit=3, order="created_at DESC")
     return render_to_response('home/index.html', {
         'products': products,
-        'orders': orders,
+        # 'orders': orders,
     }, context_instance=RequestContext(request))

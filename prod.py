@@ -30,8 +30,8 @@ WEPAY_CLIENT_SECRET = "cf356f0e63"
 WEPAY_PRODUCTION = True
 WEPAY_STAGE = "production"
 
-SHOPIFY_API_KEY = "a9dca1e81ac8554c181100b5a47de622"
-SHOPIFY_API_SECRET = "bc1b2b77901a3d1cd0ec408eb33fe315"
+SHOPIFY_API_KEY = "0bccd168c35ce06f12af9ce75d9adeb9"
+SHOPIFY_API_SECRET = "e87147b636bad9a76512700306407ba5"
 # See http://api.shopify.com/authentication.html for available scopes
 # to determine the permisssions your app will need.
 SHOPIFY_API_SCOPE = ['read_products', 'read_orders', 'write_products' 

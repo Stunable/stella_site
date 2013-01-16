@@ -15,7 +15,7 @@
 		this._downEvent = "";
 		this._moveEvent = "";
 		this._upEvent = "";
-		this._page = 3;
+		this._next_page = 3;
 		
 		this._totalItemsWidth;
 		this._itemWidths;
