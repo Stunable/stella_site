@@ -201,6 +201,7 @@ INSTALLED_APPS = (
     'stunable_shopify',
     'shopify_app',
     #'chronograph'
+    'django.contrib.sitemaps',
 )
 
 # django-registration
