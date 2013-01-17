@@ -270,7 +270,7 @@
                         settings.onPasswordValidate(pstr.length >= settings.minlength);
 
                     if (pstr.length < settings.maxlength)
-                        meter.removeClass('strong').removeClass('medium').removeClass('week');
+                        meter.removeClass('strong').removeClass('medium').removeClass('weak');
                     if (pstr.length > 0) {
                         var rx = new RegExp(/^(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,30}$/);
                         if (rx.test(pstr)) {
@@ -289,8 +289,8 @@
                                 meter.html("Medium");
                             }
                             else {
-                                meter.addClass('week');
-                                meter.html("Week");
+                                meter.addClass('weak');
+                                meter.html("weak");
                             }
                         }
                         if (cPassword.val().toString().length > 0) {

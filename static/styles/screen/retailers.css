@@ -131,7 +131,7 @@ table td {
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffff00', endColorstr='#f98900',GradientType=1 ); /* IE6-9 */
         background: linear-gradient(left, #ffff00 0%,#f98900 100%); /* W3C */
     }
-    .week
+    .weak
     {
         background-color: yellow;
         background: #ffff00; /* Old browsers */
