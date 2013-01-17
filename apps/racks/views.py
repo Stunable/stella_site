@@ -674,12 +674,16 @@ def pagination(request, ctx, template, query_set):
         if page == '1':
             prepare_ctx_with_num(query_set, ctx, item_per_page)
         else:
-            _from = item_per_page * int(page)
+            try:
+                page = int(page)
+            except:
+                page = 1
+            _from = item_per_page * page
             _to = _from+item_per_page
-            if query_set.count() < _to:
+            if query_set.count() < _to+item_per_page:
                 next = 1
             else:
-                next = int(page)+1
+                next = page+1
 
             user_items = query_set[_from:_to]
 #            ctx['items'] = user_items
