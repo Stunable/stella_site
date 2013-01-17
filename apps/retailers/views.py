@@ -67,7 +67,7 @@ def create_retailer_profile(request, template="retailers/retailer_profile_create
     else:        
         form = RetailerProfileCreationForm()
     
-    ctx['form']=form
+    ctx = {'form':form}
     return direct_to_template(request, template, ctx)
 
 def terms(request, retailer_id, template='retailers/terms.html'):
