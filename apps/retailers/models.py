@@ -178,20 +178,23 @@ class ShopifyProduct(APIConnection):
                     'name':'title',
                     'category':'product_type',
                     'tags':'tags',
+                    'brand':'vendor'
                 }
             },
             'itemtype':{
                 'source':'variants',
                 'fields':{
+                    'source_id':'id',
                     'SKU':'sku',
                     'inventory':'inventory_quantity',
-                    'price':'price'
+                    'price':'price',
+                    'position':'position'
                 }
             }
 
         }
         for o in pd['options']:
-            if o['name'] == 'Size':
+            if o['name'] in ['size','Size']:
                 out['itemtype']['fields']['size'] = 'option'+str(o['position'])
             if o['name'] == 'Color':
                 out['itemtype']['fields']['custom_color_name'] = 'option'+str(o['position'])
@@ -199,5 +202,6 @@ class ShopifyProduct(APIConnection):
         return out
 
 
-
+class ShopifyVariation(APIConnection):
+    pass
         

@@ -675,16 +675,24 @@ def pagination(request, ctx, template, query_set):
             prepare_ctx_with_num(query_set, ctx, item_per_page)
         else:
             _from = item_per_page * int(page)
-            user_items = query_set[_from:_from+item_per_page]
+            _to = _from+item_per_page
+            if query_set.count() < _to:
+                next = 1
+            else:
+                next = int(page)+1
+
+            user_items = query_set[_from:_to]
 #            ctx['items'] = user_items
             rack_items_list = []
             rack_items_list.append(user_items)
             ctx['rack_items_list'] = rack_items_list
-            ctx['user_items'] = Item.objects.filter(pk__in=[i.pk for i in user_items])        
+            ctx['user_items'] = Item.objects.filter(pk__in=[i.pk for i in user_items])
+            ctx['next'] = next   
     else:
         template = 'racks/carousel.html'
         prepare_ctx_with_num(query_set, ctx, item_per_page)
-        
+    
+        ctx['next'] = 3
     ctx['item_per_page'] = item_per_page
             
     return direct_to_template(request, template, ctx)

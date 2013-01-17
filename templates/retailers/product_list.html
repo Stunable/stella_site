@@ -92,10 +92,10 @@
         height:420px;
     }
 
-    #bulk_add_box.collapsed{
+    #bulk_add_box.collapsed, #shopify_form.collapsed{
         height:30px;
         overflow:hidden;
-        width:180px;
+        width:200px;
         border:none;
         padding:0px;
     }
@@ -165,7 +165,7 @@
 
     <div id="addbuttons">
         <div><a href="{% url add_item %}"type="button" class="btn">Add Item</a></div>
-        <div id="bulk_add_box" class="collapsed">
+        <div id="bulk_add_box" class="collapsed ">
             <a href="" type="button" class="btn click_to_expand">Add Lots of Items</a>
             <p style="margin:10px">If you have lots of items to sell, and would like to upload them in large batches,  just follow these two steps:<br><br>
                 1.&nbsp <a href="{{ STATIC_URL }}stunable_upload_example.zip" target="blank"><strong class="big red">download this example file </strong></a> <br><br>
@@ -182,7 +182,19 @@
             </div>
             </form>    
         </div>
-        <div><a href="/retailers/shopify/load" type="button" class="btn">Load Your Shopify Inventory</a></div>
+        <div id="shopify_form" class="collapsed">
+            <a href="" type="button" class="btn click_to_expand">Load Your Shopify Inventory</a>
+            <form action="{% url apps.shopify_app.views.authenticate %}" method="post">{% csrf_token %}
+              <br>
+              <label for='shop'><strong>Enter The URL of your Shopify Shop</strong>
+                <span class="hint">(or just the subdomain if it&rsquo;s at myshopify.com)</span>
+              </label>
+              <p>
+                <input id="shop" name="shop" size="45" type="text" />
+                <input name="commit" type="submit" value="Install" />
+              </p>
+            </form>
+        </div>
     </div>
     <br><br>
     {% endif %}

@@ -265,7 +265,7 @@ class ItemType(models.Model):
     position = models.IntegerField(default=0,blank=True,null=True)
 
     inventory = models.PositiveIntegerField(default=0,verbose_name="inventory quantity")
-    price = models.DecimalField(blank=True,max_digits=19, decimal_places=2, verbose_name='Special Price for this color/size/inventory')
+    price = models.DecimalField(blank=True,null=True,max_digits=19, decimal_places=2, verbose_name='Special Price for this color/size/inventory')
     
     is_onsale = models.BooleanField(default=False, verbose_name='Currently On Sale?')
     sale_price = models.DecimalField(blank=True,null=True,max_digits=19, decimal_places=2, verbose_name='Sale Price for this color/size/inventory')
@@ -290,10 +290,10 @@ class ItemType(models.Model):
         return "%s %s, Size %s" % (color, self.item.name, self.size.size)
 
     def save(self,*args,**kwargs):
-        for attr in ['price','image']:
-            if getattr(self,attr) is None:
-                setattr(self,attr,getattr(self.item,attr))
-        super(ItemType,self).save()
+        # for attr in ['image']:
+        #     if getattr(self,attr) is None:
+        #         setattr(self,attr,getattr(self.item,attr))
+        super(ItemType,self).save(*args,**kwargs)
         self.item.save()
 
     @property

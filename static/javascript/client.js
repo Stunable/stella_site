@@ -1237,17 +1237,20 @@ function initDesktopSwipe(){
 
 	    	number_of_slides = this.numItems;
 	    	currentSlideNum = this.getCurrentId();
-	    	//console.log(currentSlideNum)
+	    	console.log(currentSlideNum)
 	    	//console.log(number_of_slides)
 	    	var slider = this;
+	    	console.log(slider._next_page)
+
 			if (number_of_slides - currentSlideNum <= 6){
 				$.ajax({
-			  		url: '?page=' + slider._page + '&item_per_page=' + 6,
+			  		url: '?page=' + slider._next_page + '&item_per_page=' + 6,
 			  		success: function(data) {
+			  			console.log($(data).attr('data-nextpage'))
 			  			var items = $(data).find('.item')
 			  			$('.touchcarousel-container').append(items);
 			  			slider.addItems(items);
-			  			slider._page += 1
+			  			slider._next_page = parseInt($(data).attr('data-nextpage'))
 			  			// console.log(slider)
 			  			initFancyBox();
 			  			initDragDrop(items);
