@@ -81,23 +81,37 @@
     }
 
     #bulk_add_box{
-        padding:8px;
         border-radius:5px;
-        border:1px solid #ccc;
         width:300px;
  /*       float:right;*/
         margin:10px;
         position:relative;
         font-size:15px;
-        height:420px;
+        height:440px;
     }
 
-    #bulk_add_box.collapsed, #shopify_form.collapsed{
-        height:30px;
+     div.expandable{
+           padding:8px;
+           border-radius:5px;
+           border:1px solid #ccc;
+
+    /*       float:right;*/
+           margin:10px;
+           position:relative;
+           font-size:15px;
+           max-height:440px;
+       }
+
+    div.expandable.collapsed{
+        max-height:71px;
         overflow:hidden;
-        width:200px;
+        width:240px;
         border:none;
         padding:0px;
+    }
+
+    #API_Forms.expandable.collapsed{
+        max-height:90px;
     }
 
     #addbuttons div{
@@ -113,7 +127,7 @@
         height:60px;
         position:absolute;
         padding:10px;
-        top:330px;
+        top:360px;
         left:20px;
 
     }
@@ -127,6 +141,22 @@
     }
     .productlist .errorlist li{
         margin:5px;
+    }
+
+    #apiList{
+        background-color:#eee;
+        padding:20px;
+    }
+
+    #apiList form{
+        margin:10px;
+        padding:10px;
+        border:1px solid black;
+        border-radius: 8px;
+    }
+
+    .api_form img{
+        margin-bottom:20px;
     }
 
 
@@ -163,10 +193,11 @@
     {% if bulk_upload_form %}
     <div>
 
-    <div id="addbuttons">
-        <div><a href="{% url add_item %}"type="button" class="btn">Add Item</a></div>
-        <div id="bulk_add_box" class="collapsed ">
-            <a href="" type="button" class="btn click_to_expand">Add Lots of Items</a>
+    <div id="addbuttons" class="expandable collapsed">
+        <div class="click_to_expand"><a href=""><H1>Add Items</H1></a><br></div>
+        <div><a href="{% url add_item %}"><img src="/static/images/gui/add_item.png"></a></div>
+        <div id="bulk_add_box" class="expandable collapsed">
+            <a href="" class="click_to_expand"><img src="/static/images/gui/add_lots_of_items.png"></a>
             <p style="margin:10px">If you have lots of items to sell, and would like to upload them in large batches,  just follow these two steps:<br><br>
                 1.&nbsp <a href="{{ STATIC_URL }}stunable_upload_example.zip" target="blank"><strong class="big red">download this example file </strong></a> <br><br>
 
@@ -182,18 +213,36 @@
             </div>
             </form>    
         </div>
-        <div id="shopify_form" class="collapsed">
-            <a href="" type="button" class="btn click_to_expand">Load Your Shopify Inventory</a>
-            <form action="{% url apps.shopify_app.views.authenticate %}" method="post">{% csrf_token %}
-              <br>
-              <label for='shop'><strong>Enter The URL of your Shopify Shop</strong>
-                <span class="hint">(or just the subdomain if it&rsquo;s at myshopify.com)</span>
-              </label>
-              <p>
-                <input id="shop" name="shop" size="45" type="text" />
-                <input name="commit" type="submit" value="Install" />
-              </p>
-            </form>
+        <div id="API_Forms" class="expandable collapsed">
+            <a href="" class="click_to_expand"><img src="/static/images/gui/load_from_api.png"></a>
+            <div id="apiList">
+            <div class="api_form collapsed expandable">
+                <img class="click_to_expand" src="/static/images/APIs/shopify.png">
+                <form action="{% url apps.shopify_app.views.authenticate %}" method="post">{% csrf_token %}     
+                  <br>
+                  <label for='shop'><strong>Enter The URL of your Shopify Shop</strong>
+                   (YOUR SHOP NAME).myshopify.com
+                  </label>
+                  <p>
+                    <input id="shop" name="shop" size="45" type="text" />
+                    <input name="commit" type="submit" value="Install" />
+                  </p>
+                </form>
+            </div>
+                <div class="api_form collapsed expandable">
+                    <img class="click_to_expand" src="/static/images/APIs/magento.gif">
+                    <form action="{% url apps.shopify_app.views.authenticate %}" method="post">{% csrf_token %}
+                      <br>
+                      <label for='shop'><strong>Enter your Magento Shop Name</strong>
+                        <span class="hint">It's found in your Magento login page thing whatever</span>
+                      </label>
+                      <p>
+                        <input id="shop" name="shop" size="45" type="text" />
+                        <input name="commit" type="submit" value="Install" />
+                      </p>
+                    </form>
+                 </div>
+            </div>
         </div>
     </div>
     <br><br>
