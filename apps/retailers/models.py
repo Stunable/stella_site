@@ -9,7 +9,14 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.localflavor.us.us_states import US_STATES
 from django.contrib.localflavor.us.models import PhoneNumberField
-from racks.models import Item,ProductImage
+from racks.models import Item,ProductImage,ItemType,Size
+from django.contrib.contenttypes.models import ContentType
+
+import tempfile
+import urllib
+from django.core.files import File
+
+import shopify
 
 from tasks import process_upload
 
@@ -147,22 +154,21 @@ class StylistItem(models.Model):
             return '-deleted- '
 
 
-
-
-
 class APIConnection(models.Model):
 
     class Meta:
         abstract=True
+    retailer = models.ForeignKey(User)
+    update_in_progress = models.BooleanField(default=False)
 
+
+class APIProductConnection(models.Model):
+    class Meta:
+        abstract=True
     source_id = models.IntegerField()
 
-    @staticmethod
-    def field_mapping():
-        return {}
 
-
-class ShopifyProduct(APIConnection):
+class ShopifyProduct(APIProductConnection):
     pass
 
     @staticmethod
@@ -201,7 +207,114 @@ class ShopifyProduct(APIConnection):
 
         return out
 
+    @staticmethod
+    def get_images(pd):
+        for img in pd['images']:
+            # this needs to output the url/path to the image and some sort of unique identifier to prevent duplicates
+            yield img['src'],img['id']
 
-class ShopifyVariation(APIConnection):
+
+class ShopifyVariation(APIProductConnection):
     pass
-        
+
+
+
+
+class ShopifyConnection(APIConnection):
+
+    ITEM_API_CLASS = ShopifyProduct
+    VARIATION_API_CLASS = ShopifyVariation
+
+    shop_url = models.TextField()
+    access_token = models.TextField()
+
+    def get_session(self):
+        session = shopify.Session(self.shop_url)
+        session.token = self.access_token
+        shopify.ShopifyResource.activate_session(session)
+
+        return shopify
+
+
+    def get_products(self):
+        return self.get_session().Product.find()
+
+    def update_products(self):
+        for product in self.get_products():
+            try:
+                d = product.to_dict()
+                Map = self.ITEM_API_CLASS.field_mapping(d)
+
+                # PP.pprint(Map)
+                api_item_object,created = self.ITEM_API_CLASS.objects.get_or_create(source_id=d[Map['API']['source_id']])
+
+                # if created:
+                I,created = Item.objects.get_or_create(
+                    name =d['title'],
+                    api_type = ContentType.objects.get_for_model(api_item_object),
+                    object_id = api_item_object.id,
+                )
+                I.brand = d[Map['item']['fields']['brand']]
+                I.save()
+                StylistItem.objects.get_or_create(
+                                            stylist = self.retailer,
+                                            item = I)
+
+                for index,image in enumerate(self.ITEM_API_CLASS.get_images(d)):
+                    path,identifier = image
+                    Picture = ProductImage.already_exists(identifier,self.retailer)
+                    if not Picture:
+                        out = tempfile.NamedTemporaryFile()
+                        out.write(urllib.urlopen(path).read())
+                        Picture = ProductImage.objects.create(identifier=identifier,image=File(out, os.path.basename(path)),retailer=self.retailer,item=I)
+
+                    if index == 0:
+                        I.featured_image = Picture
+                        I.save()
+
+                for v in d[Map['itemtype']['source']]:
+
+                    api_variation_object,created = self.VARIATION_API_CLASS.objects.get_or_create(source_id=v[Map['itemtype']['fields']['source_id']])
+                    size_string = 'ONE SIZE'
+                    color_string = 'ONE COLOR'
+
+                    # PP.pprint( Map['itemtype']['fields'])
+                    if Map['itemtype']['fields'].has_key('size'):
+                        size_string = v[Map['itemtype']['fields']['size']]
+
+                    s,created = Size.objects.get_or_create(
+                        size=size_string,
+                        retailer = self.retailer,
+                    )
+
+                    if Map['itemtype']['fields'].has_key('custom_color_name'):
+                        color_string =v[Map['itemtype']['fields']['custom_color_name']]
+                    
+
+                    try:
+                        it = ItemType.objects.get(
+                            item = I,
+                            size = s,
+                            custom_color_name = color_string
+                        )
+                    except:
+                        it = ItemType.objects.create(
+                            item = I,
+                            size = s,
+                            custom_color_name = color_string
+                        )
+
+
+                    it.api_type = ContentType.objects.get_for_model(api_variation_object)
+                    it.object_id = api_variation_object.id
+                    it.inventory = v[Map['itemtype']['fields']['inventory']]
+                    it.price = v[Map['itemtype']['fields']['price']]
+                    # it.sale_price = v[Map['itemtype']['fields']['sale_price']]
+                    it.SKU = v[Map['itemtype']['fields']['SKU']]
+                    # it.image = Picture
+
+                    it.save()
+            except Exception,e:
+                raise
+                print 'ERROR:',e
+    

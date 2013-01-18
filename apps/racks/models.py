@@ -99,10 +99,14 @@ class ProductImage(models.Model,listImageMixin):
         except:
             self.__class__.__name__
 
+
     image = ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product Image")
     pretty_image = models.ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product pretty Image",storage=OverwriteStorage())
     bg_color = models.CharField(max_length=32,default='white',blank=True,null=True)
     retailer = models.ForeignKey(User,null=True,blank=True)
+    item = models.ForeignKey('Item',null=True, blank=True,related_name='item_image_set')
+
+    identifier = models.CharField(max_length=256,blank=True,null=True)
 
     def get_image(self):
         if self.pretty_image:
@@ -120,11 +124,17 @@ class ProductImage(models.Model,listImageMixin):
         if not this_id:
             self.generate_pretty_picture()
 
-
+    @staticmethod
+    def already_exists(unique_string,retailer):
+        try:
+            P = ProductImage.objects.get(identifier=unique_string,retailer=retailer)
+            return P
+        except:
+            return None
 
 
 class Item(models.Model,listImageMixin):
-    image = models.ForeignKey(ProductImage,null=True,blank=True)
+    featured_image = models.ForeignKey(ProductImage,null=True,blank=True,related_name='item_featured_image_set')
     gender = models.CharField(max_length=1,default='F',choices=[('F','F'),('M','M'),('B','B')])
     brand = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(max_length=200, verbose_name='Product Name')
@@ -159,11 +169,11 @@ class Item(models.Model,listImageMixin):
         return self.name
     
     def get_image(self):
-        if self.image:
-            if self.image.pretty_image:
-                return self.image.pretty_image
-        if self.image:
-            return self.image.image
+        if self.featured_image:
+            if self.featured_image.pretty_image:
+                return self.featured_image.pretty_image
+        if self.featured_image:
+            return self.featured_image.image
         elif self.image_urls:
             return self.image_urls.split(',')[0].replace('.jpg', '_150x296.jpg')
         else:
@@ -178,8 +188,8 @@ class Item(models.Model,listImageMixin):
             return ''
         
     def get_full_size_image(self):
-        if self.image:
-            return self.image.image
+        if self.featured_image:
+            return self.featured_image.image
         elif self.image_urls:
             return self.image_urls.split(',')[0]
         else: 
@@ -255,8 +265,7 @@ class ItemType(models.Model):
     class Meta:
         unique_together = (('item', 'size','custom_color_name'))
 
-
-    image = models.ForeignKey(ProductImage,null=True)
+    image = models.ForeignKey(ProductImage,null=True,blank=True)
     item = models.ForeignKey('Item', related_name='types')
     size = models.ForeignKey('Size',default=1)
     SKU = models.CharField(max_length=64,null=True,blank=True)
