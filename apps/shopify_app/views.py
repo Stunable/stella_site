@@ -9,6 +9,10 @@ from decorators import shop_login_required
 
 from racks.models import Item,ItemType,Color,Size,ProductImage
 from retailers.models import ShopifyProduct,ShopifyVariation,ShopifyConnection,StylistItem,RetailerProfile
+from retailers.tasks import *
+
+
+
 from django.db import transaction
 
 
@@ -77,7 +81,7 @@ def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,V
     shopify_connection,created = APICONNECTION.objects.get_or_create(retailer=request.user,shop_url=request.session['shopify']['shop_url'])
     shopify_connection.access_token = request.session['shopify']['access_token']
     shopify_connection.save()
-    shopify_connection.update_products()
+    update_API_products.delay(shopify_connection)
     return redirect(reverse("product_list"))
 
 

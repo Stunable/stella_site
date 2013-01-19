@@ -201,7 +201,23 @@ INSTALLED_APPS = (
     'stunable_shopify',
     'shopify_app',
     #'chronograph'
+    'kombu.transport.django',
+    'djcelery',
 )
+
+BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
+BROKER_HOST = "127.0.0.1" # this will be our master server IP
+BROKER_PORT = 5672
+BROKER_VHOST = "/"
+BROKER_USER = "guest"
+BROKER_PASSWORD = "guest"
+
+import djcelery
+CELERY_IMPORTS = (
+    'apps.retailers',
+    'apps.racks'
+)
+djcelery.setup_loader()
 
 # django-registration
 ACCOUNT_ACTIVATION_DAYS = 14

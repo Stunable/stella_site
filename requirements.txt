@@ -49,3 +49,5 @@ django-mass-edit
 oauth
 gdata
 ShopifyAPI
+django-celery
+django-kombu

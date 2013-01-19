@@ -153,15 +153,6 @@ class StylistItem(models.Model):
         except:
             return '-deleted- '
 
-
-class APIConnection(models.Model):
-
-    class Meta:
-        abstract=True
-    retailer = models.ForeignKey(User)
-    update_in_progress = models.BooleanField(default=False)
-
-
 class APIProductConnection(models.Model):
     class Meta:
         abstract=True
@@ -218,6 +209,24 @@ class ShopifyVariation(APIProductConnection):
     pass
 
 
+class APIConnection(models.Model):
+
+    # these are per API
+    ITEM_API_CLASS = ShopifyProduct
+    VARIATION_API_CLASS = ShopifyVariation
+    
+    # these probably won't need to change but are helpful for avoiding circular imports
+    SIZE_CLASS = Size
+    ITEM_TYPE_CLASS = ItemType
+    ITEM_CLASS = Item
+    IMAGE_CLASS = ProductImage
+    STYLIST_ITEM_CLASS = StylistItem
+
+    class Meta:
+        abstract=True
+    retailer = models.ForeignKey(User)
+    update_in_progress = models.BooleanField(default=False)
+
 
 
 class ShopifyConnection(APIConnection):
@@ -239,82 +248,5 @@ class ShopifyConnection(APIConnection):
     def get_products(self):
         return self.get_session().Product.find()
 
-    def update_products(self):
-        for product in self.get_products():
-            try:
-                d = product.to_dict()
-                Map = self.ITEM_API_CLASS.field_mapping(d)
-
-                # PP.pprint(Map)
-                api_item_object,created = self.ITEM_API_CLASS.objects.get_or_create(source_id=d[Map['API']['source_id']])
-
-                # if created:
-                I,created = Item.objects.get_or_create(
-                    name =d['title'],
-                    api_type = ContentType.objects.get_for_model(api_item_object),
-                    object_id = api_item_object.id,
-                )
-                I.brand = d[Map['item']['fields']['brand']]
-                I.save()
-                StylistItem.objects.get_or_create(
-                                            stylist = self.retailer,
-                                            item = I)
-
-                for index,image in enumerate(self.ITEM_API_CLASS.get_images(d)):
-                    path,identifier = image
-                    Picture = ProductImage.already_exists(identifier,self.retailer)
-                    if not Picture:
-                        out = tempfile.NamedTemporaryFile()
-                        out.write(urllib.urlopen(path).read())
-                        Picture = ProductImage.objects.create(identifier=identifier,image=File(out, os.path.basename(path)),retailer=self.retailer,item=I)
-
-                    if index == 0:
-                        I.featured_image = Picture
-                        I.save()
-
-                for v in d[Map['itemtype']['source']]:
-
-                    api_variation_object,created = self.VARIATION_API_CLASS.objects.get_or_create(source_id=v[Map['itemtype']['fields']['source_id']])
-                    size_string = 'ONE SIZE'
-                    color_string = 'ONE COLOR'
-
-                    # PP.pprint( Map['itemtype']['fields'])
-                    if Map['itemtype']['fields'].has_key('size'):
-                        size_string = v[Map['itemtype']['fields']['size']]
-
-                    s,created = Size.objects.get_or_create(
-                        size=size_string,
-                        retailer = self.retailer,
-                    )
-
-                    if Map['itemtype']['fields'].has_key('custom_color_name'):
-                        color_string =v[Map['itemtype']['fields']['custom_color_name']]
-                    
-
-                    try:
-                        it = ItemType.objects.get(
-                            item = I,
-                            size = s,
-                            custom_color_name = color_string
-                        )
-                    except:
-                        it = ItemType.objects.create(
-                            item = I,
-                            size = s,
-                            custom_color_name = color_string
-                        )
-
-
-                    it.api_type = ContentType.objects.get_for_model(api_variation_object)
-                    it.object_id = api_variation_object.id
-                    it.inventory = v[Map['itemtype']['fields']['inventory']]
-                    it.price = v[Map['itemtype']['fields']['price']]
-                    # it.sale_price = v[Map['itemtype']['fields']['sale_price']]
-                    it.SKU = v[Map['itemtype']['fields']['SKU']]
-                    # it.image = Picture
-
-                    it.save()
-            except Exception,e:
-                raise
-                print 'ERROR:',e
+    
     

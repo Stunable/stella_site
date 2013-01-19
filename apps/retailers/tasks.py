@@ -2,49 +2,16 @@ from utils import getXLSdata
 import zipfile
 import os
 import copy
+import urllib
+import pprint
+import tempfile
 
+from django.contrib.contenttypes.models import ContentType
 from racks.models import Item,ItemType,Color,Size,ProductImage
 from django.core.files import File
 
-# Item
-# image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product Image")
-# pretty_image = models.ImageField(upload_to='upload', null=True, blank=True, verbose_name="Product pretty Image",storage=OverwriteStorage())
-# bg_color = models.CharField(max_length=32,default='white',blank=True,null=True)
+from celery import task
 
-# brand = models.CharField(max_length=200, null=True, blank=True)
-# name = models.CharField(max_length=200, verbose_name='Product Name')
-# price = models.DecimalField(max_digits=19, decimal_places=2, verbose_name='Retail Price')
-# is_onsale = models.BooleanField(default=False, verbose_name='Currently On Sale?')
-# description = models.TextField()
-# category = models.ForeignKey(Category, verbose_name='Product Category', null=True, blank=True)
-# fabrics = models.CharField(max_length=200, null=True, blank=True)
-# image_urls = models.TextField(null=True, blank=True)
-# order = models.IntegerField(default=0, db_index=True)
-# is_deleted = models.BooleanField(default=False,blank=True)
-
-# retailers = models.ManyToManyField(User, through='retailers.StylistItem', null=True, blank=True)
-# sizes = models.ManyToManyField(Size, through='racks.ItemType', null=True, blank=True)
-# colors = models.ManyToManyField(Color, through='racks.ItemType', null=True, blank=True)
-# created_date = models.DateField(auto_now=True, auto_now_add=True, default=datetime.date.today)
-
-# approved = models.BooleanField(default=False)
-
-# ItemType:
-# item = models.ForeignKey('Item', related_name='types')
-# color = models.ForeignKey('Color')
-# size = models.ForeignKey('Size')
-# custom_color_name = models.CharField(max_length=100, blank=True, null=True,
-#                                      help_text="An optional custom name for the color of this item")
-# inventory = models.PositiveIntegerField(default=0)
-
-# Size
-# size = models.CharField(max_length=30)
-# description = models.TextField(null=True, blank=True)
-# retailer = models.ForeignKey(User, blank=True, null=True)
-
-# StylistItem
-# stylist = models.ForeignKey(User)
-# item = models.ForeignKey(Item)
 def find_image(folder,image):
     for f in os.listdir(folder):
         # print f.lower()
@@ -182,6 +149,85 @@ def extract_zip(filepath):
     return outdir    
 
 
+@task
+def update_API_products(self):
+    for product in self.get_products():
+        try:
+            d = product.to_dict()
+            Map = self.ITEM_API_CLASS.field_mapping(d)
+
+            # PP.pprint(Map)
+            api_item_object,created = self.ITEM_API_CLASS.objects.get_or_create(source_id=d[Map['API']['source_id']])
+
+            # if created:
+            I,created = self.ITEM_CLASS.objects.get_or_create(
+                name =d['title'],
+                api_type = ContentType.objects.get_for_model(api_item_object),
+                object_id = api_item_object.id,
+            )
+            I.brand = d[Map['item']['fields']['brand']]
+            I.save()
+            self.STYLIST_ITEM_CLASS.objects.get_or_create(
+                                        stylist = self.retailer,
+                                        item = I)
+
+            for index,image in enumerate(self.ITEM_API_CLASS.get_images(d)):
+                path,identifier = image
+                Picture = self.IMAGE_CLASS.already_exists(identifier,self.retailer)
+                if not Picture:
+                    out = tempfile.NamedTemporaryFile()
+                    out.write(urllib.urlopen(path).read())
+                    Picture = self.IMAGE_CLASS.objects.create(identifier=identifier,image=File(out, os.path.basename(path)),retailer=self.retailer,item=I)
+
+                if index == 0:
+                    I.featured_image = Picture
+                    I.save()
+
+            for v in d[Map['itemtype']['source']]:
+
+                api_variation_object,created = self.VARIATION_API_CLASS.objects.get_or_create(source_id=v[Map['itemtype']['fields']['source_id']])
+                size_string = 'ONE SIZE'
+                color_string = 'ONE COLOR'
+
+                # PP.pprint( Map['itemtype']['fields'])
+                if Map['itemtype']['fields'].has_key('size'):
+                    size_string = v[Map['itemtype']['fields']['size']]
+
+                s,created = self.SIZE_CLASS.objects.get_or_create(
+                    size=size_string,
+                    retailer = self.retailer,
+                )
+
+                if Map['itemtype']['fields'].has_key('custom_color_name'):
+                    color_string =v[Map['itemtype']['fields']['custom_color_name']]
+                
+
+                try:
+                    it = self.ITEM_TYPE_CLASS.objects.get(
+                        item = I,
+                        size = s,
+                        custom_color_name = color_string
+                    )
+                except:
+                    it = self.ITEM_TYPE_CLASS.objects.create(
+                        item = I,
+                        size = s,
+                        custom_color_name = color_string
+                    )
+
+
+                it.api_type = ContentType.objects.get_for_model(api_variation_object)
+                it.object_id = api_variation_object.id
+                it.inventory = v[Map['itemtype']['fields']['inventory']]
+                it.price = v[Map['itemtype']['fields']['price']]
+                # it.sale_price = v[Map['itemtype']['fields']['sale_price']]
+                it.SKU = v[Map['itemtype']['fields']['SKU']]
+                # it.image = Picture
+
+                it.save()
+        except Exception,e:
+            raise
+            print 'ERROR:',e
 
 
 
