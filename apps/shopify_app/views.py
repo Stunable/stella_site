@@ -80,6 +80,7 @@ def logout(request):
 def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,VARIATION_API_CLASS= ShopifyVariation):
     shopify_connection,created = APICONNECTION.objects.get_or_create(retailer=request.user,shop_url=request.session['shopify']['shop_url'])
     shopify_connection.access_token = request.session['shopify']['access_token']
+    shopify_connection.update_in_progress = True
     shopify_connection.save()
     update_API_products.delay(shopify_connection)
     return redirect(reverse("product_list"))

@@ -95,8 +95,10 @@
 
 <script>
 $(document).ready(function(){
-    console.log($('select[name=image]'))
+
    $('select[name=image]').ImageSelect(); 
+   $('select[name=featured_image]').ImageSelect(); 
+   
    $('.imageselector').ImageSelect();
 
    $('.deetsclick').click(function(){
@@ -125,6 +127,12 @@ $(document).ready(function(){
     })
    })
 
+   if (updates_in_progress){
+    setTimeout("location.reload(true);",5000);
+    setInterval(function(){
+      $('#progress_box').append('. ').FadeIn('slow')
+    },200)
+   }
    
 
 })

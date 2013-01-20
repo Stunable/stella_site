@@ -184,7 +184,8 @@ class ShopifyProduct(APIProductConnection):
                     'source_id':'id',
                     'SKU':'sku',
                     'inventory':'inventory_quantity',
-                    'price':'price',
+                    'price':'compare_at_price',
+                    'sale_price':'price',
                     'position':'position'
                 }
             }
@@ -205,9 +206,22 @@ class ShopifyProduct(APIProductConnection):
             yield img['src'],img['id']
 
 
+
+
 class ShopifyVariation(APIProductConnection):
     pass
 
+    @staticmethod
+    def get_prices(variation_object,Map):
+        """ shopify variants don't always have a "compare at price" so we need to handle that"""
+
+        sale_price = variation_object[Map['itemtype']['fields']['sale_price']]
+        price = sale_price
+
+        if variation_object[Map['itemtype']['fields']['price']]:
+            price = variation_object[Map['itemtype']['fields']['price']]
+
+        return price,sale_price
 
 class APIConnection(models.Model):
 
@@ -222,10 +236,13 @@ class APIConnection(models.Model):
     IMAGE_CLASS = ProductImage
     STYLIST_ITEM_CLASS = StylistItem
 
-    class Meta:
-        abstract=True
+    # class Meta:
+    #     abstract=True
+
+    #fields
     retailer = models.ForeignKey(User)
     update_in_progress = models.BooleanField(default=False)
+    last_updated = models.DateTimeField(auto_now_add=True)
 
 
 
@@ -238,15 +255,27 @@ class ShopifyConnection(APIConnection):
     access_token = models.TextField()
 
     def get_session(self):
+        """ return an object which is authenticated and can interact with the API"""
+
         session = shopify.Session(self.shop_url)
         session.token = self.access_token
         shopify.ShopifyResource.activate_session(session)
-
         return shopify
 
-
     def get_products(self):
-        return self.get_session().Product.find()
+        """ return all products for this retailer for this API"""
+        page = 1
+        out = []
+        while True:
+            resp = self.get_session().Product.find(limit=250,page=page)
+            if len(resp):
+                out += resp
+                page += 1
+            else:
+                return out
+
+    def get_variations(self,product_dict):
+        return product_dict[self.ITEM_API_CLASS.field_mapping(product_dict)['itemtype']['source']]
 
     
     

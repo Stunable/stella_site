@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from retailers.forms import RetailerProfileCreationForm, RetailerEditForm, ItemForm,\
                             ItemEditForm, LogoUploadForm
-from retailers.models import RetailerProfile, StylistItem, ShippingType,ProductUpload
+from retailers.models import RetailerProfile, StylistItem, ShippingType,ProductUpload,APIConnection,ShopifyConnection
 from racks.models import Item, Rack, Rack_Item
 from apps.common import json_view
 from django.views.decorators.csrf import csrf_exempt
@@ -18,6 +18,8 @@ from django.http import HttpResponse,HttpResponseRedirect
 from apps.racks.forms import item_inventory_form_factory
 
 from apps.cms.models import SiteTextContent
+
+from django.forms import HiddenInput
 
 from django.forms.models import inlineformset_factory
 from apps.racks.models import ItemType,ProductImage
@@ -32,11 +34,12 @@ from wepay import WePay
 
 import urllib
 import urllib2
+from datetime import date,timedelta
 
 from apps.cart.plugins.taxcloud import TaxCloudClient
 TCC = TaxCloudClient()
 
-
+from tasks import update_API_products
 
 from cart.plugins.create_shipment import ship_it
 
@@ -323,7 +326,8 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
     if request.is_ajax():
         template = 'racks/size_input.html'
     ctx['next']=request.get_full_path()
-    ctx['image_upload_form'] = modelform_factory(ProductImage,fields=["image"])(initial={'retailer':retailer.id},prefix="new")
+    ctx['image_upload_form'] = modelform_factory(ProductImage,fields=["image","item"])(initial={'retailer':retailer.id,'item':item_instance.id},prefix="new")
+    ctx['image_upload_form'].fields['item'].widget = HiddenInput()
     ctx['item'] = item_instance
     ctx['form'] = form #MyForm()
     ctx['inventory_forms'] = inventory_type_formset_factory(request.user, None, item_instance,extra=1)
@@ -385,7 +389,26 @@ def product_list(request, template="retailers/product_list.html"):
             if si.item.pk not in s:
                 pl.append(si.item)
                 s.add(si.item.pk)
-        ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form}
+
+        yesterday = date.today() - timedelta(days=1)
+
+        for API_type in [ShopifyConnection]:
+            need_updates = API_type.objects.filter(retailer=request.user,last_updated__lte=yesterday)
+            if need_updates.count():
+                for api in need_updates:
+                    api.update_in_progress = True
+                    api.last_updated = datetime.datetime.now()
+                    api.save()
+                    update_API_products.delay(getattr(api,'shopifyconnection'))
+
+        in_progress = APIConnection.objects.filter(retailer=request.user,update_in_progress=True)
+        for i in in_progress:
+            i.update_in_progress = False
+            i.save()
+
+
+
+        ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form,'updates_in_progress':in_progress}
     except:
         raise
         return redirect(reverse("home"))

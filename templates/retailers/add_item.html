@@ -293,12 +293,15 @@
 							success : function(json) {
 								if (json.success) {
 									var $newel = $(json.html)
-									$('.imageselector,  select[name=image]').append($newel)
-									$('.imageselector,  select[name=image]').ImageSelect('remove');
-									$('.imageselector,  select[name=image]').ImageSelect();
-									$(cln).fadeOut(1000).remove()
-									console.log(active_image_form)
+									$('.imageselector,  select[name=image], select[name=featured_image]').append($newel)
 									active_image_form.find('.new_image_'+json.message).attr('selected','selected')
+									
+									$('.imageselector,  select[name=image], select[name=featured_image]').ImageSelect('remove');
+									$('.imageselector,  select[name=image], select[name=featured_image]').ImageSelect();
+									$(cln).fadeOut(1000).remove()
+									
+
+
 								} else {
 									$('.fixed-popup .alert-message').text(json.message);						
 								}
@@ -307,7 +310,7 @@
 
 			$('#id_new-image').change(function(){
 				cln.find('form').submit()
-				active_image_form = cln.find('form');
+				active_image_form = cln.closest('td').find('select');
 			})
 			return false
 		})
@@ -320,6 +323,7 @@
 <script>
 $(document).ready(function(){
    $('select[name=image]').ImageSelect(); 
+   $('select[name=featured_image]').ImageSelect(); 
    $('.imageselector').ImageSelect();
 })
 

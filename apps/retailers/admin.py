@@ -22,6 +22,9 @@ admin.site.register(ProductUpload)
 admin.site.register(ShopifyProduct)
 admin.site.register(ShopifyVariation)
 
+admin.site.register(ShopifyConnection)
+
+
 class UploadErrorAdmin(admin.ModelAdmin):
     list_display = ('text','upload')
 

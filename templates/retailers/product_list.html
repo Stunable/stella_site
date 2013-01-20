@@ -30,19 +30,18 @@
         text-align: center;
         font-weight: lighter;
     }
-    .notconfirm .nodeets .variation{
+    .notconfirm .nodeets .variation,.notconfirm .nodeets .addl_pic{
         display: none;
         border-bottom:none;
     }
-    .item_pic{
-        display:none;
-    }
-    .nodeets .item_pic{
-        display:block;
-    }
-
+ 
     .confirm .deetsclick{
         display:none;
+    }
+    .picture_box img{
+        margin-top:10px;
+        -webkit-margin-bottom-collapse: :10px;
+        display:block;
     }
 
     .notconfirm .deetsclick{
@@ -159,9 +158,15 @@
         margin-bottom:20px;
     }
 
+    #progress_box{
+        font-size: 1.5em;
+    }
 
 
 </style>
+
+<script>var updates_in_progress = {{updates_in_progress|length}};</script>
+
 
 <div class="section intro clearfix">
     <h2><span>{% if upload %}Upload: {{upload.filename}}{% else %}Product Inventory{% endif %}</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
@@ -245,7 +250,12 @@
             </div>
         </div>
     </div>
+    
+    {% if updates_in_progress %}
+    <p>Your Products are updating, the page will automatically every few seconds until they are finished.</p>
+    <div id="progress_box"></div>
     <br><br>
+    {% endif %}
     {% endif %}
     <form class="action_submit" action="/retailers/item_action?next={% url product_list %}" method="post">
         {% if not confirm %}
@@ -274,72 +284,7 @@
             </tr>
             {% endif %}
             {% for item in product_list %}
-            <tr class="product_row nodeets">
-            {% if confirm %}
-                <input type="hidden" value="{{item.pk}}" name="selected_items">
-                {% else %}
-                <td class="action-checkbox"><input class="item_selector" type="checkbox" value="{{item.pk}}" name="selected_items">
-                    <div><a class="edit-link" href="{% url edit_item item.pk %}">Edit</a></div>
-                    <div><a class="delete-link">Delete</a></div>
-                </td>
-            {% endif %}
-                <td >
-                    {% load thumbnail %}
-                    {% thumbnail item.get_image "50" as im %}
-                        <img class="item_pic" src="{{ im.url }}">
-                        {% empty %}
-                        <img class="item_pic" src="{{ item.get_image }}" style="width: 50px;" alt=""/>
-                    {% endthumbnail %}
-                    
-                </td>
-                <td>
-                    <table class="inner-table">
-                        <thead>
-                            <th>PRODUCT NAME</th>
-                            <th>RETAIL PRICE RANGE</th>
-                            <th class="small">TOTAL INVENTORY</th>
-                            <th>STATUS</th>
-                            <th>DATE ADDED</th>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td>{{item.name|lower}}</td>
-                                <td>${{item.price_range.min}}{% if not item.price_range.max == item.price_range.min %} - ${{item.price_range.max}}{%endif%}</td>
-                                <td {% if not item.all_inv_in_stock %}class="warning"{% endif %}>{{item.total_inventory}}</td>
-                                <td>{{item.display_approval_status|safe|lower}}</td>
-                                <td>{{item.created_date}}</td>
-                            </tr>
-                            {% if not confirm %}
-                            <tr class="deetsclick"><td colspan=5>Click to Show/Hide Details</td></tr>
-                            {% endif %}
-                            {% with item.types_by_color as styles %}
-                                {% for it in styles.styles %} 
-                                <tr class="variation">
-                                    <td><img class="var_pic" src="{% thumbnail it.list.0.pic "50" as im %}{{im.url}}{% endthumbnail %}"></td>
-                                    <td colspan=4>
-                                        <table>
-                                            <tr><td class="heading">COLOR</td>
-                                                <td colspan={{styles.longest}}>{{it.color|lower}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="heading">SIZE</td>{% for s in it.list %}<td>{{s.size|lower}}</td>{% endfor %}
-                                            </tr>
-                                            <tr>
-                                                <td class="heading">QUANTITY AVAILABLE</td>{% for s in it.list %}<td class="inventory{{ s.inv }}">{{s.inv|lower}}</td>{% endfor %}
-                                            </tr>
-                                            <tr>
-                                                <td class="heading">PRICE</td>{% for s in it.list %}<td>${{s.price|lower}}{% if s.onsale %}<sup>*</sup>{% endif %}</td>{% endfor %}
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            {% endwith %}
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
+                {% include "retailers/product_with_inv_tr.html" %}
             {% endfor %}
         </tbody>
     </table>

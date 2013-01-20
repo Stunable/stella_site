@@ -150,42 +150,47 @@ def extract_zip(filepath):
 
 
 @task
-def update_API_products(self):
-    for product in self.get_products():
+def update_API_products(API_OBJECT):
+
+    for product in API_OBJECT.get_products():
         try:
             d = product.to_dict()
-            Map = self.ITEM_API_CLASS.field_mapping(d)
+            Map = API_OBJECT.ITEM_API_CLASS.field_mapping(d)
 
             # PP.pprint(Map)
-            api_item_object,created = self.ITEM_API_CLASS.objects.get_or_create(source_id=d[Map['API']['source_id']])
+            api_item_object,created = API_OBJECT.ITEM_API_CLASS.objects.get_or_create(source_id=d[Map['API']['source_id']])
 
             # if created:
-            I,created = self.ITEM_CLASS.objects.get_or_create(
+    
+            I,created = API_OBJECT.ITEM_CLASS.objects.get_or_create(
                 name =d['title'],
                 api_type = ContentType.objects.get_for_model(api_item_object),
                 object_id = api_item_object.id,
             )
             I.brand = d[Map['item']['fields']['brand']]
             I.save()
-            self.STYLIST_ITEM_CLASS.objects.get_or_create(
-                                        stylist = self.retailer,
-                                        item = I)
+            API_OBJECT.STYLIST_ITEM_CLASS.objects.get_or_create(
+                                                                    stylist=API_OBJECT.retailer,
+                                                                    item=I
+                                                                )
 
-            for index,image in enumerate(self.ITEM_API_CLASS.get_images(d)):
+            # get all the images associated with this product
+            for index,image in enumerate(API_OBJECT.ITEM_API_CLASS.get_images(d)):
                 path,identifier = image
-                Picture = self.IMAGE_CLASS.already_exists(identifier,self.retailer)
+                Picture = API_OBJECT.IMAGE_CLASS.already_exists(identifier,API_OBJECT.retailer)
                 if not Picture:
                     out = tempfile.NamedTemporaryFile()
                     out.write(urllib.urlopen(path).read())
-                    Picture = self.IMAGE_CLASS.objects.create(identifier=identifier,image=File(out, os.path.basename(path)),retailer=self.retailer,item=I)
+                    Picture = API_OBJECT.IMAGE_CLASS.objects.create(identifier=identifier,image=File(out, os.path.basename(path)),retailer=API_OBJECT.retailer,item=I)
 
                 if index == 0:
                     I.featured_image = Picture
                     I.save()
 
-            for v in d[Map['itemtype']['source']]:
+            # get all the variations
+            for v in API_OBJECT.get_variations(d):
 
-                api_variation_object,created = self.VARIATION_API_CLASS.objects.get_or_create(source_id=v[Map['itemtype']['fields']['source_id']])
+                api_variation_object,created = API_OBJECT.VARIATION_API_CLASS.objects.get_or_create(source_id=v[Map['itemtype']['fields']['source_id']])
                 size_string = 'ONE SIZE'
                 color_string = 'ONE COLOR'
 
@@ -193,9 +198,9 @@ def update_API_products(self):
                 if Map['itemtype']['fields'].has_key('size'):
                     size_string = v[Map['itemtype']['fields']['size']]
 
-                s,created = self.SIZE_CLASS.objects.get_or_create(
+                s,created = API_OBJECT.SIZE_CLASS.objects.get_or_create(
                     size=size_string,
-                    retailer = self.retailer,
+                    retailer = API_OBJECT.retailer,
                 )
 
                 if Map['itemtype']['fields'].has_key('custom_color_name'):
@@ -203,31 +208,37 @@ def update_API_products(self):
                 
 
                 try:
-                    it = self.ITEM_TYPE_CLASS.objects.get(
+                    it = API_OBJECT.ITEM_TYPE_CLASS.objects.get(
                         item = I,
                         size = s,
                         custom_color_name = color_string
                     )
                 except:
-                    it = self.ITEM_TYPE_CLASS.objects.create(
+                    it = API_OBJECT.ITEM_TYPE_CLASS.objects.create(
                         item = I,
                         size = s,
                         custom_color_name = color_string
                     )
 
-
                 it.api_type = ContentType.objects.get_for_model(api_variation_object)
                 it.object_id = api_variation_object.id
                 it.inventory = v[Map['itemtype']['fields']['inventory']]
-                it.price = v[Map['itemtype']['fields']['price']]
-                # it.sale_price = v[Map['itemtype']['fields']['sale_price']]
-                it.SKU = v[Map['itemtype']['fields']['SKU']]
-                # it.image = Picture
 
+                regular_price,sale_price = api_variation_object.get_prices(v,Map)
+
+                if regular_price != sale_price:
+                    it.is_onsale = True
+
+                it.price = regular_price
+                it.sale_price = sale_price
+                it.SKU = v[Map['itemtype']['fields']['SKU']]
                 it.save()
+
         except Exception,e:
             raise
             print 'ERROR:',e
+    API_OBJECT.update_in_progress = False
+    API_OBJECT.save()
 
 
 

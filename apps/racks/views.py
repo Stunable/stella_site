@@ -1003,7 +1003,7 @@ def add_product_image(request):
 
     retailer = RetailerProfile.objects.get(user=request.user)
 
-    form = modelform_factory(ProductImage,fields=["image"])(request.POST,request.FILES,prefix="new")
+    form = modelform_factory(ProductImage,fields=["image",'item'])(request.POST,request.FILES,prefix="new")
 
     if form.is_valid():
         im = form.save(commit=False)
@@ -1012,7 +1012,7 @@ def add_product_image(request):
 
         print im
 
-        ret = {'html':'<option class="new_image_'+str(im.id)+'" value="'+str(im.id)+'">'+im.thumbnail+'</option>','message':None,'success':True}
+        ret = {'html':'<option class="new_image_'+str(im.id)+'" value="'+str(im.id)+'">'+im.thumbnail+'</option>','message':str(im.id),'success':True}
     else:
         ret = {'message':form.errors}
     return HttpResponse(json.dumps(ret), mimetype="application/json")

@@ -222,9 +222,9 @@ class ItemForm(AjaxModelForm):
         self.user = user
         super(ItemForm, self).__init__(*args, **(kwargs))
         self.fields['tags'].label = "Tags Related to your Product"
-        self.fields['image'].empty_label = '/static/images/choosepic.png'
-        self.fields['image'].queryset = ProductImage.objects.filter(retailer=user)
-        addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(retailer=user),'#','Product Image')
+        self.fields['featured_image'].empty_label = '/static/images/choosepic.png'
+        self.fields['featured_image'].queryset = ProductImage.objects.filter(retailer=user)
+        addPlus(self.fields['featured_image'].widget, 'featured_image', None, ProductImage.objects.filter(retailer=user),'#','Product Image')
 
 
 
@@ -272,10 +272,10 @@ class ItemEditForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(ItemEditForm, self).__init__(*args, **(kwargs))
-        self.fields['image'].required = False
-        self.fields['image'].empty_label = '/static/images/choosepic.png'
-        self.fields['image'].queryset = ProductImage.objects.filter(retailer=user)
-        addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(retailer=retailer),'#','Product Image')
+        self.fields['featured_image'].required = False
+        self.fields['featured_image'].empty_label = '/static/images/choosepic.png'
+        self.fields['featured_image'].queryset = ProductImage.objects.filter(retailer=user)
+        addPlus(self.fields['featured_image'].widget, 'featured_image', None, ProductImage.objects.filter(retailer=retailer),'#','Product Image')
 
     
     def clean_price(self):

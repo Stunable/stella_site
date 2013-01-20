@@ -179,7 +179,10 @@ class Item(models.Model,listImageMixin):
         else:
             return "upload/agjea1.254x500.jpg"
 #            return "%simages/general/agjea1.254x500.jpg" % (settings.STATIC_URL)
-        
+    
+    def get_additional_images(self):
+        return [im for im in self.item_image_set.all() if im !=self.featured_image]
+
     def retailer(self):
         try:    
             RetailerProfile = get_model('retailers', 'RetailerProfile')
