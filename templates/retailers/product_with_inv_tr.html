@@ -7,7 +7,8 @@
         <div><a class="delete-link">Delete</a></div>
     </td>
 {% endif %}
-    <td class="picture_box">
+    <td >
+        <div class="picture_box">
         {% load thumbnail %}
         {% thumbnail item.get_image "50" as im %}
             <img class="item_pic" src="{{ im.url }}">
@@ -19,6 +20,7 @@
                 <img class="item_pic addl_pic" src="{{ im.url }}">
             {% endthumbnail %}
         {% endfor %}
+    </div>
     </td>
     <td>
         <table class="inner-table">
