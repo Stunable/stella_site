@@ -278,7 +278,7 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
             print 'after save item form'
             
             inventory_form = inventory_type_formset_factory(request.user, post, item_instance)        
-    
+            print inventory_form
             if not inventory_form.is_valid():
                 response.update({'success' : False})
                 response['errors'].update(inventory_form.errors_as_json()['errors'])
@@ -331,6 +331,10 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
     ctx['item'] = item_instance
     ctx['form'] = form #MyForm()
     ctx['inventory_forms'] = inventory_type_formset_factory(request.user, None, item_instance,extra=1)
+
+
+    print ctx['inventory_forms']
+
     ctx['retailer_profile'] = retailer
     ctx['item_pk'] = item_id
 

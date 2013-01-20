@@ -118,7 +118,7 @@ def item_inventory_form_factory(retailer):
     class ItemInventoryForm(AjaxModelForm):
         item = forms.ModelChoiceField(queryset=Item.objects.all(), widget=forms.HiddenInput())
         size = forms.ModelChoiceField(required=True,queryset=Size.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
-        image = forms.ModelChoiceField(required=True,queryset=ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
+        image = forms.ModelChoiceField(required=False,queryset=ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
 
 
         class Meta:
@@ -146,8 +146,11 @@ def item_inventory_form_factory(retailer):
             addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)),'#','Product Image')
             self.fields['image'].widget.attrs['class'] = "imageselector"
             self.fields['image'].empty_label = '/static/images/choosepic.png'
-            self.fields['size'].initial = 1
-            self.fields['size'].empty_label = None
+            self.fields['size'].initial = None
+            self.fields['image'].initial = None
+            self.fields['position'].initial = 0
+            self.fields['custom_color_name'].initial = None
+            self.fields['size'].empty_label = '------'
 
 
 
