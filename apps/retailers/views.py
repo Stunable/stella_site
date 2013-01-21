@@ -406,10 +406,6 @@ def product_list(request, template="retailers/product_list.html"):
                     update_API_products.delay(getattr(api,'shopifyconnection'))
 
         in_progress = APIConnection.objects.filter(retailer=request.user,update_in_progress=True)
-        for i in in_progress:
-            i.update_in_progress = False
-            i.save()
-
 
 
         ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form,'updates_in_progress':in_progress}

@@ -74,8 +74,6 @@ def logout(request):
 
     return redirect(reverse('shopify_app.views.login'))
 
-
-@transaction.commit_on_success
 @shop_login_required
 def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,VARIATION_API_CLASS= ShopifyVariation):
     shopify_connection,created = APICONNECTION.objects.get_or_create(retailer=request.user,shop_url=request.session['shopify']['shop_url'])

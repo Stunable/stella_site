@@ -18,6 +18,9 @@ from tasks import *
 from apps.common.utils import *
 from apps.accounts.models import AnonymousProfile
 
+from django.dispatch import receiver
+from django.db.models.signals import post_save,pre_save
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
     
@@ -177,7 +180,7 @@ class Item(models.Model,listImageMixin):
         elif self.image_urls:
             return self.image_urls.split(',')[0].replace('.jpg', '_150x296.jpg')
         else:
-            return "upload/agjea1.254x500.jpg"
+            return None
 #            return "%simages/general/agjea1.254x500.jpg" % (settings.STATIC_URL)
     
     def get_additional_images(self):
@@ -189,6 +192,9 @@ class Item(models.Model,listImageMixin):
             return RetailerProfile.objects.filter(user=self.retailers.all()[0])[0].name
         except:
             return ''
+
+    def get_retailer(self):
+        self.retailers.all()[0] 
         
     def get_full_size_image(self):
         if self.featured_image:
@@ -196,7 +202,7 @@ class Item(models.Model,listImageMixin):
         elif self.image_urls:
             return self.image_urls.split(',')[0]
         else: 
-            return "upload/agjea1.254x500.jpg"
+            return None
 
     def price_range(self):
         seq = [it.get_current_price() for it in self.types.all()]
@@ -212,7 +218,7 @@ class Item(models.Model,listImageMixin):
 
     def total_inventory(self):
         """ returns the total inventory available of all item variations for this product"""
-        return reduce(lambda x, y: x+y, [it.inventory for it in self.types.all()], 0)
+        return reduce(lambda x, y: x+y, [it.inventory for it in self.types.all() if it.inventory is not None], 0)
 
     def all_inv_in_stock(self):
         for it in self.types.all():
@@ -250,7 +256,7 @@ class Item(models.Model,listImageMixin):
         return {'styles':out,'longest':longest}
 
     def save(self,*args,**kwargs):
-        print self, 'inventory:', self.total_inventory()
+
         if self.total_inventory() < 1:
             self.is_available = False
         else:
@@ -263,7 +269,7 @@ class Item(models.Model,listImageMixin):
 
         super(Item,self).save()
 
-class ItemType(models.Model):
+class ItemType(models.Model,DirtyFieldsMixin):
 
     class Meta:
         unique_together = (('item', 'size','custom_color_name'))
@@ -276,7 +282,7 @@ class ItemType(models.Model):
                                          help_text="An optional name for the color of this item",verbose_name="Style Name")
     position = models.IntegerField(default=0,blank=True,null=True)
 
-    inventory = models.PositiveIntegerField(default=0,verbose_name="inventory quantity")
+    inventory = models.PositiveIntegerField(default=None,null=True,verbose_name="inventory quantity")
     price = models.DecimalField(blank=True,null=True,max_digits=19, decimal_places=2, verbose_name='Special Price for this color/size/inventory')
     
     is_onsale = models.BooleanField(default=False, verbose_name='Currently On Sale?')
@@ -301,18 +307,19 @@ class ItemType(models.Model):
         color = self.custom_color_name
         return "%s %s, Size %s" % (color, self.item.name, self.size.size)
 
-    def save(self,*args,**kwargs):
-        # for attr in ['image']:
-        #     if getattr(self,attr) is None:
-        #         setattr(self,attr,getattr(self.item,attr))
-        super(ItemType,self).save(*args,**kwargs)
-        self.item.save()
+
 
     @property
     def color(self):
         return Color(name=self.custom_color_name)
 
-    
+@receiver(post_save, sender=ItemType,dispatch_uid="item_type_post_inventorySave")
+def postSaveGeneric(sender, instance, created, **kwargs):
+    dks = instance.get_dirty_fields().keys()
+    if 'inventory' in dks and not created and instance._original_state['inventory'] is not None:
+        if instance.api_connection:
+            instance.api_connection.update_inventory(instance.inventory)
+        instance.item.save()
 
 class RackManager(models.Manager):
         

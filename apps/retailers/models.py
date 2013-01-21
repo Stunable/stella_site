@@ -17,8 +17,9 @@ import urllib
 from django.core.files import File
 
 import shopify
+from celery import task
 
-from tasks import process_upload
+from tasks import process_upload,save_shopify_inventory_update
 
 RETAILER_SUBJECT = 'accounts/retailer_welcome_subject.txt'
 RETAILER_MESSAGE = 'accounts/retailer_welcome_message.txt'
@@ -157,6 +158,10 @@ class APIProductConnection(models.Model):
     class Meta:
         abstract=True
     source_id = models.IntegerField()
+    api_connection= models.ForeignKey('APIConnection')
+
+    
+
 
 
 class ShopifyProduct(APIProductConnection):
@@ -209,7 +214,11 @@ class ShopifyProduct(APIProductConnection):
 
 
 class ShopifyVariation(APIProductConnection):
-    pass
+
+    
+    def update_inventory(self,new_value):
+        save_shopify_inventory_update.delay(self.api_connection.shopifyconnection,self.source_id,new_value)    
+
 
     @staticmethod
     def get_prices(variation_object,Map):
@@ -272,10 +281,12 @@ class ShopifyConnection(APIConnection):
                 out += resp
                 page += 1
             else:
-                return out
+                return [p.to_dict() for p in out]
 
     def get_variations(self,product_dict):
         return product_dict[self.ITEM_API_CLASS.field_mapping(product_dict)['itemtype']['source']]
+
+
 
     
     

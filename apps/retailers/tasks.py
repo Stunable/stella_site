@@ -150,18 +150,34 @@ def extract_zip(filepath):
 
 
 @task
-def update_API_products(API_OBJECT):
+def save_inventory_modification(API_OBJECT,variant):
+    pass
 
+
+@task
+def save_shopify_inventory_update(api_connection,source_id,new_value):
+    SV = api_connection.shopifyconnection.get_session().Variant.find(source_id)
+    SV.attributes['inventory_quantity'] = new_value
+    try:
+        SV.save()
+        print 'success'
+    except:
+        raise
+
+
+@task
+def update_API_products(API_OBJECT):
+    print 'updating products for '+str(API_OBJECT)
     for product in API_OBJECT.get_products():
         try:
-            d = product.to_dict()
+            d = product
             Map = API_OBJECT.ITEM_API_CLASS.field_mapping(d)
 
             # PP.pprint(Map)
-            api_item_object,created = API_OBJECT.ITEM_API_CLASS.objects.get_or_create(source_id=d[Map['API']['source_id']])
+            api_item_object,created = API_OBJECT.ITEM_API_CLASS.objects.get_or_create(source_id=d[Map['API']['source_id']],api_connection=API_OBJECT)
 
             # if created:
-    
+
             I,created = API_OBJECT.ITEM_CLASS.objects.get_or_create(
                 name =d['title'],
                 api_type = ContentType.objects.get_for_model(api_item_object),
@@ -189,8 +205,8 @@ def update_API_products(API_OBJECT):
 
             # get all the variations
             for v in API_OBJECT.get_variations(d):
-
-                api_variation_object,created = API_OBJECT.VARIATION_API_CLASS.objects.get_or_create(source_id=v[Map['itemtype']['fields']['source_id']])
+                print v
+                api_variation_object,created = API_OBJECT.VARIATION_API_CLASS.objects.get_or_create(source_id=v[Map['itemtype']['fields']['source_id']],api_connection=API_OBJECT)
                 size_string = 'ONE SIZE'
                 color_string = 'ONE COLOR'
 
@@ -206,7 +222,6 @@ def update_API_products(API_OBJECT):
                 if Map['itemtype']['fields'].has_key('custom_color_name'):
                     color_string =v[Map['itemtype']['fields']['custom_color_name']]
                 
-
                 try:
                     it = API_OBJECT.ITEM_TYPE_CLASS.objects.get(
                         item = I,
@@ -222,7 +237,7 @@ def update_API_products(API_OBJECT):
 
                 it.api_type = ContentType.objects.get_for_model(api_variation_object)
                 it.object_id = api_variation_object.id
-                it.inventory = v[Map['itemtype']['fields']['inventory']]
+                it.inventory = int(v[Map['itemtype']['fields']['inventory']])
 
                 regular_price,sale_price = api_variation_object.get_prices(v,Map)
 
@@ -237,6 +252,7 @@ def update_API_products(API_OBJECT):
         except Exception,e:
             raise
             print 'ERROR:',e
+    print 'done updating items'
     API_OBJECT.update_in_progress = False
     API_OBJECT.save()
 
