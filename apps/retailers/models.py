@@ -284,6 +284,13 @@ class ShopifyConnection(APIConnection):
             # this needs to output the url/path to the image and some sort of unique identifier to prevent duplicates
             yield img['src'],img['id']
 
+    @staticmethod
+    def get_description(pd):
+        desc = ''
+        if pd['body_html']:
+            desc = pd['body_html']
+        return desc
+
 
 
     

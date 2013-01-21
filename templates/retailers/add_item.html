@@ -82,6 +82,14 @@
 	.heading td{
 		margin:20px;
 	}
+	#description_text{
+		position: absolute;
+		right: 200px;
+		width: 200px;
+		top: 420px;
+		padding:5px;
+		border:1px solid black;
+	}
 </style>
 
 
@@ -115,6 +123,9 @@
 	<form action="" method="post" id="add-item-form" enctype="multipart/form-data">
 		{% csrf_token %}
 		{{ form.non_field_errors }}
+		<div id="description_text">
+			{{form.description.value|safe}}
+		</div>
 		<table>
 			{{ form.as_table }}
 			<tr></tr>

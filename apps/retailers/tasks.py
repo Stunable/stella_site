@@ -186,12 +186,14 @@ def update_API_products(api_connection):
                 object_id = api_item_object.id,
             )
             I.brand = d[Map['item']['fields']['brand']]
+
+            I.description = api_connection.get_description(d)
             I.save()
+            
             api_connection.STYLIST_ITEM_CLASS.objects.get_or_create(
                                                                     stylist=api_connection.retailer,
                                                                     item=I
                                                                 )
-
             # get all the images associated with this product
             for index,image in enumerate(api_connection.get_images(d)):
                 path,identifier = image
