@@ -157,12 +157,13 @@ def save_inventory_modification(API_OBJECT,variant):
 @task
 def save_shopify_inventory_update(api_connection,source_id,new_value):
     SV = api_connection.shopifyconnection.get_session().Variant.find(source_id)
-    SV.attributes['inventory_quantity'] = new_value
-    try:
-        SV.save()
-        print 'success'
-    except:
-        raise
+    if SV.attributes['inventory_quantity'] != new_value:
+        SV.attributes['inventory_quantity'] = new_value
+        try:
+            SV.save()
+            print 'success'
+        except:
+            raise
 
 
 @task
@@ -205,7 +206,7 @@ def update_API_products(API_OBJECT):
 
             # get all the variations
             for v in API_OBJECT.get_variations(d):
-                print v
+                # print v
                 api_variation_object,created = API_OBJECT.VARIATION_API_CLASS.objects.get_or_create(source_id=v[Map['itemtype']['fields']['source_id']],api_connection=API_OBJECT)
                 size_string = 'ONE SIZE'
                 color_string = 'ONE COLOR'
