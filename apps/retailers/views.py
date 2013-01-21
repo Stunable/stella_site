@@ -220,7 +220,7 @@ def inventory_type_formset_factory(retailer, data=None, instance=None,extra=1):
     # by passing the retailer (instance of User) to it's constructor.
 #    form = ItemInventoryForm(retailer)
     form = item_inventory_form_factory(retailer)
-    formset_class = inlineformset_factory(Item, ItemType, form=form, extra=extra, can_delete=True)
+    formset_class = inlineformset_factory(Item, ItemType, form=form, extra=extra, can_delete=True, exclude=['api_connection','object_id','api_type'])
     
     def errors_as_json(self, strip_tags=False):
         error_summary = {}

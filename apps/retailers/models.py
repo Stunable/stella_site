@@ -167,51 +167,6 @@ class APIProductConnection(models.Model):
 class ShopifyProduct(APIProductConnection):
     pass
 
-    @staticmethod
-    def field_mapping(pd):
-        out = {
-            'API':{
-                'source_id':'id'
-
-            },
-            'item':{
-                'source':'root',
-                'fields':{
-                    'name':'title',
-                    'category':'product_type',
-                    'tags':'tags',
-                    'brand':'vendor'
-                }
-            },
-            'itemtype':{
-                'source':'variants',
-                'fields':{
-                    'source_id':'id',
-                    'SKU':'sku',
-                    'inventory':'inventory_quantity',
-                    'price':'compare_at_price',
-                    'sale_price':'price',
-                    'position':'position'
-                }
-            }
-
-        }
-        for o in pd['options']:
-            if o['name'] in ['size','Size']:
-                out['itemtype']['fields']['size'] = 'option'+str(o['position'])
-            if o['name'] == 'Color':
-                out['itemtype']['fields']['custom_color_name'] = 'option'+str(o['position'])
-
-        return out
-
-    @staticmethod
-    def get_images(pd):
-        for img in pd['images']:
-            # this needs to output the url/path to the image and some sort of unique identifier to prevent duplicates
-            yield img['src'],img['id']
-
-
-
 
 class ShopifyVariation(APIProductConnection):
 
@@ -284,7 +239,50 @@ class ShopifyConnection(APIConnection):
                 return [p.to_dict() for p in out]
 
     def get_variations(self,product_dict):
-        return product_dict[self.ITEM_API_CLASS.field_mapping(product_dict)['itemtype']['source']]
+        return product_dict[self.field_mapping(product_dict)['itemtype']['source']]
+
+    @staticmethod
+    def field_mapping(pd):
+        out = {
+            'API':{
+                'source_id':'id'
+
+            },
+            'item':{
+                'source':'root',
+                'fields':{
+                    'name':'title',
+                    'category':'product_type',
+                    'tags':'tags',
+                    'brand':'vendor'
+                }
+            },
+            'itemtype':{
+                'source':'variants',
+                'fields':{
+                    'source_id':'id',
+                    'SKU':'sku',
+                    'inventory':'inventory_quantity',
+                    'price':'compare_at_price',
+                    'sale_price':'price',
+                    'position':'position'
+                }
+            }
+
+        }
+        for o in pd['options']:
+            if o['name'] in ['size','Size']:
+                out['itemtype']['fields']['size'] = 'option'+str(o['position'])
+            if o['name'] == 'Color':
+                out['itemtype']['fields']['custom_color_name'] = 'option'+str(o['position'])
+
+        return out
+
+    @staticmethod
+    def get_images(pd):
+        for img in pd['images']:
+            # this needs to output the url/path to the image and some sort of unique identifier to prevent duplicates
+            yield img['src'],img['id']
 
 
 

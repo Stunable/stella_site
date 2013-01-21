@@ -316,6 +316,7 @@ class ItemType(models.Model,DirtyFieldsMixin):
 @receiver(post_save, sender=ItemType,dispatch_uid="item_type_post_inventorySave")
 def postSaveGeneric(sender, instance, created, **kwargs):
     dks = instance.get_dirty_fields().keys()
+
     if 'inventory' in dks and not created and instance._original_state['inventory'] is not None:
         if instance.api_connection:
             instance.api_connection.update_inventory(instance.inventory)

@@ -150,7 +150,7 @@ def extract_zip(filepath):
 
 
 @task
-def save_inventory_modification(API_OBJECT,variant):
+def save_inventory_modification(api_connection,variant):
     pass
 
 
@@ -158,6 +158,7 @@ def save_inventory_modification(API_OBJECT,variant):
 def save_shopify_inventory_update(api_connection,source_id,new_value):
     SV = api_connection.shopifyconnection.get_session().Variant.find(source_id)
     if SV.attributes['inventory_quantity'] != new_value:
+        print 'updating inventory for variant:',SV
         SV.attributes['inventory_quantity'] = new_value
         try:
             SV.save()
@@ -167,47 +168,48 @@ def save_shopify_inventory_update(api_connection,source_id,new_value):
 
 
 @task
-def update_API_products(API_OBJECT):
-    print 'updating products for '+str(API_OBJECT)
-    for product in API_OBJECT.get_products():
+def update_API_products(api_connection):
+    print 'updating products for '+str(api_connection)
+    for product in api_connection.get_products():
         try:
             d = product
-            Map = API_OBJECT.ITEM_API_CLASS.field_mapping(d)
+            Map = api_connection.field_mapping(d)
 
             # PP.pprint(Map)
-            api_item_object,created = API_OBJECT.ITEM_API_CLASS.objects.get_or_create(source_id=d[Map['API']['source_id']],api_connection=API_OBJECT)
+            api_item_object,created = api_connection.ITEM_API_CLASS.objects.get_or_create(source_id=d[Map['API']['source_id']],api_connection=api_connection)
 
             # if created:
 
-            I,created = API_OBJECT.ITEM_CLASS.objects.get_or_create(
+            I,created = api_connection.ITEM_CLASS.objects.get_or_create(
                 name =d['title'],
                 api_type = ContentType.objects.get_for_model(api_item_object),
                 object_id = api_item_object.id,
             )
             I.brand = d[Map['item']['fields']['brand']]
             I.save()
-            API_OBJECT.STYLIST_ITEM_CLASS.objects.get_or_create(
-                                                                    stylist=API_OBJECT.retailer,
+            api_connection.STYLIST_ITEM_CLASS.objects.get_or_create(
+                                                                    stylist=api_connection.retailer,
                                                                     item=I
                                                                 )
 
             # get all the images associated with this product
-            for index,image in enumerate(API_OBJECT.ITEM_API_CLASS.get_images(d)):
+            for index,image in enumerate(api_connection.get_images(d)):
                 path,identifier = image
-                Picture = API_OBJECT.IMAGE_CLASS.already_exists(identifier,API_OBJECT.retailer)
+                Picture = api_connection.IMAGE_CLASS.already_exists(identifier,api_connection.retailer)
                 if not Picture:
                     out = tempfile.NamedTemporaryFile()
                     out.write(urllib.urlopen(path).read())
-                    Picture = API_OBJECT.IMAGE_CLASS.objects.create(identifier=identifier,image=File(out, os.path.basename(path)),retailer=API_OBJECT.retailer,item=I)
+                    Picture = api_connection.IMAGE_CLASS.objects.create(identifier=identifier,image=File(out, os.path.basename(path)),retailer=api_connection.retailer,item=I)
 
                 if index == 0:
                     I.featured_image = Picture
                     I.save()
 
             # get all the variations
-            for v in API_OBJECT.get_variations(d):
+            for v in api_connection.get_variations(d):
                 # print v
-                api_variation_object,created = API_OBJECT.VARIATION_API_CLASS.objects.get_or_create(source_id=v[Map['itemtype']['fields']['source_id']],api_connection=API_OBJECT)
+
+                api_variation_object,created = api_connection.VARIATION_API_CLASS.objects.get_or_create(source_id=v[Map['itemtype']['fields']['source_id']],api_connection=api_connection)
                 size_string = 'ONE SIZE'
                 color_string = 'ONE COLOR'
 
@@ -215,22 +217,22 @@ def update_API_products(API_OBJECT):
                 if Map['itemtype']['fields'].has_key('size'):
                     size_string = v[Map['itemtype']['fields']['size']]
 
-                s,created = API_OBJECT.SIZE_CLASS.objects.get_or_create(
+                s,created = api_connection.SIZE_CLASS.objects.get_or_create(
                     size=size_string,
-                    retailer = API_OBJECT.retailer,
+                    retailer = api_connection.retailer,
                 )
 
                 if Map['itemtype']['fields'].has_key('custom_color_name'):
                     color_string =v[Map['itemtype']['fields']['custom_color_name']]
                 
                 try:
-                    it = API_OBJECT.ITEM_TYPE_CLASS.objects.get(
+                    it = api_connection.ITEM_TYPE_CLASS.objects.get(
                         item = I,
                         size = s,
                         custom_color_name = color_string
                     )
                 except:
-                    it = API_OBJECT.ITEM_TYPE_CLASS.objects.create(
+                    it = api_connection.ITEM_TYPE_CLASS.objects.create(
                         item = I,
                         size = s,
                         custom_color_name = color_string
@@ -254,8 +256,8 @@ def update_API_products(API_OBJECT):
             raise
             print 'ERROR:',e
     print 'done updating items'
-    API_OBJECT.update_in_progress = False
-    API_OBJECT.save()
+    api_connection.update_in_progress = False
+    api_connection.save()
 
 
 
