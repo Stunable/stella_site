@@ -30,12 +30,15 @@
                 display:none;
             }
             #login_box{
+                margin-left:10%;
+                margin-top:10%;
                 width:566px;
                 height:350px;
                 border:1px solid white;
                 border-radius:20px;
                 overflow:hidden;
                 background-color:rgba(0,0,0,.2);
+                     
             }
                 #login_box .inner_content{
                     padding:60px;
@@ -419,25 +422,33 @@
                 </form>
             </div>
         </div>
+
         {% block login_modal_box %}
-         <div class="special" id="login_box">
-            
-            <div class="inner_content">
-                <div>
-                    {{CMS.login_explain|safe}}
-                </div>                
-                <div id="login_options">
-                    <div><a href="/login/facebook/"><div class="facebooklogin" style="cursor:pointer"></div></a>
-                    </div>
-                    <!-- <div class="fb-login-button" data-show-faces="true" data-width="500" data-max-rows="1"></div> -->
-                </div>
-                
-            </div>
-            <div class="foot">
-                <a href="/retailers/create_profile">become a stunable stylist</a>
-                <a href="/accounts/login">stylist login</a>
-            </div>
-         </div>
+
+        {% if not request.user.is_authenticated %}
+      
+       
+        <div id="fancybox-overlay" style="background-color: rgb(0, 0, 0); opacity: 0.85; cursor: auto; height: 1191px; position: fixed; display: block;"></div>
+        <div id="fancybox-wrap" style="display: inline-block; opacity: 1;"><div id="fancybox-outer"><div id="fancybox-content" style=""><div style="width:2000px;text-align:center;"><div class="special" id="login_box">
+                     
+             <div class="inner_content">
+                 <div>
+                     {{CMS.login_explain|safe}}
+                 </div>                
+                 <div id="login_options">
+                     <div><a href="/login/facebook/"><div class="facebooklogin" style="cursor:pointer"></div></a>
+                     </div>
+                     <!-- <div class="fb-login-button" data-show-faces="true" data-width="500" data-max-rows="1"></div> -->
+                 </div>
+                 
+             </div>
+             <div class="foot">
+                 <a href="/retailers/create_profile">become a stunable stylist</a>
+                 <a href="/accounts/login">stylist login</a>
+             </div>
+          </div></div></div></div></div></div>
+
+          {% endif %}
         {% endblock %}
         </div>
 
@@ -594,7 +605,7 @@
                   {% block login_modal_script %}
                     if (!logged_in){
                         console.log('not logged in')
-                        login_modal()
+                        // login_modal()
                     }
                   {% endblock %}
               })

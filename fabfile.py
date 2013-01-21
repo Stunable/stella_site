@@ -15,7 +15,7 @@ from fabric.colors import yellow, green, blue, red
 # Config setup #
 ################
 
-MODE = 'dev'
+MODE = 'live'
 
 
 conf = {
