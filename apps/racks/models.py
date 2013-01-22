@@ -212,8 +212,13 @@ class Item(models.Model,listImageMixin):
 
     def price_range_text(self):
         r = self.price_range()
+        r.update({'sale':
+            ' class="sale" ' if self.is_onsale else ''
+        })
+
+        print r
         if not r['min'] == r['max']:
-            return '<span class="dollar">$</span>%(min)s - <span class="dollar">$</span>%(max)s'%r
+            return '<span%(sale)s><span class="dollar">$</span>%(min)s</span> - <span class="dollar">$</span>%(max)s'%r
         return '<span class="dollar">$</span>%(min)s'%r
 
     def total_inventory(self):

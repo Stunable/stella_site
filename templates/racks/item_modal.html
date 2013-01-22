@@ -415,9 +415,10 @@
 			</div>
 		</div><!--/.item-visuals-->
 		<div class="item-actions">
-			<p class="description">
-				{{item.description}}
-			</p>					
+			<div class="description">
+			
+				{{item.description|safe}}
+			</div>					
 			<div class="item-size">
 				<div>SELECT SIZE:</div>
 				<div class="item-size-list">

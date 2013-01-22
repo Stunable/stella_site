@@ -105,7 +105,7 @@
                                         </p>
                                     </div>
                                     <div class="carousel_price_tag">
-                                        {% if not item.price_range.max == item.price_range.min %}<span {% if item.is_onsale %}class="sale"{% endif %}>${{item.price_range.min}}</span> - {%endif%}${{item.price_range.max}}</div>
+                                        {{item.price_range_text|safe}}</div>
                                 </li>
                             {% endfor %}
                             {% endfor %}
