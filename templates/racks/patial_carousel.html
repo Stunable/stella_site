@@ -26,7 +26,7 @@
                                                 </p>
                                             </div>
                                             <div class="carousel_price_tag">
-                                                <sup>$</sup>{{item.price}}</div>
+                                                {{item.price_range_text|safe}}</div>
                                         </li>
 	{% endfor %}
 </ul>

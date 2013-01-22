@@ -313,7 +313,6 @@ class ItemType(models.Model,DirtyFieldsMixin):
         return "%s %s, Size %s" % (color, self.item.name, self.size.size)
 
 
-
     @property
     def color(self):
         return Color(name=self.custom_color_name)
@@ -325,6 +324,9 @@ def postSaveGeneric(sender, instance, created, **kwargs):
     if 'inventory' in dks and not created and instance._original_state['inventory'] is not None:
         if instance.api_connection:
             instance.api_connection.update_inventory(instance.inventory)
+        instance.item.save()
+
+    if 'is_onsale' in instance.get_dirty_fields().keys():
         instance.item.save()
 
 class RackManager(models.Manager):
