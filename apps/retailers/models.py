@@ -19,7 +19,7 @@ from django.core.files import File
 import shopify
 from celery import task
 
-from tasks import process_upload,save_shopify_inventory_update
+from tasks import process_upload,save_shopify_inventory_update,update_API_products
 
 RETAILER_SUBJECT = 'accounts/retailer_welcome_subject.txt'
 RETAILER_MESSAGE = 'accounts/retailer_welcome_message.txt'
@@ -210,13 +210,20 @@ class APIConnection(models.Model):
 
 
 
+
 class ShopifyConnection(APIConnection):
+
+    def __unicode__(self):
+        return self.shop_url
 
     ITEM_API_CLASS = ShopifyProduct
     VARIATION_API_CLASS = ShopifyVariation
 
     shop_url = models.TextField()
     access_token = models.TextField()
+
+    def refresh_all_products(self):
+        update_API_products.delay(self)
 
     def get_session(self):
         """ return an object which is authenticated and can interact with the API"""

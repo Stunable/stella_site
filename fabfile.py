@@ -85,11 +85,11 @@ env.mode = MODE
 # also run.
 
 templates = {
-    "nginx": {
-        "local_path": "deploy/nginx.conf",
-        "remote_path": "/etc/nginx/sites-enabled/%(proj_name)s.conf",
-        "reload_command": "service nginx restart",
-    },
+    # "nginx": {
+    #     "local_path": "deploy/nginx.conf",
+    #     "remote_path": "/etc/nginx/sites-enabled/%(proj_name)s.conf",
+    #     "reload_command": "service nginx restart",
+    # },
     "supervisor": {
         "local_path": "deploy/supervisor.conf",
         "remote_path": "/etc/supervisor/conf.d/%(proj_name)s.conf",
@@ -316,8 +316,8 @@ def deploy_build():
             manage("syncdb --noinput")
             manage("migrate --noinput")
 #            manage("collectstatic -v 0 --noinput")
-            if not MODE == 'live':
-                upload_template_and_reload("settings")
+            # if not MODE == 'live':
+            upload_template_and_reload("settings")
             restart()
 
 def test():

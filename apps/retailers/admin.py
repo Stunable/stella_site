@@ -22,8 +22,16 @@ admin.site.register(ProductUpload)
 admin.site.register(ShopifyProduct)
 admin.site.register(ShopifyVariation)
 
-admin.site.register(ShopifyConnection)
 
+
+class APIConnectionAdmin(admin.ModelAdmin):
+    actions=('refresh_all_products',)
+
+    def refresh_all_products(self,request,queryset):
+        for o in queryset:
+            o.refresh_all_products()
+
+admin.site.register(ShopifyConnection,APIConnectionAdmin)
 
 class UploadErrorAdmin(admin.ModelAdmin):
     list_display = ('text','upload')
