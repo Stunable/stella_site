@@ -3,7 +3,7 @@
         "pk": 1, 
         "model": "notification.emailtemplate", 
         "fields": {
-            "body": "Dear {{retailer.first_name}}:\r\n\r\nA new order has been placed by {{shopper.first_name}} {{shopper.last_name}}.\r\nPlease login {{url}} and update the status of your order.\r\n\r\nCheers!\r\n\r\nSam, Brie, and Lizzy\r\nStunable Co-Founders\r\n", 
+            "body": "Dear {{retailer.first_name}}:\r\n\r\nA new order has been placed by {{shopper.first_name}} {{shopper.last_name}}.\r\nPlease login {{url}} to complete your order. Just click get label to retrieve and print your FedEx Shipping label and packing slip and then drop off the package at the nearest FedEx/Kinkos Location. If you prefer, you may also arrange a pickup by contacting FedEx directly or visiting their website.\r\n\r\nCheers!\r\n\r\nSam, Brie, and Lizzy\r\nStunable Co-Founders\r\n", 
             "sender": "no-reply@shopwithstella.com", 
             "name": "retailer-order-placed", 
             "recipients": "retailer", 
