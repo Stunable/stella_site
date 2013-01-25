@@ -630,11 +630,15 @@ def new(request, template="racks/carousel.html"):
 #    return direct_to_template(request, template, ctx)
 
 #@login_required
-def _all(request, template='racks/carousel.html'):
+def _all(request, slug=None, template='racks/carousel.html'):
     query_set = None
     if request.GET.get('item_id', None):
         linked_item = Item.objects.filter(id=request.GET.get('item_id'))
         query_set =  linked_item #| Item.objects.filter(brand=linked_item[0].brand).filter(~Q(id =linked_item[0].id))
+    if slug:
+        linked_item = Item.objects.filter(slug=slug)
+        query_set =  linked_item #| Item.objects.filter(brand=linked_item[0].brand).filter(~Q(id =linked_item[0].id))
+
     profile = None
     if request.user.is_authenticated():
         profile = get_or_create_profile(request)
@@ -644,11 +648,6 @@ def _all(request, template='racks/carousel.html'):
             profile = request.session.get('anonymous_profile')
             print profile.first_login
 
-    # if not profile:
-    #     return redirect(reverse('welcome'))
-    # if not profile.favourite_designer:
-    #     return redirect(reverse('welcome'))
-    # else:
     ctx = {}
     ctx['categories'] = Category.objects.all()
     ctx['current'] = "all"

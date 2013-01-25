@@ -34,6 +34,7 @@ urlpatterns = patterns('',
                        #url(r'^item_add_new/(?P<rack_id>\d+)', rack_item_add_new, name="rack_item_add_new"),
                        url(r'search', search, name='rack_search'),
                        url(r'brands', get_brands, name='get_brands'),  
+                       url(r'recommendations/(?P<slug>[-\w]+)', _all, name='item_link'),  
                        
                        url(r'sale', sale_items, name='my_closet_sale_items'),
                        url(r'recent_added', recent_added_items, name='my_closet_recent_added_items'),

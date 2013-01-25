@@ -170,6 +170,10 @@ def save_shopify_inventory_update(api_connection,source_id,new_value):
 @task
 def update_API_products(api_connection):
     print 'updating products for '+str(api_connection)
+
+    Retailer = ContentType.objects.get(app_label="retailers", model="retailerprofile").model_class().objects.get(user=api_connection.retailer)
+
+
     for product in api_connection.get_products():
         try:
             d = product
@@ -188,6 +192,7 @@ def update_API_products(api_connection):
             I.brand = d[Map['item']['fields']['brand']]
 
             I.description = api_connection.get_description(d)
+            I._retailer = Retailer
             I.save()
             
             api_connection.STYLIST_ITEM_CLASS.objects.get_or_create(

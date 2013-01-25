@@ -14,6 +14,8 @@ from django.db.models.loading import get_model, get_models
 
 from sorl.thumbnail import ImageField,get_thumbnail
 
+from django.template.defaultfilters import slugify
+
 from tasks import *
 from apps.common.utils import *
 from apps.accounts.models import AnonymousProfile
@@ -137,6 +139,10 @@ class ProductImage(models.Model,listImageMixin):
 
 
 class Item(models.Model,listImageMixin):
+
+    def get_absolute_url(self):
+        return '/shop/recommendations/%s'%self.slug
+
     featured_image = models.ForeignKey(ProductImage,null=True,blank=True,related_name='item_featured_image_set')
     gender = models.CharField(max_length=1,default='F',choices=[('F','F'),('M','M'),('B','B')])
     brand = models.CharField(max_length=200, null=True, blank=True)
@@ -149,20 +155,22 @@ class Item(models.Model,listImageMixin):
     image_urls = models.TextField(null=True, blank=True)
     order = models.IntegerField(default=0, db_index=True)
     is_deleted = models.BooleanField(default=False,blank=True)
-    
+    _retailer = models.ForeignKey('retailers.RetailerProfile',related_name='retailer_item_set',null=True,blank=True)
     retailers = models.ManyToManyField(User, through='retailers.StylistItem', null=True, blank=True)
     sizes = models.ManyToManyField(Size, through='racks.ItemType', null=True, blank=True)
     colors = models.ManyToManyField(Color,blank=True)
     created_date = models.DateField(auto_now=True, auto_now_add=True, default=datetime.date.today)
     
+    slug = models.SlugField()
+
     approved = models.NullBooleanField(default=None)
     is_available = models.BooleanField(default=True)
 
     upload = models.ForeignKey('retailers.ProductUpload',null=True,blank=True)
 
     api_type    = models.ForeignKey(ContentType,related_name='item_api_set',null=True,blank=True)
-    object_id       = models.PositiveIntegerField(null=True,blank=True)
-    api_connection             = generic.GenericForeignKey('api_type', 'object_id')
+    object_id   = models.PositiveIntegerField(null=True,blank=True)
+    api_connection = generic.GenericForeignKey('api_type', 'object_id')
     
     tags = TagField()
     
@@ -186,7 +194,10 @@ class Item(models.Model,listImageMixin):
     def get_additional_images(self):
         return [im for im in self.item_image_set.all() if im !=self.featured_image]
 
+    @property
     def retailer(self):
+        if self._retailer:
+            return self._retailer.name
         try:    
             RetailerProfile = get_model('retailers', 'RetailerProfile')
             return RetailerProfile.objects.filter(user=self.retailers.all()[0])[0].name
@@ -194,6 +205,8 @@ class Item(models.Model,listImageMixin):
             return ''
 
     def get_retailer(self):
+        if self._retailer:
+            return self._retailer.user
         self.retailers.all()[0] 
         
     def get_full_size_image(self):
@@ -261,6 +274,12 @@ class Item(models.Model,listImageMixin):
         return {'styles':out,'longest':longest}
 
     def save(self,*args,**kwargs):
+        if not self.slug:
+            slug = self.name
+            if self._retailer:
+                slug = self._retailer.name + '-' + slug
+            slug = slugify(slug)
+            self.slug = slug
 
         if self.total_inventory() < 1:
             self.is_available = False
@@ -271,6 +290,7 @@ class Item(models.Model,listImageMixin):
         for i in self.types.all():
             if i.is_onsale:
                 self.is_onsale = True
+
 
         super(Item,self).save()
 

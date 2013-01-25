@@ -90,9 +90,9 @@ class ItemTypeInline(admin.TabularInline):
     
 class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
     inlines = [ItemTypeInline]
-    list_display = ('name','category','approved','is_available','list_image',)
+    list_display = ('name','category','approved','is_available','list_image','_retailer')
     actions = ('approve','unapprove')
-    list_filter = ('approved','is_available','created_date')
+    list_filter = ('approved','is_available','created_date','_retailer')
     search_fields = ('name','description')
 
     def unapprove(self,request,queryset):

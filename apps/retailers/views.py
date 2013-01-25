@@ -369,12 +369,7 @@ def bulk_upload(request,upload_id=None,template="retailers/product_list.html"):
                     uploadObject = up
                     return redirect(reverse('bulk_upload',kwargs={'upload_id':up.id}))
 
-            pl = []
-            s = set()
-            for si in StylistItem.objects.filter(stylist=request.user):
-                if si.item.pk not in s:
-                    pl.append(si)
-                    s.add(si.item.pk)
+            pl = retailer_profile.retailer_item_set.all()
 
             ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form,'upload':uploadObject}
         except:
@@ -387,12 +382,7 @@ def product_list(request, template="retailers/product_list.html"):
     try:
         form = modelform_factory(ProductUpload,fields=['uploaded_zip'])()
         retailer_profile = RetailerProfile.objects.get(user=request.user)
-        pl = []
-        s = set()
-        for si in StylistItem.objects.filter(stylist=request.user):
-            if si.item.pk not in s:
-                pl.append(si.item)
-                s.add(si.item.pk)
+        pl = retailer_profile.retailer_item_set.all()
 
         yesterday = date.today() - timedelta(days=1)
 

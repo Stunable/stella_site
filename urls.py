@@ -15,6 +15,26 @@ from racks.models import Item
 from racks.views import carousel 
 from django.shortcuts import redirect
 
+
+from django.contrib.sitemaps import FlatPageSitemap, GenericSitemap
+
+items = {
+    'queryset': Item.objects.all(),
+    'date_field': 'created_date',
+}
+
+on_sale = {
+    'queryset': Item.objects.filter(is_onsale=True),
+    'date_field': 'created_date',
+}
+
+
+sitemaps = {
+    'flatpages': FlatPageSitemap,
+    'items': GenericSitemap(items, priority=0.6),
+    'items_on_sale':GenericSitemap(on_sale, priority=0.666),
+}
+
 admin.autodiscover() # enables admin
 
 
@@ -55,6 +75,7 @@ urlpatterns = patterns('',
                        url(r'^admirers/', include('apps.friends.urls')),
                        url(r'^notification/', include('apps.notification.urls')),
                        url(r'^racks/', include('apps.racks.urls')),
+                       url(r'^shop/', include('apps.racks.urls')),
                        url(r'^trends/', include('apps.trends.urls')),
                        
                        url(r'^vote/?$', object_list, dict(queryset=Item.objects.all(),
@@ -84,7 +105,8 @@ urlpatterns = patterns('',
                        
                        (r'^ckeditor/', include('ckeditor.urls')),
                        (r'^api/', include('api.urls')),
-                    
+                      
+                       (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps})
                        # # paypal integration app
                        # (r'^purchased/(?P<uid>\d+)/(?P<id>\d+)/$', 'paypal.views.purchased' ), # purchase callback
 
