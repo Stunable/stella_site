@@ -19,20 +19,36 @@ MODE = 'live'
 
 
 conf = {
+    # 'live': {
+    #     "SSH_USER": "ubuntu", # SSH username
+    #     "SSH_PASS":  "", # SSH password (consider key-based authentication)
+    #     "SSH_KEY_PATH":  "", # Local path to SSH key file, for key-based auth
+    #     "HOSTS": ['198.74.59.175',], # List of hosts to deploy to
+    #     "VIRTUALENV_HOME":  "/home/ubuntu", # Absolute remote path for virtualenvs
+    #     "PROJECT_NAME": "stella", # Unique identifier for project
+    #     "REQUIREMENTS_PATH": "requirements.txt", # Path to pip requirements, relative to project
+    #     "GUNICORN_PORT": 8000, # Port gunicorn will listen on
+    #     "LOCALE": "en_US.utf8", # Should end with ".utf8"
+    #     "LIVE_HOSTNAME": "stunable.com", # Host for public site.
+    #     "REPO_URL": "https://github.com/Stunable/stella_site.git", # Git or Mercurial remote repo URL for the project
+    #     "DB_PASS": "123456", # Live database password
+    #     "ADMIN_PASS": "123456", # Live admin user password
+    # },
     'live': {
         "SSH_USER": "ubuntu", # SSH username
         "SSH_PASS":  "", # SSH password (consider key-based authentication)
         "SSH_KEY_PATH":  "", # Local path to SSH key file, for key-based auth
-        "HOSTS": ['198.74.59.175',], # List of hosts to deploy to
+        "HOSTS": ['ec2-50-19-41-147.compute-1.amazonaws.com'], # List of hosts to deploy to
         "VIRTUALENV_HOME":  "/home/ubuntu", # Absolute remote path for virtualenvs
-        "PROJECT_NAME": "stella", # Unique identifier for project
+        "PROJECT_NAME": "stunable", # Unique identifier for project
         "REQUIREMENTS_PATH": "requirements.txt", # Path to pip requirements, relative to project
         "GUNICORN_PORT": 8000, # Port gunicorn will listen on
         "LOCALE": "en_US.utf8", # Should end with ".utf8"
-        "LIVE_HOSTNAME": "stunable.com", # Host for public site.
+        "LIVE_HOSTNAME": "new.stunable.com", # Host for public site.
         "REPO_URL": "https://github.com/Stunable/stella_site.git", # Git or Mercurial remote repo URL for the project
-        "DB_PASS": "123456", # Live database password
-        "ADMIN_PASS": "123456", # Live admin user password
+        "DB_USER":"stunable",
+        "DB_PASS": "stunable!", # Live database password
+        "ADMIN_PASS": "Numba1!!", # Live admin user password
     },
     'dev':{
         "SSH_USER": "ubuntu", # SSH username
@@ -293,7 +309,7 @@ def install():
             run("exit")
     sudo("apt-get update -y -q")
     apt("nginx libjpeg-dev python-dev python-setuptools git-core "
-        "postgresql libpq-dev memcached supervisor libgraphviz-dev mysql-server mysql-client libmysqlclient-dev "
+        "postgresql libpq-dev memcached supervisor libgraphviz-dev "
         "build-essential libxml2-dev libxslt-dev")
     
     sudo("apt-get build-dep python-imaging ")
@@ -347,14 +363,14 @@ def create():
         run("%s clone %s %s" % (vcs, env.repo_url, env.proj_path))
 
     # Create DB and DB user.
-    pw = db_pass()
-    user_sql_args = (env.proj_name, pw.replace("'", "\'"))
-    user_sql = "CREATE USER '%s' IDENTIFIED BY '%s';" % user_sql_args
-    psql(user_sql, show=False)
-    shadowed = "*" * len(pw)
-    print_command(user_sql.replace("'%s'" % pw, "'%s'" % shadowed))
-    psql("CREATE DATABASE %s DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" %
-         (env.proj_name,))
+    # pw = db_pass()
+    # user_sql_args = (env.proj_name, pw.replace("'", "\'"))
+    # user_sql = "CREATE USER '%s' IDENTIFIED BY '%s';" % user_sql_args
+    # psql(user_sql, show=False)
+    # shadowed = "*" * len(pw)
+    # print_command(user_sql.replace("'%s'" % pw, "'%s'" % shadowed))
+    # psql("CREATE DATABASE %s DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" %
+         # (env.proj_name,))
 
     # Set up SSL certificate.
     conf_path = "/etc/nginx/conf"

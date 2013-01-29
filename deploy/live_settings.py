@@ -1,19 +1,11 @@
 
 DATABASES = {
-    "default": {
-        # Ends with "postgresql_psycopg2", "mysql", "sqlite3" or "oracle".
-        "ENGINE": "django.db.backends.mysql",
-        # DB name or path to database file if using sqlite3.
-        "NAME": "%(proj_name)s",
-        # Not used with sqlite3.
-        #"USER": "%(proj_name)s",TODO:FIX THIS
-        "USER": "root",
-        # Not used with sqlite3.
-        "PASSWORD": "%(db_pass)s",
-        # Set to empty string for localhost. Not used with sqlite3.
-        "HOST": "127.0.0.1",
-        # Set to empty string for default. Not used with sqlite3.
-        "PORT": "",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'stunable',                      
+        'USER': 'stunable',
+        'PASSWORD': 'stunable!',
+        'HOST': ''
     }
 }
 
@@ -32,7 +24,7 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/accounts/connect/'
-LOGIN_ERROR_URL = '/login/'
+LOGIN_ERROR_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 

@@ -19,3 +19,6 @@ dev.py
 hack.py
 
 *.sql
+mydatabase
+
+.DS_Store
