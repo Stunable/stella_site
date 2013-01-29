@@ -50,14 +50,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'stella',
-        'HOST': 'localhost',
-        'USER': 'root',
-        'PASSWORD': '123456',
-        'OPTIONS': {
-           'init_command': 'SET storage_engine=INNODB',
-        }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'stunable',                      
+        'USER': 'stunable',
+        'PASSWORD': 'stunable!',
+        'HOST': ''
     }
 }
 

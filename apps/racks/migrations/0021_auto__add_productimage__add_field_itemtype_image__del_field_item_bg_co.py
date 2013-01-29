@@ -32,7 +32,7 @@ class Migration(SchemaMigration):
         # Renaming column for 'Item.image' to match new field type.
         db.rename_column('racks_item', 'image', 'image_id')
         # Changing field 'Item.image'
-        db.alter_column('racks_item', 'image_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['racks.ProductImage'], null=True))
+#        db.alter_column('racks_item', 'image_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['racks.ProductImage'], null=True))
         # Adding index on 'Item', fields ['image']
         # db.create_index('racks_item', ['image_id'])
 
