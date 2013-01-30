@@ -181,7 +181,7 @@ def process_API_products(list_of_products,api_connection):
 
     for product in list_of_products:
         try:
-            d = product
+            d = product.to_dict()
             Map = api_connection.field_mapping(d)
 
             # PP.pprint(Map)
