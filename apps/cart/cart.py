@@ -67,7 +67,7 @@ class Cart:
                                quantity = quantity,
                                size = size,
                                color = color,
-                               retailer = RetailerProfile.objects.get(user = product.item.retailers.all()[0]),
+                               retailer = product.item._retailer,
                             )
             item.save()
         else: #ItemAlreadyExists

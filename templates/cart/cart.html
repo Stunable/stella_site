@@ -50,7 +50,7 @@
                     by {{ item.product.item.retailer }}
                 </p>
                 <p class="price-each">
-                    ${{ item.product.item.price|floatformat:2 }}
+                    ${{ item.product.get_current_price|floatformat:2 }}
                 </p>
                 <p class='size'>
                     Size: <span class='cart-item-size'>{{ item.size }}</span>
