@@ -39,7 +39,9 @@ AWS_ACCESS_KEY_ID = "AKIAJX3OAPMY5SVE2KHA"
 AWS_SECRET_ACCESS_KEY ="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"
 USE_AMAZON_S3 = True
 AWS_STORAGE_BUCKET_NAME = "images.stunable.com"
+AWS_S3_CUSTOM_DOMAIN = 'images.stunable.com'
 DEFAULT_BUCKET = "images.stunable.com"
+AWS_S3_SECURE_URLS = False
 
 AWS_HEADERS = {
     'Cache-Control': 'max-age=186400000',
