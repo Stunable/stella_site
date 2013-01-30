@@ -101,11 +101,11 @@ env.mode = MODE
 # also run.
 
 templates = {
-    # "nginx": {
-    #     "local_path": "deploy/nginx.conf",
-    #     "remote_path": "/etc/nginx/sites-enabled/%(proj_name)s.conf",
-    #     "reload_command": "service nginx restart",
-    # },
+    "nginx": {
+        "local_path": "deploy/nginx.conf",
+        "remote_path": "/etc/nginx/sites-enabled/%(proj_name)s.conf",
+        "reload_command": "service nginx restart",
+    },
     "supervisor": {
         "local_path": "deploy/supervisor.conf",
         "remote_path": "/etc/supervisor/conf.d/%(proj_name)s.conf",
@@ -470,9 +470,9 @@ def deploy():
             print "\nAborting!"
             return False
         create()
-    if not MODE == 'live':
-        for name in get_templates():
-            upload_template_and_reload(name)
+    # if not MODE == 'live':
+    for name in get_templates():
+        upload_template_and_reload(name)
     with project():
         git = ".git" in env.repo_url
         run("git pull " if git else "hg pull && hg up -C")
