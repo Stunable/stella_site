@@ -35,6 +35,16 @@ SHOPIFY_API_SECRET = "bc1b2b77901a3d1cd0ec408eb33fe315"
 SHOPIFY_API_SCOPE = ['read_products', 'read_orders', 'write_products' 
 ]
 
+AWS_ACCESS_KEY_ID = "AKIAJX3OAPMY5SVE2KHA"
+AWS_SECRET_ACCESS_KEY ="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"
+USE_AMAZON_S3 = True
+AWS_STORAGE_BUCKET_NAME = "images.stunable.com"
+DEFAULT_BUCKET = "images.stunable.com"
+
+AWS_HEADERS = {
+    'Cache-Control': 'max-age=186400000',
+}
+
 
 MANAGERS = ADMINS
 
@@ -202,8 +212,10 @@ INSTALLED_APPS = (
     'stunable_shopify',
     'shopify_app',
     #'chronograph'
-    'kombu.transport.django',
+    #'kombu.transport.django',
     'djcelery',
+    'storages',
+    'queued_storage',
 )
 
 BROKER_BACKEND = "djkombu.transport.DatabaseTransport"

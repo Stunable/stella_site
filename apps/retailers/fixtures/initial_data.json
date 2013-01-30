@@ -1,2 +1,0 @@
-[{"pk": 4, "model": "retailers.shippingtype", "fields": {"vendor_tag": "FEDEX_GROUND", "vendor": "FEDEX", "name": "Regular", "description": "Should get to you in a few days"}}, 
- {"pk": 5, "model": "retailers.shippingtype", "fields": {"vendor_tag": "FEDEX_2_DAY", "vendor": "FEDEX", "name": "Expedited", "description": "Gets to you faster!"}}]

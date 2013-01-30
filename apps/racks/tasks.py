@@ -6,7 +6,7 @@ import StringIO
 from django.core.files.temp import NamedTemporaryFile
 from django.conf import settings
 
-
+from celery import task
 
 def get_dominant_color(image):
     pallette = Image.new("RGB",image.size)
@@ -16,6 +16,7 @@ def get_dominant_color(image):
     #print c
     return c[-1:][0][1]
 
+@task(name='racks.prettify_image')
 def prettify(instance):
     pic = Image.open(instance.image.file)
     enhancer  = ImageEnhance.Contrast(pic)

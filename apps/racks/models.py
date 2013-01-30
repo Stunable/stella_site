@@ -23,6 +23,14 @@ from apps.accounts.models import AnonymousProfile
 from django.dispatch import receiver
 from django.db.models.signals import post_save,pre_save
 
+from queued_storage.backends import QueuedStorage
+from storages.backends.s3boto import S3BotoStorage
+
+queued_s3storage = QueuedStorage(
+    'django.core.files.storage.FileSystemStorage',
+    'storages.backends.s3boto.S3BotoStorage')
+
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
     
@@ -106,7 +114,7 @@ class ProductImage(models.Model,listImageMixin):
 
 
     image = ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product Image")
-    pretty_image = models.ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product pretty Image",storage=OverwriteStorage())
+    pretty_image = models.ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product pretty Image",storage=queued_s3storage)
     bg_color = models.CharField(max_length=32,default='white',blank=True,null=True)
     retailer = models.ForeignKey(User,null=True,blank=True)
     item = models.ForeignKey('Item',null=True, blank=True,related_name='item_image_set')
@@ -120,7 +128,7 @@ class ProductImage(models.Model,listImageMixin):
             return self.image
 
     def generate_pretty_picture(self):
-        prettify(self)
+        prettify.delay(self)
 
     def save(self,*args,**kwargs):
         this_id = self.id
