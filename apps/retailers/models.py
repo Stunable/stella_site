@@ -238,13 +238,12 @@ class ShopifyConnection(APIConnection):
         page = 1
         out = []
         while True:
-            resp = self.get_session().Product.find(limit=250,page=page)
-            if len(resp):
-                out += resp
-                page += 1
-            else:
-                return [p.to_dict() for p in out]
-
+            resp = self.get_session().Product.find(limit=10,page=page)
+            if not len(resp):
+                return
+            yield resp
+            page += 1
+       
     def get_variations(self,product_dict):
         return product_dict[self.field_mapping(product_dict)['itemtype']['source']]
 

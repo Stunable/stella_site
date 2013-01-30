@@ -171,8 +171,13 @@ def save_shopify_inventory_update(api_connection,source_id,new_value):
 def update_API_products(api_connection):
     print 'updating products for '+str(api_connection)
 
-    Retailer = ContentType.objects.get(app_label="retailers", model="retailerprofile").model_class().objects.get(user=api_connection.retailer)
+    for product_list in api_connection.get_products():
+        process_API_products.delay(product_list,api_connection)
+    
+@task
+def process_API_products(list_of_products,api_connection):
 
+    Retailer = ContentType.objects.get(app_label="retailers", model="retailerprofile").model_class().objects.get(user=api_connection.retailer)
 
     for product in api_connection.get_products():
         try:
