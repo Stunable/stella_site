@@ -179,7 +179,7 @@ def process_API_products(list_of_products,api_connection):
 
     Retailer = ContentType.objects.get(app_label="retailers", model="retailerprofile").model_class().objects.get(user=api_connection.retailer)
 
-    for product in api_connection.get_products():
+    for product in list_of_products:
         try:
             d = product
             Map = api_connection.field_mapping(d)
