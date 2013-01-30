@@ -293,7 +293,11 @@ TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
     "django.core.context_processors.request",
     "apps.cms.context_processors.CMS",
     'shopify_app.context_processors.current_shop',
+    'django.core.context_processors.debug'
     )
+
+
+INTERNAL_IPS = ('127.0.0.1',)
 
 
 SITE_NAME = "STELLA"

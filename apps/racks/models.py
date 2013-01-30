@@ -190,14 +190,8 @@ class Item(models.Model,listImageMixin):
     def get_image(self):
         if self.featured_image:
             if self.featured_image.pretty_image:
+                print 'returning featured_image'
                 return self.featured_image.pretty_image
-        if self.featured_image:
-            return self.featured_image.image
-        elif self.image_urls:
-            return self.image_urls.split(',')[0].replace('.jpg', '_150x296.jpg')
-        else:
-            return None
-#            return "%simages/general/agjea1.254x500.jpg" % (settings.STATIC_URL)
     
     def get_additional_images(self):
         return [im for im in self.item_image_set.all() if im !=self.featured_image]
@@ -218,12 +212,7 @@ class Item(models.Model,listImageMixin):
         self.retailers.all()[0] 
         
     def get_full_size_image(self):
-        if self.featured_image:
-            return self.featured_image.image
-        elif self.image_urls:
-            return self.image_urls.split(',')[0]
-        else: 
-            return None
+        return self.get_image()
 
     def price_range(self):
         seq = [it.get_current_price() for it in self.types.all()]
@@ -326,8 +315,9 @@ class ItemType(models.Model,DirtyFieldsMixin):
     api_connection  = generic.GenericForeignKey('api_type', 'object_id')
 
     def get_image(self):
-        if self.image:
-            return self.image.image
+        img = self.image
+        if img:
+            return img
         else:
             return self.item.get_image()
     
