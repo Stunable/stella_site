@@ -362,6 +362,8 @@ WAITLIST_ACTIVE = True
 NOTICE_TIME_DIFF = 2 #minutes
 
 
+THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
+
 
 EXTERNAL_CONTENT_URL = {
                             'blog':"http://stunable.wordpress.com/",
