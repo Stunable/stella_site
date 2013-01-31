@@ -216,7 +216,7 @@ class ItemForm(AjaxModelForm):
     
     class Meta:
         model = Item
-        exclude = ('fabrics', 'image_urls', 'order', 'retailers', 'tags', 'sizes', 'colors','upload','price','is_onsale','is_available', 'approved','is_deleted','bg_color','api_type','object_id','slug','_retailer')
+        exclude = ('fabrics', 'image_urls', 'order', 'retailers', 'tags', 'sizes', 'colors','upload','price','is_onsale','is_available', 'approved','is_deleted','bg_color','api_type','object_id','slug','_retailer','price_text')
     
     def __init__(self, user=None, *args, **kwargs):
         self.user = user
@@ -268,7 +268,7 @@ class ItemForm(AjaxModelForm):
 class ItemEditForm(forms.ModelForm):
     class Meta:
         model = Item
-        exclude = ('colors', 'fabrics', 'image_urls', 'order', 'upload', 'is_available', 'price', 'approved','api_type','object_id','slug','_retailer')
+        exclude = ('colors', 'fabrics', 'image_urls', 'order', 'upload', 'is_available', 'price', 'approved','api_type','object_id','slug','_retailer','price_text')
     
     def __init__(self, *args, **kwargs):
         super(ItemEditForm, self).__init__(*args, **(kwargs))

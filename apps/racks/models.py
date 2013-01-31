@@ -168,6 +168,7 @@ class Item(models.Model,listImageMixin):
     sizes = models.ManyToManyField(Size, through='racks.ItemType', null=True, blank=True)
     colors = models.ManyToManyField(Color,blank=True)
     created_date = models.DateField(auto_now=True, auto_now_add=True, default=datetime.date.today)
+    price_text = models.CharField(max_length=128,default=None,blank=True)
     
     slug = models.SlugField()
 
@@ -216,17 +217,22 @@ class Item(models.Model,listImageMixin):
 
     def price_range(self):
         seq = [it.get_current_price() for it in self.types.all()]
+
         if not len(seq):
-            return
+            self.is_available = False
+            self.save()
+            return {'min':999999999,'max':999999999}
+
         return {'min':min(seq),'max':max(seq)}
 
     def price_range_text(self):
+        if self.price_text:
+            return self.price_text
+
         r = self.price_range()
         r.update({'sale':
             ' class="sale" ' if self.is_onsale else ''
         })
-
-        print r
         if not r['min'] == r['max']:
             return '<span%(sale)s><span class="dollar">$</span>%(min)s</span> - <span class="dollar">$</span>%(max)s'%r
         return '<span class="dollar">$</span>%(min)s'%r
@@ -283,13 +289,20 @@ class Item(models.Model,listImageMixin):
         else:
             self.is_available = True
 
+        self.set_price_text()
+
         self.is_onsale = False
         for i in self.types.all():
             if i.is_onsale:
                 self.is_onsale = True
 
-
         super(Item,self).save()
+
+
+    def set_price_text(self):
+        self.price_text = None
+        self.price_text = self.price_range_text()
+        
 
 class ItemType(models.Model,DirtyFieldsMixin):
 
