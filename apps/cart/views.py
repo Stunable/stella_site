@@ -53,14 +53,14 @@ def buy_rack(request, rack_id):
     for inventory in item_types: 
         product = inventory.item
         cart = Cart(request)    
-        cart.add(inventory, product.price, 1, inventory.size.size, inventory.color.name)
+        cart.add(inventory, product.get_current_price(), 1, inventory.size.size, inventory.color.name)
     return redirect(reverse('get_cart'))
 
 @login_required
 def add_to_cart(request, product_id, quantity, size=None):
     inventory = ItemType.objects.get(id=product_id)
     cart = Cart(request)    
-    cart.add(inventory, inventory.price, quantity, inventory.size.size, inventory.color.name)
+    cart.add(inventory, inventory.get_current_price(), quantity, inventory.size.size, inventory.color.name)
     
     return redirect(reverse('get_cart'))
 
@@ -70,7 +70,7 @@ def update_cart(request, product_id):
         quantity = request.POST.get('quantity', 1)
         inventory = ItemType.objects.get(id=product_id)
         cart = Cart(request)
-        cart.update(inventory, inventory.item.price, quantity, inventory.size.size, inventory.color.name)
+        cart.update(inventory, inventory.item.get_current_price(), quantity, inventory.size.size, inventory.color.name)
         if request.is_ajax():
             try:
                 if request.session.get('recipient_zipcode'):
