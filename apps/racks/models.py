@@ -216,12 +216,13 @@ class Item(models.Model,listImageMixin):
         return self.get_image()
 
     def price_range(self):
-        seq = [it.get_current_price() for it in self.types.all()]
+        seq = set([price for price in [it.price,it.sale_price] for it in self.types.all()])
 
         if not len(seq):
             self.is_available = False
             self.save()
             return {'min':999999999,'max':999999999}
+
 
         return {'min':min(seq),'max':max(seq)}
 
@@ -233,7 +234,7 @@ class Item(models.Model,listImageMixin):
         r.update({'sale':
             ' class="sale" ' if self.is_onsale else ''
         })
-        if not r['min'] == r['max']:
+        if not r['min'] == r['max'] and self.is_onsale:
             return '<span%(sale)s><span class="dollar">$</span>%(min)s</span> - <span class="dollar">$</span>%(max)s'%r
         return '<span class="dollar">$</span>%(min)s'%r
 
@@ -338,7 +339,8 @@ class ItemType(models.Model,DirtyFieldsMixin):
         if self.is_onsale:
             return self.sale_price
         return self.price
-    
+
+
     def __unicode__(self):
         color = self.custom_color_name
         return "%s %s, Size %s" % (color, self.item.name, self.size.size)
