@@ -152,23 +152,23 @@ class Item(models.Model,listImageMixin):
         return '/shop/recommendations/%s'%self.slug
 
     featured_image = models.ForeignKey(ProductImage,null=True,blank=True,related_name='item_featured_image_set')
-    gender = models.CharField(max_length=1,default='F',choices=[('F','F'),('M','M'),('B','B')])
-    brand = models.CharField(max_length=200, null=True, blank=True)
-    name = models.CharField(max_length=200, verbose_name='Product Name')
-    price = models.DecimalField(max_digits=19, decimal_places=2, verbose_name='Retail Price',null=True,blank=True)
-    is_onsale = models.BooleanField(default=False, verbose_name='Currently On Sale?')
-    description = models.TextField()
-    category = models.ForeignKey(Category, verbose_name='Product Category', null=True, blank=True)
-    fabrics = models.CharField(max_length=200, null=True, blank=True)
-    image_urls = models.TextField(null=True, blank=True)
-    order = models.IntegerField(default=0, db_index=True)
-    is_deleted = models.BooleanField(default=False,blank=True)
-    _retailer = models.ForeignKey('retailers.RetailerProfile',related_name='retailer_item_set',null=True,blank=True)
-    retailers = models.ManyToManyField(User, through='retailers.StylistItem', null=True, blank=True)
-    sizes = models.ManyToManyField(Size, through='racks.ItemType', null=True, blank=True)
-    colors = models.ManyToManyField(Color,blank=True)
-    created_date = models.DateField(auto_now=True, auto_now_add=True, default=datetime.date.today)
-    price_text = models.CharField(max_length=128,default=None,blank=True)
+    gender =         models.CharField(max_length=1,default='F',choices=[('F','F'),('M','M'),('B','B')])
+    brand =          models.CharField(max_length=200, null=True, blank=True)
+    name =           models.CharField(max_length=200, verbose_name='Product Name')
+    price =          models.DecimalField(max_digits=19, decimal_places=2, verbose_name='Retail Price',null=True,blank=True)
+    is_onsale =      models.BooleanField(default=False, verbose_name='Currently On Sale?')
+    description =    models.TextField()
+    category =       models.ForeignKey(Category, verbose_name='Product Category', null=True, blank=True)
+    fabrics =        models.CharField(max_length=200, null=True, blank=True)
+    image_urls =     models.TextField(null=True, blank=True)
+    order =          models.IntegerField(default=0, db_index=True)
+    is_deleted =     models.BooleanField(default=False,blank=True)
+    _retailer =      models.ForeignKey('retailers.RetailerProfile',related_name='retailer_item_set',null=True,blank=True)
+    retailers =      models.ManyToManyField(User, through='retailers.StylistItem', null=True, blank=True)
+    sizes =          models.ManyToManyField(Size, through='racks.ItemType', null=True, blank=True)
+    colors =         models.ManyToManyField(Color,blank=True)
+    created_date =   models.DateField(auto_now=True, auto_now_add=True, default=datetime.date.today)
+    price_text =     models.CharField(max_length=128,default=None,blank=True,null=True)
     
     slug = models.SlugField()
 
@@ -229,7 +229,7 @@ class Item(models.Model,listImageMixin):
         return {'min':min(seq),'max':max(seq)}
 
     def price_range_text(self):
-        if self.price_text:
+        if self.price_text and self.price_text != 'none':
             return self.price_text
 
         r = self.price_range()
@@ -292,7 +292,7 @@ class Item(models.Model,listImageMixin):
         else:
             self.is_available = True
 
-        self.set_price_text()
+        # self.set_price_text()
 
         self.is_onsale = False
         for i in self.types.all():

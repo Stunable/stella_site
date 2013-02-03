@@ -2,6 +2,8 @@
 \#*
 .\#*
 
+outdata/*
+./outdata/*
 bin
 build
 include
@@ -22,3 +24,7 @@ hack.py
 mydatabase
 
 .DS_Store
+
+_fixtures/outdata.tar.gz
+
+_fixtures/media.tar.gz

@@ -291,7 +291,7 @@ TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
     "apps.trends.context_processors.trend_count",
     "apps.friends.context_processors.friend_notice_count",
     "racks.context_processors.racks",
-    #'apps.common.context_processors.seo' # in case we do this...
+    "apps.common.context_processors.page_role",
     "django.core.context_processors.request",
     "apps.cms.context_processors.CMS",
     'shopify_app.context_processors.current_shop',

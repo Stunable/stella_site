@@ -108,7 +108,7 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
 
     def set_price_text(self,request,queryset):
         for obj in queryset:
-            obj.set_price_text()
+            # obj.set_price_text()
             obj.save()
 
 
