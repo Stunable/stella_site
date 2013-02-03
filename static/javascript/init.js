@@ -1,6 +1,20 @@
 var stunable = {
     common : function() {
 
+    var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
+    $(document).ajaxSend(function(e, xhr, settings) {
+      xhr.setRequestHeader('X-CSRFToken', csrfToken);
+    });
+
+    $($('.private-racks')[1]).sortable({
+        stop : function(e, ui) {
+        }
+    });
+    $($('.public-racks')[1]).sortable({
+        stop : function(e, ui) {
+        }
+    });
+
     }
     ,shop: function(){              
         $('.panel-tab').click(function() {
