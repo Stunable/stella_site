@@ -386,3 +386,41 @@ function initSwipe(selection){
         $('.iosSlider').css('overflow','hidden');
     }
 }
+
+
+function setupRackIt(){
+    // prevent more binds when close fancy box
+    $('.rack-icon').unbind("click");
+    $('.rack-icon').click(function(event){
+        event.preventDefault();
+        var href = $(this).attr('href');
+        var item_id = $(this).attr('data-value');
+        var containers = $('.private-racks').find('li span');
+        if (containers.length > 0){
+            rack_id = $(containers[0]).attr('data-value');
+        }else{
+            rack_id = "myrack";
+        }
+        
+        var link = href + 'item_id=' + item_id +'&rack=' + rack_id;
+        $.get(link, function(result){
+            if(result['result'] == 'ok'){
+                alert("Item Added!");
+                if(result['new_rack_id']){
+                    // add a new rack name My Rack into the left-nav by using javascript
+                    $('.private-racks').html('<li class="drop_item ui-droppable">'+
+                                            '<span data-value="'+ result['new_rack_id'] +'"><a href="/racks/detail/' + result['new_rack_id'] + '">' +
+                                            'My Rack</a></span></li>');
+                    initDragDrop();
+                    fixDragDropIssue();
+                }
+                // check if fancy box is opened
+                if($('#fu').length > 0){
+                    parent.$.fancybox.close();
+                }
+            }else{
+                alert(result['Error']);
+            }
+        });
+    });
+}

@@ -1,19 +1,26 @@
 var stunable = {
     common : function() {
 
-    var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
-    $(document).ajaxSend(function(e, xhr, settings) {
-      xhr.setRequestHeader('X-CSRFToken', csrfToken);
-    });
+      var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
+      $(document).ajaxSend(function(e, xhr, settings) {
+        xhr.setRequestHeader('X-CSRFToken', csrfToken);
+      });
 
-    $($('.private-racks')[1]).sortable({
-        stop : function(e, ui) {
-        }
-    });
-    $($('.public-racks')[1]).sortable({
-        stop : function(e, ui) {
-        }
-    });
+      $($('.private-racks')[1]).sortable({
+          stop : function(e, ui) {
+          }
+      });
+      $($('.public-racks')[1]).sortable({
+          stop : function(e, ui) {
+          }
+      });
+
+      // $('.click_href').click(function(e){
+      //   $.post($(this).data('href'),function(data){
+      //     console.log(data)
+      //   })
+
+      // })
 
     }
     ,shop: function(){ 
@@ -30,6 +37,8 @@ var stunable = {
         initSwipe($('.iosSlider'))
         initDrop(); 
     }
+
+
 }
 
 

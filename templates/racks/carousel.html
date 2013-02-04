@@ -93,7 +93,7 @@
                                     <h4 class="item-name"><a class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.id %}">{{item.name}}</a></h4>
                                     <div class="item-icon">{% thumbnail item.get_image "200x390" as im %} <img src="{{ im.url }}"> {% empty %} <img src="{{item.get_image}}" alt="" /> {% endthumbnail %}</div>
                                     <div class="wp drag_item touchable">
-                                        <a class="item-ref bottom-ref rel_pos" data-value="{{ item.id }}" href="{% url item_modal item.id %}"> {% thumbnail item.get_image "200x390" as im %} <img src="{{ im.url }}"> {% empty %} <img src="{{item.get_image}}" alt="" /> {% endthumbnail %} </a>
+                                        <a rel="modal:open" class="item-ref bottom-ref rel_pos" data-value="{{ item.id }}" href="{% url item_modal item.id %}"> {% thumbnail item.get_image "200x390" as im %} <img src="{{ im.url }}"> {% empty %} <img src="{{item.get_image}}" alt="" /> {% endthumbnail %} </a>
                                     </div>
                                     {% dict_entry_for_item item from vote_dict as vote %}
                                     <div class="link-holder" id="item_{{item.pk}}">

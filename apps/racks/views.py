@@ -220,7 +220,7 @@ def add(request, template='racks/add.html'):
         ctx['public'] = is_public
         return direct_to_template(request, template, ctx)
     else:
-        return redirect(reverse("all"))
+        return redirect(reverse("shop"))
 
 @json_view
 @login_required

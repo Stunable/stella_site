@@ -303,7 +303,7 @@
                                         {% endfor %}
                                     </ul>
                                     <p id="add-rack">
-                                        <a href="" data-href="/racks/add?public=True" class="icon plus-icon item-ref" title="Create a New Rack">Add a New Rack</a>
+                                        <a rel="modal:open" href="/racks/add?public=True" class="icon plus-icon item-ref" title="Create a New Rack">Add a New Rack</a>
                                     </p>
                                     <div class="separator"></div>
                                     <h4 class="list-header">Private Racks</h4>
@@ -319,7 +319,7 @@
                                         {% endfor %}
                                     </ul>
                                     <p id="add-rack">
-                                        <a href="/racks/add" class="icon plus-icon item-ref" title="Create a New Rack">Add a New Rack</a>
+                                        <a rel="modal:open" href="/racks/add" class="icon plus-icon item-ref" title="Create a New Rack">Add a New Rack</a>
                                     </p>
                                 </div>
                             </div>
@@ -498,13 +498,16 @@
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.tooltip.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.iosslider.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/portamento-min.js"></script>
-        <script src="{{ STATIC_URL }}javascript/jquery.spritely-0.6.1.js" type="text/javascript"></script>
+        
  -->
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery-ui-1.8.22.custom.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.spritely-0.6.1.js" ></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/chosen.jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.flip.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.touchcarousel-1.1.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.modal.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.validate.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/stunable.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/init.js"></script>
 
