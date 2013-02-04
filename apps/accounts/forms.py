@@ -18,8 +18,8 @@ else:
     
 
 from apps.common.forms import testAddress
-from apps.cart.plugins.taxcloud import TaxCloudClient
-TCC = TaxCloudClient()
+# from apps.cart.plugins.taxcloud import TaxCloudClient
+# TCC = TaxCloudClient()
 
 from django.core.mail import send_mail
 from django.contrib.localflavor.us.us_states import US_STATES

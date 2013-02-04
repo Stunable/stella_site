@@ -27,6 +27,7 @@ body {
 ol, ul {
 	list-style: none;
 }
+
 blockquote, q {
 	quotes: none;
 }
@@ -1032,6 +1033,14 @@ body {
 }
 /* CAROUSEL */
 
+.shop li{
+	list-style: none;
+}
+
+.item.black{
+	border:10px solid black;	
+}
+
 .gallery #page-content, 
 .static #page-content,
 .feed #page-content {
@@ -1445,7 +1454,7 @@ a.friend-name{
 	margin: 0 auto;
 	padding: 0 40px;
 }
-#carousel .item-list {
+.item-list {
 	left: auto;
 	position:relative;
 	list-style-type:none;
@@ -3218,19 +3227,19 @@ outline: none;
 	padding-right: auto;
 }
 
-.item-list .item-label { 	
+body .item-label { 	
 	color: #F05C68;
  	background: white url(/static/images/gui/gray-dotted-bg.jpg) repeat-x 0 center;
  	text-align: center;
  	text-transform: uppercase;
 }
 
-.item-list .item-label span {
-	background-color: white;
+body .item-label span {
+	/*background-color: white;*/
 	padding: 0 5px;
 }
 
-.item-list .item-name {
+body .item-name {
 	border: none;
 	text-align: center;
 	padding: 0;
@@ -3799,6 +3808,46 @@ outline: none;
 .drag_item :hover{
 	cursor: move;
 }
+
+.item-icon{
+	position:absolute;
+	visibility:hidden;
+}
+
+.ui-draggable-dragging {
+	height:170px;
+	
+	border:1px solid #F05C68 !important;
+	background-color:rgba(255,255,255,.4) !important;
+	color:black;
+}
+
+.ui-draggable-dragging .item-name{
+	color:black !important;
+}
+
+.ui-draggable-dragging .item-label{
+	background-color:rgba(255,255,255,.4) !important;
+}
+
+.ui-draggable-dragging .touchable{
+	visibility:hidden;
+}
+
+.ui-draggable-dragging .item-icon{
+	visibility: visible;
+	text-align:center;
+	display:inline;
+	position:inherit;
+	margin-left:10%;
+
+}
+
+.ui-draggable-dragging .item-icon img{
+	width:80px;
+	border:1px solid #F05C68 !important;
+}
+
 .left-panel ul.my-closet-menu{
 	max-height:150px;
 	overflow:auto;
@@ -3810,11 +3859,32 @@ outline: none;
 	text-overflow: ellipsis;
 	-o-text-overflow: ellipsis;
 	-ms-text-overflow: ellipsis;
+	margin-bottom:3px;
+	margin-top:2px;
 }
 .drop_item_hover {
 	border-width: 3px !important;
 	border-color: gray !important;
+	padding-top:-3px !important;
+	padding-bottom:-3px !important;
+	margin:0px !important;
 }
+.left-panel .my-closet-menu li.drop_item_here {
+	background-color:#eee;
+	padding:3px;
+	border: 1px white dashed;
+	border-radius:3px;
+}
+
+.left-panel .my-closet-menu li.drop_item_here:nth-child(even){
+	background-color:#fee;
+}
+
+.left-panel .my-closet-menu li.drop_item_here a{
+	/*color:white;*/
+	/*padding:5px;*/
+}
+
 .hiw h2 {
 	text-transform: uppercase;
 	margin: 20px 15px;
@@ -4714,7 +4784,7 @@ background-color: white;
   margin: 0 0 18px;
 }
 
-.item-list .item-label span {
+body .item-label span {
 height: 18px;
 display: inline-block;
 overflow: hidden;
@@ -4861,3 +4931,89 @@ max-width: 94%;
 	font-weight: bold;
 }
 
+
+
+/*
+
+MODAL CSS
+*/
+
+.modal {
+  display: none;
+  width: 400px;
+  background: #fff;
+  padding: 15px 30px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -o-border-radius: 8px;
+  -ms-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-box-shadow: 0 0 10px #000;
+  -moz-box-shadow: 0 0 10px #000;
+  -o-box-shadow: 0 0 10px #000;
+  -ms-box-shadow: 0 0 10px #000;
+  box-shadow: 0 0 10px #000;
+}
+
+.modal a.close-modal {
+  position: absolute;
+  top: -12.5px;
+  right: -12.5px;
+  display: block;
+  width: 30px;
+  height: 30px;
+  text-indent: -9999px;
+  background: url(close.png) no-repeat 0 0;
+}
+
+.modal-spinner {
+  display: none;
+  width: 64px;
+  height: 64px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-right: -32px;
+  margin-top: -32px;
+  background: url(spinner.gif) #111 no-repeat center center;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -o-border-radius: 8px;
+  -ms-border-radius: 8px;
+  border-radius: 8px;
+}
+
+/*END MODAL CSSS*/
+
+
+
+#wrapper {
+    width:250px;
+}
+ul.tabs {
+    width:250px;
+    margin:0;
+    padding:0;
+}
+ul.tabs li {
+    display:block;
+    float:left;
+    padding:0 5px;
+}
+ul.tabs li a {
+    display:block;
+    float:left;
+    padding:5px;
+    font-size:0.8em;
+    background-color:#e0e0e0;
+    color:#666;
+    text-decoration:none;
+}
+.selected {
+    font-weight:bold;
+}
+.tab-content {
+    clear:both;
+    border:1px solid #ddd;
+    padding:10px;
+}

@@ -36,8 +36,8 @@ import urllib
 import urllib2
 from datetime import date,timedelta
 
-from apps.cart.plugins.taxcloud import TaxCloudClient
-TCC = TaxCloudClient()
+# from apps.cart.plugins.taxcloud import TaxCloudClient
+# TCC = TaxCloudClient()
 
 from tasks import update_API_products
 

@@ -204,7 +204,7 @@
 				});
 
 				this.arrowLeft.click(function(e) {
-					console.log()
+					//console.log()
 					e.preventDefault();
 					if(self.settings.loopItems && !self._blockClickEvents || !self._arrowLeftBlocked )
 						self.prev();
@@ -448,7 +448,7 @@
 				if(!this._pagingEnabled) {
 					newItemId = newItemId + this._itemsPerMove;						
 					if(this.settings.loopItems) {
-						console.log(currXPos,this.carouselWidth,this._maxXPos)
+						//console.log(currXPos,this.carouselWidth,this._maxXPos)
 						if(currXPos <= this.carouselWidth - this._maxXPos) {
 							newItemId = 0;
 						}
@@ -614,8 +614,8 @@
 					to2 = {containerPos: endPos},
 					endPos = bounceAnim ? endPos : pos,
 					dContainer = self._dragContainerStyle;
-				
-				self._isAnimating = true;
+				    // console.log('start',this._isAnimating)
+				this._isAnimating = true;
 				
 				if(scrollbarEnabled) {
 					var sbStyle = this._scrollbarStyle;
@@ -632,6 +632,7 @@
 				this._updateDirectionNav(endPos);
 				
 				function animationComplete() {
+					// console.log('complete',self._isAnimating)
 					self._isAnimating = false;
 			    	self._releaseAutoplay();
 			    	if(self.settings.scrollbarAutoHide)  {					

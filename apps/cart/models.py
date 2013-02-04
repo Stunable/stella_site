@@ -24,9 +24,9 @@ from apps.cart.plugins.rate_request import get_rate as fedex_rate_request
 
 
 
-from apps.cart.plugins.taxcloud import TaxCloudClient
-TCC = TaxCloudClient()
-
+# from apps.cart.plugins.taxcloud import TaxCloudClient
+# TCC = TaxCloudClient()
+# TCC = None
 
 
 def base35encode(number):

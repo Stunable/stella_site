@@ -24,8 +24,8 @@ from tagging.models import Tag
 
 attrs_dict = {}      
 from apps.common.forms import testAddress
-from apps.cart.plugins.taxcloud import TaxCloudClient
-TCC = TaxCloudClient()
+# from apps.cart.plugins.taxcloud import TaxCloudClient
+# TCC = TaxCloudClient()
 
 WAITLIST_MSG = "You have request an invite from stella"
 SUBJECT = "accounts/waitlist_invite_subject.txt"

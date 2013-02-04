@@ -88,8 +88,10 @@
                             
                             {% for list_3_items in rack_items_list %}
                             {% for item in list_3_items %}
-                                <li class="touchcarousel-item item some-crazy-class"> <h5 class="item-label"><span>{{item.brand}}</span></h5>
+                                <li class="touchcarousel-item item some-crazy-class"> 
+                                    <h5 class="item-label"><span>{{item.brand}}</span></h5>
                                     <h4 class="item-name"><a class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.id %}">{{item.name}}</a></h4>
+                                    <div class="item-icon">{% thumbnail item.get_image "200x390" as im %} <img src="{{ im.url }}"> {% empty %} <img src="{{item.get_image}}" alt="" /> {% endthumbnail %}</div>
                                     <div class="wp drag_item touchable">
                                         <a class="item-ref bottom-ref rel_pos" data-value="{{ item.id }}" href="{% url item_modal item.id %}"> {% thumbnail item.get_image "200x390" as im %} <img src="{{ im.url }}"> {% empty %} <img src="{{item.get_image}}" alt="" /> {% endthumbnail %} </a>
                                     </div>

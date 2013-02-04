@@ -494,7 +494,6 @@ function initDragDrop(selection) {
             $('.nxt').each(function(){
             	$(this).removeClass('nxt');
             });
-            $('.iosSlider').css('overflow','hidden');
             $('#prev').on('hover');
             $('#next').on('hover');
         }
