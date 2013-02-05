@@ -114,7 +114,7 @@ class ProductImage(models.Model,listImageMixin):
             self.__class__.__name__
 
 
-    image = models.ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product Image",storage=queued_s3storage)
+    image = models.ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product Image")
     pretty_image = models.ImageField(upload_to='pretty/%Y/%m/%d/', null=True, blank=True, verbose_name="Product pretty Image",storage=queued_s3storage)
     bg_color = models.CharField(max_length=32,default='white',blank=True,null=True)
     retailer = models.ForeignKey(User,null=True,blank=True)

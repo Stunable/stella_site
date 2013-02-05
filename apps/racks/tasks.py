@@ -57,12 +57,16 @@ def prettify(instance):
         print 'width:', instance.width
         instance.save()
     except Exception, e:
-        print e
-        if settings.DEBUG:
-            if instance.item:
-                if not instance.item.item_image_set.all().count() >= 2:
-                    instance.item.delete()
-            instance.delete()
+        instance.item.approved = False
+        instance.save()
+
+        # print e
+        # if settings.DEBUG:
+        #     if instance.item:
+        #         if not instance.item.item_image_set.all().count() >= 2:
+        #             instance.item.approved = False
+        #             instance.item.save()
+        instance.delete()
             
 
 
