@@ -18,11 +18,7 @@
 </div>
 <div class="share-item-info item-detail-info">
     <a class="item-ref" href="{% url item_modal item_id=item.id %}">
-        {% thumbnail item.get_image "90x90" as im %}
-            <img src="{{ im.url }}">
-            {% empty %}
-            <img src="{{item.get_image}}" alt="" />
-        {% endthumbnail %}
+            <img src="{{ item.get_image.tiny.url }}">
     </a>
 </div>
 <div class="action bootstrap">

@@ -7,6 +7,6 @@ def page_role(request):
 
         return {'page_role':'shop'}
     
-    return {'page_role': request.path_info.replace('/','_').lstrip('_').rstrip('_')}
+    return {'page_role': 'shop'}
 
    

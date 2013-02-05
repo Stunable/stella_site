@@ -41,9 +41,7 @@
             {% for item in cart %}
             <div class="cart-item round-corner-shadow" id="product-item-{{item.product.pk}}">
                 <div class='image_wrapper'>
-                    {% thumbnail item.product.item.get_image "100x200" as im %} <img class="product" src="{{ im.url }}">
-                    {% empty %} <img class="product"src="{{item.product.get_image}}" alt="" />
-                    {% endthumbnail %}
+                   <img class="product" src="{{ item.product.item.get_image.medium.url }}">
                 </div>
                 <h4>{{ item.product.name }}</h4>
                 <p class="retailer">

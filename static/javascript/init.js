@@ -36,7 +36,18 @@ var stunable = {
 
         initSwipe($('.iosSlider'))
         initDrop(); 
+
+        $(document).on($.modal.AJAX_COMPLETE, function(event, modal) {
+          console.log('ajax success')
+           post_item_modal()
+        });
     }
+    ,rack: function(){
+      initDrag($('.item'))
+      initDrop(); 
+
+    }
+
 
 
 }

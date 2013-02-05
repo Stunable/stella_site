@@ -7,8 +7,8 @@
 		var closeBox = $('.close-box').parent(), itemLink = $('.item-ref'), trash = $('.trash');
 
 		//determines new class for a button
-		closeBox.click($.fancybox.close);
-		closeBox.click(function(e) {e.preventDefault();
+		// closeBox.click($.fancybox.close);
+		// closeBox.click(function(e) {e.preventDefault();
 		});
 		$('.confirmation').hide();
 		var options = {
@@ -92,7 +92,7 @@
 				
 				<input type="text" id="name" class="txt" name="name" value="Enter rack name here" style="box-shadow:none;" onfocus="clearInput(this)" onblur="restoreInput(this)"/>
 				<input type="hidden" name="public" value="{{ public }}"/>
-				<input type="hidden" id="next" name="next" value="{% url racks_index %}" />
+				<input type="hidden" id="next" name="next" value="{% url all %}" />
 				<p class="btn-wrap bootstrap">
 					<input type="submit" class="btn btn-primary send" id="btn_send" value="Submit" />
 					<center>

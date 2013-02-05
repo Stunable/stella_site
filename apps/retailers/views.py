@@ -433,9 +433,8 @@ def retailer_list(request, template='retailers/retailer_list.html'):
 
 def retailer_modal(request, item_id, template="retailers/retailer_information_modal.html"):
     current_item = get_object_or_404(Item, pk=item_id)
-    stylist_item = StylistItem.objects.filter(item=current_item)
-    user = stylist_item[0].stylist
-    retailer_profile = RetailerProfile.objects.get(user=user)
+
+    retailer_profile = current_item._retailer
     return direct_to_template(request, template, {'retailer_profile': retailer_profile})    
 
 @login_required

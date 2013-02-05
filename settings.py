@@ -43,10 +43,14 @@ AWS_S3_CUSTOM_DOMAIN = 'images.stunable.com'
 DEFAULT_BUCKET = "images.stunable.com"
 AWS_S3_SECURE_URLS = False
 
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
 AWS_HEADERS = {
     'Cache-Control': 'max-age=186400000',
 }
 
+
+THUMB_SIZES = {'tiny':(90,90), 'small':(150,300),'medium':(200,400),'large':(450,900),'extralarge':(900,1800)}
 
 MANAGERS = ADMINS
 
@@ -363,7 +367,7 @@ NOTICE_TIME_DIFF = 2 #minutes
 
 
 THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
-
+THUMBNAIL_DEBUG = True
 
 EXTERNAL_CONTENT_URL = {
                             'blog':"http://stunable.wordpress.com/",

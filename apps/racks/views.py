@@ -239,7 +239,7 @@ def rack_item_add_new(request, rack_id, template='racks/add_item.html'):
 
 @login_required
 def delete(request, rack_id, template="racks/closet.html"):
-    #rack = Rack.objects.get(pk=rack_id)
+    #rack = Rack.objects.(pk=rack_id)
     rack = get_object_or_404(Rack, pk=rack_id)
     if request.user == rack.user:   
         rack.delete()
@@ -444,7 +444,7 @@ def item(request, template='racks/item_management.html'):
 
 
 #@login_required
-def item_modal(request, item_id, template='racks/item_modal.html'):
+def item_modal(request, item_slug, template='racks/item_modal.html'):
     
     # if request.user.is_anonymous():
     #     template = "racks/view_error.html"
@@ -454,7 +454,7 @@ def item_modal(request, item_id, template='racks/item_modal.html'):
     ctx = {}
     
 
-    item = get_object_or_404(Item, pk=item_id)
+    item = get_object_or_404(Item, slug=item_slug)
     ctx['item'] = item
 
     if request.GET.get("opt") == "rack_it":
@@ -466,7 +466,7 @@ def item_modal(request, item_id, template='racks/item_modal.html'):
         admirer_list = Friendship.objects.friends_for_user(request.user)
         ctx['admirer_list'] = admirer_list
 
-        if Rack_Item.objects.filter(item__id=item_id, user=request.user).count() > 0:
+        if Rack_Item.objects.filter(item__slug=item_slug, user=request.user).count() > 0:
             item.shared_to_this_user = True 
     else:
         if request.session.has_key('anonymous_profile'):

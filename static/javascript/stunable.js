@@ -154,9 +154,11 @@ var DRAGGABLE_OPTIONS = {
 
 var DROPPABLE_OPTIONS = {
         // accept : ".drag_item",
+
         hoverClass : "drop_item_hover",
         activeClass: "drop_item_here",
         drop : function(event, ui) {
+            var temp="";
             // find the next ul which have the 'nxt' class and remove it
             $('.nxt').each(function(){
                 $(this).removeClass('nxt');
@@ -169,7 +171,8 @@ var DROPPABLE_OPTIONS = {
             $.post('/racks/add_item/?item_id=' + item_id + '&rack=' + rack_id, function(returnData) {
                 if (temp != "Item Added!"){
                     temp = $(droppable).html();
-                }                
+                }
+                console.log(returnData)                
                 var text;
                 if(returnData['result'] == 'ok') {
                     text = "Item Added!";
@@ -197,7 +200,7 @@ function initDrag(selection) {
 }
 
 function initDrop(){
-    console.log($('.drop_item'))
+    // console.log($('.drop_item'))
     $('.drop_item').droppable(DROPPABLE_OPTIONS);
 }
 
@@ -423,4 +426,41 @@ function setupRackIt(){
             }
         });
     });
+}
+
+
+function touchHandler(event){
+    //alert($(event.target).attr('class'))
+  if($(event.target).hasClass('touchable') || $(event.target).parent().hasClass('touchable')){
+     //alert(event.target)
+     $('.iosSlider').data('touchCarousel').freeze()
+      var touches = event.changedTouches,
+          first = touches[0],
+          type = "";
+
+           switch(event.type)
+      {
+          case "touchstart": type = "mousedown"; $('.iosSlider').data('touchCarousel').freeze(); break;
+          case "touchmove":  type="mousemove"; break;        
+          case "touchend":   type="mouseup"; $('.iosSlider').data('touchCarousel').unfreeze(); break;
+          default: return;
+      }
+      var simulatedEvent = document.createEvent("MouseEvent");
+      simulatedEvent.initMouseEvent(type, true, true, window, 1,
+                                first.screenX, first.screenY,
+                                first.clientX, first.clientY, false,
+                                false, false, false, 0/*left*/, null);
+
+      first.target.dispatchEvent(simulatedEvent);
+      event.preventDefault();
+      //event.stopPropagation();
+  }
+}
+
+function initTouch()
+{
+   document.addEventListener("touchstart", touchHandler, true);
+   document.addEventListener("touchmove", touchHandler, true);
+   document.addEventListener("touchend", touchHandler, true);
+   document.addEventListener("touchcancel", touchHandler, true);    
 }

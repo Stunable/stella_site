@@ -12,8 +12,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db.models.loading import get_model, get_models
 
-from sorl.thumbnail import ImageField,get_thumbnail
-
 from django.template.defaultfilters import slugify
 
 from tasks import *
@@ -25,6 +23,9 @@ from django.db.models.signals import post_save,pre_save
 
 from queued_storage.backends import QueuedStorage
 from storages.backends.s3boto import S3BotoStorage
+
+S3BotoStorage.IGNORE_IMAGE_DIMENSIONS = False
+
 
 queued_s3storage = QueuedStorage(
     'django.core.files.storage.FileSystemStorage',
@@ -91,7 +92,7 @@ class listImageMixin(object):
     @property
     def thumbnail(self):
         try:
-            return self.get_image().url
+            return self.get_image().small.url
         except:
             return 'pic'
         #get_thumbnail(self.get_image(), '120x120',  quality=100).url
@@ -113,13 +114,27 @@ class ProductImage(models.Model,listImageMixin):
             self.__class__.__name__
 
 
-    image = ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product Image")
-    pretty_image = models.ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product pretty Image",storage=queued_s3storage)
+    image = models.ImageField(upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product Image",storage=queued_s3storage)
+    pretty_image = models.ImageField(upload_to='pretty/%Y/%m/%d/', null=True, blank=True, verbose_name="Product pretty Image",storage=queued_s3storage)
     bg_color = models.CharField(max_length=32,default='white',blank=True,null=True)
     retailer = models.ForeignKey(User,null=True,blank=True)
     item = models.ForeignKey('Item',null=True, blank=True,related_name='item_image_set')
 
+    width = models.IntegerField(null=True,blank=True)
+    height = models.IntegerField(null=True,blank=True)
+
+    tiny        = models.ImageField(upload_to='upload/t/%Y/%m/%d/', null=True, blank=True,  verbose_name="90,90",storage=queued_s3storage)
+    small       = models.ImageField(upload_to='upload/s/%Y/%m/%d/', null=True, blank=True,  verbose_name="150,300",storage=queued_s3storage)
+    medium      = models.ImageField(upload_to='upload/m/%Y/%m/%d/', null=True, blank=True,  verbose_name="200,400",storage=queued_s3storage)
+    large       = models.ImageField(upload_to='upload/l/%Y/%m/%d/', null=True, blank=True,  verbose_name="450,900",storage=queued_s3storage)
+    extralarge  = models.ImageField(upload_to='upload/xl/%Y/%m/%d/', null=True, blank=True, verbose_name="900,1800",storage=queued_s3storage)
+
     identifier = models.CharField(max_length=256,blank=True,null=True)
+
+    def get_thumbs(self):
+        for size in settings.THUMB_SIZES:
+            get_thumbnail(self.pretty_image, '%dx%d'%size, crop='center', quality=99)
+            print 'thumbs for ',self,size
 
     def get_image(self):
         if self.pretty_image:
@@ -129,6 +144,19 @@ class ProductImage(models.Model,listImageMixin):
 
     def generate_pretty_picture(self):
         prettify.delay(self)
+
+    def set_size(self):
+        set_size(self)
+
+    
+    def image_dims(self):
+        #width and height of the image are based on the large image which is 450x900
+        #so... to get the width and height of the small image we would do 150/450 * w etc.
+        return {
+                'small': {'width': self.width * settings.THUMB_SIZES['small'][0]/450, 'height': self.height * settings.THUMB_SIZES['small'][1]/900}
+            }
+
+
 
     def save(self,*args,**kwargs):
         this_id = self.id
@@ -189,13 +217,25 @@ class Item(models.Model,listImageMixin):
         return self.name
     
     def get_image(self):
+        return self.get_image_object()
+
+
+    def get_product_images(self):
+        return self.item_image_set.all()
+
+
+    def get_image_object(self):
         if self.featured_image:
-            if self.featured_image.pretty_image:
-                print 'returning featured_image'
-                return self.featured_image.pretty_image
+            if self.featured_image:
+                # print 'returning featured_image'
+                return self.featured_image
+        try:
+            return self.item_image_set.all()[0]
+        except:
+            return None
     
     def get_additional_images(self):
-        return [im for im in self.item_image_set.all() if im !=self.featured_image]
+        return [im for im in self.item_image_set.all() if im.id !=self.featured_image.id]
 
     @property
     def retailer(self):
@@ -300,6 +340,9 @@ class Item(models.Model,listImageMixin):
                 self.is_onsale = True
 
         super(Item,self).save()
+
+    def set_slug(self):
+        self.slug = None
 
 
     def set_price_text(self):

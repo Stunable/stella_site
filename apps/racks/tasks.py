@@ -6,6 +6,8 @@ import StringIO
 from django.core.files.temp import NamedTemporaryFile
 from django.conf import settings
 
+from queued_storage.tasks import Transfer
+
 from celery import task
 
 def get_dominant_color(image):
@@ -18,21 +20,55 @@ def get_dominant_color(image):
 
 @task(name='racks.prettify_image')
 def prettify(instance):
-    pic = Image.open(instance.image.file)
-    enhancer  = ImageEnhance.Contrast(pic)
-    outpic = enhancer.enhance(1.1)
-
-    temp = NamedTemporaryFile(delete=True)
-     
-    grad = Image.open(os.path.join(settings.PROJECT_ROOT,'static','item_grad.jpg'))
-    gradsize = grad.resize(outpic.size)
     try:
-        outpic = ImageChops.add(outpic,gradsize)
-    except:
-        print 'error adding gradient:',instance
+        pic = Image.open(instance.image.file)
+        enhancer  = ImageEnhance.Contrast(pic)
+        outpic = enhancer.enhance(1.1)
+
+        temp = NamedTemporaryFile(delete=True)
+         
+        grad = Image.open(os.path.join(settings.PROJECT_ROOT,'static','item_grad.jpg'))
+        gradsize = grad.resize(outpic.size)
+        try:
+            outpic = ImageChops.add(outpic,gradsize)
+        except:
+            print 'error adding gradient:',instance
 
 
-    outpic.save(temp.name+str(instance.id),'jpeg')
+        outpic.save(temp.name+str(instance.id),'jpeg')
 
-    instance.pretty_image.save("%d_pretty.jpg"%instance.id, File(open(temp.name+str(instance.id),'rb')))
+        instance.pretty_image.save("%d_pretty.jpg"%instance.id, File(open(temp.name+str(instance.id),'rb')))
+        instance.save()
+        #causes sorl to premake thumbs for this new image
+        for key,val in settings.THUMB_SIZES.items():
+            temp = NamedTemporaryFile(delete=True)
+            newpic = outpic.copy()
+            newpic.thumbnail(val,Image.ANTIALIAS)
+
+            if key == 'large':
+                instance.width = newpic.size[0]
+                instance.height = newpic.size[1]
+
+            newpic.save(temp.name+str(instance.id),'jpeg')
+            getattr(instance,key).save("%d_%s.jpg"%(instance.id,key), File(open(temp.name+str(instance.id),'rb')))
+
+        print 'saved sizes for ',instance
+        print 'height:', instance.height
+        print 'width:', instance.width
+        instance.save()
+    except Exception, e:
+        print e
+        if settings.DEBUG:
+            if instance.item:
+                if not instance.item.item_image_set.all().count() >= 2:
+                    instance.item.delete()
+            instance.delete()
+            
+
+
+@task(name='racks.set_sizes')
+def set_size(instance):
+    pic = Image.open(instance.pretty_image.file)
+    instance.width = pic.size[0]
+    instance.height = pic.size[1]
     instance.save()

@@ -1,2 +1,2 @@
 from settings import *
-DEBUG = False
+DEBUG = True

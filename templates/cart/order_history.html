@@ -109,10 +109,8 @@
 
 		{% for item in purchase.cart.item_set.all %}
 		<tr id="product-item-{{item.product.pk}}">
-			{% load thumbnail %}
-            {% thumbnail item.product.item.get_image "100x100" as im %}
-			<td align="center"><img height="60px" src="{{ im.url }}"/></td>
-			{% endthumbnail %}
+			
+			<td align="center"><img height="60px" src="{{ item.product.item.get_image.small.url }}"/></td>
 			<td>{{ item.product.item.name }}</td>
 			<td align="right">{{ item.product.item.price }}</td>
 			<td align="center">{{ item.product.item.retailer }}</td>

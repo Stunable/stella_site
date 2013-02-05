@@ -91,7 +91,7 @@ class ItemTypeInline(admin.TabularInline):
 class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
     inlines = [ItemTypeInline]
     list_display = ('name','category','approved','is_available','list_image','_retailer')
-    actions = ('approve','unapprove','set_price_text')
+    actions = ('approve','unapprove','set_price_text','set_item_slugs')
     list_filter = ('approved','is_available','created_date','_retailer')
     search_fields = ('name','description')
 
@@ -116,6 +116,13 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
         for obj in queryset:
             obj.generate_pretty_picture()
 
+    def set_item_slugs(self,request,queryset):
+        for obj in queryset:
+            obj.set_slug()
+            obj.save()
+
+
+
 
     
 
@@ -126,11 +133,19 @@ class SizeAdmin(admin.ModelAdmin):
 class ProductImageAdmin(admin.ModelAdmin):
     list_display = ['image','retailer','list_image']
     #readonly_fields = ['retailer']
-    actions = ('make_pretty',)
+    actions = ('make_pretty','premake_thumbs')
 
     def make_pretty(self,request,queryset):
         for obj in queryset:
             obj.generate_pretty_picture()
+
+    def set_size(self,request,queryset):
+        for obj in queryset:
+            obj.set_size()
+
+    def premake_thumbs(self,request,queryset):
+        for obj in queryset:
+            obj.get_thumbs()
 
 
     
