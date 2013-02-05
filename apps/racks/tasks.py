@@ -59,7 +59,7 @@ def prettify(instance):
             instance.save()
     except Exception, e:
         instance.item.approved = False
-        instance.save()
+        instance.item.save()
 
         # print e
         # if settings.DEBUG:
@@ -67,7 +67,7 @@ def prettify(instance):
         #         if not instance.item.item_image_set.all().count() >= 2:
         #             instance.item.approved = False
         #             instance.item.save()
-        instance.delete()
+        # instance.delete()
             
 
 
