@@ -137,10 +137,7 @@ class ProductImage(models.Model,listImageMixin):
             print 'thumbs for ',self,size
 
     def get_image(self):
-        if self.pretty_image:
-            return self.pretty_image
-        else:
-            return self.image
+        return self
 
     def generate_pretty_picture(self):
         prettify.delay(self)
