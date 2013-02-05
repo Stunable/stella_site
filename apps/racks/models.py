@@ -218,7 +218,10 @@ class Item(models.Model,listImageMixin):
     def price_range(self):
 	seq = []
         for it in self.types.all():
-             seq.extend([it.price,it.sale_price])
+            if it.price:
+                seq.append(it.price)
+            if it.sale_price:
+                seq.append(it.sale_price)
 
         if not len(seq):
             self.is_available = False
