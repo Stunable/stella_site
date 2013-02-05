@@ -22,7 +22,7 @@ var stunable = {
 
       // })
       if (! logged_in){
-        // $('#login_box').modal({clickClose: false})
+        $('#login_box').modal({clickClose: false})
 
       }
 
