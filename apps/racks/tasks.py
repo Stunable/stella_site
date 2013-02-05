@@ -58,8 +58,9 @@ def prettify(instance):
             print 'width:', instance.width
             instance.save()
     except Exception, e:
-        instance.item.approved = False
-        instance.item.save()
+        if instance.item:
+            instance.item.approved = False
+            instance.item.save()
 
         # print e
         # if settings.DEBUG:
