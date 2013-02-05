@@ -91,7 +91,7 @@
                                 <li class="touchcarousel-item item some-crazy-class"> 
                                     <h5 class="item-label"><span>{{item.brand}}</span></h5>
                                     <h4 class="item-name"><a class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.id %}">{{item.name}}</a></h4>
-                                    <div class="item-icon"><img src="{{item.product.item.get_image.medium.url}}"></div>
+                                    <div class="item-icon"><img src="{{item.get_image.medium.url}}"></div>
                                     <div class="wp drag_item touchable">
                                         <a rel="modal:open" class="item-ref bottom-ref rel_pos" data-value="{{ item.id }}" href="{% url item_modal item.slug %}">  <img src="{{ item.get_image.medium.url }}"> </a>
                                     </div>
