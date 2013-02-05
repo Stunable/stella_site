@@ -1,4 +1,79 @@
 
+// CLEAR TEXT INPUTS OF DEFAULT VALUE ON FOCUS
+function clearInput(textField) {
+    if(textField.value == textField.defaultValue) {
+        textField.value = "";
+    }
+}
+
+// RESTORE TEXT INPUT DEFAULT VALUE ON BLUR
+function restoreInput(textField) {
+    if(textField.value == "" || isEmpty(textField.value)) {
+        textField.value = textField.defaultValue;
+    }
+}
+
+function isEmpty(tarString) {
+    var blanks = /^\s*$/
+    if(blanks.test(tarString)) {
+        return true;
+    }
+    return false;
+}
+
+function isDefault(textField) {
+    if(textField.value == textField.defaultValue) {
+        return true;
+    }
+    return false;
+}
+
+function init_add_rack_modal() {
+        $('.confirmation').hide();
+        var options = {
+            success : close_dialog
+        };
+
+        function close_dialog(resp, statusText, xhr, $form) {
+            
+            if ($(resp).find(".errorlist").length > 0){
+                $('.confirmation').text($(resp).find(".errorlist > li").text());
+                $('.confirmation').css('color', 'red');
+            }else{
+                $('.confirmation').text("Created!");
+                $('.confirmation').css('color', 'gray');
+                setTimeout("parent.$.modal.close()", 500);
+                $(resp.result.target).append($(resp.result.html).hide().fadeIn('slow').droppable(DROPPABLE_OPTIONS));
+            }
+            $('.confirmation').show();
+        }
+
+        $('#rack-insert-form').ajaxForm(options);
+
+        $('#btn_create').click(function(e) {
+            e.preventDefault();
+            if($('#name').attr('value') == 'Enter Rack name here' || $('#name').attr('value') == '') {
+                
+                $('#bigform-error').stop();
+                $('#bigform-error').animate({
+                    "opacity" : "1"
+                }, "fast", function() {
+                    changeError($('#bigform-error')[0], "Please Enter Rack Name");
+                    $('.acct .password-field').css('margin-bottom', '0px');
+                    $('#bigform-error').css('display', 'inline');
+                });
+                
+
+
+            } else {
+                $('#rack-insert-form').submit();
+            }
+        });
+        
+        $('.spinner').sprite({ fps: 10, no_of_frames: 12 });
+    };
+
+
 // BEGIN USER BASE
 function initAddFriend(){
     // unbind the click function just in case

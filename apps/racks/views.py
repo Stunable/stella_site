@@ -169,6 +169,7 @@ def public(request, template='racks/public.html'):
     ctx['public_racks'] = public_racks
     return direct_to_template(request, template, ctx)
 
+
 @login_required
 def add(request, template='racks/add.html'):
     if request.is_ajax():
@@ -181,45 +182,34 @@ def add(request, template='racks/add.html'):
                 rack.user = request.user
                 if request.POST.get('public') == 'True':
                     rack.publicity = 1
+                    target = '.public-racks'
                 else:
                     rack.publicity = 0 #default publicity is private
+                    target = '.private-racks'
                 rack.save()
                 # add notification for created rack
                 user_friends = Friendship.objects.friends_for_user(request.user)
                 
-                # # if user sign up/ login using facebook
-                # # TODO: cannot post on user news feed. Maybe Facebook bug!  
-                # social_users = UserSocialAuth.objects.filter(provider='facebook').filter(user=request.user)
-                # if social_users:
-                #     social_user = social_users[0]
-                #     access_token = social_user.tokens['access_token']
-                #     # get user friends
-                #     url = 'https://graph.facebook.com/me/feed?method=post&client_id=' + settings.FACEBOOK_APP_ID + '&access_token=' + access_token
-                #     message = request.user.first_name + ' ' + request.user.last_name + ' created a ' + rack.name + ' rack on' +\
-                #             ' Stunable'
-                #     publish = {
-                #       'message': message
-                #     };
-                #     data = urllib.urlencode(publish)
-                    
-                #     try:
-                #         req = urllib2.Request(url, data) 
-                #         content = urllib2.urlopen(req)
-                #         data = json.load(content)
-                #     except:
-                #         # TODO: log bug here
-                #         pass 
                 
                 if notification:
                     for friend in user_friends:                    
                         notification.send([friend['friend']], "friend_creates_new_rack", {"rack": rack}, True, request.user)
+                
                 ctx['success'] = True
+                d  = {'rack':rack}
+                ctx['result'] = {'html':render_to_string("racks/includes/rack_in_list.html", d),'target':target}
+                print 'ctx:',ctx
+
+                json = simplejson.dumps(ctx)
+                return HttpResponse(json, mimetype='application/json')
+                 
         else:
             form = RackForm()
         ctx['form'] = form
         ctx['public'] = is_public
         return direct_to_template(request, template, ctx)
     else:
+        raise ValidationError('no good...')
         return redirect(reverse("shop"))
 
 @json_view

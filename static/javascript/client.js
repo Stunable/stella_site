@@ -56,7 +56,7 @@ function restoreInput(textField) {
 function isEmpty(tarString) {
 	var blanks = /^\s*$/
 	if(blanks.test(tarString)) {
-		return true;
+		return true;	
 	}
 	return false;
 }

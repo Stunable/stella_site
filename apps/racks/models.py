@@ -27,10 +27,18 @@ from storages.backends.s3boto import S3BotoStorage
 S3BotoStorage.IGNORE_IMAGE_DIMENSIONS = False
 
 
-queued_s3storage = QueuedStorage(
-    'django.core.files.storage.FileSystemStorage',
-    'storages.backends.s3boto.S3BotoStorage')
 
+if settings.DEBUG:
+    queued_s3storage = QueuedStorage(
+        'django.core.files.storage.FileSystemStorage',
+        'django.core.files.storage.FileSystemStorage',
+        # 'storages.backends.s3boto.S3BotoStorage'
+        )
+else:
+    queued_s3storage = QueuedStorage(
+    'django.core.files.storage.FileSystemStorage',
+    'storages.backends.s3boto.S3BotoStorage'
+    )   
 
 class Category(models.Model):
     name = models.CharField(max_length=100)

@@ -1,55 +1,6 @@
 {% block content %}
 <script>
-	$(document).ready(function() {
-		//Fancybox
-		///------------------------------------------------------
-		//variables
-		var closeBox = $('.close-box').parent(), itemLink = $('.item-ref'), trash = $('.trash');
-
-		//determines new class for a button
-		// closeBox.click($.fancybox.close);
-		// closeBox.click(function(e) {e.preventDefault();
-		});
-		$('.confirmation').hide();
-		var options = {
-			success : close_dialog
-		};
-
-		function close_dialog(responseText, statusText, xhr, $form) {
-		    console.log(responseText);
-		    if ($(responseText).find(".errorlist").length > 0){
-		        $('.confirmation').text($(responseText).find(".errorlist > li").text());
-		        $('.confirmation').css('color', 'red');
-		    }else{
-		        $('.confirmation').text("Created!");
-		        $('.confirmation').css('color', 'gray');
-		        setTimeout("parent.$.fancybox.close()", 2000);
-		        setTimeout("location.reload(true)", 2500);
-		    }
-		    $('.confirmation').show();
-		}
-
-		$('#rack-insert-form').ajaxForm(options);
-
-		$('#btn_create').click(function(e) {
-			if($('#name').attr('value') == 'Enter Rack name here' || $('#name').attr('value') == '') {
-				e.preventDefault();
-				$('#bigform-error').stop();
-				$('#bigform-error').animate({
-					"opacity" : "1"
-				}, "fast", function() {
-					changeError($('#bigform-error')[0], "Please Enter Rack Name");
-					$('.acct .password-field').css('margin-bottom', '0px');
-					$('#bigform-error').css('display', 'inline');
-				});
-			} else {
-				$('#rack-insert-form').submit();
-			}
-		});
-		
-		$('.spinner').sprite({ fps: 10, no_of_frames: 12 });
-	});
-
+	
 </script>
 <style type="text/css">
 	#bigform-error {

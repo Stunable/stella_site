@@ -1,0 +1,7 @@
+<li class="drop_item">
+    <span data-value="{{ rack.id }}"><a href="{% url racks_detail rack.id %}"> {% if rack.shared_users.all %}
+        {{ rack.owner.first_name|first }}.{{ rack.owner.last_name|first }}: {{ rack.name }}
+        {% else %}
+        {{ rack.name }}
+        {% endif %}</a></span>
+</li>
