@@ -1,7 +1,7 @@
 
 	var add_selected_product_variant_url = undefined;
 	
-	// console.log(inventories)
+	////console.log(inventories)
 	
 	function formatPrice(element){
 		$e = $(element);
@@ -23,7 +23,7 @@
 	}
 
 function setItemDetailsEvent(){
-			console.log('setItemDetailsEvent')
+		//console.log('setItemDetailsEvent')
 			$('.item-details .chzn-container').remove();
 			$('.item-details #friends-select').css('display', 'block').removeClass('chzn-done').chosen();
 			
@@ -248,12 +248,12 @@ function setItemDetailsEvent(){
 			var modal_height = $('.modal').height();
 			var modal_top = $('.modal').position().top
 
-			console.log('size',modal_top)
+		//console.log('size',modal_top)
 			e.preventDefault();
             var link = $(this);
             var container = link.parents('.item-details');
             e.preventDefault();
-            console.log(link.data('href'))
+           //console.log(link.data('href'))
             $.get(link.data('href'), function(content){
                 container.flip({
                     direction:'lr',
@@ -313,7 +313,7 @@ function post_item_modal(){
 				
 				added_sizes.push(inventory.size)
 			}
-			console.log(inventory.color)
+		//console.log(inventory.color)
 			if (added_colors.indexOf(inventory.color) === -1){
 				var t = "<span"+selectedclass+'><a data-saleprice="'+inventory.saleprice+'" data-regprice="'+inventory.regularprice+'" data-onsale="'+inventory.is_onsale+"\" href='" + inventory.add_cart_url + "' >" + inventory.color +"</a></span>"
 				var el = $(t)
@@ -321,7 +321,7 @@ function post_item_modal(){
 				if (inventory.is_onsale){
 					el.addClass('onsale')
 				}
-			console.log('adding ',el)
+		//console.log('adding ',el)
 			$('.item-color-list').append(el);		
 				added_colors.push(inventory.color)
 			}
