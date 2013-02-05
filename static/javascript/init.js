@@ -4,10 +4,8 @@
   }
 
 
-  var item_click_modal_options = {
-
-
-
+  var item_modal_options = {
+    afterOpenFunction:init_item_modal,
   }
 
 var stunable = {

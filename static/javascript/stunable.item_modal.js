@@ -287,7 +287,7 @@ function setItemDetailsEvent(){
             });         
         }
 
-function post_item_modal(){
+function init_item_modal(){
 		$('.spinner').sprite({ fps: 10, no_of_frames: 12 });		
 		var added_sizes = [];
 		var added_colors = [];
