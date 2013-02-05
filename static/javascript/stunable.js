@@ -123,7 +123,7 @@ function listFilter(input, list) {
         // fire the above change event after every letter
         $(this).change();
     }).keydown(function(e){
-        console.log(e)
+       //console.log(e)
     });
 }
 
@@ -186,10 +186,10 @@ var DRAGGABLE_OPTIONS = {
         zIndex: 2700,
         // snap: ".drop_item",
         start: function(event, ui) {
-            console.log(ui.helper)
+           //console.log(ui.helper)
             $(ui.helper[0]).addClass("black");
 
-            console.log('dragging',this)
+           //console.log('dragging',this)
             if ($('.iosSlider').data('touchCarousel')){
                 $('.iosSlider').data('touchCarousel').freeze();
             }
@@ -247,7 +247,7 @@ var DROPPABLE_OPTIONS = {
                 if (temp != "Item Added!"){
                     temp = $(droppable).html();
                 }
-                console.log(returnData)                
+               //console.log(returnData)                
                 var text;
                 if(returnData['result'] == 'ok') {
                     text = "Item Added!";
@@ -263,7 +263,7 @@ var DROPPABLE_OPTIONS = {
             // alert("You have dragged " + item_name + " into " + rack_name);
         },
         over: function(e, ui){
-            console.log(ui)
+            ////console.log(ui)
         }
     }
 
@@ -275,7 +275,7 @@ function initDrag(selection) {
 }
 
 function initDrop(){
-    // console.log($('.drop_item'))
+    ////console.log($('.drop_item'))
     $('.drop_item').droppable(DROPPABLE_OPTIONS);
 }
 
@@ -401,7 +401,7 @@ function setupCarousel(selection){
                         $('.touchcarousel-container').append(items);
                         slider.addItems(items);
                         slider._next_page = parseInt($(data).attr('data-nextpage'))
-                        // console.log(slider)
+                        ////console.log(slider)
                         initDrag(items);
                         fixDragDropIssue();
                     }
