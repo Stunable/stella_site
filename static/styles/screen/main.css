@@ -3892,8 +3892,9 @@ background-color: white;
 .spinner,.modal-spinner {
     width: 26px;
     height: 26px;
-    background-image: url(/static/images/gui/spinner.png);
+    background-image: url(../../images/loading.gif);
     background-position: 0px 0px;
+    z-index:5000;
 }
 
 .read-more {
@@ -4614,7 +4615,7 @@ MODAL CSS
   background: url(../../images/x.png) no-repeat 0 0;
 }
 
-.modal-spinner {
+/*.modal-spinner {
   display: none;
   width: 64px;
   height: 64px;
@@ -4629,7 +4630,7 @@ MODAL CSS
   -o-border-radius: 8px;
   -ms-border-radius: 8px;
   border-radius: 8px;
-}
+}*/
 
 /*END MODAL CSSS*/
 

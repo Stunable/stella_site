@@ -17,12 +17,12 @@ var stunable = {
 
       // $('.click_href').click(function(e){
       //   $.post($(this).data('href'),function(data){
-      //     console.log(data)
+      //    //console.log(data)
       //   })
 
       // })
       if (! logged_in){
-        $('#login_box').modal({clickClose: false})
+        // $('#login_box').modal({clickClose: false})
 
       }
 
@@ -42,7 +42,7 @@ var stunable = {
         initDrop(); 
 
         $(document).on($.modal.AJAX_COMPLETE, function(event, modal) {
-          console.log('ajax success')
+         //console.log('ajax success')
            post_item_modal()
         });
     }
@@ -83,19 +83,19 @@ var stunable = {
             }
         });
 
-        $(".cart-item").on('click', '.cart-remove', function(event) {
-            event.preventDefault();
-            var item = $(this).closest('.cart-item');
-            $.ajax({
-                url : $(this).attr('href'),
-                type : 'post',
-                success : function(data, textStatus, jqXHR) {
-                    update_shipping_handling_fee();
-                    item.fadeOut();
-                    updateCartTotals(data);
-                }
-            })
-        });
+        // $(".cart-item").on('click', '.cart-remove', function(event) {
+        //     event.preventDefault();
+        //     var item = $(this).closest('.cart-item');
+        //     $.ajax({
+        //         url : $(this).attr('href'),
+        //         type : 'post',
+        //         success : function(data, textStatus, jqXHR) {
+        //             update_shipping_handling_fee();
+        //             item.fadeOut();
+        //             updateCartTotals(data);
+        //         }
+        //     })
+        // });
 
         $(".cart-item").on('click', '.cart-change-quantity', function(event) {
             event.preventDefault();
@@ -181,13 +181,13 @@ var stunable = {
     
 $(document).ready(function() {
     var pageScrLoader = $('body').attr('data-role');
-    console.log('page:',pageScrLoader)
+   //console.log('page:',pageScrLoader)
     if ( pageScrLoader && stunable[pageScrLoader] ) {
-        return stunable[ pageScrLoader ].apply( this, stunable.common());
+        return stunable[pageScrLoader].apply( this, stunable.common());
     } else if ( !pageScrLoader ) {
         return stunable.common.apply( this );
     }else{
         stunable.common();
     }
-    console.log( pageScrLoader + ' does not exist' );
+   //console.log( pageScrLoader + ' does not exist' );
 });

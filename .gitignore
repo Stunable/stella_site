@@ -28,3 +28,5 @@ mydatabase
 _fixtures/outdata.tar.gz
 
 _fixtures/media.tar.gz
+
+dump.rdb
