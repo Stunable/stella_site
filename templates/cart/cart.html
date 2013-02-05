@@ -84,7 +84,7 @@
                 <tr>
                     <td>Zipcode</td>
                     <td>
-                    <input type="text" name="zipcode" value="{{request.session.recipient_zipcode}}"/>
+                    <input id="zipcode_field" type="text" name="zipcode" value="{{request.session.recipient_zipcode}}"/>
                     </td>
                 </tr>
 <!--                 <tr>
@@ -127,6 +127,7 @@
 {% endblock %} 
 {% block extra_script %}
 <script type="text/javascript">
+console.log('yoqyoqywoeyqwoey')
     valid_shipping_info = false;
 
     $(function(){
@@ -182,8 +183,8 @@
             $(this).parent().append("<div class='bootstrap' style='margin-top: 5px;'><form class='item-change-form form-horizontal' action='" + url + "' method='post'>" + "<div class='control-group'><input type='text' class='cart-new-quantity' name='quantity'>" + "<input style='margin-left: 5px;' type='submit' class='btn btn-primary' value='submit'></div></form></div>");
         });
 
-        function update_shipping_handling_fee(){
-            
+        function update_shipping_handling_fee(event){
+            console.log(event)
             var zipcode = $('input[name="zipcode"]').val();
             valid_shipping_info = false;                
             if (zipcode.length == 5) {
@@ -216,6 +217,8 @@
         $('input[name="zipcode"]').keyup(update_shipping_handling_fee);
 
         $('#shipping_option_select').change(update_shipping_handling_fee);
+
+
 
         $(".cart-item").on('submit', '.item-change-form', function(event) {         
             event.preventDefault();
