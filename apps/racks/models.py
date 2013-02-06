@@ -203,7 +203,7 @@ class Item(models.Model,listImageMixin):
     created_date =   models.DateField(auto_now=True, auto_now_add=True, default=datetime.date.today)
     price_text =     models.CharField(max_length=128,default=None,blank=True,null=True)
     
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=128)
 
     approved = models.NullBooleanField(default=None)
     is_available = models.BooleanField(default=True)
@@ -329,8 +329,18 @@ class Item(models.Model,listImageMixin):
             slug = self.name
             if self._retailer:
                 slug = self._retailer.name + '-' + slug
+
             slug = slugify(slug)
-            self.slug = slug
+            test = slug
+            i = 1
+            if Item.objects.filter(slug=test).count():
+                while Item.objects.filter(slug=test).count():
+                    test = slug +'_' + str(i)
+                    i += 1
+
+
+
+            self.slug = test
 
         if self.total_inventory() < 1:
             self.is_available = False
