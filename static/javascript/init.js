@@ -36,29 +36,23 @@ var stunable = {
 
       }
 
+      setupCustomTabs($('#left-panel'));  
+      $('.panel-inner-content').html($('.panel-header .active').find('.tab-content').html()).fadeIn(1000, function() {
+          // console.log('panel thing just happened')
+        });             
+
     }
-    ,shop: function(){ 
-        setupCustomTabs($('#left-panel'));             
+    ,shop: function(){            
         setupCarousel($('.iosSlider'));
-
-        $('.panel-inner-content').html($('.panel-header .active').find('.tab-content').html()).fadeIn(1000, function() {
-                // initDragDrop();
-
-                // hookupFBMessages(static_url,url);
-                // fixDragDropIssue();
-        });   
-
         initSwipe($('.iosSlider'))
         initDrop(); 
 
-        // $(document).on($.modal.AJAX_COMPLETE, function(event, modal) {
-        //  //console.log('ajax success')
-           
-        // });
     }
-    ,rack: function(){
-      initDrag($('.item'))
+    ,racks: function(){
+      console.log('racks setup')
       initDrop(); 
+      initDrag($('.item'))
+
 
     }
     ,cart: function(){
@@ -191,7 +185,7 @@ var stunable = {
     
 $(document).ready(function() {
     var pageScrLoader = $('body').attr('data-role');
-   //console.log('page:',pageScrLoader)
+   console.log('page:',pageScrLoader)
     if ( pageScrLoader && stunable[pageScrLoader] ) {
         return stunable[pageScrLoader].apply( this, stunable.common());
     } else if ( !pageScrLoader ) {

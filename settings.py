@@ -240,7 +240,7 @@ djcelery.setup_loader()
 
 # django-registration
 ACCOUNT_ACTIVATION_DAYS = 14
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/accounts/connect"
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

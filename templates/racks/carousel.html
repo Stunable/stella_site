@@ -88,27 +88,8 @@
                             
                             {% for list_3_items in rack_items_list %}
                             {% for item in list_3_items %}
-                                <li class="touchcarousel-item item some-crazy-class"> 
-                                    <h5 class="item-label"><span>{{item.brand}}</span></h5>
-                                    <h4 class="item-name"><a class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.id %}">{{item.name}}</a></h4>
-                                    <div class="item-icon"><img src="{{item.get_image.medium.url}}"></div>
-                                    <div class="wp drag_item touchable">
-                                        <a rel="modal:open" data-options="item_modal_options" class="item-ref bottom-ref rel_pos" data-value="{{ item.id }}" href="{% url item_modal item.slug %}">  <img src="{{ item.get_image.medium.url }}"> </a>
-                                    </div>
-                                    {% dict_entry_for_item item from vote_dict as vote %}
-                                    <div class="link-holder" id="item_{{item.pk}}">
-                                        <p class="icon-link yes-no no {% if vote and vote.is_downvote %}voted{% endif %} no_{{item.pk}}">
-                                            <a href="{% url item_vote item.pk 'down' %}" class="icon disapprove">No way.</a>
-                                        </p>
-                                        <p class="icon-link hanger">
-                                            <a href="{% url add_item_from_modal %}" data-value="{{ item.id }}" class="icon rack-icon">Rack it.</a>
-                                        </p>
-                                        <p class="icon-link yes-no yes {% if vote and vote.is_upvote %}voted{% endif %} yes_{{item.pk}}">
-                                            <a href="{% url item_vote item.pk 'up' %}" class="icon approve">Yes, please!</a>
-                                        </p>
-                                    </div>
-                                    <div class="carousel_price_tag">
-                                        {{item.price_range_text|safe}}</div>
+                                <li class="touchcarousel-item item some-crazy-class">
+                                    {% include "racks/includes/item_list_content.html" %}
                                 </li>
                             {% endfor %}
                             {% endfor %}

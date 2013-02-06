@@ -5,9 +5,9 @@ def page_role(request):
     print splits
     if not len(splits) > 2:
         return {'page_role':'shop'}
-    if splits[1] == 'cart':
-        return {'page_role':'cart'}
     
-    return {'page_role': 'shop'}
+    return {'page_role':splits[1]}
+    
+    # return {'page_role': 'shop'}
 
    

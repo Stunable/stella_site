@@ -95,6 +95,7 @@
             {% else %}
                 var logged_in = null;
             {% endif %}
+            var root_url="{{URL}}";
         </script>
 <script type="text/javascript">
 {% if not debug %}
@@ -113,7 +114,7 @@
     </head>
     <body data-role="{{page_role}}" class="{{page_role}} internal {% block body_class %}account{% endblock %} gallery" id="{% block body_id %}gallery{% endblock %}">
         {% block facebook %}
-             {% if not debug %}
+             
                 <div id="fb-root"></div>
                 <script>
                   window.fbAsyncInit = function() {
@@ -136,7 +137,7 @@
                      ref.parentNode.insertBefore(js, ref);
                    }(document, /*debug*/ false));
                 </script>
-                {% endif %}
+             
                 <!--[if IE]>
                 <div class="container ie8 ie">
                 <![endif]-->

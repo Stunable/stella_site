@@ -145,6 +145,7 @@ function getUserlist(input, list){
         if (filter != oldFilter && filter != ""){
             var link = href + '?q=' + filter;           
             $.get(link, function(returnValue){
+                console.log(returnValue)
                 $('#result-list').children().remove();
                 $.each(list, function(){
                     $(this).html(returnValue);
@@ -269,6 +270,7 @@ var DROPPABLE_OPTIONS = {
 
 
 function initDrag(selection) {
+    // console.log(selection)
     $(selection).draggable(DRAGGABLE_OPTIONS)
     $($('.private-racks')[1]).disableSelection();
     $($('.public-racks')[1]).disableSelection();
@@ -289,7 +291,7 @@ function fixDragDropIssue(){
 }
 
 
-function hookupFBMessages(STATIC_URL,URL){
+function hookupFBMessages(URL){
     $('.friend_adder').click(function(e){
         e.preventDefault();
         publish = {
@@ -298,7 +300,7 @@ function hookupFBMessages(STATIC_URL,URL){
           ,'description': 'Hi, Check out Stunable'
           ,'name':"Stunable Invite"
           ,'to':$(this).attr('data-value')
-          ,'picture':URL+STATIC_URL+'/images/logo_small.jpg'
+          ,'picture':URL+'static/images/logo_small.jpg'
         }
         FB.ui(publish);
         $('.spinner').hide()
@@ -315,7 +317,7 @@ function setupCustomTabs(selection){
                   $('.panel-inner-content').fadeOut(500, function() {
                       $('.panel-inner-content').html(t.find('.tab-content').html()).fadeIn(500, function() {
                           initDrop();
-                          
+                          initFriendDragDrop()
                            // initFancyBox('#add-rack ');
                            //    initFancyBox('#add-friend ');
                           // initFancyBox();
@@ -323,12 +325,12 @@ function setupCustomTabs(selection){
                           // fixDragDropIssue();
                       });
                       if($('.friend-search-box').length > 1) {
+                          console.log('friend search')
                           // because there are exactly identical elements so i need to choose the last one (the first one is hidden)
-                          // listFilter($('.friend-search-box')[1], $('.friend-list')[1]);
+                          listFilter($('.friend-search-box')[1], $('.friend-list')[1]);
                           getUserlist($('.friend-search-box')[1], $('.search-result'));
-                          initFriendDragDrop();
-                          initDrop()
-                          // hookupFBMessages(static_url,url);
+                          initFriendDragDrop()
+                          hookupFBMessages(root_url);
                       }
                   });
               }
@@ -503,6 +505,78 @@ function setupRackIt(){
     });
 }
 
+
+function initFriendDragDrop() { 
+ 
+    var temp = "";
+    
+    $('.panel-content').find('.share_item').droppable({
+        accept : ".drag_item",
+        hoverClass : "drop_item_hover",
+        drop : function(event, ui) {
+            var item_id = $(ui.draggable).find('a').attr('data-value');
+            // var rack_id = $(this).find('span').attr('data-value');
+            var admirer_id = $(this).find('a').attr('data-value');
+            var admirer_type = $(this).find('a').attr('data-type');
+            var droppable = $(this).find('a');
+
+            $('#reduced_item_id').val(item_id);
+            $('#reduced_admirer_id').val(admirer_id);
+            $('#reduced_admirer_type').val(admirer_type)
+            $('#reduced_admirer_name').val($(this).find('a').attr('data-name'));
+            
+            if (admirer_type!='facebook'){
+                $.fancybox({
+                    'speedIn' : 1000,
+                    'speedOut' : 500,
+                    'overlayShow' : true,
+                    'overlayOpacity' : 0.85,
+                    'titleShow' : false,
+                    'overlayColor' : '#000',
+                    'transitionIn' : 'elastic',
+                    'transitionOut' : 'elastic',
+                    'easingIn' : 'easeOutBack',
+                    'easingOut' : 'easeInBack',
+                     'href' : '#send_to_admirer_reduced_form',
+                     'onStart' : function() {
+                        $('#loading2').hide();
+                        $('#send_to_admirer_reduced_form').css('opacity', '0').show().delay(200).animate({
+                                opacity : 1
+                            }, 800);
+                            $('#send_item_confirmation_reduced').hide();
+                     },
+                     'onCleanup' : function() {
+                        $('#reduced_item_id').val("");
+                        $('#reduced_admirer_id').val("");
+                        $('#reduced_message').val("");
+                        $('#reduced_admirer_type').val("")
+                    },
+                    'onClosed': function(){
+                        $('#send_to_admirer_reduced_form').css('opacity', '0').css('display','none');
+                    }
+                  });
+                  
+                  $('#send_it_to_admirer_reduced').click(function(){
+                        $('#loading2').css('display', 'inline');
+                        $.get('/racks/sent_to_admirer/?'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
+                            $('#loading2').css('display', 'none');
+                            $("#send_item_confirmation_reduced").css('opacity','1').text(data.result == 'ok' ? "Sent" : "Error").show();
+                            
+                            if(data.result != 'ok') {
+                                // do nothing here
+                            } else {
+                                // close fancy box after 2 second on success
+                                setTimeout("parent.$.fancybox.close()", 2000);
+                            }
+                        },'json');
+                  });
+            }else{
+                $.get('/racks/sent_to_admirer/?'+ $('#reduced_send_to_admirer_form').serialize(), function(data) {
+                    FB.ui(data)
+                })
+            }}
+        });
+}
 
 function touchHandler(event){
     //alert($(event.target).attr('class'))
