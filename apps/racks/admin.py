@@ -90,7 +90,7 @@ class ItemTypeInline(admin.TabularInline):
     
 class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
     inlines = [ItemTypeInline]
-    list_display = ('name','category','approved','is_available','list_image','_retailer')
+    list_display = ('name','category','approved','is_available','list_image','_retailer','slug')
     actions = ('approve','unapprove','set_price_text','set_item_slugs')
     list_filter = ('approved','is_available','created_date','_retailer')
     search_fields = ('name','description')
