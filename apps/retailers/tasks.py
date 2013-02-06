@@ -193,6 +193,7 @@ def process_API_products(list_of_products,api_connection):
                 name =d['title'],
                 api_type = ContentType.objects.get_for_model(api_item_object),
                 object_id = api_item_object.id,
+                _retailer = Retailer
             )
             I.brand = d[Map['item']['fields']['brand']]
 

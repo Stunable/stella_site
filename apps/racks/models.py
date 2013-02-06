@@ -337,9 +337,6 @@ class Item(models.Model,listImageMixin):
                 while Item.objects.filter(slug=test).count():
                     test = slug +'_' + str(i)
                     i += 1
-
-
-
             self.slug = test
 
         if self.total_inventory() < 1:
