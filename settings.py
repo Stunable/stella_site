@@ -126,6 +126,13 @@ STATICFILES_DIRS = (
 INITIAL_RACKS = ['A Night Out on the Town', "A day at the Beach"]
 
 
+SESSION_ENGINE = 'redis_sessions.session'
+
+SESSION_REDIS_HOST = 'localhost'
+SESSION_REDIS_PORT = 6379
+SESSION_REDIS_DB = 0
+
+
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -151,6 +158,7 @@ MIDDLEWARE_CLASSES = (
     'johnny.middleware.LocalStoreClearMiddleware',
     'johnny.middleware.QueryCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'apps.common.middleware.ProfileMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -168,7 +176,6 @@ CACHES = {
         JOHNNY_CACHE = True,
     )
 }
-
 
 
 

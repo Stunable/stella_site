@@ -22,7 +22,13 @@ def get_dominant_color(image):
 def prettify(instance):
     try:
         if not instance.medium:
-            pic = Image.open(instance.image.file)
+            try:
+                pic = Image.open(instance.image.file)
+            except:
+                if os.path.exists(instance.image.path):
+                    pic = Image.open(instance.image.path)
+                else:
+                    raise
             enhancer  = ImageEnhance.Contrast(pic)
             outpic = enhancer.enhance(1.1)
 
