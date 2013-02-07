@@ -55,4 +55,6 @@ psycopg2
 boto
 django-queued-storage
 django-storages
+johnny-cache
+django-redis-cache
 
