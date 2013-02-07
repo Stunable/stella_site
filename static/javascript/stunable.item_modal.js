@@ -236,12 +236,7 @@ function setItemDetailsEvent(){
                 $(this).hide();
             });
 
-            $('#images').etalage({        
-					thumb_image_width: thumb_image_width,
-					thumb_image_height: thumb_image_height,
-					source_image_width: source_image_width,
-					source_image_height: source_image_height
-				});
+           
 		}
 
 	function aboutDetailsClicked(e){
@@ -359,8 +354,13 @@ function init_item_modal(){
 
 		}
 
-		
-		
+		console.log('calling etalage')
+		 $('#images').etalage({        
+					thumb_image_width: thumb_image_width,
+					thumb_image_height: thumb_image_height,
+					source_image_width: source_image_width,
+					source_image_height: source_image_height
+				});
 		setItemDetailsEvent();
 
 
