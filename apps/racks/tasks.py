@@ -54,7 +54,8 @@ def prettify(instance):
                 try:
                     outpic = Image.open(instance.pretty_image.file)
                     print 'found pretty image'
-                except:
+                except Exception,e:
+                    print e
                     try:
                         outpic = Image.open(instance.pretty_image.storage.local.open(instance.pretty_image.name))
                     except:
