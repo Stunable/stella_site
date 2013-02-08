@@ -61,8 +61,8 @@ def prettify(instance):
                         print instance.pretty_image.path
                         print instance.pretty_image.storage 
                         print 'no pretty image for ', instance
-                        print 'using remote:'+str(instance.pretty_image.storage.using_remote)
-                        print 'using local:'+str(instance.pretty_image.storage.using_local)
+                        print 'using remote:'+str(instance.pretty_image.storage.using_remote())
+                        print 'using local:'+str(instance.pretty_image.storage.using_local())
                         raise
 
             if outpic:            
