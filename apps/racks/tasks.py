@@ -20,6 +20,8 @@ def get_dominant_color(image):
 
 @task(name='racks.prettify_image')
 def prettify(instance):
+    pic = None
+    outpic = None
     try:
         if not instance.medium:
             try:
@@ -28,41 +30,49 @@ def prettify(instance):
                 if os.path.exists(instance.image.path):
                     pic = Image.open(instance.image.path)
                 else:
-                    raise
-            enhancer  = ImageEnhance.Contrast(pic)
-            outpic = enhancer.enhance(1.1)
+                    print 'failed to find original image'
+            if pic:
+                enhancer  = ImageEnhance.Contrast(pic)
+                outpic = enhancer.enhance(1.1)
 
-            temp = NamedTemporaryFile(delete=True)
-             
-            grad = Image.open(os.path.join(settings.PROJECT_ROOT,'static','item_grad.jpg'))
-            gradsize = grad.resize(outpic.size)
-            try:
-                outpic = ImageChops.add(outpic,gradsize)
-            except:
-                print 'error adding gradient:',instance
-
-
-            outpic.save(temp.name+str(instance.id),'jpeg')
-
-            instance.pretty_image.save("%d_pretty.jpg"%instance.id, File(open(temp.name+str(instance.id),'rb')))
-            instance.save()
-            #causes sorl to premake thumbs for this new image
-            for key,val in settings.THUMB_SIZES.items():
                 temp = NamedTemporaryFile(delete=True)
-                newpic = outpic.copy()
-                newpic.thumbnail(val,Image.ANTIALIAS)
+                 
+                grad = Image.open(os.path.join(settings.PROJECT_ROOT,'static','item_grad.jpg'))
+                gradsize = grad.resize(outpic.size)
+                try:
+                    outpic = ImageChops.add(outpic,gradsize)
+                except:
+                    print 'error adding gradient:',instance
 
-                if key == 'large':
-                    instance.width = newpic.size[0]
-                    instance.height = newpic.size[1]
 
-                newpic.save(temp.name+str(instance.id),'jpeg')
-                getattr(instance,key).save("%d_%s.jpg"%(instance.id,key), File(open(temp.name+str(instance.id),'rb')))
+                outpic.save(temp.name+str(instance.id),'jpeg')
 
-            print 'saved sizes for ',instance
-            print 'height:', instance.height
-            print 'width:', instance.width
-            instance.save()
+                instance.pretty_image.save("%d_pretty.jpg"%instance.id, File(open(temp.name+str(instance.id),'rb')))
+                instance.save()
+                #causes sorl to premake thumbs for this new image
+            if not outpic:
+                try:
+                    outpic = Image.open(instance.pretty_image.file)
+                except:
+                    raise
+
+            if outpic:            
+                for key,val in settings.THUMB_SIZES.items():
+                    temp = NamedTemporaryFile(delete=True)
+                    newpic = outpic.copy()
+                    newpic.thumbnail(val,Image.ANTIALIAS)
+
+                    if key == 'large':
+                        instance.width = newpic.size[0]
+                        instance.height = newpic.size[1]
+
+                    newpic.save(temp.name+str(instance.id),'jpeg')
+                    getattr(instance,key).save("%d_%s.jpg"%(instance.id,key), File(open(temp.name+str(instance.id),'rb')))
+
+                print 'saved sizes for ',instance
+                print 'height:', instance.height
+                print 'width:', instance.width
+                instance.save()
     except Exception, e:
         if instance.item:
             instance.item.approved = False

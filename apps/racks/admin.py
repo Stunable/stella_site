@@ -133,6 +133,8 @@ class SizeAdmin(admin.ModelAdmin):
 class ProductImageAdmin(admin.ModelAdmin):
     list_display = ['image','retailer','list_image']
     #readonly_fields = ['retailer']
+    list_filter = ('retailer',)
+    search_fields = ('name','description','item')
     actions = ('make_pretty','premake_thumbs')
 
     def make_pretty(self,request,queryset):
