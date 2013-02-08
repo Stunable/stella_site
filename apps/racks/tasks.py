@@ -52,7 +52,7 @@ def prettify(instance):
                 #causes sorl to premake thumbs for this new image
             if not outpic:
                 try:
-                    outpic = Image.open(instance.prett_image.file)
+                    outpic = Image.open(instance.pretty_image.file)
                     print 'found pretty image'
                 except:
                     try:
