@@ -1,7 +1,7 @@
 {% load voting_tags %} 
 {% votes_by_user request.user on user_items as vote_dict %}
 
-
+{% if rack.owner == request.user %}<a href="{% url rack_item_remove rack.id item.id %}" title="Remove this item." class="icon x remove">REMOVE</a>{% endif %}
 <h5 class="item-label"><span>{{item.brand}}</span></h5>
 <h4 class="item-name"><a class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.slug %}">{{item.name}}</a></h4>
 <div class="item-icon"><img src="{{item.get_image.medium.url}}"></div>
