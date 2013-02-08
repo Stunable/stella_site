@@ -54,7 +54,11 @@ def prettify(instance):
                 try:
                     outpic = Image.open(instance.pretty_image.file)
                 except:
-                    raise
+                    if os.path.exists(instance.pretty_image.path):
+                        outpic = Image.open(instance.pretty_image.path)
+                    else:
+                        print 'no pretty image for ', instance
+                        raise
 
             if outpic:            
                 for key,val in settings.THUMB_SIZES.items():
