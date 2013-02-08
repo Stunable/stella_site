@@ -52,17 +52,15 @@ def prettify(instance):
                 #causes sorl to premake thumbs for this new image
             if not outpic:
                 try:
-                    outpic = Image.open(instance.pretty_image.storage.remote.open(instance.pretty_image.name))
+                    outpic = Image.open(instance.prett_image.file)
                     print 'found pretty image'
                 except:
-                    if os.path.exists(instance.pretty_image.path):
-                        outpic = Image.open(instance.pretty_image.path)
-                    else:
+                    try:
+                        outpic = Image.open(instance.pretty_image.storage.local.open(instance.pretty_image.name))
+                    except:
                         print instance.pretty_image.path
                         print instance.pretty_image.storage 
                         print 'no pretty image for ', instance
-                        print 'using remote:'+str(instance.pretty_image.storage.using_remote())
-                        print 'using local:'+str(instance.pretty_image.storage.using_local())
                         raise
 
             if outpic:            
