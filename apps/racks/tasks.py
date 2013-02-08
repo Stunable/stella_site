@@ -53,6 +53,7 @@ def prettify(instance):
             if not outpic:
                 try:
                     outpic = Image.open(instance.pretty_image.file)
+                    print 'found pretty image'
                 except:
                     if os.path.exists(instance.pretty_image.path):
                         outpic = Image.open(instance.pretty_image.path)
