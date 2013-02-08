@@ -1891,6 +1891,15 @@ a.friend-name{
 	border-color:#ccc;
 	background-color:#fff;
 }
+
+.upvoted .yes-no .approve {
+    background-position: -42px -45px;
+}
+
+.downvoted .yes-no .disapprove {
+    background-position: 8px -46px;
+}
+
 .yes-no .disapprove {
 	background-position:8px 5px;
 }
@@ -2325,13 +2334,7 @@ body{
 	border: solid 1px red;
 }
 
-.voted .approve {
-    background-position: -42px -45px;
-}
 
-.voted .disapprove {
-    background-position: 8px -46px;
-}
 
 #admirer_search_btn {
 	background:#000;

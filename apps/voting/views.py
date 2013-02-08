@@ -152,4 +152,5 @@ def xmlhttprequest_vote_on_object(request, model, direction,
     return HttpResponse(simplejson.dumps({
         'success': True,
         'score': Vote.objects.get_score(obj),
+        'callback': direction+'vote'
     }))

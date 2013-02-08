@@ -28,6 +28,42 @@ function isDefault(textField) {
     return false;
 }
 
+var refclickFunctions = {
+    'remove' : function(selection){
+        $(selection.data('target')).fadeOut('slow')
+    },
+    'downvote': function(selection){
+        $(selection.data('target')).removeClass('upvoted').addClass('downvoted')
+    },
+    'upvote': function(selection){
+        $(selection.data('target')).removeClass('downvoted').addClass('upvoted')
+    },
+    'clearvote': function(selection){
+        $(selection.data('target')).removeClass('downvoted').removeClass('upvoted')
+    },
+}
+
+
+
+
+function init_refclicks(selection){
+    selection.click(function(e){
+        var $t = $(this);
+        e.preventDefault()
+        url=$(this).data('href')
+        $.post(url,function(response){
+            console.log(response)
+            if (response.result || response.success){
+                if (response.callback){
+                    console.log(response.callback)
+                    refclickFunctions[response.callback]($t)
+                }
+            }
+        },'json')
+    })
+
+}
+
 function init_add_rack_modal() {
         $('.confirmation').hide();
         var options = {

@@ -1,7 +1,7 @@
 {% load voting_tags %} 
 {% votes_by_user request.user on user_items as vote_dict %}
 
-{% if rack.owner == request.user %}<a href="{% url rack_item_remove rack.id item.id %}" title="Remove this item." class="icon x remove">REMOVE</a>{% endif %}
+{% if rack.owner == request.user %}<a href="" data-target="#list_item_{{item.id}}" data-href="{% url rack_item_remove rack.id item.id %}" title="Remove this item." class="icon x remove refclick">REMOVE</a>{% endif %}
 <h5 class="item-label"><span>{{item.brand}}</span></h5>
 <h4 class="item-name"><a class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.slug %}">{{item.name}}</a></h4>
 <div class="item-icon"><img src="{{item.get_image.medium.url}}"></div>
@@ -9,15 +9,15 @@
     <a rel="modal:open" data-options="item_modal_options" class="item-ref bottom-ref rel_pos" data-value="{{ item.id }}" href="{% url item_modal item.slug %}">  <img src="{{ item.get_image.medium.url }}"> </a>
 </div>
 {% dict_entry_for_item item from vote_dict as vote %}
-<div class="link-holder" id="item_{{item.pk}}">
-    <p class="icon-link yes-no no {% if vote and vote.is_downvote %}voted{% endif %} no_{{item.pk}}">
-        <a href="{% url item_vote item.pk 'down' %}" class="icon disapprove">No way.</a>
+<div  class="link-holder{% if vote and vote.is_upvote %} upvoted{% endif %}{% if vote and vote.is_downvote %} downvoted{% endif %}" id="link_holder_item_{{item.id}}">
+    <p class="icon-link yes-no no  no_{{item.pk}}">
+        <a href="" data-target="#link_holder_item_{{item.id}}" data-href="{% url item_vote item.pk 'down' %}" class="icon disapprove refclick">No way.</a>
     </p>
     <p class="icon-link hanger">
-        <a href="{% url add_item_from_modal %}" data-value="{{ item.id }}" class="icon rack-icon">Rack it.</a>
+        <a href="" data-href="{% url add_item_from_modal %}" data-value="{{ item.id }}" class="icon rack-icon refclick">Rack it.</a>
     </p>
-    <p class="icon-link yes-no yes {% if vote and vote.is_upvote %}voted{% endif %} yes_{{item.pk}}">
-        <a href="{% url item_vote item.pk 'up' %}" class="icon approve">Yes, please!</a>
+    <p class="icon-link yes-no yes yes_{{item.pk}}">
+        <a href="" data-target="#link_holder_item_{{item.id}}" data-href="{% url item_vote item.pk 'up' %}" class="icon approve refclick">Yes, please!</a>
     </p>
 </div>
 <div class="carousel_price_tag">

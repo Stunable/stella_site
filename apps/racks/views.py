@@ -216,12 +216,14 @@ def add(request, template='racks/add.html'):
 @login_required
 def rack_item_remove(request, rack_id, rack_item_id, template='racks/rack_detail.html'):
     try:
-        rack_items = Rack_Item.objects.filter(rack__id=rack_id, item__id=rack_item_id, user=request.user)
-        rack_items[0].delete()
+        if request.method == 'POST':
+            rack_items = Rack_Item.objects.filter(rack__id=rack_id, item__id=rack_item_id, user=request.user)
+            rack_items[0].delete()
+            return {'result': True,'callback':'remove'}
     except:
         return {'result': False, 'message':'Item or rack is not valid'}
     
-    return {'result': True}
+    return {'result': False, 'message':'Method not supported'}
 
 @login_required
 def rack_item_add_new(request, rack_id, template='racks/add_item.html'):

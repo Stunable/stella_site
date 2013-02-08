@@ -8,7 +8,7 @@
 	<input type="hidden" name="page_id" value="{% if parent_loop_counter == 1 %}{{ request.GET.page }}{% else %}{{ parent_loop_counter }}{% endif %}" />
     <input type="hidden" class="item_per_page" name="item_per_page" value="{{ item_per_page }}" />
 	{% for item in items %}
-		<li class="touchcarousel-item item some-crazy-class">
+		<li id="list_item_{{item.id}}" class="touchcarousel-item item some-crazy-class">
            {% include "racks/includes/item_list_content.html" %}
         </li>
 	{% endfor %}

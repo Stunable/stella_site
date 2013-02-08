@@ -88,7 +88,7 @@
                             
                             {% for list_3_items in rack_items_list %}
                             {% for item in list_3_items %}
-                                <li class="touchcarousel-item item some-crazy-class">
+                                <li id="list_item_{{item.id}}" class="touchcarousel-item item some-crazy-class">
                                     {% include "racks/includes/item_list_content.html" %}
                                 </li>
                             {% endfor %}

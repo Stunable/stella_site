@@ -41,6 +41,10 @@ var stunable = {
           // console.log('panel thing just happened')
         });             
 
+      init_refclicks($('.refclick'))
+
+
+
     }
     ,shop: function(){            
         setupCarousel($('.iosSlider'));
@@ -49,7 +53,7 @@ var stunable = {
 
     }
     ,racks: function(){
-      console.log('racks setup')
+      // console.log('racks setup')
       initDrop(); 
       initDrag($('.item'))
 

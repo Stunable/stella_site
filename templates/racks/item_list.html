@@ -33,7 +33,7 @@
                     <h2 style="font-size: 1.5em;text-transform: uppercase;color: #888;text-align: left;font-weight: 200; padding-bottom:10px">{{rack.name}}</h2>
                     <ul class="item-list">
                         {% for item in items %}
-                        <li class="item some-crazy-class">
+                        <li id="list_item_{{item.id}}" class="item some-crazy-class">
                             {% include "racks/includes/item_list_content.html" %}
                         </li>
                         {% empty %}

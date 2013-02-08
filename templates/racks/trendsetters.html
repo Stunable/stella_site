@@ -90,7 +90,7 @@
                     <div class="separator"></div>
                     <ul class="item-list">
                         {% for item in rack.rack_items.all %}
-                        <li class="item some-crazy-class">
+                        <li id="list_item_{{item.id}}" class="item some-crazy-class">
                             {% include "racks/includes/item_list_content.html" %}
                         </li>
                         {% empty %}
