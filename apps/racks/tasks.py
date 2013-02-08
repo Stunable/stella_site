@@ -57,6 +57,8 @@ def prettify(instance):
                     if os.path.exists(instance.pretty_image.path):
                         outpic = Image.open(instance.pretty_image.path)
                     else:
+                        print instance.pretty_image.path
+                        print instance.pretty_image.storage 
                         print 'no pretty image for ', instance
                         raise
 
