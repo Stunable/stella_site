@@ -12,7 +12,7 @@ from st_fedex.services.address_validation_service import FedexAddressValidationR
 
 CONFIG_OBJ = settings.FEDEX_CONFIG
 
-def validate_this_address(address):
+def fedex_validate_this_address(address):
     # Set this to the INFO level to see the response from Fedex printed in stdout.
     logging.basicConfig(level=logging.INFO)
 

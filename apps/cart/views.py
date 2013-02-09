@@ -11,7 +11,6 @@ from apps.cart.models import Purchase
 from django.contrib.auth.decorators import login_required
 from apps.racks.models import ItemType
 from fedex.base_service import FedexError
-from apps.cart.plugins.validate_address import validate_this_address
 
 from apps.cart.models import Item as CartItem
 # from paypal.pro.exceptions import PayPalFailure

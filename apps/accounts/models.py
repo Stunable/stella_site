@@ -17,7 +17,6 @@ from apps.common.forms import FedexTestAddress
 
 from django.forms.models import model_to_dict
 
-from cart.plugins.validate_address import validate_this_address
 
 AGE_RANGE_CHOICE = (
     ('','optional'),
@@ -201,7 +200,7 @@ class Address(models.Model):
             data = model_to_dict(self)
 
         F = FedexTestAddress(data)
-        return validate_this_address(F)
+        return F.validate().processed()
 
 
 

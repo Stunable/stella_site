@@ -180,6 +180,17 @@ var stunable = {
             });
         });
     
+      },
+      retailers:function(){
+        var term_doc = $('#terms-and-cons-modal');
+        $('#terms-label').css('color', 'black');
+        $('#terms-input').change(function(){
+            $('#terms-continue-btn').attr('href', $(this).data('url')).css('color', 'black').click(function(e){
+                if (!$('#terms-input').is(':checked')) {
+                    e.preventDefault();
+                } 
+            });
+        })
       }
 
 

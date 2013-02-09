@@ -17,10 +17,6 @@ else:
     notification = None
     
 
-from apps.common.forms import testAddress
-# from apps.cart.plugins.taxcloud import TaxCloudClient
-# TCC = TaxCloudClient()
-
 from django.core.mail import send_mail
 from django.contrib.localflavor.us.us_states import US_STATES
 from django.utils.translation import ugettext_lazy as _
@@ -218,27 +214,11 @@ class ShippingInfoForm(forms.ModelForm):
         exclude = ('email', 'company_name', 'is_default', 'customer')
 
     def clean(self):
-        T = testAddress(self.cleaned_data)
-        V = TCC.verify_address(testAddress(self.cleaned_data))
-        print V
-        if V.ErrNumber != "0":
-            if 'City' in V.ErrDescription:
-                # self._errors['city'] = self._errors.get('city', [])
-                self._errors['city']= self.error_class([V.ErrDescription])
-            elif 'Address Not Found.' in V.ErrDescription:
-                pass
-                #self._errors['city']= self.error_class("We could not verify this as an existing address.")
-            elif 'Zip Code' in V.ErrDescription:
-                self._errors['zip_code']= self.error_class([V.ErrDescription])
-            else:
-                raise forms.ValidationError(V.ErrDescription)
-        else:
-            for user,test in T.fieldmap:
-                if hasattr(T,user) and hasattr(V,test):
-                    #if getattr(T,user).upper() == getattr(V,test).upper():
-                    self.cleaned_data[user] = getattr(V,test)
-                    #else:
-                     #   self.cleaned_data[user] = getattr(V,test)
+        data,result = ShippingInfo.verify_address(data=self.cleaned_data)
+
+
+        if result.Changes[0] == 'MODIFIED_TO_ACHIEVE_MATCH':
+            self.cleaned_data.update(data)
         return self.cleaned_data
 
         

@@ -12,7 +12,6 @@ from django.contrib.localflavor.us.models import PhoneNumberField
 from racks.models import Item,ProductImage,ItemType,Size
 from django.contrib.contenttypes.models import ContentType
 
-from cart.plugins.validate_address import validate_this_address
 
 import tempfile
 import urllib
@@ -20,6 +19,8 @@ from django.core.files import File
 
 import shopify
 from celery import task
+
+from apps.common.forms import FedexTestAddress
 
 from tasks import process_upload,save_shopify_inventory_update,update_API_products
 
@@ -148,12 +149,14 @@ class RetailerProfile(models.Model):
     def phone(self):
         return self.phone_number
 
-    def verify_address(self, data=None):
+    @staticmethod
+    def verify_address(data=None):
         if not data:
             data = model_to_dict(self)
 
         F = FedexTestAddress(data)
-        validate_this_address(F)
+        return F.validate().processed()
+
 
         
 class StylistItem(models.Model):

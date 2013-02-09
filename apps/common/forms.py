@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 from django.template.defaultfilters import striptags
 
+from cart.plugins.validate_address import fedex_validate_this_address
 
 class testAddress(object):
     def __init__(self,cleaned_data):
@@ -20,8 +21,11 @@ class testAddress(object):
 
 class FedexTestAddress(object):
     def __init__(self,cleaned_data):
+
         if cleaned_data.has_key('company_name'):
             self.CompanyName = cleaned_data['company_name']
+        else:
+            self.CompanyName = ''
         self.line1 = cleaned_data['address1']
         self.line2 = cleaned_data['address2']
         self.city = cleaned_data['city']
@@ -29,7 +33,29 @@ class FedexTestAddress(object):
         self.zip_code = cleaned_data['zip_code']
         self.CountryCode = 'US'
 
+    def validate(self):
+        self.result = fedex_validate_this_address(self)
+        print self.result
+        return self
 
+    def processed(self):
+        return ({
+            'address1':self.result.Address.StreetLines[0],
+            'address2':','.join(self.result.Address.StreetLines[1:-1]),
+            'city':self.result.Address.City,
+            'zip_code':self.result.Address.PostalCode,
+            'state':self.result.Address.StateOrProvinceCode
+        },self.result)
+        
+
+    # (Address){
+    #      StreetLines[] = 
+    #         "124 Rivington St",
+    #      City = "New York"
+    #      StateOrProvinceCode = "NY"
+    #      PostalCode = "10002-2302"
+    #      CountryCode = "US"
+    #   }
 
     # address1.CompanyName = address.company_name
     # address1.Address.StreetLines = [address.line1, address.line2]

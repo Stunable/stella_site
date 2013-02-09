@@ -186,11 +186,11 @@
 						<td>
 							<div class="password-container">
 
-										<input class="strong-password" id="password" name="password" type="password" />
+										<input class="strong-password" id="password" name="password" type="password" value="{{form.password.value}}"/>
 										<br>
-						   				{{form.password.errors}}
-						                <input class="strong-password" id="password_confirm" name="password_confirm" type="password" />
-						                <br>{{form.password_confirm.errors}}
+						                <input class="strong-password" id="password_confirm" name="password_confirm" type="password" value="{{form.password_confirm.value}}" />
+						                <br>
+						                {{form.password.errors}}<br>{{form.password_confirm.errors}}
 						            <div class="strength-indicator">
 						                <div class="meter">
 						                </div>

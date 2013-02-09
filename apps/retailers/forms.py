@@ -172,25 +172,17 @@ class RetailerProfileCreationForm(forms.ModelForm):
             if self.cleaned_data['password'] != self.cleaned_data['password_confirm']:
                 raise forms.ValidationError("Your password doesn't match")
 
-        Result = RetailerProfile.verify_address(self.cleaned_data)
+        if self.cleaned_data.has_key('zip_code'):
+            data,result = RetailerProfile.verify_address(data=self.cleaned_data)
 
-        print Result.AddressResults[0].ProposedAddressDetails[0].Score
+            for key,val in data.items():
+                if self.cleaned_data[key] != val and key != 'address2':
+                    self._errors[key]= self.error_class(['* please confirm'])
 
-        if V.ErrNumber != "0":
-            if 'City' in V.ErrDescription:
-                # self._errors['city'] = self._errors.get('city', [])
-                self._errors['city']= self.error_class([V.ErrDescription])
-            elif 'Zip Code' in V.ErrDescription:
-                self._errors['zip_code']= self.error_class([V.ErrDescription])
-            else:
-                raise forms.ValidationError(V.ErrDescription)
-        else:
-            for user,test in T.fieldmap:
-                if hasattr(T,user) and hasattr(V,test):
-                    if getattr(T,user).upper() == getattr(V,test).upper():
-                        print getattr(T,user)
-                    else:
-                        print getattr(T,user),':',getattr(V,test)
+            self.cleaned_data.update(data)
+            self.data.update(data)
+
+
 
         return self.cleaned_data
     
