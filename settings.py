@@ -257,8 +257,11 @@ BROKER_PASSWORD = "guest"
 import djcelery
 CELERY_IMPORTS = (
     'apps.retailers',
-    'apps.racks'
+    'apps.racks',
+    'apps.cms'
 )
+
+CELERYBEAT_SCHEDULER = 'edjcelery.schedulers.DatabaseScheduler'
 djcelery.setup_loader()
 
 # django-registration

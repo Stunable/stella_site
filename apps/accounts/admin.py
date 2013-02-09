@@ -27,6 +27,14 @@ class WaitingListAdmin(admin.ModelAdmin):
     list_filter   = ('approved',)
     search_fields = ('email',)
 
+class ShippingInfoAdmin(admin.ModelAdmin):
+    
+	actions = ('verify_address',)
+
+	def verify_address(self,request,queryset):
+		for obj in queryset:
+			print obj.verify_address()
+
 
 admin.site.register(WaitingList, WaitingListAdmin)
  
@@ -40,5 +48,5 @@ admin.site.register(Question)
 admin.site.register(Answer)
 admin.site.register(QuestionAnswer)
 admin.site.register(BillingInfo)
-admin.site.register(ShippingInfo)
+admin.site.register(ShippingInfo,ShippingInfoAdmin)
 admin.site.register(CCToken)

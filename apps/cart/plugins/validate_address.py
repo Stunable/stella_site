@@ -12,7 +12,7 @@ from st_fedex.services.address_validation_service import FedexAddressValidationR
 
 CONFIG_OBJ = settings.FEDEX_CONFIG
 
-def validate_this(address):
+def validate_this_address(address):
     # Set this to the INFO level to see the response from Fedex printed in stdout.
     logging.basicConfig(level=logging.INFO)
 
@@ -41,12 +41,12 @@ def validate_this(address):
 
     ## Create some addresses to validate
     address1 = connection.create_wsdl_object_of_type('AddressToValidate')
-    address1.CompanyName = address.company_name
+    address1.CompanyName = address.CompanyName
     address1.Address.StreetLines = [address.line1, address.line2]
     address1.Address.City = address.city
     address1.Address.StateOrProvinceCode = address.state
     address1.Address.PostalCode = address.zip_code
-    address1.Address.CountryCode = address.country
+    address1.Address.CountryCode = address.CountryCode
     address1.Address.Residential = False
     connection.add_address(address1)
 
@@ -60,4 +60,4 @@ def validate_this(address):
 
     ## Send the request and print the response
     connection.send_request()
-    print connection.response
+    return connection.response.AddressResults[0].ProposedAddressDetails[0]

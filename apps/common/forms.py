@@ -18,6 +18,28 @@ class testAddress(object):
         self.state = cleaned_data['state']
         self.zip_code = cleaned_data['zip_code']
 
+class FedexTestAddress(object):
+    def __init__(self,cleaned_data):
+        if cleaned_data.has_key('company_name'):
+            self.CompanyName = cleaned_data['company_name']
+        self.line1 = cleaned_data['address1']
+        self.line2 = cleaned_data['address2']
+        self.city = cleaned_data['city']
+        self.state = cleaned_data['state']
+        self.zip_code = cleaned_data['zip_code']
+        self.CountryCode = 'US'
+
+
+
+    # address1.CompanyName = address.company_name
+    # address1.Address.StreetLines = [address.line1, address.line2]
+    # address1.Address.City = address.city
+    # address1.Address.StateOrProvinceCode = address.state
+    # address1.Address.PostalCode = address.zip_code
+    # address1.Address.CountryCode = address.country
+    # address1.Address.Residential = False
+    # connection.add_address(address1)
+
 
 class AjaxBaseForm(forms.BaseForm):
     def errors_as_json(self, strip_tags=False):

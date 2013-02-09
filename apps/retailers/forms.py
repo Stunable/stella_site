@@ -23,7 +23,6 @@ from racks.models import Item, Rack, Rack_Item,ProductImage
 from tagging.models import Tag
 
 attrs_dict = {}      
-from apps.common.forms import testAddress
 # from apps.cart.plugins.taxcloud import TaxCloudClient
 # TCC = TaxCloudClient()
 
@@ -173,8 +172,9 @@ class RetailerProfileCreationForm(forms.ModelForm):
             if self.cleaned_data['password'] != self.cleaned_data['password_confirm']:
                 raise forms.ValidationError("Your password doesn't match")
 
-        T = testAddress(self.cleaned_data)
-        V = TCC.verify_address(testAddress(self.cleaned_data))
+        Result = RetailerProfile.verify_address(self.cleaned_data)
+
+        print Result.AddressResults[0].ProposedAddressDetails[0].Score
 
         if V.ErrNumber != "0":
             if 'City' in V.ErrDescription:

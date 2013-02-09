@@ -13,6 +13,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.localflavor.us.us_states import STATE_CHOICES
 from django.contrib.localflavor.us.models import PhoneNumberField
 
+from apps.common.forms import FedexTestAddress
+
+from django.forms.models import model_to_dict
+
+from cart.plugins.validate_address import validate_this_address
+
 AGE_RANGE_CHOICE = (
     ('','optional'),
     ('20 or younger','20 or younger'),
@@ -188,6 +194,16 @@ class Address(models.Model):
     country = models.CharField(_("Country"), default='US', choices=(('US', 'United States'), ), max_length=250,)
     phone = PhoneNumberField(_("Phone"))
     email = models.EmailField(_("E-Mail"), blank=True, null=True, max_length=50)
+
+
+    def verify_address(self, data=None):
+        if not data:
+            data = model_to_dict(self)
+
+        F = FedexTestAddress(data)
+        return validate_this_address(F)
+
+
 
     def __unicode__(self):
         return "%s / %s" % (self.address1, self.city)
