@@ -1,7 +1,8 @@
 {% block content %}
 
 {% load voting_tags %}
-{% vote_by_user user on item as vote %}
+
+{% votes_by_user user on user_items as vote_dict %}
 <style>
 	#bigform-error, #bigform-error1 {
 		height: 25px;
@@ -98,16 +99,18 @@
                 {% endthumbnail %}
 <!-- 			    <img src="{{item.get_full_size_image}}" alt="item" width="135px" /> -->
 			</a>
-			<div class="icon-linkk-holder" id="item_{{item.pk}}">
-				<span class="icon-link yes-no {% if vote and vote.is_downvote %}voted{% endif %} no_{{item.pk}}">
-					<a href="{% url item_vote item.pk 'down' %}" class="icon disapprove">No way.</a>
-				</span>
-				<span class="icon-link hanger">
-					<a href="{% url add_item_from_modal %}" data-value="{{ item.id }}" class="icon rack-icon">Rack It!</a>
-				</span>
-				<span class="icon-link yes-no {% if vote and vote.is_upvote %}voted{% endif %} yes_{{item.pk}}">
-					<a href="{% url item_vote item.pk 'up' %}" class="icon approve">Yes, please!</a>
-				</span>
+			{% dict_entry_for_item item from vote_dict as vote %}
+			{{vote}}
+			<div  class="link-holder{% if vote and vote.is_upvote %} upvoted{% endif %}{% if vote and vote.is_downvote %} downvoted{% endif %}" id="link_holder_item_{{item.id}}">
+			    <p class="icon-link yes-no no  no_{{item.pk}}">
+			        <a href="" data-target="#link_holder_item_{{item.id}}" data-href="{% url item_vote item.pk 'down' %}" class="icon disapprove refclick">No way.</a>
+			    </p>
+			    <p class="icon-link hanger">
+			        <a href="" data-href="{% url add_item_from_modal %}" data-value="{{ item.id }}" class="icon rack-icon refclick">Rack it.</a>
+			    </p>
+			    <p class="icon-link yes-no yes yes_{{item.pk}}">
+			        <a href="" data-target="#link_holder_item_{{item.id}}" data-href="{% url item_vote item.pk 'up' %}" class="icon approve refclick">Yes, please!</a>
+			    </p>
 			</div>
 		</div><!--/.item-visuals-->
 		<div class="item-actions">

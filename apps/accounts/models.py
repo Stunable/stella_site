@@ -194,8 +194,8 @@ class Address(models.Model):
     phone = PhoneNumberField(_("Phone"))
     email = models.EmailField(_("E-Mail"), blank=True, null=True, max_length=50)
 
-
-    def verify_address(self, data=None):
+    @staticmethod
+    def verify_address(data=None):
         if not data:
             data = model_to_dict(self)
 

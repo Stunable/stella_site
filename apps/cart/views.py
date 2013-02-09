@@ -149,12 +149,12 @@ def update_info(request, template="cart/info.html"):
 
     if request.method=='GET':
         ctx.update(
-                {"shipping": ShippingInfoForm(instance=default_shipping, prefix="shipping", 
+                {"shipping": ShippingInfoForm(instance=default_shipping, 
                                               initial={'customer':user_profile, 
                                                        'zip_code':request.session.get('recipient_zipcode')}), 
         })
     else:#request == POST
-        shipping_form = ShippingInfoForm(request.POST, prefix="shipping", instance=default_shipping)
+        shipping_form = ShippingInfoForm(request.POST, instance=default_shipping)
         if shipping_form.is_valid():
             shipping_info = shipping_form.save(commit=False)
             shipping_info.customer=user_profile

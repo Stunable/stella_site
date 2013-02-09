@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.core import validators
 from accounts.models import UserProfile, WaitingList
+import copy
 
 from django.conf import settings
 from accounts.models import BillingInfo, ShippingInfo
@@ -213,12 +214,21 @@ class ShippingInfoForm(forms.ModelForm):
         model = ShippingInfo        
         exclude = ('email', 'company_name', 'is_default', 'customer')
 
+    def validate_address(self):
+        self.validation = ShippingInfo.verify_address(data=self.cleaned_data)
+
     def clean(self):
-        data,result = ShippingInfo.verify_address(data=self.cleaned_data)
 
+        if len(self._errors) < 1:   
+            self.validate_address() 
+            data,result = self.validation
 
-        if result.Changes[0] == 'MODIFIED_TO_ACHIEVE_MATCH':
-            self.cleaned_data.update(data)
+            for key,val in data.items():
+                if self.cleaned_data[key] != val and key != 'address2':
+                    self._errors[key]= self.error_class(['* verified'])
+                    self.fields[key].value = val
+            self.data._mutable = True
+            self.data.update(data)
         return self.cleaned_data
 
         

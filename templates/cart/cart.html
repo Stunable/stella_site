@@ -66,7 +66,7 @@
         </div>
         <div class='cart-action bootstrap'>
             <table class='no-border cart-summary'>
-            	<form action="" method="POST">
+            	<form id="zipcode_form" action="" method="POST">
                 <tr>
                     <td>Before Tax:</td><td><strong><span id='cart-total'>{{cart.total|floatformat:2}}</span></strong></td>
                 </tr>
@@ -84,7 +84,7 @@
                 <tr>
                     <td>Zipcode</td>
                     <td>
-                    <input id="zipcode_field" type="text" name="zipcode" value="{{request.session.recipient_zipcode}}"/>
+                    <input data-href="{% url update_zipcode %}" id="zipcode_field" type="text" name="zipcode" value="{{request.session.recipient_zipcode}}"/>
                     </td>
                 </tr>
 <!--                 <tr>
@@ -105,7 +105,7 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                    	<a href="#" id="checkout-btn" class="btn btn-primary {% if not cart.checkout_ok %}disabled{% endif %}">Checkout</a>
+                    	<a href="#" data-href="{% url update_cart_info %}" id="checkout-btn" class="btn btn-primary {% if not cart.checkout_ok %}disabled{% endif %}">Checkout</a>
                     	<a href="/" class="btn btn-primary">Continue Shopping</a></td>
                 </tr>
                 
@@ -125,124 +125,3 @@
     </div>
 </div>
 {% endblock %} 
-{% block extra_script %}
-<script type="text/javascript">
-console.log('yoqyoqywoeyqwoey')
-    valid_shipping_info = false;
-
-    $(function(){
-        function updateCartTotals(totals) {
-            $("#cart-total").html(totals.total.toFixed(2));
-            $("#cart-tax").html(totals.tax.toFixed(2));
-            $("#cart-shipping").html(totals.shipping_and_handling.toFixed(2));
-            $("#cart-grand-total").html(totals.grand_total.toFixed(2));
-        }
-
-        $('#checkout-btn').click(function(e) {
-            e.preventDefault();
-
-            if ($(this).hasClass('disabled')){
-                return false;
-            }
-            // alert("Hang in there, we're not quite ready to go there yet.  Soon!")
-            // return false;
-
-            var zipcode = $('input[name="zipcode"]').val();
-            
-            if (valid_shipping_info && zipcode.length > 0)
-                window.location.href = '{% url update_cart_info %}';
-            
-            if (zipcode.length == 0) {
-                alert("Please enter zipcode");
-            }
-                
-            if ($('html').hasClass('wait')) {
-                alert('Please be patient, shipping and handling cost is being calculated');
-            }
-        });
-
-        $(".cart-item").on('click', '.cart-remove', function(event) {
-            event.preventDefault();
-            var item = $(this).closest('.cart-item');
-            $.ajax({
-                url : $(this).attr('href'),
-                type : 'post',
-                success : function(data, textStatus, jqXHR) {
-                    update_shipping_handling_fee();
-                    item.fadeOut();
-                    updateCartTotals(data);
-                }
-            })
-        });
-
-        $(".cart-item").on('click', '.cart-change-quantity', function(event) {
-            event.preventDefault();
-            var url = $(this).attr('href');
-            $(this).hide();
-            // TODO: JS templating
-            $(this).parent().append("<div class='bootstrap' style='margin-top: 5px;'><form class='item-change-form form-horizontal' action='" + url + "' method='post'>" + "<div class='control-group'><input type='text' class='cart-new-quantity' name='quantity'>" + "<input style='margin-left: 5px;' type='submit' class='btn btn-primary' value='submit'></div></form></div>");
-        });
-
-        function update_shipping_handling_fee(event){
-            console.log(event)
-            var zipcode = $('input[name="zipcode"]').val();
-            valid_shipping_info = false;                
-            if (zipcode.length == 5) {
-                $('html').addClass('wait');
-                $.ajax({
-                    url : "{% url update_zipcode %}",
-                    data : {
-                        recipient_zipcode : $('input[name="zipcode"]').val(),
-                        shipping_method : $('select[name="shipping-method"] option:selected').val()
-                    },
-                    type : 'post',
-                    success : function(data, textStatus, jqXHR) {
-                        $('html').removeClass('wait');
-                        
-                        if(data.success == true) {
-                            valid_shipping_info = true;
-                            updateCartTotals(data);
-                            $('.update-zipcode').hide();
-                        } else {
-                            alert(data.message);
-                        }
-                    }
-                });
-            } else {
-                $("#cart-shipping").text('0.00');   
-            }
-        }
-
-        update_shipping_handling_fee();
-        $('input[name="zipcode"]').keyup(update_shipping_handling_fee);
-
-        $('#shipping_option_select').change(update_shipping_handling_fee);
-
-
-
-        $(".cart-item").on('submit', '.item-change-form', function(event) {         
-            event.preventDefault();
-            var url = $(this).attr('action');
-            var data = $(this).serialize();
-            var quantity_el = $(this).siblings().filter('.cart-item-quantity');
-            var size_el = $(this).siblings().filter('.cart-item-size');
-            var change_link = $(this).siblings().filter(".cart-change-quantity");
-            var form = $(this);
-            $.ajax({
-                url : url,
-                data : data,
-                type : 'post',
-                success : function(data, textStatus, jqXHR) {
-                    update_shipping_handling_fee();
-                    updateCartTotals(data);
-                    quantity_el.html(data.quantity);
-                    size_el.html(data.size);
-                    change_link.show();
-                    form.remove();
-                }
-            });
-        });
-    });
-</script>
-
-{% endblock %}

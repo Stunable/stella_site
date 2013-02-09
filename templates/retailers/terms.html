@@ -29,7 +29,7 @@
 		{% include 'retailers/retailer_terms_and_cons.html' %}
 		
 		<p style="text-align: right;" class="bootstrap">
-			<input data-url="{% url retailer_terms_complete retailer_id %}" type="checkbox" name="terms" id="terms-input" /><span style="color:gray; margin-left:10px;" id="terms-label">I Agree to the Stunable Term Of Use</span>
+			<input data-href="{% url retailer_terms_complete retailer_id %}" type="checkbox" name="terms" id="terms-input" /><span style="color:gray; margin-left:10px;" id="terms-label">I Agree to the Stunable Term Of Use</span>
 			<br/><br/>
 			<a type="button" href="#" class="btn btn-primary" value="Continue" id="terms-continue-btn" style="color: #aaa;">Continue</a>
 			<br /><br />

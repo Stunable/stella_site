@@ -21,7 +21,7 @@ class testAddress(object):
 
 class FedexTestAddress(object):
     def __init__(self,cleaned_data):
-
+        print cleaned_data
         if cleaned_data.has_key('company_name'):
             self.CompanyName = cleaned_data['company_name']
         else:
@@ -35,7 +35,7 @@ class FedexTestAddress(object):
 
     def validate(self):
         self.result = fedex_validate_this_address(self)
-        print self.result
+        # print self.result
         return self
 
     def processed(self):

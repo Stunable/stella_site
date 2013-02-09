@@ -80,7 +80,7 @@ var stunable = {
             var zipcode = $('input[name="zipcode"]').val();
             
             if (valid_shipping_info && zipcode.length > 0)
-                window.location.href = '{% url update_cart_info %}';
+                window.location.href = $(this).data('href');
             
             if (zipcode.length == 0) {
                 alert("Please enter zipcode");
@@ -113,7 +113,7 @@ var stunable = {
             $(this).parent().append("<div class='bootstrap' style='margin-top: 5px;'><form class='item-change-form form-horizontal' action='" + url + "' method='post'>" + "<div class='control-group'><input type='text' class='cart-new-quantity' name='quantity'>" + "<input style='margin-left: 5px;' type='submit' class='btn btn-primary' value='submit'></div></form></div>");
         });
 
-        $('form').submit(function(e){
+        $('#zipcode_form').submit(function(e){
           e.preventDefault()
         })
 
@@ -121,13 +121,13 @@ var stunable = {
           if (event){
             event.preventDefault()
           }
-            
+            var field=$('#zipcode_field')
             var zipcode = $('input[name="zipcode"]').val();
             valid_shipping_info = false;                
             if (zipcode.length == 5) {
                 $('html').addClass('wait');
                 $.ajax({
-                    url : "{% url update_zipcode %}",
+                    url : field.data('href'),
                     data : {
                         recipient_zipcode : $('input[name="zipcode"]').val(),
                         shipping_method : $('select[name="shipping-method"] option:selected').val()
@@ -185,7 +185,7 @@ var stunable = {
         var term_doc = $('#terms-and-cons-modal');
         $('#terms-label').css('color', 'black');
         $('#terms-input').change(function(){
-            $('#terms-continue-btn').attr('href', $(this).data('url')).css('color', 'black').click(function(e){
+            $('#terms-continue-btn').attr('href', $(this).data('href')).css('color', 'black').click(function(e){
                 if (!$('#terms-input').is(':checked')) {
                     e.preventDefault();
                 } 
