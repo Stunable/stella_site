@@ -11,6 +11,8 @@ from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
 
 
+from django.forms.models import BaseInlineFormSet
+
 __all__ = ['AdminImageWidget', 'AdminImageMixin']
 
 
@@ -65,7 +67,7 @@ class AdminImageMixin(object):
     """
     def formfield_for_dbfield(self, db_field, **kwargs):
         if isinstance(db_field, models.ImageField):
-            print db_field
+            # print db_field
             return db_field.formfield(widget=AdminImageWidget)
         sup = super(AdminImageMixin, self)
         return sup.formfield_for_dbfield(db_field, **kwargs)
@@ -83,17 +85,37 @@ class ColorAdmin(admin.ModelAdmin):
             qs = qs.order_by(*ordering)
         return qs
     
+class ItemTypeInlineFormset(BaseInlineFormSet):
+    def add_fields(self, form, index):
+        super(ItemTypeInlineFormset, self).add_fields(form, index)
+        if form.instance:
+            if hasattr(form.instance,'item'):
+                form.fields['image'].queryset = ProductImage.objects.filter(item=form.instance.item)
 
 class ItemTypeInline(admin.TabularInline):
     model = ItemType
     extra = 0
-    
+    formset = ItemTypeInlineFormset
+   
+
+
 class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
     inlines = [ItemTypeInline]
     list_display = ('name','category','approved','is_available','list_image','_retailer','slug')
     actions = ('approve','unapprove','set_price_text','set_item_slugs')
     list_filter = ('approved','is_available','created_date','_retailer')
     search_fields = ('name','description')
+
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ItemAdmin,self).get_form(request, obj,**kwargs)
+        # form class is created per request by modelform_factory function
+        # so it's safe to modify
+        #we modify the the queryset
+        form.base_fields['featured_image'].queryset = form.base_fields['featured_image'].queryset.filter(item=obj)
+        return form
+
+
 
     def unapprove(self,request,queryset):
         for obj in queryset:
@@ -120,8 +142,6 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
         for obj in queryset:
             obj.set_slug()
             obj.save()
-
-
 
 
     
