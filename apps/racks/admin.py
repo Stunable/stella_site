@@ -51,6 +51,7 @@ class ItemTypeInline(admin.TabularInline):
     model = ItemType
     extra = 0
     formset = ItemTypeInlineFormset
+    exclude = ('api_type','object_id')
    
 
 
