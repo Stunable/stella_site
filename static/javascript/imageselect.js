@@ -42,6 +42,9 @@
           dropdown.hide();
 
           var selectedImage = $('option:selected',element).text();
+          if (selectedImage=='---------'){
+            selectedImage = '/static/images/gui/empty.png'
+          }
 
           header.attr('lock',options.lock);
           if(options.lock == 'height'){
@@ -54,8 +57,13 @@
           var $options = $('option',element);
 
           $options.each(function(i,el){
+                if ($(el).text() == '---------'){
+                  dropdown.append('<img style="width:100%" onclick="jQuery(\'select[name=' + selectName + ']\').val(\''+ "" + '\').ImageSelect(\'close\').ImageSelect(\'update\',{src:\''+ '/static/images/gui/empty.png' + '\'});" src="' + '/static/images/gui/empty.png' + '"/>');
+
+                }else{
                 //dropdown.append('<img style="width:' + options.dropdownWidth + 'px" onclick="jQuery(\'select[name=' + selectName + ']\').val(\''+ $(el).val() + '\').ImageSelect(\'close\').ImageSelect(\'update\',{src:\''+ $(el).text() + '\'});" src="' + $(el).text() + '"/>');
-                dropdown.append('<img style="width:100%" onclick="jQuery(\'select[name=' + selectName + ']\').val(\''+ $(el).val() + '\').ImageSelect(\'close\').ImageSelect(\'update\',{src:\''+ $(el).text() + '\'});" src="' + $(el).text() + '"/>');
+                  dropdown.append('<img style="width:100%" onclick="jQuery(\'select[name=' + selectName + ']\').val(\''+ $(el).val() + '\').ImageSelect(\'close\').ImageSelect(\'update\',{src:\''+ $(el).text() + '\'});" src="' + $(el).text() + '"/>');
+                }
           });
 
 

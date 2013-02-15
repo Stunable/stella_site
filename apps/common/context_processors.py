@@ -2,7 +2,7 @@
 
 def page_role(request):
     splits = request.path_info.split('/')
-    print splits
+    # print splits
     if not len(splits) > 2:
         return {'page_role':'shop'}
     

@@ -198,7 +198,7 @@ def add(request, template='racks/add.html'):
                 ctx['success'] = True
                 d  = {'rack':rack}
                 ctx['result'] = {'html':render_to_string("racks/includes/rack_in_list.html", d),'target':target}
-                print 'ctx:',ctx
+               #print 'ctx:',ctx
 
                 json = simplejson.dumps(ctx)
                 return HttpResponse(json, mimetype='application/json')
@@ -478,7 +478,7 @@ def item_modal(request, item_slug, template='racks/item_modal.html'):
     
     size2color = {}
     for inventory in item.types.all():
-        # print inventory
+        ##print inventory
         if size2color.has_key(inventory.size.size):
             size2color[inventory.size.size].append(inventory.custom_color_name)
         else:
@@ -491,7 +491,7 @@ def item_modal(request, item_slug, template='racks/item_modal.html'):
     for color_list in size2color.values():
         colors += color_list
 
-    print 's2c:',size2color
+   #print 's2c:',size2color
 
     ctx.update({'size2color': json.dumps(size2color),     
                 'sizes': set(size2color.keys()),
@@ -636,9 +636,9 @@ def _all(request, slug=None, template='racks/carousel.html'):
         profile = get_or_create_profile(request)
     else:
         if request.session.has_key('anonymous_profile'):
-            print request.session
+           #print request.session
             profile = request.session.get('anonymous_profile')
-            print profile.first_login
+           #print profile.first_login
 
     ctx = {}
     ctx['categories'] = Category.objects.all()
@@ -759,7 +759,7 @@ def send_item_to_admirer(request):
                 to_user = User.objects.get(pk=admirer)
 
             if to_user:
-                print 'to user'
+               #print 'to user'
                 logger.info(to_user)
                 # TODO: implement the link to trend here
                 trend_url = u"https://%s%s" % (
@@ -1001,7 +1001,7 @@ def add_product_image(request):
         im.retailer = retailer.user
         im.save()
 
-        print im
+       #print im
 
         ret = {'html':'<option class="new_image_'+str(im.id)+'" value="'+str(im.id)+'">'+im.thumbnail+'</option>','message':str(im.id),'success':True}
     else:

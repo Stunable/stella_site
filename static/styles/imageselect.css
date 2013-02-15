@@ -34,3 +34,9 @@
     cursor:pointer;
     float:left;
 }
+
+select {
+        display: inline;
+        max-height: 94px;
+    }
+

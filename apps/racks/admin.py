@@ -13,52 +13,6 @@ from django.utils.safestring import mark_safe
 
 from django.forms.models import BaseInlineFormSet
 
-__all__ = ['AdminImageWidget', 'AdminImageMixin']
-
-
-get_thumbnail = None
-
-try:
-    from easy_thumbnails.files import get_thumbnailer
-except ImportError:
-    def thumbnail1(image_path):
-        absolute_url = os.path.join(settings.MEDIA_URL, image_path)
-        return u'<img src="%s" alt="" width="160" />' % absolute_url
-    get_thumbnail = thumbnail1
-else:
-    def thumbnail2(image_path):
-        thumbnailer = get_thumbnailer(image_path)
-        thumbnail_options = {
-            'crop': True, 'size': (160, 120), 'detail': True, 'upscale': True}
-        t = thumbnailer.get_thumbnail(thumbnail_options)
-        media_url = settings.MEDIA_URL
-        return u'<img src="%s%s" alt="" width="160" height="120"/>' % (
-            media_url, t)
-    get_thumbnail = thumbnail2
-
-
-class AdminImageWidget(AdminFileWidget):
-    """
-    A FileField Widget that displays an image instead of a file path
-    if the current file is an image.
-    """
-    def render(self, name, value, attrs=None):
-        output = []
-        file_name = str(value)
-        if file_name:
-            file_path = ''.join((settings.MEDIA_URL, file_name))
-            try:
-                Image.open(os.path.join(settings.MEDIA_ROOT, file_name))
-            except IOError:
-                # Not an image
-                output.append('%s <a target="_blank" href="%s">%s</a> '
-                              '<br />%s ' % (_('Currently:'), file_path,
-                                             file_name, _('Change:')))
-            else:
-                output.append('<a target="_blank" href="%s">%s</a>' % (
-                              file_path, get_thumbnail(file_name)))
-        output.append(super(AdminFileWidget, self).render(name, value, attrs))
-        return mark_safe(u''.join(output))
 
 class AdminImageMixin(object):
     """
@@ -66,9 +20,10 @@ class AdminImageMixin(object):
     show nicer form widget
     """
     def formfield_for_dbfield(self, db_field, **kwargs):
-        if isinstance(db_field, models.ImageField):
-            # print db_field
-            return db_field.formfield(widget=AdminImageWidget)
+        # print db_field.name
+        if 'image' in db_field.name:
+            pass
+            # return db_field.formfield(widget=AdminImageWidget)
         sup = super(AdminImageMixin, self)
         return sup.formfield_for_dbfield(db_field, **kwargs)
 
@@ -105,6 +60,18 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
     actions = ('approve','unapprove','set_price_text','set_item_slugs')
     list_filter = ('approved','is_available','created_date','_retailer')
     search_fields = ('name','description')
+
+    class Media:
+        css = {
+            "all": ("styles/imageselect.css",
+                    "styles/admin.css"
+                )
+        }
+        js = ('javascript/jquery.js',
+            'javascript/imageselect.js',
+
+
+                "javascript/admin.js",)
 
 
     def get_form(self, request, obj=None, **kwargs):
