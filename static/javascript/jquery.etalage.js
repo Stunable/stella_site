@@ -183,10 +183,11 @@
 					$smallthumbs = $('<li class="etalage_small_thumbs"><ul></ul></li>').appendTo($container);
 					$smallthumbs_ul = $smallthumbs.children('ul');
 					$.each($thumb_images, function(){
+						console.log(this)
 						var $t = $(this);
 						src = $t.data('src');
 						thumb_id = $t.parents('.etalage_thumb').data('id');
-						$('<li><img class="etalage_small_thumb" src="'+src+'" /></li>').data('thumb_id', thumb_id).appendTo($smallthumbs_ul);
+						$('<li><img class="etalage_small_thumb imgid_'+$(this).data('imgid')+'" src="'+src+'" /></li>').data('thumb_id', thumb_id).appendTo($smallthumbs_ul);
 					});
 					$smallthumb = $smallthumbs_ul.children('li').css({ opacity:o.smallthumb_inactive_opacity });
 					if(small_thumbs < 3){

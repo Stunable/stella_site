@@ -392,6 +392,11 @@ class ItemType(models.Model,DirtyFieldsMixin):
             return img
         else:
             return self.item.get_image()
+
+    def get_image_id(self):
+        if self.image:
+            return self.image.id
+        return None
     
     def get_current_price(self):
         if self.is_onsale:

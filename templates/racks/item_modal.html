@@ -72,7 +72,7 @@
 
 			
 				<li>
-		                <img class="etalage_thumb_image" src="{{item.get_image.small.url}}">
+		                <img class="etalage_thumb_image" data-imgid="{{item.get_image.id}}" src="{{item.get_image.small.url}}">
 		                <img class="etalage_source_image" src="{{item.get_image.large.url}}">
 		           
 		          
@@ -81,7 +81,7 @@
 				{% for each_image in item.get_additional_images %}
 					<li>
 						
-			                <img class="etalage_thumb_image" src="{{each_image.small.url}}">		       
+			                <img class="etalage_thumb_image" data-imgid="{{each_image.id}}" src="{{each_image.small.url}}">		       
 			                <img class="etalage_source_image" src="{{each_image.large.url}}">
 			         
 					</li>
