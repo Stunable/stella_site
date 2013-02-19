@@ -249,7 +249,7 @@ class Item(models.Model):
             return 'error item'
 
     def get_image(self):
-        return self.product.item.get_image()
+        return self.product.get_image()
 
     @property
     def total_price(self):
@@ -308,6 +308,10 @@ class Item(models.Model):
     @property
     def actions(self): 
         return self.get_actions()
+
+
+    def get_name(self):
+        return self.product.item.name
 
     # product
     def get_product(self):

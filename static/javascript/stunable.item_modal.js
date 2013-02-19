@@ -50,7 +50,7 @@ function setItemDetailsEvent(){
 
 					$.post($('.item-details .item-color-list .selected a').data('href'),function(data){
 						$.modal.close()
-						var cs = reveal_cart(e,data);
+						var cs = reveal_cart(e,data,true);
 					})
 
 				}
