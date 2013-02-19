@@ -64,7 +64,6 @@ function init_refclicks(selection){
 function reveal_cart(event,data,add){
     var height = '280px'
     
-
     if (data){
         $('#cart_contents_container').html(data)
     }
@@ -77,10 +76,11 @@ function reveal_cart(event,data,add){
         el.removeClass('add')
     }
 
-
     el.animate({'height': height}, 400);
     var cart_close = setTimeout(close_cart,4000)
     el.hover(function(e){clearTimeout(cart_close)},function(e){cart_close = setTimeout(close_cart,1000)})//keeps cart out on re-hover, closes on leaving
+
+    $('#cartcount').text($('#cart_items').data('length'))
 }
 
 function close_cart(){

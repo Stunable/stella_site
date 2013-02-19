@@ -239,7 +239,7 @@
                                 </li>
                                 <li class="navlink" id="nav-account">
                                     {# href="{% url get_cart %}"  #}
-                                    <a title="Cart" class="text-link cart_slide_trigger">Cart({{cart.count}})</a>
+                                    <a title="Cart" class="text-link cart_slide_trigger">Cart(<span id="cartcount">{{cart.count}}</span>)</a>
                                     <div id="cart_slide"> 
                                         <div id="cart_contents_container">
                                             {% include "cart/cart_slideout.html" %}
