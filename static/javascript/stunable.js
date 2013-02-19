@@ -44,8 +44,6 @@ var refclickFunctions = {
 }
 
 
-
-
 function init_refclicks(selection){
     selection.click(function(e){
         var $t = $(this);
@@ -61,7 +59,20 @@ function init_refclicks(selection){
             }
         },'json')
     })
+}
 
+function reveal_cart(event,data){
+    if (data){
+        $('#cart_contents_container').html(data)
+    }
+    var el = $('#cart_slide');
+    el.animate({'height': '200px'}, 400);
+    var cart_close = setTimeout(close_cart,4000)
+    el.hover(function(e){clearTimeout(cart_close)},function(e){cart_close = setTimeout(close_cart,1000)})//keeps cart out on re-hover, closes on leaving
+}
+
+function close_cart(){
+    $('#cart_slide').animate({'height': '0px'}, 400);
 }
 
 function init_add_rack_modal() {

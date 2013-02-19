@@ -4,6 +4,7 @@ from django.conf import settings
 
 import sys
 import os
+from decimal import *
 CART_ID = 'CART-ID'
 
 
@@ -191,12 +192,12 @@ class Cart:
         self.total = total
         self.tax = tax
         self.processing = processing        
-        self.grand_total = self.tax + self.total +self.processing + float(self.cart and self.cart.shipping_and_handling_cost or 0)
+        self.grand_total = Decimal(self.tax + self.total +self.processing + float(self.cart and self.cart.shipping_and_handling_cost or 0))
         self.checkout_ok = self.check_fee_cost_per_retailer()
 
     
     def totals_as_dict(self):
-        # self.calculate()
+
         return dict(
             total=self.total,
             tax=self.tax,

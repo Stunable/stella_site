@@ -47,7 +47,12 @@ function setItemDetailsEvent(){
 				if ($('.item-details .item-size-list .selected').length == 0 || $('.item-details .item-color-list .selected').length == 0) {
 					alert('Please select size and color');
 				} else {
-					window.location = $('.item-details .item-color-list .selected a').data('href');
+
+					$.post($('.item-details .item-color-list .selected a').data('href'),function(data){
+						$.modal.close()
+						var cs = reveal_cart(e,data);
+					})
+
 				}
 			});
 		
@@ -75,8 +80,8 @@ function setItemDetailsEvent(){
 							//alert(data.text);
 							$('bigform-error').html("");
 						} else {
-							// close fancy box after 2 second on success
-							setTimeout("$.modal.close()", 2000);
+							// 	 fancy box after 2 second on success
+							setTimeout($.modal.close(), 2000);
 						}
 					});
 				}
@@ -372,7 +377,6 @@ function init_item_modal(){
 					source_image_height: source_image_height
 				});
 		setItemDetailsEvent();
-
 
 	}
 		

@@ -26,6 +26,6 @@ def racks(request):
         else:
             context['fb_friend_list'] = fb_stunable_friends+fb_friends
         context['fb_token'] = request.session['fb_token']
-    if 'cart' in request.META.get('PATH_INFO'):
-        context['cart'] = Cart(request)
+    # if 'cart' in request.META.get('PATH_INFO'):
+    context['cart'] = Cart(request)
     return context

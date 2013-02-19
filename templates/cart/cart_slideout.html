@@ -1,0 +1,27 @@
+
+<table id="cart_items">
+    {% for item in cart reversed %}
+    <tr>
+      <td id="product-item-{{item.product.pk}}">
+            <div >
+               <img class="product_image" src="{{ item.get_image.tiny.url }}">
+            </div>
+            <div>{{ item.product.name }}</div>
+            <p class="retailer">
+                by {{ item.product.item.retailer }}
+            </p>
+            <p class="price-each">
+                ${{ item.product.get_current_price|floatformat:2 }}
+            </p>
+            <p class='quantity'>
+                Quantity: <span class='cart-item-quantity'>{{ item.quantity }}</span><a class='cart-change-quantity' href="/cart/update_cart/{{item.product.pk}}">change</a>
+            </p>
+            <input type="hidden" class="path" value="/cart/update_cart/{{item.product.pk}}/"/>
+            <a class='cart-remove' href="/cart/remove_from_cart/{{item.product.pk}}/">remove item</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<div id="cart_data">
+    {{cart.totals_as_pretty_dict.grand_total}}
+</div>

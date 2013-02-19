@@ -43,8 +43,10 @@ var stunable = {
 
       init_refclicks($('.refclick'))
 
+      $('.cart_slide_trigger').hover(reveal_cart)
 
 
+      initTouch()
     }
     ,shop: function(){            
         setupCarousel($('.iosSlider'));

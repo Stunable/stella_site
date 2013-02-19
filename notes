@@ -1,65 +1,26 @@
-Checkout Order
 
-    Wepay
+New Cart:
+    Click "add to cart"
+        Modal fades out
+        little cart slideout comes down
+            "<item title> added to cart"
+        little cart slideout slides back up
 
-    Customer:
-        approve grand total:
-            grand total:
-                total shipping
-                total item costs
-                total sales tax
-                total processing
-        shipping info:
-
-        wepay:
-
-
-    Retailer_Order:
-        retailer order:
-            display:
-                total shipping
-                total item costs
-                total sales tax
-                total processing
-
-        fields:
-            wepay_checkout_id
-            items
-            date
-            status
-            
-
-orders per retailer
-    retailer_order
-        checkout_id
-        retailer
-        
-        retailer location specific info
-            sales tax
-            shipping info
+Checkout Process:
 
 
 
+Fix Mobile dragging
 
-Friendship:
-    User Logs in with FB
-        check for stunable users who are facebook friends
-            add stunable friendships for each one found
 
-        Can share Items with any (facebook or stunable) friend:
-            on share:
-                if not a stunable user:
-                    Send facebook-facebook invite
-                else:
-                    Send trend notification thing and/or facebook
-    User logs in NOT facebook:
-        Sharing is diminished but email invite still works
-                   
-    Relationships:        
 
-        Stunable - Stunable
+Tabs:
+    too many defaults
+    auto complete
+        searches from existing tags (and categories)
 
-                
 
+    Remove Categories
+    
 
 

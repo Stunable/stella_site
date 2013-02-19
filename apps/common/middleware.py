@@ -25,6 +25,13 @@ from django.db import connection, reset_queries
 from django.http import HttpResponse
 from django.utils import html
 
+# from django.core.exceptions import MiddlewareNotUsed
+# from django.conf import settings
+import cProfile
+import pstats
+import marshal
+# from cStringIO import StringIO
+
 class StdoutWrapper(object):
     """Simple wrapper to capture and overload sys.stdout"""
     def __init__(self):
@@ -276,75 +283,45 @@ def display_queries(request, stats, queries):
 
 
 class ProfileMiddleware(object):
-    """
-    Displays hotshot profiling for any view.
-    http://yoursite.com/yourview/?profile=1
-
-    WARNING: It uses hotshot profiler which is not thread safe.
-    """
-    def process_request(self, request):
-        """
-	Setup the profiler for a profiling run and clear the SQL query log.
-
-	If this is a resort of an existing profiling run, just return
-	the resorted list.
-	"""
-        def unpickle(params):
-            stats = unpickle_stats(b64decode(params.get('stats', '')))
-            queries = cPickle.loads(b64decode(params.get('queries', '')))
-            return stats, queries
-
-        if request.method != 'GET' and \
-           not (request.META.get('HTTP_CONTENT_TYPE',
-                                 request.META.get('CONTENT_TYPE', '')) in
-                ['multipart/form-data', 'application/x-www-form-urlencoded']):
-            return
-        if (request.REQUEST.get('profile', False) and
-            (settings.DEBUG == True or request.user.is_staff)):
-            request.statsfile = tempfile.NamedTemporaryFile()
-            params = request.REQUEST
-            if (params.get('show_stats', False)
-                and params.get('show_queries', '1') == '1'):
-                # Instantly re-sort the existing stats data
-                stats, queries = unpickle(params)
-                return display_stats(request, stats, queries)
-            elif (params.get('show_queries', False)
-                  and params.get('show_stats', '1') == '1'):
-                stats, queries = unpickle(params)
-                return display_queries(request, stats, queries)
-            else:
-                # We don't have previous data, so initialize the profiler
-                request.profiler = hotshot.Profile(request.statsfile.name)
-                reset_queries()
-
-    def process_view(self, request, view_func, view_args, view_kwargs):
-        """Run the profiler on _view_func_."""
-        profiler = getattr(request, 'profiler', None)
-        if profiler:
-            # Make sure profiler variables don't get passed into view_func
-            original_get = request.GET
-            request.GET = original_get.copy()
-            request.GET.pop('profile', None)
-            request.GET.pop('show_queries', None)
-            request.GET.pop('show_stats', None)
-            try:
-                return profiler.runcall(view_func,
-                                        request, *view_args, **view_kwargs)
-            finally:
-                request.GET = original_get
-
-
+    def __init__(self):
+        if not settings.DEBUG:
+            raise MiddlewareNotUsed()
+        self.profiler = None
+ 
+    def process_view(self, request, callback, callback_args, callback_kwargs):
+        if settings.DEBUG and ('profile' in request.GET
+                            or 'profilebin' in request.GET):
+            self.profiler = cProfile.Profile()
+            args = (request,) + callback_args
+            return self.profiler.runcall(callback, *args, **callback_kwargs)
+ 
     def process_response(self, request, response):
-        """Finish profiling and render the results."""
-        profiler = getattr(request, 'profiler', None)
-        if profiler:
-            profiler.close()
-            params = request.REQUEST
-            stats = hotshot.stats.load(request.statsfile.name)
-            queries = connection.queries
-            if (params.get('show_queries', False)
-                and params.get('show_stats', '1') == '1'):
-                response = display_queries(request, stats, queries)
-            else:
-                response = display_stats(request, stats, queries)
+        if settings.DEBUG:
+            if 'profile' in request.GET:
+                self.profiler.create_stats()
+                out = StringIO()
+                stats = pstats.Stats(self.profiler, stream=out)
+                # Values for stats.sort_stats():
+                # - calls           call count
+                # - cumulative      cumulative time
+                # - file            file name
+                # - module          file name
+                # - pcalls          primitive call count
+                # - line            line number
+                # - name            function name
+                # - nfl                     name/file/line
+                # - stdname         standard name
+                # - time            internal time
+                stats.sort_stats('time').print_stats(.2)
+                response.content = out.getvalue()
+                response['Content-type'] = 'text/plain'
+                return response
+            if 'profilebin' in request.GET:
+                self.profiler.create_stats()
+                response.content = marshal.dumps(self.profiler.stats)
+                filename = request.path.strip('/').replace('/','_') + '.pstat'
+                response['Content-Disposition'] = \
+                    'attachment; filename=%s' % (filename,)
+                response['Content-type'] = 'application/octet-stream'
+                return response
         return response

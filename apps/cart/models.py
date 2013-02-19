@@ -248,6 +248,9 @@ class Item(models.Model):
         except:
             return 'error item'
 
+    def get_image(self):
+        return self.product.item.get_image()
+
     @property
     def total_price(self):
         return float(self.quantity * self.unit_price)
@@ -419,7 +422,10 @@ class Item(models.Model):
         if not self.shipping_amount or refresh:
             retailer_zipcode = self.retailer.zip_code
             # print 'recipient zip:',self.cart.destination_zip_code
-            self.shipping_amount = fedex_rate_request(shipping_option=self.cart.shipping_method.vendor_tag,weight=self.weight*self.quantity, shipper_zipcode=retailer_zipcode, recipient_zipcode=self.cart.destination_zip_code)
+            try:
+                self.shipping_amount = fedex_rate_request(shipping_option=self.cart.shipping_method.vendor_tag,weight=self.weight*self.quantity, shipper_zipcode=retailer_zipcode, recipient_zipcode=self.cart.destination_zip_code)
+            except:
+                self.shipping_amount = 9.95
             self.save()
         return float(self.shipping_amount)
 

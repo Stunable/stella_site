@@ -57,10 +57,17 @@ def buy_rack(request, rack_id):
 
 @login_required
 def add_to_cart(request, product_id, quantity, size=None):
-    inventory = ItemType.objects.get(id=product_id)
-    cart = Cart(request)    
-    cart.add(inventory, inventory.get_current_price(), quantity, inventory.size.size, inventory.color.name)
+    if request.method == 'POST':
+        inventory = ItemType.objects.get(id=product_id)
+        cart = Cart(request)    
+        cart.add(inventory, inventory.get_current_price(), quantity, inventory.size.size, inventory.color.name)
     
+
+        return render_to_response("cart/cart_slideout.html", 
+                                  {'cart': cart }, 
+                                  context_instance=RequestContext(request) )
+
+
     return redirect(reverse('get_cart'))
 
 @login_required

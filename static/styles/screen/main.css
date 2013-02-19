@@ -620,6 +620,43 @@ form .edit {
 	font-size:0.8em;
 }
 
+
+
+
+
+
+/*CART*/
+
+#cart_slide{
+	z-index: 2;
+	background-color: rgba(255,255,255,.5);
+	height: 0px;
+	width: 200px;
+	position: absolute;
+	border: 2px solid black;
+	border-top: 0px;
+	border-radius: 0px 0px 9px 9px;
+	top: 37px;
+	top: -3px;
+	left: -50px;
+	overflow:hidden;
+}
+
+#cart_contents_container{
+	width:100%;
+}
+#cart_items{
+	height:140px;
+	display:block;
+	overflow:auto;
+}
+#cart_data{
+	height:60px;
+	background-color:grey;
+	width:100%;
+	color:white;
+}
+
 /* TABLES
 ----------------------------------------*/
 .help .table-container {
