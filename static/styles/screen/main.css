@@ -630,7 +630,7 @@ form .edit {
 #cart_slide{
 	padding:5px;
 	z-index: 2;
-	background-color: rgba(255,255,255,.9);
+	background-color: rgba(255,255,255,.83);
 	height: 0px;
 	width: 200px;
 	position: absolute;
@@ -664,6 +664,7 @@ form .edit {
 		padding-bottom:10px;
 		text-align: right;
 		height:60px;
+		padding-right:8px;
 	}
 	#cart_items td span{
 		vertical-align:top;
@@ -672,7 +673,7 @@ form .edit {
 	}
 
 	#cart_items.item-list .item-label{
-		width: 160px;
+		width: 100%;
 		text-align: right;
 		background:none;
 	}

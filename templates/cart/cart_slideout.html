@@ -8,7 +8,7 @@
       <td id="product-item-{{item.product.pk}}">
             <div>
                <img style="width:40px;display:inline;float:left" class="product_image" src="{{ item.get_image.tiny.url }}">
-               <div style="display:inline;float:right">
+               <div style="display:inline">
                <span class="item-label">{{ item.get_name }}</span>
                <span>by {{ item.retailer }}</span>
                <span>${{ item.unit_price|floatformat:2 }}</span>
