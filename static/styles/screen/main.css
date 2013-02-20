@@ -623,70 +623,6 @@ form .edit {
 
 
 
-
-
-/*CART*/
-
-#cart_slide{
-	padding:5px;
-	z-index: 2;
-	background-color: rgba(255,255,255,.83);
-	height: 0px;
-	width: 200px;
-	position: absolute;
-	border: 2px solid #ccc;
-	border-top: 0px;
-	border-radius: 0px 0px 9px 9px;
-	left: -70px;
-	top:-60px;
-	overflow:hidden;
-	box-shadow: 3px 1px 10px rgba(0,0,0,.5);
-}
-
-
-#cart_items{
-	height:162px;
-	display:block;
-	overflow:auto;
-}
-
-.add #cart_items{
-	height:81px;
-	overflow:hidden;
-}
-	#cart_items tr{
-
-		font-size:.6em;
-	}
-	#cart_items td{
-		border-bottom:1px dashed #ccc;
-		padding-top:10px;
-		padding-bottom:10px;
-		text-align: right;
-		height:60px;
-		padding-right:8px;
-	}
-	#cart_items td span{
-		vertical-align:top;
-		display:block;
-		line-height: 1.2em;
-	}
-
-	#cart_items.item-list .item-label{
-		width: 100%;
-		text-align: right;
-		background:none;
-	}
-
-#cart_data{
-	margin-top:71px;
-	border-bottom:1px dashed #ccc;
-	height:40px;
-	width:100%;
-	color:#aaa;
-	vertical-align: middle;
-}
-
 /* TABLES
 ----------------------------------------*/
 .help .table-container {
@@ -1341,7 +1277,7 @@ height: 593px;
 	font-family: 'Helvetica', sans-serif;
 }
 
-.left-panel  .friend-search-box {
+.left-panel .bootstrap .friend-search-box {
 	padding: 4px 11px;
 	margin: 0 7px 10px 12px;
 	width: 162px;
@@ -3974,66 +3910,66 @@ background-color: white;
 
 /********* Bootstrap *************/
 
- label,
- input,
- button,
- select,
- textarea {
+.bootstrap label,
+.bootstrap input,
+.bootstrap button,
+.bootstrap select,
+.bootstrap textarea {
   font-size: 15px;
   font-weight: normal;
   line-height: 18px;
 }
 
- button,
- input,
- select,
- textarea {
+.bootstrap button,
+.bootstrap input,
+.bootstrap select,
+.bootstrap textarea {
   margin: 0;
   font-size: 100%;
   vertical-align: middle;
 }
 
- button,
- input {
+.bootstrap button,
+.bootstrap input {
   *overflow: visible;
   line-height: normal;
 }
 
 
- button.btn,
- input[type="submit"].btn {
+.bootstrap button.btn,
+.bootstrap input[type="submit"].btn {
   *padding-top: 2px;
   *padding-bottom: 2px;
 }
 
- button::-moz-focus-inner,
- input::-moz-focus-inner {
+.bootstrap button::-moz-focus-inner,
+.bootstrap input::-moz-focus-inner {
   padding: 0;
   border: 0;
 }
 
- textarea {
+.bootstrap textarea {
   overflow: auto;
   vertical-align: top;
 }
 
- select,
- textarea,
- input[type="text"],
- input[type="password"],
- input[type="datetime"],
- input[type="datetime-local"],
- input[type="date"],
- input[type="month"],
- input[type="time"],
- input[type="week"],
- input[type="number"],
- input[type="email"],
- input[type="url"],
- input[type="search"],
- input[type="tel"],
- input[type="color"],
- .uneditable-input {
+.bootstrap select,
+.bootstrap textarea,
+.bootstrap input[type="text"],
+.bootstrap input[type="password"],
+.bootstrap input[type="datetime"],
+.bootstrap input[type="datetime-local"],
+.bootstrap input[type="date"],
+.bootstrap input[type="month"],
+.bootstrap input[type="time"],
+.bootstrap input[type="week"],
+.bootstrap input[type="number"],
+.bootstrap input[type="email"],
+.bootstrap input[type="url"],
+.bootstrap input[type="search"],
+.bootstrap input[type="tel"],
+.bootstrap input[type="color"],
+.bootstrap .uneditable-input {
   display: inline-block;
   height: 18px;
   padding: 4px;
@@ -4043,31 +3979,31 @@ background-color: white;
   color: #555555;
 }
 
- input,
- textarea {
+.bootstrap input,
+.bootstrap textarea {
   width: 210px;
 }
 
- textarea {
+.bootstrap textarea {
   height: auto;
 }
 
- textarea,
- input[type="text"],
- input[type="password"],
- input[type="datetime"],
- input[type="datetime-local"],
- input[type="date"],
- input[type="month"],
- input[type="time"],
- input[type="week"],
- input[type="number"],
- input[type="email"],
- input[type="url"],
- input[type="search"],
- input[type="tel"],
- input[type="color"],
- .uneditable-input {
+.bootstrap textarea,
+.bootstrap input[type="text"],
+.bootstrap input[type="password"],
+.bootstrap input[type="datetime"],
+.bootstrap input[type="datetime-local"],
+.bootstrap input[type="date"],
+.bootstrap input[type="month"],
+.bootstrap input[type="time"],
+.bootstrap input[type="week"],
+.bootstrap input[type="number"],
+.bootstrap input[type="email"],
+.bootstrap input[type="url"],
+.bootstrap input[type="search"],
+.bootstrap input[type="tel"],
+.bootstrap input[type="color"],
+.bootstrap .uneditable-input {
   background-color: #ffffff;
   border: 1px solid #cccccc;
   -webkit-border-radius: 3px;
@@ -4083,22 +4019,22 @@ background-color: white;
           transition: border linear 0.2s, box-shadow linear 0.2s;
 }
 
- textarea:focus,
- input[type="text"]:focus,
- input[type="password"]:focus,
- input[type="datetime"]:focus,
- input[type="datetime-local"]:focus,
- input[type="date"]:focus,
- input[type="month"]:focus,
- input[type="time"]:focus,
- input[type="week"]:focus,
- input[type="number"]:focus,
- input[type="email"]:focus,
- input[type="url"]:focus,
- input[type="search"]:focus,
- input[type="tel"]:focus,
- input[type="color"]:focus,
- .uneditable-input:focus {
+.bootstrap textarea:focus,
+.bootstrap input[type="text"]:focus,
+.bootstrap input[type="password"]:focus,
+.bootstrap input[type="datetime"]:focus,
+.bootstrap input[type="datetime-local"]:focus,
+.bootstrap input[type="date"]:focus,
+.bootstrap input[type="month"]:focus,
+.bootstrap input[type="time"]:focus,
+.bootstrap input[type="week"]:focus,
+.bootstrap input[type="number"]:focus,
+.bootstrap input[type="email"]:focus,
+.bootstrap input[type="url"]:focus,
+.bootstrap input[type="search"]:focus,
+.bootstrap input[type="tel"]:focus,
+.bootstrap input[type="color"]:focus,
+.bootstrap .uneditable-input:focus {
   border-color: #EC67F0;
   outline: 0 none;
 
@@ -4107,8 +4043,8 @@ background-color: white;
           box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #EC67F0;
 }
 
- input[type="radio"],
- input[type="checkbox"] {
+.bootstrap input[type="radio"],
+.bootstrap input[type="checkbox"] {
   margin: 3px 0;
   *margin-top: 0;
   /* IE7 */
@@ -4117,21 +4053,21 @@ background-color: white;
   cursor: pointer;
 }
 
- input[type="submit"],
- input[type="reset"],
- input[type="button"],
- input[type="radio"],
- input[type="checkbox"] {
+.bootstrap input[type="submit"],
+.bootstrap input[type="reset"],
+.bootstrap input[type="button"],
+.bootstrap input[type="radio"],
+.bootstrap input[type="checkbox"] {
   width: auto;
 }
 
- .uneditable-textarea {
+.bootstrap .uneditable-textarea {
   width: auto;
   height: auto;
 }
 
- select,
- input[type="file"] {
+.bootstrap select,
+.bootstrap input[type="file"] {
   height: 28px;
   /* In IE7, the height of the select element cannot be changed by height, only font-size */
 
@@ -4141,7 +4077,7 @@ background-color: white;
   line-height: 28px;
 }
 
- select {
+.bootstrap select {
   width: 220px;
   border: 1px solid #bbb;
   -webkit-border-radius: 0;
@@ -4150,25 +4086,25 @@ background-color: white;
    background-color: none;
 }
 
- select[multiple],
- select[size] {
+.bootstrap select[multiple],
+.bootstrap select[size] {
   height: auto;
 }
 
- input[type="file"] {
+.bootstrap input[type="file"] {
 	margin-bottom: 9px;
 }
 
- select:focus,
- input[type="file"]:focus,
- input[type="radio"]:focus,
- input[type="checkbox"]:focus {
+.bootstrap select:focus,
+.bootstrap input[type="file"]:focus,
+.bootstrap input[type="radio"]:focus,
+.bootstrap input[type="checkbox"]:focus {
   outline: thin dotted #EC67F0;
   outline: 5px auto #EC67F0;
   outline-offset: -2px;
 }
 
- .form-actions {
+.bootstrap .form-actions {
   padding: 17px 20px 18px;
   margin-top: 18px;
   margin-bottom: 18px;
@@ -4177,29 +4113,29 @@ background-color: white;
   *zoom: 1;
 }
 
- .form-actions:before,
- .form-actions:after {
+.bootstrap .form-actions:before,
+.bootstrap .form-actions:after {
   display: table;
   content: "";
 }
 
- .form-actions:after {
+.bootstrap .form-actions:after {
   clear: both;
 }
 
- .radio,
- .checkbox {
+.bootstrap .radio,
+.bootstrap .checkbox {
   min-height: 18px;
   padding-left: 18px;
 }
 
- .radio input[type="radio"],
- .checkbox input[type="checkbox"] {
+.bootstrap .radio input[type="radio"],
+.bootstrap .checkbox input[type="checkbox"] {
   float: left;
   margin-left: -18px;
 }
 
- .btn {
+.bootstrap .btn {
    display: inline-block;
   *display: inline;
   padding: 4px 10px 4px;
@@ -4242,15 +4178,15 @@ background-color: white;
   	float: none;
 }
 
- .btn:hover,
- .btn:active,
- .btn.active,
- .btn.disabled,
- .btn[disabled] {
+.bootstrap .btn:hover,
+.bootstrap .btn:active,
+.bootstrap .btn.active,
+.bootstrap .btn.disabled,
+.bootstrap .btn[disabled] {
  	color:#777;
 }
 
- .btn:hover {
+.bootstrap .btn:hover {
 	display: inline-block;
   *display: inline;
   padding: 4px 10px 4px;
@@ -4307,29 +4243,29 @@ background-color: white;
           transition: background-position 0.1s linear;
 }
 
- .btn:focus {
+.bootstrap .btn:focus {
   outline: thin dotted #333;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
 
- .btn-primary,
- .btn-primary:hover:not(.disabled),
- .btn-warning,
- .btn-warning:hover,
- .btn-danger,
- .btn-danger:hover,
- .btn-success,
- .btn-success:hover,
- .btn-info,
- .btn-info:hover,
- .btn-inverse,
- .btn-inverse:hover {
+.bootstrap .btn-primary,
+.bootstrap .btn-primary:hover:not(.disabled),
+.bootstrap .btn-warning,
+.bootstrap .btn-warning:hover,
+.bootstrap .btn-danger,
+.bootstrap .btn-danger:hover,
+.bootstrap .btn-success,
+.bootstrap .btn-success:hover,
+.bootstrap .btn-info,
+.bootstrap .btn-info:hover,
+.bootstrap .btn-inverse,
+.bootstrap .btn-inverse:hover {
   color: #ffffff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
- .btn-primary {
+.bootstrap .btn-primary {
   background-color: #D337DA;
   background-image: -ms-linear-gradient(top, #EC67F0, #D337DA);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#EC67F0), to(#D337DA));
@@ -4342,11 +4278,11 @@ background-color: white;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
- .btn-primary:hover,
- .btn-primary:active,
- .btn-primary.active,
- .btn-primary.disabled,
- .btn-primary[disabled] {
+.bootstrap .btn-primary:hover,
+.bootstrap .btn-primary:active,
+.bootstrap .btn-primary.active,
+.bootstrap .btn-primary.disabled,
+.bootstrap .btn-primary[disabled] {
   background-image: -ms-linear-gradient(top, #EC67F0, #D337DA);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#EC67F0), to(#D337DA));
   background-image: -webkit-linear-gradient(top, #EC67F0, #D337DA);
@@ -4360,12 +4296,12 @@ background-color: white;
   background-color: #D337DA;
 }
 
- .btn-primary:active,
- .btn-primary.active {
+.bootstrap .btn-primary:active,
+.bootstrap .btn-primary.active {
   background-color: #004099 \9;
 }
 
- .alert {
+.bootstrap .alert {
   padding: 8px 35px 8px 14px;
   margin-bottom: 18px;
   color: #c09853;
@@ -4377,8 +4313,8 @@ background-color: white;
           border-radius: 4px;
 }
 
- .label,
- .badge {
+.bootstrap .label,
+.bootstrap .badge {
   font-size: 10.998px;
   font-weight: bold;
   line-height: 14px;
@@ -4391,115 +4327,115 @@ background-color: white;
 }
 
 
- .form-search input,
- .form-inline input,
- .form-horizontal input,
- .form-search textarea,
- .form-inline textarea,
- .form-horizontal textarea,
- .form-search select,
- .form-inline select,
- .form-horizontal select,
- .form-search .help-inline,
- .form-inline .help-inline,
- .form-horizontal .help-inline,
- .form-search .uneditable-input,
- .form-inline .uneditable-input,
- .form-horizontal .uneditable-input,
- .form-search .input-prepend,
- .form-inline .input-prepend,
- .form-horizontal .input-prepend,
- .form-search .input-append,
- .form-inline .input-append,
- .form-horizontal .input-append {
+.bootstrap .form-search input,
+.bootstrap .form-inline input,
+.bootstrap .form-horizontal input,
+.bootstrap .form-search textarea,
+.bootstrap .form-inline textarea,
+.bootstrap .form-horizontal textarea,
+.bootstrap .form-search select,
+.bootstrap .form-inline select,
+.bootstrap .form-horizontal select,
+.bootstrap .form-search .help-inline,
+.bootstrap .form-inline .help-inline,
+.bootstrap .form-horizontal .help-inline,
+.bootstrap .form-search .uneditable-input,
+.bootstrap .form-inline .uneditable-input,
+.bootstrap .form-horizontal .uneditable-input,
+.bootstrap .form-search .input-prepend,
+.bootstrap .form-inline .input-prepend,
+.bootstrap .form-horizontal .input-prepend,
+.bootstrap .form-search .input-append,
+.bootstrap .form-inline .input-append,
+.bootstrap .form-horizontal .input-append {
   display: inline-block;
   *display: inline;
   margin-bottom: 0;
   *zoom: 1;
 }
 
- .form-search .hide,
- .form-inline .hide,
- .form-horizontal .hide {
+.bootstrap .form-search .hide,
+.bootstrap .form-inline .hide,
+.bootstrap .form-horizontal .hide {
   display: none;
 }
 
- .form-horizontal .control-group {
+.bootstrap .form-horizontal .control-group {
   margin-bottom: 18px;
   *zoom: 1;
 }
 
- .form-horizontal .control-group:before,
- .form-horizontal .control-group:after {
+.bootstrap .form-horizontal .control-group:before,
+.bootstrap .form-horizontal .control-group:after {
   display: table;
   content: "";
 }
 
- .form-horizontal .control-group:after {
+.bootstrap .form-horizontal .control-group:after {
   clear: both;
 }
 
- .form-horizontal .control-label {
+.bootstrap .form-horizontal .control-label {
   float: left;
   width: 140px;
   padding-top: 5px;
   text-align: right;
 }
 
- .form-horizontal .controls {
+.bootstrap .form-horizontal .controls {
   *display: inline-block;
   *padding-left: 20px;
   margin-left: 160px;
   *margin-left: 0;
 }
 
- .form-horizontal .controls:first-child {
+.bootstrap .form-horizontal .controls:first-child {
   *padding-left: 160px;
 }
 
- .form-horizontal .help-block {
+.bootstrap .form-horizontal .help-block {
   margin-top: 9px;
   margin-bottom: 0;
 }
 
- .form-horizontal .form-actions {
+.bootstrap .form-horizontal .form-actions {
   padding-left: 160px;
 }
 
- .control-group.error > label,
- .control-group.error .help-block,
- .control-group.error .help-inline {
+.bootstrap .control-group.error > label,
+.bootstrap .control-group.error .help-block,
+.bootstrap .control-group.error .help-inline {
   color: #b94a48;
 }
 
- .control-group.error .checkbox,
- .control-group.error .radio,
- .control-group.error input,
- .control-group.error select,
- .control-group.error textarea {
+.bootstrap .control-group.error .checkbox,
+.bootstrap .control-group.error .radio,
+.bootstrap .control-group.error input,
+.bootstrap .control-group.error select,
+.bootstrap .control-group.error textarea {
   color: #b94a48;
   border-color: #b94a48;
 }
 
- .control-group.error .checkbox:focus,
- .control-group.error .radio:focus,
- .control-group.error input:focus,
- .control-group.error select:focus,
- .control-group.error textarea:focus {
+.bootstrap .control-group.error .checkbox:focus,
+.bootstrap .control-group.error .radio:focus,
+.bootstrap .control-group.error input:focus,
+.bootstrap .control-group.error select:focus,
+.bootstrap .control-group.error textarea:focus {
   border-color: #953b39;
   -webkit-box-shadow: 0 0 6px #d59392;
      -moz-box-shadow: 0 0 6px #d59392;
           box-shadow: 0 0 6px #d59392;
 }
 
- .control-group.error .input-prepend .add-on,
- .control-group.error .input-append .add-on {
+.bootstrap .control-group.error .input-prepend .add-on,
+.bootstrap .control-group.error .input-append .add-on {
   color: #b94a48;
   background-color: #f2dede;
   border-color: #b94a48;
 }
 
- form {
+.bootstrap form {
   margin: 0 0 18px;
 }
 
@@ -5072,3 +5008,65 @@ div.etalage_description{ position:absolute; bottom:0; left:0; z-index:999 }
 div.etalage_description.rtl{ direction:rtl; text-align:right }
 /*END ETELAGE*/
 
+
+
+
+#cart_slide{
+	padding:5px;
+	z-index: 2;
+	background-color: rgba(255,255,255,.83);
+	height: 0px;
+	width: 200px;
+	position: absolute;
+	border: 2px solid #ccc;
+	border-top: 0px;
+	border-radius: 0px 0px 9px 9px;
+	left: -70px;
+	top:-60px;
+	overflow:hidden;
+	box-shadow: 3px 1px 10px rgba(0,0,0,.5);
+}
+
+
+#cart_items{
+	height:162px;
+	display:block;
+	overflow:auto;
+}
+
+.add #cart_items{
+	height:81px;
+	overflow:hidden;
+}
+	#cart_items tr{
+
+		font-size:.6em;
+	}
+	#cart_items td{
+		border-bottom:1px dashed #ccc;
+		padding-top:10px;
+		padding-bottom:10px;
+		text-align: right;
+		height:60px;
+		padding-right:;
+	}
+	#cart_items td span{
+		vertical-align:top;
+		display:block;
+		line-height: 1.2em;
+	}
+
+	#cart_items.item-list .item-label{
+		width: 100%;
+		text-align: right;
+		background:none;
+	}
+
+#cart_data{
+	margin-top:71px;
+	border-bottom:1px dashed #ccc;
+	height:40px;
+	width:100%;
+	color:#aaa;
+	vertical-align: middle;
+}

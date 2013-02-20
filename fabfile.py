@@ -38,7 +38,7 @@ conf = {
         "SSH_USER": "ubuntu", # SSH username
         "SSH_PASS":  "", # SSH password (consider key-based authentication)
         "SSH_KEY_PATH":  "", # Local path to SSH key file, for key-based auth
-        "HOSTS": ['ec2-50-19-41-147.compute-1.amazonaws.com'], # List of hosts to deploy to
+        "HOSTS": ['ec2-23-22-204-103.compute-1.amazonaws.com'], # List of hosts to deploy to
         "VIRTUALENV_HOME":  "/home/ubuntu", # Absolute remote path for virtualenvs
         "PROJECT_NAME": "stunable", # Unique identifier for project
         "REQUIREMENTS_PATH": "requirements.txt", # Path to pip requirements, relative to project
