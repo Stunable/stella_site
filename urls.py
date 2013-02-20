@@ -74,9 +74,9 @@ urlpatterns = patterns('',
                        url(r'^accounts/', include('apps.accounts.urls')),
                        url(r'^admirers/', include('apps.friends.urls')),
                        url(r'^notification/', include('apps.notification.urls')),
-                      
+                       url(r'^racks/', include('apps.racks.urls')),
                        url(r'^shop/', include('apps.racks.urls')),
-                        # url(r'^racks/', include('apps.racks.urls')),
+                        
                        url(r'^trends/', include('apps.trends.urls')),
                        
                        url(r'^vote/?$', object_list, dict(queryset=Item.objects.all(),
