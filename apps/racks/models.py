@@ -42,9 +42,15 @@ else:
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=128,null=True)
     
     def __unicode__(self):
         return self.name
+
+    def save(self,*args,**kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(Category,self).save(*args,**kwargs)
     
 class ItemManager(RecommenderManager):
     pass

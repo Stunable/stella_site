@@ -58,11 +58,11 @@
                     <a href="{% url new %}" {% if current == "new" %} id = "current-tab" {% endif %} title="" class="text-link"><span class="identity">new</span></a>
                 </li>
                 <li class="tab" id="tab-all">
-                    <a href="{% url all %}" title="" {% if current == "all" %} id = "current-tab" {% endif %} class="text-link"><span>all</span></a>
+                    <a href="/" title="" {% if current == "all" %} id = "current-tab" {% endif %} class="text-link"><span>all</span></a>
                 </li>
                 {% for category in categories %}
                 <li class="tab {% if category.name == 'Shoes' %}end{% endif %}" id="tab-{{category.name}}">
-                    <a href="{% url carousel category.id %}" {% if current_category.id == category.id %} id="current-tab" {% endif %} title="" class="text-link {% if category.name == "Jeans" %}new-line{% endif %} "><span>{{category.name}}</span></a>
+                    <a href="{% url carousel category.slug %}" {% if current_category.name == category.name %} id="current-tab" {% endif %} title="" class="text-link {% if category.name == "Jeans" %}new-line{% endif %} "><span>{{category.name}}</span></a>
                 </li>
                 {% endfor %}
             </ul>

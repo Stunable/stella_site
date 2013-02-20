@@ -522,7 +522,7 @@ def divide_into_list(list_item):
     return rack_items_list
 
 @login_required
-def carousel(request, category_id=None, template='racks/carousel.html'):
+def carousel(request, category_slug=None, template='racks/carousel.html'):
     ctx = {}
     profile = get_or_create_profile(request)
     
@@ -530,8 +530,8 @@ def carousel(request, category_id=None, template='racks/carousel.html'):
     #     return redirect(reverse('welcome'))
     # else:
     ctx['categories'] = Category.objects.all()
-    if category_id:
-        current_category = get_object_or_404(Category, pk=category_id)
+    if category_slug:
+        current_category = get_object_or_404(Category, slug=category_slug)
         ctx['current_category'] = current_category
         get_context_variables(ctx, request)
         
