@@ -52,68 +52,16 @@ var stunable = {
         setupCarousel($('.iosSlider'));
         initSwipe($('.iosSlider'))
         initDrop(); 
-
+        initRackEvents();
     }
     ,racks: function(){
       // console.log('racks setup')
       initDrop(); 
       initDrag($('.item'))
+      initRackEvents();
 
         // make inline edit
-      $('.editable').hide();
-
-      $('.edit').click(function(event) {
-          event.preventDefault();
-          if($(this).html() == 'Edit') {
-              $(this).html("Close");
-          } else {
-              $(this).html("Edit");
-          }
-
-          var stc = $(this).parent().parent().find('.static');
-          var editable = $(this).parent().parent().find('.editable');
-
-          if($(stc).css('display') == 'none') {
-              $(stc).css('display', '');
-              $(editable).css('display', 'none');
-          } else {
-              $(stc).css('display', 'none');
-              $(editable).css('display', '');
-          }
-      });
       
-      $('.editable').submit(function(event){
-          event.preventDefault();
-          var href = $(this).attr('action');
-          var new_name = $($(this).find('input:text')[0]).val();
-          var editable = $(this);
-          $.post(href, $(editable).serialize(), function(returnData){
-              if(returnData['success'] == true){
-                  window.location.reload();
-              }else{
-                  console.log("There are some errors!");
-              }
-          });
-      });
-      
-      $('.steal-rack-link').click(function(e){
-          e.preventDefault();
-          $.ajax({
-              url : $(this).attr('href'),
-              type : 'post',
-              success : function(data, textStatus, jqXHR) {
-                  if (data.success == true) {
-                      $('.update-zipcode').hide();
-                      new_item = $('<li class="drop_item ui-droppable"><span data-value="' + data.created_rack.id +  '"><a href="' + data.created_rack.url +'">' + data.created_rack.name +'</a></span></li>');
-                      new_item.hide();
-                      $('.public-racks').append(new_item);
-                      new_item.fadeIn('slow');
-                  } else {
-                      alert(data.message);
-                  }
-              }
-          });
-      });
       
       // $('.delete-link').click(function(e){
       //     e.preventDefault();
