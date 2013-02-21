@@ -58,7 +58,10 @@ class UserProfile(models.Model,ProfileBase):
     first_login = models.BooleanField(default=True)
     
     def __unicode__(self):
-        return "%s's profile" % self.user
+        try:
+            return "%s's profile" % self.user
+        except:
+            return "Somebody's user profile"
     
     @property
     def avatar_image(self):
