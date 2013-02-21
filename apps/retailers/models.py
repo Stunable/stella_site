@@ -95,7 +95,11 @@ class RetailerProfile(models.Model):
 #    terms = models.BooleanField(default=False, null=True, blank=True)
     
     def __unicode__(self):
-        return self.name.title()
+        try:
+            return self.name.title()
+        except:
+            return 'Retailer Profile Object'
+
     @property
     def not_accept_refund(self):
         if self.accept_refund:
