@@ -42,6 +42,7 @@ import httplib, json, time, datetime
 import gdata.contacts.data
 import gdata.contacts.client
 import gdata.gauth
+
     
 @login_required
 def profile_edit(request, template="accounts/profile_edit.html"):
@@ -376,6 +377,8 @@ def connect(request):
             P = request.user.get_profile()
         except:
             P = UserProfile.objects.create(user=request.user)
+            UserProfile.set_default_tags()
+
 
         I = get_fb_avatar_image(sa)
         if I:
@@ -411,7 +414,7 @@ def connect(request):
 
     return redirect(reverse("home"))
 
-connection = httplib.HTTPSConnection('api.twitter.com')
+# connection = httplib.HTTPSConnection('api.twitter.com')
 
 
 def request(url, access_token, parameters=None):

@@ -19,6 +19,9 @@ from tagging.utils import LOGARITHMIC
 
 qn = connection.ops.quote_name
 
+from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
+
 ############
 # Managers #
 ############
@@ -459,6 +462,8 @@ class Tag(models.Model):
     A tag.
     """
     name = models.CharField(_('name'), max_length=50, unique=True, db_index=True)
+    is_default = models.BooleanField(default=False)
+    slug = models.SlugField(max_length=128,null=True)
 
     objects = TagManager()
 
@@ -469,6 +474,11 @@ class Tag(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def save(self,*args,**kwargs):
+        # if not self.slug:
+        self.slug = slugify(self.name)
+        super(Tag,self).save(*args,**kwargs)
 
 class TaggedItem(models.Model):
     """

@@ -36,13 +36,22 @@ class ShippingInfoAdmin(admin.ModelAdmin):
 			print obj.verify_address()
 
 
+class UserProfileAdmin(admin.ModelAdmin):
+    actions = ('set_default_tags',)
+
+    def set_default_tags(self,request,queryset):
+        for obj in queryset:
+            obj.set_default_tags()
+
+
+
 admin.site.register(WaitingList, WaitingListAdmin)
  
 # We have to unregister the normal admin, and then reregister ours
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
 
-admin.site.register(UserProfile)
+admin.site.register(UserProfile,UserProfileAdmin)
 admin.site.register(AnonymousProfile)
 admin.site.register(Question)
 admin.site.register(Answer)

@@ -51,20 +51,19 @@
         <input type="hidden" value="{{page_count}}" name="page-count" />
         <div class="special" id="item-viewer">
             <ul class="nav tabbed clearfix">
-                <li class="tab" id="tab-choice">
-                    <a href="{% url stella_choice %}" {% if current == "Stella's Choice" %} id = "current-tab" {% endif %} title="" class="text-link"><span class="identity">Most Stunable</span></a>
-                </li>
+    
                 <li class="tab" id="tab-new">
-                    <a href="{% url new %}" {% if current == "new" %} id = "current-tab" {% endif %} title="" class="text-link"><span class="identity">new</span></a>
+                    <a href="{% url new %}"  title="" class="text-link"><span class="identity">new</span></a>
                 </li>
                 <li class="tab" id="tab-all">
-                    <a href="/" title="" {% if current == "all" %} id = "current-tab" {% endif %} class="text-link"><span>all</span></a>
+                    <a href="/" title="" class="text-link"><span>all</span></a>
                 </li>
-                {% for category in categories %}
-                <li class="tab {% if category.name == 'Shoes' %}end{% endif %}" id="tab-{{category.name}}">
-                    <a href="{% url carousel category.slug %}" {% if current_category.name == category.name %} id="current-tab" {% endif %} title="" class="text-link {% if category.name == "Jeans" %}new-line{% endif %} "><span>{{category.name}}</span></a>
-                </li>
+                {% for tag in tags %}
+                    <li class="tab">
+                        <a href="{% url tagged_carousel tag.slug %}" class="text-link {% if current == tag.slug %}active_tab{% endif %}"><span>{{tag.name}}</span></a>
+                    </li>
                 {% endfor %}
+               
             </ul>
             <div class="tab-detail clearfix" id="carousel">
                 {% if rack_items_list %}

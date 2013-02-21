@@ -19,7 +19,7 @@ from django.conf import settings
 from django.utils import simplejson
 from apps.common import get_or_create_profile
 import datetime
-from tagging.models import Tag
+from tagging.models import Tag,TaggedItem
 from voting.models import Vote
 from django.views.decorators.cache import cache_page
 from django.forms import ValidationError
@@ -55,8 +55,19 @@ def gethome(request):
         return _all(request)
 
 
-def get_context_variables(context, request):
-    return context
+def get_context_variables(ctx, request):
+
+    if request.user.is_authenticated():
+        ctx['tags'] = Tag.objects.get_for_object(request.user) 
+        # profile = get_or_create_profile(request)
+    else:
+        if request.session.has_key('anonymous_profile'):
+           #print request.session
+            # profile = request.session.get('anonymous_profile')
+            ctx['tags'] = Tag.objects.filter(is_default=True) 
+           #print profile.first_login
+    
+    return ctx
 
 @login_required
 def detail(request, rack_id, template='racks/rack_detail.html'):
@@ -522,25 +533,22 @@ def divide_into_list(list_item):
     return rack_items_list
 
 @login_required
-def carousel(request, category_slug=None, template='racks/carousel.html'):
+def carousel(request, slug, template='racks/carousel.html'):
     ctx = {}
-    profile = get_or_create_profile(request)
+    # profile = get_or_create_profile(request)
     
-    # if not profile.favourite_designer:
-    #     return redirect(reverse('welcome'))
+
+    current_tag = get_object_or_404(Tag, slug=slug)
+    ctx['current'] = current_tag
+    get_context_variables(ctx, request)
+    
+    # if settings.IS_PROD:
+    #     query_set = Item.objects.filter(category=current_category, approved=True)
     # else:
-    ctx['categories'] = Category.objects.all()
-    if category_slug:
-        current_category = get_object_or_404(Category, slug=category_slug)
-        ctx['current_category'] = current_category
-        get_context_variables(ctx, request)
-        
-        if settings.IS_PROD:
-            query_set = Item.objects.filter(category=current_category, approved=True)
-        else:
-            query_set = Item.objects.filter(category=current_category)
-        
-        return pagination(request, ctx, template, query_set)
+    #     query_set = Item.objects.filter(category=current_category)  
+    query_set = Item.objects.with_any(current_tag)
+    
+    return pagination(request, ctx, template, query_set)
 
 @login_required
 def stella_choice(request, template='racks/carousel.html'):
@@ -624,6 +632,7 @@ def new(request, template="racks/carousel.html"):
 #@login_required
 def _all(request, slug=None, template='racks/carousel.html'):
     query_set = None
+    ctx = {}
     if request.GET.get('item_id', None):
         linked_item = Item.objects.filter(id=request.GET.get('item_id'))
         query_set =  linked_item #| Item.objects.filter(brand=linked_item[0].brand).filter(~Q(id =linked_item[0].id))
@@ -631,17 +640,9 @@ def _all(request, slug=None, template='racks/carousel.html'):
         linked_item = Item.objects.filter(slug=slug)
         query_set =  linked_item #| Item.objects.filter(brand=linked_item[0].brand).filter(~Q(id =linked_item[0].id))
 
-    profile = None
-    if request.user.is_authenticated():
-        profile = get_or_create_profile(request)
-    else:
-        if request.session.has_key('anonymous_profile'):
-           #print request.session
-            profile = request.session.get('anonymous_profile')
-           #print profile.first_login
+    # profile = None
+    
 
-    ctx = {}
-    ctx['categories'] = Category.objects.all()
     ctx['current'] = "all"
     get_context_variables(ctx, request)
     

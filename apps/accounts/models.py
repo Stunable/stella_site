@@ -36,6 +36,10 @@ class ProfileBase(object):
             tags.append(product_group)
         Tag.objects.update_tags(self, ','.join(tags))
 
+    def set_default_tags(self):
+        tags = [tag.name for tag in Tag.objects.filter(is_default=True)]
+        Tag.objects.update_tags(self.user, ','.join(tags))
+
 
 class UserProfile(models.Model,ProfileBase):
     """

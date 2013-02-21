@@ -5,8 +5,9 @@ from django.contrib.auth.models import User
 from common import utils
 from voting.models import Vote
 from tagging.models import Tag
+from tagging.managers import ModelTaggedItemManager
 
-class RecommenderManager(models.Manager):
+class RecommenderManager(ModelTaggedItemManager):
 
     MIN_RECOMMENDATION_VALUE = 0
     MIN_SIMILARITY_VALUE = 0.01
