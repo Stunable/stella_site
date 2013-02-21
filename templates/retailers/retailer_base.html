@@ -9,6 +9,8 @@
 
 {% block page_tab %}
 {% endblock %}
+{% block facebook %}
+{% endblock %}
 
 {% block local_nav %} <!--LOCAL NAVIGATION LINKS-->
 					<div class="clearfix">
@@ -91,55 +93,6 @@
 {% block content %}
 {% endblock %}
 {% block extra_script%}
-<script type="text/javascript" src="{{ STATIC_URL }}javascript/imageselect.js"></script>
-
-<script>
-$(document).ready(function(){
-
-   $('select[name=image]').ImageSelect(); 
-   $('select[name=featured_image]').ImageSelect(); 
-   
-   $('.imageselector').ImageSelect();
-
-   $('.deetsclick').click(function(){
-    console.log(this)
-    $(this).closest('.product_row').toggleClass('nodeets')
-   })
-
-   $('.select_all').click(function () {
-       $($(this).data('target')).attr('checked', this.checked);
-   });
-
-   $('.delete-link').click(function(){
-        $(this).closest('td').find('.item_selector').attr('checked','checked');
-        $('#action_select').val('delete');
-        $('.action_submit').submit();
-   })
-
-   $('.click_to_expand').click(function(e){
-      $(this).parent().toggleClass('collapsed')
-      return false
-   })
-
-   $('#id_uploaded_zip').change(function(){
-    $('.long_process_submit_form').submit(function(){
-     $(this).find('.submit_holder').html('<img src="/static/images/gui/loading.gif">');
-    })
-   })
-
-   if (updates_in_progress){
-    setTimeout("location.reload(true);",5000);
-    setInterval(function(){
-      $('#progress_box').append('. ').FadeIn('slow')
-    },200)
-   }
-   
-
-})
-
-
-
-</script>
 
 
 {% endblock %}

@@ -204,6 +204,26 @@ var stunable = {
     
       },
       retailers:function(){
+
+          function hide_form_errors() {
+            $('.errorlist').remove();
+          }
+
+          function process_form_errors(json, form) {
+            hide_form_errors();
+            //form.clearForm();
+            errors = json.errors;
+
+            if(errors.__all__ != undefined)
+              form.append(errors.__all__);
+            prefix = form.find(":hidden[name='prefix']").val(); prefix == undefined ? prefix = '' : prefix = prefix + '-';
+            
+            for(field in errors) {
+              $('#id_' + prefix + field).after(errors[field]);
+            }
+          }
+
+          inventory_option_counter = 1;
         var term_doc = $('#terms-and-cons-modal');
         $('#terms-label').css('color', 'black');
         $('#terms-input').change(function(){
@@ -213,6 +233,183 @@ var stunable = {
                 } 
             });
         })
+
+           $('select[name=image]').ImageSelect(); 
+           $('select[name=featured_image]').ImageSelect(); 
+           
+           $('.imageselector').ImageSelect();
+
+           $('.deetsclick').click(function(){
+            console.log(this)
+            $(this).closest('.product_row').toggleClass('nodeets')
+           })
+
+           $('.select_all').click(function () {
+               $($(this).data('target')).attr('checked', this.checked);
+           });
+
+           $('.delete-link').click(function(){
+                $(this).closest('td').find('.item_selector').attr('checked','checked');
+                $('#action_select').val('delete');
+                $('.action_submit').submit();
+           })
+
+           $('.click_to_expand').click(function(e){
+              $(this).parent().toggleClass('collapsed')
+              return false
+           })
+
+           $('#id_uploaded_zip').change(function(){
+            $('.long_process_submit_form').submit(function(){
+             $(this).find('.submit_holder').html('<img src="/static/images/gui/loading.gif">');
+            })
+           })
+
+
+           // if (updates_in_progress != undefined){
+           //  setTimeout("location.reload(true);",5000);
+           //  setInterval(function(){
+           //    $('#progress_box').append('. ').fadeIn('slow')
+           //  },200)
+           // }
+              for( i = 0; i < parseInt($('#id_types-INITIAL_FORMS').val()); i++) {
+                inventory_option_counter++;
+                // $('#tbl-' + inventory_option_counter).show();
+              }
+              if (inventory_option_counter == 1){
+                $('#add-more-option').hide()
+                $('#tbl-1').show()
+              }
+              
+              
+              $('.add-color-popup-btn .plus-icon').click(function() {
+                $('.fixed-popup').remove();
+                $(this).parent().append('<div class="fixed-popup">' + $('.add-color-dlg').html() + '<div>');
+                $('.fixed-popup').show('fast');
+                $('.fixed-popup input[type="text"]').focus();
+                
+                $('.add-color-form').ajaxForm({
+                  url : this.action,
+                  // dataType : 'json',
+                  success : function(json) {
+                    if (json.success) {
+                      $('.color-select select').append(new Option(json.name, json.id));
+                      $('.fixed-popup .alert-message').text('Updated')
+                      $('.fixed-popup').delay(3000).hide('fast');
+                    } else {
+                      $('.fixed-popup .alert-message').text(json.errors.__all__[0]);            
+                    }
+                  }
+                });
+                
+                $('.fixed-popup .btn-cancel').click(function() {
+                  $('.fixed-popup').hide('fast');
+                });
+              });
+              
+              $('.add-size-popup-btn .plus-icon').click(function() {
+                $('.fixed-popup').remove();
+                $(this).parent().append('<div class="fixed-popup">' + $('.add-size-dlg').html() + '<div>');
+                $('.fixed-popup').show('fast');
+                $('.fixed-popup input[type="text"]').focus();
+                
+                $('.add-size-form').ajaxForm({
+                  url : this.action,
+                  // dataType : 'json',
+                  success : function(json) {
+                    if (json.success) {
+                      $('.size-select select').append(new Option(json.name, json.id));
+                      $('.fixed-popup .alert-message').text('Updated')
+                      $('.fixed-popup').delay(3000).hide('fast');
+                    } else {
+                      $('.fixed-popup .alert-message').text(json.message);            
+                    }
+                  }
+                });
+                
+                $('.fixed-popup .btn-cancel').click(function() {
+                  $('.fixed-popup').hide('fast');
+                });
+
+              });
+
+              $('.onsale_check').find('input').click(function(e){
+                if ($(this).is(':checked')){
+                  $(this).closest('table').find('.sale_price_field').show()
+                }else{
+                  $(this).closest('table').find('.sale_price_field').hide()
+                }
+              })
+
+              $('#add-more-option').click(function() {
+                $('#tbl-' + inventory_option_counter).show('fast');
+                $('#tbl-' + inventory_option_counter +' .imageselector,  select[name=image]').ImageSelect('remove');
+                $('#tbl-' + inventory_option_counter +' .imageselector,  select[name=image]').ImageSelect();
+                $(this).remove()
+                return false
+              });
+
+              $('#id_tags').chosen();
+              $('#id_Sizes').after("<a class='icon plus-icon item-ref' href='{% url add_size %}'>&nbsp</a>");
+              $('#id_Colors').after("<a class='icon plus-icon item-ref' href='{% url add_color %}'>&nbsp</a>");
+              // $('.inventory').tooltip();
+
+              var add_item_form = $('#add-item-form');
+
+              add_item_form.ajaxForm({
+                url : this.action,
+                dataType : 'json',
+                success : function(json) {
+                  if(json.success == false) {
+                    if(json.message != undefined && json.message)
+                      alert(json.message);
+
+                    if(json.errors != undefined)
+                      process_form_errors(json, add_item_form)
+                  } else {
+                    window.location.href = '/retailers/product_list';
+                  }
+                }
+              });
+              var active_image_form = null;
+              $('.addProductImage').click(function(){
+
+                $('.clonedform').remove();
+                var cln = $('#new_image_form').clone();
+
+                $(this).after(cln.addClass('clonedform').show())
+
+
+                cln.find('form').ajaxForm({
+                        url : this.action,
+                        // dataType : 'json',
+                        success : function(json) {
+                          if (json.success) {
+                            var $newel = $(json.html)
+                            $('.imageselector,  select[name=image], select[name=featured_image]').append($newel)
+                            active_image_form.find('.new_image_'+json.message).attr('selected','selected')
+                            $('.imageselector,  select[name=image], select[name=featured_image]').ImageSelect('remove');
+                            $('.imageselector,  select[name=image], select[name=featured_image]').ImageSelect();
+                            $(cln).fadeOut(1000).remove()
+                            
+
+
+                          } else {
+                            $('.fixed-popup .alert-message').text(json.message);            
+                          }
+                        }
+                      });
+
+                $('#id_new-image').change(function(){
+                  cln.find('form').submit()
+                  active_image_form = cln.closest('td').find('select');
+                })
+                return false
+              })
+
+            
+
+
       }
 
 

@@ -1026,7 +1026,7 @@ def add_product_image(request):
     if form.is_valid():
         im = form.save(commit=False)
         im.retailer = retailer.user
-        im.save()
+        im.save(instant=True)
 
        #print im
 

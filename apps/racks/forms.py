@@ -153,6 +153,11 @@ def item_inventory_form_factory(retailer):
             self.fields['size'].empty_label = '------'
 
 
+            if self.instance:
+                if hasattr(self.instance,'item'):
+                    print 'instance:',self.instance
+                    self.fields['image'].queryset = ProductImage.objects.filter(item__id=self.instance.item.id)
+     
 
 
     return ItemInventoryForm

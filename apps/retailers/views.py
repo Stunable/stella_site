@@ -92,10 +92,10 @@ def setup_wepay(request):
           "code":code,
         }
         url += '?'+urllib.urlencode(data)
-        print url
+        # print url
         response = urllib2.urlopen(url)
         resp_data = json.loads(response.read())
-        print resp_data
+        # print resp_data
 
         #{"user_id":121042660,"access_token":"e4423c3a3a3a3f62aa53151a9b2fca1718af0bc78b40dba6578716b9a2979fa5","token_type":"BEARER"}
         if request.session.get('retailer_id',None):
@@ -175,7 +175,7 @@ def update_retailer_profile(request, template="retailers/account_information.htm
         if request.method == "POST":
             form = RetailerEditForm(request.POST, instance=retailer_profile)
             if form.is_valid():
-                print 'VALID'
+                # print 'VALID'
                 user = request.user
                 # TODO: check and fix bug here
                 if form.cleaned_data.get('shipping_type'):
@@ -278,7 +278,7 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
             print 'after save item form'
             
             inventory_form = inventory_type_formset_factory(request.user, post, item_instance)        
-            print inventory_form
+            # print inventory_form
             if not inventory_form.is_valid():
                 response.update({'success' : False})
                 response['errors'].update(inventory_form.errors_as_json()['errors'])
@@ -333,7 +333,7 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
     ctx['inventory_forms'] = inventory_type_formset_factory(request.user, None, item_instance,extra=1)
 
 
-    print ctx['inventory_forms']
+    # print ctx['inventory_forms']
 
     ctx['retailer_profile'] = retailer
     ctx['item_pk'] = item_id

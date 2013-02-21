@@ -154,8 +154,11 @@ class ProductImage(models.Model,listImageMixin):
     def get_image(self):
         return self
 
-    def generate_pretty_picture(self):
-        prettify.delay(self)
+    def generate_pretty_picture(self,instant=None):
+        if instant:
+            prettify(self)
+        else:
+            prettify.delay(self)
 
     def set_size(self):
         set_size(self)
@@ -170,12 +173,12 @@ class ProductImage(models.Model,listImageMixin):
 
 
 
-    def save(self,*args,**kwargs):
+    def save(self,instant=None,*args,**kwargs):
         this_id = self.id
         super(ProductImage,self).save()
 
         if not this_id:
-            self.generate_pretty_picture()
+            self.generate_pretty_picture(instant)
 
     @staticmethod
     def already_exists(unique_string,retailer):
