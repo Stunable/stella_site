@@ -42,6 +42,7 @@ var stunable = {
         });             
 
       init_refclicks($('.refclick'))
+      init_refsubmits($('.refsubmit'))
 
       $('.cart_slide_trigger').hover(reveal_cart)
       $('.cart_slide_trigger').click(reveal_cart)

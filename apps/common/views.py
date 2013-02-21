@@ -1,7 +1,9 @@
 import csv
+import json
 from django.http import HttpResponse, HttpResponseForbidden
 from django.template.defaultfilters import slugify
 from django.db.models.loading import get_model
+from apps.friends.views import json_view
 
 
 def export(qs, fields=None):
@@ -94,5 +96,18 @@ def admin_list_export(request, model_name, app_label, queryset=None, fields=None
         return export_average(queryset, fields)
     
     return export(queryset, fields)
+
+
+def lookup(request, model_name, app_label, queryset=None, fields=None, list_display=True):
+    model = get_model(app_label, model_name)
+    qs = model.objects.all()
+    # [{"id":"Columba oenas","label":"Stock Dove","value":"Stock Dove"},
+    # {"id":"Streptopelia decaocto","label":"Eurasian Collared Dove","value":"Eurasian Collared Dove"},
+    # {"id":"Streptopelia turtur","label":"European Turtle Dove","value":"European Turtle Dove"},
+    # {"id":"Streptopelia senegalensis","label":"Laughing Dove","value":"Laughing Dove"}]
+    if request.GET.get('term',None):
+        out = qs.filter(name__startswith=request.GET.get('term'))
+    return HttpResponse(json.dumps([{'slug':o.slug,'label':o.name,'value':o.slug} for o in out]),mimetype="application/json")
+
 
 

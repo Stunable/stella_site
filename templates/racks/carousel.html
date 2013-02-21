@@ -50,19 +50,22 @@
         </div>
         <input type="hidden" value="{{page_count}}" name="page-count" />
         <div class="special" id="item-viewer">
-            <ul class="nav tabbed clearfix">
-    
+            <ul id="stunable-tabs-nav" class="nav tabbed clearfix">
+                <li class="tab" id="tab-all">
+                    <a href="/" title="" class="text-link"><span>all</span></a>
+                </li>
                 <li class="tab" id="tab-new">
                     <a href="{% url new %}"  title="" class="text-link"><span class="identity">new</span></a>
                 </li>
                 <li class="tab" id="tab-all">
-                    <a href="/" title="" class="text-link"><span>all</span></a>
+                    <a href="/shop/sale" title="" class="text-link"><span>sale</span></a>
                 </li>
-                {% for tag in tags %}
-                    <li class="tab">
-                        <a href="{% url tagged_carousel tag.slug %}" class="text-link {% if current == tag.slug %}active_tab{% endif %}"><span>{{tag.name}}</span></a>
-                    </li>
-                {% endfor %}
+                
+                {% include 'racks/includes/tag_tabs.html' %}
+
+                <li id="new_tab_field">
+                    <input data-target="#new_tab_field" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text">
+                </li>
                
             </ul>
             <div class="tab-detail clearfix" id="carousel">
@@ -110,53 +113,54 @@
     </div><!--/.section#page-content"-->
     {% endblock %}
 
-    {% block extra_script %}
+{% block extra_script %}
     <script>
   
-$(document).ready(function(){
-    initSwipe($('.iosSlider'));
-    setupRackIt();
+// $(document).ready(function(){
+//     initSwipe($('.iosSlider'));
+//     setupRackIt();
     
-    //initSliderTracking();
-    $('.iosSlider').css('overflow','hidden');
+//     //initSliderTracking();
+//     $('.iosSlider').css('overflow','hidden');
     
-    // setup the remove icon in the rack detail
-    $('.remove').click(function(){
-        var conf = confirm("Are you sure you want to remove this item from this rack?");
-        if (conf == true){
-            // call ajax to remove the item from rack
-            var current_item = $(this).parent();
-            $.getJSON($(this).attr('href'), function(result){
-                if(result['result'] == true){
-                    $(current_item).remove();
-                }else{
-                    alert(result['message']);
-                }
-            });
-            return false;
-        }
-    });
+//     // setup the remove icon in the rack detail
+//     $('.remove').click(function(){
+//         var conf = confirm("Are you sure you want to remove this item from this rack?");
+//         if (conf == true){
+//             // call ajax to remove the item from rack
+//             var current_item = $(this).parent();
+//             $.getJSON($(this).attr('href'), function(result){
+//                 if(result['result'] == true){
+//                     $(current_item).remove();
+//                 }else{
+//                     alert(result['message']);
+//                 }
+//             });
+//             return false;
+//         }
+//     });
     
-    // calls ajax when click on the products per page slider
-    $('.products_per_page_links').click(function(event){
-        event.preventDefault();
-        var link = $(this).attr('href');
-        $('.products_per_page_links').css('text-decoration', 'none');
-        $(this).css('text-decoration', 'underline');
-        $.ajax({
-            url: link,
-            success: function(returnData){
-                $('.iosSlider').iosSlider('destroy', true);
-                // return to the first slide
-                slideNum = 0;
-                $('.iosSlider .slider').html(returnData);
-                initDesktopSwipe();
-                initFancyBox();
-                initDragDrop();
-                fixDragDropIssue();
-            }
-        })
-    })
-});
+//     // calls ajax when click on the products per page slider
+//     $('.products_per_page_links').click(function(event){
+//         event.preventDefault();
+//         var link = $(this).attr('href');
+//         $('.products_per_page_links').css('text-decoration', 'none');
+//         $(this).css('text-decoration', 'underline');
+//         $.ajax({
+//             url: link,
+//             success: function(returnData){
+//                 $('.iosSlider').iosSlider('destroy', true);
+//                 // return to the first slide
+//                 slideNum = 0;
+//                 $('.iosSlider .slider').html(returnData);
+//                 initDesktopSwipe();
+//                 initFancyBox();
+//                 initDragDrop();
+//                 fixDragDropIssue();
+//             }
+//         })
+//     })
+// });
+// 
 </script>
     {% endblock %}

@@ -29,6 +29,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
+from django.contrib.contenttypes.models import ContentType
 from django.forms.models import modelform_factory
 from racks.models import PriceCategory
 from social_auth.models import UserSocialAuth
@@ -539,7 +540,7 @@ def carousel(request, slug, template='racks/carousel.html'):
     
 
     current_tag = get_object_or_404(Tag, slug=slug)
-    ctx['current'] = current_tag
+    ctx['current'] = current_tag.slug
     get_context_variables(ctx, request)
     
     # if settings.IS_PROD:
@@ -549,6 +550,31 @@ def carousel(request, slug, template='racks/carousel.html'):
     query_set = Item.objects.with_any(current_tag)
     
     return pagination(request, ctx, template, query_set)
+
+@json_view
+@login_required
+def tab_handler(request, slug, method=None):
+    if request.method == 'POST':
+        current_tag = get_object_or_404(Tag, slug=slug)
+
+        
+        if method=='remove':
+            Ts = Tag.objects.get_for_object(request.user).filter(slug=slug)
+            for T in Ts:
+                TaggedItem.objects.get(tag=T,content_type=ContentType.objects.get_for_model(User),object_id=request.user.id).delete()
+            return {'callback':'remove'}
+        if method=='add':
+            T = Tag.objects.get(slug=slug)
+            TI,created = TaggedItem.objects.get_or_create(tag=T,content_type=ContentType.objects.get_for_model(User),object_id=request.user.id)
+            if created:
+                return {'callback':'add_tab','data':render_to_string("racks/includes/tag_tabs.html",{'tags':[T]})}
+            else:
+                return {}
+
+        return {}
+
+        
+
 
 @login_required
 def stella_choice(request, template='racks/carousel.html'):

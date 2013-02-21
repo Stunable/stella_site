@@ -177,9 +177,6 @@ CACHES = {
     )
 }
 
-
-
-
 ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (

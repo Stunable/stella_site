@@ -63,6 +63,9 @@ urlpatterns = patterns('',
                            direct_to_template,
                            {'template': 'static/stella_thank-you.html'},
                            name="main-thankyou"),
+
+
+                       url(r'^lookups/(?P<app_label>[\d\w]+)/(?P<model_name>[\d\w]+)','common.views.lookup'),
 #                       url(r'^privacy/$',
 #                           direct_to_template,
 #                           {'template': 'static/privacy-policy.html'},

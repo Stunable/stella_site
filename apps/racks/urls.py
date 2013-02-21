@@ -13,6 +13,11 @@ urlpatterns = patterns('',
 #                       url(r'^carousel/change_it_up', change_it_up, name="change_it_up"),
                        url(r'^trendsetters/(?P<user_id>\d+)?$', trendsetters, name='trendsetters'),
                        url(r'^tab/(?P<slug>[-\w]+)', carousel, name="tagged_carousel"),
+
+                       url(r'^remove-tab/(?P<slug>[-\w]+)', tab_handler, {'method': 'remove'}, name="remove_tab"),
+                       url(r'^add-tab/(?P<slug>[-\w]+)?', tab_handler, {'method': 'add'}, name="add_tab"),
+
+
                        url(r'^sent_to_admirer/', send_item_to_admirer, name="send_item_to_admirer"),
                        url(r'^add_item/', add_item_from_modal, name="add_item_from_modal"),
                        url(r'^$', index, name="all"),

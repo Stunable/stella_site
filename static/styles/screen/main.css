@@ -1098,6 +1098,7 @@ border-radius: 9px;
 box-shadow: 4px 7px 10px 0 rgba(77,77,77,0.48);
 padding-top: 40px;
 min-height: 592px;
+
 /*position: absolute;
 top: 62px;*/
 }
@@ -1107,7 +1108,9 @@ top: 62px;*/
     position: absolute;
     top: -43px;
     z-index: 100;
+    width:100%;
 }
+
 .tabbed .tab {
 	float:left;
 	margin:0;
@@ -1153,11 +1156,17 @@ top: 62px;*/
 	color: #EC67F0;
 	/* font-weight: bold; */
 }
-.tab #current-tab {
+.stunable-tab .active {
 	margin-left:0;
 	padding:0;
 	background:none;
+	margin-top:-10px;
+	padding-top:10px;
 	/* font-weight: bold; */
+}
+
+.stunable-tab {
+	position:relative;
 }
 
 .panel-tab {
@@ -1174,6 +1183,23 @@ top: 62px;*/
 	cursor: pointer;
 	display: block;
 	text-transform: uppercase;
+}
+
+.tab-begone{
+	display:none;
+	top:3px;
+	right:3px;
+	position:absolute;
+	cursor:pointer;
+	color:#ccc;
+}
+
+.tab-begone:hover{
+	color:#EC67F0;
+}
+
+.stunable-tab:hover .tab-begone{
+	display:inline-block;
 }
 
 .active .text-link{
@@ -1376,13 +1402,13 @@ a.friend-name{
 #tab-choice #current-tab {
 	background:transparent;
 }
-.tab #current-tab span {
+.tab .active span {
 	display:block;
 	margin-left:2px;
 	padding:9px 19px 5px 18px;
 	background:url(../../images/gui/bg-tab-current.png) repeat-x right 0;
 }
-.end #current-tab span {
+.end .active span {
 	padding-right: 8px;
 	background: url(../../images/gui/bg-tab-current.png) repeat-x right 0;
 }
@@ -1447,6 +1473,9 @@ a.friend-name{
 .tab-detail .views {
 	padding:0 30px;
 }
+
+
+
 #carousel .views {
 	left: auto;
 	visibility:visible;

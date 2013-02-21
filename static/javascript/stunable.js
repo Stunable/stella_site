@@ -29,18 +29,23 @@ function isDefault(textField) {
 }
 
 var refclickFunctions = {
-    'remove' : function(selection){
+    'remove' : function(selection,data){
         $(selection.data('target')).fadeOut('slow')
     },
-    'downvote': function(selection){
+    'downvote': function(selection,data){
         $(selection.data('target')).removeClass('upvoted').addClass('downvoted')
     },
-    'upvote': function(selection){
+    'upvote': function(selection,data){
         $(selection.data('target')).removeClass('downvoted').addClass('upvoted')
     },
-    'clearvote': function(selection){
+    'clearvote': function(selection,data){
         $(selection.data('target')).removeClass('downvoted').removeClass('upvoted')
     },
+    'add_tab':function(selection,data){
+        var el = $(data)
+        $(selection.data('target')).before(el.hide().fadeIn())
+        init_refclicks(el.find('.refclick'));
+    }
 }
 
 
@@ -50,15 +55,47 @@ function init_refclicks(selection){
         e.preventDefault()
         url=$(this).data('href')
         $.post(url,function(response){
-            console.log(response)
             if (response.result || response.success){
                 if (response.callback){
-                    console.log(response.callback)
                     refclickFunctions[response.callback]($t)
                 }
             }
         },'json')
     })
+}
+
+var ac_cache = {};
+
+function init_refsubmits(selection){
+    var $t = selection;
+    
+    selection.autocomplete({
+      minLength: 2,
+      select: function( event, ui ) {
+
+        $.post(selection.data('href')+ui.item.slug,function(response){
+            if (response.result || response.success){
+                if (response.callback){
+                    refclickFunctions[response.callback]($t,response.data)
+                }
+            }
+
+        })
+        return false;
+      },
+      source: function( request, response ) {
+        var term = request.term;
+        if ( term in ac_cache ) {
+          response( ac_cache[ term ] );
+          return;
+        }
+        $.getJSON( "/lookups/tagging/tag", request, function( data, status, xhr ) {
+          ac_cache[ term ] = data;
+          response( data );
+        });
+      }
+      
+    });
 }
 
 function reveal_cart(event,data,add){
