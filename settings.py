@@ -50,7 +50,7 @@ AWS_HEADERS = {
 }
 
 
-THUMB_SIZES = {'tiny':(90,90), 'small':(150,300),'medium':(200,400),'large':(450,900),'extralarge':(900,1800)}
+THUMB_SIZES = {'tiny':(90,90), 'small':(150,300),'medium':(200,400),'large':(700,700),'extralarge':(1280,1280)}
 
 MANAGERS = ADMINS
 

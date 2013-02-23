@@ -61,24 +61,7 @@ var stunable = {
       initDrag($('.item'))
       initRackEvents();
 
-        // make inline edit
-      
-      
-      // $('.delete-link').click(function(e){
-      //     e.preventDefault();
-      //     $.getJSON($(this).attr('href'), function(returnData){
-      //         if(returnData['success'] == true){
-      //             window.location.reload();
-      //         }else{
-      //             console.log("There are some errors!");
-      //         }
-      //     });
-      // });
-      
-      // $('#left-panel').portamento({
-      //     wrapper: $('#carousel-wrapper')
-      //   });
-
+     
 
     }
     ,cart: function(){

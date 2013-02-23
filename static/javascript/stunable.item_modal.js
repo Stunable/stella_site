@@ -368,16 +368,11 @@ function init_item_modal(){
 			});
 			init_inventory_click();
 		}
+		
+		
 
-
-		 $('#images').etalage({        
-					thumb_image_width: thumb_image_width,
-					thumb_image_height: thumb_image_height,
-					source_image_width: source_image_width,
-					source_image_height: source_image_height
-				});
 		setItemDetailsEvent();
-
+		$('.zoom_this.featured').load(function(){$(this).damonzoom()});
 	}
 		
 	   

@@ -31,140 +31,34 @@
 <script>
 	var size2color = {{size2color|safe}};
 	var inventories = {{inventories|safe}};
+    
+	var thumb_image_width = {{item.get_image.image_dims.large.width}};
+	var thumb_image_height= {{item.get_image.image_dims.large.height}};
 
-	       
-	var thumb_image_width = {{item.get_image.image_dims.small.width}};
-	var thumb_image_height= {{item.get_image.image_dims.small.height}};
-
-	var source_image_width  = {{item.get_image.width}};
-	var source_image_height = {{item.get_image.height}};
-
-
-
-
+	var source_image_width  = {{item.get_image.image_dims.extralarge.width}};
+	var source_image_height = {{item.get_image.image_dims.extralarge.height}};
 
 </script>
-<div id="fu" class="item-details clearfix " style="width: 700px;">
-	<div class="item-info-wrapper left-backside">
-		<div class="item-info right-backside">
-			<div class="item-name-wrapper">
-				<div class="item-name">
-				    {{item.brand}}
-				</div>
-			</div>
-			<div class="item-general-info-wrapper">
-				<div class="item-general-info">
-					<div class="item-label">
-						{{item.name}}
-					</div>
-					<div class="item-price">
-						<span id="modal_item_price">{{item.price_range_text|safe}}</span>
-					</div>
-				</div>
-			</div>
-		</div><!--/.item-info-->
-	</div>
-	<div class="item-body flippable">
-		<div class="item-visuals" id="item_visual_{{item.pk}}">
-			<a class="about_retailer" href="" data-href="{% url retailer_modal item.id %}">About this Stylist</a>
-			<ul id="images">
-
-
+	<div id="modal_contents">
+		<div class="modal_inner_frame">
 			
+			<div class="item-visuals" id="item_visual_{{item.pk}}">
+				<ul id="images">
+
 				<li>
-		                <img class="etalage_thumb_image" data-imgid="{{item.get_image.id}}" src="{{item.get_image.small.url}}">
-		                <img class="etalage_source_image" src="{{item.get_image.large.url}}">
-		           
-		          
+					<img class="zoom_this featured" data-big="{{item.get_image.extralarge.url}}"  src="{{item.get_image.large.url}}">
 				</li>
-
 				{% for each_image in item.get_additional_images %}
-					<li>
-						
-			                <img class="etalage_thumb_image" data-imgid="{{each_image.id}}" src="{{each_image.small.url}}">		       
-			                <img class="etalage_source_image" src="{{each_image.large.url}}">
-			         
-					</li>
+				<li>
+	                <img style="display:none" class="zoom_this" data-big="{{each_image.extralarge.url}}"  src="{{each_image.large.url}}">
+				</li>
 				{% endfor %}
-			</ul>
-
-
-
-			<!-- <a href="#" class="img-link">
-			    {% load thumbnail %}
-			    {% thumbnail item.get_full_size_image "137x267" as im %}
-                    <img src="{{ im.url }}" alt="item">
-                    {% empty %}
-                    <img src="{{item.get_full_size_image}}" alt="item" width="135px" />
-                {% endthumbnail %}
-<!-- 			    <img src="{{item.get_full_size_image}}" alt="item" width="135px" /> -->
-			</a>
-			{% dict_entry_for_item item from vote_dict as vote %}
-			
-			<!-- <div  class="link-holder{% if vote and vote.is_upvote %} upvoted{% endif %}{% if vote and vote.is_downvote %} downvoted{% endif %}" id="link_holder_item_{{item.id}}">
-			    <p class="icon-link yes-no no  no_{{item.pk}}">
-			        <a href="" data-target="#link_holder_item_{{item.id}}" data-href="{% url item_vote item.pk 'down' %}" class="icon disapprove refclick">No way.</a>
-			    </p>
-			    <p class="icon-link hanger">
-			        <a href="" data-href="{% url add_item_from_modal %}" data-value="{{ item.id }}" class="icon rack-icon refclick">Rack it.</a>
-			    </p>
-			    <p class="icon-link yes-no yes yes_{{item.pk}}">
-			        <a href="" data-target="#link_holder_item_{{item.id}}" data-href="{% url item_vote item.pk 'up' %}" class="icon approve refclick">Yes, please!</a>
-			    </p>
-			</div> -->
-		</div><!--/.item-visuals-->
-		<div class="item-actions">
-			<div class="description">
-			
-				{{item.description|safe}}
-			</div>					
-			<div class="item-size">
-				<div>SELECT SIZE:</div>
-				<div class="item-size-list">
-					{% for size in sizes %}
-						<!-- <span {% if sizes|length == 1 %}class="selected"{% endif %}><a href="#">{{size}}</a></span> -->
-					{% endfor %}
-				</div>
-				
-				<div>COLOR:</div>
-				<div class="item-color-list">
-					{% for color in colors %}
-						<!-- <span {% if colors|length == 1 %}class="selected"{% endif %}><a href="#">{{color}}</a></span> -->
-					{% endfor %}
-				</div>
-
+			</div><!--/.item-visuals-->
+			<div class="modal-item-details">
+				<div class="description">
+					{{item.description|safe}}
+				</div>		
 			</div>
-			<div class="buy-wrapper bootstrap" style="float: right;">
-                <a class="btn btn-primary" href="{% url add_to_cart item.pk 1 '' %}" id="add-to-cart-link">ADD TO CART</a>
-            </div>
 		</div>
-	</div><!--/.item-actions-->
-	<div class="item-send clearfix">
-		<form action="{% url send_item_to_admirer %}" id="send_to_admirer_form" method="POST">
-			{% csrf_token %}
-			<div class="item-send-left">
-				<label for="sendit" class="">LOOKING FOR FEEDBACK OR THINK THIS WOULD LOOK GREAT ON A FRIEND?</label>
-				<select id="friends-select" multiple="true" name="admirer" data-placeholder="Select friends..." style="width: 220px;">
-					{% for fs_u in admirer_list %}
-					<option value="{{ fs_u.friend.id }}">{% if fs_u.friend.first_name %} {{fs_u.friend.first_name}} {{fs_u.friend.last_name}} {% else %} {{ fs_u.friend.username }} {% endif %} </option>
-					{% endfor %}
-				</select>
-			</div>
-			<div class="item-send-right">
-				<textarea name="message" id="message" placeholder="PERSONAL MESSAGE: Less then 160 characters"></textarea>
-				<center>
-					<p id='bigform-error'></p>
-				</center>
-				<input type="hidden" name="item_id" value="{{item.id}}" />
-				<div class="btn-wrap bootstrap">
-					<input type="button" class="btn send btn-primary" id="send_it_to_admirer" value="Send It" />
-					<div id="loading1">
-						<div class="spinner"></div>
-					</div>
-					<span class="confirmation" id="send_item_confirmation">Sent!</span>
-				</div>
-			</div>			
-		</form>
 	</div>
-	<a class="flip" href="javascript:void(0)">flip</a>
 	{% endblock %}

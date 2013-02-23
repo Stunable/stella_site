@@ -58,7 +58,7 @@ class ItemTypeInline(admin.TabularInline):
 class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
     inlines = [ItemTypeInline]
     list_display = ('name','category','approved','is_available','list_image','_retailer','slug')
-    actions = ('approve','unapprove','set_price_text','set_item_slugs')
+    actions = ('approve','unapprove','set_price_text','set_item_slugs','make_featured_pretty')
     list_filter = ('approved','is_available','created_date','_retailer')
     search_fields = ('name','description')
 
@@ -102,9 +102,12 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
             obj.save()
 
 
-    def make_pretty(self,request,queryset):
+    def make_featured_pretty(self,request,queryset):
         for obj in queryset:
-            obj.generate_pretty_picture()
+            obj.make_featured_pretty()
+
+
+    
 
     def set_item_slugs(self,request,queryset):
         for obj in queryset:
@@ -123,11 +126,12 @@ class ProductImageAdmin(admin.ModelAdmin):
     #readonly_fields = ['retailer']
     list_filter = ('retailer',)
     search_fields = ('name','description','item')
-    actions = ('make_pretty','premake_thumbs')
+    actions = ('make_pretty','premake_thumbs','delete_orphans')
 
     def make_pretty(self,request,queryset):
         for obj in queryset:
-            obj.generate_pretty_picture()
+            print obj
+            obj.generate_pretty_picture(instant=False)
 
     def set_size(self,request,queryset):
         for obj in queryset:
@@ -136,6 +140,10 @@ class ProductImageAdmin(admin.ModelAdmin):
     def premake_thumbs(self,request,queryset):
         for obj in queryset:
             obj.get_thumbs()
+
+    def delete_orphans(self,request,queryset):
+        for PI in queryset:
+            print PI.item, PI.identifier, PI.height
 
 
     

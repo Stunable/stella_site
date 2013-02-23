@@ -141,7 +141,7 @@ class ProductImage(models.Model,listImageMixin):
     tiny        = models.ImageField(upload_to='upload/t/%Y/%m/%d/', null=True, blank=True,  verbose_name="90,90",storage=queued_s3storage)
     small       = models.ImageField(upload_to='upload/s/%Y/%m/%d/', null=True, blank=True,  verbose_name="150,300",storage=queued_s3storage)
     medium      = models.ImageField(upload_to='upload/m/%Y/%m/%d/', null=True, blank=True,  verbose_name="200,400",storage=queued_s3storage)
-    large       = models.ImageField(upload_to='upload/l/%Y/%m/%d/', null=True, blank=True,  verbose_name="450,900",storage=queued_s3storage)
+    large       = models.ImageField(upload_to='upload/l/%Y/%m/%d/', null=True, blank=True,  verbose_name="%d,%d"%(settings.THUMB_SIZES['large'][0],settings.THUMB_SIZES['large'][1]),storage=queued_s3storage)
     extralarge  = models.ImageField(upload_to='upload/xl/%Y/%m/%d/', null=True, blank=True, verbose_name="900,1800",storage=queued_s3storage)
 
     identifier = models.CharField(max_length=256,blank=True,null=True)
@@ -154,11 +154,12 @@ class ProductImage(models.Model,listImageMixin):
     def get_image(self):
         return self
 
-    def generate_pretty_picture(self,instant=None):
+    def generate_pretty_picture(self,instant=None,refresh=None):
         if instant:
-            prettify(self)
+            print 'prettifying',self
+            prettify(self,refresh=refresh)
         else:
-            prettify.delay(self)
+            prettify.delay(self,refresh=refresh)
 
     def set_size(self):
         set_size(self)
@@ -168,7 +169,22 @@ class ProductImage(models.Model,listImageMixin):
         #width and height of the image are based on the large image which is 450x900
         #so... to get the width and height of the small image we would do 150/450 * w etc.
         return {
-                'small': {'width': self.width * settings.THUMB_SIZES['small'][0]/450, 'height': self.height * settings.THUMB_SIZES['small'][1]/900}
+                'small': {  
+                            'width' : self.width  * settings.THUMB_SIZES['small'][0]/settings.THUMB_SIZES['large'][0], 
+                            'height': self.height * settings.THUMB_SIZES['small'][1]//settings.THUMB_SIZES['large'][1]
+                            },
+                'medium': {  
+                            'width' : self.width  * settings.THUMB_SIZES['medium'][0]//settings.THUMB_SIZES['large'][0], 
+                            'height': self.height * settings.THUMB_SIZES['medium'][1]//settings.THUMB_SIZES['large'][1]
+                            },
+                'large': {  
+                            'width' : self.width,
+                            'height': self.height
+                            },
+                'extralarge': {  
+                            'width' : self.width * settings.THUMB_SIZES['extralarge'][0]//settings.THUMB_SIZES['large'][0], 
+                            'height': self.height * settings.THUMB_SIZES['extralarge'][1]//settings.THUMB_SIZES['large'][1], 
+                            }
             }
 
 
@@ -230,7 +246,26 @@ class Item(models.Model,listImageMixin):
     
     def __unicode__(self):
         return self.name
-    
+
+    def make_featured_pretty(self):
+        FI = self.get_image_object()
+        if FI:
+            FI.generate_pretty_picture(refresh=True)
+
+
+    def cleanup_images(self):
+        print self
+        last_seen = None
+
+        for I in self.item_image_set.all().order_by('identifier'):
+            print I.identifier
+            if I.identifier == last_seen:
+                print '\t',last_seen
+                print '\tdeleting:',I
+                # I.delete()
+            else:
+                last_seen = I.identifier
+
     def get_image(self):
         return self.get_image_object()
 
@@ -241,9 +276,8 @@ class Item(models.Model,listImageMixin):
 
     def get_image_object(self):
         if self.featured_image:
-            if self.featured_image:
-                # print 'returning featured_image'
-                return self.featured_image
+            print 'returning featured_image'
+            return self.featured_image
         try:
             return self.item_image_set.all()[0]
         except:

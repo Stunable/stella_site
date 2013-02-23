@@ -623,7 +623,7 @@ def prepare_ctx(query_set, ctx):
 
 def prepare_ctx_with_num(query_set, ctx, num):
     length = query_set.count()
-    items = query_set[:18]
+    items = query_set[:6]
     rack_items_list = []
 
     for i in xrange(0, len(items), num):
@@ -685,7 +685,7 @@ def _all(request, slug=None, template='racks/carousel.html'):
 
 def pagination(request, ctx, template, query_set):
     page = request.GET.get('page')
-    item_per_page = int(request.GET.get('item_per_page', '3'))
+    item_per_page = int(request.GET.get('item_per_page', '2'))
     
     if request.is_ajax():
         template = 'racks/patial_carousel.html'

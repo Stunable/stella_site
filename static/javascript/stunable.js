@@ -442,7 +442,7 @@ function setupCustomTabs(selection){
 
 function setupCarousel(selection){
     selection.touchCarousel({
-        itemsPerMove: 3,              // The number of items to move per arrow click.
+        itemsPerMove: 2,              // The number of items to move per arrow click.
         
         snapToItems: true,           // Snap to items, based on itemsPerMove.
         pagingNav: false,             // Enable paging nav. Overrides snapToItems.
@@ -477,7 +477,7 @@ function setupCarousel(selection){
         
         itemFallbackWidth: 500,       // Default width of the item in pixels. (used if impossible to get item width).
         
-        baseMouseFriction: 0.0012,    // Container friction on desktop (higher friction - slower speed).
+        baseMouseFriction: 0.5112,    // Container friction on desktop (higher friction - slower speed).
         baseTouchFriction: 0.0008,    // Container friction on mobile.
         lockAxis: true,               // Allow dragging only on one direction.
         useWebkit3d: false,           // Enable WebKit 3d transform on desktop devices. 

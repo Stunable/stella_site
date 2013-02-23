@@ -1611,9 +1611,9 @@ a.friend-name{
 }
 
 #carousel .item {
-	min-height:480px;
+	min-height:390px;
 	width:200px;
-	margin: 25px 20px 50px 20px;
+	margin: 5px 5px 5px 5px;
 }
 #racks .item {
 	height:166px;
@@ -1643,21 +1643,37 @@ a.friend-name{
 	overflow: hidden;
 }
 
-.modal.current .item-label {
-	font-size:1.4em;
-	float: left;
-/*	width: 160px;*/
-	width: 200px;
-	border-right: 1px dashed #c2b5bf;
-	margin: 5px 0;
-	height: 65px;	
+
+/*MODAL*/
+
+.modal.current{
+	overflow:hidden;
+	
+
 }
+
+#modal_contents{
+	height:700px;
+	width:700px;
+	overflow:hidden;
+	background-color:black;
+	border-radius: 10px;
+}
+
+#modal_contents .modal_inner_frame div{
+	display:inline;
+}
+
+.damonzoomcontainer{
+	border-radius: 10px;
+}
+
 
 .modal.current .item-price {
 	font-size: 2.5em;
 	float: right;
-/*	width: 190px;*/
-	width: 230px;
+	width: 190px;
+	/*width: 230px;*/
 	margin: 5px 0 15px 0;
 	overflow: hidden;
 	font-weight: 200;
@@ -1670,6 +1686,27 @@ a.friend-name{
 .modal.current .item-price{
 	white-space: nowrap;
 }
+
+.modal.current .modal-item-details{
+	color:black;
+	width:300px;
+	position:absolute;
+	right:0px;
+	top:50%;
+	height:50%;
+	background-color:white;
+	padding:10px;
+	/*border-left:2px solid black;*/
+	/*border-top:2px solid black;*/
+	border-radius:0px 0px 10px 0px;
+	font-family: serif;
+}
+
+.modal.current .item-visuals {
+	border-radius:10px;
+	margin-top:10px;
+}
+
 
 .modal.current .item-price span.dollard-sign{
 	font-size: .7em;
@@ -1696,89 +1733,11 @@ a.friend-name{
 }
 
 
-.modal.current .item-details .description{
-	margin-top: 30px;
-/*	text-transform: uppercase;*/
-	color: #0a0a0a;
-	height:180px;
-	overflow:auto;
-}
-
-.modal.current .item-details a.about_retailer{
-	color: #eb5def;
-	text-transform: uppercase;
-	font-size: .8em;
-	display: block;
-	margin-bottom: 10px;
-	text-decoration: none;
-}
 
 .modal.current label{
 	text-transform: none;
 }
 
-.modal.current .item-send{
-	background: #f4f3f3;
-	border-top: 1px solid #c5c5c8;
-	border-bottom-left-radius: 10px 10px;
-	border-bottom-right-radius: 10px 10px;
-	border-top-left-radius: 10px 10px;
-	border-top-right-radius: 10px 10px;
-	margin-top: 10px;
-	padding: 10px 50px 20px 50px;;
-}
-
-.modal.current .item-send .item-send-left{
-	width: 260px;
-	float: left;
-	margin-right: 20px;
-}
-
-.modal.current .item-send .fiends-input{
-	width: 240px;
-	border-radius: 8px;
-	border: 1px solid #e4e4e4;
-	padding: 0 10px;
-	height: 30px;
-}
-
-.modal.current .item-send .item-send-left label{
-	font-size: 1em;
-	width: 230px;
-}
-
-.modal.current .item-send .item-send-right{
-	width: 270px;
-	float: left;
-}
-
-.modal.current .item-send  textarea{
-	border-top-left-radius: 8px;
-	border-top-right-radius: 8px;
-	border: 1px solid #e4e4e4;
-	width: 260px;
-	height: 63px;
-	font-size: .8em;
-	resize: none;
-	overflow: auto;
-}
-
-.modal.current .item-send  .btn-wrap{
-	border: 1px solid #e4e4e4;
-	width: 260px;
-	padding: 5px;
-	border-top: 0;
-	background: #ffffff;
-	border-bottom-left-radius: 8px;
-	border-bottom-right-radius: 8px;
-	text-align: right;
-}
-
-.modal.current .item-send  .btn-wrap .btn{
-	margin: 0;
-	display: inline-block;
-	border: 1px dashed #bc6cac;
-}
 
 .modal.current .item-size{
 	color: #646464;
@@ -1991,44 +1950,6 @@ a.friend-name{
 	float:right;
 }
 
-.modal.current .item-visuals .icon-link .approve {
-	float: none;
-	
-}
-
-.modal.current .item-visuals .icon-link .buy-now {
-	float: none;
-}
-
-.modal.current .item-visuals .icon-link{
-	display: inline-block;
-}
-
-.modal.current .item-visuals link-holder{
-	width: 300px;
-}
-
-.modal.current .item-details{
-	position: relative;
-	margin: 0;
-	padding: 10px 0 0 0;
-	border: 0;
-}
-
-.modal.current .flip{
-	display: block;
-	position: absolute;
-	right: 5px;
-	bottom: 5px;
-	top: auto;
-	left: auto;
-	background: url(../../images/gui/icons.png) no-repeat 0px -1px;
-	text-indent:-999em;
-	cursor:pointer;
-	z-index: 1103;
-	width: 24px;
-	height: 24px;
-}
 
 
 .btn-wrap {
@@ -2042,14 +1963,6 @@ a.friend-name{
 .rack .btn-wrap {
 	float:left;
 	width:50%;
-}
-
-.modal.current .item-details .btn-wrap .btn{
-	float: none;
-}
-
-.modal.current .item-details .btn-wrap{
-	margin: 0;
 }
 
 #carousel .choice {
@@ -2121,25 +2034,6 @@ a.friend-name{
 	padding: 0 20px 20px 20px;
 }
 
-.modal.current .close {
-	position:absolute;
-	top:0;
-	right:-5px;
-	height:24px;
-	width:24px;
-	margin:0;
-	padding:0;
-	background:url(../../images/gui/icons.png) no-repeat -24px -1px;
-	text-indent:-999em;
-	cursor:pointer;
-	z-index: 1103;
-}
-
-.modal.current .item-info {
-	
-	overflow: hidden;
-	font-family: 'Advent Pro';
-}
 
 .item-info-wrapper{
 	margin: 0 -20px;
@@ -2155,10 +2049,6 @@ a.friend-name{
 	background: url(../../images/gui/right-backside.png) right bottom no-repeat;
 }
 
-.item-visuals {
-	float:left;
-	width:160px;
-}
 /*.item-visuals img {
 	height:320px;
 	width:260px;
@@ -3622,10 +3512,7 @@ body .item-name {
 	padding-top: 0;
 }
 
-.modal.current .retailer-wrapper .close{
-	top: 5px;
-	right: 5px;
-}
+
 
 .retailer-content{
 	border-radius: 10px;
@@ -4763,30 +4650,20 @@ ul .item .ie-icon-link{
 }
 
 .modal .item-visuals {
-	margin-left: 50px;
+	/*margin-left: 50px;*/
+	margin-top:20px;
 }
 
-/*.modal.current .item-visuals img{
-    border: medium none;
-    display: block;
-    height: auto;
-    max-height: 265px;
-    max-width: 260px;
-    position: relative;
-    width: auto;
-    border: 1px solid #7b7c7f;
-	border-radius: 5px;
-	width: 135px;
-}*/
+
 /*.items-3 .item img{*/
 ul .item img{
 	border:none;
     display: block;
     margin: 0 auto;
-    max-height: 390px;
+    /*max-height: 390px;*/
 /*    max-width: 200px;*/
     position: relative;
-    width: 200px;
+    /*width: 300px;*/
 }
 ul .item img:hover{
 	border: none;

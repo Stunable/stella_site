@@ -19,11 +19,11 @@ def get_dominant_color(image):
     return c[-1:][0][1]
 
 @task(name='racks.prettify_image')
-def prettify(instance):
+def prettify(instance,refresh=False):
     pic = None
     outpic = None
     try:
-        if not instance.medium:
+        if not instance.medium or refresh:
             try:
                 pic = Image.open(instance.image.file)
             except:
@@ -84,15 +84,15 @@ def prettify(instance):
     except Exception, e:
         if instance.item:
             instance.item.approved = False
-            instance.item.save()
+            instance.item.delete()
 
-        # print e
-        # if settings.DEBUG:
-        #     if instance.item:
-        #         if not instance.item.item_image_set.all().count() >= 2:
-        #             instance.item.approved = False
-        #             instance.item.save()
-        # instance.delete()
+        print e
+        if settings.DEBUG:
+            if instance.item:
+                if not instance.item.item_image_set.all().count() >= 2:
+                    instance.item.approved = False
+                    instance.item.save()
+        instance.delete()
             
 
 
