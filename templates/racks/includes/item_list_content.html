@@ -19,6 +19,7 @@
     <p class="icon-link yes-no yes yes_{{item.pk}}">
         <a href="" data-target="#link_holder_item_{{item.id}}" data-href="{% url item_vote item.pk 'up' %}" class="icon approve refclick">Yes, please!</a>
     </p>
+
 </div>
 <div class="carousel_price_tag">
     {{item.price_range_text|safe}}

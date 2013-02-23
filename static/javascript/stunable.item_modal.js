@@ -373,6 +373,9 @@ function init_item_modal(){
 
 		setItemDetailsEvent();
 		$('.zoom_this.featured').load(function(){$(this).damonzoom()});
+
+		$('#retailer-header .modalitem').textfill(25)
+		$('#retailer-header .retailer').textfill(40)
 	}
 		
 	   

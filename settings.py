@@ -155,8 +155,8 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     # 'sslify.middleware.SSLifyMiddleware',
-    'johnny.middleware.LocalStoreClearMiddleware',
-    'johnny.middleware.QueryCacheMiddleware',
+    # 'johnny.middleware.LocalStoreClearMiddleware',
+    # 'johnny.middleware.QueryCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'apps.common.middleware.ProfileMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

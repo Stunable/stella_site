@@ -98,4 +98,5 @@ PAYPAL_RECEIVER_EMAIL = "thanh_1346909527_biz@simpleunion.com"
 try:
     from local_settings import *
 except ImportError, exp:
+    print 'bad import of local settings'
     pass

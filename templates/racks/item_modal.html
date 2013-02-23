@@ -39,7 +39,7 @@
 	var source_image_height = {{item.get_image.image_dims.extralarge.height}};
 
 </script>
-	<div id="modal_contents">
+	<div id="modal_contents" style="background-color:{{item.get_image.color}}" class="{{item.get_image.orientation}}">
 		<div class="modal_inner_frame">
 			
 			<div class="item-visuals" id="item_visual_{{item.pk}}">
@@ -54,11 +54,44 @@
 				</li>
 				{% endfor %}
 			</div><!--/.item-visuals-->
+			<div id="retailer-header">
+				<div class="modalitem"><span>{{item.name}}</span></div>
+				<div class="retailer"><span>{{item.retailer}}</span></div>
+			</div>
 			<div class="modal-item-details">
-				<div class="description">
-					{{item.description|safe}}
-				</div>		
+				<div class="item-data"> 
+					<div class="description">
+						{{item.description|safe}}
+					</div>	
+				</div>
+				<div class="item-actions">						
+					<div class="item-size">
+						<div>SELECT SIZE:</div>
+						<div class="item-size-list">
+							{% for size in sizes %}
+								<!-- <span {% if sizes|length == 1 %}class="selected"{% endif %}><a href="#">{{size}}</a></span> -->
+							{% endfor %}
+						</div>
+						<br>
+						<div>COLOR:</div>
+						<div class="item-color-list">
+							{% for color in colors %}
+								<!-- <span {% if colors|length == 1 %}class="selected"{% endif %}><a href="#">{{color}}</a></span> -->
+							{% endfor %}
+						</div>
+						<br>
+						
+						<div class="buy-wrapper bootstrap">
+			    			<a class="btn btn-primary" href="{% url add_to_cart item.pk 1 '' %}" id="add-to-cart-link">ADD TO CART</a>
+						</div>
+					</div>
+				</div>
+				<ul class="sharelinks">
+					<li><a href="http://www.facebook.com/GreatAmericanArt"><span class="share iconFacebook"></span> Facebook</a></li>
+					<li><a href="http://www.twitter.com"><span class="share iconTwitter"></span> Twitter</a></li>
+				</ul>	
 			</div>
 		</div>
+
 	</div>
 	{% endblock %}

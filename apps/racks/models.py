@@ -146,6 +146,15 @@ class ProductImage(models.Model,listImageMixin):
 
     identifier = models.CharField(max_length=256,blank=True,null=True)
 
+    def orientation(self):
+        if self.width>self.height:
+            return 'wide'
+        return 'tall'
+
+    def color(self):
+        return 'rgb%s'%self.bg_color
+
+
     def get_thumbs(self):
         for size in settings.THUMB_SIZES:
             get_thumbnail(self.pretty_image, '%dx%d'%size, crop='center', quality=99)
@@ -159,6 +168,7 @@ class ProductImage(models.Model,listImageMixin):
             print 'prettifying',self
             prettify(self,refresh=refresh)
         else:
+            print 'delayed prettify',self
             prettify.delay(self,refresh=refresh)
 
     def set_size(self):
@@ -275,13 +285,16 @@ class Item(models.Model,listImageMixin):
 
 
     def get_image_object(self):
-        if self.featured_image:
-            print 'returning featured_image'
-            return self.featured_image
         try:
-            return self.item_image_set.all()[0]
+            if self.featured_image:
+                print 'returning featured_image'
+                return self.featured_image
+            try:
+                return self.item_image_set.all()[0]
+            except:
+                return None
         except:
-            return None
+            self.delete()
     
     def get_additional_images(self):
         return [im for im in self.item_image_set.all() if im.id !=self.featured_image.id]

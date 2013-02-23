@@ -8,18 +8,22 @@ from django.conf import settings
 
 from queued_storage.tasks import Transfer
 
+from johnny.cache import enable
+
+
 from celery import task
 
-def get_dominant_color(image):
-    pallette = Image.new("RGB",image.size)
-    pallette.paste(image)
+def get_dominant_color(canvas):
+    pallette = Image.new("RGB",canvas.size)
+    pallette.paste(canvas)
     pallette = ImageOps.posterize(pallette,3)
-    c = pallette.getcolors(pallette.size[0]*pallette.size[1])
-    #print c
-    return c[-1:][0][1]
+    return sorted(pallette.getcolors(pallette.size[0]*pallette.size[1]))[-1:][0][1]
+        
+
 
 @task(name='racks.prettify_image')
 def prettify(instance,refresh=False):
+    enable()
     pic = None
     outpic = None
     try:
@@ -74,25 +78,40 @@ def prettify(instance,refresh=False):
                         instance.width = newpic.size[0]
                         instance.height = newpic.size[1]
 
+                        #get color info about the edges
+                        if instance.width<instance.height:
+                            rightedge = newpic.crop((newpic.size[0]-3,0,newpic.size[0],newpic.size[1]))
+                            color  = get_dominant_color(rightedge)
+                            instance.bg_color = str(color)
+
+
                     newpic.save(temp.name+str(instance.id),'jpeg')
                     getattr(instance,key).save("%d_%s.jpg"%(instance.id,key), File(open(temp.name+str(instance.id),'rb')))
+
+                    temp.close()
+                    # newpic.close()
+                    # rightedge.close()
+                    # outpic.close()
 
                 print 'saved sizes for ',instance
                 print 'height:', instance.height
                 print 'width:', instance.width
                 instance.save()
     except Exception, e:
-        if instance.item:
-            instance.item.approved = False
-            instance.item.delete()
-
-        print e
-        if settings.DEBUG:
+        try:
             if instance.item:
-                if not instance.item.item_image_set.all().count() >= 2:
-                    instance.item.approved = False
-                    instance.item.save()
-        instance.delete()
+                instance.item.approved = False
+                instance.item.delete()
+
+            print e
+            if settings.DEBUG:
+                if instance.item:
+                    if not instance.item.item_image_set.all().count() >= 2:
+                        instance.item.approved = False
+                        instance.item.save()
+                # instance.delete()
+        except Exception,e:
+            print e
             
 
 

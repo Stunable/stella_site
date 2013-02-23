@@ -125,13 +125,16 @@ class ProductImageAdmin(admin.ModelAdmin):
     list_display = ['image','retailer','list_image']
     #readonly_fields = ['retailer']
     list_filter = ('retailer',)
-    search_fields = ('name','description','item')
+    search_fields = ('image','identifier')
     actions = ('make_pretty','premake_thumbs','delete_orphans')
 
     def make_pretty(self,request,queryset):
         for obj in queryset:
-            print obj
-            obj.generate_pretty_picture(instant=False)
+            if len(queryset) == 1:
+                print 'now'
+                obj.generate_pretty_picture(instant=True,refresh=True)                
+            else:
+                obj.generate_pretty_picture(instant=True,refresh=True)
 
     def set_size(self,request,queryset):
         for obj in queryset:

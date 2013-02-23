@@ -1660,10 +1660,6 @@ a.friend-name{
 	border-radius: 10px;
 }
 
-#modal_contents .modal_inner_frame div{
-	display:inline;
-}
-
 .damonzoomcontainer{
 	border-radius: 10px;
 }
@@ -1688,23 +1684,133 @@ a.friend-name{
 }
 
 .modal.current .modal-item-details{
-	color:black;
-	width:300px;
+	color:white;
 	position:absolute;
-	right:0px;
-	top:50%;
-	height:50%;
-	background-color:white;
+	background-color:rgba(0,0,0,.7);
 	padding:10px;
 	/*border-left:2px solid black;*/
 	/*border-top:2px solid black;*/
 	border-radius:0px 0px 10px 0px;
+}
+
+.modal.current .wide .modal-item-details{
+	position:inherit;
+}
+
+.modal.current .modal-item-details{
+	right:0px;
+	top:0px;
+	height:700px;
+	width:280px;
+}
+
+.modal.current .wide .modal-item-details{
+	right:0px;
+	top:500px;
+	height:200px;
+	width:100%
+}
+
+
+.modal-item-details .item-data{
+	min-height:350px;
+	display:block;
+
+}
+
+.wide .modal-item-details .item-data{
+	min-height:350px;
+	display:inline-block;
+
+}
+
+.wide .modal-item-details .item-actions{
+	display:inline-block;
+	width:200px;
+	margin-top:10px;
+}
+
+.modal-item-details .description{
+	font-size:1em;
 	font-family: serif;
+}
+
+.wide .modal-item-details .description{
+	width:200px;
+}
+
+.wide .modal-item-details .item-data{
+	height:200px;
+	width:300px;
+	display:inline-block;
+	margin-left:20px;
+}
+
+.item-actions{
+	display:block;
+	color:white;
+}
+
+.modal.current .buy-wrapper{
+	position:absolute;
+	top:660px;
+	right:13px;
+}
+
+.modal.current #retailer-header{
+	width:400px;
+	position: absolute;
+	top:630px;
+	height:70px;
+	left:0px;
+	border-radius:0px 0px 0px 10px;
+	font-family: serif;
+	background-color:rgba(0,0,0,.5);
+}
+
+.modal.current .wide #retailer-header{
+	top:0px;
+	right:0px;
+	left:auto;
+	border-radius:0px 10px 0px 0px;
+
+}
+
+
+
+.modal.current #retailer-header div{
+	
+
+}
+
+.modal.current #retailer-header .modalitem{
+	font-size: 1.5em;
+	color:white;
+	font-weight: bolder;
+	position:absolute;
+	height:20px;
+	width:400px;
+}
+
+.modal.current .wide #retailer-header .modalitem{
+	padding-left:8px;
+}
+
+.modal.current #retailer-header .retailer{
+	position:absolute;
+	color:#f054ba;
+	font-weight: bolder;
+	right:0px;
+	text-align: right;
+	padding-right:4px;
+	top:22px;
+	height:40px;
+	width:400px;
+	white-space: nowrap;
 }
 
 .modal.current .item-visuals {
 	border-radius:10px;
-	margin-top:10px;
 }
 
 
@@ -1732,15 +1838,13 @@ a.friend-name{
 	font-weight: 400;
 }
 
-
-
 .modal.current label{
 	text-transform: none;
 }
 
 
 .modal.current .item-size{
-	color: #646464;
+	color: white;
 	font-size: .8em;
 }
 
@@ -1834,6 +1938,19 @@ a.friend-name{
 	font-weight: bold;
 }
 
+
+
+
+.item-actions .confirmation {
+	position:relative;
+	top:-30px;
+	left:200px;
+	color:#e84e4b;
+	font-size:1.3em;
+}
+
+
+
 .item img {
 	width:100%;
 	border:1px solid #ccc;
@@ -1853,6 +1970,34 @@ a.friend-name{
 .icon-link .icon {
 	display:block;
 }
+
+  ul li a span.share {
+    background: url(../../images/sprites.png) no-repeat;
+    overflow:hidden;
+  }
+  
+  	ul li a span.share {
+      border: none;
+      display: inline-block;
+      height: 22px;
+      text-indent: -9999px;
+      vertical-align: middle;
+      width: 22px;
+      font-size:.6em;
+    }
+
+ ul li a span.share.iconFacebook {
+    	background-position: -44px 0;
+    }
+    
+    ul li a span.share.iconTwitter {
+    	background-position: -66px 0;
+    }
+    
+
+
+
+
 .item .icon-link {
 	float:left;
 	width:36px;
@@ -1948,6 +2093,18 @@ a.friend-name{
 }
 .item-visuals .icon-link .approve {
 	float:right;
+}
+
+.modal.current .modal-item-details ul.sharelinks {
+	margin-top:100px;
+}
+
+.modal.current .wide .modal-item-details ul.sharelinks {
+	/*margin-top: 10px;*/
+	float: right;
+	position: absolute;
+	top: 420px;
+	right: 10px;
 }
 
 
@@ -2061,28 +2218,7 @@ a.friend-name{
 	margin-top: -10px;
 }
 
-.item-actions {
-	float: left;
-	width: 390px;
-}
-.item-actions textarea {
-	width:;
-	background:;
-}
-.item-actions .btn-wrap {
-	margin:0;
-	text-align:left;
-}
-.item-actions .btn-wrap .btn {
-	margin:0 10px 0 0;
-}
-.item-actions .confirmation {
-	position:relative;
-	top:-30px;
-	left:200px;
-	color:#e84e4b;
-	font-size:1.3em;
-}
+
 #admirers .intro form {
 	float:left;
 }
@@ -4639,19 +4775,6 @@ FROM "roma.css"
 
 ul .item .ie-icon-link{
 	display: block;
-}
-
-
-.item-visuals .img-link{
-    /*height: 265px;*/
-    margin: 0 0 5px;
-	display: table-cell;
-	vertical-align: middle;    
-}
-
-.modal .item-visuals {
-	/*margin-left: 50px;*/
-	margin-top:20px;
 }
 
 
