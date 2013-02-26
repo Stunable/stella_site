@@ -51,8 +51,20 @@ except ImportError:
 import os
 
 
+
+def get_retailer_profile(request,retailer_id=None):
+    if retailer_id:
+        return RetailerProfile.objects.get(id=id)
+    if request.user.is_staff:
+        return RetailerProfile.objects.get(id=request.GET.get('retailer',None))
+    return RetailerProfile.objects.get(user=request.user)
+
+
+
+
+
 def retailer_help(request,  template="retailers/retailer_help.html"):
-    retailer_profile = RetailerProfile.objects.get(user=request.user)
+    retailer_profile = get_retailer_profile(request)
 
     ctx = {'retailer_profile':retailer_profile}
     return direct_to_template(request, template, ctx)
@@ -99,9 +111,9 @@ def setup_wepay(request):
 
         #{"user_id":121042660,"access_token":"e4423c3a3a3a3f62aa53151a9b2fca1718af0bc78b40dba6578716b9a2979fa5","token_type":"BEARER"}
         if request.session.get('retailer_id',None):
-            retailer_profile = RetailerProfile.objects.get(id=request.session.get('retailer_id'))
+            retailer_profile = get_retailer_profile(request, retailer_id=request.session.get('retailer_id'))
         else:
-            retailer_profile = RetailerProfile.objects.get(user=request.user)
+            retailer_profile = get_retailer_profile(request)
         # retailer_profile.wepay_acct = resp_data['user_id']
         retailer_profile.wepay_token = resp_data['access_token']
 
@@ -171,7 +183,7 @@ def terms_complete(request, retailer_id, template="accounts/thank-you.html"):
 def update_retailer_profile(request, template="retailers/account_information.html"):
     ctx = {}
     try:
-        retailer_profile = RetailerProfile.objects.filter(user=request.user)[0]
+        retailer_profile = get_retailer_profile(request)
         if request.method == "POST":
             form = RetailerEditForm(request.POST, instance=retailer_profile)
             if form.is_valid():
@@ -261,7 +273,7 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
         item_instance = Item()
 
 
-    retailer = RetailerProfile.objects.get(user=request.user)
+    retailer = get_retailer_profile(request)
     
     post = request.POST.copy()
     if request.method == 'POST':
@@ -347,7 +359,7 @@ def add_item(request, item_id=None, template='retailers/add_item.html'):
 def bulk_upload(request,upload_id=None,template="retailers/product_list.html"):
     uploadObject = None
     try:
-        retailer_profile = RetailerProfile.objects.get(user=request.user)
+        retailer_profile = get_retailer_profile(request)
     except:
         raise
 
@@ -381,7 +393,7 @@ def bulk_upload(request,upload_id=None,template="retailers/product_list.html"):
 def product_list(request, template="retailers/product_list.html"):
     try:
         form = modelform_factory(ProductUpload,fields=['uploaded_zip'])()
-        retailer_profile = RetailerProfile.objects.get(user=request.user)
+        retailer_profile = get_retailer_profile(request)
         pl = retailer_profile.retailer_item_set.all()
 
         yesterday = date.today() - timedelta(days=1)
@@ -406,7 +418,7 @@ def product_list(request, template="retailers/product_list.html"):
 
 @login_required
 def retailer_information(request, name, template="retailers/retailer_information.html"):
-    retailer_profile = RetailerProfile.objects.filter(user=request.user)[0]
+    retailer_profile = get_retailer_profile(request)
     shipping_types = ShippingType.objects.all()
     form = RetailerEditForm(instance=retailer_profile)
     ctx = {'retailer_profile': retailer_profile, 'shipping_types': shipping_types, 'form': form}
@@ -417,7 +429,7 @@ def retailer_information(request, name, template="retailers/retailer_information
 @login_required
 def retailer_logo_upload(request):
     try:
-        retailer_profile = RetailerProfile.objects.get(email_address=request.user.email)
+        retailer_profile = get_retailer_profile(request)
         if request.method == "POST":
             form = LogoUploadForm(request.POST, request.FILES, instance=retailer_profile)
             form.save()
@@ -441,7 +453,7 @@ def retailer_modal(request, item_id, template="retailers/retailer_information_mo
 def order_history(request, template='orders/order_history.html'):
     ctx = {'purchase_actions': 'orders/retailer_purchase_actions.html'}
     try:
-        retailer_profile = RetailerProfile.objects.get(user=request.user)
+        retailer_profile = get_retailer_profile(request)
         shipping_types = ShippingType.objects.all()
         form = RetailerEditForm(instance=retailer_profile)
         ctx.update({'retailer_profile': retailer_profile, 'shipping_types': shipping_types, 'form': form})
@@ -505,7 +517,7 @@ def update_order_item(request, order_item_id):
 def item_action(request, template="retailers/product_list.html"):
     if request.method=='POST':
         try:
-            retailer_profile = RetailerProfile.objects.get(user=request.user)
+            retailer_profile = get_retailer_profile(request)
             pl = []
             s = set()
             for si in StylistItem.objects.filter(stylist=request.user):
@@ -599,7 +611,6 @@ def print_packing_slip(request, shipping_number=None, template='retailers/print_
         purchases = shipment.purchases.all()
         # ctx.update({'retailer_profile': retailer_profile})
         try:
-            retailer_profile = RetailerProfile.objects.get(user=request.user)
             ctx['packing_slip_text'] = SiteTextContent.objects.get(item_name='packing_slip_retailer')
         except:
             ctx['packing_slip_text'] = SiteTextContent.objects.get(item_name='packing_slip_customer')
@@ -622,7 +633,6 @@ def view_shipping_label(request, shipping_number=None,template='retailers/retail
         # ctx.update({'retailer_profile': retailer_profile})
 
         try:
-            retailer_profile = RetailerProfile.objects.get(user=request.user)
             ctx['advice_text'] = SiteTextContent.objects.get(item_name='shipping_label_instructions')
         except:
             ctx['advice_text'] = SiteTextContent.objects.get(item_name='return_label_instructions')

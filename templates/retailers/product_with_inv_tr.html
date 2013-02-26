@@ -9,16 +9,9 @@
 {% endif %}
     <td >
         <div class="picture_box">
-        {% load thumbnail %}
-        {% thumbnail item.get_image "50" as im %}
-            <img class="item_pic" src="{{ im.url }}">
-            {% empty %}
-            <img class="item_pic" src="{{ item.get_image }}" style="width: 50px;" alt=""/>
-        {% endthumbnail %}
+            <img class="item_pic" src="{{ item.get_image.small.url  }}" alt=""/>
         {% for image in item.get_additional_images %}
-            {% thumbnail image.get_image "50" as im %}
-                <img class="item_pic addl_pic" src="{{ im.url }}">
-            {% endthumbnail %}
+            <img class="item_pic addl_pic" src="{{ image.small.url  }}">
         {% endfor %}
     </div>
     </td>
@@ -46,7 +39,7 @@
                 {% with item.types_by_color as styles %}
                     {% for it in styles.styles %} 
                     <tr class="variation">
-                        <td><img class="var_pic" src="{% thumbnail it.list.0.pic "50" as im %}{{im.url}}{% endthumbnail %}"></td>
+                        <td><img class="var_pic" src="{{it.list.0.pic.small.url}}"></td>
                         <td colspan=4>
                             <table>
                                 <tr><td class="heading">COLOR</td>

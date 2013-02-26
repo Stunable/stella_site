@@ -169,13 +169,13 @@ MIDDLEWARE_CLASSES = (
 
 JOHNNY_MIDDLEWARE_KEY_PREFIX='jc_st'
 # some johnny settings
-CACHES = {
-    'default' : dict(
-        BACKEND = 'johnny.backends.redis.RedisCache',
-        LOCATION = '127.0.0.1:6379',
-        JOHNNY_CACHE = True,
-    )
-}
+# CACHES = {
+#     'default' : dict(
+#         BACKEND = 'johnny.backends.redis.RedisCache',
+#         LOCATION = '127.0.0.1:6379',
+#         JOHNNY_CACHE = True,
+#     )
+# }
 
 ROOT_URLCONF = 'urls'
 

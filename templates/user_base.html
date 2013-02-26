@@ -21,74 +21,7 @@
         {% block extra_css %}{% endblock %}
         <link rel="shortcut icon" href="{{ STATIC_URL }}images/gui/favicon.ico" type="image/x-icon" />
         <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/jquery.tooltip.css"/>
-        <style>
-			.hidden {
-				display: none;
-			}
 
-            body>#login_box{
-                display:none;
-            }
-            #login_box{
-                margin-left:10%;
-                margin-top:10%;
-                width:566px;
-                height:350px;
-                border:1px solid white;
-                border-radius:20px;
-                overflow:hidden;
-                background-color:rgba(0,0,0,.2);
-                     
-            }
-                #login_box .inner_content{
-                    padding:60px;
-                    padding-left:40px;
-                    padding-right:40px;
-                    height:200px;
-                }
-                    #login_options{
-                        margin-top:50px;
-                        width:100%;
-                        text-align: center;
-                    }
-                        #login_options>div{
-                            display:inline-block;
-                        }
-                        #login_options div{
-                            border-radius: 8px;
-                            width:278px;
-                            height:59px;
-                        }
-                        .facebooklogin{
-
-                            background: url('/static/images/login_with_facebook.png') no-repeat 0px 0px;
-                        }
-
-
-                #login_box .foot{
-                    /*background-color:rgba(255,255,255,.7);*/
-                    border-top:1px solid white;
-                    height:30px;
-                    width:100%;
-                    overflow:hidden;
-                }
-
-                    #login_box .foot a{
-                        vertical-align: middle;
-                        margin:3px 10px 0px 19px;
-                        float:right;
-                        /*background-color:rgba(255,255,255,.1);*/
-                        border-radius: 6px;
-                        padding-left:6px;
-                        padding-right:6px;
-                        font-size:.8em;
-                        /*color:black;*/
-                    }
-                    #login_box .foot a:hover{
-                        color:inherit;
-                    }
-
-        </style>
         <script>
             {% if request.user.is_authenticated %}
                 var logged_in = true;

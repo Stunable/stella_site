@@ -9,6 +9,7 @@
   }
 
 var stunable = {
+
     common : function() {
 
       var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
@@ -31,7 +32,7 @@ var stunable = {
       //   })
 
       // })
-      if (! logged_in){
+      if (! logged_in &&  $('body').attr('data-role')!='accounts'){
         $('#login_box').modal({clickClose: false})
 
       }
@@ -393,7 +394,70 @@ var stunable = {
             
 
 
-      }
+      },
+      accounts:function(){
+        $('#tester').focus()
+
+
+          //         // the validation code
+          //     container = $('#bigform-error1');
+          //     // validate form on keyup and submit
+          //     validator = $('#waitlist-form').validate({
+          //       errorLabelContainer : container,
+          //       //errorClass : 'field-error',
+          //       errorElement : 'errorlist',
+          //       invalidHandler : function(form, validator) {
+          //         //display error on submit
+          //         var errors = validator.numberOfInvalids();
+          //         if(errors) {
+          //           if(validator.errorList[0].message) {
+          //             $('#bigform-error1').text = "";
+          //             $('#bigform-error1').animate({
+          //               "opacity" : "1"
+          //             }, "fast", function() {
+          //               changeError($('#bigform-error1')[0], validator.errorList[0].message);
+          //               $('#bigform-error1').css('display', 'inline').css('opacy', '1');
+          //             });
+          //             validator.errorList[0].element.focus();
+          //             $(validator.errorList[0].element).addClass('field-error');
+          //           }
+          //         }
+          //       },
+          //       showErrors : function(errorMap, errorList) {
+          //         //display error on blur
+          //         $("#waitlist-form'").find("input").each(function() {
+          //           $(this).removeClass("error");
+          //         });
+          //         $("#bigform-error1").html("");
+          //         if(errorList.length) {
+          //           $('#bigform-error1').animate({
+          //             "opacity" : "1"
+          //           }, "fast", function() {
+          //             changeError($('#bigform-error1')[0], errorList[0]['message']);
+          //             $('#bigform-error1').css('display', 'inline').css('opacy', '1');
+          //           });
+          //           $(errorList[0]['element']).addClass("field-error");
+          //         } else {
+          //           $("#waitlist-form").find("input").each(function() {
+          //             $(this).removeClass("field-error");
+          //           });
+          //         }
+          //       },
+          //       submitHandler : function(form) {
+          //         $(".field-error").removeClass("field-error");
+          //         form.submit();
+          //       },
+          //       rules : {
+          //         email : {
+          //           required : true,
+          //           email : true
+          //         },
+          //       },
+          //       messages : {
+          //         email : "Stella can't reach you there",
+          //       }
+          //     });
+          }
 
 
 }

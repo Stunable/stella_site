@@ -11,6 +11,7 @@ from django.contrib.localflavor.us.us_states import US_STATES
 from django.contrib.localflavor.us.models import PhoneNumberField
 from racks.models import Item,ProductImage,ItemType,Size
 from django.contrib.contenttypes.models import ContentType
+from django.utils.safestring import mark_safe
 
 
 import tempfile
@@ -162,7 +163,12 @@ class RetailerProfile(models.Model):
         return F.validate().processed()
 
 
-        
+    def admin_link(self):
+      return '<a href="%s?retailer=%s">admin page link</a>' %(reverse('product_list'),self.id)
+
+    admin_link.allow_tags = True
+
+
 class StylistItem(models.Model):
     stylist = models.ForeignKey(User)
     item = models.ForeignKey(Item)

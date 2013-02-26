@@ -5,7 +5,7 @@ from apps.retailers.models import *
 
 
 class RetailerProfileAdmin(admin.ModelAdmin):
-    list_display  = ('name', 'approved')
+    list_display  = ('name', 'approved','admin_link')
     list_filter   = ('approved',)
     search_fields = ('name',)
     actions = ('verify_address',)

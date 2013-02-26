@@ -427,7 +427,7 @@ background: none repeat scroll 0 0 white;
     box-shadow: none;
     color: #8D8791;
     float: right;
-    font-family: 'Advent Pro',sans-serif;
+    /*font-family: 'Advent Pro',sans-serif;*/
     margin: 6px 20px;
     padding: 0 30px;
     width: auto;
@@ -1176,7 +1176,7 @@ top: 62px;*/
 }
 
 .panel-tab .text-link{
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 	font-size: 12.5px;
 	font-weight: 700;
 	color: #7E6A79;
@@ -2278,7 +2278,7 @@ a.friend-name{
 }
 
 .article p, .article a, .article h5 {
-	font-family: 'Advent Pro';
+	/*font-family: 'Advent Pro';*/
 }
 
 .article-title,.entry-title {
@@ -2292,7 +2292,7 @@ a.friend-name{
 }
 
 .widget {
-	font-family: 'Advent Pro';
+	/*font-family: 'Advent Pro';*/
 }
 
 .sidebar .widget-title {
@@ -2432,42 +2432,7 @@ body{
   src: local('Abbeyline'), local('Abbeyline'), url(/static/fonts/abbeyline-webfont.woff) format('woff');
 }
 
-@font-face {
-  font-family: 'Advent Pro';
-  font-style: normal;
-  font-weight: 500;
-  src: local('Advent Pro Medium'), local('AdventPro-Medium'), url(/static/fonts/7kBth2-rT8tP40RmMMXMLO46x7QEqGuF-FJIFiH1W2g.woff) format('woff');
-}
-@font-face {
-  font-family: 'Advent Pro';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Advent Pro Regular'), local('AdventPro-Regular'), url(/static/fonts/rT9jpj7pBpZV6AmssbZKkxsxEYwM7FgeyaSgU71cLG0.woff) format('woff');
-}
-@font-face {
-  font-family: 'Advent Pro';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Advent Pro Bold'), local('AdventPro-Bold'), url(/static/fonts/M4I6QiICt-ey_wZTpR2gKwFhaRv2pGgT5Kf0An0s4MM.woff) format('woff');
-}
-@font-face {
-  font-family: 'Advent Pro';
-  font-style: normal;
-  font-weight: 600;
-  src: local('Advent Pro SemiBold'), local('AdventPro-SemiBold'), url(/static/fonts/3Jo-2maCzv2QLzQBzaKHV24H_cQCpNmkmj7HsMzmiiM.woff) format('woff');
-}
-@font-face {
-  font-family: 'Advent Pro';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Advent Pro Light'), local('AdventPro-Light'), url(/static/fonts/sJaBfJYSFgoB80OL1_66m9kZXW4sYc4BjuAIFc1SXII.woff) format('woff');
-}
-@font-face {
-  font-family: 'Advent Pro';
-  font-style: normal;
-  font-weight: 200;
-  src: local('Advent Pro ExtraLight'), local('AdventPro-ExtraLight'), url(/static/fonts/URTSSjIp0Wr-GrjxFdFWnBp4ivTFcMoDJtPEqAe9hmM.woff) format('woff');
-}
+
 
 
 .login #page-content {
@@ -2486,9 +2451,6 @@ body{
 	padding-left: 14px;
 }
 
-.login #page-content input:hover {
-	color: #888;
-}
 
 .login #page-content .separator {
 	height:1px;
@@ -2496,20 +2458,32 @@ body{
 	border-bottom: 1px #eee5ed solid; 
 }
 
-.login #page-content .btn {
-	margin: 22px auto;
-	/*background: none;*/
-	/*border: 1px #E6D3E7 dashed;*/
-	border-radius: 19px;
-	width: 407px;
-	color: #AAA;
-	font-family: 'Advent Pro', sans-serif;
-	text-shadow: none;
-	font-size: 20px;
-	font-weight: 500;
-	padding: 7px 0;
-	height: auto;
-	float: none;
+
+.login #page-content form #login-buttons{
+	width:100%;
+	text-align: center;
+	margin-top:20px;
+	margin-bottom:30px;
+}
+.login #page-content form #login-buttons span{
+	margin:10px;
+}
+.login #page-content form .fix{
+	display:inline;
+}
+.login #page-content form .fix input,.login #page-content form .fix a{
+	color:#d337da;
+	font-size:1.5em;
+	border: 1px #F3CBE0 dashed;
+	background: white;
+	border-radius: 30px;
+	padding:8px;
+}
+
+.login #page-content form .fix input:hover,.login #page-content form .fix a:hover{
+	color:white;
+	background-color:#d337da;
+	border:1px solid;
 }
 
 .login #page-content .btn.facebooklogin{
@@ -2519,11 +2493,6 @@ body{
 	background: url('/static/images/login_with_facebook.png') no-repeat 0px 0px;
 }
 
-.login #page-content a {
-	color: #ec67f0;
-	text-transform: uppercase; 
-	font-family: 'Advent Pro', sans-serif;
-}
 
 .login #page-content .txt  {
 	height: 40px;
@@ -2605,10 +2574,6 @@ body{
 	display: block;
 	height: 42px;
 	float: none;
-}
-
-.own-show {
-	font-family: 'Advent Pro', sans-serif;
 }
 
 .login #page-content .sign-up-fb-icon  {
@@ -2805,7 +2770,7 @@ body{
 	text-transform: uppercase;
 	text-shadow: none;
 	text-align: center;
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 	width: 70%;
 	margin: 10px auto 10px auto;
 	/* padding for new chosen select */
@@ -2825,7 +2790,7 @@ body{
 .welcome #page-content .btn {
   margin: 10px auto;
 	background: none;
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 	font-weight: bold;
 	text-shadow: none;
 	font-size: 25px;
@@ -2844,7 +2809,7 @@ body{
 .welcome .header {
 	width: 100%;
 	text-align: center;
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 	color: gray;
 	font-size: 30px;
 	text-shadow: none;
@@ -2906,7 +2871,7 @@ outline: none;
 	box-shadow: none;
 	width: auto;
 	float: right;
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 	padding: 0 30px;
 	box-shadow: none;
 	text-transform: uppercase;
@@ -3002,7 +2967,7 @@ body .item-name {
 	margin-bottom: 30px;
 }
 .bummer #page-content .btn{
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 	text-shadow: none;
 	padding: 0px;
 	float: none;
@@ -3014,7 +2979,7 @@ body .item-name {
 	border-radius: 19px 19px 19px 19px !important;
 }
 .font-static{
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 	font-weight: 600;
 	font-size: 25px;
 	color: gray;
@@ -3031,7 +2996,7 @@ body .item-name {
 	background-color: white;
 } 
 .faq .body-content{
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 	width: 630px;
 	margin: 10px auto;
 }
@@ -3041,7 +3006,7 @@ body .item-name {
 }
 
 .careers .body-copy{
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 	padding: 0 20px;
 }
 .careers h2 {
@@ -3141,7 +3106,7 @@ body .item-name {
 }
 
 .about .body-copy, .team .body-copy, .return .body-copy{
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 	padding: 0 20px;
 }
 .about h2, .team h2, .return h2 {
@@ -3199,7 +3164,7 @@ body .item-name {
 }
 
 .devs .body-copy{
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 	margin: 10px 20px;
 }
 
@@ -3314,14 +3279,14 @@ body .item-name {
 #happening-events .event-table .header {
 	border-bottom: #EBEBEB 1px solid;
 	padding: 2px 11px;
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 	font-weight: 500;
 }
 
 #happening-events .event-table .row {
 	border-bottom: #EBEBEB 1px dashed;
 	padding: 2px 11px;
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 }
 
 #happening-events .event-table .row .user-name {
@@ -3444,7 +3409,7 @@ body .item-name {
 	background-color: white;
 }
 .invite .intro p {
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 	color: #EB5DEF;
 	text-transform: uppercase;
 	font-size: 34px;
@@ -3606,7 +3571,7 @@ body .item-name {
 	background-color: white;
 } 
 .hiw .body-content{
-	font-family: 'Advent Pro', sans-serif;
+	/*font-family: 'Advent Pro', sans-serif;*/
 	width: 630px;
 	margin: 10px auto;
 }

@@ -57,23 +57,23 @@
                 <span class="text-link">Stylist Admin</span>
                 <div class="tab-content hidden">
                     <h4 class="list-header" id="company-information-menu-item">
-                    	<a href="{% url retailer_information name=retailer_profile.name %}">Company Information</a></h4>
+                    	<a href="{% url retailer_information name=retailer_profile.name %}{% if request.user.is_staff %}?retailer={{retailer_profile.id}}{% endif %}">Company Information</a></h4>
                     
                     <div class="separator"></div>
                     <h4 class="list-header" id="account-information-menu-item">
-                    		<a href="{% url update_retailer_profile %}">Account Information</a></h4>
+                    		<a href="{% url update_retailer_profile %}{% if request.user.is_staff %}?retailer={{retailer_profile.id}}{% endif %}">Account Information</a></h4>
                     
                     <div class="separator"></div>
                     <h4 class="list-header" id="product-inventory-menu-item">
-                    		<a href="{% url product_list %}">Product Inventory</a></h4>
+                    		<a href="{% url product_list %}{% if request.user.is_staff %}?retailer={{retailer_profile.id}}{% endif %}">Product Inventory</a></h4>
                     
                     <div class="separator"></div>
                     <h4 class="list-header" id="order-history-menu-item">
-                    	<a href="{% url retailer_order_history %}">Order history</a></h4>
+                    	<a href="{% url retailer_order_history %}{% if request.user.is_staff %}?retailer={{retailer_profile.id}}{% endif %}">Order history</a></h4>
 
                     <div class="separator"></div>
                     <h4 class="list-header" id="order-history-menu-item">
-                      <a href="{% url retailer_help %}">Help</a></h4>
+                      <a href="{% url retailer_help %}{% if request.user.is_staff %}?retailer={{retailer_profile.id}}{% endif %}">Help</a></h4>
                 </div>
             </div>
             <div class="fake-tab"></div>
