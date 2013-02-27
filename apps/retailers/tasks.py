@@ -220,7 +220,7 @@ def process_API_products(list_of_products,api_connection):
 
             # get all the variations
             for v in api_connection.get_variations(d):
-                # print v
+                
 
                 api_variation_object,created = api_connection.VARIATION_API_CLASS.objects.get_or_create(source_id=v[Map['itemtype']['fields']['source_id']],api_connection=api_connection)
                 size_string = 'ONE SIZE'
@@ -259,14 +259,24 @@ def process_API_products(list_of_products,api_connection):
 
                 if regular_price != sale_price:
                     it.is_onsale = True
-
-                it.price = regular_price
-                it.sale_price = sale_price
                 it.SKU = v[Map['itemtype']['fields']['SKU']]
                 it.save()
 
+                try:
+                    it.price = regular_price
+                    it.sale_price = sale_price
+                    it.save()
+                except Exception,e:
+
+                    print 'PRODUCT:',d
+                    print 'VARIATION:',v
+                    print 'ERROR:',e
+                    pass
+                    # raise (Exception)
+
+
         except Exception,e:
-            raise
+            
             print 'ERROR:',e
     print 'done updating items'
     api_connection.update_in_progress = False

@@ -39,7 +39,11 @@
                 {% with item.types_by_color as styles %}
                     {% for it in styles.styles %} 
                     <tr class="variation">
+                        {% if it.list.0.pic.small %}
                         <td><img class="var_pic" src="{{it.list.0.pic.small.url}}"></td>
+                        {% else %}
+                        <td><img class="var_pic" src="{{STATIC_ROOT}}/images/image_not_ready.png"></td>
+                        {% endif %}
                         <td colspan=4>
                             <table>
                                 <tr><td class="heading">COLOR</td>
