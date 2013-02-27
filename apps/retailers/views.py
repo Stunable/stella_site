@@ -387,7 +387,7 @@ def bulk_upload(request,upload_id=None,template="retailers/product_list.html"):
                     up.save()
 
                     uploadObject = up
-                    # return redirect(reverse('bulk_upload',kwargs={'upload_id':up.id}))
+                    return product_list(request,upload=uploadObject)
 
             pl = retailer_profile.retailer_item_set.all()
 
@@ -398,7 +398,7 @@ def bulk_upload(request,upload_id=None,template="retailers/product_list.html"):
     return direct_to_template(request, template, ctx)
 
 @login_required 
-def product_list(request, template="retailers/product_list.html"):
+def product_list(request, upload=None, template="retailers/product_list.html"):
     try:
         form = modelform_factory(ProductUpload,fields=['uploaded_zip'])()
         retailer_profile = get_retailer_profile(request)
@@ -418,7 +418,7 @@ def product_list(request, template="retailers/product_list.html"):
         in_progress = APIConnection.objects.filter(retailer=request.user,update_in_progress=True)
 
 
-        ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form,'updates_in_progress':in_progress}
+        ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form,'updates_in_progress':in_progress, 'upload':upload}
     except:
         raise
         return redirect(reverse("home"))
