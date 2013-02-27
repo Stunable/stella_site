@@ -69,7 +69,7 @@
             <h3 class="inline">Shipping</h3>
         </div>
         <p class="static">
-            We currently offer shipping exclusively through Fedex.  Customers may choose from a limited selection of options which are subject to change at our discretion.  If this is not acceptable to you, please don't hesitate to <a href="mailto:stylists@stunable.com"><span style="font-size:1em;font-weight:bold">Email Us</span></a> 
+            We currently offer shipping exclusively through Fedex.  Stunable strongly prefers that all orders are shipped within <strong>two business days.</strong> If this is not acceptable to you, please don't hesitate to <a href="mailto:stylists@stunable.com"><span style="font-size:1em;font-weight:bold">Email Us</span></a> 
         </p>
         <div class="editable">
             <form action="{% url update_retailer_profile %}" method="POST">
@@ -87,82 +87,3 @@
     </div>
 </div>
 {% endblock %} 
-{% block extra_script %}
-<script type="text/javascript">
-    $('document').ready(function() {
-        $('#company-information-menu-item').addClass('active-menu');
-
-        $(".quest").click(function() {
-            $("#upload_avatar").click();
-        });
-        $('#avatar-upload-form').ajaxForm(function(data) {
-            message = "";
-            if(data.result == "ok") {
-                $('.retailer-logo').attr('src', data.source);
-                message = "Upload Successful!";
-            } else {
-                message = "There was an error. Please try again!";
-            }
-            $('#bigform-error').stop();
-            $('#bigform-error').animate({
-                "opacity" : "1"
-            }, "fast", function() {
-                changeError($('#bigform-error')[0], message);
-                $('#bigform-error').css('display', 'inline');
-                $('#bigform-error').delay(2000).fadeOut(1000);
-            });
-        });
-        $('input[type=file]').bind('change', function() {
-            var str = "";
-            str = $(this).val();
-            if(str != "" && str.length > 0) {
-                if(str.match(/.*\.(jpg|png|gif)$/)) {
-                    $("#avatar-upload-form").submit();
-                } else {
-                    $('#bigform-error').stop();
-                    $('#bigform-error').animate({
-                        "opacity" : "1"
-                    }, "fast", function() {
-                        changeError($('#bigform-error')[0], "Please Upload a valid image!");
-                        $('#bigform-error').css('display', 'inline');
-                        $('#bigform-error').delay(2000).fadeOut(1000);
-                    });
-                }
-            }
-        }).change();
-
-        $('#new_shipping_type').hide();
-
-        $('#others').change(function() {
-            if($('#others').is(':checked')) {
-                $('#new_shipping_type').fadeIn(500);
-            } else {
-                $('#new_shipping_type').fadeOut(500);
-            }
-        });
-        // make inline edit
-        $('.editable').hide();
-
-        $('.edit').click(function(event) {
-            event.preventDefault();
-            if($(this).html() == 'Edit') {
-                $(this).html("Close");
-            } else {
-                $(this).html("Edit");
-            }
-
-            var stc = $(this).parent().parent().find('.static');
-            var editable = $(this).parent().parent().find('.editable');
-
-            if($(stc).css('display') == 'none') {
-                $(stc).css('display', '');
-                $(editable).css('display', 'none');
-            } else {
-                $(stc).css('display', 'none');
-                $(editable).css('display', '');
-            }
-        });
-    });
-
-</script>
-{% endblock %}
