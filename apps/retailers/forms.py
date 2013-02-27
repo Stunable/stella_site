@@ -105,6 +105,8 @@ class RetailerEditForm(forms.ModelForm):
 
 
 class RetailerProfileCreationForm(forms.ModelForm):
+    ignore_address_variance = False
+
     first_name = forms.CharField(required=False, error_messages={'required': (u'Stella wants to know your first name')})
     last_name = forms.CharField(required=False, error_messages={'required': (u'Stella wants to know your last name')})
     state = forms.ChoiceField(widget=forms.Select(attrs={'class': 'required', 'id': 'state'}), choices=US_STATES,error_messages={'required': (u'State is required')} )
@@ -141,16 +143,6 @@ class RetailerProfileCreationForm(forms.ModelForm):
             elif self.cleaned_data['selling_options'] == 'yes yes' and not self.cleaned_data['more_details']:
                 raise forms.ValidationError("Please enter your web address!")
             
-    # def clean_not_accept_refund(self):
-    #     if not self.cleaned_data.get('accept_refund') and not self.cleaned_data['not_accept_refund'] :
-    #         raise forms.ValidationError("Please Accept or not Accept Refund Policy")
-    #     return self.cleaned_data['not_accept_refund'] 
-    
-    def clean_accept_refund(self):
-        if not self.cleaned_data['accept_refund']:
-            raise forms.ValidationError('you must accept the terms')
-        return self.cleaned_data['accept_refund'] 
-    
     def clean_selling_options(self):
         try:
             return self.cleaned_data['selling_options'][0]
@@ -168,19 +160,41 @@ class RetailerProfileCreationForm(forms.ModelForm):
         return self.cleaned_data['password_confirm']
     
     def clean(self):
+        self.address_diffs = {}
+
+        if not self.cleaned_data['accept_refund'] and not self.cleaned_data['not_accept_refund']:
+            self._errors['accept_refund'] = self.error_class(['Please choose whether or not to accept refunds'])
+
         if 'password' in self.cleaned_data and 'password_confirm' in self.cleaned_data:
             if self.cleaned_data['password'] != self.cleaned_data['password_confirm']:
                 raise forms.ValidationError("Your password doesn't match")
 
         if len(self._errors) < 1:    
             data,result = RetailerProfile.verify_address(data=self.cleaned_data)
-
+            if not data:
+                raise forms.ValidationError("Could not validate this address, please correct it.")
+            address_diffs = False
             for key,val in data.items():
                 if self.cleaned_data[key] != val and key != 'address2':
-                    self._errors[key]= self.error_class(['* verified'])
+                    address_diffs = True
+                    continue
+                    # self._errors[key]= self.error_class(['* verified'])
+
+
+            if address_diffs and not self.ignore_address_variance:
+                self.address_diff_list = {}
+                for key,val in data.items():
+                    # print key,val
+                    self.address_diff_list[key] = {'original':self.cleaned_data[key],'suggested':val, 'diff' :{True:'diff',False:'ok'}[(self.cleaned_data[key] != val)]}
+
+                self.cleaned_data.update(data)
+                self.data.update(data)
+
+                raise forms.ValidationError("Please confirm these address modifications...")
 
             self.cleaned_data.update(data)
             self.data.update(data)
+            
 
         return self.cleaned_data
     

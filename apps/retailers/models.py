@@ -10,16 +10,7 @@ from django.conf import settings
 from django.contrib.localflavor.us.us_states import US_STATES
 from django.contrib.localflavor.us.models import PhoneNumberField
 from racks.models import Item,ProductImage,ItemType,Size
-from django.contrib.contenttypes.models import ContentType
-from django.utils.safestring import mark_safe
-
-
-import tempfile
-import urllib
-from django.core.files import File
-
 import shopify
-from celery import task
 
 from apps.common.forms import FedexTestAddress
 
@@ -91,7 +82,7 @@ class RetailerProfile(models.Model):
     shipping_type = models.ManyToManyField(ShippingType, null=True, blank=True)
     accept_refund = models.BooleanField(default=False)
     welcome_message_sent = models.BooleanField(default=False)
-    # not_accept_refund = models.BooleanField(default=False)
+    not_accept_refund = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
 #    terms = models.BooleanField(default=False, null=True, blank=True)
     
@@ -101,11 +92,11 @@ class RetailerProfile(models.Model):
         except:
             return 'Retailer Profile Object'
 
-    @property
-    def not_accept_refund(self):
-        if self.accept_refund:
-            return False
-        return True
+    # @property
+    # def not_accept_refund(self):
+    #     if self.accept_refund:
+    #         return False
+    #     return True
         
     @property
     def logo_image(self):

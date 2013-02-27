@@ -75,6 +75,7 @@ def create_retailer_profile(request, template="retailers/retailer_profile_create
         form = RetailerProfileCreationForm(request.POST, request.FILES)
         if form.is_valid():
             new_retailer = form.save()
+            request.session['retailer_id'] = new_retailer.id
             template = "accounts/thank-you.html"
             return redirect(reverse('retailer_terms', args=[new_retailer.id]))
         else:
@@ -164,7 +165,9 @@ def setup_wepay(request):
 def terms_complete(request, retailer_id, template="accounts/thank-you.html"):
     ctx = {'retailer': True}
 
-    request.session['retailer_id'] = retailer_id
+    if int(request.session['retailer_id']) != int(retailer_id):
+        print request.session['retailer_id']
+        raise
     
     # send email to notify user
     retailer = get_object_or_404(RetailerProfile, pk=retailer_id)

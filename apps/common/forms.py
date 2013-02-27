@@ -21,7 +21,7 @@ class testAddress(object):
 
 class FedexTestAddress(object):
     def __init__(self,cleaned_data):
-        print cleaned_data
+        # print cleaned_data
         if cleaned_data.has_key('company_name'):
             self.CompanyName = cleaned_data['company_name']
         else:
@@ -35,17 +35,19 @@ class FedexTestAddress(object):
 
     def validate(self):
         self.result = fedex_validate_this_address(self)
-        # print self.result
         return self
 
     def processed(self):
-        return ({
-            'address1':self.result.Address.StreetLines[0],
-            'address2':','.join(self.result.Address.StreetLines[1:-1]),
-            'city':self.result.Address.City,
-            'zip_code':self.result.Address.PostalCode,
-            'state':self.result.Address.StateOrProvinceCode
-        },self.result)
+        if self.result.Score:
+            return ({
+                'address1':self.result.Address.StreetLines[0],
+                'address2':','.join(self.result.Address.StreetLines[1:-1]),
+                'city':self.result.Address.City,
+                'zip_code':self.result.Address.PostalCode,
+                'state':self.result.Address.StateOrProvinceCode
+            },self.result)
+        else:
+            return None,None
         
 
     # (Address){

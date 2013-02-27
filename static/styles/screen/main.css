@@ -1778,6 +1778,7 @@ a.friend-name{
 
 
 
+
 .modal.current #retailer-header div{
 	
 
@@ -1902,6 +1903,63 @@ a.friend-name{
 	text-transform: uppercase;
 	font-weight: bold;
 }
+
+ul.address_confirm{
+	white-space: nowrap;
+	margin:10px;
+}
+
+
+
+.address_confirm li{
+	display:inline;
+	margin:0px;
+}
+
+.address_confirm li.heading{
+	font-size:.8em;
+	color:black;
+	font-weight:400;
+}
+
+.address_confirm li.diff{
+	color:red;
+}
+
+.address_confirm .address_action{
+	float:right;
+	display:inline;
+	padding:4px;
+	width:60px;
+	text-align:center;
+}
+
+
+.retailers form>div>.errorlist,.retailers form>div>.form_errors{
+	display:none;
+}	
+
+.modal.current.info_modal{
+	max-width:50%;
+	padding:20px;
+	overflow-y:auto;
+	background-color:white;
+}
+
+.info_modal ul{
+	text-align: left;
+	width:100%;
+}
+
+.info_modal h2{
+	text-align: center !important;
+	width:100%;
+	font-size:1.4em;
+	font-weight: bold;
+
+}
+
+
 
 .item-name-wrapper{
 	float:left;
@@ -2471,17 +2529,25 @@ body{
 .login #page-content form .fix{
 	display:inline;
 }
-.login #page-content form .fix input,.login #page-content form .fix a{
-	color:#d337da;
+
+.new_button,.login #page-content form a,.login #page-content form input{
 	font-size:1.5em;
-	border: 1px #F3CBE0 dashed;
-	background: white;
-	border-radius: 30px;
 	padding:8px;
+	background: white;
+}
+.new_button{
+	padding:4px;
 }
 
-.login #page-content form .fix input:hover,.login #page-content form .fix a:hover{
-	color:white;
+.new_button,.login #page-content form .fix input,.login #page-content form .fix a,.address_confirm li.address_action{
+	color:#d337da;
+	border: 1px #F3CBE0 dashed;
+	border-radius: 30px;
+	cursor:pointer;
+}
+
+.new_button:hover,.login #page-content form .fix input:hover,.login #page-content form .fix a:hover,.address_confirm li.address_action:hover{
+	color:white!important;
 	background-color:#d337da;
 	border:1px solid;
 }
@@ -3216,9 +3282,14 @@ body .item-name {
 	padding-bottom: 40px;;
 	padding-right: 6px;
 }
-.accounts p {
+/*.accounts p {
 	height: 45px;
+}*/
+
+.accounts input{
+	text-transform: lowercase;
 }
+
 
 .accounts .btn {
 	margin-right: 139px;
@@ -3425,6 +3496,7 @@ body .item-name {
 	width: 170px;
 	margin: 27px auto;
 	float: none;
+	text-transform: lowercase;
 }
 .invite .txt{
 	width: 288px;
@@ -3876,7 +3948,8 @@ background-color: white;
 }
 
 .reset-form #page-content {
-	height: 340px !important;
+/*	height: 340px !important;*/
+padding:40px;
 }
 
 .btn-buy-it {
@@ -4627,16 +4700,27 @@ MODAL CSS
   box-shadow: 0 0 10px #000;
 }
 
-.modal a.close-modal {
-  position: absolute;
-  top: -12.5px;
-  right: -12.5px;
-  display: block;
-  width: 30px;
-  height: 30px;
-  text-indent: -9999px;
-  background: url(../../images/x.png) no-repeat 0 0;
+/*.modal.current .errorlist{
+	background-color:white;
+	text-align: center;
+	min-height:200px;
+	min-width:200px;
+}*/
+
+.close-modal {
+	position: absolute;
+	top: 10px;
+	right:10px;
+	height: 24px;
+	width: 24px;
+	margin: 0;
+	padding: 0;
+	background: url(../../images/gui/icons.png) no-repeat -24px -1px;
+	text-indent: -999em;
+	cursor: pointer;
+	z-index: 1103;
 }
+
 
 /*.modal-spinner {
   display: none;
@@ -4884,125 +4968,6 @@ ul .item img:hover{
 	font-size: 12px;
 	text-align: center;
 }
-/*
-End Roma.css*/
-
-/*ETALAGE*/
-/*
- * Title: jQuery Etalage plugin CSS
- * Author: Berend de Jong, Frique
- * Author URI: http://www.frique.me/
- * Version: 1.3.1 (20120705.1)
- *
- * ------------------------------------ STYLE ------------------------------------
- * Edit this section to style your thumbnails, zoom area, magnifier etc.
- * If the id of your Etalage instance is different, do a find/replace on #etalage.
- * -------------------------------------------------------------------------------
- */
-
-/* Etalage container (large thumb + small thumbs): */
-#etalage{
-	display: none;
-	margin-bottom: 50px;
-}
-
-/* Large thumbnail: */
-#etalage .etalage_thumb{
-	background: white url(../../images/loading.gif) center no-repeat;
-	border: 1px solid #ddd;
-	padding: 6px;
-	-webkit-box-shadow: 0 0 10px #ddd;
-	-moz-box-shadow: 0 0 10px #ddd;
-	box-shadow: 0 0 10px #ddd;
-}
-/* Large thumbnail - image (in case you want to add a border around the image within the frame) */
-#etalage .etalage_thumb_image{ }
-
-/* Small thumbnails: */
-#etalage .etalage_small_thumbs li{
-	background: white;
-	border: 1px solid #ddd;
-	margin: 10px;
-	padding: 3px;
-}
-/* The one on the left that makes them slide */
-#etalage ul li.etalage_smallthumb_first{ }
-/* The one on the right that makes them slide */
-#etalage ul li.etalage_smallthumb_last{ }
-/* The currently active one */
-#etalage ul li.etalage_smallthumb_active{
-	-webkit-box-shadow: 0 0 10px #ddd;
-	-moz-box-shadow: 0 0 10px #ddd;
-	box-shadow: 0 0 10px #ddd;
-}
-
-/* Zoomed image area: */
-#etalage .etalage_zoom_area,
-.etalage_zoom_area{
-	background: white url(../../images/loading.gif) center no-repeat;
-	border: 1px solid #ddd;
-	padding: 6px;
-	-webkit-box-shadow: 0 0 10px #ddd;
-	-moz-box-shadow: 0 0 10px #ddd;
-	box-shadow: 0 0 10px #ddd;
-}
-
-/* Magnifier area (thumbnail hovering rectangle): */
-#etalage .etalage_magnifier{
-	background: white;
-	border: 1px solid #bbb;
-}
-
-/* Icon that will apear at the left bottom of the large thumbnail (optional): */
-#etalage .etalage_icon{
-	background: url(../../images/zoom.png) no-repeat;
-	width: 14px;
-	height: 14px;
-}
-
-/* Hint that will apear at the top right of the large thumbnail (optional): */
-#etalage .etalage_hint{
-	background: url(../../images/hint.gif) no-repeat;
-	width: 130px;
-	height: 57px;
-}
-
-/* Description area (optional) */
-#etalage .etalage_description{
-	background: white;
-	font-style: italic;
-	margin: 10px;
-	padding: 6px 10px;
-}
-
-/*
- * ------------------------------------ FUNCTIONALITY --------------------------------------
- * The following CSS serves to make Etalage function properly. Don't edit or edit carefully.
- * -----------------------------------------------------------------------------------------
- */
-
-.etalage, .etalage_thumb, .etalage_thumb_image, .etalage_source_image, .etalage_zoom_preview, .etalage_icon, .etalage_hint{ display:none }
-.etalage, .etalage ul, .etalage li, .etalage img, .etalage_hint, .etalage_icon, .etalage_description{ margin:0; padding:0; border:0; list-style:none }
-.etalage, .etalage_magnifier div, .etalage_magnifier div img, .etalage_small_thumbs ul, ul .etalage_small_thumbs li, .etalage_zoom_area div, .etalage_zoom_img{ position:relative }
-.etalage img, .etalage li{ -webkit-user-select:none; -khtml-user-select:none; -moz-user-select:none; -o-user-select:none; user-select:none; -webkit-user-drag:none; -moz-user-drag:none; user-drag:none }
-.etalage, .etalage_small_thumbs li{ float:left }
-.etalage_right{ float:right }
-.etalage li{ position:absolute }
-.etalage img{ vertical-align:bottom; max-width:none }
-.etalage_magnifier{ cursor:default }
-.etalage_magnifier div, .etalage_small_thumbs{ overflow:hidden }
-.etalage_magnifier div img{ display:none }
-.etalage_icon, .etalage_hint{ cursor:default; width:0; height:0; overflow:hidden }
-.etalage_small_thumbs li.vertical{ float:none }
-.etalage_zoom_area div{ overflow:hidden; z-index:997 }
-.etalage_zoom_preview{ position:absolute; z-index:998 }
-.etalage_zoom_img, .etalage_hint{ z-index:999 }
-.etalage{ direction:ltr }
-div.etalage_description{ position:absolute; bottom:0; left:0; z-index:999 }
-div.etalage_description.rtl{ direction:rtl; text-align:right }
-/*END ETELAGE*/
-
-
 
 
 #cart_slide{

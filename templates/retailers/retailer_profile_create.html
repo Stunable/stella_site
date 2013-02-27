@@ -59,28 +59,56 @@
 		/*		display: inline-block;*/
 	}
     .form_errors{
-        position:absolute;
-        top:340px;
-        right:0px;
-        text-align:right;
-        margin-right:25%;
-        font-size: 1.2em;
+        display:none;
     }
 </style>
 
 <div id="page-content" class="section clearfix round-corner-shadow">
 	<div class="page-header">
 		<div class="section intro">
-			<h2><span>Interested in Becoming a Stylist?</span></h2>
+			<h2><span>Interested in Becoming a Stunable Stylist?</span></h2>
 			<h3><span>Please complete our application below and we'll be in touch.</span></h3>
 		</div>
 	</div>
 	<div class="section body-copy bootstrap">
-		<form action="" method="POST" class="user-entry" id="account-form" enctype="multipart/form-data">
+		<form action="" method="POST" class="user-entry validated_address_form" id="account-form" enctype="multipart/form-data">
 			{% csrf_token %}
-            <div class="form_errors">
+			{% if form.non_field_errors %}
+            <div class="form_errors info_modal">
                 {{form.non_field_errors}}
+
+                {% if form.address_diff_list %}
+                    {% with form.address_diff_list as fdl %}
+                    
+                    <ul class="address_confirm">
+                    		<li class="heading">You entered:</li>
+                    		<li class="{{fdl.address1.diff}}">{{fdl.address1.original}},</li>
+          					{% if fdl.address2.original %}
+                    		<li class="{{fdl.address2.diff}}">{{fdl.address2.original}},</li>
+                    	{% endif %}
+                    		<li class="{{fdl.city.diff}}">{{fdl.city.original}},</li>
+                    		<li class="{{fdl.state.diff}}">{{fdl.state.original}},</li>
+                    		<li class="{{fdl.zip_code.diff}}">{{fdl.zip_code.original}}</li>
+                    		<li rel="modal:close" data-val="original" class="address_action heading">edit</li>
+                    </ul>
+                    <hr>
+                    <ul class="address_confirm">
+                    	<li class="heading">We suggest:</li>
+                    	<li class="{{fdl.address1.diff}}">{{fdl.address1.suggested}},</li>
+                    	{% if fdl.address2.original %}
+                    	<li class="{{fdl.address2.diff}}">{{fdl.address2.suggested}},</li>
+                    	{% endif %}
+                    	<li class="{{fdl.city.diff}}">{{fdl.city.suggested}},</li>
+                    	<li class="{{fdl.state.diff}}">{{fdl.state.suggested}},</li>
+                    	<li class="{{fdl.zip_code.diff}}">{{fdl.zip_code.suggested}}</li>
+                    	<li data-val="suggested" class="heading address_action">use this</li>
+                    </ul>
+                  <!--   <div style="width:100%;text-align:left;font-size:.6em;color:grey">
+                    go with this one if possible...</div> -->
+                	{% endwith %}
+                {% endif %}
             </div>
+            {% endif %}
 			<table style="width: 100%">
 				<tbody>
 					<tr>
@@ -176,7 +204,7 @@
 						<td>Description</td>
 						<td>						
 						    <textarea class="inline txt" 
-						    placeholder="Tell us a little something about yourself and the products you sell. Hit us with your best elevator pitch in under 600 words!"
+						    placeholder="Tell us a little something about yourself and the products you sell. Have fun with it!"
 						     id="description" name="description">{{ form.description.value|default_if_none:'' }}</textarea>
 						     {{form.description.errors}}
 						</td>
@@ -202,8 +230,15 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td>{{ form.accept_refund }} I accept <a href="#return-policy" class="item-ref">Stunable Return Policy</a> 
-                            {{ form.accept_refund.errors }}
+						<td>{{ form.accept_refund }} I accept <a data-target="#return-policy" href="#return-policy" class="item-ref arbitrary_modal">Stunable Return Policy</a> 
+                            <span style="margin-top:20px;position:absolute">{{ form.accept_refund.errors }}</span>
+							<!-- <span>{{ form.not_accept_refund }}<span>I do not accept</span> -->
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>{{ form.not_accept_refund }}  Nope.  I do not accept returns. 
+                            {{ form.not_accept_refund.errors }}
 							<!-- <span>{{ form.not_accept_refund }}<span>I do not accept</span> -->
 						</td>
 					</tr>
@@ -225,163 +260,11 @@
 		</form>
 	</div>
 	<div id="hidden-items">
-		<div id="return-policy" class="item-details clearfix sub-page">
-            <p class="close">
-                <a class="close-box" href="#">Close</a>
-            </p>
-            <div class="section intro">
-                <h2><span>Standard Return Policy</span></h2>
-            </div>
-            <div class="user-entry sub-page-content">
-                {{CMS.retailer_return_policy|safe}}
-            </div>
+		<div id="return-policy" class="info_modal">
+           {{CMS.retailer_return_policy|safe}}
         </div>
 		<!-- ********************************************* Modal-Window for Invite Friends START ********************************************* -->
 		{% include 'retailers/retailer_terms_and_cons.html' %}
 	</div>
 </div>
 {% endblock %} 
-
-{% block extra_script %}
-
-<script type="text/javascript">
-(function ($) {
-    $.fn.extend({
-        pschecker: function (options) {
-            var settings = $.extend({ minlength: 8, maxlength: 16, onPasswordValidate: null, onPasswordMatch: null }, options);
-            return this.each(function () {
-                var wrapper = $('.password-container');
-                var password = $('.strong-password:eq(0)', wrapper);
-                var cPassword = $('.strong-password:eq(1)', wrapper);
-
-                cPassword.removeClass('no-match');
-                password.keyup(validatePassword).blur(validatePassword).focus(validatePassword);
-                cPassword.keyup(validatePassword).blur(validatePassword).focus(validatePassword);
-
-                function validatePassword() {
-                    var pstr = password.val().toString();
-                    var meter = $('.meter');
-                    meter.html("");
-                    //fires password validate event if password meets the min length requirement
-                    if (settings.onPasswordValidate != null)
-                        settings.onPasswordValidate(pstr.length >= settings.minlength);
-
-                    if (pstr.length < settings.maxlength)
-                        meter.removeClass('strong').removeClass('medium').removeClass('weak');
-                    if (pstr.length > 0) {
-                        var rx = new RegExp(/^(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,30}$/);
-                        if (rx.test(pstr)) {
-                            meter.addClass('strong');
-                            meter.html("Strong");
-                        }
-                        else {
-                            var alpha = containsAlpha(pstr);
-                            var number = containsNumeric(pstr);
-                            var upper = containsUpperCase(pstr);
-                            var special = containsSpecialCharacter(pstr);
-                            var result = alpha + number + upper + special;
-
-                            if (result > 2) {
-                                meter.addClass('medium');
-                                meter.html("Medium");
-                            }
-                            else {
-                                meter.addClass('weak');
-                                meter.html("weak");
-                            }
-                        }
-                        if (cPassword.val().toString().length > 0) {
-                            if (pstr == cPassword.val().toString()) {
-                                cPassword.removeClass('no-match');
-                                if (settings.onPasswordMatch != null)
-                                    settings.onPasswordMatch(true);
-                            }
-                            else {
-                                cPassword.addClass('no-match');
-                                if (settings.onPasswordMatch != null)
-                                    settings.onPasswordMatch(false);
-                            }
-                        }
-                        else {
-                            cPassword.addClass('no-match');
-                            if (settings.onPasswordMatch != null)
-                                settings.onPasswordMatch(false);
-                        }
-                    }
-                }
-
-                function containsAlpha(str) {
-                    var rx = new RegExp(/[a-z]/);
-                    if (rx.test(str)) return 1;
-                    return 0;
-                }
-
-                function containsNumeric(str) {
-                    var rx = new RegExp(/[0-9]/);
-                    if (rx.test(str)) return 1;
-                    return 0;
-                }
-
-                function containsUpperCase(str) {
-                    var rx = new RegExp(/[A-Z]/);
-                    if (rx.test(str)) return 1;
-                    return 0;
-                }
-                function containsSpecialCharacter(str) {
-
-                    var rx = new RegExp(/[\W]/);
-                    if (rx.test(str)) return 1;
-                    return 0;
-                }
-
-
-            });
-        }
-    });
-})(jQuery);
-
-	function get_time_text() {
-		var day_1 = $('#day_1').val();
-		var day_2 = $('#day_2').val();
-		var time_1 = $('#time_picker_1').val();
-		var time_2 = $('#time_picker_2').val();
-
-		var text = day_1 + ' through ' + day_2 + " from " + time_1 + ' to ' + time_2;
-		$('#hours').val(text);
-	}
-
-
-	$(document).ready(function() {
-
-		$('.password-container').pschecker();
-
-				
-		$('input[name=selling_options]').change(function() {
-			$('input[name="selling_options"]').attr('checked', false);
-			$(this).attr('checked', true);
-			
-			$('li > input').each(function() {
-				$(this).remove();
-			});
-			if($('input[name=selling_options]:checked').val() == 'no yes' || $('input[name=selling_options]:checked').val() == 'yes yes') {
-				$(this).parent().parent().append("<input class='more-details inline txt' type='text' name='more_details' placeholder='Please enter your web address' />");
-			} else if($('input[name=selling_options]:checked').val() == 'yes no') {
-				$(this).parent().parent().append("<input class='more-details inline txt' type='text' name='more_details' placeholder='Where do you currently sell online?' />");
-			}
-		});
-		if($('input[name=selling_options]:checked').val() == 'no yes' || $('input[name=selling_options]:checked').val() == 'yes yes') {
-			$(this).parent().parent().append("<input class='more-details inline txt' type='text' name='more_details' placeholder='Please enter your web address' />");
-		} else if($('input[name=selling_options]:checked').val() == 'yes no') {
-			$(this).parent().parent().append("<input class='more-details inline txt' type='text' name='more_details' placeholder='Where do you currently sell online?' />");
-		}
-
-
-
-	
-		
-	})
-
-
-
-</script>
-{% endblock %}

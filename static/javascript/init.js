@@ -3,7 +3,6 @@
     afterOpenFunction:init_add_rack_modal,
   }
 
-
   var item_modal_options = {
     afterOpenFunction:init_item_modal,
   }
@@ -49,6 +48,24 @@ var stunable = {
       $('.cart_slide_trigger').click(reveal_cart)
 
       initTouch()
+
+      $('.arbitrary_modal').click(function(e){
+        console.log( $($(this).data('target')))
+        $($(this).data('target')).modal()
+      })
+
+      $('.form_errors').modal()
+
+
+      $('.address_action').click(function(e){
+        var t = $(this);
+        if (t.data('val')=='suggested'){
+          $('.validated_address_form').submit()
+        }else{
+        $.modal.close();
+        }
+      })
+
     }
     ,shop: function(){            
         setupCarousel($('.iosSlider'));
@@ -391,7 +408,41 @@ var stunable = {
                 return false
               })
 
+        
+          $('#id_accept_refund').change(function(e){
+            if ($(this).is(':checked')){
+              $('#id_not_accept_refund').attr('checked',false)
+            }
+          })
+           $('#id_not_accept_refund').change(function(e){
+            if ($(this).is(':checked')){
+              $('#id_accept_refund').attr('checked',false)
+            }
+          })
+
+            $('.password-container').pschecker();
+
+              
+          $('input[name=selling_options]').change(function() {
+            $('input[name="selling_options"]').attr('checked', false);
+            $(this).attr('checked', true);
             
+            $('li > input').each(function() {
+              $(this).remove();
+            });
+            if($('input[name=selling_options]:checked').val() == 'no yes' || $('input[name=selling_options]:checked').val() == 'yes yes') {
+              $(this).parent().parent().append("<input class='more-details inline txt' type='text' name='more_details' placeholder='Please enter your web address' />");
+            } else if($('input[name=selling_options]:checked').val() == 'yes no') {
+              $(this).parent().parent().append("<input class='more-details inline txt' type='text' name='more_details' placeholder='Where do you currently sell online?' />");
+            }
+          });
+          if($('input[name=selling_options]:checked').val() == 'no yes' || $('input[name=selling_options]:checked').val() == 'yes yes') {
+            $(this).parent().parent().append("<input class='more-details inline txt' type='text' name='more_details' placeholder='Please enter your web address' />");
+          } else if($('input[name=selling_options]:checked').val() == 'yes no') {
+            $(this).parent().parent().append("<input class='more-details inline txt' type='text' name='more_details' placeholder='Where do you currently sell online?' />");
+          }
+
+
 
 
       },
