@@ -1664,6 +1664,18 @@ a.friend-name{
 	border-radius: 10px;
 }
 
+.modal.current .inner_content{
+	padding:100px;
+	background-color:rgba(0,0,0,.4);
+	border:2px solid rgba(255,255,255,.1);
+	border-radius:10px
+}
+
+.modal.current .foot a{
+	float:right;
+	margin:2px;
+	margin-right:6px;
+}
 
 .modal.current .item-price {
 	font-size: 2.5em;
@@ -1703,6 +1715,9 @@ a.friend-name{
 	height:700px;
 	width:280px;
 }
+
+
+
 
 .modal.current .wide .modal-item-details{
 	right:0px;

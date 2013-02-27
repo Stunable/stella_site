@@ -32,7 +32,7 @@ var stunable = {
 
       // })
       if (! logged_in &&  $('body').attr('data-role')!='accounts'){
-        $('#login_box').modal({clickClose: false})
+        $('#login_box').modal({clickClose: false,escapeClose:false,showClose:false})
 
       }
 
@@ -227,6 +227,7 @@ var stunable = {
           inventory_option_counter = 1;
         var term_doc = $('#terms-and-cons-modal');
         $('#terms-label').css('color', 'black');
+
         $('#terms-input').change(function(){
             $('#terms-continue-btn').attr('href', $(this).data('href')).css('color', 'black').click(function(e){
                 if (!$('#terms-input').is(':checked')) {
