@@ -262,7 +262,7 @@ def process_API_products(list_of_products,api_connection):
                 it.SKU = v[Map['itemtype']['fields']['SKU']]
                 it.save()
 
-                try:
+                try: #sometimes prices are screwy (with shopify)
                     it.price = regular_price
                     it.sale_price = sale_price
                     it.save()

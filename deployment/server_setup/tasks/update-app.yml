@@ -1,0 +1,35 @@
+
+  - name: git clone
+    action: git repo=$repo dest=$project_root/project
+    sudo_user: ubuntu
+
+  - name: install python libraries
+    pip: requirements=$project_root/project/requirements.txt virtualenv=$project_root
+
+  - name: link admin media
+    file:  dest=$project_root/project/$static_path/admin src=$project_root/lib/python2.7/site-packages/django/contrib/admin/static/admin state=link
+    sudo_user: ubuntu
+
+  - name: syncdb
+    command: $project_root/bin/python manage.py syncdb chdir=$manage_path --noinput
+    sudo_user: ubuntu
+
+  - name: migrate
+    command: $project_root/bin/python manage.py migrate chdir=$manage_path --noinput
+    sudo_user: ubuntu
+
+  - name: start gunicorn
+    supervisorctl: name=$app_name:gunicorn state=started
+
+  - name: restart gunicorn
+    supervisorctl: name=$app_name:gunicorn state=restarted
+
+  - name: restart nginx 
+    service: name=nginx state=restarted 
+
+  - name: start celery
+    supervisorctl: name=$app_name:celery state=started
+
+  - name: restart celery
+    supervisorctl: name=$app_name:celery state=restarted  
+

@@ -1,0 +1,3 @@
+  - name: create $app_name user 
+    postgresql_user: user=$app_name password=$app_pw role_attr_flags=CREATEDB
+    sudo_user: postgres

@@ -1,0 +1,33 @@
+  - name: install git
+    action: apt pkg=git state=installed
+
+  - name: id_rsa.pub copied
+    action: copy src=sec/pub dest=/home/ubuntu/.ssh/id_rsa.pub owner=ubuntu group=ubuntu mode=0700
+
+  - name: id_rsa copied
+    action: copy src=sec/key dest=/home/ubuntu/.ssh/id_rsa owner=ubuntu group=ubuntu mode=0700
+
+  - name: shut ssh up
+    copy: src=sec/config dest=/home/ubuntu/.ssh/config owner=ubuntu group=ubuntu mode=0700
+
+  - name: virtual env installed
+    apt: pkg=python-virtualenv state=installed
+
+  - name: dev tools installalled
+    apt: pkg=python-all-dev
+
+  - name: supervisor installed
+    apt: pkg=supervisor
+
+  - name: setup $app_name in supervisor
+    template: src=server_setup/templates/supervisor.j2 dest=/etc/supervisor/conf.d/$app_name.conf 
+
+  - name: restart supervisor
+    command: service supervisor force-reload
+
+  - name: write sites-enabled.conf 
+    action: template src='nginx/templates/nginx.sites-enabled.j2' dest='/etc/nginx/sites-enabled/$app_name.conf'
+    notify:
+      - restart nginx
+
+

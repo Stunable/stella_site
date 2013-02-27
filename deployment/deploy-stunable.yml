@@ -1,0 +1,31 @@
+---
+# easy Ubuntu nginx playbook as an example.
+- hosts: stunable:&nginx
+  user: ubuntu 
+  sudo: True
+
+  vars:
+     #workers: use at template ansible_processor_count 
+     connections : "1024"
+     is_10_up: "'$ansible_distribution_version' >= '10.04'"
+     is_ubuntu: "'$ansible_distribution' == 'Ubuntu'"
+     app_name: "stunable"
+     app_pw: stunable!
+     app_port: 8000
+     project_root: /data/$app_name
+     repo: git@github.com:Stunable/stella_site.git
+     hosts: "post:&nginx"
+     manage_path: $project_root/project/
+     project_user: ubuntu
+     static_path: staticFiles
+     media_path: source/postghost/media
+
+  tasks:
+     # - include: server_setup/tasks/add-people.yml 
+     # - include: nginx/tasks/nginx-task.yml
+     # - include: server_setup/tasks/install-app.yml
+     - include      : server_setup/tasks/update-app.yml
+
+  handlers:
+     - name: restart nginx
+       action: service name=nginx state=restarted

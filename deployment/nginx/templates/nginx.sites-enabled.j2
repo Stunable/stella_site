@@ -1,0 +1,62 @@
+upstream {{app_name}} {
+    server 127.0.0.1:{{app_port}};
+}
+
+
+
+server{
+#    if ($http_x_forwarded_proto != 'https') {
+#        rewrite ^(.*) https://$host$1 permanent;
+#    }
+
+
+    listen 80;
+     server_name {{inventory_hostname}} {{app_name}} www.{{app_name}};
+#    ssl                  on;
+#    ssl_certificate      conf/dev.{{app_name}}.crt;
+#    ssl_certificate_key  conf/dev.{{app_name}}.key;    
+#    ssl_session_cache    shared:SSL:10m;
+#    ssl_session_timeout  10m;
+
+    client_max_body_size 500M;
+    client_header_timeout   10m;
+    client_body_timeout     10m;
+    send_timeout            10m;
+
+    location / {
+        proxy_redirect      off;
+        proxy_set_header    Host                    $host;
+        proxy_set_header    X-Real-IP               $remote_addr;
+        proxy_set_header    X-Forwarded-For         $proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Protocol    $scheme;
+        proxy_pass          http://{{app_name}};
+
+#        auth_basic            "Restricted";
+#        auth_basic_user_file  htpasswd;
+    }
+
+    location /static/ {
+        alias           {{project_root}}/project/{{static_path}}/;
+        access_log      off;
+        log_not_found   off;
+    }
+    
+    location /media/ {
+        alias           {{project_root}}/project/{{media_path}}/;
+        access_log      off;
+        log_not_found   off;
+    }
+    
+    location /robots.txt {
+        root            {{project_root}}/project/{{static_path}};
+        access_log      off;
+        log_not_found   off;
+    }
+
+    location /favicon.ico {
+        root            {{project_root}}/project/{{static_path}}/;
+        access_log      off;
+        log_not_found   off;
+    }
+
+}
