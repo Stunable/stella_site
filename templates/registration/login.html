@@ -27,7 +27,7 @@
 		<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{% url welcome %}{% endif %}" />
 		
 		<div id="login-buttons">
-			<div class="fix" ><input type="submit" value="login" /></div>
+			<div class="fix" ><input class="new_button"type="submit" value="login" /></div>
 			<span>or</span>
 			<div class="fix" ><a href="{% url create_retailer_profile %}">create account</a></div>
 		</div>

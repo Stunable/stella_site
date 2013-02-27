@@ -54,7 +54,7 @@ import os
 
 def get_retailer_profile(request,retailer_id=None):
     if retailer_id:
-        return RetailerProfile.objects.get(id=id)
+        return RetailerProfile.objects.get(id=retailer_id)
     if request.user.is_staff:
         return RetailerProfile.objects.get(id=request.GET.get('retailer',None))
     return RetailerProfile.objects.get(user=request.user)
@@ -76,6 +76,7 @@ def create_retailer_profile(request, template="retailers/retailer_profile_create
         if form.is_valid():
             new_retailer = form.save()
             request.session['retailer_id'] = new_retailer.id
+            print request.session.items()
             template = "accounts/thank-you.html"
             return redirect(reverse('retailer_terms', args=[new_retailer.id]))
         else:
@@ -109,9 +110,10 @@ def setup_wepay(request):
         response = urllib2.urlopen(url)
         resp_data = json.loads(response.read())
         # print resp_data
-
+        print request.session.keys()
         #{"user_id":121042660,"access_token":"e4423c3a3a3a3f62aa53151a9b2fca1718af0bc78b40dba6578716b9a2979fa5","token_type":"BEARER"}
         if request.session.get('retailer_id',None):
+
             retailer_profile = get_retailer_profile(request, retailer_id=request.session.get('retailer_id'))
         else:
             retailer_profile = get_retailer_profile(request)
@@ -168,6 +170,8 @@ def terms_complete(request, retailer_id, template="accounts/thank-you.html"):
     if int(request.session['retailer_id']) != int(retailer_id):
         print request.session['retailer_id']
         raise
+
+    print request.session.items()
     
     # send email to notify user
     retailer = get_object_or_404(RetailerProfile, pk=retailer_id)

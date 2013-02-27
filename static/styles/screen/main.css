@@ -2531,9 +2531,9 @@ body{
 }
 
 .new_button,.login #page-content form a,.login #page-content form input{
-	font-size:1.5em;
 	padding:8px;
 	background: white;
+	font:inherit;
 }
 .new_button{
 	padding:4px;
@@ -3483,7 +3483,6 @@ body .item-name {
 	/*font-family: 'Advent Pro', sans-serif;*/
 	color: #EB5DEF;
 	text-transform: uppercase;
-	font-size: 34px;
 	margin: 11px auto;
 }
 .invite p {
