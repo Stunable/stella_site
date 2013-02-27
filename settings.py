@@ -28,6 +28,9 @@ CONTACT_LIST = (
 )
 
 
+RETAILER_EMAIL = 'stylists@stunable.com'
+
+
 SHOPIFY_API_KEY = "a9dca1e81ac8554c181100b5a47de622"
 SHOPIFY_API_SECRET = "bc1b2b77901a3d1cd0ec408eb33fe315"
 # See http://api.shopify.com/authentication.html for available scopes

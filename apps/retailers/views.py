@@ -385,8 +385,9 @@ def bulk_upload(request,upload_id=None,template="retailers/product_list.html"):
                     up = form.save(commit=False)
                     up.retailer = retailer_profile
                     up.save()
+
                     uploadObject = up
-                    return redirect(reverse('bulk_upload',kwargs={'upload_id':up.id}))
+                    # return redirect(reverse('bulk_upload',kwargs={'upload_id':up.id}))
 
             pl = retailer_profile.retailer_item_set.all()
 

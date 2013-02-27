@@ -175,7 +175,11 @@
 
 
 <div class="section intro clearfix">
-    <h2><span>{% if upload %}Upload: {{upload.filename}}{% else %}Product Inventory{% endif %}</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
+    <h2><span>
+        {#% if upload %}Upload: {{upload.filename}}{% else %#}
+        Product Inventory
+        {#% endif %#}
+    </span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
 </div>
 <div class="section productlist body-copy bootstrap {% if not confirm %}not{% endif %}confirm">
     
@@ -186,8 +190,9 @@
         <input type="hidden" name="action_name" value="{{confirm.action_name}}">
     {% else %}
     {% if upload %}
-        <p>
-            Here are the results of your upload.
+            Thank you for uploading your products.  We have sent you an email to confirm we got the upload and we will get them up on the site as soon as possible.
+
+           <!--  Here are the results of your upload.
             {% if upload.uploaderror_set.all|length %}
             <p> Looks like there were a few issues:</p>
             <div style="margin-left:25px;background-color:#eee;padding:5px">
@@ -195,9 +200,7 @@
                     <p>{{error|safe}}</p>
                 {% endfor %}
             {% endif %}
-            </div>
-  
-            <p>If you're having trouble with any part of the product upload process, just <a href="mailto:stylists@stunable.com?subject=Upload Trouble ({{upload.id}})">email us</a> at stylists@stunable.com and we'll help you out.</p>
+            </div> -->
 
         </p>
     {% endif %}

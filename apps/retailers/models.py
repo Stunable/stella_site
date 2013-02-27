@@ -20,6 +20,7 @@ from tasks import process_upload,save_shopify_inventory_update,update_API_produc
 
 RETAILER_SUBJECT = 'accounts/retailer_welcome_subject.txt'
 RETAILER_MESSAGE = 'accounts/retailer_welcome_message.txt'
+NEW_UPLOAD = 'retailers/new_upload.txt'
     
 class ShippingType(models.Model):
     name = models.CharField(max_length=100)
@@ -46,7 +47,17 @@ class ProductUpload(models.Model):
     def save(self,*args,**kwargs):
         super(ProductUpload, self).save()
         if not self.processed:
-            process_upload(self,StylistItem,UploadError)
+            ctx = {
+                   'upload': self,
+
+                }
+            subject = 'stunable.com upload %d'%self.id
+            email_message = render_to_string(NEW_UPLOAD, ctx)
+                      
+            
+#                send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [self.email_address])
+            send_mail(subject, email_message, settings.RETAILER_EMAIL, [self.retailer.email_address])
+            # process_upload(self,StylistItem,UploadError)
 
     def filename(self):
         return os.path.basename(self.uploaded_zip.name)

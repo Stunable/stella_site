@@ -1,0 +1,8 @@
+Dear {{ upload.retailer }}:
+
+Thanks for your product upload.  We will need a little bit of time to process it but we'll get back to you ASAP if we have any questions.
+
+Thanks again!
+
+Sam, Brie, and Lizzy
+Stunable Co-Founders
