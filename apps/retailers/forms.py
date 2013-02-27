@@ -216,16 +216,16 @@ from common.forms import AjaxModelForm
 
 
 class ItemForm(AjaxModelForm):
-    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
+    # tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
     
     class Meta:
         model = Item
-        exclude = ('fabrics', 'image_urls', 'order', 'retailers', 'tags', 'sizes', 'colors','upload','price','is_onsale','is_available', 'approved','is_deleted','bg_color','api_type','object_id','slug','_retailer','price_text')
+        exclude = ('fabrics', 'image_urls', 'order', 'retailers', 'category','tags', 'sizes', 'colors','upload','price','is_onsale','is_available', 'approved','is_deleted','bg_color','api_type','object_id','slug','_retailer','price_text')
     
     def __init__(self, user=None, *args, **kwargs):
         self.user = user
         super(ItemForm, self).__init__(*args, **(kwargs))
-        self.fields['tags'].label = "Tags Related to your Product"
+        # self.fields['tags'].label = "Tags Related to your Product"
         self.fields['featured_image'].empty_label = '/static/images/choosepic.png'
         if self.instance:
             self.fields['featured_image'].queryset = ProductImage.objects.filter(item=self.instance)

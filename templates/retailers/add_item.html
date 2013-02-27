@@ -123,9 +123,12 @@
 	<form action="" method="post" id="add-item-form" enctype="multipart/form-data">
 		{% csrf_token %}
 		{{ form.non_field_errors }}
+		{% if form.instance.id %}
 		<div id="description_text">
+
 			{{form.description.value|safe}}
 		</div>
+		{% endif %}
 		<table>
 			{{ form.as_table }}
 			<tr></tr>
