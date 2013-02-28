@@ -102,7 +102,7 @@ def setup_wepay(request):
         data = {
           "client_id":settings.WEPAY_CLIENT_ID,
           "client_secret":settings.WEPAY_CLIENT_SECRET,
-          "redirect_uri":settings.RETAILER_SUBDOMAIN+'retailers/wepay/',
+          "redirect_uri":settings.RETAILER_SUBDOMAIN+'/wepay/',
           "code":code,
         }
         url += '?'+urllib.urlencode(data)
