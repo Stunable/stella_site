@@ -2547,7 +2547,7 @@ body{
 
 .new_button,.login #page-content form a,.login #page-content form input{
 	padding:8px;
-	background: white;
+	/*background: white;*/
 	font:inherit;
 }
 .new_button{
