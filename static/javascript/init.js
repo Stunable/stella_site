@@ -376,7 +376,7 @@ var stunable = {
                     if(json.errors != undefined)
                       process_form_errors(json, add_item_form)
                   } else {
-                    window.location.href = '/retailers/product_list';
+                    window.location.href = '/product_list';
                   }
                 }
               });

@@ -268,7 +268,7 @@
     <br><br>
     {% endif %}
     {% endif %}
-    <form class="action_submit" action="/retailers/item_action?next={% url product_list %}" method="post">
+    <form class="action_submit" action="/item_action?next={% url product_list %}" method="post">
         {% if not confirm %}
         <select style="display:none" id="action_select" name="action_name">
             <option value="-------------">-------------</option>

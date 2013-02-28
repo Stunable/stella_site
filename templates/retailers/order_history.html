@@ -174,7 +174,7 @@
                             $( this ).dialog( "close" );
                             $.ajax({
                               type: 'POST',
-                              url: '/retailers/order/update/' + item_pk + '/',
+                              url: '/order/update/' + item_pk + '/',
                               data: {status: 'return-item'},
                               success: function() { $('<div id="dialog-confirm" title="Success"><p>Updated successfully</p></div>').dialog({
                                     height: 140,
@@ -201,7 +201,7 @@
                             
                             $.ajax({
                               type: 'POST',
-                              url: '/retailers/order/update/' + item_pk + '/',
+                              url: '/order/update/' + item_pk + '/',
                               data: {status: 'shipped'},
                               success: function() { $('<div id="dialog-confirm" title="Success"><p>Updated successfully</p></div>').dialog({
                                     height: 140,
@@ -229,7 +229,7 @@
                             } 
                             $.ajax({
                                   type: 'POST',
-                                  url: '/retailers/order/update/' + item_pk + '/',
+                                  url: '/order/update/' + item_pk + '/',
                                   data: { status: 'shipped', tracking_number: $('#input-tracking-number').val() },
                                   success: function(data) { $('<div id="dialog-confirm" title="Success"><p>Updated successfully</p></div>').dialog({
                                         height: 140,
@@ -270,7 +270,7 @@
                             
                             $.ajax({
                               type: 'POST',
-                              url: '/retailers/order/update/' + item_pk + '/',
+                              url: '/order/update/' + item_pk + '/',
                               data: {status: 'cancel-order-return'},
                               success: function() { $('<div id="dialog-confirm" title="Success"><p>Updated successfully</p></div>').dialog({
                                     height: 140,

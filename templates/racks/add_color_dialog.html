@@ -38,7 +38,7 @@
 					setTimeout("parent.$.fancybox.close()", 3000);
 					var item_id = returnvalue['item_id'];
 					if(item_id){
-					    $.get('/retailers/item/edit/'+ item_id, function(returnData){
+					    $.get('/item/edit/'+ item_id, function(returnData){
 					        var temp = $('#id_colors');
                             // terrible way to select this
                             var new_color = $(returnData)[2];
