@@ -518,6 +518,31 @@ var stunable = {
             }
         });
 
+                $('#account-information-menu-item').addClass('active-menu');
+        
+        // make inline edit
+    $('.editable').hide();
+        
+    $('.edit').click(function(event){
+        event.preventDefault();
+        if ($(this).html() == 'Edit'){
+            $(this).html("Close");
+        }else{
+            $(this).html("Edit");
+        }
+        
+        var stc = $(this).parent().parent().find('.static');
+        var editable = $(this).parent().parent().find('.editable');
+        
+        if ($(stc).css('display')=='none'){
+            $(stc).css('display', '');
+            $(editable).css('display', 'none');
+        }else{
+            $(stc).css('display', 'none');
+            $(editable).css('display','');
+        }
+    });
+
       },
       accounts:function(){
         $('#tester').focus()
