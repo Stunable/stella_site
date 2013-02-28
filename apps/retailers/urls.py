@@ -31,6 +31,8 @@ urlpatterns = patterns('',
     url(r'^item_action', item_action),
     url(r'^wepay', setup_wepay),
     url(r'^$', redirect_to, {'url':'/accounts/login'}),
+    url(r'^racks/', include('apps.racks.urls'))
+
 )
 urlpatterns += patterns('django.contrib.flatpages.views',
     url(r'^about/$', 'flatpage', {'url': '/about/'}, name='main-about'),
