@@ -268,12 +268,12 @@ var stunable = {
            })
 
 
-           // if (updates_in_progress != undefined){
-           //  setTimeout("location.reload(true);",5000);
-           //  setInterval(function(){
-           //    $('#progress_box').append('. ').fadeIn('slow')
-           //  },200)
-           // }
+           if (updates_in_progress != undefined){
+            setTimeout("location.reload(true);",5000);
+            setInterval(function(){
+              $('#progress_box').append('. ').fadeIn('slow')
+            },200)
+           }
               for( i = 0; i < parseInt($('#id_types-INITIAL_FORMS').val()); i++) {
                 inventory_option_counter++;
                 // $('#tbl-' + inventory_option_counter).show();
