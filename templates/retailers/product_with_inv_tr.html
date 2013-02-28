@@ -10,13 +10,13 @@
     <td >
         <div class="picture_box">
             {% if item.get_image.small %}
-            <img class="item_pic" src="{{ item.get_image.small.url  }}" alt=""/>
+            <img class="item_pic" src="{{ item.get_image.tiny.url  }}" alt=""/>
             {% else %}
                         <td><img class="var_pic" src="{{STATIC_ROOT}}/images/image_not_ready.png"></td>
                         {% endif %}
         {% for image in item.get_additional_images %}
         {% if image.small %}
-            <img class="item_pic addl_pic" src="{{ image.small.url  }}">
+            <img class="item_pic addl_pic" src="{{ image.tiny.url  }}">
             {% else %}
                         <td><img class="var_pic" src="{{STATIC_ROOT}}/images/image_not_ready.png"></td>
                         {% endif %}
@@ -48,7 +48,7 @@
                     {% for it in styles.styles %} 
                     <tr class="variation">
                         {% if it.list.0.pic.small %}
-                        <td><img class="var_pic" src="{{it.list.0.pic.small.url}}"></td>
+                        <td><img class="var_pic" src="{{it.list.0.pic.tiny.url}}"></td>
                         {% else %}
                         <td><img class="var_pic" src="{{STATIC_ROOT}}/images/image_not_ready.png"></td>
                         {% endif %}

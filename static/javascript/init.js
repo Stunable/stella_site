@@ -242,7 +242,6 @@ var stunable = {
            $('.imageselector').ImageSelect();
 
            $('.deetsclick').click(function(){
-            console.log(this)
             $(this).closest('.product_row').toggleClass('nodeets')
            })
 
