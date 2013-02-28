@@ -6,9 +6,17 @@ def CMS(request):
     out = {}
     cms_entries = SiteTextContent.objects.filter(component='all')
     sp = request.path_info.split('/')
-    if len(sp)>1:
-        component = sp[1]
-        cms_entries = SiteTextContent.objects.filter(Q(component='all') | Q(component=component))
+
+    component = 'all'
+    
+    if request.subdomain == 'stylists':
+        component == 'retailers'
+    else:
+        if len(sp)>1:
+            component = sp[1]
+    
+
+    cms_entries = SiteTextContent.objects.filter(Q(component='all') | Q(component=component))
 
     for e in cms_entries:
         out[e.item_name] = e.html
