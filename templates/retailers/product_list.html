@@ -123,27 +123,29 @@
         margin:20px;
     }
 
+    #bulk_add_box form p label{
+        display:none;
+    }
+
+
     #id_uploaded_zip{
-        font-size:.5em;
-        text-align: left;
-        border: 1px dashed #EC67F0;
-        border-radius:8px;
-        width:160px;
-        height:60px;
+        font-size:1em;
+        /*text-align: left;*/
         position:absolute;
-        padding:10px;
         top:360px;
-        left:20px;
+        left:10px;
+        width:200px;
+    }
 
+
+    #bulk_add_box .submit_holder{
+        position:absolute;
+        top:390px;
+        left:10px;
     }
 
 
 
-    .productlist .errorlist ul{
-        position:absolute;
-        left:40px;
-        top:360px;
-    }
     .productlist .errorlist li{
         margin:5px;
     }
@@ -223,7 +225,7 @@
                 {{bulk_upload_form.errors}}
                 {% csrf_token %}
             <div class="submit_holder">
-            <input type="submit" value="Submit">
+            <input disabled="disabled" type="submit" value="Submit">
             </div>
             </form>    
         </div>

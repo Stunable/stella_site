@@ -261,9 +261,15 @@ var stunable = {
               return false
            })
 
-           $('#id_uploaded_zip').change(function(){
+
+
+           $('#id_uploaded_zip').click(function(e){
+              $('.submit_holder  input').attr('disabled',false);
+              $(this).css('color','grey');
+            
             $('.long_process_submit_form').submit(function(){
-             $(this).find('.submit_holder').html('<img src="/static/images/gui/loading.gif">');
+             $('<div class="info_modal">Your Upload is in progress.  When this goes away, that means it\'s done!</div>').modal({clickClose: false,escapeClose:false,showClose:false})
+              // sleep(3000)
             })
            })
 
