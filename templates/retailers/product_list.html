@@ -218,7 +218,7 @@
                 2.&nbsp unzip it, put your own files and information in it, and send it back right here.
 
                   <p>Uploads need to be <strong>.zip</strong> files with a .XLS file and then an image for each item.  Upload it here and you'll know what to do next.  Email us if you have questions</p>
-            <form class="long_process_submit_form" style="float:right" action="/retailers/item/bulk_upload/" method="POST"enctype="multipart/form-data">
+            <form class="long_process_submit_form" style="float:right" action="{% url bulk_upload %}" method="POST"enctype="multipart/form-data">
                 {{bulk_upload_form.as_p}}
                 {{bulk_upload_form.errors}}
                 {% csrf_token %}
