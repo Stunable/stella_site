@@ -184,7 +184,7 @@
 <div class="section productlist body-copy bootstrap {% if not confirm %}not{% endif %}confirm">
     
     {% if action %}
-    <form class="action_submit" action="/retailers/item_action?next={% url product_list %}" method="post">
+    <form class="action_submit" action="/item_action?next={% url product_list %}" method="post">
         <p> Are you sure you want to delete the following items?</p>
         <input type="hidden" name="confirm_{{confirm.action_name}}" value="True">
         <input type="hidden" name="action_name" value="{{confirm.action_name}}">
