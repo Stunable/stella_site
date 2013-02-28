@@ -327,8 +327,15 @@ class Item(models.Model,listImageMixin):
             self.save()
             return {'min':999999999,'max':999999999}
 
+        mn = min(seq)
+        mx = max(seq)
+        if mn and mx:
+            return {'min':mn,'max':mx}
+        elif mn:
+            return {'min':mn,'max':mn}
+        else:
+            return {'min':mx,'max':mx}
 
-        return {'min':min(seq),'max':max(seq)}
 
     def price_range_text(self):
         if self.price_text and self.price_text != 'none':

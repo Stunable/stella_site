@@ -501,8 +501,6 @@ var stunable = {
                 $('#new_shipping_type').fadeOut(500);
             }
         });
-        // make inline edit
-        $('.editable').hide();
 
         $('.edit').click(function(event) {
             event.preventDefault();
@@ -529,45 +527,45 @@ var stunable = {
         // make inline edit
     $('.editable').hide();
         
-    $('.edit').click(function(event){
-        event.preventDefault();
-        if ($(this).html() == 'Edit'){
-            $(this).html("Close");
-        }else{
-            $(this).html("Edit");
-        }
+    // $('.edit').click(function(event){
+    //     event.preventDefault();
+    //     if ($(this).html() == 'Edit'){
+    //         $(this).html("Close");
+    //     }else{
+    //         $(this).html("Edit");
+    //     }
         
-        var stc = $(this).parent().parent().find('.static');
-        var editable = $(this).parent().parent().find('.editable');
+    //     var stc = $(this).parent().parent().find('.static');
+    //     var editable = $(this).parent().parent().find('.editable');
         
-        if ($(stc).css('display')=='none'){
-            $(stc).css('display', '');
-            $(editable).css('display', 'none');
-        }else{
-            $(stc).css('display', 'none');
-            $(editable).css('display','');
-        }
+    //     if ($(stc).css('display')=='none'){
+    //         $(stc).css('display', '');
+    //         $(editable).css('display', 'none');
+    //     }else{
+    //         $(stc).css('display', 'none');
+    //         $(editable).css('display','');
+    //     }
 
-        $('#id_tags').chosen();
-        $('#id_sizes').after("<a class='icon plus-icon item-ref' href='{% url add_size %}'>&nbsp</a>");
-        $('#id_colors').after("<a class='icon plus-icon item-ref' href='{% url add_color %}'>&nbsp</a>");
+    //     $('#id_tags').chosen();
+    //     $('#id_sizes').after("<a class='icon plus-icon item-ref' href='{% url add_size %}'>&nbsp</a>");
+    //     $('#id_colors').after("<a class='icon plus-icon item-ref' href='{% url add_color %}'>&nbsp</a>");
         
-        var add_item_form = $('#add-item-form'); 
+    //     var add_item_form = $('#add-item-form'); 
         
-        add_item_form.ajaxForm({
-            url : this.action,
-            dataType : 'json',
-            success : function(json)
-            {
-                if (json.success == false && json.errors != undefined)
-                    process_form_errors(json, add_item_form)
-                else {
-                    //do something if there aren't errors
-                    // $('#paypal-form').submit();
-                }
-            }
-          }); 
-        })
+    //     add_item_form.ajaxForm({
+    //         url : this.action,
+    //         dataType : 'json',
+    //         success : function(json)
+    //         {
+    //             if (json.success == false && json.errors != undefined)
+    //                 process_form_errors(json, add_item_form)
+    //             else {
+    //                 //do something if there aren't errors
+    //                 // $('#paypal-form').submit();
+    //             }
+    //         }
+    //       }); 
+    //     })
       },
       accounts:function(){
         $('#tester').focus()

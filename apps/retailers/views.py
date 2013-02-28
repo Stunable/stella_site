@@ -102,7 +102,7 @@ def setup_wepay(request):
         data = {
           "client_id":settings.WEPAY_CLIENT_ID,
           "client_secret":settings.WEPAY_CLIENT_SECRET,
-          "redirect_uri":settings.WWW_ROOT+'retailers/wepay/',
+          "redirect_uri":settings.RETAILER_SUBDOMAIN+'retailers/wepay/',
           "code":code,
         }
         url += '?'+urllib.urlencode(data)
@@ -160,7 +160,7 @@ def setup_wepay(request):
 
 
     else:
-        url = 'https://'+{'stage':'stage.','production':'' }[settings.WEPAY_STAGE]+'wepay.com/v2/oauth2/authorize?client_id='+settings.WEPAY_CLIENT_ID+'&redirect_uri='+settings.WWW_ROOT+'retailers/wepay/&scope=manage_accounts,collect_payments,refund_payments,preapprove_payments,send_money'
+        url = 'https://'+{'stage':'stage.','production':'' }[settings.WEPAY_STAGE]+'wepay.com/v2/oauth2/authorize?client_id='+settings.WEPAY_CLIENT_ID+'&redirect_uri='+settings.RETAILER_SUBDOMAIN+'wepay/&scope=manage_accounts,collect_payments,refund_payments,preapprove_payments,send_money'
         return HttpResponseRedirect(url)
 
 
@@ -316,7 +316,7 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                     inventory_form = inventory_type_formset_factory(request.user, post, item_instance)
                     if inventory_form:
                         new_thing = inventory_form.save()
-                        print new_thing
+                        # print new_thing
                 except IndexError, e:
                     # TODO
                     raise
