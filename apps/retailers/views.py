@@ -425,7 +425,7 @@ def product_list(request, upload=None, template="retailers/product_list.html"):
     return direct_to_template(request, template, ctx)
 
 @login_required
-def retailer_information(request, name, template="retailers/retailer_information.html"):
+def retailer_information(request, name=None, template="retailers/retailer_information.html"):
     retailer_profile = get_retailer_profile(request)
     shipping_types = ShippingType.objects.all()
     form = RetailerEditForm(instance=retailer_profile)

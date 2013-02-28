@@ -107,8 +107,10 @@
                     </div><!--/.wrap-->
                 </div><!--/.nav#global-->
                 <div class="wrap" id="hdr-logo">
-                    <h1 id="shop-with-stella"><a href="{% url home %}" class="logo">Stunable</a></h1>
-                </div><!--/.wrap-->
+                    {% if request.subdomain != 'stylists' %}
+                       <h1 id="shop-with-stella"><a href="{% url home %}" class="logo">Stunable</a></h1>
+                    {% endif %}
+                 </div><!--/.wrap-->
             </div><!--/.header-->
             <div class="section" id="main">
                 <div class="wrap" id="carousel-wrapper">
@@ -366,6 +368,7 @@
                 <br><br><br>
                 {% endif %}
             </div><!--/.footer -->
+            {% if request.subdomain != 'stylists' %}
             <div class="item-send clearfix" id="send_to_admirer_reduced_form" style="opacity: 0; display: none; width: 270px;">
                 <form action="{% url send_item_to_admirer %}" id="reduced_send_to_admirer_form" method="POST" >
                     {% csrf_token %}
@@ -388,6 +391,7 @@
                     </div>
                 </form>
             </div>
+            {% endif %}
         </div>
 
         {% block login_modal_box %}
@@ -410,7 +414,7 @@
              </div>
              <div class="foot">
                  <!-- <a href="/retailers/create_profile">become a stunable stylist</a> -->
-                 <a href="/accounts/login">stylist login</a>
+                 <a href="https://stylists.stunable.com/accounts/login">stylist login</a>
              </div>
           </div></div></div></div></div></div>
 

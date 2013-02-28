@@ -1,8 +1,12 @@
 from django.conf.urls.defaults import *
-from django.views.generic.simple import direct_to_template
+from django.views.generic.simple import direct_to_template,redirect_to
 from retailers.views import *
+from contact_form.views import contact
+
 
 urlpatterns = patterns('',
+    url(r'^accounts/', include('apps.accounts.urls')),
+    url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^create_profile$', create_retailer_profile, name='create_retailer_profile'),
     url(r'^update_profile$', update_retailer_profile, name='update_retailer_profile'),
     url(r'^shopify/', include('apps.shopify_app.urls')),
@@ -25,6 +29,17 @@ urlpatterns = patterns('',
     url(r'^view_shipping_label/(?P<shipping_number>\w+)', view_shipping_label, name='view_shipping_label'),
     url(r'^print_packing_slip/(?P<shipping_number>\w+)',print_packing_slip, name='print_packing_slip'),
     url(r'^item_action', item_action),
-    url(r'^wepay', setup_wepay)
+    url(r'^wepay', setup_wepay),
+    url(r'^$', redirect_to, {'url':'/accounts/login'}),
 )
-
+urlpatterns += patterns('django.contrib.flatpages.views',
+    url(r'^about/$', 'flatpage', {'url': '/about/'}, name='main-about'),
+    url(r'^faq/$', 'flatpage', {'url': '/faq/'}, name='faq'),
+    url(r'^team/$', 'flatpage', {'url': '/team/'}, name='team'),
+    url(r'^return/$', 'flatpage', {'url': '/return/'}, name='return'),
+    url(r'^careers/$', 'flatpage', {'url': '/careers/'}, name='careers'),
+    url(r'^we_love_developers/$', 'flatpage', {'url': '/we_love_developers/'}, name='devs'),
+    url(r'^how_it_works/$', 'flatpage', {'url': '/how_it_works/'}, name='hiw'),
+    url(r'^privacy/$', 'flatpage', {'url': '/privacy/'}, name="main-privacy"),
+    url(r'^terms/$', 'flatpage', {'url': '/terms/'}, name="terms"),
+)

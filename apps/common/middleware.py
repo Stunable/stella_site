@@ -325,3 +325,18 @@ class ProfileMiddleware(object):
                 response['Content-type'] = 'application/octet-stream'
                 return response
         return response
+
+class SubdomainsMiddleware:
+    def process_request(self, request):
+        """Parse out the subdomain from the request"""
+        request.subdomain = None
+        host = request.META.get('HTTP_HOST', '')
+        host_s = host.replace('www.', '').split('.')
+        if len(host_s) > 2:
+            request.subdomain = ''.join(host_s[:-2])
+
+        if request.subdomain == 'stylists':
+            print 'STYLISTS DOMAIN'
+            request.urlconf = 'retailers.urls'
+
+

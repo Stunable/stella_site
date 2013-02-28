@@ -26,7 +26,7 @@
 	                                <li><a class="text-link" href="{% url faq %}">FAQ</a></li>
 	                                <li><a class="text-link" href="{% url retailer_list %}">Stunable Stylists</a></li>
 	                                <li><a class="text-link" href="{% url careers %}">Careers</a></li>
-	                                <li><a class="text-link" href="{% url main-contact %}">Contact Us</a></li>
+	                                <li><a class="text-link" href="/contact">Contact Us</a></li>
 	                                <li><a class="text-link" href="{% url main-privacy %}">Privacy Policy</a></li>
 	                                <li><a class="text-link" href="{% url terms %}">Terms of Use</a></li>
 	                                <li><a class="text-link" href="{% url return %}">Returns</a></li>
@@ -34,11 +34,11 @@
 	                                </ul>
 	                            </li>
 	                            <li class="navlink" id="nav-news">
-	                                <a href="{% url news_index %}" title="The latest about Stunable."  class="text-link">News</a>
+	                                <a href="/news" title="The latest about Stunable."  class="text-link">News</a>
 	                            </li>
 	                            {% if request.user.is_authenticated %}
 	                            <li class="navlink" id="nav-signout">
-	                                <a href="{% url auth_logout %}" title="Sign out of Stunable." class="text-link">Log Out</a>
+	                                <a href="/accounts/logout" title="Sign out of Stunable." class="text-link">Log Out</a>
 	                            </li>
 	                            {% endif %}
 	                        </ul><!--/.horizontal-list -->

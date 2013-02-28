@@ -161,6 +161,7 @@ MIDDLEWARE_CLASSES = (
     # 'johnny.middleware.LocalStoreClearMiddleware',
     # 'johnny.middleware.QueryCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'apps.common.middleware.SubdomainsMiddleware',    
     'apps.common.middleware.ProfileMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
