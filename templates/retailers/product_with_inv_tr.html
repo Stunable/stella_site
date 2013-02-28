@@ -9,9 +9,17 @@
 {% endif %}
     <td >
         <div class="picture_box">
+            {% if item.get_image.small %}
             <img class="item_pic" src="{{ item.get_image.small.url  }}" alt=""/>
+            {% else %}
+                        <td><img class="var_pic" src="{{STATIC_ROOT}}/images/image_not_ready.png"></td>
+                        {% endif %}
         {% for image in item.get_additional_images %}
+        {% if image.small %}
             <img class="item_pic addl_pic" src="{{ image.small.url  }}">
+            {% else %}
+                        <td><img class="var_pic" src="{{STATIC_ROOT}}/images/image_not_ready.png"></td>
+                        {% endif %}
         {% endfor %}
     </div>
     </td>
