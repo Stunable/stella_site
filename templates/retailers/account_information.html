@@ -92,7 +92,11 @@
     
                 <div class="static">
                     <p style="display: inline">
+                        {% if retailer_profile.wepay_acct %}
                         WePay Account #: <a href="http://wepay.com">{{ retailer_profile.wepay_acct }}</a>
+                        {% else %}
+                        WePay Account #: <a href="/wepay">Click to set up payments through Wepay.</a>
+                        {% endif %}
                     </p>
                 </div>
                 <div class="editable">
