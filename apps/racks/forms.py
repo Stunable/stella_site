@@ -148,7 +148,7 @@ def item_inventory_form_factory(retailer):
             self.fields['image'].empty_label = '/static/images/choosepic.png'
             self.fields['size'].initial = None
             self.fields['image'].initial = None
-            self.fields['position'].initial = 0
+            # self.fields['position'].initial = 0
             self.fields['custom_color_name'].initial = None
             self.fields['size'].empty_label = '------'
 

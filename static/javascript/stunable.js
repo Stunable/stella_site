@@ -885,3 +885,29 @@ function initTouch()
    document.addEventListener("touchend", touchHandler, true);
    document.addEventListener("touchcancel", touchHandler, true);    
 }
+
+
+// FROM RETAILERS
+
+  function hide_form_errors()
+    {
+        $('.errorlist').remove();
+    }
+
+    function process_form_errors(json, form)
+    {
+        hide_form_errors();
+        //form.clearForm();
+        errors = json.errors;
+    
+        if (errors.__all__ != undefined)
+            form.append(errors.__all__);
+
+        prefix = form.find(":hidden[name='prefix']").val();
+
+        prefix == undefined ? prefix = '' : prefix = prefix + '-';
+        for (field in errors) {
+            // console.log('#id_' + prefix + field);
+            $('#id_' + prefix + field).after(errors[field]);
+        }
+    }

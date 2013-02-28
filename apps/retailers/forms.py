@@ -228,7 +228,7 @@ class ItemForm(AjaxModelForm):
         # self.fields['tags'].label = "Tags Related to your Product"
         self.fields['featured_image'].empty_label = '/static/images/choosepic.png'
         if self.instance:
-            self.fields['featured_image'].queryset = ProductImage.objects.filter(item=self.instance)
+            self.fields['featured_image'].queryset = ProductImage.objects.filter(item=self.instance) |  ProductImage.objects.filter(retailer=user,item=None)
         else:
             self.fields['featured_image'].queryset = ProductImage.objects.filter(retailer=user)
         addPlus(self.fields['featured_image'].widget, 'featured_image', None, ProductImage.objects.filter(retailer=user),'#','Product Image')
