@@ -102,9 +102,10 @@ def setup_wepay(request):
         data = {
           "client_id":settings.WEPAY_CLIENT_ID,
           "client_secret":settings.WEPAY_CLIENT_SECRET,
-          "redirect_uri":settings.RETAILER_SUBDOMAIN+'/wepay/',
+          "redirect_uri":settings.RETAILER_SUBDOMAIN+'wepay/',
           "code":code,
         }
+
         url += '?'+urllib.urlencode(data)
         # print url
         response = urllib2.urlopen(url)
@@ -160,7 +161,8 @@ def setup_wepay(request):
 
 
     else:
-        url = 'https://'+{'stage':'stage.','production':'' }[settings.WEPAY_STAGE]+'wepay.com/v2/oauth2/authorize?client_id='+settings.WEPAY_CLIENT_ID+'&redirect_uri='+urllib.quote(settings.RETAILER_SUBDOMAIN.encode("utf-8"))+'wepay/&scope=manage_accounts,collect_payments,refund_payments,preapprove_payments,send_money'
+        url = 'https://'+{'stage':'stage.','production':'' }[settings.WEPAY_STAGE]+'wepay.com/v2/oauth2/authorize?client_id='+settings.WEPAY_CLIENT_ID+'&redirect_uri='+settings.RETAILER_SUBDOMAIN+'wepay/&scope=manage_accounts,collect_payments,refund_payments,preapprove_payments,send_money'
+        # print url
         return HttpResponseRedirect(url)
 
 
@@ -171,7 +173,7 @@ def terms_complete(request, retailer_id, template="accounts/thank-you.html"):
         print request.session['retailer_id']
         raise
 
-    print request.session.items()
+    # print request.session.items()
     
     # send email to notify user
     retailer = get_object_or_404(RetailerProfile, pk=retailer_id)
