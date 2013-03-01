@@ -24,7 +24,7 @@
 		<div class="separator"></div>
 		<input  class="txt pass" name="password" type="password" placeholder="PASSWORD"/>
 		<div class="separator"></div>
-		<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{% url welcome %}{% endif %}" />
+		<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{% url retailer_information %}{% endif %}" />
 		
 		<div id="login-buttons">
 			<div class="fix" ><input class="new_button"type="submit" value="login" /></div>

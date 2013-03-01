@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.utils import simplejson
 from django.core.mail import mail_admins
 import sys
-from accounts.models import UserProfile
+
 
 
 def json_view(func):
@@ -46,6 +46,7 @@ def json_view(func):
 
 
 def get_or_create_profile(request):
+    from accounts.models import UserProfile
     try:
         profile = request.user.get_profile()
     except UserProfile.DoesNotExist:

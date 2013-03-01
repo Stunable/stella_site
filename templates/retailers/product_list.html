@@ -5,6 +5,10 @@
 {% block body_class %}common large_common pad-bottom{% endblock %}
 {% block content-class%}round-corner-shadow{%endblock%}
 
+{% load pagination %}
+
+
+
 {% block content %}
 
 <style type="text/css">
@@ -283,6 +287,7 @@
     {% endif %}
     {% csrf_token %}
     <div id="product_table">
+    {% pagination product_list %}
     <table class="product_list_table">
         <tbody>
             {% if not confirm %}
@@ -298,7 +303,8 @@
                 </td>
             </tr>
             {% endif %}
-            {% for item in product_list %}
+
+            {% for item in product_list.object_list %}
                 {% include "retailers/product_with_inv_tr.html" %}
             {% endfor %}
         </tbody>

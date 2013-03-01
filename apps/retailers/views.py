@@ -36,6 +36,8 @@ import urllib
 import urllib2
 from datetime import date,timedelta
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 # from apps.cart.plugins.taxcloud import TaxCloudClient
 # TCC = TaxCloudClient()
 
@@ -421,7 +423,22 @@ def product_list(request, upload=None, template="retailers/product_list.html"):
         in_progress = APIConnection.objects.filter(retailer=request.user,update_in_progress=True)
 
 
-        ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form,'updates_in_progress':in_progress, 'upload':upload}
+        paginator = Paginator(pl, int(request.GET.get('limit',2)))
+
+        page = int(request.GET.get('page',1))
+        try:
+            products = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            products = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            products = paginator.page(paginator.num_pages)
+
+
+
+
+        ctx = {'retailer_profile': retailer_profile, 'product_list': products,'bulk_upload_form':form,'updates_in_progress':in_progress, 'upload':upload}
     except:
         raise
         return redirect(reverse("home"))
