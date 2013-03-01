@@ -228,6 +228,7 @@ INSTALLED_APPS = (
     'retailers',
     # 'paypal',
     'cart',
+    'common',
     'contact_form',
     'bootstrap',
     'sorl.thumbnail',
