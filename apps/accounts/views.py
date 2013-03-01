@@ -410,9 +410,12 @@ def connect(request):
 
     request.session['fb_token'] = sa.tokens['access_token']
     if request.session.has_key('next'):
-        return redirect(session['next'])
-
-    return redirect(reverse("home"))
+        try:
+            print 'accounts/connect redirecting to'+request.session.get('next')
+            return redirect(request.session.get('next','/'))
+        except Exception, e:
+            print 'accounts/connect error:',e
+    return redirect('/')
 
 # connection = httplib.HTTPSConnection('api.twitter.com')
 
