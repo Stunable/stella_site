@@ -377,7 +377,7 @@ def connect(request):
             P = request.user.get_profile()
         except:
             P = UserProfile.objects.create(user=request.user)
-            UserProfile.set_default_tags()
+            P.set_default_tags()
 
 
         I = get_fb_avatar_image(sa)
