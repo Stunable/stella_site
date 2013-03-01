@@ -140,11 +140,10 @@ class RetailerProfile(models.Model):
                     pass                    
                 
 #                send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [self.email_address])
-                send_mail(subject, email_message, settings.STELLA_DEFAULT_EMAIL, [self.email_address])
-
+                send_mail(subject, email_message, settings.EMAIL_HOST_USER, [self.email_address])
                 subject = "NEW RETAILER:%s"%self.name
                 email_message = "THE FOLLOWING EMAIL WAS SENT TO %s\n"%self.email_address + email_message
-                send_mail(subject, email_message, settings.STELLA_DEFAULT_EMAIL, [settings.RETAILER_EMAIL])
+                send_mail(subject, email_message, settings.EMAIL_HOST_USER, [settings.RETAILER_EMAIL])
         super(RetailerProfile, self).save()
 
     @property
