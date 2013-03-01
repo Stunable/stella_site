@@ -423,7 +423,7 @@ def product_list(request, upload=None, template="retailers/product_list.html"):
         in_progress = APIConnection.objects.filter(retailer=request.user,update_in_progress=True)
 
 
-        paginator = Paginator(pl, int(request.GET.get('limit',2)))
+        paginator = Paginator(pl, int(request.GET.get('limit',20)))
 
         page = int(request.GET.get('page',1))
         try:
