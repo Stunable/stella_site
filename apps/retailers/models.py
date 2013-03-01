@@ -57,6 +57,9 @@ class ProductUpload(models.Model):
             
 #                send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [self.email_address])
             send_mail(subject, email_message, settings.RETAILER_EMAIL, [self.retailer.email_address])
+
+            email_message = "%sadmin/retailers/productupload/%d/ was uploaded by %s\n\n"%(settings.WWW_ROOT,self.id,self.retailer.email_address) + email_message
+            send_mail(subject, email_message, settings.EMAIL_HOST_USER, [settings.RETAILER_EMAIL])
             # process_upload(self,StylistItem,UploadError)
 
     def filename(self):
@@ -138,6 +141,10 @@ class RetailerProfile(models.Model):
                 
 #                send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [self.email_address])
                 send_mail(subject, email_message, settings.STELLA_DEFAULT_EMAIL, [self.email_address])
+
+                subject = "NEW RETAILER:%s"%self.name
+                email_message = "THE FOLLOWING EMAIL WAS SENT TO %s\n"%self.email_address + email_message
+                send_mail(subject, email_message, settings.STELLA_DEFAULT_EMAIL, [settings.RETAILER_EMAIL])
         super(RetailerProfile, self).save()
 
     @property
@@ -263,7 +270,7 @@ class ShopifyConnection(APIConnection):
     def get_products(self):
         """ return all products for this retailer for this API"""
         page = 1
-        out = []
+
         while True:
             resp = self.get_session().Product.find(limit=10,page=page)
             if not len(resp):

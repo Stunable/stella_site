@@ -145,7 +145,10 @@
     }
 
 
-
+    #product_table{
+        max-width:910px;
+        overflow:auto;
+    }
     .productlist .errorlist li{
         margin:5px;
     }
@@ -279,6 +282,7 @@
 
     {% endif %}
     {% csrf_token %}
+    <div id="product_table">
     <table class="product_list_table">
         <tbody>
             {% if not confirm %}
@@ -299,6 +303,7 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
     {% if confirm %}
    
         {% if action %}

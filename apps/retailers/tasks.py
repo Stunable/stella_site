@@ -10,6 +10,11 @@ from django.contrib.contenttypes.models import ContentType
 from racks.models import Item,ItemType,Color,Size,ProductImage
 from django.core.files import File
 
+
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from django.conf import settings
+
 from celery import task
 
 def find_image(folder,image):
@@ -176,7 +181,7 @@ def update_API_products(api_connection):
     
 @task
 def process_API_products(list_of_products,api_connection):
-
+    product_count = 0
     Retailer = ContentType.objects.get(app_label="retailers", model="retailerprofile").model_class().objects.get(user=api_connection.retailer)
 
     for product in list_of_products:
@@ -200,6 +205,9 @@ def process_API_products(list_of_products,api_connection):
             I.description = api_connection.get_description(d)
             I._retailer = Retailer
             I.save()
+
+            if created:
+                product_count += 1
             
             api_connection.STYLIST_ITEM_CLASS.objects.get_or_create(
                                                                     stylist=api_connection.retailer,
@@ -281,6 +289,27 @@ def process_API_products(list_of_products,api_connection):
     print 'done updating items'
     api_connection.update_in_progress = False
     api_connection.save()
+
+#     ctx = {
+
+#                 }
+#     subject = 'Product API refresh completed'
+#     email_message = """
+
+# %(retailer)s just had their
+
+
+
+#     """     
+    
+# #                send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [self.email_address])
+#     send_mail(subject, email_message, settings.STELLA_DEFAULT_EMAIL, [self.email_address])
+
+#     subject = "NEW RETAILER:%s"%self.name
+#     email_message = "THE FOLLOWING EMAIL WAS SENT TO %s\n"%self.email_address + email_message
+#     send_mail(subject, email_message, settings.STELLA_DEFAULT_EMAIL, [settings.RETAILER_EMAIL])
+
+
 
 
 

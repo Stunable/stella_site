@@ -31,7 +31,9 @@ urlpatterns = patterns('',
     url(r'^item_action', item_action),
     url(r'^wepay', setup_wepay),
     url(r'^$', redirect_to, {'url':'/accounts/login'}),
-    url(r'^racks/', include('apps.racks.urls'))
+    url(r'^racks/', include('apps.racks.urls')),
+    url(r'^blog/', include('apps.blog.urls')),
+    url(r'^news/', include('apps.news.urls'))
 
 )
 urlpatterns += patterns('django.contrib.flatpages.views',
@@ -45,3 +47,23 @@ urlpatterns += patterns('django.contrib.flatpages.views',
     url(r'^privacy/$', 'flatpage', {'url': '/privacy/'}, name="main-privacy"),
     url(r'^terms/$', 'flatpage', {'url': '/terms/'}, name="terms"),
 )
+
+urlpatterns += patterns('',
+     url(r'^$',
+        'contact_form.views.contact',name='main-contact'),
+)
+
+from django.conf import settings
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': settings.MEDIA_ROOT,
+        }),
+        url(r'^admin-media/(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': settings.ADMIN_MEDIA_ROOT,
+        }),
+        
+   )
+
+    

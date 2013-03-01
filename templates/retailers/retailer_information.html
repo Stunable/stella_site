@@ -14,44 +14,188 @@
 	textarea {
 		width: 100%;
 	}
+
+    .edit {
+        display: inline;
+        margin-left: 10px;
+    }
+    table {
+        margin-bottom: 20px;
+    }
+    .first {
+        width: 10%;
+    }
+    .common td input {
+        width: 150px;
+    }
+
+    .private_info_wrapper{
+
+    }
+
+    .desctext{
+        border:1px solid #ddd;
+        margin-bottom:20px;
+        padding:10px;
+    }
+
+    .wrapper{
+        margin:20px;
+        border-radius:10px;
+    }
+
+    #public_info{
+        border:1px solid #EC67F0;
+        padding:30px;
+    }
+
+    #private_info{
+        background-color:#eee;
+        padding:30px;
+    }
+
+    #private_info>div{
+        margin-top:20px;
+        border-top:1px solid #bbb;
+        padding:10px;
+    }
+
 </style>
+
+
 <div class="section intro clearfix">
-    <h2><span>Company Information</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
-    <p>
-        This information will be visible to Stunable Shoppers 
-    </p>
+    <h2><span>Account Information:</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
 </div>
-<div class="section body-copy bootstrap">
-    <div class="retailer-wrapper">
-        <form style="margin: 0px; height: 0px;" action="{% url retailer_logo_upload %}" method="POST" id="avatar-upload-form" enctype="multipart/form-data" >
-            {% csrf_token %}
-            <input style="visibility: collapse" type="file" id="upload_avatar" name="company_logo">
-        </form>
-        {% load thumbnail %}
-        {% thumbnail retailer_profile.logo_image "120x100" as im %}
-            <img src="{{ im.url }}" class="retailer-logo">
-            {% empty %}
-            <img src="{{ retailer_profile.logo_image }}" class="retailer-logo" />
-        {% endthumbnail %}
-        &nbsp;<a class="quest">Update Logo</a>
-    </div>
-    <p id="bigform-error"></p>
-    <div class="description">
-        <div>
-            <h3 class="inline">Company Description</h3><a class="edit" href="#">Edit</a>
-        </div>
-        <p class="static">
-            {{ retailer_profile.description }}
-        </p>
-        
-        <div class="editable">
-            <form action='{% url update_retailer_profile %}' method="POST">
-                <textarea name="description">{{ retailer_profile.description }}</textarea>
-                <input type="hidden" name="account_page" value="yes" />
-                <input type="submit" class="btn btn-primary" value="Save"/>
+
+
+
+    <div id="public_info" class="wrapper">
+         <h3>
+            This information will be visible to Stunable Shoppers 
+        </h3>
+        <br>
+        <div class="retailer-wrapper">
+            <form style="margin: 0px; height: 0px;" action="{% url retailer_logo_upload %}" method="POST" id="avatar-upload-form" enctype="multipart/form-data" >
+                {% csrf_token %}
+                <input style="visibility: collapse" type="file" id="upload_avatar" name="company_logo">
             </form>
+            {% load thumbnail %}
+            {% thumbnail retailer_profile.logo_image "120x100" as im %}
+                <img src="{{ im.url }}" class="retailer-logo">
+                {% empty %}
+                <img src="{{ retailer_profile.logo_image }}" class="retailer-logo" />
+            {% endthumbnail %}
+            &nbsp;<br>&nbsp&nbsp&nbsp<a class="quest">Update Logo</a>
+        </div>
+        <p id="bigform-error"></p>
+        
+        <br>
+
+        <div class="description">
+            <div>
+                <h3 class="inline">Company Description</h3><a class="edit" href="#">Edit</a>
+            </div>
+
+            <div class="desctext">
+                <p class="static">
+                    {{ retailer_profile.description }}
+                </p>
+            </div>
+            <div class="editable">
+                <form action='{% url update_retailer_profile %}' method="POST">
+                    <textarea name="description">{{ retailer_profile.description }}</textarea>
+                    <input type="hidden" name="account_page" value="yes" />
+                    <input type="submit" class="btn btn-primary" value="Save"/>
+                </form>
+            </div>
         </div>
     </div>
+
+
+    <div id="private_info" class="wrapper">
+
+         <h3>
+            This information will be <strong>not</strong> visible to Stunable Shoppers 
+        </h3>
+
+        <div>
+         <table class="account_info">
+                <tr>
+                    <td class="first"><label>Email: </label></td>
+                    <td>
+                        <p>
+                           <!-- <a class="edit">Edit</a>  -->
+                        </p>
+                        <p class="static">
+                            {{ retailer_profile.email_address }} 
+                        </p>
+                    
+                        <div class="editable" style="margin-left: 10px;">
+                            <form action='' class="form-horizontal" method="POST">
+                                <div class="control-group">
+                                    <input type="text" name="email_address" value="{{ retailer_profile.email_address }}" />
+                                    <input type="submit" class="btn btn-primary" value="Save"/>
+                                </div>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="first"><label>Password: </label></td>
+                    <td>
+                        <p>
+                           <a href="{% url django.contrib.auth.views.password_reset %}">Reset Password</a> 
+                        </p>
+                        <p class="static">
+                            *****
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+            
+
+            If you would like to make changes to your company name, company address, or have issues with your WePay Account, please contact us here: <a href="mailto:support@stunable.com?subject=Stylist Company Info Change Request">Stunable Stylists Support</a>
+                <br>
+                <br>
+            <div class="company_address">
+                <h3>Company Address</h3>
+                <ul>
+                    <li style="display:inline">{{retailer_profile.address1}}</li>
+                    <li style="display:inline">{{retailer_profile.address2}}</li>
+                    <li>{{retailer_profile.city}}</li>
+                    <li style="display:inline">{{retailer_profile.state}}</li>
+                    <li style="display:inline">{{retailer_profile.zip_code}}</li>
+                </ul>
+                <div class="editable">
+                    <form action="" method="POST">
+                    <p>
+                        {{ retailer_profile.name }}
+                    </p>
+                    <input type="text" name="address1" value="{{ retailer_profile.address1 }}"/>
+                    <br>
+                    <input type="text" name="address2" value="{{ retailer_profile.address2 }}"/>
+                    <br/>
+                    <input type="submit" class="btn btn-primary" value="Save"/>
+                    </form>
+                </div>
+            </div>
+
+        <div class="billing_information">
+            <h3>Billing information</h3>
+
+            <div class="static">
+                <p style="display: inline">
+                    {% if retailer_profile.wepay_acct %}
+                    WePay Account #: <a href="http://wepay.com">{{ retailer_profile.wepay_acct }}</a>
+                    {% else %}
+                    WePay Account #: <a href="/wepay">Click to set up payments through Wepay.</a>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+
     <div class="return_policy">
         <div>
             <h3 class="inline">Return Policy</h3>
@@ -64,6 +208,10 @@
         </p>
         {% endif %}
     </div>
+    
+
+
+
     <div class="shipping_options">
         <div>
             <h3 class="inline">Shipping</h3>
