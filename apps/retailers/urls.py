@@ -30,7 +30,7 @@ urlpatterns = patterns('',
     url(r'^print_packing_slip/(?P<shipping_number>\w+)',print_packing_slip, name='print_packing_slip'),
     url(r'^item_action', item_action),
     url(r'^wepay', setup_wepay),
-    url(r'^$', redirect_to, {'url':'/accounts/login'}),
+    url(r'^$', redirect_to, {'url':'/accounts/login'}, name="home"),
     url(r'^racks/', include('apps.racks.urls')),
     url(r'^blog/', include('apps.blog.urls')),
     url(r'^news/', include('apps.news.urls'))
@@ -66,4 +66,3 @@ if settings.DEBUG:
         
    )
 
-    
