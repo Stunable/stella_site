@@ -78,6 +78,8 @@ urlpatterns = patterns('',
                        url(r'^accounts/', include('django.contrib.auth.urls')),
                        url(r'^admirers/', include('apps.friends.urls')),
                        url(r'^notification/', include('apps.notification.urls')),
+                           # retailer app
+                       url(r'^retailers/', include('retailers.urls')),
                        url(r'^racks/', include('apps.racks.urls')),
                        url(r'^shop/', include('apps.racks.urls')),
                         
@@ -103,8 +105,7 @@ urlpatterns = patterns('',
                        # facebook integration
                        url(r'^facebook/', include('facebook.urls')),
                         
-                       # retailer app
-                       url(r'^retailers/', include('retailers.urls')),
+                   
                     
                        url(r'^cart/', include('cart.urls')),
                        
