@@ -39,9 +39,11 @@ admin.autodiscover() # enables admin
 
 
 urlpatterns = patterns('',
+
                        url(r'^$', 
                            'apps.racks.views.gethome',
                            name="home"),
+                       url(r'^retailers/', include('retailers.urls')),
                        url(r'', include('social_auth.urls')),
                        url(r'^registration/', include('apps.registration.urls')),
                        url(r'^login/$', redirect_to, {'url': '/login/facebook'}),
@@ -79,7 +81,7 @@ urlpatterns = patterns('',
                        url(r'^admirers/', include('apps.friends.urls')),
                        url(r'^notification/', include('apps.notification.urls')),
                            # retailer app
-                       url(r'^retailers/', include('retailers.urls')),
+                       
                        url(r'^racks/', include('apps.racks.urls')),
                        url(r'^shop/', include('apps.racks.urls')),
                         
