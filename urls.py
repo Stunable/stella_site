@@ -92,7 +92,7 @@ urlpatterns = patterns('',
                             paginate_by=15, allow_empty=True)),
                             
                        # item vote
-                       url(r'^item_vote/(?P<object_id>\d+)/(?P<direction>up|down|clear)vote/?$',
+                       url(r'^item_vote/(?P<slug>\d+)?/(?P<direction>up|down|clear)vote/?$',
                             vote_on_object, dict(model=Item, template_object_name='Item',
                                 template_name='racks/vote_on_item.html',
                                 post_vote_redirect='/',

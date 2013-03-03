@@ -1,19 +1,10 @@
-{% load voting_tags %}
-{% load thumbnail %}
 
-{% votes_by_user request.user on items as vote_dict %}
 {% for items in rack_items_list %}
-<ul class="slide items-{{ item_per_page }}" data-nextpage="{{next}}"style="width: 860px; float:left;">
-	{% with forloop.counter as parent_loop_counter %}
-	<input type="hidden" name="page_id" value="{% if parent_loop_counter == 1 %}{{ request.GET.page }}{% else %}{{ parent_loop_counter }}{% endif %}" />
-    <input type="hidden" class="item_per_page" name="item_per_page" value="{{ item_per_page }}" />
-	{% for item in items %}
-		<li id="list_item_{{item.id}}" class="touchcarousel-item item some-crazy-class">
-           {% include "racks/includes/item_list_content.html" %}
-        </li>
-	{% endfor %}
-</ul>
-{% endwith %}
+	<div class="slide items-{{ item_per_page }}" data-nextpage="{{next}}"style="width: 860px; float:left;">
+		{% for item in items %}
+	        {% include "racks/includes/new_item_list_content.html" %}
+		{% endfor %}
+	</div>
 {% endfor %}
 
 					

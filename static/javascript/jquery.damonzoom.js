@@ -59,7 +59,7 @@
                             height: el.outerHeight(),
                             // border: '3px solid red',
                             maxWidth: 'none',
-                            overflow:'hidden',
+                            // overflow:'hidden',
                             display:'none'
                     })
 

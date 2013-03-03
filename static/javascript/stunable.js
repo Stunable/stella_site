@@ -161,8 +161,11 @@ var refclickFunctions = {
         $(selection.data('target')).removeClass('downvoted').removeClass('upvoted')
     },
     'add_tab':function(selection,data){
-        var el = $(data)
-        $(selection.data('target')).before(el.hide().fadeIn())
+        var el = $(data),
+            t = $(selection.data('target'));
+
+        t.append(el.hide().fadeIn().css('display','inline'))
+        $(t).scrollTo(t.children().last())
         init_refclicks(el.find('.refclick'));
     }
 }
@@ -559,128 +562,134 @@ function setupCustomTabs(selection){
     });   
 }
 
-function setupCarousel(selection){
-    selection.touchCarousel({
-        itemsPerMove: 2,              // The number of items to move per arrow click.
+// function setupCarousel(selection){
+//     selection.touchCarousel({
+//         itemsPerMove: 2,              // The number of items to move per arrow click.
         
-        snapToItems: true,           // Snap to items, based on itemsPerMove.
-        pagingNav: false,             // Enable paging nav. Overrides snapToItems.
-                                      // Snap to first item of every group, based on itemsPerMove. 
+//         snapToItems: true,           // Snap to items, based on itemsPerMove.
+//         pagingNav: false,             // Enable paging nav. Overrides snapToItems.
+//                                       // Snap to first item of every group, based on itemsPerMove. 
                                       
-        pagingNavControls: false,      // Paging controls (bullets).
+//         pagingNavControls: false,      // Paging controls (bullets).
         
-        scrollSpeed:1,
+//         scrollSpeed:1,
         
-        autoplay:false,               // Autoplay enabled.
-        autoplayDelay:100,            // Delay between transitions.
-        autoplayStopAtAction:true,    // Stop autoplay forever when user clicks arrow or does any other action.
+//         autoplay:false,               // Autoplay enabled.
+//         autoplayDelay:100,            // Delay between transitions.
+//         autoplayStopAtAction:true,    // Stop autoplay forever when user clicks arrow or does any other action.
         
-        scrollbar: true,              // Scrollbar enabled.
-        scrollbarAutoHide: false,     // Scrollbar autohide.
-        scrollbarTheme: "light",       // Scrollbar color. Can be "light" or "dark".    
+//         scrollbar: true,              // Scrollbar enabled.
+//         scrollbarAutoHide: false,     // Scrollbar autohide.
+//         scrollbarTheme: "light",       // Scrollbar color. Can be "light" or "dark".    
         
-        transitionSpeed: 600,         // Carousel transition speed (next/prev arrows, slideshow).       
+//         transitionSpeed: 600,         // Carousel transition speed (next/prev arrows, slideshow).       
         
-        directionNav:true,            // Direction (arrow) navigation (true or false).
-        directionNavAutoHide:false,   // Direction (arrow) navigation auto hide on hover. 
-                                      // On touch devices arrows are always displayed.
+//         directionNav:true,            // Direction (arrow) navigation (true or false).
+//         directionNavAutoHide:false,   // Direction (arrow) navigation auto hide on hover. 
+//                                       // On touch devices arrows are always displayed.
         
-        loopItems: false,             // Loop items (don't disable arrows on last slide and allow autoplay to loop).
+//         loopItems: false,             // Loop items (don't disable arrows on last slide and allow autoplay to loop).
         
-        keyboardNav: true,           // Keyboard arrows navigation.
-        dragUsingMouse:true,          // Enable drag using mouse.   
-        
-        
-        scrollToLast: true,          // Last item ends at start of carousel wrapper.    
+//         keyboardNav: true,           // Keyboard arrows navigation.
+//         dragUsingMouse:true,          // Enable drag using mouse.   
         
         
-        itemFallbackWidth: 500,       // Default width of the item in pixels. (used if impossible to get item width).
+//         scrollToLast: true,          // Last item ends at start of carousel wrapper.    
         
-        baseMouseFriction: 0.5112,    // Container friction on desktop (higher friction - slower speed).
-        baseTouchFriction: 0.0008,    // Container friction on mobile.
-        lockAxis: true,               // Allow dragging only on one direction.
-        useWebkit3d: false,           // Enable WebKit 3d transform on desktop devices. 
-                                      // (on touch devices this option is turned on).
-                                      // Use it if you have only images, 3d transform makes text blurry.
+        
+//         itemFallbackWidth: 500,       // Default width of the item in pixels. (used if impossible to get item width).
+        
+//         baseMouseFriction: 0.5112,    // Container friction on desktop (higher friction - slower speed).
+//         baseTouchFriction: 0.0008,    // Container friction on mobile.
+//         lockAxis: true,               // Allow dragging only on one direction.
+//         useWebkit3d: false,           // Enable WebKit 3d transform on desktop devices. 
+//                                       // (on touch devices this option is turned on).
+//                                       // Use it if you have only images, 3d transform makes text blurry.
                                                
         
-        onAnimStart: null,            // Callback, triggers before deceleration or transition animation.
-        onAnimComplete: function(){
+//         onAnimStart: null,            // Callback, triggers before deceleration or transition animation.
+//         onAnimComplete: function(){
 
-            number_of_slides = this.numItems;
-            currentSlideNum = this.getCurrentId();
-            var slider = this;
-            if (number_of_slides - currentSlideNum <= 6){
-                $.ajax({
-                    url: '?page=' + slider._next_page + '&item_per_page=' + 6,
-                    success: function(data) {
-                        var items = $(data).find('.item')
-                        $('.touchcarousel-container').append(items);
-                        slider.addItems(items);
-                        slider._next_page = parseInt($(data).attr('data-nextpage'))
-                        ////console.log(slider)
-                        initDrag(items);
-                        fixDragDropIssue();
-                    }
-                    ,dataType:'html'
-                });
-            }
-        },         // Callback, triggers after deceleration or transition animation.
+//             number_of_slides = this.numItems;
+//             currentSlideNum = this.getCurrentId();
+//             var slider = this;
+//             if (number_of_slides - currentSlideNum <= 6){
+//                 $.ajax({
+//                     url: '?page=' + slider._next_page + '&item_per_page=' + 6,
+//                     success: function(data) {
+//                         var items = $(data).find('.item')
+//                         $('.touchcarousel-container').append(items);
+//                         slider.addItems(items);
+//                         slider._next_page = parseInt($(data).attr('data-nextpage'))
+//                         ////console.log(slider)
+//                         initDrag(items);
+//                         fixDragDropIssue();
+
+//                         $(items).find('img').load(function(){
+//                             $(this).hide().show().css('border','3px solid white').css('border-radius','10px');
+//                             console.log(this)
+//                         })
+//                     }
+//                     ,dataType:'html'
+//                 });
+//             }
+//         },         // Callback, triggers after deceleration or transition animation.
         
-        onDragStart:null,             // Callback, triggers on drag start.
-        onDragRelease: null           // Callback, triggers on drag complete.
-    }); 
+//         onDragStart:null,             // Callback, triggers on drag start.
+//         onDragRelease: null           // Callback, triggers on drag complete.
+//     }); 
 
-    initDrag(selection.find('.item'))
-}
+//     initDrag(selection.find('.item'))
+// }
 
-function initSwipe(selection){
+
+// function initSwipe(selection){
                
-    // initDesktopSwipe();
-    if($('.iosSlider').length){
-        sliderInstance = $('.iosSlider').data('touchCarousel');
-        sliderInstance.swipeStart = new Date();
-        function handle(delta) {
-            if (Math.abs(delta)>.02){
-                //var c = sliderInstance._getXPos();
-                if (delta > 0){
-                    //sliderInstance.animateTo(-80, sliderInstance.settings.transitionSpeed, "easeInOutSine");  
-                    sliderInstance.prev()
+//     // initDesktopSwipe();
+//     if($('.iosSlider').length){
+//         sliderInstance = $('.iosSlider').data('touchCarousel');
+//         sliderInstance.swipeStart = new Date();
+//         function handle(delta) {
+//             if (Math.abs(delta)>.02){
+//                 //var c = sliderInstance._getXPos();
+//                 if (delta > 0){
+//                     //sliderInstance.animateTo(-80, sliderInstance.settings.transitionSpeed, "easeInOutSine");  
+//                     sliderInstance.prev()
 
-                }else{
-                    sliderInstance.next()
-                    //sliderInstance.animateTo(-80, sliderInstance.settings.transitionSpeed, "easeInOutSine");  
-                }
-            }
-        }
+//                 }else{
+//                     sliderInstance.next()
+//                     //sliderInstance.animateTo(-80, sliderInstance.settings.transitionSpeed, "easeInOutSine");  
+//                 }
+//             }
+//         }
 
-        function wheel(event){
-            var delta = 0;
-            //if (!event) event = window.event;
-            if (event.originalEvent.wheelDelta) {
-                delta = event.originalEvent.wheelDelta/120; 
-            } else if (event.originalEvent.detail) {
-                delta = -event.originalEvent.detail/3;
-            }
-            //console.log(delta)
-            var now = new Date()
-            if (!sliderInstance._isAnimating && now - sliderInstance.swipeStart > (sliderInstance.settings.transitionSpeed*1.5)){
-                handle(delta);
-                sliderInstance.swipeStart = now;
-            }
+//         function wheel(event){
+//             var delta = 0;
+//             //if (!event) event = window.event;
+//             if (event.originalEvent.wheelDelta) {
+//                 delta = event.originalEvent.wheelDelta/120; 
+//             } else if (event.originalEvent.detail) {
+//                 delta = -event.originalEvent.detail/3;
+//             }
+//             //console.log(delta)
+//             var now = new Date()
+//             if (!sliderInstance._isAnimating && now - sliderInstance.swipeStart > (sliderInstance.settings.transitionSpeed*1.5)){
+//                 handle(delta);
+//                 sliderInstance.swipeStart = now;
+//             }
 
-            if (event.preventDefault)
-                event.preventDefault();
-            event.originalEvent.returnValue = false;
-        }
+//             if (event.preventDefault)
+//                 event.preventDefault();
+//             event.originalEvent.returnValue = false;
+//         }
 
-        if (selection){
-            $(selection).on( "mousewheel DOMMouseScroll", wheel);
-        }
+//         if (selection){
+//             $(selection).on( "mousewheel DOMMouseScroll", wheel);
+//         }
 
-        $('.iosSlider').css('overflow','hidden');
-    }
-}
+//         $('.iosSlider').css('overflow','hidden');
+//     }
+// }
 
 
 function setupRackIt(){

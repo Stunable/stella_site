@@ -13,7 +13,7 @@ class LoginProtection(object):
                               secret=settings.SHOPIFY_API_SECRET)
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        if hasattr(request, 'session') and 'shopify' in request.session:
+        if hasattr(request, 'session') and 'shopify' in request.session and 'shopify' in request.META['PATH_INFO']:
             shopify_session = shopify.Session(request.session['shopify']['shop_url'])
             shopify_session.token = request.session['shopify']['access_token']
             shopify.ShopifyResource.activate_session(shopify_session)

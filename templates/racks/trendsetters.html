@@ -91,7 +91,7 @@
                     <ul class="item-list">
                         {% for item in rack.rack_items.all %}
                         <li id="list_item_{{item.id}}" class="item some-crazy-class">
-                            {% include "racks/includes/item_list_content.html" %}
+                            {% include "racks/includes/new_item_list_content.html" %}
                         </li>
                         {% empty %}
 	                       	<div class="center" >

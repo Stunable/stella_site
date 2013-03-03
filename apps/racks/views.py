@@ -623,7 +623,7 @@ def prepare_ctx(query_set, ctx):
 
 def prepare_ctx_with_num(query_set, ctx, num):
     length = query_set.count()
-    items = query_set[:6]
+    items = query_set[:20]
     rack_items_list = []
 
     for i in xrange(0, len(items), num):
@@ -639,7 +639,7 @@ def prepare_ctx_with_num(query_set, ctx, num):
     ctx['rack_items_list'] = rack_items_list
 
 @login_required
-def new(request, template="racks/carousel.html"):
+def new(request, template="racks/new_carousel.html"):
     ctx = {}
     ctx['categories'] = Category.objects.all()
     ctx['current'] = "new"
@@ -656,7 +656,7 @@ def new(request, template="racks/carousel.html"):
 #    return direct_to_template(request, template, ctx)
 
 #@login_required
-def _all(request, slug=None, template='racks/carousel.html'):
+def _all(request, slug=None, template='racks/new_carousel.html'):
     query_set = None
     ctx = {}
     if request.GET.get('item_id', None):
@@ -678,7 +678,7 @@ def _all(request, slug=None, template='racks/carousel.html'):
             query_set = Item.objects.filter(approved=True,is_available=True).order_by('?')
         # else:
             # query_set = Item.objects.all().order_by('?')
-    
+    print len(query_set)
     return pagination(request, ctx, template, query_set)
             
 #    return direct_to_template(request, template, ctx)
@@ -690,7 +690,7 @@ def pagination(request, ctx, template, query_set):
     if request.is_ajax():
         template = 'racks/patial_carousel.html'
         if page == '1':
-            prepare_ctx_with_num(query_set, ctx, item_per_page)
+            prepare_ctx_with_num(query_set, ctx, 20)
         else:
             try:
                 page = int(page)
@@ -705,17 +705,18 @@ def pagination(request, ctx, template, query_set):
 
             user_items = query_set[_from:_to]
 #            ctx['items'] = user_items
+            print user_items
             rack_items_list = []
             rack_items_list.append(user_items)
             ctx['rack_items_list'] = rack_items_list
             ctx['user_items'] = Item.objects.filter(pk__in=[i.pk for i in user_items])
             ctx['next'] = next   
     else:
-        template = 'racks/carousel.html'
+        template = 'racks/new_carousel.html'
         prepare_ctx_with_num(query_set, ctx, item_per_page)
     
         ctx['next'] = 3
-    ctx['item_per_page'] = item_per_page
+    ctx['item_per_page'] = 10
             
     return direct_to_template(request, template, ctx)
 

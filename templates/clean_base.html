@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--[if lt IE 7]><html class="ie6 ie no-js" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><![endif]-->
+<!--[if IE 7 ]>  <html class="ie7 ie no-js" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><![endif]-->
+<!--[if IE 8 ]>  <html class="ie8 ie no-js" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><![endif]-->
+<!--[if IE 9 ]>  <html class="ie9 ie no-js" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><![endif]-->
+<!--[if!(IE)]><!-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <!--<![endif]-->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>{% block title %}Stunable | Your Admirers{% endblock %}</title>
+        <meta name="robots" content="index, follow" />
+        <meta name="MSSmartTagsPreventParsing" content="true" />
+        <meta http-equiv="imagetoolbar" content="false" />
+        <meta name="title" content="Welcome to Stunable" />
+        <meta name="DC.title" content="Stunable" />
+        <meta name="author" content="Stunable" />
+        <meta name="description" content="Shopping online has never been sassier!" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/main.css" type="text/css" media="screen, projection" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/touchcarousel.css" type="text/css" media="screen, projection" />
+        {% block extra_css %}{% endblock %} 
+        <link rel="shortcut icon" href="{{ STATIC_URL }}images/gui/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/jquery.tooltip.css"/>
+
+        <script>
+            {% if request.user.is_authenticated %}
+                var logged_in = true;
+            {% else %}
+                var logged_in = null;
+            {% endif %}
+            var root_url="{{URL}}";
+        </script>
+<script type="text/javascript">
+
+{% if not debug %}
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34344571-2']);
+  _gaq.push(['_setDomainName', 'stunable.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+{% endif %}
+</script>
+    </head>
+    <body data-role="{{page_role}}" class="{{page_role}} {% block body_class %}account{% endblock %} gallery" id="{% block body_id %}gallery{% endblock %}">
+        {% block facebook %}
+             
+                <div id="fb-root"></div>
+                <script>
+                  window.fbAsyncInit = function() {
+                    FB.init({
+                      appId      : {{FACEBOOK_APPID}}, // App ID from the App Dashboard
+                      channelUrl : 'http://stunable.com/channel.html', // Channel File for x-domain communication
+                      status     : true, // check the login status upon init?
+                      cookie     : true, // set sessions cookies to allow your server to access the session?
+                      xfbml      : true  // parse XFBML tags on this page?
+                    });
+                    // Additional initialization code such as adding Event Listeners goes here
+                  };
+
+                  // Load the SDK's source Asynchronously
+                  (function(d, debug){
+                     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+                     if (d.getElementById(id)) {return;}
+                     js = d.createElement('script'); js.id = id; js.async = true;
+                     js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+                     ref.parentNode.insertBefore(js, ref);
+                   }(document, /*debug*/ false));
+                </script>
+             
+                <!--[if IE]>
+                <div class="container ie8 ie">
+                <![endif]-->
+                <!--[if IE 7]>
+                <div class="container ie7 ie">
+                <![endif]-->
+                <!--[if lt IE 7]>
+                <div class="container ie6 ie">
+                <![endif]-->
+                <!--[if !IE]><!-->
+            
+        {% endblock %}
+                        <div class="section content" id="header">
+                <div class="nav bar clearfix" id="global">
+                    <div class="wrap">
+                        <!--SOCIAL MEDIA ICON LINKS -->
+                        <ul class="horizontal-list icon-list">
+                            <li class="navlink">
+                                <a href="http://twitter.com/stunable" title="Follow Stunable on Twitter." class="icon" id="nav-twitter">Twitter</a>
+                            </li>
+                            <li class="navlink">
+                                <a href="https://plus.google.com/u/0/b/100141127984777292620/100141127984777292620/posts" title="Add Stunable to Google+." class="icon" id="nav-googleplus">Google+</a>
+                            </li>
+                            <li class="navlink">
+                                <a href="http://facebook.com/stunable" title="Subscribe to Stunable on Facebook." class="icon" id="nav-facebook">Facebook</a>
+                            </li>
+                        </ul><!--/.horizontal-list -->
+                        <!--NAVIGATION LINKS -->
+                        {% block navigation %}
+                        {% endblock %}
+                    </div><!--/.wrap-->
+                </div><!--/.nav#global-->
+                <div class="wrap" id="hdr-logo">
+                       <h1 id="shop-with-stella"><a href="/" class="logo">Stunable</a></h1>
+                 </div><!--/.wrap-->
+            </div><!--/.header-->
+            <div class="section" id="main">
+                <h1 id="shop-with-stella"><a href="/" class="logo">Stunable</a></h1>
+
+                <div class="wrap" id="carousel-wrapper">
+                    {% block local_nav %} <!--LOCAL NAVIGATION LINKS-->
+                    {% if request.subdomain == 'stylists' %}
+                        {% include "includes/retailer_nav.html" %}
+                    {% else %}
+                        {% include "includes/user_nav.html" %}
+                    {% endif %}
+                    {% endblock %}
+                    {% block rack %}
+
+                  
+                    {% block page_tab %}
+                    {% endblock %}
+                    
+                    <!-- block content begin -->
+                    {% block content %}
+                    {% endblock %}
+                 
+                    {% endblock %}
+                    {% block content1 %}
+                    {% endblock %}
+                </div><!--/.section-->
+            </div><!--/.container#viewport -->
+            <div class="section content" id="footer">
+                <div class="wrap">
+                    <div class="nav bar" id="footer-nav">
+                        <p class="horizontal list">
+                            Copyright, Stunable, LLC 2012
+                        </p>
+                    </div><!--/.nav.bar#footer-nav -->
+                </div><!--/.wrap -->
+                {% if debug %}
+                <div id="debug">
+                  <h2>Queries</h2>
+                  <p>
+                    {{ sql_queries|length }} Quer{{ sql_queries|pluralize:"y,ies" }}
+                    {% ifnotequal sql_queries|length 0 %}
+                    (<span style="cursor: pointer;" onclick="var s=document.getElementById('debugQueryTable').style;s.display=s.display=='none'?'':'none';this.innerHTML=this.innerHTML=='Show'?'Hide':'Show';">Show</span>)
+                    {% endifnotequal %}
+                  </p>
+                  <table id="debugQueryTable" style="display: none;">
+                    <col width="1"></col>
+                    <col></col>
+                    <col width="1"></col>
+                    <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">SQL</th>
+                      <th scope="col">Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for query in sql_queries %}<tr class="{% cycle odd,even %}">
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ query.sql|escape }}</td>
+                      <td>{{ query.time }}</td>
+                    </tr>{% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <br><br><br>
+                {% endif %}
+            </div><!--/.footer -->
+            {% if request.subdomain != 'stylists' %}
+            <div class="item-send clearfix" id="send_to_admirer_reduced_form" style="opacity: 0; display: none; width: 270px;">
+                <form action="{% url send_item_to_admirer %}" id="reduced_send_to_admirer_form" method="POST" >
+                    {% csrf_token %}
+                    <div class="item-send-right">
+                        <textarea name="message" id="reduced_message" placeholder="PERSONAL MESSAGE: Less then 160 characters"></textarea>
+                        <input type="hidden" id="reduced_item_id" name="item_id" value="" />
+                        <input type="hidden" id="reduced_admirer_id" name="admirer" value=""/>
+                        <input type="hidden" id="reduced_admirer_type" name="admirer_type" value=""/>
+                        <input type="hidden" id="reduced_admirer_name" name="admirer_name" value=""/>
+                        <div class="btn-wrap bootstrap" style="margin-bottom: 0">
+                            <input type="button" class="btn btn-primary" id="send_it_to_admirer_reduced" value="Send It" />
+                        </div>
+                        <center>
+                            <div id="loading2">
+                                <div class="spinner"></div>
+                            </div>
+                            <span class="confirmation" id="send_item_confirmation_reduced">Sent!</span>
+                            <!--                     <p id='bigform-error-reduced'></p> -->
+                        </center>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+
+        {% block login_modal_box %}
+
+        {% if not request.user.is_authenticated %}
+      
+       
+        <div class="special" id="login_box">
+                     
+             <div class="inner_content">
+                 <div>
+                     {{CMS.login_explain|safe}}
+                 </div>                
+                 <div id="login_options">
+                     <div><a href="/login/facebook/"><div class="facebooklogin" style="cursor:pointer"></div></a>
+                     </div>
+                     <!-- <div class="fb-login-button" data-show-faces="true" data-width="500" data-max-rows="1"></div> -->
+                 </div>
+                 
+             </div>
+             <div class="foot">
+                 <!-- <a href="/retailers/create_profile">become a stunable stylist</a> -->
+                 <a href="https://stylists.stunable.com/accounts/login">stylist login</a>
+             </div>
+          </div></div></div></div></div></div>
+
+          {% endif %}
+        {% endblock %}
+        </div>
+
+<!-- 
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/swipe.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/modernizr.js"></script>
+
+
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.validate.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.form.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.transit-0.1.3.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/chosen.jquery.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.timePicker.js"></script>
+        <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/timePicker.css"/>
+
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.tooltip.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.iosslider.js"></script>
+        
+        
+ -->
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery-ui-1.8.22.custom.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.spritely-0.6.1.js" ></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/chosen.jquery.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.form.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.flip.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.touchcarousel-1.1.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.modal.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.validate.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.damonzoom.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.damonscroll.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/portamento-min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/imageselect.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.isotope.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/stunable.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/stunable.item_modal.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/init.js"></script>
+
+
+        
+    </body>
+
+</html>

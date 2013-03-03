@@ -31,14 +31,14 @@ var stunable = {
       //   })
 
       // })
-      if (! logged_in &&  $('body').attr('data-role')!='accounts'){
-        $('#login_box').modal({clickClose: false,escapeClose:false,showClose:false})
+      // if (! logged_in &&  $('body').attr('data-role')!='accounts'){
+      //   $('#login_box').modal({clickClose: false,escapeClose:false,showClose:false})
 
-      }
+      // }
 
       setupCustomTabs($('#left-panel'));  
       $('.panel-inner-content').html($('.panel-header .active').find('.tab-content').html()).fadeIn(1000, function() {
-          // console.log('panel thing just happened')
+
         });             
 
       init_refclicks($('.refclick'))
@@ -47,7 +47,7 @@ var stunable = {
       $('.cart_slide_trigger').hover(reveal_cart)
       $('.cart_slide_trigger').click(reveal_cart)
 
-      initTouch()
+      // initTouch()
 
       $('.arbitrary_modal').click(function(e){
         console.log( $($(this).data('target')))
@@ -68,10 +68,25 @@ var stunable = {
 
     }
     ,shop: function(){            
-        setupCarousel($('.iosSlider'));
-        initSwipe($('.iosSlider'))
-        initDrop(); 
-        initRackEvents();
+        // setupCarousel($('.iosSlider'));
+        // initSwipe($('.iosSlider'))
+        // initDrop(); 
+        // initRackEvents();
+
+        $('.carouselbox').damonscroll({
+          target_element: $('#container'),
+          add_function: function(items){
+
+            items.find('img').load(function(){
+              // console.log($(this).closest('.item'));
+              $('#container').isotope('insert', $(this).closest('.item'))
+            })
+            
+
+          }
+        })
+
+
     }
     ,racks: function(){
       // console.log('racks setup')
@@ -251,8 +266,10 @@ var stunable = {
 
            $('.delete-link').click(function(){
                 $(this).closest('td').find('.item_selector').attr('checked','checked');
+                
                 $('#action_select').val('delete');
                 $('.action_submit').submit();
+                return false;
            })
 
            $('.click_to_expand').click(function(e){
@@ -633,6 +650,15 @@ var stunable = {
 
 }
 
+
+window.onload = function(){
+    $('#container').isotope({
+ layoutMode: 'cellsByColumn',
+  cellsByRow: {
+    columnWidth: 100,
+    rowHeight: 100
+  }})
+}
 
     
 $(document).ready(function() {
