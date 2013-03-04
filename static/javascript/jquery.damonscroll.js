@@ -16,7 +16,10 @@
         defaults = {
             orientation: "horizontal",
             target_element: null,
-            threshold_percent: 90
+            threshold_percent: 90,
+            nextkey : $('.next'),
+            prevkey : $('.prev'),
+            keynav : true
         };
 
     // The actual plugin constructor
@@ -40,13 +43,13 @@
         init: function() {
 
             this._next_page = this.options.first_page || 2;
-            this._num_per_page = this.options._num_per_page || 6;
+            this.num_per_page = this.options.num_per_page || 6;
             this._add_function= this.options.add_function || function(items){
                 this._t.append(items);
             }
 
             if (!this.options.target_element){
-                throw('you must specify a "target_element" selector which should be an element that scrolls inside a bigger scrolling element')
+                throw('you must specify a "target_element" selector which should be a container element that scrolls inside a bigger scrolling element')
             }else{
                 this._t = $(this.options.target_element);
             }
@@ -58,6 +61,25 @@
                 self.onScroll()
             })
 
+            if(this.options.keynav) {
+                $(document).bind("keydown.damonscroll", function(e) {              
+                    if (e.keyCode === 37) {                     
+                        self.go_to_prevpage();
+                    }
+                    else if (e.keyCode === 39) {                        
+                        self.go_to_nextpage();
+                    }
+                
+                });
+            }
+
+        },
+        go_to_nextpage: function(number){
+            this.handler.animate($(this.element).width());
+        },
+        go_to_prevpage: function(number){
+            console.log('prev')
+            this.handler.animate(-$(this.element).width());
         },
         onScroll: function() {
             if (this.handler.get_percentage(this.element).p > this.options.threshold_percent){
@@ -66,7 +88,8 @@
 
         },
         horizontal:function(el){
-            var $t = this._t;      
+            var $t = this._t;
+            var $e = $(this.element)
             return {
                 get_percentage: function(el){
                     var $element = $(el),
@@ -75,7 +98,13 @@
                     total = tw-ew;
                     return {'p':100*$element.scrollLeft()/total,'dir':'horizontal'}
                 }
+                ,animate: function(number){
 
+                    $e.stop(true).animate({
+                        scrollLeft: $e.scrollLeft()+number
+                     }, 800);
+
+                }
             }
         },
         vertical:function(el){
@@ -88,6 +117,13 @@
                     total = tw-ew;
                     return {'p':100*$element.scrollTop()/total,'dir':'vertical'}
                 }
+                ,animate: function(number){
+
+                    $e.stop(true).animate({
+                        scrollTop: $e.scrollTop()+number
+                     }, 800);
+
+                }
             }
         },
         procure_elements: function(){
@@ -95,7 +131,7 @@
                 this._loading = true;
                 var self = this;
                 $.ajax({
-                        url: '?page=' + this._next_page + '&item_per_page=' + this._num_per_page,
+                        url: '?page=' + this._next_page + '&item_per_page=' + this.num_per_page,
                         success: function(data) {
                             var items = $(data).find('.item')
 

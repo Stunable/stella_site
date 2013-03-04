@@ -16,8 +16,11 @@
         <meta name="DC.title" content="Stunable" />
         <meta name="author" content="Stunable" />
         <meta name="description" content="Shopping online has never been sassier!" />
-        <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/main.css" type="text/css" media="screen, projection" />
+       <!--  <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/main.css" type="text/css" media="screen, projection" />
         <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/touchcarousel.css" type="text/css" media="screen, projection" />
+
+ -->        
+        <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/main.2.css" type="text/css" media="screen, projection" />
         {% block extra_css %}{% endblock %} 
         <link rel="shortcut icon" href="{{ STATIC_URL }}images/gui/favicon.ico" type="image/x-icon" />
         <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/jquery.tooltip.css"/>
@@ -108,17 +111,17 @@
                        <h1 id="shop-with-stella"><a href="/" class="logo">Stunable</a></h1>
                  </div><!--/.wrap-->
             </div><!--/.header-->
-            <div class="section" id="main">
-                <h1 id="shop-with-stella"><a href="/" class="logo">Stunable</a></h1>
+            <div class="section" id="main" style="border:1px solid red">
+                <!-- <h1 id="shop-with-stella"><a href="/" class="logo">Stunable</a></h1> -->
 
-                <div class="wrap" id="carousel-wrapper">
-                    {% block local_nav %} <!--LOCAL NAVIGATION LINKS-->
+                <div class="wrap" id="carousel-wrapper" style="border:1px solid blue  ">
+                    {%comment%}{% block local_nav %} <!--LOCAL NAVIGATION LINKS-->
                     {% if request.subdomain == 'stylists' %}
                         {% include "includes/retailer_nav.html" %}
                     {% else %}
                         {% include "includes/user_nav.html" %}
                     {% endif %}
-                    {% endblock %}
+                    {% endblock %}{%endcomment%}
                     {% block rack %}
 
                   

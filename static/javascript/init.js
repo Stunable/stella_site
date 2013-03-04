@@ -74,16 +74,17 @@ var stunable = {
         // initRackEvents();
 
         $('.carouselbox').damonscroll({
+
           target_element: $('#container'),
+          
           add_function: function(items){
 
-            items.find('img').load(function(){
-              // console.log($(this).closest('.item'));
-              $('#container').isotope('insert', $(this).closest('.item'))
-            })
-            
+            // items.find('img').load(function(){
+              $('#container').isotope('insert', items)
+            // })
+          },
 
-          }
+
         })
 
 
@@ -656,7 +657,8 @@ window.onload = function(){
  layoutMode: 'cellsByColumn',
   cellsByRow: {
     columnWidth: 100,
-    rowHeight: 100
+    rowHeight: 100,
+    animationEngine : 'css'
   }})
 }
 
