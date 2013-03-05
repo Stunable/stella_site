@@ -3,6 +3,7 @@
 	{% block inner_content %}
 
 	{% if default_ccS %}
+	<div style="float:left">
 	<div class="section-intro">
 		<h2><span>Payment</span></h2>
 	</div>
@@ -449,95 +450,52 @@
 
 
 </div>
+</div>
+<div style="float:right">
+	'eROGFIJHQEWPOFIJQWEPOUFHQWEPI;UFH'
+	<div class="section-intro">
+		<h2><span>Shipping Information</span></h2>
+	</div>
+	<div class="body-copy bootstrap">
+		<form action="/cart/update_info" method="POST" id="cart-form" class="form-horizontal">
+		{% csrf_token %}
+
+		{% for field in shipping %}
+		<div class="control-group">
+			<label class="control-label">{{ field.label }}</label>
+			<div class="controls">
+				{{field}}
+				{{field.errors}}
+			</div>
+		</div>
+		{% endfor %}
+		
+		<div class="control-group">
+			<div class="controls">
+				<h2 style="margin: 0;">Total: ${{cart.grand_total|floatformat:2}}</h2>
+			</div>
+		</div>		
+<!-- 		<div class="control-group">
+			<div class="controls">
+				<label class="checkbox" style="text-transform: none">
+						<input class="" type="checkbox" name="term_and_condition" id="id_term_and_condition"/>
+						<a href="/terms/" target="_" class="">Terms & Condition</a>
+				</label>
+				<span class="help-inline"></span>
+			</div>
+		</div> -->
+		<div class="form-actions">
+			<input type="submit" class="btn btn-primary" value="Place an order" id="btn-place-an-order" />
+		</div>
+		</form>
+	</div>
+</div>
 <script type="text/javascript" src="https://wepay.com/min/js/tokenization.v2.js">
 </script>
 <script type="text/javascript">
 	WePay.set_endpoint("{{mode}}"); // change to "production" when live
 </script>
-<script>
-	$.fn.serializeObject = function()
-	{
-	    var o = {};
-	    var a = this.serializeArray();
-	    $.each(a, function() {
-	        if (o[this.name] !== undefined) {
-	            if (!o[this.name].push) {
-	                o[this.name] = [o[this.name]];
-	            }
-	            o[this.name].push(this.value || '');
-	        } else {
-	            o[this.name] = this.value || '';
-	        }
-	    });
-	    return o;
-	};
 
-	$(document).ready(function () {
-
-		$('#payment-form').validate({
-			submitHandler:function(form) {
-
-				var d = $(form).serializeObject();
-
-
-
-
-
-				var data ={
-					"client_id":"{{wepay_client_id}}",
-					"user_name":d.firstname+' '+d.lastname,
-					"email":'{{request.user.email}}',
-					"cc_number":$('#id_acct').val(),
-					"cvv":$('#id_cvv2').val(),
-					"expiration_month":$('#id_expdate_0').val(),
-					"expiration_year":$('#id_expdate_1').val(),
-					"address":
-						{
-							"address1":d.street,
-							"city":d.city,
-							"state":d.state,
-							"country":d.countrycode,
-							"zip":d.zip
-						}
-				}
-
-				var response = WePay.credit_card.create( data, function(data) {
-					if (data.error) {
-
-						// handle error response
-					} else {
-						$('#wepay_id').val(data.credit_card_id)
-						$('#wepay_state').val(data.state)
-						$('#wepay_info').submit()
-					}
-				} );
-
-				if (response.error) {
-					console.log(response);
-					console.log(data);
-					alert(response.error_description)
-					// handle error response
-				}
-			},
-			rules: {
-				firstname: "required",		// simple rule, converted to {required:true}
-				lastname: "required",
-				street: "required",
-				city: "required",
-				state: "required",
-				countrycode: "required",
-				zip: "required",
-				acct: "required",
-				expdate_0: "required",
-				expdate_1: "required",
-				cvv2: "required"
-			},
-			messages: {
-				
-			}
-		})
-	});
-</script>
 {% endblock %}
 
 

@@ -67,7 +67,7 @@ var stunable = {
       })
 
         $('.left-panel>ul>li').click(function(e){
-          e.stopPropagation();
+          e.stopPropagation();  
           $('.left-panel>ul>li.active').removeClass('active');
           $(this).addClass('active');
           if ($(this).find('a').length){
@@ -97,9 +97,8 @@ var stunable = {
 
     }
     ,shop: function(){            
-        // setupCarousel($('.iosSlider'));
-        // initSwipe($('.iosSlider'))
-        // initDrop(); 
+
+        
         // initRackEvents();
 
         $('.carouselbox').damonscroll({
@@ -107,10 +106,7 @@ var stunable = {
           target_element: $('#container'),
           
           add_function: function(items){
-
-            // items.find('img').load(function(){
               $('#container').isotope('insert', items)
-            // })
           },
 
 
@@ -125,6 +121,8 @@ var stunable = {
             rowHeight: 100
             // animationEngine : 'css'
           }})
+          initDrag($('.item'))
+          initDrop(); 
         }
 
     }
@@ -138,7 +136,7 @@ var stunable = {
 
     }
     ,cart: function(){
-
+        zipcode = [];
         function updateCartTotals(totals) {
             $("#cart-total").html(totals.total.toFixed(2));
             $("#cart-tax").html(totals.tax.toFixed(2));
@@ -199,8 +197,9 @@ var stunable = {
           if (event){
             event.preventDefault()
           }
+
             var field=$('#zipcode_field')
-            var zipcode = $('input[name="zipcode"]').val();
+            var zipcode = $('input[name="zipcode"]').val()|| 10002;
             valid_shipping_info = false;                
             if (zipcode.length == 5) {
                 $('html').addClass('wait');
@@ -219,7 +218,7 @@ var stunable = {
                             updateCartTotals(data);
                             $('.update-zipcode').hide();
                         } else {
-                            alert(data.message);
+                            // alert(data.message);
                         }
                     }
                 });
@@ -257,6 +256,69 @@ var stunable = {
                 }
             });
         });
+
+        $('#payment-form').validate({
+          submitHandler:function(form) {
+
+            var d = $(form).serializeObject();
+
+
+
+
+
+            var data ={
+              "client_id":"{{wepay_client_id}}",
+              "user_name":d.firstname+' '+d.lastname,
+              "email":'{{request.user.email}}',
+              "cc_number":$('#id_acct').val(),
+              "cvv":$('#id_cvv2').val(),
+              "expiration_month":$('#id_expdate_0').val(),
+              "expiration_year":$('#id_expdate_1').val(),
+              "address":
+                {
+                  "address1":d.street,
+                  "city":d.city,
+                  "state":d.state,
+                  "country":d.countrycode,
+                  "zip":d.zip
+                }
+            }
+
+            var response = WePay.credit_card.create( data, function(data) {
+              if (data.error) {
+
+                // handle error response
+              } else {
+                $('#wepay_id').val(data.credit_card_id)
+                $('#wepay_state').val(data.state)
+                $('#wepay_info').submit()
+              }
+            } );
+
+            if (response.error) {
+              console.log(response);
+              console.log(data);
+              alert(response.error_description)
+              // handle error response
+            }
+              },
+              rules: {
+                firstname: "required",    // simple rule, converted to {required:true}
+                lastname: "required",
+                street: "required",
+                city: "required",
+                state: "required",
+                countrycode: "required",
+                zip: "required",
+                acct: "required",
+                expdate_0: "required",
+                expdate_1: "required",
+                cvv2: "required"
+              },
+              messages: {
+                
+              }
+            })
     
       },
       retailers:function(){

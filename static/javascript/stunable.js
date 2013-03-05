@@ -1,3 +1,21 @@
+$.fn.serializeObject = function()
+    {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+
+
 $.fn.extend({
         pschecker: function (options) {
             var settings = $.extend({ minlength: 8, maxlength: 16, onPasswordValidate: null, onPasswordMatch: null }, options);
@@ -399,15 +417,15 @@ function getUserlist(input, list){
 var DRAGGABLE_OPTIONS = {
         helper : "clone",
         appendTo : 'body',
-        opacity : .8,
-        cursorAt : {
-          top : 73,
-          left : 145    
-        },
+        // opacity : .8,
+        // cursorAt : {
+        //   top : 73,
+        //   left : 145    
+        // },
         zIndex: 2700,
         // snap: ".drop_item",
         start: function(event, ui) {
-           //console.log(ui.helper)
+           console.log(ui.helper)
             $(ui.helper[0]).addClass("black");
 
            //console.log('dragging',this)
@@ -494,6 +512,7 @@ function initDrag(selection) {
     $(selection).draggable(DRAGGABLE_OPTIONS)
     $($('.private-racks')[1]).disableSelection();
     $($('.public-racks')[1]).disableSelection();
+    fixDragDropIssue()
 }
 
 function initDrop(){

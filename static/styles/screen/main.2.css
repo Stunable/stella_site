@@ -286,7 +286,7 @@ a:hover, form .btn:hover { color:#8D8791;}
           transition-duration: 0s;
 }
 */
-#main,#footer{
+#main{
 	display:block;
 	width:100%;
 	clear:both;
@@ -340,6 +340,21 @@ a:hover, form .btn:hover { color:#8D8791;}
 	}
 
 
+	.drop_item_hover {
+	border-width: 3px !important;
+	border-color: gray !important;
+	padding-top:-3px !important;
+	padding-bottom:-3px !important;
+	margin:0px !important;
+	}
+
+	#left-panel>ul>li.drop_item_here {
+		background-color:#eee;
+		padding-top:4px;
+		padding-left:4px;
+		border: 1px white dashed;
+		border-radius:3px;
+	}
 
 
 
@@ -600,7 +615,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 /*DRAGGING AND DROPPING*/
 
 
-.ui-draggable-dragging {
+.item.ui-draggable-dragging {
 	height:170px;
 	
 	border:1px solid #F05C68 !important;
@@ -608,19 +623,19 @@ a:hover, form .btn:hover { color:#8D8791;}
 	color:black;
 }
 
-.ui-draggable-dragging .item-name{
+.item.ui-draggable-dragging .item-name{
 	color:black !important;
 }
 
-.ui-draggable-dragging .item-label{
+.item.ui-draggable-dragging .item-label{
 	background-color:rgba(255,255,255,.4) !important;
 }
 
-.ui-draggable-dragging .touchable{
-	visibility:hidden;
+.item.ui-draggable-dragging .touchable{
+	/*visibility:hidden;*/
 }
 
-.ui-draggable-dragging .item-icon{
+.item.ui-draggable-dragging .picbox{
 	visibility: visible;
 	text-align:center;
 	display:inline;
@@ -629,7 +644,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 
 }
 
-.ui-draggable-dragging .item-icon img{
+.item.ui-draggable-dragging img{
 	width:80px;
 	border:1px solid #F05C68 !important;
 }

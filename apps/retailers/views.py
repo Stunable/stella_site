@@ -563,7 +563,8 @@ def item_action(request, template="retailers/product_list.html"):
                 ctx = {'retailer_profile': retailer_profile, 'product_list': pl, 'confirm': data,'action':True}
                 return direct_to_template(request, template, ctx)
 
-        except:    
+        except Exception, e:   
+            print 'item action error:',e 
             return redirect(reverse("product_list"))
 
 @login_required
