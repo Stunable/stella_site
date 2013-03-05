@@ -129,26 +129,36 @@
                       {% block page_tab %}
                       {% endblock %}
 
-                      {% block left_panel %}
-                        <div style="text-align:center;padding:20px" class="left-panel" id="left-panel">
+                      
+                        <div class="left-panel" id="left-panel">
                           <ul>
-                            <li id="shop" class="active">
-                              shop
+                            
+                            
+                            {% block left_panel %}
+                            <li class="active" id="shop" >
+                              <a href="/">shop</a>
                             </li>
                             <li id="cart">
-                              cart
+                              <a href="/cart" title="Cart" class="text-link cart_slide_trigger">Cart(<span id="cartcount">{{cart.count}}</span>)</a>
+                              <div id="cart_slide"> 
+                                  <div id="cart_contents_container">
+                                      {% include "cart/cart_slideout.html" %}
+                                  </div>
+                              </div>
                             </li>
-
                             <li id="wishlist">
                               wishlist
                             </li>
-
                             <li id="friends">
                               friends
                             </li>
+                            <li id="settings">
+                              <a href="/accounts/profile">settings</a>
+                            </li>
+                             {% endblock %}
                           </ul>
                         </div>
-                      {% endblock %}
+                     
                     
                       <!-- block content begin -->
                       {% block content %}

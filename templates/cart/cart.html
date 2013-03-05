@@ -1,14 +1,27 @@
-{% extends 'user_base.html' %}
+{% extends 'clean_base.html' %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/cart.css" type="text/css" media="screen, projection" />
 {% endblock %}
 
-{% block left_panel %}{%endblock%}
 {% block body_class %}common{% endblock %}
 {% block content-class%}round-corner-shadow{%endblock%}
 
 {% load thumbnail %}
+{% block left_panel %}
+    <li id="shop" >
+      <a href="/">shop</a>
+    </li>
+    
+    <li class="active" id="cart">
+      <a href="/cart" title="Cart" class="text-link cart_slide_trigger">Cart(<span id="cartcount">{{cart.count}}</span>)</a>
+      <div id="cart_slide"> 
+          <div id="cart_contents_container">
+              {% include "cart/cart_slideout.html" %}
+          </div>
+      </div>
+    </li>
+{% endblock %}
 {% block content %}
 <style>
 	.common td input[type="text"] {
@@ -33,8 +46,16 @@
 	
 </style>
 
-<div class="section-intro">
-    <h2><span>Checkout</span></h2>
+<div id="page-content">
+    <div class="page-inner-content">
+    <div id="stunable-tabs-nav">
+        <ul id="tabs-container" class="nav tabbed clearfix">
+            <li class="active"> <a href="/cart">Shopping Cart</a></li>
+            <li> <a href="/cart/wpp">Payment/Shipping</a></li>
+            <li> <a href="/cart/wpp_success">Place Order</a></li>
+        </ul>
+    </div>
+    {% block inner_content %}
     <div class="body-copy">
         {% if cart.grand_total %}
         <div class='cart-items'>
@@ -121,7 +142,9 @@
                 <a href="/" class="btn btn-primary">Continue Shopping</a>
             </div>
             {% endif %}
+         </div>
         </div>
     </div>
+    {% endblock %}
 </div>
 {% endblock %} 

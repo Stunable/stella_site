@@ -66,6 +66,35 @@ var stunable = {
         }
       })
 
+        $('.left-panel>ul>li').click(function(e){
+          e.stopPropagation();
+          $('.left-panel>ul>li.active').removeClass('active');
+          $(this).addClass('active');
+          if ($(this).find('a').length){
+            window.location = $(this).find('a').attr('href');
+
+          }
+          // return false;
+        })
+
+        $('.left-panel').toggle(
+            function(){
+              $('#page-content').animate({'left':'20px'},400)
+            },
+            function(){
+              $('#page-content').animate({'left': '220px'},400)
+            }
+        )
+
+        $('#nav-handle').toggle(
+            function(){
+              $('#page-content').animate({'left':'20px'},400)
+            },
+            function(){
+              $('#page-content').animate({'left': '220px'},400)
+            }
+        )
+
     }
     ,shop: function(){            
         // setupCarousel($('.iosSlider'));
@@ -86,21 +115,18 @@ var stunable = {
 
 
         })
-        $('.left-panel>ul>li').click(function(e){
-          e.stopPropagation();
-          $('.left-panel>ul>li.active').removeClass('active');
-          $(this).addClass('active');
-          return false;
-        })
-        $('.left-panel').toggle(
-            function(){
-              $('#page-content').animate({'left':'20px'},400)
-            },
-            function(){
-              $('#page-content').animate({'left': '220px'},400)
-            }
-          )
-      
+
+
+        window.onload = function(){
+            $('#container').isotope({
+         layoutMode: 'cellsByColumn',
+          cellsByRow: {
+            columnWidth: 100,
+            rowHeight: 100
+            // animationEngine : 'css'
+          }})
+        }
+
     }
     ,racks: function(){
       // console.log('racks setup')
@@ -599,8 +625,119 @@ var stunable = {
       },
       accounts:function(){
         $('#tester').focus()
+                var login_form = $('#mng-account-form');
+        
+        login_form.ajaxForm({
+            url : this.action,
+            dataType : 'json',
+            success : function(json)
+            {
+                if (json.success == false && json.errors != undefined)
+                    process_form_errors(json, login_form)
+                else {
+                    //do something if there aren't errors
+                    
+                    window.location.href = "/"; 
+                }
+            }
+        }); 
 
+    
 
+    function hide_form_errors()
+    {
+        $('.errorlist').remove();
+    }
+
+    function process_form_errors(json, form)
+    {
+        var curField;
+        
+        hide_form_errors();
+        //form.clearForm();
+        errors = json.errors;
+    
+        if (errors.__all__ != undefined)
+            form.append(errors.__all__);
+
+        prefix = form.find(":hidden[name='prefix']").val();
+
+        prefix == undefined ? prefix = '' : prefix = prefix + '-';
+        $('.error').removeClass('error');
+        $('.help-inline').text('');
+        for (field in errors) {
+            if(errors.hasOwnProperty(field)){
+                curField = $('[name=' + field + '], [name=' + field + ']');
+                if(curField.attr('type') === 'checkbox'){
+                    curField.parent().siblings('.help-inline').text(errors[field][0]);
+                } else {
+                    curField.siblings('.help-inline').text(errors[field][0]);
+                }
+                curField.parents('.control-group:first').addClass('error')
+            }
+        }
+  
+        $(".quest").click(function() {
+            $("#upload_avatar").click();
+        });
+        $('#avatar-upload-form').ajaxForm(function(data) {
+            message = "";
+            console.log(data);
+            if(data.result == "ok") {
+                $('.acct-avatar').attr('src', data.source);
+                $('#avatar-error').css('display', 'none');
+                // message = "Upload Successful!";
+            } else {
+                message = data.error;
+                $('#avatar-error').stop();
+                $('#avatar-error').animate({
+                    "opacity" : "1"
+                }, "fast", function() {
+                    changeError($('#avatar-error')[0], message);
+                    $('#avatar-error').css('display', 'inline');
+                });
+                // message = "There were errors with your image upload. Please try again!";
+            }
+        });
+        $('#upload_avatar').bind('change', function() {
+            var str = "";
+            str = $(this).val();
+            if(str != "" && str.length > 0) {
+                if(str.match(/.*\.(jpg|png|gif)$/)) {
+                    $("#avatar-upload-form").submit();
+                } else {
+                    $('#avatar-error').stop();
+                    $('#avatar-error').animate({
+                        "opacity" : "1"
+                    }, "fast", function() {
+                        changeError($('#avatar-error')[0], "Please Upload a valid image!");
+                        $('#avatar-error').css('display', 'inline');
+                    });
+                }
+            }
+        }).change();
+        $('.editable').hide();
+        $('.edit').click(function(event) {
+            event.preventDefault();
+            if($(this).html() == 'Edit') {
+                $(this).html("Close");
+            } else {
+                $(this).html("Edit");
+            }
+
+            var stc = $(this).parent().parent().find('.static');
+            var editable = $(this).parent().parent().find('.editable');
+
+            if($(stc).css('display') == 'none') {
+                $(stc).css('display', '');
+                $(editable).css('display', 'none');
+            } else {
+                $(stc).css('display', 'none');
+                $(editable).css('display', '');
+            }
+        })
+
+      }}
           //         // the validation code
           //     container = $('#bigform-error1');
           //     // validate form on keyup and submit
@@ -659,21 +796,14 @@ var stunable = {
           //         email : "Stella can't reach you there",
           //       }
           //     });
-          }
-
+     
 
 }
 
 
-window.onload = function(){
-    $('#container').isotope({
- layoutMode: 'cellsByColumn',
-  cellsByRow: {
-    columnWidth: 100,
-    rowHeight: 100
-    // animationEngine : 'css'
-  }})
-}
+
+
+
 
     
 $(document).ready(function() {

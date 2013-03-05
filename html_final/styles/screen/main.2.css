@@ -382,10 +382,7 @@ h2 {
 .internal #main .wrap {
 	padding-top:41px;
 	}
-.internal #page-content {
-	margin:0 30px;
-	padding-bottom:40px;
-	}	
+
 .landing .wrap {
 	width:323px;
 	margin:0 auto;
@@ -393,10 +390,7 @@ h2 {
 .landing #main .wrap {
 	padding-top:0;
 	}
-.landing #page-content {
-	margin:0;
-	padding:0 6px;
-	}
+
 .intro {
 	margin-bottom:20px;
 	border-bottom:1px dotted #666;

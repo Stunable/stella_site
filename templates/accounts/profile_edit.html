@@ -1,4 +1,4 @@
-{% extends "user_base.html" %}
+{% extends "clean_base.html" %}
 
 {% block title %} Stunable | Manage Account {% endblock %}
 
@@ -6,87 +6,86 @@
 
 {% block body_class %}profile_edit common large_common{% endblock %}
 
-{% block content-class%}round-corner-shadow{%endblock%}
+{% block content-class%}profile{%endblock%}
+
+{% block extra_css %}
+<style>
+    
+    .image-holder, .link {
+        float: left;
+    }
+    .edit {
+        display: inline;
+        margin-left: 10px;
+    }
+    .common table {
+        width: 70%;
+    }
+    .shipping_information, .billing_information {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .static {
+        margin-bottom: 10px;
+    }
+    .details {
+        margin: 0 !important;
+    }
+    .shipping-wrapper {
+        width: 260px;
+        min-height: 70px;
+    }
+    .shipping-wrapper .static {
+        float: left;
+        min-width: 150px;
+    }
+    .shipping-wrapper .action-link {
+        float: left;
+        width: 100px;
+        margin: 0;
+    }
+    .alert {
+        width: 92% !important;
+        margin-top: 0 !important;
+        text-align: center;
+    }
+    .first {
+        width: 15%;
+    }
+    .first label {
+        margin-bottom: 0;
+    }
+    .common table {
+        border: none;
+    }
+    .common table td {
+        border: none;
+    }
+    .edit_name {
+        display: inline;
+    }
+</style>
+{% endblock %}
+
+
 
 {% block left_panel %}
-<style>
-	.gallery .left-panel {
-		height: 200px;
-		padding: 10px 0 0 0;
-	}
-	.gallery #page-content {
-		padding-right: 10px;
-		width: 886px;
-	}
-	.image-holder, .link {
-		float: left;
-	}
-	.edit {
-		display: inline;
-		margin-left: 10px;
-	}
-	.common table {
-		width: 70%;
-	}
-	.shipping_information, .billing_information {
-		margin-top: 10px;
-		margin-bottom: 10px;
-	}
-	.static {
-		margin-bottom: 10px;
-	}
-	.details {
-		margin: 0 !important;
-	}
-	.shipping-wrapper {
-		width: 260px;
-		min-height: 70px;
-	}
-	.shipping-wrapper .static {
-		float: left;
-		min-width: 150px;
-	}
-	.shipping-wrapper .action-link {
-		float: left;
-		width: 100px;
-		margin: 0;
-	}
-	.alert {
-		width: 92% !important;
-		margin-top: 0 !important;
-		text-align: center;
-	}
-	.first {
-		width: 15%;
-	}
-	.first label {
-		margin-bottom: 0;
-	}
-	.common table {
-		border: none;
-	}
-	.common table td {
-		border: none;
-	}
-	.edit_name {
-		display: inline;
-	}
-</style>
-<div class="left-panel round-corner-shadow">
-    <ul class="my-closet-menu link">
-        <li class="active" style="background-color: #eee;">
-            <a href="{% url profile_edit %}">Settings</a>
+        <li id="shop" >
+                              <a href="/">shop</a>
+                            </li>
+        <li class="active">
+            <a  href="{% url profile_edit %}">Settings</a>
         </li>
         <li>
             <a href="{% url order_history %}">Order history</a>
         </li>
-    </ul>
-</div>
+
 {% endblock %}
 
 {% block content %}
 
-<div class="section intro clearfix bootstrap">
+<div id="page-content">
+    <div class="inner-page-content">
     <center style="margin-top: 10px">
         <div id="avatar-error" style="display: none" class="alert" ></div>
     </center>
@@ -94,16 +93,16 @@
     <h3> {% if profile.user.first_name %}
     <div>
         <span class="static">{{ profile.user.get_full_name }}</span>
-        <!-- <div class="editable edit_name" style="margin-left: 10px;">
+        <div class="editable edit_name" style="margin-left: 10px;">
             <form action="{% url update_profile %}" class="form-horizontal" style="display: inline" method="POST">
                 <input type="text" id="first_name" name="first_name" value="{{ profile.user.first_name }}" />
                 <input type="text" id="last_name" name="last_name" value="{{ profile.user.last_name }}" />
                 <input type="submit" class="btn btn-primary" value="Save"/>
             </form>
         </div>
-        <span> <a style="float: none; font-size: 16px;" class="edit">Edit</a> </span> -->
+        <span> <a style="float: none; font-size: 16px;" class="edit">Edit</a> </span>
     </div> {% endif %} </h3>
-</div>
+
 <div class="section body-copy bootstrap">
     {% if profile.user.first_name %}
     <form style="margin: 0px; height: 0px;" action="{% url avatar_upload %}" method="POST" id="avatar-upload-form" enctype="multipart/form-data" >
@@ -281,127 +280,7 @@
     </div>
     {% endif %}
 </div>
+</div>
+</div>
 {% endblock %}
-{% block extra_script %}
-    <script>
-    jQuery(function($){
-        
-        var login_form = $('#mng-account-form');
-        
-        login_form.ajaxForm({
-            url : this.action,
-            dataType : 'json',
-            success : function(json)
-            {
-                if (json.success == false && json.errors != undefined)
-                    process_form_errors(json, login_form)
-                else {
-                    //do something if there aren't errors
-                    
-                    window.location.href = "/"; 
-                }
-            }
-        }); 
-    });
-    
-    
 
-    function hide_form_errors()
-    {
-        $('.errorlist').remove();
-    }
-
-    function process_form_errors(json, form)
-    {
-        var curField;
-        
-        hide_form_errors();
-        //form.clearForm();
-        errors = json.errors;
-    
-        if (errors.__all__ != undefined)
-            form.append(errors.__all__);
-
-        prefix = form.find(":hidden[name='prefix']").val();
-
-        prefix == undefined ? prefix = '' : prefix = prefix + '-';
-        $('.error').removeClass('error');
-        $('.help-inline').text('');
-        for (field in errors) {
-            if(errors.hasOwnProperty(field)){
-                curField = $('[name=' + field + '], [name=' + field + ']');
-                if(curField.attr('type') === 'checkbox'){
-                    curField.parent().siblings('.help-inline').text(errors[field][0]);
-                } else {
-                    curField.siblings('.help-inline').text(errors[field][0]);
-                }
-                curField.parents('.control-group:first').addClass('error')
-            }
-        }
-    }
-</script>
-<script>
-    $(document).ready(function() {
-        $(".quest").click(function() {
-            $("#upload_avatar").click();
-        });
-        $('#avatar-upload-form').ajaxForm(function(data) {
-            message = "";
-            console.log(data);
-            if(data.result == "ok") {
-                $('.acct-avatar').attr('src', data.source);
-                $('#avatar-error').css('display', 'none');
-                // message = "Upload Successful!";
-            } else {
-                message = data.error;
-                $('#avatar-error').stop();
-                $('#avatar-error').animate({
-                    "opacity" : "1"
-                }, "fast", function() {
-                    changeError($('#avatar-error')[0], message);
-                    $('#avatar-error').css('display', 'inline');
-                });
-                // message = "There were errors with your image upload. Please try again!";
-            }
-        });
-        $('#upload_avatar').bind('change', function() {
-            var str = "";
-            str = $(this).val();
-            if(str != "" && str.length > 0) {
-                if(str.match(/.*\.(jpg|png|gif)$/)) {
-                    $("#avatar-upload-form").submit();
-                } else {
-                    $('#avatar-error').stop();
-                    $('#avatar-error').animate({
-                        "opacity" : "1"
-                    }, "fast", function() {
-                        changeError($('#avatar-error')[0], "Please Upload a valid image!");
-                        $('#avatar-error').css('display', 'inline');
-                    });
-                }
-            }
-        }).change();
-        $('.editable').hide();
-        $('.edit').click(function(event) {
-            event.preventDefault();
-            if($(this).html() == 'Edit') {
-                $(this).html("Close");
-            } else {
-                $(this).html("Edit");
-            }
-
-            var stc = $(this).parent().parent().find('.static');
-            var editable = $(this).parent().parent().find('.editable');
-
-            if($(stc).css('display') == 'none') {
-                $(stc).css('display', '');
-                $(editable).css('display', 'none');
-            } else {
-                $(stc).css('display', 'none');
-                $(editable).css('display', '');
-            }
-        });
-    });
-
-</script>
-{% endblock %}

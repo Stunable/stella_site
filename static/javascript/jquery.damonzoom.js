@@ -81,8 +81,8 @@
                            yRatio = (this.height - outerHeight) / el.outerHeight();
                            offset = el.offset();
                     
-                           console.log(outerWidth)
-                           console.log(outerHeight)
+                           // console.log(outerWidth)
+                           // console.log(outerHeight)
 
                            el.after(container);
 

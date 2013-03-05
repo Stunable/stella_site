@@ -1,6 +1,6 @@
 <div id="cart_data" class="bootstrap">
-    <span><span class="dollar">$</span>{{cart.totals_as_pretty_dict.grand_total}} </span>
-    <a style="float:right;margin-right:10px" href="/cart/update_info" id="checkout-btn" class="btn btn-primary ">Checkout</a> 
+    <!-- <span><span class="dollar">$</span>{{cart.totals_as_pretty_dict.grand_total}} </span> -->
+    <a style="margin-top:10px" href="/cart/" id="checkout-btn" class="btn btn-primary ">Checkout</a> 
 </div>
 <table id="cart_items" class="item-list" data-length="{{cart.count}}">
     {% for item in cart reversed %}

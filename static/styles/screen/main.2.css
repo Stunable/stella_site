@@ -307,18 +307,21 @@ a:hover, form .btn:hover { color:#8D8791;}
 	height:700px;
 	display:inline;
 	background-color:gray;
+	text-align:center;
+	padding:20px
 }
 
 	#left-panel>ul{
 		background-color:#ddd;
 		border:1px solid #EC67F0;
 		border-radius:8px;
+
 	}
 
 	#left-panel>ul>li{
 		margin:10px;
 		background-color:#eee;
-		height:90px;
+		min-height:90px;
 		width:100%;
 		border-radius: 8px;
 		cursor:pointer;
@@ -328,7 +331,12 @@ a:hover, form .btn:hover { color:#8D8791;}
 	#left-panel>ul>li.active{
 		background-color: white;
 		border:1px solid #EC67F0;
-		height:89px;
+		min-height:89px;
+	}
+
+	#left-panel>ul>li>a{
+		width:100%;
+		height:100%;
 	}
 
 
@@ -348,9 +356,21 @@ a:hover, form .btn:hover { color:#8D8791;}
     padding-left:40px;
     /*padding-right:10px;*/
     box-shadow: -4px 0px 4px 4px rgba(0,0,0,.2);
+    overflow:auto;
 }
 
-		.carouselbox{
+#page-content #nav-handle{
+	position:absolute;
+	left:0px;
+	top:340px;
+	height:60px;
+	width:16px;
+	background-color: gray;
+	border-radius:1px 10px 10px 1px;
+	cursor:pointer;
+}
+
+		.inner-page-content{
 			background-color:rgb(250,250,250);
 			width:100%;
 			border-radius: 10px;
@@ -400,7 +420,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 
 
-		.content.carousel div#stunable-tabs-nav li{
+		div#stunable-tabs-nav li{
 			margin-top:10px;
 			display:inline-block;
 			height:20px;
@@ -431,7 +451,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 
 /*CAROUSEL*/
-		.carouselbox #container{
+		.inner-page-content #container{
 			margin-top:32px;
 			min-height:500px;
 			width:100%;
@@ -447,7 +467,6 @@ a:hover, form .btn:hover { color:#8D8791;}
 			margin:10px;
 			padding:10px;
 			border:1px solid #eee;
-
 		    height:390px;
 		   
 		    width:201px;
@@ -480,7 +499,8 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 
 		div.item:hover{
-			border: 2px dashed #EC67F0;;
+			border: 2px dashed #EC67F0;
+			padding: 9px;
 		}
 
 		div.item .pic-container img{
@@ -673,12 +693,79 @@ a:hover, form .btn:hover { color:#8D8791;}
 
 
 /*MODAL*/
+/*
 
-.modal.current{
+MODAL CSS
+*/
+
+.modal {
+  display: none;
+  /*width: 400px;*/
+  /*background: #fff;*/
+  /*padding: 15px 30px;*/
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -o-border-radius: 8px;
+  -ms-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-box-shadow: 0 0 10px #000;
+  -moz-box-shadow: 0 0 10px #000;
+  -o-box-shadow: 0 0 10px #000;
+  -ms-box-shadow: 0 0 10px #000;
+  box-shadow: 0 0 10px #000;
+}
+
+/*.modal.current .errorlist{
+	background-color:white;
+	text-align: center;
+	min-height:200px;
+	min-width:200px;
+}*/
+
+.close-modal {
+	position: absolute;
+	top: 10px;
+	right:10px;
+	height: 24px;
+	width: 24px;
+	margin: 0;
+	padding: 0;
+	background: url(../../images/gui/icons.png) no-repeat -24px -1px;
+	text-indent: -999em;
+	cursor: pointer;
+	z-index: 1103;
+}
+
+
+/*.modal-spinner {
+  display: none;
+  width: 64px;
+  height: 64px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-right: -32px;
+  margin-top: -32px;
+  background: url(../../images/gui/spinner.png) #111 no-repeat center center;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -o-border-radius: 8px;
+  -ms-border-radius: 8px;
+  border-radius: 8px;
+}*/
+
+/*END MODAL CSSS*/
+
+
+/*.modal.current{
 	overflow:hidden;
 	margin-left:50%;
 	margin-top:50%;
-}
+}*/
+
+/*.wide.modal.current{
+	height:620px;
+}*/
 
 #modal_contents{
 	overflow:hidden;
@@ -762,13 +849,24 @@ a:hover, form .btn:hover { color:#8D8791;}
 .modal-item-details .item-data{
 	min-height:350px;
 	display:block;
+}
 
+.wide .modal-item-details .item-data{
+	display:inline-block;
+	width:200px;
+	height:200px;
 }
 
 
 .modal-item-details .description{
 	font-size:.8em;
 	font-family: serif;
+}
+
+.wide .modal-item-details .description{
+	font-size:.8em;
+	font-family: serif;
+	width:200px;
 }
 
 .item-actions{
@@ -778,7 +876,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 
 .modal.current .buy-wrapper{
 	position:absolute;
-	top:660px;
+	top:580px;
 	right:13px;
 }
 
@@ -924,3 +1022,605 @@ a:hover, form .btn:hover { color:#8D8791;}
 	text-transform: uppercase;
 	font-weight: bold;
 }
+
+
+/*CART*/
+	
+#cart_slide{
+	/*padding:5px;*/
+	/*z-index: 2;*/
+	/*background-color: rgba(255,255,255,.83);*/
+	height: 40px;
+	width: 200px;
+	/*position: absolute;*/
+	/*border: 2px solid #ccc;*/
+	/*border-top: 0px;*/
+	/*border-radius: 0px 0px 9px 9px;*/
+	/*left: -70px;*/
+	/*top:-60px;*/
+	overflow:hidden;
+	/*box-shadow: 3px 1px 10px rgba(0,0,0,.5);*/
+}
+
+
+#cart_items{
+	height:162px;
+	display:block;
+	overflow:auto;
+}
+
+.add #cart_items{
+	height:81px;
+	overflow:hidden;
+}
+	#cart_items tr{
+
+		font-size:.6em;
+	}
+	#cart_items td{
+		border-bottom:1px dashed #ccc;
+		padding-top:10px;
+		padding-bottom:10px;
+		text-align: right;
+		height:60px;
+		padding-right:;
+	}
+	#cart_items td span{
+		vertical-align:top;
+		display:block;
+		line-height: 1.2em;
+	}
+
+	#cart_items.item-list .item-label{
+		width: 100%;
+		text-align: right;
+		background:none;
+	}
+
+#cart_data{
+	/*margin-top:71px;*/
+	border-bottom:1px dashed #ccc;
+	height:40px;
+	width:100%;
+	color:#aaa;
+	vertical-align: middle;
+}
+
+
+
+
+
+/*BOOTSRAP*/
+
+/********* Bootstrap *************/
+
+.bootstrap label,
+.bootstrap input,
+.bootstrap button,
+.bootstrap select,
+.bootstrap textarea {
+  font-size: 15px;
+  font-weight: normal;
+  line-height: 18px;
+}
+
+.bootstrap button,
+.bootstrap input,
+.bootstrap select,
+.bootstrap textarea {
+  margin: 0;
+  font-size: 100%;
+  vertical-align: middle;
+}
+
+.bootstrap button,
+.bootstrap input {
+  *overflow: visible;
+  line-height: normal;
+}
+
+
+.bootstrap button.btn,
+.bootstrap input[type="submit"].btn {
+  *padding-top: 2px;
+  *padding-bottom: 2px;
+}
+
+.bootstrap button::-moz-focus-inner,
+.bootstrap input::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+.bootstrap textarea {
+  overflow: auto;
+  vertical-align: top;
+}
+
+.bootstrap select,
+.bootstrap textarea,
+.bootstrap input[type="text"],
+.bootstrap input[type="password"],
+.bootstrap input[type="datetime"],
+.bootstrap input[type="datetime-local"],
+.bootstrap input[type="date"],
+.bootstrap input[type="month"],
+.bootstrap input[type="time"],
+.bootstrap input[type="week"],
+.bootstrap input[type="number"],
+.bootstrap input[type="email"],
+.bootstrap input[type="url"],
+.bootstrap input[type="search"],
+.bootstrap input[type="tel"],
+.bootstrap input[type="color"],
+.bootstrap .uneditable-input {
+  display: inline-block;
+  height: 18px;
+  padding: 4px;
+  margin-bottom: 9px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #555555;
+}
+
+.bootstrap input,
+.bootstrap textarea {
+  width: 210px;
+}
+
+.bootstrap textarea {
+  height: auto;
+}
+
+.bootstrap textarea,
+.bootstrap input[type="text"],
+.bootstrap input[type="password"],
+.bootstrap input[type="datetime"],
+.bootstrap input[type="datetime-local"],
+.bootstrap input[type="date"],
+.bootstrap input[type="month"],
+.bootstrap input[type="time"],
+.bootstrap input[type="week"],
+.bootstrap input[type="number"],
+.bootstrap input[type="email"],
+.bootstrap input[type="url"],
+.bootstrap input[type="search"],
+.bootstrap input[type="tel"],
+.bootstrap input[type="color"],
+.bootstrap .uneditable-input {
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+     -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+      -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
+       -o-transition: border linear 0.2s, box-shadow linear 0.2s;
+          transition: border linear 0.2s, box-shadow linear 0.2s;
+}
+
+.bootstrap textarea:focus,
+.bootstrap input[type="text"]:focus,
+.bootstrap input[type="password"]:focus,
+.bootstrap input[type="datetime"]:focus,
+.bootstrap input[type="datetime-local"]:focus,
+.bootstrap input[type="date"]:focus,
+.bootstrap input[type="month"]:focus,
+.bootstrap input[type="time"]:focus,
+.bootstrap input[type="week"]:focus,
+.bootstrap input[type="number"]:focus,
+.bootstrap input[type="email"]:focus,
+.bootstrap input[type="url"]:focus,
+.bootstrap input[type="search"]:focus,
+.bootstrap input[type="tel"]:focus,
+.bootstrap input[type="color"]:focus,
+.bootstrap .uneditable-input:focus {
+  border-color: #EC67F0;
+  outline: 0 none;
+
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #EC67F0;
+     -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #EC67F0;
+          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #EC67F0;
+}
+
+.bootstrap input[type="radio"],
+.bootstrap input[type="checkbox"] {
+  margin: 3px 0;
+  *margin-top: 0;
+  /* IE7 */
+
+  line-height: normal;
+  cursor: pointer;
+}
+
+.bootstrap input[type="submit"],
+.bootstrap input[type="reset"],
+.bootstrap input[type="button"],
+.bootstrap input[type="radio"],
+.bootstrap input[type="checkbox"] {
+  width: auto;
+}
+
+.bootstrap .uneditable-textarea {
+  width: auto;
+  height: auto;
+}
+
+.bootstrap select,
+.bootstrap input[type="file"] {
+  height: 28px;
+  /* In IE7, the height of the select element cannot be changed by height, only font-size */
+
+  *margin-top: 4px;
+  /* For IE7, add top margin to align select with labels */
+
+  line-height: 28px;
+}
+
+.bootstrap select {
+  width: 220px;
+  border: 1px solid #bbb;
+  -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+          border-radius: 0;
+   background-color: none;
+}
+
+.bootstrap select[multiple],
+.bootstrap select[size] {
+  height: auto;
+}
+
+.bootstrap input[type="file"] {
+	margin-bottom: 9px;
+}
+
+.bootstrap select:focus,
+.bootstrap input[type="file"]:focus,
+.bootstrap input[type="radio"]:focus,
+.bootstrap input[type="checkbox"]:focus {
+  outline: thin dotted #EC67F0;
+  outline: 5px auto #EC67F0;
+  outline-offset: -2px;
+}
+
+.bootstrap .form-actions {
+  padding: 17px 20px 18px;
+  margin-top: 18px;
+  margin-bottom: 18px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #e5e5e5;
+  *zoom: 1;
+}
+
+.bootstrap .form-actions:before,
+.bootstrap .form-actions:after {
+  display: table;
+  content: "";
+}
+
+.bootstrap .form-actions:after {
+  clear: both;
+}
+
+.bootstrap .radio,
+.bootstrap .checkbox {
+  min-height: 18px;
+  padding-left: 18px;
+}
+
+.bootstrap .radio input[type="radio"],
+.bootstrap .checkbox input[type="checkbox"] {
+  float: left;
+  margin-left: -18px;
+}
+
+.bootstrap .btn {
+   display: inline-block;
+  *display: inline;
+  padding: 4px 10px 4px;
+  margin-bottom: 0;
+  *margin-left: .3em;
+  font-size: 13px;
+  line-height: 18px;
+  *line-height: 20px;
+  color: #333333;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: #f5f5f5;
+  *background-color: #e6e6e6;
+  background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+  background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+  background-repeat: repeat-x;
+  border: 1px solid #cccccc;
+  *border: 0;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-bottom-color: #b3b3b3;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+  *zoom: 1;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+     -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	
+	border-color: #ccc;
+  	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  	float: none;
+}
+
+.bootstrap .btn:hover,
+.bootstrap .btn:active,
+.bootstrap .btn.active,
+.bootstrap .btn.disabled,
+.bootstrap .btn[disabled] {
+ 	color:#777;
+}
+
+.bootstrap .btn:hover {
+	display: inline-block;
+  *display: inline;
+  padding: 4px 10px 4px;
+  margin-bottom: 0;
+  *margin-left: .3em;
+  font-size: 13px;
+  line-height: 18px;
+  *line-height: 20px;
+  color: #333333;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: #f5f5f5;
+  *background-color: #e6e6e6;
+  background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+  background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+  background-repeat: repeat-x;
+  border: 1px solid #cccccc;
+  *border: 0;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-bottom-color: #b3b3b3;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+  *zoom: 1;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+     -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	
+	border-color: #ccc;
+  	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+	
+  color: #333333;
+  text-decoration: none;
+  background-color: #e6e6e6;
+  *background-color: #d9d9d9;
+  /* Buttons in IE7 don't get borders, so darken on hover */
+
+ 
+
+  background-position: 0 -15px;
+  -webkit-transition: background-position 0.1s linear;
+     -moz-transition: background-position 0.1s linear;
+      -ms-transition: background-position 0.1s linear;
+       -o-transition: background-position 0.1s linear;
+          transition: background-position 0.1s linear;
+}
+
+.bootstrap .btn:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+.bootstrap .btn-primary,
+.bootstrap .btn-primary:hover:not(.disabled),
+.bootstrap .btn-warning,
+.bootstrap .btn-warning:hover,
+.bootstrap .btn-danger,
+.bootstrap .btn-danger:hover,
+.bootstrap .btn-success,
+.bootstrap .btn-success:hover,
+.bootstrap .btn-info,
+.bootstrap .btn-info:hover,
+.bootstrap .btn-inverse,
+.bootstrap .btn-inverse:hover {
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.bootstrap .btn-primary {
+  background-color: #D337DA;
+  background-image: -ms-linear-gradient(top, #EC67F0, #D337DA);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#EC67F0), to(#D337DA));
+  background-image: -webkit-linear-gradient(top, #EC67F0, #D337DA);
+  background-image: -o-linear-gradient(top, #EC67F0, #D337DA);
+  background-image: -moz-linear-gradient(top, #EC67F0, #D337DA);
+  background-image: linear-gradient(top, #EC67F0, #D337DA);
+  background-repeat: repeat-x;
+  border-color: #0055cc #0055cc #003580;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
+.bootstrap .btn-primary:hover,
+.bootstrap .btn-primary:active,
+.bootstrap .btn-primary.active,
+.bootstrap .btn-primary.disabled,
+.bootstrap .btn-primary[disabled] {
+  background-image: -ms-linear-gradient(top, #EC67F0, #D337DA);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#EC67F0), to(#D337DA));
+  background-image: -webkit-linear-gradient(top, #EC67F0, #D337DA);
+  background-image: -o-linear-gradient(top, #EC67F0, #D337DA);
+  background-image: -moz-linear-gradient(top, #EC67F0, #D337DA);
+  background-image: linear-gradient(top, #EC67F0, #D337DA);
+  background-repeat: repeat-x;
+  border-color: #0055cc #0055cc #003580;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  
+  background-color: #D337DA;
+}
+
+.bootstrap .btn-primary:active,
+.bootstrap .btn-primary.active {
+  background-color: #004099 \9;
+}
+
+.bootstrap .alert {
+  padding: 8px 35px 8px 14px;
+  margin-bottom: 18px;
+  color: #c09853;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  background-color: #fcf8e3;
+  border: 1px solid #fbeed5;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+}
+
+.bootstrap .label,
+.bootstrap .badge {
+  font-size: 10.998px;
+  font-weight: bold;
+  line-height: 14px;
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+  vertical-align: baseline;
+  background-color: #999999;
+  margin: 0;
+}
+
+
+.bootstrap .form-search input,
+.bootstrap .form-inline input,
+.bootstrap .form-horizontal input,
+.bootstrap .form-search textarea,
+.bootstrap .form-inline textarea,
+.bootstrap .form-horizontal textarea,
+.bootstrap .form-search select,
+.bootstrap .form-inline select,
+.bootstrap .form-horizontal select,
+.bootstrap .form-search .help-inline,
+.bootstrap .form-inline .help-inline,
+.bootstrap .form-horizontal .help-inline,
+.bootstrap .form-search .uneditable-input,
+.bootstrap .form-inline .uneditable-input,
+.bootstrap .form-horizontal .uneditable-input,
+.bootstrap .form-search .input-prepend,
+.bootstrap .form-inline .input-prepend,
+.bootstrap .form-horizontal .input-prepend,
+.bootstrap .form-search .input-append,
+.bootstrap .form-inline .input-append,
+.bootstrap .form-horizontal .input-append {
+  display: inline-block;
+  *display: inline;
+  margin-bottom: 0;
+  *zoom: 1;
+}
+
+.bootstrap .form-search .hide,
+.bootstrap .form-inline .hide,
+.bootstrap .form-horizontal .hide {
+  display: none;
+}
+
+.bootstrap .form-horizontal .control-group {
+  margin-bottom: 18px;
+  *zoom: 1;
+}
+
+.bootstrap .form-horizontal .control-group:before,
+.bootstrap .form-horizontal .control-group:after {
+  display: table;
+  content: "";
+}
+
+.bootstrap .form-horizontal .control-group:after {
+  clear: both;
+}
+
+.bootstrap .form-horizontal .control-label {
+  float: left;
+  width: 140px;
+  padding-top: 5px;
+  text-align: right;
+}
+
+.bootstrap .form-horizontal .controls {
+  *display: inline-block;
+  *padding-left: 20px;
+  margin-left: 160px;
+  *margin-left: 0;
+}
+
+.bootstrap .form-horizontal .controls:first-child {
+  *padding-left: 160px;
+}
+
+.bootstrap .form-horizontal .help-block {
+  margin-top: 9px;
+  margin-bottom: 0;
+}
+
+.bootstrap .form-horizontal .form-actions {
+  padding-left: 160px;
+}
+
+.bootstrap .control-group.error > label,
+.bootstrap .control-group.error .help-block,
+.bootstrap .control-group.error .help-inline {
+  color: #b94a48;
+}
+
+.bootstrap .control-group.error .checkbox,
+.bootstrap .control-group.error .radio,
+.bootstrap .control-group.error input,
+.bootstrap .control-group.error select,
+.bootstrap .control-group.error textarea {
+  color: #b94a48;
+  border-color: #b94a48;
+}
+
+.bootstrap .control-group.error .checkbox:focus,
+.bootstrap .control-group.error .radio:focus,
+.bootstrap .control-group.error input:focus,
+.bootstrap .control-group.error select:focus,
+.bootstrap .control-group.error textarea:focus {
+  border-color: #953b39;
+  -webkit-box-shadow: 0 0 6px #d59392;
+     -moz-box-shadow: 0 0 6px #d59392;
+          box-shadow: 0 0 6px #d59392;
+}
+
+.bootstrap .control-group.error .input-prepend .add-on,
+.bootstrap .control-group.error .input-append .add-on {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #b94a48;
+}
+
+.bootstrap form {
+  margin: 0 0 18px;
+}
+
+

@@ -7,6 +7,7 @@
 {% block content %}
 
 <div class="content {% block content-class%}carousel{%endblock%}" id="page-content" >
+    <div id="nav-handle"></div>
 
     <div id="stunable-tabs-nav">
     <ul id="tabs-container" class="nav tabbed clearfix">
@@ -28,7 +29,7 @@
             <input data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text">
         </div>
     </div>
-    <div class="carouselbox item-list medium">
+    <div class="carouselbox inner-page-content item-list medium">
         <!-- <div class="sizecontrols"><span>tiny</span><span>small</span><span>medium</span>large</span></div> -->
 
         <div id="container" >
