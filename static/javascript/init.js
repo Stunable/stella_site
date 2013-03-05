@@ -86,8 +86,21 @@ var stunable = {
 
 
         })
-
-
+        $('.left-panel>ul>li').click(function(e){
+          e.stopPropagation();
+          $('.left-panel>ul>li.active').removeClass('active');
+          $(this).addClass('active');
+          return false;
+        })
+        $('.left-panel').toggle(
+            function(){
+              $('#page-content').animate({'left':'20px'},400)
+            },
+            function(){
+              $('#page-content').animate({'left': '220px'},400)
+            }
+          )
+      
     }
     ,racks: function(){
       // console.log('racks setup')
@@ -657,8 +670,8 @@ window.onload = function(){
  layoutMode: 'cellsByColumn',
   cellsByRow: {
     columnWidth: 100,
-    rowHeight: 100,
-    animationEngine : 'css'
+    rowHeight: 100
+    // animationEngine : 'css'
   }})
 }
 

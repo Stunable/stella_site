@@ -87,11 +87,14 @@
                 <!--[if !IE]><!-->
             
         {% endblock %}
-                        <div class="section content" id="header">
-                <div class="nav bar clearfix" id="global">
-                    <div class="wrap">
-                        <!--SOCIAL MEDIA ICON LINKS -->
-                        <ul class="horizontal-list icon-list">
+
+                
+                
+                <div class="global" id="header">
+                        <a href="/" class="logo"></a>
+                      
+                      <!--SOCIAL MEDIA ICON LINKS -->
+                        <ul class="horizontal-list icon-list social">
                             <li class="navlink">
                                 <a href="http://twitter.com/stunable" title="Follow Stunable on Twitter." class="icon" id="nav-twitter">Twitter</a>
                             </li>
@@ -103,39 +106,58 @@
                             </li>
                         </ul><!--/.horizontal-list -->
                         <!--NAVIGATION LINKS -->
-                        {% block navigation %}
+                    
+                        {% block local_nav %} <!--LOCAL NAVIGATION LINKS-->
+                          {% if request.subdomain == 'stylists' %}
+                              {% include "includes/retailer_nav.html" %}
+                          {% else %}
+                            {% comment %}  {% include "includes/user_nav.html" %}{% endcomment %}
+                          {% endif %}
                         {% endblock %}
-                    </div><!--/.wrap-->
-                </div><!--/.nav#global-->
-                <div class="wrap" id="hdr-logo">
-                       <h1 id="shop-with-stella"><a href="/" class="logo">Stunable</a></h1>
-                 </div><!--/.wrap-->
-            </div><!--/.header-->
-            <div class="section" id="main" style="border:1px solid red">
-                <!-- <h1 id="shop-with-stella"><a href="/" class="logo">Stunable</a></h1> -->
-
-                <div class="wrap" id="carousel-wrapper" style="border:1px solid blue  ">
-                    {%comment%}{% block local_nav %} <!--LOCAL NAVIGATION LINKS-->
-                    {% if request.subdomain == 'stylists' %}
-                        {% include "includes/retailer_nav.html" %}
-                    {% else %}
-                        {% include "includes/user_nav.html" %}
-                    {% endif %}
-                    {% endblock %}{%endcomment%}
+                        
+                        
+                        
+                    
+                </div>
+                
+            <div class="section" id="main" >
+                <!-- <h1 id="shop-with-stella"><a href="/" class="logo">Stunable</a></h1> --> 
+                    
                     {% block rack %}
 
-                  
-                    {% block page_tab %}
-                    {% endblock %}
                     
-                    <!-- block content begin -->
-                    {% block content %}
-                    {% endblock %}
+                      {% block page_tab %}
+                      {% endblock %}
+
+                      {% block left_panel %}
+                        <div style="text-align:center;padding:20px" class="left-panel" id="left-panel">
+                          <ul>
+                            <li id="shop" class="active">
+                              shop
+                            </li>
+                            <li id="cart">
+                              cart
+                            </li>
+
+                            <li id="wishlist">
+                              wishlist
+                            </li>
+
+                            <li id="friends">
+                              friends
+                            </li>
+                          </ul>
+                        </div>
+                      {% endblock %}
+                    
+                      <!-- block content begin -->
+                      {% block content %}
+                      {% endblock %}
                  
                     {% endblock %}
+                    
                     {% block content1 %}
                     {% endblock %}
-                </div><!--/.section-->
             </div><!--/.container#viewport -->
             <div class="section content" id="footer">
                 <div class="wrap">

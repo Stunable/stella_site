@@ -165,7 +165,8 @@ var refclickFunctions = {
             t = $(selection.data('target'));
 
         t.append(el.hide().fadeIn().css('display','inline'))
-        $(t).scrollTo(t.children().last())
+        $(t).animate({scrollLeft:$(t).width()},400);
+        window.location(el.find('a').attr('href'))
         init_refclicks(el.find('.refclick'));
     }
 }
@@ -203,6 +204,7 @@ function init_refsubmits(selection){
             }
 
         })
+        $(this).val('')
         return false;
       },
       source: function( request, response ) {

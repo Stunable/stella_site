@@ -1,38 +1,35 @@
 {% extends "racks/rack_base.html" %} {% block title %} Stunable | Browse Items {% endblock %} {% block page_tab %}{% endblock %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/main.2.css" type="text/css" media="screen, projection" />
-{% endblock %}
 
-{% block left_panel %}
-{% endblock %}
+
 
 
 {% block content %}
 
-<div class="content {% block content-class%}carousel{%endblock%}" id="page-content" style="border:1px solid green">
+<div class="content {% block content-class%}carousel{%endblock%}" id="page-content" >
 
     <div id="stunable-tabs-nav">
     <ul id="tabs-container" class="nav tabbed clearfix">
-                <li class="tab" id="tab-all">
+
+                <li class="stunable-tab tab {% if current == 'all' %} active{% endif %}">
                     <a href="/" title="" class="text-link"><span>all</span></a>
                 </li>
-                <li class="tab" id="tab-new">
+                <li class="stunable-tab tab">
                     <a href="{% url new %}"  title="" class="text-link"><span class="identity">new</span></a>
                 </li>
-                <li class="tab" id="tab-all">
+                <li class="stunable-tab tab">
                     <a href="/shop/sale" title="" class="text-link"><span>sale</span></a>
                 </li>
                 
                 {% include 'racks/includes/tag_tabs.html' %}
            
     </ul>
-    <div id="new_tab_field">
-        <input data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text">
-    </div>
+        <div id="new_tab_field">
+            <input data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text">
+        </div>
     </div>
     <div class="carouselbox item-list medium">
-        <div class="sizecontrols"><span>tiny</span><span>small</span><span>medium</span>large</span></div>
+        <!-- <div class="sizecontrols"><span>tiny</span><span>small</span><span>medium</span>large</span></div> -->
 
         <div id="container" >
                             

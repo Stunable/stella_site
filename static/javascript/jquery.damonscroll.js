@@ -16,7 +16,7 @@
         defaults = {
             orientation: "horizontal",
             target_element: null,
-            threshold_percent: 90,
+            threshold_percent: 75,
             nextkey : $('.next'),
             prevkey : $('.prev'),
             keynav : true
@@ -41,7 +41,8 @@
     Plugin.prototype = {
 
         init: function() {
-
+            this.is_animating = false;
+            this.anim_duration = 2000;
             this._next_page = this.options.first_page || 2;
             this.num_per_page = this.options.num_per_page || 6;
             this._add_function= this.options.add_function || function(items){
@@ -88,6 +89,7 @@
 
         },
         horizontal:function(el){
+            var self = this
             var $t = this._t;
             var $e = $(this.element)
             return {
@@ -99,10 +101,10 @@
                     return {'p':100*$element.scrollLeft()/total,'dir':'horizontal'}
                 }
                 ,animate: function(number){
-
+                    self.is_animating = true;
                     $e.stop(true).animate({
                         scrollLeft: $e.scrollLeft()+number
-                     }, 800);
+                     }, self.anim_duration,function(){self.is_animating = false;self.post_anim_callback()});
 
                 }
             }
@@ -118,10 +120,10 @@
                     return {'p':100*$element.scrollTop()/total,'dir':'vertical'}
                 }
                 ,animate: function(number){
-
+                    self.is_animating = true;
                     $e.stop(true).animate({
                         scrollTop: $e.scrollTop()+number
-                     }, 800);
+                     }, self.anim_duration,function(){self.is_animating = false;self.post_anim_callback()});
 
                 }
             }
@@ -134,18 +136,8 @@
                         url: '?page=' + this._next_page + '&item_per_page=' + this.num_per_page,
                         success: function(data) {
                             var items = $(data).find('.item')
-
                             self._add_function(items)
-                            // self._t.append(items);
                             self._next_page = $(data).attr('data-nextpage')
-                            ////console.log(slider)
-                            // initDrag(items);
-                            // fixDragDropIssue();
-
-                            // $(items).find('img').load(function(){
-                            //     $(this).hide().show().css('border','3px solid white').css('border-radius','10px');
-                            //     console.log(this)
-                            // })
                             self._loading = false;
                         }
                         ,dataType:'html'
@@ -154,6 +146,9 @@
         },
         get_url:function(){
             return this.options.url || window.location
+        },
+        post_anim_callback:function(){
+            // console.log('hi')
         }
 
     };
