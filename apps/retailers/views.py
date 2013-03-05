@@ -74,8 +74,12 @@ def add_product_image(request):
         im = form.save(commit=False)
         im.retailer = retailer.user
         im.save(instant=True)
-
-        ret = {'html':'<option class="new_image_'+str(im.id)+'" value="'+str(im.id)+'">'+im.small.url+'</option>','message':str(im.id),'success':True}
+        try:
+            path = im.small.url
+        except:
+            path = '/static/images/image_not_ready.png'
+            
+        ret = {'html':'<option class="new_image_'+str(im.id)+'" value="'+str(im.id)+'">'+path+'</option>','message':str(im.id),'success':True}
     else:
         ret = {'message':form.errors}
     return HttpResponse(json.dumps(ret), mimetype="application/json")
