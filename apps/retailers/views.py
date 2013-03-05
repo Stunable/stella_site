@@ -78,7 +78,7 @@ def add_product_image(request):
             path = im.small.url
         except:
             path = '/static/images/image_not_ready.png'
-            
+
         ret = {'html':'<option class="new_image_'+str(im.id)+'" value="'+str(im.id)+'">'+path+'</option>','message':str(im.id),'success':True}
     else:
         ret = {'message':form.errors}
@@ -490,12 +490,15 @@ def retailer_logo_upload(request):
         retailer_profile = get_retailer_profile(request)
         if request.method == "POST":
             form = LogoUploadForm(request.POST, request.FILES, instance=retailer_profile)
-            form.save()
+            if form.is_valid():
+                form.save()
+            else:
+                return form.errors_as_json()
             return {'result': 'ok', 'source': retailer_profile.logo_image.url}
         else:
             raise ValidationError("Errors Occur!")
-    except:
-        pass
+    except Exception, e:
+        return {'result':str(e)}
     
 def retailer_list(request, template='retailers/retailer_list.html'):
     retailer_list = RetailerProfile.objects.all()
