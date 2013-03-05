@@ -201,9 +201,10 @@ def process_API_products(list_of_products,api_connection):
                 _retailer = Retailer
             )
             I.brand = d[Map['item']['fields']['brand']]
-
-            I.description = api_connection.get_description(d)
-            I._retailer = Retailer
+            
+            if created:
+                 I.description = api_connection.get_description(d)
+                 I._retailer = Retailer
             I.save()
 
             if created:
