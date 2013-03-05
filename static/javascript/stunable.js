@@ -1,3 +1,8 @@
+function changeError(target, message) {
+    target.innerHTML = message;
+}
+
+
 $.fn.extend({
         pschecker: function (options) {
             var settings = $.extend({ minlength: 8, maxlength: 16, onPasswordValidate: null, onPasswordMatch: null }, options);
