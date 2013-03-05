@@ -394,13 +394,32 @@ def bulk_upload(request,upload_id=None,template="retailers/product_list.html"):
                     uploadObject = up
                     return product_list(request,upload=uploadObject)
 
-            pl = retailer_profile.retailer_item_set.all()
+            pl = get_paginator(retailer_profile.retailer_item_set.all(),request)
 
             ctx = {'retailer_profile': retailer_profile, 'product_list': pl,'bulk_upload_form':form,'upload':uploadObject}
         except:
             raise
         # e redirect(reverse("home"))
     return direct_to_template(request, template, ctx)
+
+
+def get_paginator(pl,request):
+
+    paginator = Paginator(pl, int(request.GET.get('limit',20)))
+
+    page = int(request.GET.get('page',1))
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        products = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        products = paginator.page(paginator.num_pages)
+
+    return products
+
+
 
 @login_required 
 def product_list(request, upload=None, template="retailers/product_list.html"):
@@ -423,17 +442,8 @@ def product_list(request, upload=None, template="retailers/product_list.html"):
         in_progress = APIConnection.objects.filter(retailer=request.user,update_in_progress=True)
 
 
-        paginator = Paginator(pl, int(request.GET.get('limit',20)))
-
-        page = int(request.GET.get('page',1))
-        try:
-            products = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            products = paginator.page(1)
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            products = paginator.page(paginator.num_pages)
+        products = get_paginator(pl,request)
+        
 
 
 
@@ -555,15 +565,20 @@ def item_action(request, template="retailers/product_list.html"):
             if request.POST.get('action_name','None') and request.POST.get('confirm_%s'%request.POST.get('action_name')):
                 for i in pl:
                     getattr(i,request.POST.get('action_name','None'))()
-                return redirect(request.get('next',reverse("product_list")))
+                return redirect(request.GET.get('next',reverse("product_list")))
             else:   
                 data = {
                     'action_name': request.POST.get('action_name')
                 }
+
+                pl = get_paginator(pl, request)
+
                 ctx = {'retailer_profile': retailer_profile, 'product_list': pl, 'confirm': data,'action':True}
                 return direct_to_template(request, template, ctx)
 
-        except:    
+        except Exception, e:
+            raise
+            print 'item action error:',e
             return redirect(reverse("product_list"))
 
 @login_required
