@@ -63,6 +63,22 @@ def get_retailer_profile(request,retailer_id=None):
 
 
 
+@login_required
+def add_product_image(request):
+
+    retailer = get_retailer_profile(request)
+
+    form = modelform_factory(ProductImage,fields=["image",'item'])(request.POST,request.FILES,prefix="new")
+
+    if form.is_valid():
+        im = form.save(commit=False)
+        im.retailer = retailer.user
+        im.save(instant=True)
+
+        ret = {'html':'<option class="new_image_'+str(im.id)+'" value="'+str(im.id)+'">'+im.small.url+'</option>','message':str(im.id),'success':True}
+    else:
+        ret = {'message':form.errors}
+    return HttpResponse(json.dumps(ret), mimetype="application/json")
 
 
 def retailer_help(request,  template="retailers/retailer_help.html"):

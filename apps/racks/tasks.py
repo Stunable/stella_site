@@ -27,7 +27,7 @@ def prettify(instance,refresh=False):
     pic = None
     outpic = None
     try:
-        if not instance.medium or refresh:
+        if not instance.medium or refresh and (instance.image or instance.pretty_image):
             try:
                 pic = Image.open(instance.image.file)
             except:
@@ -100,16 +100,16 @@ def prettify(instance,refresh=False):
     except Exception, e:
         try:
             if instance.item:
-                instance.item.approved = False
-                instance.item.delete()
-
+                pass
+                # instance.item.approved = False
+                # instance.item.delete()
             print e
             if settings.DEBUG:
                 if instance.item:
                     if not instance.item.item_image_set.all().count() >= 2:
                         instance.item.approved = False
                         instance.item.save()
-                # instance.delete()
+                    instance.delete()
         except Exception,e:
             print e
             

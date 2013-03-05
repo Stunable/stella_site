@@ -108,7 +108,11 @@ class listImageMixin(object):
         try:
             return self.get_image().small.url
         except:
-            return 'pic'
+            if self.image:
+                try:
+                    return self.image.url
+                except:
+                    return '/static/images/image_not_reaady.png'
         #get_thumbnail(self.get_image(), '120x120',  quality=100).url
 
     def list_image(self):
@@ -165,10 +169,8 @@ class ProductImage(models.Model,listImageMixin):
 
     def generate_pretty_picture(self,instant=None,refresh=None):
         if instant:
-            print 'prettifying',self
             prettify(self,refresh=refresh)
         else:
-            print 'delayed prettify',self
             prettify.delay(self,refresh=refresh)
 
     def set_size(self):
@@ -203,8 +205,9 @@ class ProductImage(models.Model,listImageMixin):
         this_id = self.id
         super(ProductImage,self).save()
 
-        if not this_id:
-            self.generate_pretty_picture(instant)
+        if not this_id and instant:
+            return self.generate_pretty_picture(instant)
+
 
     @staticmethod
     def already_exists(unique_string,retailer):

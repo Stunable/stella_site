@@ -32,6 +32,7 @@ urlpatterns = patterns('',
     url(r'^wepay', setup_wepay),
     url(r'^$', redirect_to, {'url':'/accounts/login'}, name="home"),
     url(r'^notification/', include('apps.notification.urls')),
+    url(r'^add_product_image', add_product_image, name="add_product_image"),
     url(r'^racks/', include('apps.racks.urls')),
     url(r'^shop/', include('apps.racks.urls')),
      

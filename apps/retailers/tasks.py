@@ -285,8 +285,10 @@ def process_API_products(list_of_products,api_connection):
 
 
         except Exception,e:
-            
             print 'ERROR:',e
+            print 'done updating items'
+            api_connection.update_in_progress = False
+            api_connection.save()
     print 'done updating items'
     api_connection.update_in_progress = False
     api_connection.save()
