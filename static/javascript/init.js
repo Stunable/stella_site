@@ -512,14 +512,16 @@ var stunable = {
                         // dataType : 'json',
                         success : function(json) {
                           if (json.success) {
-                            var $newel = $(json.html)
-                            $('.imageselector,  select[name=image], select[name=featured_image]').append($newel)
-                            active_image_form.find('.new_image_'+json.message).attr('selected','selected')
-                            $('.imageselector,  select[name=image], select[name=featured_image]').ImageSelect('remove');
-                            $('.imageselector,  select[name=image], select[name=featured_image]').ImageSelect();
-                            $(cln).fadeOut(1000).remove()
+                            setTimeout(function(){
+                              var $newel = $(json.html)
+                              $('.imageselector,  select[name=image], select[name=featured_image]').append($newel)
+                              active_image_form.find('.new_image_'+json.message).attr('selected','selected')
+                              $('.imageselector,  select[name=image], select[name=featured_image]').ImageSelect('remove');
+                              $('.imageselector,  select[name=image], select[name=featured_image]').ImageSelect();
+                              $(cln).fadeOut(1000).remove()
+                            },1000)
                             
-
+                            
 
                           } else {
                             $('.fixed-popup .alert-message').text(json.message);            

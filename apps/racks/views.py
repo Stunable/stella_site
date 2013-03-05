@@ -1017,24 +1017,6 @@ def add_color(request, template="racks/add_color_dialog.html"):
     ctx['form'] = form
     return direct_to_template(request, template, ctx)
 
-@login_required
-def add_product_image(request):
-
-    retailer = RetailerProfile.objects.get(user=request.user)
-
-    form = modelform_factory(ProductImage,fields=["image",'item'])(request.POST,request.FILES,prefix="new")
-
-    if form.is_valid():
-        im = form.save(commit=False)
-        im.retailer = retailer.user
-        im.save(instant=True)
-
-       #print im
-
-        ret = {'html':'<option class="new_image_'+str(im.id)+'" value="'+str(im.id)+'">'+im.thumbnail+'</option>','message':str(im.id),'success':True}
-    else:
-        ret = {'message':form.errors}
-    return HttpResponse(json.dumps(ret), mimetype="application/json")
 
 @login_required
 def sale_items(request, template="racks/item_list.html"):

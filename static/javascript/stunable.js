@@ -1,3 +1,4 @@
+
 $.fn.serializeObject = function()
     {
         var o = {};
@@ -14,6 +15,11 @@ $.fn.serializeObject = function()
         });
         return o;
     };
+
+function changeError(target, message) {
+    target.innerHTML = message;
+}
+
 
 
 $.fn.extend({

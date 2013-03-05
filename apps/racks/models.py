@@ -108,8 +108,11 @@ class listImageMixin(object):
         try:
             return self.get_image().small.url
         except:
-            return 'pic'
-        #get_thumbnail(self.get_image(), '120x120',  quality=100).url
+            if self.image:
+                try:
+                    return self.image.url
+                except:
+                    return '/static/images/image_not_reaady.png'
 
     def list_image(self):
         return '<img style="width:60px" src="%s"/>' % self.thumbnail

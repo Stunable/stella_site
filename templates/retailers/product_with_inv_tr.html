@@ -12,13 +12,13 @@
             {% if item.get_image.small %}
             <img class="item_pic" src="{{ item.get_image.tiny.url  }}" alt=""/>
             {% else %}
-                        <td><img class="var_pic" src="/static/images/image_not_ready.png"></td>
+                        <img class="var_pic" src="/static/images/image_not_ready.png">
                         {% endif %}
         {% for image in item.get_additional_images %}
         {% if image.small %}
             <img class="item_pic addl_pic" src="{{ image.tiny.url  }}">
             {% else %}
-                        <td><img class="var_pic" src="/static/images/image_not_ready.png"></td>
+                        <<img class="var_pic" src="/static/images/image_not_ready.png">
                         {% endif %}
         {% endfor %}
     </div>
