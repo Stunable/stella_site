@@ -283,7 +283,7 @@ def wpp(request):
     cart = Cart(request)
     
     item = {"amt": cart.grand_total,             # amount to charge for item
-        "inv": cart.name(),         # unique tracking variable paypal
+        "inv": cart.__unicode__(),         # unique tracking variable paypal
         "custom": "tracking",       # custom tracking variable for you
         "cancelurl": 'http://' + request.META['HTTP_HOST'] + "/cart/wpp",  # Express checkout cancel url
         "returnurl": 'http://' + request.META['HTTP_HOST'] + "/cart/wpp" }  # Express checkout return url

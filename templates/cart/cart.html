@@ -84,7 +84,7 @@
                 </div>
             {% endfor %}
         </ul>
-        <div id="cart-totals">
+        <div id="cart-totals" class="bootstrap">
                     <table>
                
                 <tr >
@@ -128,6 +128,7 @@
                     <td>${{cart.totals_as_pretty_dict.grand_total}}</td>
                 </tr>
            </table>
+           <a class="btn big btn-primary"href="/cart/wpp">checkout</a>
         </div>  
         {% endif %}
     </div>

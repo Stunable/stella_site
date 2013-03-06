@@ -599,7 +599,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 }
 
 .content.cart tr.item-name{
-	font-size:1.2em;
+	font-size:1.2em;	
 }
 
 .content.cart #cart-item-list{
@@ -660,6 +660,13 @@ a:hover, form .btn:hover { color:#8D8791;}
 	right:10%;
 	font-size:1.5em;
 }
+
+#cart-totals .btn{
+	margin:20px;
+	font-size:1.1em;
+	padding:.3em;
+}
+
 
 
 /* ICONOGRAPHY
