@@ -649,10 +649,11 @@ def _all(request, slug=None, template='racks/new_carousel.html'):
     if not query_set:
         # if settings.IS_PROD:
             #print "PROD"
-            query_set = Item.objects.filter(approved=True,is_available=True).order_by('?')
+            print 'getting items'
+            query_set = Item.objects.select_related('featured_image').filter(approved=True,is_available=True).order_by('?')
         # else:
             # query_set = Item.objects.all().order_by('?')
-    print len(query_set)
+    # print len(query_set)
     return pagination(request, ctx, template, query_set)
             
 #    return direct_to_template(request, template, ctx)

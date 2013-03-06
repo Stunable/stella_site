@@ -35,35 +35,69 @@
     </div>
     {% block inner_content %}
 
-        <select id="shipping_option_select" name="shipping-method" style="width:auto;">
-                        {% for option in cart.get_shipping_options %}
-                            <option {% if option.name == cart.get_shipping_method.name %}selected="selected"{%endif%}value="{{option.name}}">{{option.name}}</option>
-                        {% endfor %}
-                    </select>
         {% if cart.grand_total %}
+        <div id="cart-totals" class="bootstrap">
+            <div>
+                <a style="font-size:.8em" href="" class="click-toggle" data-target="#cart-totals-table .hidden">click for details</a>
+            <table id="cart-totals-table" width="100%">   
+                <tr  class="hidden">
+                    <td>subtotal:</td>
+                    <td>${{cart.totals_as_pretty_dict.total}}</td>
+                </tr>
+                <tr class="hidden">
+                   
+                    <td>total tax:</td>
+                    <td>${{cart.totals_as_pretty_dict.tax}}</td>
+                </tr>
+                <tr class="hidden">
+                  
+                    <td>total shipping:</td>
+                    <td>${{cart.totals_as_pretty_dict.shipping_and_handling}}</td>
+                </tr>
+                <tr class="hidden">
+                   
+                    <td>processing fees:</td>
+                    <td>${{cart.totals_as_pretty_dict.processing}}</td>
+                </tr>
+                <tr >
+                    <td>grand total:</td>
+                    <td>${{cart.totals_as_pretty_dict.grand_total}}</td>
+                </tr>
+           </table>
+           <a class="btn big btn-primary"href="/cart/wpp">checkout</a>
+       </div>
+        </div>  
         <ul id="cart-item-list">
 
             {% regroup cart by retailer as item_list %}
             {% for retailer_group in item_list %}
                 <div class="cart-retailer-group">
-                    <div class="retailer-header">{{retailer_group.grouper}}</div>
-                    <table class="retailer-item-group">
+                    
+                    <table cellpadding="0" cellspacing="0" width="100%" border="0" class="retailer-item-group">
                         <tr>
-                            <th class="item-remove"></th>
-                            <th class="item-img"></th>
-                            <th class="item-info">info</th>
-                            <th>price</th>
-                            {# <th>remove</th> #}
+                            <td colspan="2" class="retailer-header">
+                                {{retailer_group.grouper}}
+                            </td>
+                            <td>
+                                <div class="shipping-options">
+                                <label>regular shipping (5-7 days, Free!)</label><br>
+                                <label>expedited shipping (3-5 days, $20)</label>
+                                </div>
+                            </td>
+                            <td class="cart-item-shipping-edit">
+                                {{retailer_group.list.0.get_shipping_form.shipping_method}}
+                            </td>
+
                         </tr>
                         {% for item in retailer_group.list %}
-                        <tr class="item-name">
-                            <td>
+                        <tr class="item-name cart-item-{{item.id}}">
+                            <td colspan="4">
                                 {{ item.item_name }}
                             </td>
                         </tr>
-                        <tr class="item" id="cart-item-{{item.id}}">  
+                        <tr class="item cart-item-{{item.id}}">  
                             <td class="item-remove">
-                                <a href=""  data-target="#cart-item-{{item.id}}" class="cart-remove refclick" data-href="/cart/remove_from_cart/{{item.item_variation.id}}/">x</a>
+                                <a href=""  data-target=".cart-item-{{item.id}}" class="cart-remove refclick" data-href="/cart/remove_from_cart/{{item.item_variation.id}}/">x</a>
                             </td>
                             <td class="item-img">
                                 <img src="{{item.picture}}">
@@ -84,52 +118,7 @@
                 </div>
             {% endfor %}
         </ul>
-        <div id="cart-totals" class="bootstrap">
-                    <table>
-               
-                <tr >
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>subtotal:</td>
-                    <td>${{cart.totals_as_pretty_dict.total}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>total tax:</td>
-                    <td>${{cart.totals_as_pretty_dict.tax}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>total shipping:</td>
-                    <td>${{cart.totals_as_pretty_dict.shipping_and_handling}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>processing fees:</td>
-                    <td>${{cart.totals_as_pretty_dict.processing}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>grand total:</td>
-                    <td>${{cart.totals_as_pretty_dict.grand_total}}</td>
-                </tr>
-           </table>
-           <a class="btn big btn-primary"href="/cart/wpp">checkout</a>
-        </div>  
+        
         {% endif %}
     </div>
     {% endblock %}

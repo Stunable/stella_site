@@ -42,6 +42,7 @@ var stunable = {
         });             
 
       init_refclicks($('.refclick'))
+      init_choiceclicks($('.choiceclick'))
       init_refsubmits($('.refsubmit'))
 
       $('.cart_slide_trigger').hover(reveal_cart)
@@ -95,6 +96,21 @@ var stunable = {
             }
         )
 
+        // $('.left-panel').hover(function(){
+        //       $('#page-content').animate({'left':'220px'},400)
+        //     },
+        //     function(){
+        //       $('#page-content').animate({'left': '20px'},400)
+        //     })
+
+        $('.click-toggle').toggle(function(){
+          $($(this).data('target')).fadeIn()
+
+        },function(){
+          $($(this).data('target')).fadeOut()
+
+        })
+
     }
     ,shop: function(){            
 
@@ -137,6 +153,15 @@ var stunable = {
 
     }
     ,cart: function(){
+
+
+
+
+
+
+
+
+
         zipcode = [];
         function updateCartTotals(totals) {
             $("#cart-total").html(totals.total.toFixed(2));
@@ -164,29 +189,6 @@ var stunable = {
         })
 
 
-
-        $(".cart-item").on('submit', '.item-change-form', function(event) {         
-            event.preventDefault();
-            var url = $(this).attr('action');
-            var data = $(this).serialize();
-            var quantity_el = $(this).siblings().filter('.cart-item-quantity');
-            var size_el = $(this).siblings().filter('.cart-item-size');
-            var change_link = $(this).siblings().filter(".cart-change-quantity");
-            var form = $(this);
-            $.ajax({
-                url : url,
-                data : data,
-                type : 'post',
-                success : function(data, textStatus, jqXHR) {
-                    update_shipping_handling_fee();
-                    updateCartTotals(data);
-                    quantity_el.html(data.quantity);
-                    size_el.html(data.size);
-                    change_link.show();
-                    form.remove();
-                }
-            });
-        });
 
         $('#payment-form').validate({
           submitHandler:function(form) {

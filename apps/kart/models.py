@@ -5,6 +5,26 @@ from decimal import Decimal
 # Create your models here.
 from apps.cart.plugins.rate_request import get_rate as fedex_rate_request
 
+from django.forms.models import modelform_factory
+from django.forms import RadioSelect
+
+from retailers.models import ShippingType
+
+from django.forms.fields import ChoiceField
+from django.forms.widgets import RadioSelect
+
+
+
+
+DEFAULT_SHIPPING = None
+
+def get_default_shipping():
+    global DEFAULT_SHIPPING
+
+    if not DEFAULT_SHIPPING:
+        DEFAULT_SHIPPING = ShippingType.objects.get(is_default=True)
+    return DEFAULT_SHIPPING
+
 
 CART_ID = 'CART-ID'
 from django.conf import settings
@@ -20,13 +40,15 @@ class Kart(models.Model):
 
     def add_item_variation(self,item_variation):
         
-        ki,created      = KartItem.objects.get_or_create(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
-        ki.unit_price   = item_variation.get_current_price()
-        ki.picture      = item_variation.get_image().small.url
-        ki.item_name    = item_variation.item.name 
+        ki,created         = KartItem.objects.get_or_create(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
+        ki.unit_price      = item_variation.get_current_price()
+        ki.picture         = item_variation.get_image().small.url
+        ki.item_name       = item_variation.item.name 
 
         if not created:
             ki.quantity = ki.quantity + 1
+        else:
+            ki.shipping_method = get_default_shipping()
         ki.save()
 
         self.update_grand_total()
@@ -149,14 +171,14 @@ class Kart(models.Model):
 
     @staticmethod
     def get_by_request(request):
-        if request.session.get('cart',None):
-            return request.session.get('cart')
-        else:
+        if not request.session.get('cart',None):
             request.session['cart'] = Kart.objects.create()
+        return request.session.get('cart')
+
 
 
     def __iter__(self):
-        return iter(self.kartitem_set.select_related('retailer','item_variation','item_variation__size').order_by('retailer'))
+        return iter(self.kartitem_set.select_related('retailer','item_variation','item_variation__size').order_by('-date_created'))
 
 
     def by_date(self):
@@ -165,6 +187,9 @@ class Kart(models.Model):
 
     def count(self):
         return self.kartitem_set.all().count()
+
+    def items(self):
+        return self.kartitem_set.select_related('retailer','item_variation','item_variation__size').order_by('-date_created')
 
 
 def Cart(request):
@@ -233,20 +258,46 @@ class KartItem(models.Model):
         return self.total_price * .05
         
     def shipping_amount(self):
-        return 1
+        if self.shipping_method.name == 'Expedited':
+            return 20.00
+        else:
+            return 0
+
+    def get_shipping_form(self):
+        f = modelform_factory(KartItem, fields=("shipping_method",))(instance=self,prefix=self.id)
+        f.fields['shipping_method'] = ChoiceField(widget=RadioSelect, choices=((x.id, x) for x in ShippingType.objects.all()))
+        f.fields['shipping_method'].widget.attrs = {'data-attr':'shipping_method','class':'choiceclick','data-href':'update_info','data-id':self.id}
+        return f
+
 
     def get_shipping_cost(self,refresh=None):
-        if not self.shipping_amount or refresh:
-            retailer_zipcode = self.retailer.zip_code
-            # print 'recipient zip:',self.cart.destination_zip_code
-            try:
-                self.shipping_amount = fedex_rate_request(shipping_option=self.shipping_method.vendor_tag,weight=self.weight*self.quantity, shipper_zipcode=retailer_zipcode, recipient_zipcode=self.kart.destination_zip_code)
-            except:
-                self.shipping_amount = 9.95
-            self.save()
-        return float(self.shipping_amount())
+        # if not self.shipping_amount or refresh:
+        #     retailer_zipcode = self.retailer.zip_code
+        #     # print 'recipient zip:',self.cart.destination_zip_code
+        #     try:
+        #         self.shipping_amount = fedex_rate_request(shipping_option=self.shipping_method.vendor_tag,weight=self.weight*self.quantity, shipper_zipcode=retailer_zipcode, recipient_zipcode=self.kart.destination_zip_code)
+        #     except:
+        #         self.shipping_amount = 9.95
+        #     self.save()
+        return self.shipping_amount()
 
     def get_additional_fees(self, amount=None):
         if not amount:
             amount = self.sub_total
         return settings.WEPAY_FIXED_FEE + settings.WEPAY_PERCENTAGE*.01 * amount
+
+
+
+    def save(self, *args, **kwargs):
+        if self.id:
+            if self.shipping_method != KartItem.objects.get(id=self.id).shipping_method:
+                KIs = KartItem.objects.filter(retailer=self.retailer,kart=self.kart)
+                KIs.update(shipping_method=self.shipping_method)
+            else:
+                super(KartItem,self).save(*args,**kwargs)
+                return
+        super(KartItem,self).save(*args,**kwargs)
+
+
+
+

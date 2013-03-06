@@ -1,4 +1,4 @@
-from cart import Cart
+
 from racks.models import Item as Product
 from django.shortcuts import render_to_response, redirect
 from django.core.urlresolvers import reverse
@@ -12,6 +12,8 @@ from django.contrib.auth.decorators import login_required
 from apps.racks.models import ItemType
 from fedex.base_service import FedexError
 
+from retailers.models import ShippingType
+
 from apps.cart.models import Item as CartItem
 # from paypal.pro.exceptions import PayPalFailure
 
@@ -23,7 +25,7 @@ from racks.models import Rack
 
 from kart.models import Cart
 from django.template.context import RequestContext
-from accounts.models import UserProfile, CCToken
+from accounts.models import  CCToken
 import json
 # from paypal.pro.helpers import PayPalWPP
 from django.contrib.sites.models import Site
@@ -31,10 +33,6 @@ from django.contrib.sites.models import Site
 # from apps.cart.plugins.taxcloud import TaxCloudClient
 # TCC = TaxCloudClient()
 
-try:
-    import simplejson as json
-except ImportError:
-    import json
     
 import logging
 logger = logging.getLogger(__name__)
@@ -55,7 +53,6 @@ def buy_rack(request, rack_id):
         cart.add(inventory, product.get_current_price(), 1, inventory.size.size, inventory.color.name)
     return redirect(reverse('get_cart'))
 
-@login_required
 def add_to_cart(request, product_id, quantity, size=None):
     if request.method == 'POST':
         inventory = ItemType.objects.get(id=product_id)
@@ -92,7 +89,7 @@ def update_cart(request, product_id):
         
         return redirect(reverse('get_cart'))
     
-@login_required
+
 def remove_from_cart(request, product_id):
     product = ItemType.objects.get(id=product_id)
     cart = Cart(request)
@@ -104,7 +101,7 @@ def remove_from_cart(request, product_id):
     
     return redirect(reverse('get_cart'))
 
-@login_required
+
 def get_cart(request, template="cart/cart.html"):
     return direct_to_template(request, template, {})
 
@@ -135,44 +132,22 @@ def order_history(request, template='orders/order_history.html'):
         return redirect(reverse("home"))
     return direct_to_template(request, template, ctx)
 
-@login_required
+
 def update_info(request, template="cart/info.html"):
-    cart = Cart(request)
-    
-    # if cart.cart and not cart.cart.shipping_and_handling_cost:
-    #     return redirect(reverse('get_cart'))
-    print cart
     ctx = {}
+    allowed_attrs = {'shipping_method':ShippingType}
 
-    try:
-        user_profile = request.user.get_profile()
-    except:
-        user_profile = None
+    cart = Cart(request)
+    print request.POST
+    if request.method == "POST":
+        Ki = cart.items().filter(id=request.POST.get('id'))[0]
+        if request.POST.get('attr') in allowed_attrs.keys():
+            att = request.POST.get('attr')
 
-    try:
-        default_shipping = ShippingInfo.objects.filter(customer=user_profile).filter(is_default=True)[0]
-    except:
-        default_shipping = None
+            setattr(Ki,att,allowed_attrs[att].objects.get(id=request.POST.get('val')))
+            Ki.save()
+            return HttpResponse(json.dumps({'success':True,'callback':'reload'}, ensure_ascii=False), mimetype='application/json')
 
-    if request.method=='GET':
-        ctx.update(
-                {"shipping": ShippingInfoForm(instance=default_shipping, 
-                                              initial={'customer':user_profile, 
-                                                       'zip_code':request.session.get('recipient_zipcode')}), 
-        })
-    else:#request == POST
-        shipping_form = ShippingInfoForm(request.POST, instance=default_shipping)
-        if shipping_form.is_valid():
-            shipping_info = shipping_form.save(commit=False)
-            shipping_info.customer=user_profile
-            if not default_shipping:
-                shipping_info.is_default=True
-            shipping_info.save()
-            return HttpResponseRedirect(reverse('express_checkout'))
-        else:
-            ctx['shipping'] = shipping_form
-                                     
-        # return HttpResponse(json.dumps(response, ensure_ascii=False), mimetype='application/json')
     
     return direct_to_template(request, template, ctx)
 

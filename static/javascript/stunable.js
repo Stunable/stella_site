@@ -172,7 +172,11 @@ function isDefault(textField) {
 }
 
 var refclickFunctions = {
+    'reload' : function(selection,data){
+        window.location.reload();
+    },
     'remove' : function(selection,data){
+        console.log($(selection.data('target')))
         $(selection.data('target')).fadeOut('slow')
     },
     'downvote': function(selection,data){
@@ -210,6 +214,22 @@ function init_refclicks(selection){
         },'json')
     })
 }
+
+function init_choiceclicks(selection){
+    selection.click(function(e){
+        var $t = $(this);
+        url=$(this).data('href')
+        $.post(url,{id:$(this).data('id'),val:$(this).val(),attr:$(this).data('attr')},function(response){
+            if (response.result || response.success){
+                if (response.callback){
+                    refclickFunctions[response.callback]($t)
+                }
+            }
+        },'json')
+    })
+}
+
+
 
 var ac_cache = {};
 

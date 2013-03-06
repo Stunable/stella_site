@@ -575,6 +575,51 @@ a:hover, form .btn:hover { color:#8D8791;}
 
 /*CART*/
 
+.cart .page-inner-content{
+	white-space: nowrap;
+	width:100%;
+	min-width:828px;
+}
+.content.cart #cart-item-list{
+	width:60%;
+	min-width:558px;
+}
+.content.cart #cart-totals{
+	float:right;
+	width:25%;
+	padding:20px;
+	margin-right:40px;
+}
+.content.cart #cart-totals div{
+	width:100%;
+	display:block;
+	clear:both;
+}
+
+.content.cart #cart-totals table{
+	margin:auto;
+}
+.content.cart #cart-totals table td{
+	width:50%;
+	text-align: right;
+}
+
+.content.cart #cart-totals table tr.hidden{
+	display:none;
+	color:#aaa;
+}
+
+#cart-totals .btn{
+	margin:20px;
+	font-size:1.1em;
+	padding:.3em;
+}
+
+
+table.retailer-item-group{
+	min-width:380px;
+}
+
 .cart-retailer-group{
 	border:1px solid #aaa;
 	border-radius: 8px;
@@ -583,6 +628,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 
 .cart-retailer-group tr.item{
 	/*height:100px;*/
+	/*width:100%;*/
 	overflow: hidden;
 	/*white-space: nowrap;*/
 	border-bottom:1px solid #ddd;
@@ -590,10 +636,10 @@ a:hover, form .btn:hover { color:#8D8791;}
 }
 
 .cart-retailer-group td,.cart-retailer-group th{
-	display:inline-block;
+	/*display:inline-block;*/
 	position:relative;
 	/*margin-right:20px;*/
-	/*border:1px solid #ddd;*/
+	border:1px solid #ddd;
 	padding:10px;
 	/*text-align: left;*/
 	vertical-align: middle;
@@ -604,20 +650,15 @@ a:hover, form .btn:hover { color:#8D8791;}
 	font-size:1.2em;	
 }
 
-.content.cart #cart-item-list{
-	width:50%;
-	/*margin:auto;*/
-}
+
 
 .content.cart .item{
-	width:100%;
+	/*width:100%;*/
 	position:relative;
 }
 
 
-.content.cart .item-remove{
-	width:20px;
-}
+
 .content.cart .item .cart-remove{
 	padding:2px 4px 2px 4px;
 	background-color:white;
@@ -632,42 +673,32 @@ a:hover, form .btn:hover { color:#8D8791;}
 	display:inline;
 }
 
-.content.cart .item-img{
-	width:60px;
-}
+
 .cart-retailer-group td img{
 	width:60px;
 }
 
 .content.cart .item-info{
-	width:300px;
-	color:black;
+
 }
 
 .content.cart .item-info span{
-	float:right;
-	text-align:left;
+	/*float:right;
+	text-align:left;*/
+	margin:30px;
 }
 
 
 
 .content.cart .retailer-header{
-	padding:10px;
+	padding:4px;
 }
 
-.content.cart #cart-totals{
-	float:right;
-	position:fixed;
-	top:20%;
-	right:10%;
-	font-size:1.5em;
+.content.cart .shipping-options{
+	text-align: right;
+	font-size:.8em;
 }
 
-#cart-totals .btn{
-	margin:20px;
-	font-size:1.1em;
-	padding:.3em;
-}
 
 
 
@@ -1160,7 +1191,7 @@ MODAL CSS
 	/*padding:5px;*/
 	/*z-index: 2;*/
 	/*background-color: rgba(255,255,255,.83);*/
-	height: 40px;
+	height: 0px;
 	width: 200px;
 	/*position: absolute;*/
 	/*border: 2px solid #ccc;*/
