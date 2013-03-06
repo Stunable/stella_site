@@ -3,13 +3,13 @@
     <a style="margin-top:10px" href="/cart/" id="checkout-btn" class="btn btn-primary ">Checkout</a> 
 </div>
 <table id="cart_items" class="item-list" data-length="{{cart.count}}">
-    {% for item in cart reversed %}
+    {% for item in cart.by_date %}
     <tr>
       <td id="product-item-{{item.product.pk}}">
             <div>
-               <img style="width:40px;display:inline;float:left" class="product_image" src="{{ item.get_image.tiny.url }}">
+               <img style="width:40px;display:inline;float:left" class="product_image" src="{{ item.picture }}">
                <div style="display:inline">
-               <span class="item-label">{{ item.get_name }}</span>
+               <span class="item-label">{{ item.item_name }}</span>
                <span>by {{ item.retailer }}</span>
                <span>${{ item.unit_price|floatformat:2 }}</span>
                 </div>

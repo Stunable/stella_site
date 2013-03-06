@@ -106,6 +106,7 @@ var stunable = {
           target_element: $('#container'),
           
           add_function: function(items){
+              initDrag(items)
               $('#container').isotope('insert', items)
           },
 
@@ -146,40 +147,9 @@ var stunable = {
 
         $('#checkout-btn').click(function(e) {
             e.preventDefault();
-
-            if ($(this).hasClass('disabled')){
-                return false;
-            }
-            // alert("Hang in there, we're not quite ready to go there yet.  Soon!")
-            // return false;
-
-            var zipcode = $('input[name="zipcode"]').val();
-            
-            if (valid_shipping_info && zipcode.length > 0)
-                window.location.href = $(this).data('href');
-            
-            if (zipcode.length == 0) {
-                alert("Please enter zipcode");
-            }
-                
-            if ($('html').hasClass('wait')) {
-                alert('Please be patient, shipping and handling cost is being calculated');
-            }
         });
 
-        $(".cart-item").on('click', '.cart-remove', function(event) {
-            event.preventDefault();
-            var item = $(this).closest('.cart-item');
-            $.ajax({
-                url : $(this).attr('href'),
-                type : 'post',
-                success : function(data, textStatus, jqXHR) {
-                    update_shipping_handling_fee();
-                    item.fadeOut();
-                    updateCartTotals(data);
-                }
-            })
-        });
+       
 
         $(".cart-item").on('click', '.cart-change-quantity', function(event) {
             event.preventDefault();
@@ -192,45 +162,6 @@ var stunable = {
         $('#zipcode_form').submit(function(e){
           e.preventDefault()
         })
-
-        function update_shipping_handling_fee(event){
-          if (event){
-            event.preventDefault()
-          }
-
-            var field=$('#zipcode_field')
-            var zipcode = $('input[name="zipcode"]').val()|| 10002;
-            valid_shipping_info = false;                
-            if (zipcode.length == 5) {
-                $('html').addClass('wait');
-                $.ajax({
-                    url : field.data('href'),
-                    data : {
-                        recipient_zipcode : $('input[name="zipcode"]').val(),
-                        shipping_method : $('select[name="shipping-method"] option:selected').val()
-                    },
-                    type : 'post',
-                    success : function(data, textStatus, jqXHR) {
-                        $('html').removeClass('wait');
-                        
-                        if(data.success == true) {
-                            valid_shipping_info = true;
-                            updateCartTotals(data);
-                            $('.update-zipcode').hide();
-                        } else {
-                            // alert(data.message);
-                        }
-                    }
-                });
-            } else {
-                $("#cart-shipping").text('0.00');   
-            }
-        }
-
-        update_shipping_handling_fee();
-        $('input[name="zipcode"]').keyup(update_shipping_handling_fee);
-
-        $('#shipping_option_select').change(update_shipping_handling_fee);
 
 
 

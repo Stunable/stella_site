@@ -461,32 +461,6 @@ def item_modal(request, item_slug, template='racks/item_modal.html'):
     item = get_object_or_404(Item, slug=item_slug)
     ctx['item'] = item
 
-    if request.GET.get("opt") == "rack_it":
-        ctx['show_rack_it'] = True
-    
-
-    if request.user.is_authenticated():
-        rack_list = Rack.objects.filter(user = request.user) 
-        admirer_list = Friendship.objects.friends_for_user(request.user)
-        ctx['admirer_list'] = admirer_list
-
-        if Rack_Item.objects.filter(item__slug=item_slug, user=request.user).count() > 0:
-            item.shared_to_this_user = True 
-    else:
-        if request.session.has_key('anonymous_profile'):
-            profile = request.session.get('anonymous_profile')
-            rack_list = Rack.objects.filter(anon_user_profile=profile)
-        else:
-            template = "racks/view_error.html"
-            return direct_to_template(request, template)
-
-
-        
-
-    if rack_list:
-        ctx['rack_list'] = rack_list
-    
-
     
     size2color = {}
     for inventory in item.types.all():
@@ -503,7 +477,7 @@ def item_modal(request, item_slug, template='racks/item_modal.html'):
     for color_list in size2color.values():
         colors += color_list
 
-   #print 's2c:',size2color
+    print 's2c:',size2color
 
     ctx.update({'size2color': json.dumps(size2color),     
                 'sizes': set(size2color.keys()),

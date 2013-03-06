@@ -62,6 +62,11 @@
                 self.onScroll()
             })
 
+            $(this.element).bind("mousewheel",function(ev, delta) {
+                var scrollTop = $(this).scrollTop();
+                $(this).scrollTop(scrollTop-Math.round(delta));
+            });
+
             if(this.options.keynav) {
                 $(document).bind("keydown.damonscroll", function(e) {              
                     if (e.keyCode === 37) {                     

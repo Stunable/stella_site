@@ -23,127 +23,113 @@
     </li>
 {% endblock %}
 {% block content %}
-<style>
-	.common td input[type="text"] {
-		width: 40px;
-	}
-	.common th {
-		border: thin solid #EBEBEB;
-		vertical-align: middle;
-	}
-	.common table, .common .no-border td {
-		border: none;
-	}
-	.update-zipcode {
-		display: none;
-		cursor: pointer;
-	}
 
-	.cart-items p{
-        font-size:.9em;
-    }
-	html.wait, html.wait * { cursor: wait !important; }
-	
-</style>
-
-<div id="page-content">
+<div class="content cart" id="page-content">
     <div class="page-inner-content">
     <div id="stunable-tabs-nav">
         <ul id="tabs-container" class="nav tabbed clearfix">
-            <li class="active"> <a href="/cart">Shopping Cart</a></li>
-            <li> <a href="/cart/wpp">Payment/Shipping</a></li>
+            <li class="active"> <a href="/cart">Shopping Cart</a></li> >
+            <li> <a href="/cart/wpp">Payment/Shipping</a></li> >
             <li> <a href="/cart/wpp_success">Place Order</a></li>
         </ul>
     </div>
     {% block inner_content %}
-    <div class="body-copy">
-        {% if cart.grand_total %}
-        <div class='cart-items'>
-            {% for item in cart %}
-            <div class="cart-item round-corner-shadow" id="product-item-{{item.product.pk}}">
-                <div class='image_wrapper'>
-                   <img class="product" src="{{ item.product.item.get_image.medium.url }}">
-                </div>
-                <h4>{{ item.product.name }}</h4>
-                <p class="retailer">
-                    by {{ item.product.item.retailer }}
-                </p>
-                <p class="price-each">
-                    ${{ item.product.get_current_price|floatformat:2 }}
-                </p>
-                <p class='size'>
-                    Size: <span class='cart-item-size'>{{ item.size }}</span>
-                </p>
-                <p class='color'>
-                    Color: <span class='cart-item-size'>{{ item.color }}</span>
-                </p>
-                <p class='quantity'>
-                    Quantity: <span class='cart-item-quantity'>{{ item.quantity }}</span><a class='cart-change-quantity' href="/cart/update_cart/{{item.product.pk}}">change</a>
-                </p>
-                <input type="hidden" class="path" value="/cart/update_cart/{{item.product.pk}}/"/>
-                <a class='cart-remove' href="/cart/remove_from_cart/{{item.product.pk}}/">remove item</a>
-            </div>
-            {% endfor %}
-        </div>
-        <div class='cart-action bootstrap'>
-            <table class='no-border cart-summary'>
-            	<form id="zipcode_form" action="" method="POST">
-                <tr>
-                    <td>Before Tax:</td><td><strong><span id='cart-total'>{{cart.total|floatformat:2}}</span></strong></td>
-                </tr>
-                <tr>
-                    <td>(estimated) Tax: </td><td><strong><span id='cart-tax'>{{cart.tax|floatformat:2}}</span></strong></td>
-                </tr>
-                <tr>
-                    <td>Shipping method</td><td>
-                    <select id="shipping_option_select" name="shipping-method" style="width:auto;">
+
+        <select id="shipping_option_select" name="shipping-method" style="width:auto;">
                         {% for option in cart.get_shipping_options %}
                             <option {% if option.name == cart.get_shipping_method.name %}selected="selected"{%endif%}value="{{option.name}}">{{option.name}}</option>
                         {% endfor %}
-                    </select></td>
+                    </select>
+        {% if cart.grand_total %}
+        <ul id="cart-item-list">
+
+            {% regroup cart by retailer as item_list %}
+            {% for retailer_group in item_list %}
+                <div class="cart-retailer-group">
+                    <div class="retailer-header">{{retailer_group.grouper}}</div>
+                    <table class="retailer-item-group">
+                        <tr>
+                            <th class="item-remove"></th>
+                            <th class="item-img"></th>
+                            <th class="item-info">info</th>
+                            <th>price</th>
+                            {# <th>remove</th> #}
+                        </tr>
+                        {% for item in retailer_group.list %}
+                        <tr class="item-name">
+                            <td>
+                                {{ item.item_name }}
+                            </td>
+                        </tr>
+                        <tr class="item" id="cart-item-{{item.id}}">  
+                            <td class="item-remove">
+                                <a href=""  data-target="#cart-item-{{item.id}}" class="cart-remove refclick" data-href="/cart/remove_from_cart/{{item.item_variation.id}}/">x</a>
+                            </td>
+                            <td class="item-img">
+                                <img src="{{item.picture}}">
+                            </td>
+                            <td class="item-info">
+                                <br>size:<span>{{ item.item_variation.size }}</span>
+                                <br>color:<span>{{ item.item_variation.color }}</span>
+                                <br>quantity:<span>{{ item.quantity }}</span>
+                            </td>
+                                
+                            <td>
+                                ${{ item.total_price|floatformat:2 }}
+                            </td>
+                                
+                        </tr>   
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endfor %}
+        </ul>
+        <div id="cart-totals">
+                    <table>
+               
+                <tr >
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>subtotal:</td>
+                    <td>${{cart.totals_as_pretty_dict.total}}</td>
                 </tr>
                 <tr>
-                    <td>Zipcode</td>
-                    <td>
-                    <input data-href="{% url update_zipcode %}" id="zipcode_field" type="text" name="zipcode" value="{{request.session.recipient_zipcode}}"/>
-                    </td>
-                </tr>
-<!--                 <tr>
-                    <td colspan="2"><span class="btn btn-primary update-zipcode" style="display:none">Re-calculate shipping cost</span></td>
-                </tr> -->
-                <tr>
-                    <td>Processing fee:</td>
-                    <td><strong><span id='cart-processing'>{{cart.processing|floatformat:2 }}</span></strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>total tax:</td>
+                    <td>${{cart.totals_as_pretty_dict.tax}}</td>
                 </tr>
                 <tr>
-                <tr>
-                    <td>Shipping and handling:</td>
-                    <td><strong><span id='cart-shipping'>{{cart.cart.shipping_and_handling_cost|floatformat:2 }}</span></strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>total shipping:</td>
+                    <td>${{cart.totals_as_pretty_dict.shipping_and_handling}}</td>
                 </tr>
                 <tr>
-                
-                    <td>Grand total:</td><td><strong><span id='cart-grand-total'>{{cart.grand_total|floatformat:2}}</span></strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>processing fees:</td>
+                    <td>${{cart.totals_as_pretty_dict.processing}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2">
-                    	<a href="#" data-href="{% url update_cart_info %}" id="checkout-btn" class="btn btn-primary {% if not cart.checkout_ok %}disabled{% endif %}">Checkout</a>
-                    	<a href="/" class="btn btn-primary">Continue Shopping</a></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>grand total:</td>
+                    <td>${{cart.totals_as_pretty_dict.grand_total}}</td>
                 </tr>
-                
-                </form>
-            </table>
-            <div class="clearfix"></div>
-            {% else %}
-            <div class='cart-action bootstrap'>
-            <p>
-                Cart is empty
-            </p>
-            <div class='cart-action bootstrap'>
-                <a href="/" class="btn btn-primary">Continue Shopping</a>
-            </div>
-            {% endif %}
-         </div>
-        </div>
+           </table>
+        </div>  
+        {% endif %}
     </div>
     {% endblock %}
 </div>

@@ -151,10 +151,17 @@
                             </li>
                             <li id="friends">
                               friends
+                              {% if request.user.is_authenticated %}
+                              
+                              {%else%}
+                                <a href="/login/facebook/"><div class="" style="cursor:pointer"></div>login with facebook</a>
+                              {% endif %}
                             </li>
+                            {% if request.user.is_authenticated %}
                             <li id="settings">
                               <a href="/accounts/profile">settings</a>
                             </li>
+                            {% endif %}
                              {% endblock %}
                           </ul>
                         </div>

@@ -1,7 +1,7 @@
 from racks.models import Rack
 from friends.models import Friendship
 from notification.models import Notice
-from cart.cart import Cart
+from kart.models import Cart
 import random
 from django.conf import settings
 

@@ -227,6 +227,7 @@ INSTALLED_APPS = (
     'social_auth',
     'retailers',
     # 'paypal',
+    'kart',
     'cart',
     'common',
     'contact_form',

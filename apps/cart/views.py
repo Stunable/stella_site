@@ -21,7 +21,7 @@ from stunable_wepay.signals import *
 
 from racks.models import Rack
 
-from apps.cart.cart import Cart
+from kart.models import Cart
 from django.template.context import RequestContext
 from accounts.models import UserProfile, CCToken
 import json
@@ -60,7 +60,7 @@ def add_to_cart(request, product_id, quantity, size=None):
     if request.method == 'POST':
         inventory = ItemType.objects.get(id=product_id)
         cart = Cart(request)    
-        cart.add(inventory, inventory.get_current_price(), quantity, inventory.size.size, inventory.color.name)
+        cart.add(inventory)
     
 
         return render_to_response("cart/cart_slideout.html", 
@@ -98,8 +98,8 @@ def remove_from_cart(request, product_id):
     cart = Cart(request)
     cart.remove(product)
     if request.is_ajax():
-        totals = cart.totals_as_dict()
-        return HttpResponse(json.dumps(totals),
+        # totals = cart.totals_as_pretty_dict()
+        return HttpResponse(json.dumps({'success':True,'callback':'remove'}),
                             mimetype='application/json') 
     
     return redirect(reverse('get_cart'))
