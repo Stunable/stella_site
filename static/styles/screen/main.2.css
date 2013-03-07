@@ -388,12 +388,14 @@ a:hover, form .btn:hover { color:#8D8791;}
 }
 
 		.inner-page-content{
+			margin-top:40px;
 			background-color:rgb(250,250,250);
 			width:100%;
 			border-radius: 10px;
 			overflow-x:auto;
 			overflow-y:hidden;
 			border:1px solid #eee;
+			padding:20px;
 		}
 
 	
@@ -609,6 +611,11 @@ a:hover, form .btn:hover { color:#8D8791;}
 	color:#aaa;
 }
 
+.content.cart .big{
+	font-size:1.3em;
+	font-weight: bold;
+}
+
 #cart-totals .btn{
 	margin:20px;
 	font-size:1.1em;
@@ -701,6 +708,49 @@ table.retailer-item-group{
 
 
 
+#payment_shipping_info{
+	min-width:880px;
+	overflow:hidden;
+	height:1000px;
+
+}
+
+
+#payment_shipping_info .errorlist{
+	color:red;
+	font-size:.8em;
+}
+
+#payment_shipping_info #payment-form-container{
+	width:50%;
+	float:right;
+}
+
+#payment_shipping_info #payment-form-container form#payment-form{
+	margin-top:20px;
+}
+
+form#payment-form.hidden{
+	display:none;
+}
+
+
+#payment_shipping_info #shipping-form-container{
+	width:50%;
+	float:left;
+}
+
+.existing_payment_option{
+	margin:20px;
+	padding:10px;
+}
+
+#btn-place-an-order{
+	margin-left:40%;
+	margin-right:40%;
+	margin-top:20px;
+}
+
 
 /* ICONOGRAPHY
 ----------------------------------------*/
@@ -747,6 +797,19 @@ table.retailer-item-group{
 	}
 
 
+
+#login_options{
+	width:100%;
+	text-align: center;
+}
+
+
+#login_options div{
+	margin:auto;
+	margin-top:20px;
+	display:block;
+}
+
 .facebooklogin{
 	border-radius: 0px;
 	width:278px;
@@ -754,6 +817,13 @@ table.retailer-item-group{
 	background: url('/static/images/login_with_facebook.png') no-repeat 0px 0px;
 }
 
+
+.googlelogin{
+	border-radius: 0px;
+	width:226px;
+	height:39px;
+	background: url('/static/images/login_with_google.png') no-repeat 0px 0px;
+}
 
 /*DRAGGING AND DROPPING*/
 
@@ -896,6 +966,49 @@ MODAL CSS
 	z-index: 1103;
 }
 
+
+
+.modal.current.info_modal{
+	max-width:50%;
+	padding:20px;
+	overflow-y:auto;
+	background-color:white;
+}
+
+.info_modal ul{
+	text-align: left;
+	width:100%;
+}
+
+.info_modal h2{
+	text-align: center !important;
+	width:100%;
+	font-size:1.4em;
+	font-weight: bold;
+
+}
+
+.new_button,.login #page-content form a,.login #page-content form input{
+	padding:8px;
+	/*background: white;*/
+	font:inherit;
+}
+.new_button{
+	padding:4px;
+}
+
+.new_button,.login #page-content form .fix input,.login #page-content form .fix a,.address_confirm li.address_action{
+	color:#d337da;
+	border: 1px #F3CBE0 dashed;
+	border-radius: 30px;
+	cursor:pointer;
+}
+
+.new_button:hover,.login #page-content form .fix input:hover,.login #page-content form .fix a:hover,.address_confirm li.address_action:hover{
+	color:white!important;
+	background-color:#d337da;
+	border:1px solid;
+}
 
 /*.modal-spinner {
   display: none;

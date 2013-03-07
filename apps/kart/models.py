@@ -15,7 +15,7 @@ from django.forms.widgets import RadioSelect
 
 
 
-
+ALL_SHIPPING_OPTIONS = None
 DEFAULT_SHIPPING = None
 
 def get_default_shipping():
@@ -25,15 +25,35 @@ def get_default_shipping():
         DEFAULT_SHIPPING = ShippingType.objects.get(is_default=True)
     return DEFAULT_SHIPPING
 
+def get_shipping_options():
+    global ALL_SHIPPING_OPTIONS
+
+    if not ALL_SHIPPING_OPTIONS:
+        ALL_SHIPPING_OPTIONS = ShippingType.objects.all()
+    return ALL_SHIPPING_OPTIONS
+
 
 CART_ID = 'CART-ID'
 from django.conf import settings
 
 
+
+# self.total = total
+#         self.tax = tax
+#         self.processing = processing
+
 class Kart(models.Model):
     creation_date        = models.DateTimeField(auto_now=True)
     checked_out          = models.BooleanField(default=False)
+    
+    sub_total            = models.DecimalField(default=0.00,max_digits=10, decimal_places=2)
     grand_total          = models.DecimalField(default=0.00,max_digits=10, decimal_places=2)
+    total_tax            = models.DecimalField(default=0.00,max_digits=10, decimal_places=2)
+    total_fees           = models.DecimalField(default=0.00,max_digits=10, decimal_places=2)
+    total_shipping       = models.DecimalField(default=0.00,max_digits=10, decimal_places=2)
+
+    total_items          = models.PositiveIntegerField(default=0)
+    
 
     def __unicode__(self):
         return unicode(self.creation_date)
@@ -45,13 +65,15 @@ class Kart(models.Model):
         ki.picture         = item_variation.get_image().small.url
         ki.item_name       = item_variation.item.name 
 
-        if not created:
-            ki.quantity = ki.quantity + 1
-        else:
+        if created:
             ki.shipping_method = get_default_shipping()
+            self.total_items = self.total_items + 1
+        else:    
+            ki.quantity = ki.quantity + 1
+            
         ki.save()
-
-        self.update_grand_total()
+        
+        self.calculate()
 
     def add(self,item_variation):
         self.add_item_variation(item_variation)
@@ -66,12 +88,13 @@ class Kart(models.Model):
     def summary(self):
         total = 0
         tax = 0
+        shipping = 0
         processing = 0
         self.items_by_retailer = {}
-
         retailer = None
+
         for ki in self.kartitem_set.select_related().all().order_by('retailer'):
-            if ki.retailer == retailer:
+            if self.items_by_retailer.has_key(ki.retailer):
                 self.items_by_retailer[ki.retailer].append(ki)
             else:
                 self.items_by_retailer[ki.retailer] = [ki]
@@ -79,14 +102,17 @@ class Kart(models.Model):
             try:
                 total += float(ki.total_price)
                 tax += float(ki.get_tax_amount())
-                print 'total without additional:',total
+                if retailer != ki.retailer:
+                    shipping += ki.get_shipping_cost()
+                retailer = ki.retailer
+                # print 'total without additional:',total
                 processing += ki.get_wepay_amounts()[2]
-            except Exception, e:
+            except:
+                raise
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]      
                 print('cart processing error:',exc_type, fname, exc_tb.tb_lineno)
-        print 'summary:',total,tax,processing
-        return total,tax,processing
+        return total,tax,processing,shipping
 
 
     def items_by_retailer(self):
@@ -105,25 +131,24 @@ class Kart(models.Model):
         return self.items_by_retailer
 
     def calculate(self):
-        total, tax, processing = self.summary()
-        self.total = total
-        self.tax = tax
-        self.processing = processing        
-        self.grand_total = Decimal(self.tax + self.total +self.processing + float(self.shipping_and_handling_cost or 0))
-        self.checkout_ok = self.check_fee_cost_per_retailer()
-
-    def update_grand_total(self):
-        self.grand_total = self.summary()[0]
+        print 'calculating',self
+        total, tax, processing,shipping = self.summary()
+        self.total_items = self.get_count()
+        self.sub_total = total
+        self.total_tax = tax
+        self.total_fees = processing 
+        self.total_shipping = shipping       
+        self.grand_total = Decimal(self.total_tax + self.sub_total +self.total_fees + float(self.shipping_and_handling_cost or 0))
         self.save()
 
 
     @property
     def shipping_and_handling_cost(self):
-        return 20
+        return self.total_shipping
 
 
-
-    def check_fee_cost_per_retailer(self):
+    @property
+    def checkout_ok(self):
         for ret,itemlist in self.items_by_retailer.items():
             appfee = 0
             amount = 0
@@ -136,24 +161,23 @@ class Kart(models.Model):
 
         return True
 
-    @staticmethod
-    def new(self, request):
-        cart = Kart()
-        cart.save()
-        request.session[CART_ID] = cart.id
-        #self.recipient_zipcode = request.session['recipient_zipcode']
-        return cart
+    # @staticmethod
+    # def new(self, request):
+    #     cart = Kart()
+    #     cart.save()
+    #     request.session[CART_ID] = cart.id
+    #     #self.recipient_zipcode = request.session['recipient_zipcode']
+    #     return cart
 
 
     def totals_as_dict(self):
-
-        self.calculate()
-
+        if self.sub_total == 0:
+            self.calculate()
         return dict(
-            total=self.total,
-            tax=self.tax,
-            shipping_and_handling=float(self.shipping_and_handling_cost),
-            processing=float(self.processing),
+            total=self.sub_total,
+            tax=self.total_tax,
+            shipping_and_handling=self.total_shipping,
+            processing=self.total_fees,
             grand_total=self.grand_total
         )
 
@@ -164,32 +188,30 @@ class Kart(models.Model):
         return d
 
 
-    def update_shipping_for_retailer_item_variations(self,kartitem,shipping_method):
-        for ki in self.kartitem_set.filter(retailer=kartitem.retailer):
-            ki.shipping_method = kartitem.shipping_method
-            ki.save()
-
     @staticmethod
     def get_by_request(request):
         if not request.session.get('cart',None):
             request.session['cart'] = Kart.objects.create()
         return request.session.get('cart')
 
-
-
     def __iter__(self):
-        return iter(self.kartitem_set.select_related('retailer','item_variation','item_variation__size').order_by('-date_created'))
+        return iter(self.items())
 
 
     def by_date(self):
-        return self.kartitem_set.select_related('retailer','item_variation').order_by('-date_created')
+        return self.items().order_by('-date_created')
 
 
-    def count(self):
+    def get_count(self):
         return self.kartitem_set.all().count()
 
     def items(self):
-        return self.kartitem_set.select_related('retailer','item_variation','item_variation__size').order_by('-date_created')
+        return self.kartitem_set.select_related('retailer','item_variation','item_variation__size','shipping_method').order_by('-date_created')
+
+
+
+
+
 
 
 def Cart(request):
@@ -265,7 +287,7 @@ class KartItem(models.Model):
 
     def get_shipping_form(self):
         f = modelform_factory(KartItem, fields=("shipping_method",))(instance=self,prefix=self.id)
-        f.fields['shipping_method'] = ChoiceField(widget=RadioSelect, choices=((x.id, x) for x in ShippingType.objects.all()))
+        f.fields['shipping_method'] = ChoiceField(widget=RadioSelect, choices=((x.id, x) for x in get_shipping_options()))
         f.fields['shipping_method'].widget.attrs = {'data-attr':'shipping_method','class':'choiceclick','data-href':'update_info','data-id':self.id}
         return f
 

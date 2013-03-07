@@ -24,6 +24,7 @@ PIPELINE_KEY = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
 
 @dsa_view(setting('SOCIAL_AUTH_COMPLETE_URL_NAME', 'socialauth_complete'))
 def auth(request, backend):
+    print 'social auth, GO'
     """Start authentication process"""
     return auth_process(request, backend)
 

@@ -25,14 +25,16 @@
 {% block content %}
 
 <div class="content cart" id="page-content">
-    <div class="page-inner-content">
     <div id="stunable-tabs-nav">
         <ul id="tabs-container" class="nav tabbed clearfix">
             <li class="active"> <a href="/cart">Shopping Cart</a></li> >
-            <li> <a href="/cart/wpp">Payment/Shipping</a></li> >
-            <li> <a href="/cart/wpp_success">Place Order</a></li>
+            <li> <a href="/cart/details">Payment/Shipping</a></li> >
+            <li> <a href="/cart/success">Place Order</a></li>
         </ul>
     </div>
+
+    <div  class="inner-page-content">
+    
     {% block inner_content %}
 
         {% if cart.grand_total %}
@@ -59,13 +61,13 @@
                     <td>processing fees:</td>
                     <td>${{cart.totals_as_pretty_dict.processing}}</td>
                 </tr>
-                <tr >
-                    <td>grand total:</td>
+                <tr class="big" >
+                    <td >grand total:</td>
                     <td>${{cart.totals_as_pretty_dict.grand_total}}</td>
                 </tr>
            </table>
-           <a class="btn big btn-primary"href="/cart/wpp">checkout</a>
-       </div>
+           <a class="btn big btn-primary login-check" data-href="/cart/details">checkout</a>
+            </div>
         </div>  
         <ul id="cart-item-list">
 

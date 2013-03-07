@@ -210,6 +210,8 @@ class BillingInfoForm(AjaxModelForm):
         model = BillingInfo 
         
 class ShippingInfoForm(forms.ModelForm):
+    ignore_address_variance = False
+    
     class Meta:
         model = ShippingInfo        
         exclude = ('email', 'company_name', 'is_default', 'customer')
@@ -219,16 +221,33 @@ class ShippingInfoForm(forms.ModelForm):
 
     def clean(self):
 
-        if len(self._errors) < 1:   
-            self.validate_address() 
-            data,result = self.validation
-
+        if len(self._errors) < 1:    
+            data,result = ShippingInfo.verify_address(data=self.cleaned_data)
+            if not data:
+                raise forms.ValidationError("Could not validate this address, please correct it.")
+            address_diffs = False
             for key,val in data.items():
                 if self.cleaned_data[key] != val and key != 'address2':
-                    self._errors[key]= self.error_class(['* verified'])
-                    self.fields[key].value = val
-            self.data._mutable = True
+                    address_diffs = True
+                    continue
+                    # self._errors[key]= self.error_class(['* verified'])
+
+
+            if address_diffs and not self.ignore_address_variance:
+                self.address_diff_list = {}
+                for key,val in data.items():
+                    # print key,val
+                    self.address_diff_list[key] = {'original':self.cleaned_data[key],'suggested':val, 'diff' :{True:'diff',False:'ok'}[(self.cleaned_data[key] != val)]}
+
+                self.cleaned_data.update(data)
+                # self.data.update(data)
+
+                raise forms.ValidationError("Please confirm these address modifications...")
+
+            self.cleaned_data.update(data)
             self.data.update(data)
+            
+
         return self.cleaned_data
 
         

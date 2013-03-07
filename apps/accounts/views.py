@@ -13,14 +13,14 @@ from accounts.forms import AccountCreationForm, AvatarUploadForm,\
     ShippingInfoEditForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
-from django.core.exceptions import ValidationError
+# from django.core.exceptions import ValidationError
 from apps.common import get_or_create_profile, json_view
 from accounts.models import WaitingList, ShippingInfo, CCToken
 from retailers.models import RetailerProfile
 from random import random
 from django.utils.hashcompat import sha_constructor
 from racks.models import Brand, Rack
-from apps.accounts.utils import create_user
+# from apps.accounts.utils import create_user
 from django.conf import settings
 from apps.registration.models import RegistrationProfile
 from django.contrib.sites.models import Site
@@ -34,16 +34,22 @@ from friends.models import Friendship
 
 from StringIO import StringIO
 from PIL import Image
-from django.core.files.temp import NamedTemporaryFile
+
 
 from oauth.oauth import OAuthRequest,OAuthConsumer,OAuthToken,OAuthSignatureMethod_HMAC_SHA1
-import httplib, json, time, datetime
 
-import gdata.contacts.data
-import gdata.contacts.client
-import gdata.gauth
+
+# import gdata.contacts.data
+# import gdata.contacts.client
+# import gdata.gauth
 
     
+
+def check_login(request):
+    if request.user.is_authenticated():
+        return HttpResponse(json.dumps({'result':True,}, ensure_ascii=False), mimetype='application/json')
+    return HttpResponse(json.dumps({'result':False}, ensure_ascii=False), mimetype='application/json')
+
 @login_required
 def profile_edit(request, template="accounts/profile_edit.html"):
     ctx = {}

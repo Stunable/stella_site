@@ -167,8 +167,6 @@ class RetailerProfile(models.Model):
 
     @staticmethod
     def verify_address(data=None):
-        if not data:
-            data = model_to_dict(self)
 
         F = FedexTestAddress(data)
         return F.validate().processed()

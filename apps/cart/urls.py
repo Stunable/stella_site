@@ -27,6 +27,10 @@ urlpatterns = patterns('cart.views',
         view='update_info',
         name='update_cart_info'
     ),                 
+    url(r'^validate_address',
+        view='validate_address',
+        name='validate_address'
+    ),                 
     url(r'^order_history',
         view='order_history',
         name='order_history'
@@ -47,11 +51,11 @@ urlpatterns = patterns('cart.views',
         view='shopper_request_refund_item',
         name='shopper_request_refund_item'
     ),                       
-    url(r'^wpp$',
+    url(r'^details$',
         view='wpp',
         name='express_checkout'
     ),
-    url(r'^wpp_success',
+    url(r'^success',
         view='wpp_success',
         name='wpp_success'
     ),

@@ -158,8 +158,8 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     # 'sslify.middleware.SSLifyMiddleware',
-     'johnny.middleware.LocalStoreClearMiddleware',
-     'johnny.middleware.QueryCacheMiddleware',
+     # 'johnny.middleware.LocalStoreClearMiddleware',
+     # 'johnny.middleware.QueryCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'apps.common.middleware.SubdomainsMiddleware',    
     'apps.common.middleware.ProfileMiddleware',
@@ -171,15 +171,15 @@ MIDDLEWARE_CLASSES = (
     'shopify_app.middleware.LoginProtection',
 )
 
-JOHNNY_MIDDLEWARE_KEY_PREFIX='jc_st'
-# some johnny settings
-CACHES = {
-     'default' : dict(
-         BACKEND = 'johnny.backends.redis.RedisCache',
-         LOCATION = '127.0.0.1:6379',
-         JOHNNY_CACHE = True,
-     )
- }
+# JOHNNY_MIDDLEWARE_KEY_PREFIX='jc_st'
+# # some johnny settings
+# CACHES = {
+#      'default' : dict(
+#          BACKEND = 'johnny.backends.redis.RedisCache',
+#          LOCATION = '127.0.0.1:6379',
+#          JOHNNY_CACHE = True,
+#      )
+#  }
 
 ROOT_URLCONF = 'urls'
 

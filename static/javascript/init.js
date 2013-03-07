@@ -25,16 +25,22 @@ var stunable = {
           }
       });
 
-      // $('.click_href').click(function(e){
-      //   $.post($(this).data('href'),function(data){
-      //    //console.log(data)
-      //   })
-
-      // })
-      // if (! logged_in &&  $('body').attr('data-role')!='accounts'){
-      //   $('#login_box').modal({clickClose: false,escapeClose:false,showClose:false})
-
-      // }
+       $('.login-check').click(function(e){
+          var dest = $(this).data('href')
+          $.post('/accounts/check_login',function(data){
+              if (data.result){
+                window.location = dest;
+              }else{
+                var box = $('#login_box').clone()
+                box.find('.login-href-button').each(function(){
+                 var orig =  $(this).attr('href');
+                 $(this).attr('href',orig+'?next='+dest);
+                })
+               box.modal({})   
+                // $('<div style="height:400px;width:400px" class="info_modal">Your Upload is in progress.  When this goes away, that means it\'s done!</div>').modal({clickClose: false,escapeClose:false,showClose:false})
+              }
+          })
+      })
 
       setupCustomTabs($('#left-panel'));  
       $('.panel-inner-content').html($('.panel-header .active').find('.tab-content').html()).fadeIn(1000, function() {
@@ -111,6 +117,10 @@ var stunable = {
 
         })
 
+        $('.click-reveal').click(function(e){
+          $($(this).data('target')).toggle();
+        })
+
     }
     ,shop: function(){            
 
@@ -154,14 +164,6 @@ var stunable = {
     }
     ,cart: function(){
 
-
-
-
-
-
-
-
-
         zipcode = [];
         function updateCartTotals(totals) {
             $("#cart-total").html(totals.total.toFixed(2));
@@ -192,17 +194,15 @@ var stunable = {
 
         $('#payment-form').validate({
           submitHandler:function(form) {
+            console.log(form)
 
             var d = $(form).serializeObject();
 
 
-
-
-
             var data ={
-              "client_id":"{{wepay_client_id}}",
+              "client_id":WEPAY_CLIENT_ID,
               "user_name":d.firstname+' '+d.lastname,
-              "email":'{{request.user.email}}',
+              "email":USER_EMAIL,
               "cc_number":$('#id_acct').val(),
               "cvv":$('#id_cvv2').val(),
               "expiration_month":$('#id_expdate_0').val(),
@@ -253,6 +253,15 @@ var stunable = {
               }
             })
     
+
+            $('#btn-place-an-order').click(function(e){
+              e.preventDefault();
+              console.log($('#shipping-form'))
+              $('#shipping-form').submit()
+            })
+
+
+
       },
       retailers:function(){
 

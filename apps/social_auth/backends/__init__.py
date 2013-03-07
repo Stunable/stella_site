@@ -790,6 +790,7 @@ def get_backends(force_load=False):
     """
     if not BACKENDSCACHE or force_load:
         for auth_backend in setting('AUTHENTICATION_BACKENDS'):
+            print auth_backend
             mod, cls_name = auth_backend.rsplit('.', 1)
             module = import_module(mod)
             backend = getattr(module, cls_name)
@@ -799,6 +800,7 @@ def get_backends(force_load=False):
                 backends = getattr(module, 'BACKENDS', {})
                 if name in backends and backends[name].enabled():
                     BACKENDSCACHE[name] = backends[name]
+        print BACKENDSCACHE
     return BACKENDSCACHE
 
 

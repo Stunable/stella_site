@@ -92,9 +92,16 @@
                 
                 <div class="global" id="header">
                         <a href="/" class="logo"></a>
-                      
+                        
                       <!--SOCIAL MEDIA ICON LINKS -->
                         <ul class="horizontal-list icon-list social">
+                            <li>
+                              {% if request.user.is_authenticated %}
+                               <a class="logout-button" href="/accounts/logout">logout</a>
+                              {% else %}
+                                <a class="login-check" data-href="/">login</a>
+                              {% endif %}
+                            </li>
                             <li class="navlink">
                                 <a href="http://twitter.com/stunable" title="Follow Stunable on Twitter." class="icon" id="nav-twitter">Twitter</a>
                             </li>
@@ -154,7 +161,7 @@
                               {% if request.user.is_authenticated %}
                               
                               {%else%}
-                                <a href="/login/facebook/"><div class="" style="cursor:pointer"></div>login with facebook</a>
+                                {# <a href="/login/facebook/"><div class="" style="cursor:pointer"></div>login with facebook</a> #}
                               {% endif %}
                             </li>
                             {% if request.user.is_authenticated %}
@@ -250,11 +257,15 @@
         <div class="special" id="login_box">
                      
              <div class="inner_content">
-                 <div>
-                     {{CMS.login_explain|safe}}
-                 </div>                
+                 
                  <div id="login_options">
-                     <div><a href="/login/facebook/"><div class="facebooklogin" style="cursor:pointer"></div></a>
+                     <div><a class="login-href-button" href="/login/facebook/"><div class="facebooklogin" style="cursor:pointer"></div></a>
+                     </div>
+                     <div>
+                     {{CMS.login_explain|safe}}
+                      </div>                
+                     or
+                     <div><a class="login-href-button" href="/login/google-oauth2/"><div class="googlelogin" style="cursor:pointer"></div></a>
                      </div>
                      <!-- <div class="fb-login-button" data-show-faces="true" data-width="500" data-max-rows="1"></div> -->
                  </div>
@@ -262,7 +273,7 @@
              </div>
              <div class="foot">
                  <!-- <a href="/retailers/create_profile">become a stunable stylist</a> -->
-                 <a href="https://stylists.stunable.com/accounts/login">stylist login</a>
+                <!-- <a href="https://stylists.stunable.com/accounts/login">stylist login</a>-->
              </div>
           </div></div></div></div></div></div>
 

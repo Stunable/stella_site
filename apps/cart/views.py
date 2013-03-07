@@ -253,24 +253,89 @@ def shopper_return_item(request):
     return HttpResponse(json.dumps(response, ensure_ascii=False), mimetype='application/json')
 
 
+
+
+
+
+
+def validate_address(request):
+
+    try:
+        default_ccS = CCToken.objects.filter(user=request.user).order_by('-last_modified')
+    except:
+        default_ccS = None
+
+    try:
+        default_shipping = ShippingInfo.objects.filter(customer=user_profile).filter(is_default=True)[0]
+    except:
+        default_shipping = None
+
+
+
+    ctx =  {  
+                'default_ccS': default_ccS,
+                'mode':settings.WEPAY_STAGE,
+                'wepay_client_id':settings.WEPAY_CLIENT_ID,
+                'shipping_form': ShippingInfoForm(request.POST, instance=default_shipping)
+            }
+
+    if request.method == "POST":
+        shipping_form = ShippingInfoForm(request.POST, instance=default_shipping)
+        if shipping_form.is_valid():
+            shipping_info = shipping_form.save(commit=False)
+            shipping_info.customer=user_profile
+            if not default_shipping:
+                shipping_info.is_default=True
+            shipping_info.save()
+            return HttpResponseRedirect(reverse('express_checkout'))
+        else:
+            print shipping_form.errors
+            ctx['shipping_form'] = shipping_form
+
+    return direct_to_template(request,  "cart/payment.html", ctx)
+
+
 @login_required
 def wpp(request):    
     cart = Cart(request)
     
-    item = {"amt": cart.grand_total,             # amount to charge for item
-        "inv": cart.__unicode__(),         # unique tracking variable paypal
-        "custom": "tracking",       # custom tracking variable for you
-        "cancelurl": 'http://' + request.META['HTTP_HOST'] + "/cart/wpp",  # Express checkout cancel url
-        "returnurl": 'http://' + request.META['HTTP_HOST'] + "/cart/wpp" }  # Express checkout return url
     
     try:
         default_ccS = CCToken.objects.filter(user=request.user).order_by('-last_modified')
     except:
         default_ccS = None
     
+
+    try:
+        default_shipping = ShippingInfo.objects.filter(customer=user_profile).filter(is_default=True)[0]
+    except:
+        default_shipping = None
+
+
+
+
+    # shipping_form = ShippingInfoForm(request.POST, instance=default_shipping)
+    #     if shipping_form.is_valid():
+    #         shipping_info = shipping_form.save(commit=False)
+    #         shipping_info.customer=user_profile
+    #         if not default_shipping:
+    #             shipping_info.is_default=True
+    #         shipping_info.save()
+    #         return HttpResponseRedirect(reverse('express_checkout'))
+    #     else:
+    #         ctx['shipping'] = shipping_form
+
+
+
     kw = {
-      "context": {'cart':cart, 'default_ccS': default_ccS,'mode':settings.WEPAY_STAGE,'wepay_client_id':settings.WEPAY_CLIENT_ID},
-      "item": item,                            # what you're selling
+      "context": {  'cart':cart, 
+                    'default_ccS': default_ccS,
+                    'mode':settings.WEPAY_STAGE,
+                    'wepay_client_id':settings.WEPAY_CLIENT_ID,
+                    'shipping_form': ShippingInfoForm(request.POST, instance=default_shipping)
+
+                    },
+                          # what you're selling
       "payment_template": "cart/payment.html",      # template name for payment
       "confirm_template": "cart/confirm.html", # template name for confirmation
       "success_url": "/cart/wpp_success/"}              # redirect location after success

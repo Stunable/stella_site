@@ -189,9 +189,9 @@ class Address(models.Model):
     """
     customer = models.ForeignKey(UserProfile, verbose_name=_(u"Customer"), blank=True, null=True, related_name="addresses")
 
-    firstname = models.CharField(_("Firstname"), max_length=50)
-    lastname = models.CharField(_("Lastname"), max_length=50)
-    company_name = models.CharField(_("Company name"), max_length=50, blank=True, null=True)
+    firstname = models.CharField(_("First Name"), max_length=50)
+    lastname = models.CharField(_("Last Name"), max_length=50)
+    company_name = models.CharField(_("Company Name"), max_length=50, blank=True, null=True)
     address1 = models.CharField(_("Address 1"), max_length=100)
     address2 = models.CharField(_("Address 2"), max_length=100, blank=True, null=True)
     city = models.CharField(_("City"), max_length=50)
@@ -203,9 +203,7 @@ class Address(models.Model):
 
     @staticmethod
     def verify_address(data=None):
-        if not data:
-            data = model_to_dict(self)
-
+        print 'VERIFY ADDRESS ON SHIPPING FORM'
         F = FedexTestAddress(data)
         return F.validate().processed()
 

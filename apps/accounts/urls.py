@@ -9,6 +9,7 @@ from accounts.views import add_facebook_friend
 
 urlpatterns = patterns('',
     url(r'^profile$', profile_edit ,name='profile_edit'),
+    url(r'^check_login$', check_login ,name='check_login'),
     url(r'^update_profile$', update_profile, name='update_profile'),
     url(r'^create_new_shipping_info', create_new_shipping_info, name='create_new_shipping_info'),
     url(r'^(?P<info_id>\d+)/update_shipping_info', update_shipping_info, name='update_shipping_info'),
@@ -32,6 +33,7 @@ urlpatterns = patterns('',
     url(r'^new_user_join/(?P<confirmation_key>\w+)', new_user_join, name='new_user_join'),
     url(r'^connect', connect, name="connect"),
     url(r'^add_facebook_friend', add_facebook_friend, name="add_facebook_friend")
+
 )
 
 
