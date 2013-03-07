@@ -35,9 +35,17 @@ class WePayPayment(object):
             success = []
             data_success = []
             fail = []
-            for item in self.cart:
+            items = [i for i in self.cart]
+            for item in items:
 
                 WEPAY = WePay(settings.WEPAY_PRODUCTION, item.retailer.wepay_token)
+                
+                app_fee = item.get_app_fee
+                if settings.DEBUG:
+                    if item.get_app_fee() * 5 >item.get_wepay_amounts()[0]:
+                        app_fee = 3
+
+
                 data = {
                     'auto_capture':"False",
                     'account_id': item.retailer.wepay_acct,
@@ -46,7 +54,7 @@ class WePayPayment(object):
                     'type': 'GOODS',
                     'payment_method_id': self.cc_token.token, # the user's credit_card_id 
                     'payment_method_type': 'credit_card',
-                    'app_fee':str(item.get_app_fee()),
+                    'app_fee':str(app_fee),
                     'fee_payer':'payee'
                 }
 
@@ -94,6 +102,7 @@ class WePayPayment(object):
                 return False, fail, error
 
         except Exception, e:
+            raise
             print e
             return False, fail, e
 

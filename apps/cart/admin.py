@@ -26,9 +26,9 @@ class PurchaseAdmin(admin.ModelAdmin):
 
     def track_package(self,request,queryset):
         for obj in queryset:
-            if obj.shipping_number:
+            if obj.last_tracking_number:
                 try:
-                    delivery_date = track_it(obj.shipping_number)
+                    delivery_date = track_it(obj.last_tracking_number)
                     if delivery_date:
                         obj.delivery_date = delivery_date
                         obj.save()

@@ -507,7 +507,7 @@ def divide_into_list(list_item):
     
     return rack_items_list
 
-@login_required
+# @login_required
 def carousel(request, slug, template='racks/carousel.html'):
     ctx = {}
     # profile = get_or_create_profile(request)
@@ -526,7 +526,7 @@ def carousel(request, slug, template='racks/carousel.html'):
     return pagination(request, ctx, template, query_set)
 
 @json_view
-@login_required
+# @login_required
 def tab_handler(request, slug, method=None):
     if request.method == 'POST':
         current_tag = get_object_or_404(Tag, slug=slug)

@@ -10,7 +10,7 @@ from django.db.models.signals import post_save,pre_save
 
 
 from apps.retailers.models import ShippingType
-from cart import Cart   
+# from cart import Cart   
 from apps.retailers.models import RetailerProfile
 
 from accounts.models import ShippingInfo
@@ -97,8 +97,13 @@ class Checkout(models.Model):
 
         super(Checkout, self).save()
         if not self.ref:
-            self.ref =base35encode(self.retailer.id+10000)+'S'+base35encode(self.id+10000)
-            super(Checkout, self).save()   
+            try:
+                self.ref =base35encode(self.retailer.id+10000)+'S'+base35encode(self.id+10000)
+                super(Checkout, self).save()
+            except Exception, e:
+                print e
+                pass
+            
 
 PURCHASE_STATUS_CHOICES = (
     ('placed','placed'), #payment confirmed
@@ -445,9 +450,11 @@ from django.dispatch import receiver
 
 @receiver(payment_was_successful,dispatch_uid="payment_authorization_callback")
 def payment_was_successful_callback(sender, **kwargs):
-    print 'received signal that payment successful for', kwargs['item']
+    print 'received signal that payment was successful for', kwargs['item']
     transaction = sender
-    retailer = kwargs['item'].retailer#TODO this is totally ghetto...
+
+    print 'retailer:',kwargs['item'].retailer.user
+    retailer = kwargs['item'].retailer
 
     itemtype = kwargs['item'].item_variation
     itemtype.inventory = min(0,itemtype.inventory-kwargs['item'].quantity)
