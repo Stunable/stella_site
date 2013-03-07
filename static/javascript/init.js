@@ -304,7 +304,9 @@ var stunable = {
 
       },
       retailers:function(){
-
+        $('#select_all').click(function(e){
+          $('.ship_check').attr('checked',$(this).attr('checked')==='checked');
+        })
           function hide_form_errors() {
             $('.errorlist').remove();
           }

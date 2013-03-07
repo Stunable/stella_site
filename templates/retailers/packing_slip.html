@@ -17,9 +17,9 @@
     {% if not purchase.shipping_number %}
         {% with item=purchase.item %} 
             <tr id="product-item-{{item.product.pk}}">
-                <td>{{ item.product.item.name }}</td>
-                <td>{{ item.size }}</td>
-                <td>{{ item.color }}</td>
+                <td>{{ item.item_variation.item.name }}</td>
+                <td>{{ item.item_variation.size }}</td>
+                <td>{{ item.item_variation.color }}</td>
                 <td align="center">{{ item.quantity }}</td>
                 {% if not shipping_label %}
                 <td><input class="ship_check" name="ship_purchase" value="{{purchase.id}}" type="checkbox"></td>
