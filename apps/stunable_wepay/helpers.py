@@ -94,7 +94,6 @@ class WePayPayment(object):
                 return False, fail, error
 
         except Exception, e:
-            raise
             print e
             return False, fail, e
 
