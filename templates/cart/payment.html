@@ -2,37 +2,40 @@
 
 {% block inner_content %}
 
+
+
+<div class="container-box bootstrap">
+	<input type="submit" class="btn btn-primary btn-place-an-order" value="Place an order" id="btn-place-an-order" />
+	<br><br>
 <div id="payment_shipping_info">
 
 	
-	
-	<div id="payment-form-container" class="body-copy bootstrap">
+<div id="payment-form-container" class="body-copy bootstrap">
+<div class="section-intro">
+<h2><span>Payment Methods</span></h2>
+</div>
 
-		{% if default_ccS %}
-	<div class="section-intro">
-		<h2><span>Payment Methods</span></h2>
-	</div>
 	<div class="bootstrap existing_payment_option">
+		
+		<form id="payment-choice-form" {% if not default_ccS %}class="hidden"{% endif %}>
 		<div>You can pay with one of your saved credit cards: </div>
-		{% for cc in default_ccS %}
+		
+		{% include "includes/credit_card_choices.html" %}
 
-		<label for="cc-{{cc.id}}"><input {% if cc.is_default %} checked="checked" {% endif %}name="credit-card" value="{{cc.token}}"  data-id="{{cc.token}}" type="radio" id="cc-{{cc.id}}"> {{cc.cc_name}}</label><br>
-
-
-		{% endfor %}	
+		</form>
 		
 	</div>
-{% endif %}
+
 	
-	
-	{% if default_ccS|length > 0%}Or <a data-target="#payment-form" class="click-reveal">enter a new credit card</a>]
+	<br>
+	{% if default_ccS|length > 0%}Or <a data-target="#payment-form" class="click-reveal">enter a new credit card</a>
 	{% else %}
-	Enter a Credit Card
+	<span style="color:black">Enter a Credit Card</span>
 	{% endif %}
 	
 
 
-		<form id="payment-form" class="form-horizontal {% if default_ccS|length > 0%}hidden{% endif %}" novalidate="novalidate">			
+		<form id="payment-form" class="form-horizontal {% if default_ccS|length > 0%}hidden{% endif %} clear_choice_on_change" data-choicetarget="#payment-choice-form" novalidate="novalidate">			
 				
 				<div class="control-group">
 					<label class="control-label">First Name</label>
@@ -142,87 +145,50 @@
 
 				<div >
 			{% csrf_token %}
-			<input id="wepay_id" type="hidden" name="credit_card_id">
-			<input id="wepay_state" type="hidden" name="state">
-			<input type="submit" class="btn btn-primary" value="Place an order" id="btn-place-an-order" />
+			
 		</div>
 	</div>
 
-	<form id="wepay_info" method="post" action="{% url express_checkout %}">
+<div id="shipping-form-container">
+	<div class="section-intro">
+		<h2><span>Shipping Info</span></h2>
+		</div>
+
+
+	
+
+		<form id="shipping-choice-form" class="{% if not shipping_addresses %}hidden{% endif %}">
+		<div class="bootstrap existing_payment_option">
+		<div>You can choose an existing address that you've used before... </div>
+			
+			{% include "includes/shipping_address_choices.html" %}
+			
+		</div>
+		</form>
+	
+	
+	
+	{% if shipping_addresses|length > 0%}Or <a data-target="#shipping-form" class="click-reveal">Enter a new Shipping Address</a>
+	{% else %}
+	<br>
+	<span style="color:black">Enter a new Shipping Address</span>
+	{% endif %}
+
+
+	<div class="body-copy bootstrap">
+		<form action="/cart/validate_address" method="POST" id="shipping-form" class="form-horizontal validated_address_form {% if shipping_addresses|length > 0%}hidden{% endif %} clear_choice_on_change" data-choicetarget="#shipping-choice-form">
+		{% include "includes/shipping_address_form.html" %}
+		</form>
+	</div>
+</div>
+<input type="submit" class="btn btn-primary btn-place-an-order" value="Place an order" id="btn-place-an-order" />
+</div>
+
+<form id="wepay_info" method="post" action="/cart/validate_cc">
 		{% csrf_token %}
 		<input id="wepay_id" type="hidden" name="credit_card_id">
 		<input id="wepay_state" type="hidden" name="state">
 	</form>
-
-<div id="shipping-form-container">
-	Shipping Info
-	<div class="body-copy bootstrap">
-		<form action="/cart/validate_address" method="POST" id="shipping-form" class="form-horizontal">
-		{% csrf_token %}
-
-		{% if shipping_form.non_field_errors %}
-            <div class="form_errors info_modal">
-                {{shipping_form.non_field_errors}}
-
-                {% if shipping_form.address_diff_list %}
-                    {% with shipping_form.address_diff_list as fdl %}
-                    
-                    <ul class="address_confirm">
-                    		<li class="heading">You entered:</li>
-                    		<li class="{{fdl.address1.diff}}">{{fdl.address1.original}},</li>
-          					{% if fdl.address2.original %}
-                    		<li class="{{fdl.address2.diff}}">{{fdl.address2.original}},</li>
-                    	{% endif %}
-                    		<li class="{{fdl.city.diff}}">{{fdl.city.original}},</li>
-                    		<li class="{{fdl.state.diff}}">{{fdl.state.original}},</li>
-                    		<li class="{{fdl.zip_code.diff}}">{{fdl.zip_code.original}}</li>
-                    		<li rel="modal:close" data-val="original" class="address_action heading">edit</li>
-                    </ul>
-                    <hr>
-                    <ul class="address_confirm">
-                    	<li class="heading">We suggest:</li>
-                    	<li class="{{fdl.address1.diff}}">{{fdl.address1.suggested}},</li>
-                    	{% if fdl.address2.original %}
-                    	<li class="{{fdl.address2.diff}}">{{fdl.address2.suggested}},</li>
-                    	{% endif %}
-                    	<li class="{{fdl.city.diff}}">{{fdl.city.suggested}},</li>
-                    	<li class="{{fdl.state.diff}}">{{fdl.state.suggested}},</li>
-                    	<li class="{{fdl.zip_code.diff}}">{{fdl.zip_code.suggested}}</li>
-                    	<li data-val="suggested" class="heading address_action">use this</li>
-                    </ul>
-                  <!--   <div style="width:100%;text-align:left;font-size:.6em;color:grey">
-                    go with this one if possible...</div> -->
-                	{% endwith %}
-                {% endif %}
-            </div>
-            {% endif %}
-
-		{% for field in shipping_form %}
-		<div class="control-group">
-			<label class="control-label">{{ field.label }}</label>
-			<div class="controls">
-				{{field}}
-				{{field.errors}}
-			</div>
-		</div>
-		{% endfor %}
-		
-	
-<!-- 		<div class="control-group">
-			<div class="controls">
-				<label class="checkbox" style="text-transform: none">
-						<input class="" type="checkbox" name="term_and_condition" id="id_term_and_condition"/>
-						<a href="/terms/" target="_" class="">Terms & Condition</a>
-				</label>
-				<span class="help-inline"></span>
-			</div>
-		</div> -->
-		{# <input type="submit" class="btn btn-primary" value="Place an order" id="btn-place-an-order" /> #}
-		</form>
-	</div>
-</div>
-
-</div>
 <script type="text/javascript" src="https://wepay.com/min/js/tokenization.v2.js">
 </script>
 <script type="text/javascript">

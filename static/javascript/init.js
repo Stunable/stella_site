@@ -61,17 +61,7 @@ var stunable = {
         $($(this).data('target')).modal()
       })
 
-      $('.form_errors').modal()
-
-
-      $('.address_action').click(function(e){
-        var t = $(this);
-        if (t.data('val')=='suggested'){
-          $('.validated_address_form').submit()
-        }else{
-        $.modal.close();
-        }
-      })
+      init_form_errors($('body').attr('data-role'));
 
         $('.left-panel>ul>li').click(function(e){
           e.stopPropagation();  
@@ -191,11 +181,13 @@ var stunable = {
         })
 
 
+        $('.clear_choice_on_change').find('input').focus(function(e){
+          $($(this).closest('form').data('choicetarget')).find("input:checked").attr('checked',false)
+        })
 
         $('#payment-form').validate({
           submitHandler:function(form) {
-            console.log(form)
-
+            
             var d = $(form).serializeObject();
 
 
@@ -220,11 +212,22 @@ var stunable = {
             var response = WePay.credit_card.create( data, function(data) {
               if (data.error) {
 
+                pop_modal('There is a problem with your credit card information: <div class="form_error">'+ data.error_description+'</div>')
+
                 // handle error response
               } else {
                 $('#wepay_id').val(data.credit_card_id)
                 $('#wepay_state').val(data.state)
-                $('#wepay_info').submit()
+                
+                $.post($('#wepay_info').attr('action'),$('#wepay_info').serialize(),function(result){
+                  if(result.success){
+                    $('#payment-choice-form').html(result.html);
+                    $('#payment-form').fadeOut();
+                    $('.btn-place-an-order').click();
+
+                  }
+                },'json')
+
               }
             } );
 
@@ -252,14 +255,51 @@ var stunable = {
                 
               }
             })
-    
+            
 
-            $('#btn-place-an-order').click(function(e){
+            $('.btn-place-an-order').click(function(e){
+              console.log('place order clicked')
               e.preventDefault();
-              console.log($('#shipping-form'))
-              $('#shipping-form').submit()
-            })
 
+              var shipping_choice = $('#shipping-choice-form').find("input:checked" )
+              var payment_choice = $('#payment-choice-form').find("input:checked" )
+
+
+              if(!shipping_choice.length){
+                var form = $('#shipping-form');
+                $.post(form.attr('action'),form.serialize(),function(result){
+                  if(result.success){
+                    $('#shipping-choice-form').html(result.html);
+                    form.fadeOut();
+                    $('.btn-place-an-order').click();
+
+                  }else{
+                    // we had errors validating the shipping address form
+                    form.html(result.html)
+                    init_form_errors($('body').attr('data-role'));
+                  }
+                },'json')
+              }
+
+              if(!payment_choice.length){
+                  $('#payment-form').submit()             
+              }
+
+              if (shipping_choice && payment_choice){
+                $.post('/cart/order_placed',
+                  $.extend($('#shipping-choice-form').serializeObject(),$('#payment-choice-form').serializeObject()),
+                    function(data){
+                      if (data.success){
+                        window.location = data.redirect;
+                      }else{
+                        pop_modal(data.error)
+                      }
+
+                    }                
+                )
+              // $('#shipping-form').submit()
+              }
+            })
 
 
       },

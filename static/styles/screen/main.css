@@ -1956,6 +1956,7 @@ ul.address_confirm{
 
 .modal.current.info_modal{
 	max-width:50%;
+	min-width:510px;
 	padding:20px;
 	overflow-y:auto;
 	background-color:white;

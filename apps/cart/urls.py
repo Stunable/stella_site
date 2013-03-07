@@ -30,6 +30,10 @@ urlpatterns = patterns('cart.views',
     url(r'^validate_address',
         view='validate_address',
         name='validate_address'
+    ),   
+    url(r'^validate_cc',
+        view='validate_cc',
+        name='validate_cc'
     ),                 
     url(r'^order_history',
         view='order_history',
@@ -54,6 +58,10 @@ urlpatterns = patterns('cart.views',
     url(r'^details$',
         view='wpp',
         name='express_checkout'
+    ),
+    url(r'^order_placed$',
+        view='place_order',
+        name='place_order'
     ),
     url(r'^success',
         view='wpp_success',

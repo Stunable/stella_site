@@ -1,0 +1,36 @@
+{% if form.non_field_errors %}
+            <div class="form_errors info_modal">
+                {{form.non_field_errors}}
+
+                {% if form.address_diff_list %}
+                    {% with form.address_diff_list as fdl %}
+                    
+                    <ul class="address_confirm">
+                    		<li class="heading">You entered:</li>
+                    		<li class="{{fdl.address1.diff}}">{{fdl.address1.original}},</li>
+          					{% if fdl.address2.original %}
+                    		<li class="{{fdl.address2.diff}}">{{fdl.address2.original}},</li>
+                    	{% endif %}
+                    		<li class="{{fdl.city.diff}}">{{fdl.city.original}},</li>
+                    		<li class="{{fdl.state.diff}}">{{fdl.state.original}},</li>
+                    		<li class="{{fdl.zip_code.diff}}">{{fdl.zip_code.original}}</li>
+                    		<li rel="modal:close" data-val="original" class="address_action heading">edit</li>
+                    </ul>
+                    <hr>
+                    <ul class="address_confirm">
+                    	<li class="heading">We suggest:</li>
+                    	<li class="{{fdl.address1.diff}}">{{fdl.address1.suggested}},</li>
+                    	{% if fdl.address2.original %}
+                    	<li class="{{fdl.address2.diff}}">{{fdl.address2.suggested}},</li>
+                    	{% endif %}
+                    	<li class="{{fdl.city.diff}}">{{fdl.city.suggested}},</li>
+                    	<li class="{{fdl.state.diff}}">{{fdl.state.suggested}},</li>
+                    	<li class="{{fdl.zip_code.diff}}">{{fdl.zip_code.suggested}}</li>
+                    	<li data-val="suggested" class="heading address_action">use this</li>
+                    </ul>
+                  <!--   <div style="width:100%;text-align:left;font-size:.6em;color:grey">
+                    go with this one if possible...</div> -->
+                	{% endwith %}
+                {% endif %}
+            </div>
+        {% endif %}

@@ -6,12 +6,14 @@ from decimal import Decimal
 from apps.cart.plugins.rate_request import get_rate as fedex_rate_request
 
 from django.forms.models import modelform_factory
-from django.forms import RadioSelect
 
 from retailers.models import ShippingType
+from stunable_wepay.helpers import WePayPayment
 
 from django.forms.fields import ChoiceField
 from django.forms.widgets import RadioSelect
+
+from apps.accounts.models import ShippingInfo,CCToken
 
 
 
@@ -63,7 +65,7 @@ class Kart(models.Model):
         ki,created         = KartItem.objects.get_or_create(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
         ki.unit_price      = item_variation.get_current_price()
         ki.picture         = item_variation.get_image().small.url
-        ki.item_name       = item_variation.item.name 
+        ki.item_name       = item_variation.__unicode__()
 
         if created:
             ki.shipping_method = get_default_shipping()
@@ -209,6 +211,28 @@ class Kart(models.Model):
         return self.kartitem_set.select_related('retailer','item_variation','item_variation__size','shipping_method').order_by('-date_created')
 
 
+    def checkout(self,request):
+
+        # <QueryDict: {u'shipping-address': [u'2'], u'credit-card': [u'1552718934']}>
+        shipping_address = ShippingInfo.objects.get(id=request.POST.get('shipping-address'))
+        credit_card = CCToken.objects.get(token=request.POST.get('credit-card'))
+
+        wpp = WePayPayment(request,self,credit_card,shipping_address)
+        
+
+        success,item_list,error = wpp.authorizePayment()
+
+        print success,item_list,error
+
+        if success:
+            return True,None
+        else:
+            return False,error
+
+
+
+        
+
 
 
 
@@ -234,6 +258,9 @@ class KartItem(models.Model):
     shipping_method = models.ForeignKey('retailers.ShippingType', blank=True, null=True)
     date_created    = models.DateTimeField(auto_now=True)
 
+    @property
+    def cart(self):
+        return self.kart
 
     @property
     def total_price(self):

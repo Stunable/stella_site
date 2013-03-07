@@ -485,7 +485,8 @@ def postSaveGeneric(sender, instance, created, **kwargs):
 
     if 'inventory' in dks and not created and instance._original_state['inventory'] is not None:
         if instance.api_connection:
-            instance.api_connection.update_inventory(instance.inventory)
+            print 'NOT DOING INVENTORY UPDATES YET'
+            # instance.api_connection.update_inventory(instance.inventory)
         instance.item.save()
 
     if 'is_onsale' in instance.get_dirty_fields().keys():

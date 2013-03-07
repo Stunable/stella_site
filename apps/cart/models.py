@@ -45,7 +45,7 @@ def base35encode(number):
     return base36 or alphabet[0]
 
 
-
+# THIS IS NO LONGER USED AND HAS BEEN REPLACED WITH kart.Kart
 class Cart(models.Model):
     creation_date = models.DateTimeField(verbose_name=_('creation date'))
     checked_out = models.BooleanField(default=False, verbose_name=_('checked out'))
@@ -75,7 +75,7 @@ class ItemManager(models.Manager):
         return super(ItemManager, self).get(*args, **kwargs)
 
 class Checkout(models.Model):
-    cart = models.ForeignKey('Cart')
+    cart = models.ForeignKey('kart.Kart')
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
     complete = models.BooleanField(default=False)
     ref = models.CharField(max_length=250, blank=True, null=True)
@@ -112,8 +112,8 @@ PURCHASE_STATUS_CHOICES = (
 )
 
 class Purchase(models.Model):
-    item = models.ForeignKey('Item')
-    cart = models.ForeignKey('Cart')
+    item = models.ForeignKey('kart.KartItem')
+    cart = models.ForeignKey('kart.Kart')
     checkout = models.ForeignKey(Checkout)
     purchaser = models.ForeignKey(User)
     transaction = models.ForeignKey(WePayTransaction)
@@ -121,6 +121,7 @@ class Purchase(models.Model):
     purchased_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=32,choices=PURCHASE_STATUS_CHOICES,default="placed")
     shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
+    shipping_address = models.ForeignKey('accounts.ShippingInfo',blank=True,null=True)
 
     def save(self,*args, **kwargs):
         pk_before_save = self.pk
@@ -214,7 +215,7 @@ class Shipment(models.Model):
     def image(self):
         return self.label
 
-
+# THIS IS NO LONGER USED AND HAS BEEN REPLACED WITH kart.KartItem
 class Item(models.Model):
     weight = 1
     cart = models.ForeignKey(Cart, verbose_name=_('cart'))
@@ -448,10 +449,10 @@ def payment_was_successful_callback(sender, **kwargs):
     transaction = sender
     retailer = kwargs['item'].retailer#TODO this is totally ghetto...
 
-    itemtype = kwargs['item'].product
+    itemtype = kwargs['item'].item_variation
     itemtype.inventory = min(0,itemtype.inventory-kwargs['item'].quantity)
     itemtype.save()
-    itemtype.item.save() # this is to trigger a check for total remaining inventory on this item
+    # itemtype.item.save() # this is to trigger a check for total remaining inventory on this item
 
     try:
         checkout = Checkout.objects.get(cart=kwargs['item'].cart, retailer=retailer.user)
@@ -464,7 +465,8 @@ def payment_was_successful_callback(sender, **kwargs):
         transaction = transaction,
         cart = kwargs['item'].cart,
         checkout = checkout,
-        shipping_method=kwargs['item'].cart.shipping_method
+        shipping_method=kwargs['item'].shipping_method,
+        shipping_address=kwargs['shipping_address']
     )
             
     p.save()

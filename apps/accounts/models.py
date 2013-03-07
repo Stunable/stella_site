@@ -210,7 +210,7 @@ class Address(models.Model):
 
 
     def __unicode__(self):
-        return "%s / %s" % (self.address1, self.city)
+        return "%s / %s / %s" % (self.address1, self.city, self.state)
     
 class ShippingInfo(Address):
     is_default = models.BooleanField(default=False)

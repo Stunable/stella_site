@@ -67,7 +67,10 @@ class WePayHandleCC(object):
         self.context.setdefault("errors", self.errors['form'])
         return render_to_response(self.payment_template, self.context, RequestContext(self.request))
 
-    def confirm_card_info(self):
+    def confirm_card_info(self,request=None,return_valid=None):
+        newCC = None
+        if request:
+            self.request = request
         """Post:  {credit_card_id: 1339169043, state: "new"}"""
         try:
             ccID = self.request.POST.get('credit_card_id',None)
@@ -95,15 +98,23 @@ class WePayHandleCC(object):
                                                             cc_name = cc_data['credit_card_name'],
                                                             user_name = cc_data['user_name'],
                                                             token = cc_data['credit_card_id'],
-                                                            user = self.request.user
+                                                            user = self.request.user,
+                                                            is_default=True,
                                                         )
                         except:
                             newCC,created = CCToken.objects.get_or_create(
                                 cc_name = cc_data['credit_card_name'],
                                 user_name = cc_data['user_name'],
                                 token = cc_data['credit_card_id'],
-                                user = self.request.user
+                                user = self.request.user,
+                                is_default=True,
                             )
+                        if newCC:
+                            CCToken.objects.filter(user=self.request.user).exclude(id=newCC.id).update(is_default=False)
+
+
+                        if return_valid:
+                            return True
                         #newCC.save()
                         self.current_cc = newCC
                         return self.render_confirm_form()

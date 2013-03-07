@@ -1,0 +1,3 @@
+{% for cc in default_ccS %}
+<label for="cc-{{cc.id}}"><input {% if cc.is_default %} checked="checked" {% endif %}name="credit-card" value="{{cc.token}}"  data-id="{{cc.token}}" type="radio" id="cc-{{cc.id}}"> {{cc.cc_name}}</label><br>
+{% endfor %}	

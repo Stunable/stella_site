@@ -1,3 +1,37 @@
+function remember( selector ){
+
+    $(selector).each(
+
+        function(){
+
+            //if this item has been cookied, restore it
+
+            var name = $(this).attr('name');
+
+            if( $.cookie( name ) ){
+
+                $(this).val( $.cookie(name) );
+
+            }
+
+            //assign a change function to the item to cookie it
+
+            $(this).change(
+
+                function(){
+
+                    $.cookie(name, $(this).val(), { path: '/', expires: 365 });
+
+                }
+
+            );
+
+        }
+
+    );
+
+}
+
 
 $.fn.serializeObject = function()
     {
@@ -214,6 +248,37 @@ function init_refclicks(selection){
         },'json')
     })
 }
+
+
+function init_form_errors(context){
+    $('.form_errors').modal();
+
+    console.log(context)
+
+    if (context == 'retailers'){
+      $('.address_action').click(function(e){
+        var t = $(this);
+        if (t.data('val')=='suggested'){
+          $('.validated_address_form').submit()
+        }else{
+        $.modal.close();
+        }
+      })
+    }
+    if (context == 'cart'){
+     $('.address_action').click(function(e){
+        var t = $(this);
+        if (t.data('val')=='suggested'){
+            $.modal.close();
+            $('#btn-place-an-order').click()
+        }else{
+            $.modal.close();
+        }
+      })
+    }
+}
+
+
 
 function init_choiceclicks(selection){
     selection.click(function(e){
@@ -932,6 +997,10 @@ function initRackEvents(){
               }
           });
       });
+}
+
+function pop_modal(text){
+ $('<div class="info_modal">'+text+'</div>').modal()
 }
 
 function initTouch()

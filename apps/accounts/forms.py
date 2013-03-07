@@ -22,6 +22,8 @@ from django.core.mail import send_mail
 from django.contrib.localflavor.us.us_states import US_STATES
 from django.utils.translation import ugettext_lazy as _
 from apps.common.forms import AjaxForm
+
+from django.http import QueryDict
 attrs_dict = {}
 
 class AccountEditForm(forms.ModelForm):
@@ -211,7 +213,7 @@ class BillingInfoForm(AjaxModelForm):
         
 class ShippingInfoForm(forms.ModelForm):
     ignore_address_variance = False
-    
+
     class Meta:
         model = ShippingInfo        
         exclude = ('email', 'company_name', 'is_default', 'customer')
@@ -239,13 +241,21 @@ class ShippingInfoForm(forms.ModelForm):
                     # print key,val
                     self.address_diff_list[key] = {'original':self.cleaned_data[key],'suggested':val, 'diff' :{True:'diff',False:'ok'}[(self.cleaned_data[key] != val)]}
 
+                qdict = QueryDict('',mutable=True)
+                qdict.update(self.data)
+                qdict.update(data)
+
                 self.cleaned_data.update(data)
-                # self.data.update(data)
+                self.data = qdict
 
                 raise forms.ValidationError("Please confirm these address modifications...")
 
+            qdict = QueryDict('',mutable=True)
+            qdict.update(self.data)
+            qdict.update(data)
+            self.data = qdict
+
             self.cleaned_data.update(data)
-            self.data.update(data)
             
 
         return self.cleaned_data

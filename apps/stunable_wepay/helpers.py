@@ -22,81 +22,81 @@ from wepay import WePay
 WEPAY = WePay(settings.WEPAY_PRODUCTION, settings.WEPAY_ACCESS_TOKEN)
 
 class WePayPayment(object):
-    def __init__(self, request, cart, cc_token):
+    def __init__(self, request, cart, cc_token,shipping_address):
         self.request = request
         self.cart = cart
         self.cc_token = cc_token
+        self.shipping_address = shipping_address
 
 
     def authorizePayment(self):
+        error = None
+        try:
+            success = []
+            data_success = []
+            fail = []
+            for item in self.cart:
 
-        production = False
-        success = []
-        data_success = []
-        fail = []
-        items = self.cart.cart.item_set.all()
-        for item in items:
-            inventory = item.get_product()
-            product = inventory.item
-            retailer = product.retailers.all()[0]
-            retailer_profile = RetailerProfile.objects.get(user=retailer)
+                WEPAY = WePay(settings.WEPAY_PRODUCTION, item.retailer.wepay_token)
+                data = {
+                    'auto_capture':"False",
+                    'account_id': item.retailer.wepay_acct,
+                    'amount': str(item.get_wepay_amounts()[0]),
+                    'short_description': item.item_name,
+                    'type': 'GOODS',
+                    'payment_method_id': self.cc_token.token, # the user's credit_card_id 
+                    'payment_method_type': 'credit_card',
+                    'app_fee':str(item.get_app_fee()),
+                    'fee_payer':'payee'
+                }
 
-            WEPAY = WePay(settings.WEPAY_PRODUCTION, retailer_profile.wepay_token)
+                response = WEPAY.call('/checkout/create',data)
 
+                if response['state'] == "authorized":
+                    success.append((item,response))
+                    data.update({
+                        'subtotal': item.sub_total,
+                        'grand_total': item.grand_total,
+                        'unit_price':item.unit_price,
+                        'quantity':item.quantity,
+                        'shipping_amount':item.shipping_amount,
+                        'wepay_fees': item.get_additional_fees()
+                    }) 
+                    data_success.append(data)
+                else:
+                    fail.append((item,response))
             
+            if len(success) == len(items):
+                for item,transaction in success:
+                    wpt = WePayTransaction.objects.create(
+                        checkout_id = transaction['checkout_id'],
+                        state = transaction['state'],
+                        user = self.request.user
+                    )
 
-            data = {
-                'auto_capture':"False",
-                'account_id': retailer_profile.wepay_acct,
-                'amount': str(item.get_wepay_amounts()[0]),
-                'short_description': item.get_product().__unicode__(),
-                'type': 'GOODS',
-                'payment_method_id': self.cc_token.token, # the user's credit_card_id 
-                'payment_method_type': 'credit_card',
-                'app_fee':str(item.get_app_fee()),
-                'fee_payer':'payee'
-            }
+                    wpt.save()
 
-            response = WEPAY.call('/checkout/create',data)
+                    print 'authorized payment for ',item
+                    payment_was_successful.send(sender=wpt, item=item,shipping_address=self.shipping_address)
 
-            if response['state'] == "authorized":
-                success.append((item,response))
-                data.update({
-                    'subtotal': item.sub_total,
-                    'grand_total': item.grand_total,
-                    'unit_price':item.unit_price,
-                    'quantity':item.quantity,
-                    'shipping_amount':item.shipping_amount,
-                    'wepay_fees': item.get_additional_fees()
-                }) 
-                data_success.append(data)
+                
+                           
+
+                email_message = """
+                    a new checkout has been created:
+                    %s
+                """%str(data_success)
+
+                send_mail('new checkout', email_message, settings.DEFAULT_FROM_EMAIL, ['gdamon@gmail.com','admin@stunable.com'])
+
+                return True, success , error
             else:
-                fail.append((item,response))
-        
-        if len(success) == len(items):
-            for item,transaction in success:
-                wpt = WePayTransaction.objects.create(
-                    checkout_id = transaction['checkout_id'],
-                    state = transaction['state'],
-                    user = self.request.user
-                )
+                return False, fail, error
 
-                wpt.save()
-
-                print 'authorized payment for ',item
-                payment_was_successful.send(sender=wpt, item=item)
-
-            
-                       
-
-            email_message = """
-                a new checkout has been created:
-                %s
-            """%str(data_success)
-
-            send_mail('new checkout', email_message, settings.DEFAULT_FROM_EMAIL, ['gdamon@gmail.com','admin@stunable.com'])
-
-            return True
+        except Exception, e:
+            raise
+            print e
+            return False, fail, e
 
         
 

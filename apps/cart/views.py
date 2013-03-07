@@ -11,7 +11,7 @@ from apps.cart.models import Purchase
 from django.contrib.auth.decorators import login_required
 from apps.racks.models import ItemType
 from fedex.base_service import FedexError
-
+from django.template.loader import render_to_string
 from retailers.models import ShippingType
 
 from apps.cart.models import Item as CartItem
@@ -253,13 +253,9 @@ def shopper_return_item(request):
     return HttpResponse(json.dumps(response, ensure_ascii=False), mimetype='application/json')
 
 
-
-
-
-
-
 def validate_address(request):
 
+    user_profile = request.user.get_profile()
     try:
         default_ccS = CCToken.objects.filter(user=request.user).order_by('-last_modified')
     except:
@@ -269,8 +265,6 @@ def validate_address(request):
         default_shipping = ShippingInfo.objects.filter(customer=user_profile).filter(is_default=True)[0]
     except:
         default_shipping = None
-
-
 
     ctx =  {  
                 'default_ccS': default_ccS,
@@ -280,17 +274,77 @@ def validate_address(request):
             }
 
     if request.method == "POST":
-        shipping_form = ShippingInfoForm(request.POST, instance=default_shipping)
+        shipping_form = ShippingInfoForm(request.POST)
         if shipping_form.is_valid():
             shipping_info = shipping_form.save(commit=False)
             shipping_info.customer=user_profile
-            if not default_shipping:
-                shipping_info.is_default=True
+            shipping_info.is_default=True
             shipping_info.save()
-            return HttpResponseRedirect(reverse('express_checkout'))
+
+            shipping_addresses = ShippingInfo.objects.filter(customer=user_profile)
+            return HttpResponse(json.dumps(
+                {
+                    'success':True,
+                    'html': render_to_string("includes/shipping_address_choices.html", {'shipping_addresses':shipping_addresses})
+                }
+
+            ), mimetype='application/json') 
+
+            
         else:
-            print shipping_form.errors
-            ctx['shipping_form'] = shipping_form
+            return HttpResponse(json.dumps(
+                {
+                    'success':False,
+                    'html': render_to_string("includes/shipping_address_form.html", {'shipping_form':shipping_form})
+                }
+
+            ), mimetype='application/json') 
+            
+           
+
+    return direct_to_template(request,  "cart/payment.html", ctx)
+
+def validate_cc(request,*args,**kw):
+
+    user_profile = request.user.get_profile()
+    try:
+        default_ccS = CCToken.objects.filter(user=request.user).order_by('-last_modified')
+    except:
+        default_ccS = None
+
+
+    ctx =  {  
+                'default_ccS': default_ccS,
+                'mode':settings.WEPAY_STAGE,
+                'wepay_client_id':settings.WEPAY_CLIENT_ID,
+            }
+
+
+
+    ppp = WePayHandleCC(**kw)
+    if ppp.confirm_card_info(request=request,return_valid=True):
+        default_ccS = CCToken.objects.filter(user=request.user).order_by('-last_modified')
+
+        return HttpResponse(json.dumps(
+                {
+                    'success':True,
+                    'html': render_to_string("includes/credit_card_choices.html", {'default_ccS':default_ccS})
+                }
+
+            ), mimetype='application/json') 
+    else:
+        return HttpResponse(json.dumps(
+                {
+                    'success':False,
+                    'html': "There was a strange error processing your card.  Maybe try a different one?"
+                }
+
+            ), mimetype='application/json') 
+
+
+
+
+           
 
     return direct_to_template(request,  "cart/payment.html", ctx)
 
@@ -298,18 +352,20 @@ def validate_address(request):
 @login_required
 def wpp(request):    
     cart = Cart(request)
+    user_profile = request.user.get_profile()
     
     
     try:
         default_ccS = CCToken.objects.filter(user=request.user).order_by('-last_modified')
     except:
         default_ccS = None
-    
-
     try:
         default_shipping = ShippingInfo.objects.filter(customer=user_profile).filter(is_default=True)[0]
     except:
         default_shipping = None
+
+
+    shipping_addresses = ShippingInfo.objects.filter(customer=user_profile)
 
 
 
@@ -332,7 +388,8 @@ def wpp(request):
                     'default_ccS': default_ccS,
                     'mode':settings.WEPAY_STAGE,
                     'wepay_client_id':settings.WEPAY_CLIENT_ID,
-                    'shipping_form': ShippingInfoForm(request.POST, instance=default_shipping)
+                    'shipping_form': ShippingInfoForm(),
+                    'shipping_addresses':shipping_addresses,
 
                     },
                           # what you're selling
@@ -345,17 +402,45 @@ def wpp(request):
 
 
 @login_required
+def place_order(request):
+    
+    if request.method == "POST":
+        cart = Cart(request)
+    #current_cart.cart.save()
+    
+        result,error = cart.checkout(request)
+
+        if result is True:
+            return HttpResponse(json.dumps(
+                {
+                    'success':True,
+                    'redirect': '/cart/success'
+                }
+
+            ), mimetype='application/json') 
+        else:
+            return HttpResponse(json.dumps(
+                {
+                    'success':False,
+                    'error': str(error)
+                }
+
+            ), mimetype='application/json')  
+
+
+
+@login_required
 def wpp_success(request):
     
-    current_cart = Cart(request)
+    # current_cart = Cart(request)
     #current_cart.cart.save()
     
     try:        
-        current_cart.checkout()
-        purchase_objects = Purchase.objects.filter(cart=current_cart.cart)
-        print 'found ',len(purchase_objects), 'purchase objects'
+        # current_cart.checkout()
+        # purchase_objects = Purchase.objects.filter(cart=current_cart.cart)
+        # print 'found ',len(purchase_objects), 'purchase objects'
         return render_to_response('cart/purchased.html', 
-                                  {'cart': Cart(request), 'purchase': purchase_objects, 'checkout':purchase_objects[0].checkout }, 
+                                  # {'cart': Cart(request), 'purchase': purchase_objects, 'checkout':purchase_objects[0].checkout }, 
                                   context_instance=RequestContext(request) )
     except: 
         return render_to_response('cart/error.html', 

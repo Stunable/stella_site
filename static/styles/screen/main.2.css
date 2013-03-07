@@ -582,6 +582,11 @@ a:hover, form .btn:hover { color:#8D8791;}
 	width:100%;
 	min-width:828px;
 }
+
+.cart .container-box{
+	background-color:white;
+	padding:20px;
+}
 .content.cart #cart-item-list{
 	width:60%;
 	min-width:558px;
@@ -706,7 +711,9 @@ table.retailer-item-group{
 	font-size:.8em;
 }
 
-
+.content.cart form{
+	margin-top:20px;
+}
 
 #payment_shipping_info{
 	min-width:880px;
@@ -716,7 +723,7 @@ table.retailer-item-group{
 }
 
 
-#payment_shipping_info .errorlist{
+#payment_shipping_info .errorlist,.form_error{
 	color:red;
 	font-size:.8em;
 }
@@ -724,20 +731,22 @@ table.retailer-item-group{
 #payment_shipping_info #payment-form-container{
 	width:50%;
 	float:right;
+	white-space: nowrap;
 }
 
 #payment_shipping_info #payment-form-container form#payment-form{
 	margin-top:20px;
 }
 
-form#payment-form.hidden{
+.cart.content form.hidden {
 	display:none;
 }
 
 
 #payment_shipping_info #shipping-form-container{
-	width:50%;
+	width:45%;
 	float:left;
+	margin:10px;
 }
 
 .existing_payment_option{
@@ -952,6 +961,8 @@ MODAL CSS
 	min-width:200px;
 }*/
 
+
+
 .close-modal {
 	position: absolute;
 	top: 10px;
@@ -967,9 +978,47 @@ MODAL CSS
 }
 
 
+ul.address_confirm{
+	white-space: nowrap;
+	margin:10px;
+}
+
+
+
+.address_confirm li{
+	display:inline;
+	margin:0px;
+}
+
+.address_confirm li.heading{
+	font-size:.8em;
+	color:black;
+	font-weight:400;
+}
+
+.address_confirm li.diff{
+	color:red;
+}
+
+.address_confirm .address_action{
+	float:right;
+	display:inline;
+	padding:4px;
+	width:60px;
+	text-align:center;
+}
+
+form .info_modal{
+	/*display:none;*/
+}
+
+.retailers form>div>.errorlist,.retailers form>div>.form_errors,.cart form>div>.errorlist,.cart>div>.form_errors{
+	display:none;
+}	
 
 .modal.current.info_modal{
 	max-width:50%;
+	min-width:508px;
 	padding:20px;
 	overflow-y:auto;
 	background-color:white;
