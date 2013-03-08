@@ -88,37 +88,19 @@
             
         {% endblock %}
 
-                
+                           
+
                 
                 <div class="global" id="header">
                         <a href="/" class="logo"></a>
                         
-                      <!--SOCIAL MEDIA ICON LINKS -->
-                        <ul class="horizontal-list icon-list social">
-                            <li>
-                              {% if request.user.is_authenticated %}
-                               <a class="logout-button" href="/accounts/logout">logout</a>
-                              {% else %}
-                                <a class="login-check" data-href="/">login</a>
-                              {% endif %}
-                            </li>
-                            <li class="navlink">
-                                <a href="http://twitter.com/stunable" title="Follow Stunable on Twitter." class="icon" id="nav-twitter">Twitter</a>
-                            </li>
-                            <li class="navlink">
-                                <a href="https://plus.google.com/u/0/b/100141127984777292620/100141127984777292620/posts" title="Add Stunable to Google+." class="icon" id="nav-googleplus">Google+</a>
-                            </li>
-                            <li class="navlink">
-                                <a href="http://facebook.com/stunable" title="Subscribe to Stunable on Facebook." class="icon" id="nav-facebook">Facebook</a>
-                            </li>
-                        </ul><!--/.horizontal-list -->
-                        <!--NAVIGATION LINKS -->
+
                     
                         {% block local_nav %} <!--LOCAL NAVIGATION LINKS-->
                           {% if request.subdomain == 'stylists' %}
                               {% include "includes/retailer_nav.html" %}
                           {% else %}
-                            {% comment %}  {% include "includes/user_nav.html" %}{% endcomment %}
+                              {% include "includes/user_nav.html" %}
                           {% endif %}
                         {% endblock %}
                         
@@ -164,11 +146,7 @@
                                 {# <a href="/login/facebook/"><div class="" style="cursor:pointer"></div>login with facebook</a> #}
                               {% endif %}
                             </li>
-                            {% if request.user.is_authenticated %}
-                            <li id="settings">
-                              <a href="/accounts/profile">settings</a>
-                            </li>
-                            {% endif %}
+                            
                              {% endblock %}
                           </ul>
                         </div>
@@ -300,16 +278,16 @@
  -->
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery-ui-1.8.22.custom.min.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.spritely-0.6.1.js" ></script>
+
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/chosen.jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.form.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.flip.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.touchcarousel-1.1.js"></script>
+
+
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.modal.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.validate.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.damonzoom.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.damonscroll.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}javascript/portamento-min.js"></script>
+
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/imageselect.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.isotope.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/stunable.js"></script>

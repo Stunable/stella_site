@@ -1,9 +1,9 @@
-                            <ul class="horizontal-list menu">
+                            <ul id="stunable-top-nav" class="horizontal-list menu">
                                 <li class="navlink" id="nav-about">
-                                    <a href="#" title="Learn more about Stunable." class="text-link">What is Stunable?</a>
-                                    <ul>
+                                    <div><span>About</span></div>
+                                    <ul class="dropdown">
                                         <li>
-                                            <a class="text-link" href="{% url main-about %}">About</a>
+                                            <a class="text-link" href="{% url news_index %}">News</a>
                                         </li>
                                         <li>
                                             <a class="text-link" href="{% url team %}">Team</a>
@@ -37,34 +37,32 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="navlink" id="nav-news">
-                                    <a href="{% url blog_index %}" title="The latest about Stunable."  class="text-link">Blog</a>
-                                </li>
-                                <li class="navlink" id="nav-news">
-                                    <a href="{% url news_index %}" title="The latest about Stunable."  class="text-link">News</a>
-                                </li>
-                                {% if request.user.is_authenticated %}
-                                <li class="navlink" id="nav-trends">
-                                    <a href="{% url home %}" title="Share your style." class="text-link">Shop</a>
-                                </li>
-                                <li class="navlink" id="nav-trends">
-                                    <a href="{% url trend_notice_modal %}" title="Share your style." class="text-link item-ref">Trends({{ trends_unseen_count }})</a>
-                                </li>
                                 <li class="navlink" id="nav-account">
-                                    <a href="{% url profile_edit %}" title="Go to your Account Preferences." class="text-link">Account</a>
-                                </li>
-                                <li class="navlink" id="nav-account">
-                                    {# href="{% url get_cart %}"  #}
-                                    <a title="Cart" class="text-link cart_slide_trigger">Cart(<span id="cartcount">{{cart.count}}</span>)</a>
-                                    <div id="cart_slide"> 
-                                        <div id="cart_contents_container">
-                                            {% include "cart/cart_slideout.html" %}
+                                    {% if request.user.is_authenticated %}
+                                        <div class="personbox" ><img src="{{request.user.get_profile.avatar_image.url }}">
+                                            <span>{{ request.user.first_name }}</span>
                                         </div>
-                                    </div>
+                                    {% else %}
+                                        <div class="personbox" ><img style="float:left" src="/static/upload/default_avatar.gif">
+                                            <a data-href="/" class="login-check"><span><a style="color:#666" data-href="/" class="login-check">Login</span>&nbsp&nbsp&nbsp&nbsp&nbsp</a>
+                                        </div>
+                                    {% endif %}
+                                    {% if request.user.is_authenticated %}
+                                    <ul class="dropdown offset-left">
+                                        <li>
+                                            <a class="text-link" href="{% url profile_edit %}">Account Settings</a>
+                                        </li>
+                                        <li>
+                                            <a class="text-link" href="{% url order_history %}">Order History</a>
+                                        </li>
+                                        <li class="navlink" id="nav-signout">
+                                            <a href="/accounts/logout" title="Sign out of Stunable." class="text-link">Log Out</a>
+                                        </li>
+                                        
+                                    </ul>
+                                    {% endif %}
                                 </li>
-                                <li class="navlink" id="nav-signout">
-                                    <a href="{% url auth_logout %}" title="Sign out of Stunable." class="text-link">Log Out</a>
-                                </li>
-                                {% endif %}
+                                
+
                             </ul><!--/.horizontal-list -->
                 
