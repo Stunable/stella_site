@@ -514,10 +514,10 @@ def retailer_modal(request, item_id, template="retailers/retailer_information_mo
 def order_history(request, template='orders/order_history.html'):
     ctx = {'purchase_actions': 'orders/retailer_purchase_actions.html'}
     try:
-        retailer_profile = get_retailer_profile(request)
-        shipping_types = ShippingType.objects.all()
-        form = RetailerEditForm(instance=retailer_profile)
-        ctx.update({'retailer_profile': retailer_profile, 'shipping_types': shipping_types, 'form': form})
+        # retailer_profile = get_retailer_profile(request)
+        # shipping_types = ShippingType.objects.all()
+        # form = RetailerEditForm(instance=retailer_profile)
+        # ctx.update({'retailer_profile': retailer_profile, 'shipping_types': shipping_types, 'form': form})
     
         _from = request.GET.get('from')
         _to = request.GET.get('to')

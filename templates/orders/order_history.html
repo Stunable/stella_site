@@ -64,7 +64,7 @@
 {% for checkout in checkouts %}
         <table id="checkout-table">
             <tr>
-                <th>picture</th>
+                <th>Picture</th>
                 <th style="width: 17%;">Purchase Date</th>
                 <th style="width: 35%;">Product Name</th>
                 <th style="width: 7%;">Price</th>
@@ -80,15 +80,11 @@
 
             {% ifchanged purchase.purchased_at|date:"YMDH" %}
             <tr>
-
-                <th style="width: 17%;">{{purchase.purchased_at|date:"D, b d - h:m:s"}}</th>
-                <th style="width: 35%;"></th>
-                <th style="width: 7%;"></th>
+                <th colspan="3" style="width: 17%;">Reference number: {{purchase.ref}}</th>
+                
+                <th colspan="5">Purchased by : {{purchase.purchaser}}</th>
                 <th></th>
                 <th></th>
-                <th style="width: 7%;"></th>
-                <th style="width: 20%;"></th>
-                <th style="width: 10%;"></th>
             </tr>
             {% endifchanged %}
            
@@ -124,153 +120,3 @@
 
 {% block content1 %}{% endblock %}
 
-{% block extra_script %}
-<script>
-    $(document).ready(function() {
-        $('.update-price-btn').hide();
-        $('#datepicker-from, #datepicker-to').datepicker({
-            dateFormat : 'yy-mm-dd'
-        }).change(function() {
-            window.location.href = '{% url retailer_order_history %}?from=' + $('#datepicker-from').val() + '&to=' + $('#datepicker-to').val();
-        });
-
-        $("#checkout-table input").keyup(function() {
-            var value = $(this).val();
-            var btn = $(this).parent().parent().find('.update-price-btn');
-            btn.attr('href', $(this).parent().parent().find('.path').val() + value)
-            btn.show();
-        });
-        
-        $('.order-action').click(function(){
-            $('.order-action ul').hide();
-            $(this).find('ul').toggle();
-        });
-        
-        $('.order-update').change(function(e){
-            
-            if ($(this).val() == "return-item")
-                $('<div id="dialog-confirm" title="Confirmation"><p>Are you sure you want to return this item and credit ' + $(this).parent().find('.total-price').val() + '  back to ' +  $(this).parent().find('.purchaser-name').val() + ' ?</p></div>').dialog({
-                    resizable: false,
-                    height:250,
-                    modal: true,
-                    buttons: {
-                        "Yes": function() {
-                            $( this ).dialog( "close" );
-                            $.ajax({
-                              type: 'POST',
-                              url: '/order/update/' + item_pk + '/',
-                              data: {status: 'return-item'},
-                              success: function() { $('<div id="dialog-confirm" title="Success"><p>Updated successfully</p></div>').dialog({
-                                    height: 140,
-                                    modal: true
-                                }); },
-                            });
-                            
-                        },
-                        No: function() {
-                            $( this ).dialog( "close" );
-                        }
-                    }
-                });
-            
-            item_pk = $(this).parent().find('.item-pk').val();
-            if ($(this).val() == "shipped")
-                $('<div id="dialog-confirm" title="Confirmation"><p>Are you sure you want to mark this order as shipped ?</p></div>').dialog({
-                    resizable: false,
-                    height:250,
-                    modal: true,
-                    buttons: {
-                        "Yes": function() {
-                            $( this ).dialog( "close" );
-                            
-                            $.ajax({
-                              type: 'POST',
-                              url: '/order/update/' + item_pk + '/',
-                              data: {status: 'shipped'},
-                              success: function() { $('<div id="dialog-confirm" title="Success"><p>Updated successfully</p></div>').dialog({
-                                    height: 140,
-                                    modal: true
-                                }); },
-                            });
-                             
-                        },
-                        No: function() {
-                            $( this ).dialog( "close" );
-                        }
-                    }
-                });
-            
-            if ($(this).val() == "ship")
-                $('<div id="dialog-confirm" title="Confirmation"><p>Are you sure you want to mark this order as shipment requested ?</p><p>Tracking number:<p style="display:none; color:red;" class="tracking-number-alert">required</p><input type="text" name="" id="input-tracking-number"/></p> </div>').dialog({
-                    resizable: false,
-                    height:350,
-                    modal: true,
-                    buttons: {
-                        "Yes": function() {
-                            if ($('#input-tracking-number').val().length == 0) {
-                                $('.tracking-number-alert').show();
-                                return;
-                            } 
-                            $.ajax({
-                                  type: 'POST',
-                                  url: '/order/update/' + item_pk + '/',
-                                  data: { status: 'shipped', tracking_number: $('#input-tracking-number').val() },
-                                  success: function(data) { $('<div id="dialog-confirm" title="Success"><p>Updated successfully</p></div>').dialog({
-                                        height: 140,
-                                        modal: true
-                                  });
-                                
-                                  $('#item-status-' + item_pk).val('shipped');
-                                   
-                                },
-                                error: function(data) {
-                                    $('<div id="dialog-confirm" title="Error"><p>Failed to update. Please retry later</p></div>').dialog({
-                                        height: 140,
-                                        modal: true
-                                    });
-                                }
-                            });
-                            
-                            $( this ).dialog( "close" );
-                            $( "#dialog:ui-dialog" ).dialog( "destroy" );
-                        },
-                        No: function() {
-                            $( this ).dialog( "close" );
-                        }
-                    },
-                    close: function() {
-                        $(this).remove();
-                    }
-                });
-            
-            if ($(this).val() == "cancel-order-return")
-                $('<div id="dialog-confirm" title="Confirmation"><p>Are you sure you want to cancel this order and credit ' + $(this).parent().find('.total-price').val() + '  back to ' +  $(this).parent().find('.purchaser-name').val() + ' ?</p></div>').dialog({
-                    resizable: false,
-                    height:250,
-                    modal: true,
-                    buttons: {
-                        "Yes": function() {
-                            $( this ).dialog( "close" );
-                            
-                            $.ajax({
-                              type: 'POST',
-                              url: '/order/update/' + item_pk + '/',
-                              data: {status: 'cancel-order-return'},
-                              success: function() { $('<div id="dialog-confirm" title="Success"><p>Updated successfully</p></div>').dialog({
-                                    height: 140,
-                                    modal: true
-                                }); },
-                            });
-                            
-                        },
-                        No: function() {
-                            $( this ).dialog( "close" );
-                        }
-                    }
-                });
-        });
-    });
-
-</script>
-
-{% endblock %}

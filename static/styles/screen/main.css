@@ -162,12 +162,12 @@ strong {
 }
 
 
-h4, h5, .left-panel li {
+h4, h5, .retailer-left-panel li {
 	font-family: 'Advent Pro', sans-serif;
 	font-size: 15px;
 }
 
-.left-panel li {
+.retailer-left-panel li {
 	text-transform: uppercase;
 }
 
@@ -756,7 +756,7 @@ body {
 	float:right;
 }
 
-.internal .left-panel {
+.internal .retailer-left-panel {
 	width: 220px;
 	display: inline-block;
 	height: 602px;
@@ -1055,17 +1055,17 @@ body {
 	position: relative;
 }
 
-.left-panel {
+.retailer-left-panel {
   overflow: visible; 
   position: relative;
 }
 
-.gallery .left-panel {
+.gallery .retailer-left-panel {
 	position: relative;
 	top: 39px;
 }
 
-.gallery .left-panel .panel-content{
+.gallery .retailer-left-panel .panel-content{
 	border: 1px solid #d4cdd4;
 	border-bottom-left-radius: 6px;
 	border-bottom-right-radius: 6px;
@@ -1081,7 +1081,7 @@ body {
 	padding-top: 10px;
 }
 
-.gallery .left-panel .active {
+.gallery .retailer-left-panel .active {
 	background: none;
 	border-bottom: none;
 	background-color: white;
@@ -1209,7 +1209,7 @@ top: 62px;*/
 
 
 
-.left-panel .panel-content {
+.retailer-left-panel .panel-content {
 
 -webkit-box-shadow: 4px 7px 10px 0 rgba(77,77,77,0.48);
 -moz-box-shadow: 4px 7px 10px 0 rgba(77,77,77,0.48);
@@ -1218,11 +1218,11 @@ background-color: white;
 height: 593px;
 }
 
-.left-panel .one-tab{
+.retailer-left-panel .one-tab{
 	width: 125px;
 }
 
-.left-panel .fake-tab{
+.retailer-left-panel .fake-tab{
 	float: left;
 	height: 29px;
 	position: absolute;
@@ -1239,25 +1239,25 @@ height: 593px;
 	border-top-right-radius: 6px;	
 }
 
-.left-panel .begin-tab {
+.retailer-left-panel .begin-tab {
 	border-top-left-radius: 6px;	
 	border-right: none;
 }
 
-.left-panel .end-tab {
+.retailer-left-panel .end-tab {
 	border-top-right-radius: 6px;
 	width: 83px;
 	float: right;
 }
 
-.left-panel .my-closet-content {
+.retailer-left-panel .my-closet-content {
 	margin-top: 10px;
 }
-.left-panel .my-closet-menu {
+.retailer-left-panel .my-closet-menu {
 	padding: 0 15px;
 }
 
-.left-panel .my-closet-menu li{
+.retailer-left-panel .my-closet-menu li{
 	margin: 0;
 	font-size: 13px;
 	color: #939393;
@@ -1266,7 +1266,7 @@ height: 593px;
 	border-top: 1px #e9e9e9 dashed;
 }
 
-.left-panel .my-closet-menu li a, .left-panel .list-header a {
+.retailer-left-panel .my-closet-menu li a, .retailer-left-panel .list-header a {
 	margin: 0;
 	font-size: 14px;
 	color: #F05C68;
@@ -1276,40 +1276,40 @@ height: 593px;
 	text-transform: lowercase;
 }
 
-.left-panel .my-closet-menu li a:hover, .left-panel .list-header a:hover {
+.retailer-left-panel .my-closet-menu li a:hover, .retailer-left-panel .list-header a:hover {
 	text-decoration:underline;
   	color: #F05C68;
 }
 
-.left-panel .list-header{
+.retailer-left-panel .list-header{
 	margin: 0 10px;
 }
 
-.left-panel .active-menu {
+.retailer-left-panel .active-menu {
 	background: #EEE;
 }
 
-.left-panel .friend-list li {
+.retailer-left-panel .friend-list li {
 	padding: 6px 6px;
 	margin: 0;
 	border-bottom: 1px #DDD dashed
 }
 
-.left-panel .friend-list li {
+.retailer-left-panel .friend-list li {
 	border-top: 1px #e9e9e9 dashed
 }
 
-.left-panel .friend-search-box[placeholder]  {
+.retailer-left-panel .friend-search-box[placeholder]  {
 	font-family: 'Helvetica', sans-serif;
 }
 
-.left-panel .bootstrap .friend-search-box {
+.retailer-left-panel .bootstrap .friend-search-box {
 	padding: 4px 11px;
 	margin: 0 7px 10px 12px;
 	width: 162px;
 }
 
-.left-panel .link li {
+.retailer-left-panel .link li {
 	margin: 0;
 	font-size: 13px;
 	color: #fd858f;
@@ -1318,15 +1318,15 @@ height: 593px;
 	border-top: none;
 }
 
-.left-panel .friend-list li {
+.retailer-left-panel .friend-list li {
 	line-height: 25px;
 }
 
-.left-panel .friend-list li:hover {
+.retailer-left-panel .friend-list li:hover {
 	background-color: #f9f9fa;
 }
 
-.left-panel li .friend-name  {
+.retailer-left-panel li .friend-name  {
 	display: inline-block;
 	width: 60%;
 	cursor: pointer;
@@ -1340,18 +1340,18 @@ a.friend-name{
 	margin:8px;
 }
 
-.left-panel .friend-img-item {
+.retailer-left-panel .friend-img-item {
 	vertical-align: middle;
 }
 
-.left-panel .separator {
+.retailer-left-panel .separator {
 	width: 100%;
 	height: 1px;
 	border-bottom: 1px #E9E9E9 dashed;
 	margin-bottom: 1px;
 }
 
-.left-panel .list-header{
+.retailer-left-panel .list-header{
 	text-transform: uppercase;
 	padding: 0 5px;
 	font-weight: 600;
@@ -1360,7 +1360,7 @@ a.friend-name{
 	color: #707072;
 }
 
-.left-panel .panel-tab {
+.retailer-left-panel .panel-tab {
 	background: url(../../images/gui/tab-bg-partial.png) repeat-x left top;
 	border: 1px solid #d4cdd4;
 	
@@ -1374,11 +1374,11 @@ a.friend-name{
 	background-color: white;
 }
 
-.left-panel .begin-tab {	
+.retailer-left-panel .begin-tab {	
 	border-right: none;
 }
 
-.left-panel .friend-img {
+.retailer-left-panel .friend-img {
 	width: 21px;
 	height: 21px;
 	border-radius: 4px;
@@ -1386,16 +1386,16 @@ a.friend-name{
 	float: left;
 }
 
-.left-panel .tab {
+.retailer-left-panel .tab {
 	display: inline-block;
 	height: 31px;
 }
 
-.left-panel .tab .text-link {
+.retailer-left-panel .tab .text-link {
 	padding: 0;
 }
 
-.left-panel p{
+.retailer-left-panel p{
 	margin:4px;
 }
 
@@ -3601,11 +3601,11 @@ body .item-name {
 	border:1px solid #F05C68 !important;
 }
 
-.left-panel ul.my-closet-menu{
+.retailer-left-panel ul.my-closet-menu{
 	max-height:150px;
 	overflow:auto;
 }
-.left-panel .my-closet-menu li{
+.retailer-left-panel .my-closet-menu li{
 	border-bottom: 0px #E9E9E9 dashed;
 	white-space: nowrap;
 	overflow: hidden;
@@ -3614,7 +3614,7 @@ body .item-name {
 	-ms-text-overflow: ellipsis;
 }
 
-.left-panel .my-closet-menu li.drop_item{
+.retailer-left-panel .my-closet-menu li.drop_item{
 	margin-bottom:3px;
 	margin-top:2px;
 	padding-top:4px;
@@ -3629,7 +3629,7 @@ body .item-name {
 	padding-bottom:-3px !important;
 	margin:0px !important;
 }
-.left-panel .my-closet-menu li.drop_item_here {
+.retailer-left-panel .my-closet-menu li.drop_item_here {
 	background-color:#eee;
 	padding-top:4px;
 	padding-left:4px;
@@ -3637,11 +3637,11 @@ body .item-name {
 	border-radius:3px;
 }
 
-.left-panel .my-closet-menu li.drop_item_here:nth-child(even){
+.retailer-left-panel .my-closet-menu li.drop_item_here:nth-child(even){
 	background-color:#fee;
 }
 
-.left-panel .my-closet-menu li.drop_item_here a{
+.retailer-left-panel .my-closet-menu li.drop_item_here a{
 	/*color:white;*/
 	/*padding:5px;*/
 }
