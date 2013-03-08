@@ -432,17 +432,15 @@ def place_order(request):
 @login_required
 def wpp_success(request):
     
-    # current_cart = Cart(request)
+    current_cart = Cart(request,checked_out=True)
     #current_cart.cart.save()
     
     try:        
-        # current_cart.checkout()
-        # purchase_objects = Purchase.objects.filter(cart=current_cart.cart)
-        # print 'found ',len(purchase_objects), 'purchase objects'
         return render_to_response('cart/purchased.html', 
-                                  # {'cart': Cart(request), 'purchase': purchase_objects, 'checkout':purchase_objects[0].checkout }, 
+                                  {'cart': current_cart, 'checkouts':current_cart.checkout_set.all() }, 
                                   context_instance=RequestContext(request) )
     except: 
+        raise
         return render_to_response('cart/error.html', 
                                   {'error': "Failed to validate payment" }, 
                                   context_instance=RequestContext(request) )

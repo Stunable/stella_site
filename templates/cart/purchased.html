@@ -1,24 +1,82 @@
-{% extends 'user_base.html' %}
-{% block left_panel %}{%endblock%}
-{% block body_class %}common{% endblock %}
-{% block content-class%}round-corner-shadow{%endblock%}
-{% block content %}
+{% extends 'cart/cart.html' %}
+
+{% block inner_content %}
+
 	<div class="section intro">
-	<h2><span>Thank You!</span></h2>
-	</div>
-	
-	<div class="section body-copy">
-    <p>
-    Your order has been placed.
-   	</p>
 	<p>
-	Order confirmation: #{{checkout.ref}}
+    {{CMS.purchase_confirmation|safe}}
+   	</p>
+
+	 <div id="cart-item-list" class="purchased">
+	 	 
+	{% for checkout in checkouts %}
+		<div class="cart-retailer-group">
+
+			<table cellpadding="0" cellspacing="0" width="100%" border="0" class="retailer-item-group">
+                        <tr>
+                            <td colspan="2" class="retailer-header">
+                                {{checkout.retailer}}
+                            </td>
+                            <td style="text-align:right" class="cart-item-shipping-edit">
+                                reference number: <span class="reference-number"> {{checkout.ref}} </span>
+                            </td>
+                            <td>
+                                <div class="shipping-options">
+                                {% with checkout.purchase_set.all.0.shipping_method as ship %}
+                                	{{ship.name}} Shipping<br>
+                                	Estimated Arrival:{{ship.estimated_arrival_time}}<br>
+                                	Return Policy:{% if checkout.retailer.not_accept_refund %}
+                                	Final Sale
+                                	{% else %}
+                                	Return within 14 Days
+                                	{% endif %}
+
+                                {% endwith %}
+                                </div>
+                            </td>
+                            
+
+                        </tr>
+                        {% for purchase in checkout.purchase_set.all %}
+                        {% with item=purchase.item %}
+                        <tr class="item-name cart-item-{{item.id}}">
+                            <td colspan="4">
+                                {{ item.item_name }}
+                            </td>
+                        </tr>
+                        <tr class="item cart-item-{{item.id}}">  
+                           
+                            <td class="item-img">
+                                <img src="{{item.picture}}">
+                            </td>
+                            <td colspan="2" class="item-info">
+                                <br>size:<span>{{ item.item_variation.size }}</span>
+                                <br>color:<span>{{ item.item_variation.color }}</span>
+                                <br>quantity:<span>{{ item.quantity }}</span>
+                            </td>
+                                
+                            <td>
+                                ${{ item.total_price|floatformat:2 }}
+                            </td>
+                                
+                        </tr>
+                        {% endwith %}
+                        {% endfor %}
+                    </table>
+        {% endfor %}
+
+</div>
+
 	</p>
 	<p>
+	<div id="purchased_bottom">
 	You will receive an email with your shipping and tracking information soon.
 	</p>
+	
 	<p class="bootstrap">
+	<a href="/shop/wishlist" class="btn btn-primary clearfix">Check out your Wish List</a>
 	<a href="/" class="btn btn-primary clearfix">Continue shopping</a>
+	</div>
 	</p>
 	</br>
 	</br>

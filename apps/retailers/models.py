@@ -30,6 +30,10 @@ class ShippingType(models.Model):
     vendor = models.CharField(max_length=64)
     description = models.TextField(null=True, blank=True)
     is_default = models.BooleanField(default=False)
+
+    price_description = models.CharField(max_length=200, default="Free Today Only!")
+    estimated_price = models.DecimalField(default=0.00,max_digits=10, decimal_places=2)
+    estimated_arrival_time = models.CharField(max_length=200,default="3-5 days")
     
     def __unicode__(self):
         return self.name

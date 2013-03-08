@@ -60,6 +60,9 @@ class Kart(models.Model):
     def __unicode__(self):
         return unicode(self.creation_date)
 
+    def available_shipping_options(self):
+        return get_shipping_options()
+
     def add_item_variation(self,item_variation):
         
         ki,created         = KartItem.objects.get_or_create(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
@@ -191,7 +194,9 @@ class Kart(models.Model):
 
 
     @staticmethod
-    def get_by_request(request):
+    def get_by_request(request,checked_out):
+        if checked_out:
+            return request.session.get('checked_out_cart') 
         if not request.session.get('cart',None):
             request.session['cart'] = Kart.objects.create()
         return request.session.get('cart')
@@ -208,7 +213,7 @@ class Kart(models.Model):
         return self.kartitem_set.all().count()
 
     def items(self):
-        return self.kartitem_set.select_related('retailer','item_variation','item_variation__size','shipping_method').order_by('-date_created')
+        return self.kartitem_set.select_related('retailer','item_variation','item_variation__size','shipping_method').order_by('retailer')
 
 
     def checkout(self,request):
@@ -225,6 +230,9 @@ class Kart(models.Model):
         print success,item_list,error
 
         if success:
+            self.checked_out = True
+            request.session['checked_out_cart'] = self
+            del(request.session['cart'])
             return True,None
         else:
             return False,error
@@ -238,8 +246,8 @@ class Kart(models.Model):
 
 
 
-def Cart(request):
-    return Kart.get_by_request(request)
+def Cart(request,checked_out = False):
+    return Kart.get_by_request(request,checked_out)
 
 
 

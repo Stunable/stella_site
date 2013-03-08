@@ -472,7 +472,7 @@ class ItemType(models.Model,DirtyFieldsMixin):
 
     def __unicode__(self):
         color = self.custom_color_name
-        return "%s %s, Size %s" % (color, self.item.name, self.size.size)
+        return "%s in %s, Size: %s" %  (self.item.name, color, self.size.size)
 
 
     @property

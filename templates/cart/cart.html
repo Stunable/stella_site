@@ -26,10 +26,10 @@
 
 <div class="content cart" id="page-content">
     <div id="stunable-tabs-nav">
-        <ul id="tabs-container" class="nav tabbed clearfix">
-            <li class="active"> <a href="/cart">Shopping Cart</a></li> >
-            <li> <a href="/cart/details">Payment/Shipping</a></li> >
-            <li> <a href="/cart/success">Place Order</a></li>
+        <ul class="cart-progress">
+            <li {% if request.path == '/cart/'%}class="active"{% endif %}>1. Shopping Cart</li> >
+            <li {% if shipping_form %} class="active"{% endif %}>2. Payment/Shipping</li> >
+            <li {% if checkouts %} class="active"{% endif %}>3. Confirmation</li>
         </ul>
     </div>
 
@@ -69,8 +69,7 @@
            <a class="btn big btn-primary login-check" data-href="/cart/details">checkout</a>
             </div>
         </div>  
-        <ul id="cart-item-list">
-
+        <div id="cart-item-list">
             {% regroup cart by retailer as item_list %}
             {% for retailer_group in item_list %}
                 <div class="cart-retailer-group">
@@ -82,8 +81,9 @@
                             </td>
                             <td>
                                 <div class="shipping-options">
-                                <label>regular shipping (5-7 days, Free!)</label><br>
-                                <label>expedited shipping (3-5 days, $20)</label>
+                                {% for m in cart.available_shipping_options %}
+                                    <label>{{m.name}} {{m.estimated_arrival_time}} {{m.price_description}}</label><br>
+                                {% endfor %}
                                 </div>
                             </td>
                             <td class="cart-item-shipping-edit">
@@ -119,7 +119,7 @@
                     </table>
                 </div>
             {% endfor %}
-        </ul>
+        </div>
         
         {% endif %}
     </div>

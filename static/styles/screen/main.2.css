@@ -453,6 +453,22 @@ a:hover, form .btn:hover { color:#8D8791;}
 			background-color:rgb(250,250,250);
 		}
 
+		.content.cart div#stunable-tabs-nav{
+			overflow:normal;
+		}
+
+		.content.cart div#stunable-tabs-nav li.active{
+			background-color:#FF67F0;
+			color:white;
+		}
+
+
+		.content.cart div#stunable-tabs-nav .cart-progress>li{
+			border:1px solid #999;
+			margin:20px;
+
+		}
+
 		.content.carousel div#stunable-tabs-nav li.tab.active{
 			/*width:100px;*/
 			border:1px 1px 1px 0 solid #ccc;
@@ -577,10 +593,10 @@ a:hover, form .btn:hover { color:#8D8791;}
 
 /*CART*/
 
-.cart .page-inner-content{
+.cart .inner-page-content{
 	white-space: nowrap;
 	width:100%;
-	min-width:828px;
+	min-width:868px;
 }
 
 .cart .container-box{
@@ -590,6 +606,12 @@ a:hover, form .btn:hover { color:#8D8791;}
 .content.cart #cart-item-list{
 	width:60%;
 	min-width:558px;
+}
+
+.content.cart #cart-item-list.purchased{
+	width:auto;
+	max-width:80%;
+
 }
 .content.cart #cart-totals{
 	float:right;
@@ -621,6 +643,11 @@ a:hover, form .btn:hover { color:#8D8791;}
 	font-weight: bold;
 }
 
+.content.cart .reference-number{
+	font-weight:bold;
+	color:#666;
+}
+
 #cart-totals .btn{
 	margin:20px;
 	font-size:1.1em;
@@ -633,8 +660,7 @@ table.retailer-item-group{
 }
 
 .cart-retailer-group{
-	border:1px solid #aaa;
-	border-radius: 8px;
+
 	margin:20px;
 }
 
@@ -758,6 +784,12 @@ table.retailer-item-group{
 	margin-left:40%;
 	margin-right:40%;
 	margin-top:20px;
+}
+#purchased_bottom{
+	margin:20px;
+}
+#purchased_bottom a{
+	margin:40px;
 }
 
 
