@@ -423,9 +423,13 @@ a:hover, form .btn:hover { color:#8D8791;}
     padding-left:40px;
     /*padding-right:10px;*/
     box-shadow: -4px 0px 4px 4px rgba(0,0,0,.2);
-    overflow:auto;
-}
+    overflow-x:auto;
+    overflow-y:hidden;
 
+}
+#page-content.carousel{
+	overflow-x:hidden;
+}
 #page-content #nav-handle{
 	position:absolute;
 	left:0px;
@@ -455,18 +459,19 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 		#stunable-tabs-nav ul{
 			width:100%;
-			overflow-x:auto;
+			overflow-x:hidden;
 			overflow-y:hidden;
 			white-space: nowrap;
 		}
 
 		#stunable-tabs-nav div#new_tab_field{
-			width:9%;
-			float:right;
+			
 			height:20px;
-			padding:14px;
-			margin-left:8px;
-			margin-right:8px;
+			margin-top:6px;
+		}
+
+		.carouselbox #stunable-tabs-nav {
+			position:absolute;
 		}
 
 
@@ -541,7 +546,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 
 		.inner-page-content #container{
-			margin-top:32px;
+			margin-top:72px;
 			min-height:500px;
 			width:100%;
 		}
@@ -641,6 +646,36 @@ a:hover, form .btn:hover { color:#8D8791;}
 				color: #888;
 			}
 
+
+			.carousel .directional .btn {
+				position:absolute;
+				top:85%;
+				height:31px;
+				width:33px;
+				margin:0;
+				background:transparent url(../../images/gui/icon-arrows.png) no-repeat 0 0;
+				text-indent:-999em;
+				cursor:pointer;
+				z-index:3;
+				overflow:hidden;
+			}
+			.carousel .directional .btn:hover {
+			/*	background-color:#E84E4B;*/
+			}
+			.carousel .directional .previous {
+				left:0;
+				margin-left: 30px;
+			}
+			.carousel .directional .next {
+				right:10px;
+				margin-right: 30px;
+				background-position:-66px 0;
+			}
+
+			.carousel .directional .next, .carousel .directional .previous  {
+				padding: 0;
+				border: none;
+			}
 /*CART*/
 
 .cart .inner-page-content{

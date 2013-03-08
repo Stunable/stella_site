@@ -28,7 +28,7 @@
 
 	
 	<br>
-	{% if default_ccS|length > 0%}Or <a data-target="#payment-form" class="click-reveal">enter a new credit card</a>
+	{% if default_ccS|length > 0%}Or <a data-target="#payment-form" class="click-toggle">enter a new credit card</a>
 	{% else %}
 	<span style="color:black">Enter a Credit Card</span>
 	{% endif %}
@@ -168,7 +168,7 @@
 	
 	
 	
-	{% if shipping_addresses|length > 0%}Or <a data-target="#shipping-form" class="click-reveal">Enter a new Shipping Address</a>
+	{% if shipping_addresses|length > 0%}Or <a data-target="#shipping-form" class="click-toggle">Enter a new Shipping Address</a>
 	{% else %}
 	<br>
 	<span style="color:black">Enter a new Shipping Address</span>

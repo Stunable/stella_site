@@ -580,7 +580,7 @@ def stella_choice(request, template='racks/carousel.html'):
     
 def prepare_ctx(query_set, ctx):
     length = query_set.count()
-    items = query_set[:12]
+    items = query_set[:4]
     rack_items_list = []
 
     for i in xrange(0, len(items), 3):

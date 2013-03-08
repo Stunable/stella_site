@@ -107,8 +107,13 @@ var stunable = {
 
         })
 
-        $('.click-reveal').click(function(e){
-          $($(this).data('target')).toggle();
+        // $('.click-toggle').click(function(e){
+        //   $($(this).data('target')).toggle();
+        // })
+
+        $('.click-show').click(function(e){
+          e.preventDefault();
+          $($(this).data('target')).show().focus();
         })
 
     }

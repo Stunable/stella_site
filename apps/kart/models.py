@@ -176,22 +176,27 @@ class Kart(models.Model):
 
 
     def totals_as_dict(self):
-        if self.sub_total == 0:
-            self.calculate()
-        return dict(
-            total=self.sub_total,
-            tax=self.total_tax,
-            shipping_and_handling=self.total_shipping,
-            processing=self.total_fees,
-            grand_total=self.grand_total
-        )
+        try:
+            if self.sub_total == 0:
+                self.calculate()
+            return dict(
+                total=self.sub_total,
+                tax=self.total_tax,
+                shipping_and_handling=self.total_shipping,
+                processing=self.total_fees,
+                grand_total=self.grand_total
+            )
+        except:
+            pass
 
     def totals_as_pretty_dict(self):
-        d = self.totals_as_dict()
-        for k in d.keys():
-            d[k] = '%0.2f'%d[k]
-        return d
-
+        try:
+            d = self.totals_as_dict()
+            for k in d.keys():
+                d[k] = '%0.2f'%d[k]
+            return d
+        except:
+            pass
 
     @staticmethod
     def get_by_request(request,checked_out):

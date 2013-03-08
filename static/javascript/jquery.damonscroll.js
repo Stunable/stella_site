@@ -79,6 +79,13 @@
                 });
             }
 
+            $('.btn.next').click(function(e){
+                 self.go_to_nextpage();
+            })
+            $('.btn.prev').click(function(e){
+                 self.go_to_prevpage();
+            })
+
         },
         go_to_nextpage: function(number){
             this.handler.animate($(this.element).width());
