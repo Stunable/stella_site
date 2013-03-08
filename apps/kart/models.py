@@ -16,23 +16,12 @@ from django.forms.widgets import RadioSelect
 from apps.accounts.models import ShippingInfo,CCToken
 
 
-
-ALL_SHIPPING_OPTIONS = None
-DEFAULT_SHIPPING = None
-
 def get_default_shipping():
-    global DEFAULT_SHIPPING
+    return ShippingType.objects.get(is_default=True)
 
-    if not DEFAULT_SHIPPING:
-        DEFAULT_SHIPPING = ShippingType.objects.get(is_default=True)
-    return DEFAULT_SHIPPING
 
 def get_shipping_options():
-    global ALL_SHIPPING_OPTIONS
-
-    if not ALL_SHIPPING_OPTIONS:
-        ALL_SHIPPING_OPTIONS = ShippingType.objects.all()
-    return ALL_SHIPPING_OPTIONS
+    return ShippingType.objects.all()
 
 
 CART_ID = 'CART-ID'

@@ -522,7 +522,8 @@ def order_history(request, template='orders/order_history.html'):
         _from = request.GET.get('from')
         _to = request.GET.get('to')
 
-        checkouts = request.user.retailer_checkout_set.all()
+        retailer = get_retailer_profile(request)
+        checkouts = retailer.user.retailer_checkout_set.all()
         
         if not _from and not _to:
             checkouts = checkouts.filter(complete=False)
