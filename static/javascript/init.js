@@ -26,6 +26,7 @@ var stunable = {
       });
 
        $('.login-check').click(function(e){
+        e.preventDefault();
           var dest = $(this).data('href')
           $.post('/accounts/check_login',function(data){
               if (data.result){

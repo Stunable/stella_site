@@ -30,6 +30,10 @@
                         <li class="stunable-tab tab">
                             <a class="click-show" data-target="#tab-adder" href="" title="" class="text-link"><span>+</span><input id="tab-adder" style="display:none" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text"></a>
                         </li>
+                        {% else %}
+                            <li class="stunable-tab tab">
+                            <a data-href="/" class="login-check"><span><a data-href="/" href="" class="login-check">+</span>&nbsp&nbsp&nbsp&nbsp&nbsp</a>
+                        </li>
                         {% endif %}
                         
                    
