@@ -88,11 +88,11 @@
 
         },
         go_to_nextpage: function(number){
-            this.handler.animate($(this.element).width());
+            this.handler.animate($(this.element).width()-$(this.element).children().first().width()*2);
         },
         go_to_prevpage: function(number){
             console.log('prev')
-            this.handler.animate(-$(this.element).width());
+            this.handler.animate(-$(this.element).width()-$(this.element).children().first().width()*2);
         },
         onScroll: function() {
             if (this.handler.get_percentage(this.element).p > this.options.threshold_percent){
