@@ -356,13 +356,13 @@ a:hover, form .btn:hover { color:#8D8791;}
 	width:220px;
 	height:700px;
 	display:inline;
-	background-color:gray;
+	/*background-color:gray;*/
 	text-align:center;
 	/*padding:20px*/
 }
 
 	#left-panel>ul{
-		background-color:#bbb;
+		/*background-color:#bbb;*/
 		border:1px solid #EC67F0;
 
 
@@ -371,7 +371,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 	#left-panel>ul>li{
 		margin-top:10px;
 		margin-bottom:10px;
-		background-color:#eee;
+		background-color:#EC67F0;
 		min-height:90px;
 		width:100%;
 		border-radius: 8px 0px 0px 8px;
@@ -415,7 +415,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 	position: absolute;
     top: 0;
     bottom: 0;
-    left: 220px;
+    left: 110px;
     right: 0;
     /*background-color:white;*/
     background: white url(/static/images/gui/background.png) repeat 0 0;

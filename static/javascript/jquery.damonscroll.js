@@ -16,7 +16,7 @@
         defaults = {
             orientation: "horizontal",
             target_element: null,
-            threshold_percent: 75,
+            threshold_percent: 55,
             nextkey : $('.next'),
             prevkey : $('.prev'),
             keynav : true
@@ -44,7 +44,7 @@
             this.is_animating = false;
             this.anim_duration = 2000;
             this._next_page = this.options.first_page || 2;
-            this.num_per_page = this.options.num_per_page || 6;
+            this.num_per_page = this.options.num_per_page || 4;
             this._add_function= this.options.add_function || function(items){
                 this._t.append(items);
             }
@@ -88,11 +88,12 @@
 
         },
         go_to_nextpage: function(number){
+            this.procure_elements();
             this.handler.animate($(this.element).width()-$(this.element).children().first().width()*2);
         },
         go_to_prevpage: function(number){
             console.log('prev')
-            this.handler.animate(-$(this.element).width()-$(this.element).children().first().width()*2);
+            this.handler.animate(-$(this.element).width()+$(this.element).children().first().width()*2);
         },
         onScroll: function() {
             if (this.handler.get_percentage(this.element).p > this.options.threshold_percent){
