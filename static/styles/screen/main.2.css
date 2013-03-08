@@ -70,7 +70,7 @@ body {
 }
 
 body {
-	background: white url(/static/images/gui/background.png) repeat 0 0;
+	/*background: white url(/static/images/gui/background.png) repeat 0 0;*/
 	font-family: 'Helvetica', sans-serif;
 }
 
@@ -362,8 +362,9 @@ a:hover, form .btn:hover { color:#8D8791;}
 }
 
 	#left-panel>ul{
+		margin-top:50%;
 		/*background-color:#bbb;*/
-		border:1px solid #EC67F0;
+		/*border:1px solid #666;*/
 
 
 	}
@@ -371,10 +372,10 @@ a:hover, form .btn:hover { color:#8D8791;}
 	#left-panel>ul>li{
 		margin-top:10px;
 		margin-bottom:10px;
-		background-color:#EC67F0;
+		background-color:#eee;
 		min-height:90px;
 		width:100%;
-		border-radius: 8px 0px 0px 8px;
+		/*border-radius: 8px 0px 0px 8px;*/
 		cursor:pointer;
 	}
 
@@ -386,6 +387,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 	}
 
 	#left-panel>ul>li>a div{
+		margin-left:13px;
 		width:1em;
 		text-transform:uppercase;
 		/*height:100%;*/
@@ -415,14 +417,14 @@ a:hover, form .btn:hover { color:#8D8791;}
 	position: absolute;
     top: 0;
     bottom: 0;
-    left: 110px;
+    left: 40px;
     right: 0;
     /*background-color:white;*/
     background: white url(/static/images/gui/background.png) repeat 0 0;
     height:700px;
     padding-left:40px;
     /*padding-right:10px;*/
-    box-shadow: -4px 0px 4px 4px rgba(0,0,0,.2);
+    /*box-shadow: -4px 0px 4px 4px rgba(0,0,0,.2);*/
     overflow-x:auto;
     overflow-y:hidden;
 
@@ -622,12 +624,12 @@ a:hover, form .btn:hover { color:#8D8791;}
 			height: 18px;
 			text-overflow: ellipsis;
 			white-space: nowrap;
-			color: #F05C68;
+			/*color: #F05C68;*/
 			
 			text-transform: uppercase;
 			font-weight: bold;
 			font-family: 'Advent Pro', sans-serif;
-			font-size: 1.1em;
+			font-size: .9em;
 		}
 
 		div.item .item-ref{

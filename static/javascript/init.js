@@ -52,8 +52,8 @@ var stunable = {
       init_choiceclicks($('.choiceclick'))
       init_refsubmits($('.refsubmit'))
 
-      $('.cart_slide_trigger').hover(reveal_cart)
-      $('.cart_slide_trigger').click(reveal_cart)
+      // $('.cart_slide_trigger').hover(reveal_cart)
+      // $('.cart_slide_trigger').click(reveal_cart)
 
       // initTouch()
 
@@ -116,6 +116,10 @@ var stunable = {
           e.preventDefault();
           $($(this).data('target')).show().focus();
         })
+
+
+        var box = $('#login_box').clone()
+        box.modal({clickClose:false,escapeClose:false,showClose:false})   
 
     }
     ,shop: function(){            

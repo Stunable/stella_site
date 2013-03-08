@@ -1,17 +1,19 @@
 
 <div title="drag me" id="list_item_{{item.id}}" class="touchcarousel-item item">
 
-	<div class="item-label"><span>{{item.brand}}</span></div>
-	<div class="item-name"><a rel="modal:open" data-options="item_modal_options" class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.slug %}">{{item.name}}</a></div>
-
+	
 	<div class="picbox">
 	<a class="item-ref pic-container wp drag_item touchable"  rel="modal:open" data-options="item_modal_options" href="{% url item_modal item.slug %}" data-value="{{ item.id }}" >    
 		 <img src="{{ item.get_image.medium.url }}"> 
 	</a>
 	</div>
 
+	
 	<div class="carousel_price_tag">
 	    {{item.price_range_text|safe}}
 	</div>
+	<div class="item-name"><a rel="modal:open" data-options="item_modal_options" class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.slug %}">{{item.name}}</a></div>
+
+	<div class="item-label"><span>{{item.brand}}</span></div>
 
 </div>
