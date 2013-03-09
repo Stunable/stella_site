@@ -9,23 +9,26 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding model 'Tag'
-        db.create_table('tagging_tag', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50, db_index=True)),
-        ))
-        db.send_create_signal('tagging', ['Tag'])
+        try:
+            db.create_table('tagging_tag', (
+                ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+                ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50, db_index=True)),
+            ))
+            db.send_create_signal('tagging', ['Tag'])
 
-        # Adding model 'TaggedItem'
-        db.create_table('tagging_taggeditem', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('tag', self.gf('django.db.models.fields.related.ForeignKey')(related_name='items', to=orm['tagging.Tag'])),
-            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
-            ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
-        ))
-        db.send_create_signal('tagging', ['TaggedItem'])
+            # Adding model 'TaggedItem'
+            db.create_table('tagging_taggeditem', (
+                ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+                ('tag', self.gf('django.db.models.fields.related.ForeignKey')(related_name='items', to=orm['tagging.Tag'])),
+                ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
+                ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+            ))
+            db.send_create_signal('tagging', ['TaggedItem'])
 
-        # Adding unique constraint on 'TaggedItem', fields ['tag', 'content_type', 'object_id']
-        db.create_unique('tagging_taggeditem', ['tag_id', 'content_type_id', 'object_id'])
+            # Adding unique constraint on 'TaggedItem', fields ['tag', 'content_type', 'object_id']
+            db.create_unique('tagging_taggeditem', ['tag_id', 'content_type_id', 'object_id'])
+        except:
+            print 'tags table already in DB'
 
 
     def backwards(self, orm):
