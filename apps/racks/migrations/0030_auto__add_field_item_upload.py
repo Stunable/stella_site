@@ -6,6 +6,9 @@ from django.db import models
 
 
 class Migration(SchemaMigration):
+    depends_on = (
+        ("retailers", "0016_auto__add_productupload__add_uploaderror"),
+    )
 
     def forwards(self, orm):
         # Adding field 'Item.upload'

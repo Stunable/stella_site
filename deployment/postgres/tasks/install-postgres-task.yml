@@ -3,13 +3,13 @@
 - name: update apt repo
   action: command /usr/bin/apt-get update
 
-- name: ensure packages are installed
-  action: apt pkg=$item state=installed
-  with_items:
-      - build-essential
-      - postgresql
-      - libpq-dev
-      - python-psycopg2
+# - name: ensure packages are installed
+#   action: apt pkg=$item state=installed
+#   with_items:
+#       - build-essential
+#       - postgresql
+#       - libpq-dev
+#       - python-psycopg2
 
 - name: create postgres user
   user: name=postgres comment="postgres user"

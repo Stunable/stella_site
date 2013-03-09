@@ -19,15 +19,4 @@
   - name: supervisor installed
     apt: pkg=supervisor
 
-  - name: setup $app_name in supervisor
-    template: src=server_setup/templates/supervisor.j2 dest=/etc/supervisor/conf.d/$app_name.conf 
-
-  - name: restart supervisor
-    command: service supervisor force-reload
-
-  - name: write sites-enabled.conf 
-    action: template src='nginx/templates/nginx.sites-enabled.j2' dest='/etc/nginx/sites-enabled/$app_name.conf'
-    notify:
-      - restart nginx
-
 

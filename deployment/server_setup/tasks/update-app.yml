@@ -1,14 +1,27 @@
+  - name: setup $app_name in supervisor
+    template: src=server_setup/templates/supervisor.j2 dest=/etc/supervisor/conf.d/$app_name.conf 
+
+  - name: restart supervisor
+    command: service supervisor force-reload
+
+  - name: write sites-enabled.conf 
+    action: template src='nginx/templates/nginx.sites-enabled.j2' dest='/etc/nginx/sites-enabled/$app_name.conf'
+    notify:
+      - restart nginx
 
   - name: git clone
-    action: git repo=$repo dest=$project_root/project
+    action: git repo=$repo dest=$project_root/project version=$repo_version
     sudo_user: ubuntu
 
   - name: install python libraries
     pip: requirements=$project_root/project/requirements.txt virtualenv=$project_root
 
   - name: link admin media
-    file:  dest=$project_root/project/$static_path/admin src=$project_root/lib/python2.7/site-packages/django/contrib/admin/static/admin state=link
+    file:  dest=$project_root/project/$static_path/admin src=$project_root/lib/python2.7/site-packages/django/contrib/admin/media/ state=link
     sudo_user: ubuntu
+
+  - name: write local_settings
+    action: template src='server_setup/templates/local_settings.py.j2' dest=$manage_path/local_settings.py
 
   - name: syncdb
     command: $project_root/bin/python manage.py syncdb chdir=$manage_path --noinput
