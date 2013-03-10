@@ -11,10 +11,10 @@ server{
 
 
     listen 80;
-     server_name {{inventory_hostname}} stylists.{{app_name}} {{app_name}} www.{{app_name}};
+     server_name {{app_name}};
 #    ssl                  on;
-#    ssl_certificate      conf/dev.{{app_name}}.crt;
-#    ssl_certificate_key  conf/dev.{{app_name}}.key;    
+#    ssl_certificate      conf/{{app_name}}.crt;
+#    ssl_certificate_key  conf/{{app_name}}.key;    
 #    ssl_session_cache    shared:SSL:10m;
 #    ssl_session_timeout  10m;
 

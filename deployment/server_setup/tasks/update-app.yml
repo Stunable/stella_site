@@ -20,6 +20,9 @@
     file:  dest=$project_root/project/$static_path/admin src=$project_root/lib/python2.7/site-packages/django/contrib/admin/media/ state=link
     sudo_user: ubuntu
 
+  - name: write gunicorn conf
+    action: template src='server_setup/templates/gunicorn.conf.py.j2' dest=$manage_path/gunicorn.conf.py
+
   - name: write local_settings
     action: template src='server_setup/templates/local_settings.py.j2' dest=$manage_path/local_settings.py
 
@@ -33,6 +36,7 @@
 
   - name: start gunicorn
     supervisorctl: name=$app_name:gunicorn state=started
+    ignore_errors: yes
 
   - name: restart gunicorn
     supervisorctl: name=$app_name:gunicorn state=restarted

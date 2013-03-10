@@ -67,11 +67,9 @@ body {
 	background-repeat:no-repeat;
 	background-attachment:fixed;
 	color:#888;
-}
-
-body {
-	/*background: white url(/static/images/gui/background.png) repeat 0 0;*/
+/*background: white url(/static/images/gui/background.png) repeat 0 0;*/
 	font-family: 'Helvetica', sans-serif;
+	overflow-y:hidden;
 }
 
 
@@ -431,7 +429,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 }
 
 #page-content.cart{
-	overflow-y:ui-autocomplete;
+	overflow-y:auto;
 }
 #page-content.carousel{
 	overflow-x:hidden;
