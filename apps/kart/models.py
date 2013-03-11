@@ -219,17 +219,23 @@ class Kart(models.Model):
 
     @staticmethod
     def get_by_request(request,checked_out):
-        if checked_out:
-            K = Kart.objects.get(id=request.session.get('checked_out_cart'))
+        try:
+            if checked_out:
+                K = Kart.objects.get(id=request.session.get('checked_out_cart'))
+                K.request = request
+                return K
+            if not request.session.get('cart',None):
+                K = Kart.objects.create()
+                request.session['cart'] = K.id
+            else:
+                K = Kart.objects.get(id=request.session['cart'])
             K.request = request
             return K
-        if not request.session.get('cart',None):
+        except:
+            delete(request.session['cart'])
             K = Kart.objects.create()
             request.session['cart'] = K.id
-        else:
-            K = Kart.objects.get(id=request.session['cart'])
-        K.request = request
-        return K
+            return K
 
     def __iter__(self):
         return iter(self.items())
