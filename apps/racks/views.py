@@ -609,7 +609,7 @@ def prepare_ctx_with_num(query_set, ctx, num):
     ctx['page_count'] = (length + num-1)/num
     ctx['rack_items_list'] = rack_items_list
 
-@login_required
+
 def new(request, template="racks/new_carousel.html"):
     ctx = {}
     ctx['categories'] = Category.objects.all()
