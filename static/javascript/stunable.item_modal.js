@@ -41,29 +41,27 @@ function setItemDetailsEvent(){
 
 			});
 			
-			// $('.modal-item-details .item-color-list span').click(function() {
-			// 	if (!$(this).hasClass('selected')) {
-			// 		$('.modal-item-details .item-color-list span').removeClass('selected');
-			// 		$(this).addClass('selected');
-			// 	}
-			// 	$('.click_to_cart').data('href',$(this).data('href'))
-			// });
-
 			$('#add-to-cart-link, .buy-now, #add-to-wishlist-link').click(function(e) {
 
 				e.preventDefault();
 
-				if (($('.modal-item-details .item-size-list .selected').length == 0 || $('.modal-item-details .item-color-list .selected').length == 0)
-					&& !$(this).data('href')) { //IF this is a wishlist modal window, we already know the variation to add to cart
-					alert('Please select size and color');
-				} else {
-					console.log($(this));
-					$.post($(this).data('href'),function(data){
+				if ($('.item-size-list span.selected').length && $('.item-color-list span.selected').length ){
+					var selsize = $('.item-size-list span.selected'),
+						selcolor = $('.item-color-list span.selected');
+
+					var variation_id = $('.'+selsize.data('name')+'.'+selcolor.data('name')).val();
+
+					$.post($(this).data('href')+variation_id,function(data){
 						$.modal.close()
 						var cs = reveal_cart(e,data,true);
 					},'html')
-
 				}
+
+				return false;
+
+					
+
+				
 			});
 
 		}

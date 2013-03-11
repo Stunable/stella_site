@@ -53,7 +53,7 @@ def buy_rack(request, rack_id):
         cart.add(inventory, product.get_current_price(), 1, inventory.size.size, inventory.color.name)
     return redirect(reverse('get_cart'))
 
-def add_to_cart(request, product_id, quantity, size=None, wishlist_only=False):
+def add_to_cart(request, product_id, wishlist_only=False):
     if request.method == 'POST':
         inventory = ItemType.objects.get(id=product_id)
         cart = Cart(request)    
@@ -68,13 +68,12 @@ def add_to_cart(request, product_id, quantity, size=None, wishlist_only=False):
     return redirect(reverse('get_cart'))
 
 
-def update_wishlist(request, product_id, quantity, size=None):
-    return add_to_cart(request,product_id,quantity, size, wishlist_only=True)
+def update_wishlist(request, product_id):
+    return add_to_cart(request,product_id,wishlist_only=True)
 
 @login_required
 def update_cart(request, product_id):
     if request.method == 'POST':
-        quantity = request.POST.get('quantity', 1)
         inventory = ItemType.objects.get(id=product_id)
         cart = Cart(request)
         cart.update(inventory, inventory.item.get_current_price(), quantity, inventory.size.size, inventory.color.name)

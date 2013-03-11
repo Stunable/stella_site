@@ -7,11 +7,11 @@ urlpatterns = patterns('cart.views',
         view='buy_rack',
         name='buy_rack'
     ), 
-    url(r'^add_to_cart/(?P<product_id>\d+)/(?P<quantity>\d+)/(?P<size>.*)$',
+    url(r'^add_to_cart/(?P<product_id>\d+)$',
         view='add_to_cart',
         name='add_to_cart'
     ),       
-    url(r'^update_wishlist/(?P<product_id>\d+)/(?P<quantity>\d+)/(?P<size>.*)$',
+    url(r'^update_wishlist/(?P<product_id>\d+)$',
         view='update_wishlist',
         name='update_wishlist'
     ),                  

@@ -68,14 +68,14 @@
 				<div class="item-actions">						
 					<div class="item-size">
 						<div id="variation_choices">
-							<div>SELECT SIZE:</div>
+							<div style="color:black">SELECT SIZE:</div>
 							<div class="item-size-list">
 								{% regroup variations_by_size by size as sizes %}
 									{% for size in sizes %}
 									<span data-target=".color-in-sizes" class="size-in-colors{% for v in size.list %} color-{{v.custom_color_name|slugify}}{% endfor %}" data-name="size-{{size.grouper|slugify}}">
 										<a href="#">{{size.grouper.size}}</a>
 										{% for v in size.list %}
-											<input type="hidden" class="size-{{v.size|slugify}} color-{{v.custom_color_name|slugify}}" val="{{v.id}}">
+											<input type="hidden" class="size-{{v.size|slugify}} color-{{v.custom_color_name|slugify}}" value="{{v.id}}">
 										{% endfor %}
 									</span>
 
@@ -83,7 +83,7 @@
 								{% endfor %}
 							</div>
 							<br>
-							<div>COLOR:</div>
+							<div style="color:black">SELECT COLOR:</div>
 							
 							<div class="item-color-list">
 								{% regroup variations_by_color by custom_color_name as colors %}
@@ -101,11 +101,13 @@
 						<div class="buy-wrapper bootstrap">
 							{% if request.user.is_authenticated %}
 								{% if wished_variation %}
+								{# FOR WISH LIST MODAL #}
 									<a data-callback="remove_and_close" data-target="#list_item_{{wished_variation.id}}" class="btn btn-primary refclick" data-href="{% url update_wishlist wished_variation.id 1 '' %}">Remove From Wishlist</a>
 									<a class="btn btn-primary" data-href="{% url add_to_cart wished_variation.id 1 '' %}" id="add-to-cart-link">ADD TO CART</a>
 								{% else %}
-									<a class="btn btn-primary click_to_cart" href="{% url update_wishlist item.pk 1 '' %}" id="add-to-wishlist-link">Add To Wish List</a>
-									<a class="btn btn-primary click_to_cart" href="{% url add_to_cart item.pk 1 '' %}" id="add-to-cart-link">ADD TO CART</a>
+								{# FOR NORMAL ITEM MODAL #}
+									<a class="btn btn-primary click_to_cart" data-href="/cart/update_wishlist/" href="" id="add-to-wishlist-link">Add To Wish List</a>
+									<a class="btn btn-primary click_to_cart" data-href="/cart/add_to_cart/" href="" id="add-to-cart-link">ADD TO CART</a>
 								{% endif %}
 							{% endif %}					
 						</div>
