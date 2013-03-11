@@ -41,7 +41,7 @@ urlpatterns = patterns('',
                        url(r'^item/(?P<item_slug>[-\w]+)', item_modal, name='item_modal'),
                        url(r'^wishlist_item/(?P<wishlist_item_id>[-\w]+)?', variation_modal, name='variation_modal'),
 
-                       url(r'^wishlist/?$', wishlist, name='wishlist'),
+                       url(r'^wishlist', wishlist, name='wishlist'),
                        url(r'^jean_submit/', jean_submit, name='jean_submit'),
                        #url(r'^item_add/(?P<rack_id>\d+)', rack_item_add, name="rack_item_add"),
                        #url(r'^item_add_new/(?P<rack_id>\d+)', rack_item_add_new, name="rack_item_add_new"),

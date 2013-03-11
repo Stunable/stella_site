@@ -157,8 +157,12 @@ def trendsetters(request, user_id=None, template='racks/trendsetters.html'):
     return direct_to_template(request, template, ctx)
 
 def wishlist(request):
+    if request.user.is_authenticated():
+        qs = WishListItem.objects.select_related('item').filter(user=request.user)
+    else:
+        qs = WishListItem.objects.none()
 
-    return _all(request,template='racks/wishlist.html',query_set=WishListItem.objects.select_related('item').filter(user=request.user),is_wishlist=True)
+    return _all(request,template='racks/wishlist.html',query_set=qs,is_wishlist=True)
 
 
 @login_required

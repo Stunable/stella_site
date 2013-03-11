@@ -136,13 +136,14 @@
                                   </div>
                               </div>
                             </li>
+                            {% if request.user.is_authenticated %}
                             <li class="drop_item" id="wishlist">
-                              <a href="{% url wishlist %}"><div>wish</div></a>
-                              
+                              <a href="/shop/wishlist/"><div>wish</div></a>
                             </li>
+                            {% endif %}
                             
                             
-                             {% endblock %}
+                          {% endblock %}
                           </ul>
                         </div>
                      
