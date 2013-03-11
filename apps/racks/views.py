@@ -983,14 +983,12 @@ def add_color(request, template="racks/add_color_dialog.html"):
     return direct_to_template(request, template, ctx)
 
 
-@login_required
 def sale_items(request, template="racks/item_list.html"):
 
     # private_racks = Rack.objects.PrivateRacksForUser(user)
     # shared_racks = Rack.objects.SharedRacksForUser(user)
     return _all(request,query_set=Item.objects.filter(is_onsale=True,is_available=True,approved=True),is_wishlist=False)
 
-@login_required
 def recent_added_items(request, template="racks/item_list.html"):
     today = datetime.date.today()
     thirty_days_ago = today - datetime.timedelta(days=30)
