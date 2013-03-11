@@ -126,7 +126,7 @@ var stunable = {
 
         
         // initRackEvents();
-
+        console.log($('.scrollbox').data('orient'))
         $('.scrollbox').damonscroll({
           orientation: $('.scrollbox').data('orient'),
           target_element: $('#container'),

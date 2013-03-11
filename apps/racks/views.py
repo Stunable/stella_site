@@ -603,7 +603,7 @@ def prepare_ctx(query_set, ctx):
 
 def prepare_ctx_with_num(query_set, ctx, num):
     length = query_set.count()
-    items = query_set[:6]
+    items = query_set[:12]
     rack_items_list = []
 
     for i in xrange(0, len(items), num):

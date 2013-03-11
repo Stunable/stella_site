@@ -16,10 +16,11 @@
         defaults = {
             orientation: "horizontal",
             target_element: null,
-            threshold_percent: 75,
+            threshold_percent: 50,
             nextkey : $('.next'),
             prevkey : $('.prev'),
-            keynav : true
+            keynav : true,
+            scrollstep:3,
         };
 
     // The actual plugin constructor
@@ -62,10 +63,10 @@
                 self.onScroll()
             })
 
-            $(this.element).bind("mousewheel",function(ev, delta) {
-                var scrollTop = $(this).scrollTop();
-                $(this).scrollTop(scrollTop-Math.round(delta));
-            });
+            // $(this.element).bind("mousewheel",function(ev, delta) {
+            //     var scrollTop = $(this).scrollTop();
+            //     // $(this).scrollTop(scrollTop-Math.round(delta));
+            // });
 
             if(this.options.keynav) {
                 $(document).bind("keydown.damonscroll", function(e) {              
@@ -88,11 +89,11 @@
 
         },
         go_to_nextpage: function(number){
-            this.handler.animate($(this.element).width());
+            this.handler.next_page();
         },
         go_to_prevpage: function(number){
             console.log('prev')
-            this.handler.animate(-$(this.element).width());
+            this.handler.prev_page();
         },
         onScroll: function() {
             if (this.handler.get_percentage(this.element).p > this.options.threshold_percent){
@@ -118,11 +119,19 @@
                         scrollLeft: $e.scrollLeft()+number
                      }, self.anim_duration,function(){self.is_animating = false;self.post_anim_callback()});
 
+                },
+                next_page: function(){
+                    self.handler.animate($e.width()*.66)
+                }
+                ,prev_page: function(){
+                    self.handler.animate(-$e.width()*.66)
                 }
             }
         },
         vertical:function(el){
+            var self = this
             var $t = this._t;
+            var $e = $(this.element)
             return {
                 get_percentage: function(el){
                     var $element = $(el),
@@ -137,6 +146,12 @@
                         scrollTop: $e.scrollTop()+number
                      }, self.anim_duration,function(){self.is_animating = false;self.post_anim_callback()});
 
+                }
+                ,next_page: function(){
+                    self.handler.animate($e.height()*.66);
+                }
+                ,prev_page: function(){
+                    self.handler.animate(-$e.height()*.66);
                 }
             }
         },
