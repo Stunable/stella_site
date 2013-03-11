@@ -413,8 +413,8 @@ class Item(models.Model,listImageMixin):
         else:
             self.is_available = True
 
-        if not self.price_text:
-            self.set_price_text()
+        # if not self.price_text:
+        #     self.set_price_text()
 
         self.is_onsale = False
         for i in self.types.all():
