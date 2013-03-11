@@ -8,20 +8,7 @@
 {% block content-class%}round-corner-shadow{%endblock%}
 
 {% load thumbnail %}
-{% block left_panel %}
-    <li id="shop" >
-      <a href="/">shop</a>
-    </li>
-    
-    <li class="active" id="cart">
-      <a href="/cart" title="Cart" class="text-link cart_slide_trigger">Cart(<span id="cartcount">{{cart.count}}</span>)</a>
-      <div id="cart_slide"> 
-          <div id="cart_contents_container">
-              {% include "cart/cart_slideout.html" %}
-          </div>
-      </div>
-    </li>
-{% endblock %}
+
 {% block content %}
 
 <div class="content cart" id="page-content">

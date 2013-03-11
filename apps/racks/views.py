@@ -454,8 +454,11 @@ def item(request, template='racks/item_management.html'):
 
 
 
-def variation_modal(request,item_variation_id, template='racks/item_modal.html'):
-    iv = ItemType.objects.select_related('item').get(id=item_variation_id)
+def variation_modal(request,wishlist_item_id, template='racks/item_modal.html'):
+
+    print 'VARIATION MODAL'
+
+    iv = WishListItem.objects.select_related('item').get(id=wishlist_item_id)
     item = iv.item
 
     return item_modal(request, item.slug,ctx={'wished_variation':iv})
@@ -981,12 +984,7 @@ def sale_items(request, template="racks/item_list.html"):
 
     # private_racks = Rack.objects.PrivateRacksForUser(user)
     # shared_racks = Rack.objects.SharedRacksForUser(user)
-
-
-
-    qs = Item.objects.filter(is_onsale=True)
-    ctx = {'items': qs, "title": "On Sale"}
-    return direct_to_template(request, template, ctx)
+    return _all(request,query_set=Item.objects.filter(is_onsale=True,is_available=True,approved=True),is_wishlist=False)
 
 @login_required
 def recent_added_items(request, template="racks/item_list.html"):

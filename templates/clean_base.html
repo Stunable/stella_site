@@ -125,11 +125,11 @@
                             
                             
                             {% block left_panel %}
-                            <li class="active" id="shop" >
-                              <a href="/"><div>s h o p</div></a>
+                            <li id="shop" >
+                              <a href="/"><div>shop</div></a>
                             </li>
                             <li class="drop_item"  id="cart">
-                              <a href="/cart" title="Cart" class="text-link cart_slide_trigger"><div>C a r t </div></a>
+                              <a href="/cart" title="Cart" class="text-link cart_slide_trigger"><div>cart</div></a>
                               <div id="cart_slide"> 
                                   <div id="cart_contents_container">
                                       {% include "cart/cart_slideout.html" %}
@@ -137,17 +137,10 @@
                               </div>
                             </li>
                             <li class="drop_item" id="wishlist">
-                              <a href="{% url wishlist %}"><div>w i s h l i s t</div></a>
-                              wishlist
-                            </li>
-                            <li id="friends">
-                              friends
-                              {% if request.user.is_authenticated %}
+                              <a href="{% url wishlist %}"><div>wish</div></a>
                               
-                              {%else%}
-                                {# <a href="/login/facebook/"><div class="" style="cursor:pointer"></div>login with facebook</a> #}
-                              {% endif %}
                             </li>
+                            
                             
                              {% endblock %}
                           </ul>

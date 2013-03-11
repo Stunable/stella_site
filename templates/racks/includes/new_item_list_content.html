@@ -5,7 +5,7 @@
 		<div class="picbox">
 
 		<a class="item-ref pic-container wp drag_item touchable"  rel="modal:open" data-options="item_modal_options" 
-		{% if is_wishlist %}href="{% url variation_modal wishlistitem.item_variation.id %}"
+		{% if is_wishlist %}href="{% url variation_modal wishlistitem.id %}"
 			{%else%}href="{% url item_modal item.slug %}"
 		{% endif %} data-value="{{ item.id }}" >    
 			
@@ -17,7 +17,9 @@
 		<div class="carousel_price_tag">
 		    {{item.price_range_text|safe}}
 		</div>
-		<div class="item-name"><a rel="modal:open" data-options="item_modal_options" class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.slug %}">{{item.name}}</a></div>
+		<div class="item-name"><a rel="modal:open" data-options="item_modal_options" class="item-ref top-ref" data-value="{{ item.id }}" {% if is_wishlist %}href="{% url variation_modal wishlistitem.id %}"
+			{%else%}href="{% url item_modal item.slug %}"
+		{% endif %}>{{item.name}}</a></div>
 
 		<div class="item-label"><span>{{item.brand}}</span></div>
 

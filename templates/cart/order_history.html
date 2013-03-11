@@ -3,29 +3,6 @@
 {% block body_class %}common{% endblock %}
 {% block content-class%}round-corner-shadow{%endblock%}
 
-{% block left_panel %}
-<style>
-	.gallery .left-panel {
-		height: 200px;
-		padding: 10px 0 0 0;
-	}
-	.gallery #page-content {
-		padding-right: 10px;
-		width: 886px;
-	}
-
-</style>
-<div class="left-panel round-corner-shadow">
-    <ul class="my-closet-menu link">
-        <li >
-            <a href="{% url profile_edit %}">Settings</a>
-        </li>
-        <li class="active" style="background-color: #eee;">
-            <a href="{% url order_history %}">Order history</a>
-        </li>
-    </ul>
-</div>
-{% endblock %}
 
 {% block content %}
 <style>

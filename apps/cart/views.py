@@ -109,7 +109,7 @@ def get_cart(request, template="cart/cart.html"):
     return direct_to_template(request, template, {})
 
 @login_required
-def order_history(request, template='orders/order_history.html'):
+def order_history(request, template='orders/user_order_history.html'):
     ctx = {'purchase_actions': 'orders/user_purchase_actions.html'}
     try:
         # shipping_types = ShippingType.objects.all()

@@ -75,7 +75,7 @@ body {
 
 a { text-decoration:none; }
 
-a, form .btn { color:#EC67F0; }
+a, form .btn { color:#7f10b5; }
 
 a:hover, form .btn:hover { color:#8D8791;}
 
@@ -165,7 +165,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 	}
 
 	#stunable-top-nav .dropdown a{
-		color:#EC67F0;
+		color:#7f10b5;
 	}
 
 	#stunable-top-nav li div{
@@ -254,7 +254,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 
 	.global #stunable-top-nav .dropdown>li:hover{
 		color:white;
-		background-color:#EC67F0;
+		background-color:#7f10b5;
 	}
 
 	.global #stunable-top-nav .dropdown li:hover a{
@@ -371,22 +371,30 @@ a:hover, form .btn:hover { color:#8D8791;}
 		margin-top:10px;
 		margin-bottom:10px;
 		background-color:#eee;
-		min-height:90px;
-		width:100%;
+		height:60px;
+		width:60px;
+		overflow:hidden;
 		/*border-radius: 8px 0px 0px 8px;*/
 		cursor:pointer;
+	}
+
+	#left-panel>ul>li>a{
+		height:60px;
+		width:60px;
 	}
 
 
 	#left-panel>ul>li.active{
 		background-color: white;
-		border:1px solid #EC67F0;
-		min-height:89px;
+		border:1px solid #7f10b5;
+		height:59px;
 	}
 
+
 	#left-panel>ul>li>a div{
-		margin-left:13px;
-		width:1em;
+		text-align: center;
+		padding-top:10px;
+		width:100%;
 		text-transform:uppercase;
 		/*height:100%;*/
 	}
@@ -415,7 +423,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 	position: absolute;
     top: 0;
     bottom: 0;
-    left: 40px;
+    left: 60px;
     right: 0;
     /*background-color:white;*/
     background: white url(/static/images/gui/background.png) repeat 0 0;
@@ -424,8 +432,12 @@ a:hover, form .btn:hover { color:#8D8791;}
     /*padding-right:10px;*/
     /*box-shadow: -4px 0px 4px 4px rgba(0,0,0,.2);*/
     overflow-x:auto;
-    overflow-y:hidden;
+    overflow-y:auto;
 
+}
+
+#page-content.carousel{
+	overflow-y:hidden;
 }
 
 #page-content.cart{
@@ -498,7 +510,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 
 		.tab-begone:hover{
-			color:#EC67F0;
+			color:#7f10b5;
 		}
 
 		.stunable-tab:hover .tab-begone{
@@ -525,7 +537,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 
 		.content.cart div#stunable-tabs-nav li.active{
-			background-color:#FF67F0;
+			background-color:#7f10b5;
 			color:white;
 		}
 
@@ -612,7 +624,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 
 		.shop .content div.item:hover{
-			border: 2px dashed #EC67F0;
+			border: 2px dashed #7f10b5;
 			padding: 9px;
 		}
 
@@ -1432,7 +1444,7 @@ form .info_modal{
 }
 
 .modal.current .item-size-list a, .modal.current .item-color-list a{
-	color: #c44599;
+	color: #7f10b5;
 	padding: 2px;
 	display: inline-block;
 	font-weight: bold;
@@ -1455,7 +1467,7 @@ form .info_modal{
 
 .modal.current .item-size-list span.selected, .modal.current .item-size-list span:hover{
 	border: 0;
-	background: #c44599;
+	background: #7f10b5;
 }
 
 .modal.current .item-size-list span.selected a, .modal.current .item-size-list span:hover a{
@@ -1466,7 +1478,7 @@ form .info_modal{
 
 .modal.current .item-color-list span.selected, .modal.current .item-color-list span:hover{
 	border: 0;
-	background: #c44599;
+	background: #7f10b5;
 }
 
 .modal.current .item-color-list span.selected a, .modal.current .item-color-list span:hover a{
@@ -1678,12 +1690,12 @@ form .info_modal{
 .bootstrap input[type="tel"]:focus,
 .bootstrap input[type="color"]:focus,
 .bootstrap .uneditable-input:focus {
-  border-color: #EC67F0;
+  border-color: #7f10b5;
   outline: 0 none;
 
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #EC67F0;
-     -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #EC67F0;
-          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #EC67F0;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #7f10b5;
+     -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #7f10b5;
+          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #7f10b5;
 }
 
 .bootstrap input[type="radio"],
@@ -1742,8 +1754,8 @@ form .info_modal{
 .bootstrap input[type="file"]:focus,
 .bootstrap input[type="radio"]:focus,
 .bootstrap input[type="checkbox"]:focus {
-  outline: thin dotted #EC67F0;
-  outline: 5px auto #EC67F0;
+  outline: thin dotted #7f10b5;
+  outline: 5px auto #7f10b5;
   outline-offset: -2px;
 }
 
@@ -1910,12 +1922,12 @@ form .info_modal{
 
 .bootstrap .btn-primary {
   background-color: #D337DA;
-  background-image: -ms-linear-gradient(top, #EC67F0, #D337DA);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#EC67F0), to(#D337DA));
-  background-image: -webkit-linear-gradient(top, #EC67F0, #D337DA);
-  background-image: -o-linear-gradient(top, #EC67F0, #D337DA);
-  background-image: -moz-linear-gradient(top, #EC67F0, #D337DA);
-  background-image: linear-gradient(top, #EC67F0, #D337DA);
+  background-image: -ms-linear-gradient(top, #7f10b5, #D337DA);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#7f10b5), to(#D337DA));
+  background-image: -webkit-linear-gradient(top, #7f10b5, #D337DA);
+  background-image: -o-linear-gradient(top, #7f10b5, #D337DA);
+  background-image: -moz-linear-gradient(top, #7f10b5, #D337DA);
+  background-image: linear-gradient(top, #7f10b5, #D337DA);
   background-repeat: repeat-x;
   border-color: #0055cc #0055cc #003580;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
@@ -1926,12 +1938,12 @@ form .info_modal{
 .bootstrap .btn-primary.active,
 .bootstrap .btn-primary.disabled,
 .bootstrap .btn-primary[disabled] {
-  background-image: -ms-linear-gradient(top, #EC67F0, #D337DA);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#EC67F0), to(#D337DA));
-  background-image: -webkit-linear-gradient(top, #EC67F0, #D337DA);
-  background-image: -o-linear-gradient(top, #EC67F0, #D337DA);
-  background-image: -moz-linear-gradient(top, #EC67F0, #D337DA);
-  background-image: linear-gradient(top, #EC67F0, #D337DA);
+  background-image: -ms-linear-gradient(top, #7f10b5, #D337DA);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#7f10b5), to(#D337DA));
+  background-image: -webkit-linear-gradient(top, #7f10b5, #D337DA);
+  background-image: -o-linear-gradient(top, #7f10b5, #D337DA);
+  background-image: -moz-linear-gradient(top, #7f10b5, #D337DA);
+  background-image: linear-gradient(top, #7f10b5, #D337DA);
   background-repeat: repeat-x;
   border-color: #0055cc #0055cc #003580;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);

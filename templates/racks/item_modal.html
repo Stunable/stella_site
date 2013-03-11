@@ -102,12 +102,12 @@
 							{% if request.user.is_authenticated %}
 								{% if wished_variation %}
 								{# FOR WISH LIST MODAL #}
-									<a data-callback="remove_and_close" data-target="#list_item_{{wished_variation.id}}" class="btn btn-primary refclick" data-href="{% url update_wishlist wished_variation.id 1 '' %}">Remove From Wishlist</a>
-									<a class="btn btn-primary" data-href="{% url add_to_cart wished_variation.id 1 '' %}" id="add-to-cart-link">ADD TO CART</a>
+								<!-- 	<a data-callback="remove_and_close" data-target="#list_item_{{wished_variation.id}}" class="btn btn-primary refclick" data-href="{% url update_wishlist wished_variation.id %}">Remove From Wishlist</a>
+									<a class="btn btn-primary" data-href="{% url add_to_cart wished_variation.id %}" id="add-to-cart-link">ADD TO CART</a> -->
 								{% else %}
 								{# FOR NORMAL ITEM MODAL #}
-									<a class="btn btn-primary click_to_cart" data-href="/cart/update_wishlist/" href="" id="add-to-wishlist-link">Add To Wish List</a>
-									<a class="btn btn-primary click_to_cart" data-href="/cart/add_to_cart/" href="" id="add-to-cart-link">ADD TO CART</a>
+								<!-- 	<a class="btn btn-primary click_to_cart" data-href="/cart/update_wishlist/" href="" id="add-to-wishlist-link">Add To Wish List</a> -->
+								<a class="btn btn-primary click_to_cart" data-href="/cart/add_to_cart/" href="" id="add-to-cart-link">ADD TO CART</a>
 								{% endif %}
 							{% endif %}					
 						</div>
