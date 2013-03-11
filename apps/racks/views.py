@@ -37,6 +37,8 @@ import urllib
 
 from apps.retailers.models import RetailerProfile
 
+from apps.kart.models import WishListItem
+
 
 import random
 
@@ -153,6 +155,10 @@ def trendsetters(request, user_id=None, template='racks/trendsetters.html'):
     
     ctx = {'trendsetter': rack_user, 'racks': racks}
     return direct_to_template(request, template, ctx)
+
+def wishlist(request):
+
+    return _all(request,template='racks/wishlist.html',query_set=WishListItem.objects.select_related('item').filter(user=request.user))
 
 
 @login_required
@@ -488,27 +494,27 @@ def item_modal(request, item_slug, template='racks/item_modal.html'):
     return direct_to_template(request, template, ctx)
 
 def divide_into_list(list_item):
-    first_value = 0
-    last_value = 3
-    rack_items_list = []
+    # first_value = 0
+    # last_value = 3
+    # rack_items_list = []
     
-    c = 0
+    # c = 0
     
-    while first_value < len(list_item):
-        list_3_items = list_item[first_value:last_value]
-        rack_items_list.append(list_3_items)
-        first_value += 3
-        last_value += 3
+    # while first_value < len(list_item):
+    #     list_3_items = list_item[first_value:last_value]
+    #     rack_items_list.append(list_3_items)
+    #     first_value += 3
+    #     last_value += 3
     
-        # for dev only to prevent loading too much data
-        c += 1
-        if c > 20:
-            break
+    #     # for dev only to prevent loading too much data
+    #     c += 1
+    #     if c > 20:
+    #         break
     
-    return rack_items_list
+    return list_item
 
 # @login_required
-def carousel(request, slug, template='racks/carousel.html'):
+def carousel(request, slug, template='racks/new_carousel.html'):
     ctx = {}
     # profile = get_or_create_profile(request)
     
@@ -551,7 +557,7 @@ def tab_handler(request, slug, method=None):
 
 
 @login_required
-def stella_choice(request, template='racks/carousel.html'):
+def stella_choice(request, template='racks/new_carousel.html'):
     ctx = {}
     user = request.user
     ctx['categories'] = Category.objects.all()
@@ -630,27 +636,28 @@ def new(request, template="racks/new_carousel.html"):
 #    return direct_to_template(request, template, ctx)
 
 #@login_required
-def _all(request, slug=None, template='racks/new_carousel.html'):
-    query_set = None
+def _all(request, slug=None, template='racks/new_carousel.html',query_set = None):
     ctx = {}
-    if request.GET.get('item_id', None):
-        linked_item = Item.objects.filter(id=request.GET.get('item_id'))
-        query_set =  linked_item #| Item.objects.filter(brand=linked_item[0].brand).filter(~Q(id =linked_item[0].id))
-    if slug:
-        linked_item = Item.objects.filter(slug=slug)
-        query_set =  linked_item #| Item.objects.filter(brand=linked_item[0].brand).filter(~Q(id =linked_item[0].id))
-
-    # profile = None
-    
-
-    ctx['current'] = "all"
-    get_context_variables(ctx, request)
-    
     if not query_set:
-        # if settings.IS_PROD:
-            #print "PROD"
-            print 'getting items'
-            query_set = Item.objects.select_related('featured_image').filter(approved=True,is_available=True).order_by('?')
+        
+        if request.GET.get('item_id', None):
+            linked_item = Item.objects.filter(id=request.GET.get('item_id'))
+            query_set =  linked_item #| Item.objects.filter(brand=linked_item[0].brand).filter(~Q(id =linked_item[0].id))
+        if slug:
+            linked_item = Item.objects.filter(slug=slug)
+            query_set =  linked_item #| Item.objects.filter(brand=linked_item[0].brand).filter(~Q(id =linked_item[0].id))
+
+        # profile = None
+        
+
+        ctx['current'] = "all"
+        get_context_variables(ctx, request)
+        
+        if not query_set:
+            # if settings.IS_PROD:
+                #print "PROD"
+                print 'getting items'
+                query_set = Item.objects.select_related('featured_image').filter(approved=True,is_available=True).order_by('?')
         # else:
             # query_set = Item.objects.all().order_by('?')
     # print len(query_set)
@@ -687,7 +694,7 @@ def pagination(request, ctx, template, query_set):
             ctx['user_items'] = Item.objects.filter(pk__in=[i.pk for i in user_items])
             ctx['next'] = next   
     else:
-        template = 'racks/new_carousel.html'
+        # template = 'racks/new_carousel.html'
         prepare_ctx_with_num(query_set, ctx, item_per_page)
     
         ctx['next'] = 3

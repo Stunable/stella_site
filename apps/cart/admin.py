@@ -1,13 +1,18 @@
 from django.contrib import admin 
 from apps.cart.models import Cart, Purchase, Checkout,Item,Shipment
-from apps.kart.models import Kart,KartItem
+from apps.kart.models import Kart,KartItem,WishListItem
 from plugins.track_shipment import track_it
 class CartAdmin(admin.ModelAdmin):
-    list_display=('__unicode__','checked_out','ref','grand_total')
+    list_display=('__unicode__','checked_out','ref','grand_total','creation_date')
 
 admin.site.register(Cart,CartAdmin)
 admin.site.register(Kart,CartAdmin)
 admin.site.register(KartItem)
+
+admin.site.register(WishListItem)
+
+
+
 class PurchaseAdmin(admin.ModelAdmin):
     list_display=('cart','item','status','last_tracking_number','delivery_date','transaction_status')
     actions = ('track_package','check_payment_status','capture_payment')

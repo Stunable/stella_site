@@ -9,6 +9,11 @@ urlpatterns = patterns('',
                        url(r'^carousel/stella_choice', stella_choice, name="stella_choice"),
                        # url(r'^shop', _all, name='all'),
                        url(r'^carousel/new', new, name='new'),
+
+                       url(r'^wishlist/?', wishlist, name='wishlist'),
+
+
+
 #                       url(r'^carousel/change_it_up', change_it_up, name="change_it_up"),
                        url(r'^trendsetters/(?P<user_id>\d+)?$', trendsetters, name='trendsetters'),
                        url(r'^tab/(?P<slug>[-\w]+)', carousel, name="tagged_carousel"),

@@ -83,8 +83,6 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
         form.base_fields['featured_image'].queryset = form.base_fields['featured_image'].queryset.filter(item=obj)
         return form
 
-
-
     def unapprove(self,request,queryset):
         for obj in queryset:
             obj.approved = False
@@ -98,16 +96,12 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
 
     def set_price_text(self,request,queryset):
         for obj in queryset:
-            # obj.set_price_text()
+            obj.price_text = None
             obj.save()
-
 
     def make_featured_pretty(self,request,queryset):
         for obj in queryset:
             obj.make_featured_pretty()
-
-
-    
 
     def set_item_slugs(self,request,queryset):
         for obj in queryset:

@@ -58,4 +58,5 @@ django-storages
 johnny-cache
 django-redis-cache
 django-redis-sessions==0.3.0
+django-debug-toolbar
 

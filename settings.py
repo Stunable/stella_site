@@ -45,6 +45,7 @@ AWS_STORAGE_BUCKET_NAME = "images.stunable.com"
 AWS_S3_CUSTOM_DOMAIN = 'images.stunable.com'
 DEFAULT_BUCKET = "images.stunable.com"
 AWS_S3_SECURE_URLS = False
+AWS_QUERYSTRING_AUTH = False
 
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
@@ -162,24 +163,24 @@ MIDDLEWARE_CLASSES = (
      # 'johnny.middleware.QueryCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'apps.common.middleware.SubdomainsMiddleware',    
-    'apps.common.middleware.ProfileMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
     'shopify_app.middleware.LoginProtection',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
-# JOHNNY_MIDDLEWARE_KEY_PREFIX='jc_st'
-# # some johnny settings
-# CACHES = {
-#      'default' : dict(
-#          BACKEND = 'johnny.backends.redis.RedisCache',
-#          LOCATION = '127.0.0.1:6379',
-#          JOHNNY_CACHE = True,
-#      )
-#  }
+JOHNNY_MIDDLEWARE_KEY_PREFIX='jc_st'
+# some johnny settings
+CACHES = {
+     'default' : dict(
+         BACKEND = 'johnny.backends.redis.RedisCache',
+         LOCATION = '127.0.0.1:6379',
+         JOHNNY_CACHE = True,
+     )
+ }
 
 ROOT_URLCONF = 'urls'
 
@@ -248,6 +249,7 @@ INSTALLED_APPS = (
     'djcelery',
     'storages',
     'queued_storage',
+    'debug_toolbar'
 )
 
 BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
@@ -313,6 +315,17 @@ LOGGING = {
     }
 }
 
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.version.VersionDebugPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
+    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+    'debug_toolbar.panels.headers.HeaderDebugPanel',
+    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+    'debug_toolbar.panels.template.TemplateDebugPanel',
+    'debug_toolbar.panels.sql.SQLDebugPanel',
+    'debug_toolbar.panels.signals.SignalDebugPanel',
+    'debug_toolbar.panels.logger.LoggingPanel',
+)   
 
 TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",

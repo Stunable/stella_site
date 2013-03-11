@@ -3,7 +3,7 @@ import os
 import sys
 from decimal import Decimal
 # Create your models here.
-from apps.cart.plugins.rate_request import get_rate as fedex_rate_request
+from django.db import transaction
 
 from django.forms.models import modelform_factory
 
@@ -14,6 +14,7 @@ from django.forms.fields import ChoiceField
 from django.forms.widgets import RadioSelect
 
 from apps.accounts.models import ShippingInfo,CCToken
+import datetime
 
 
 def get_default_shipping():
@@ -34,7 +35,7 @@ from django.conf import settings
 #         self.processing = processing
 
 class Kart(models.Model):
-    creation_date        = models.DateTimeField(auto_now=True)
+    creation_date        = models.DateTimeField(default=datetime.datetime.now())
     checked_out          = models.BooleanField(default=False)
     
     sub_total            = models.DecimalField(default=0.00,max_digits=10, decimal_places=2)
@@ -57,7 +58,7 @@ class Kart(models.Model):
         ki,created         = KartItem.objects.get_or_create(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
         ki.unit_price      = item_variation.get_current_price()
         ki.picture         = item_variation.get_image().small.url
-        ki.item_name       = item_variation.__unicode__()
+        ki.item_name       = item_variation.get_name()
 
         if created:
             ki.shipping_method = get_default_shipping()
@@ -66,8 +67,22 @@ class Kart(models.Model):
             ki.quantity = ki.quantity + 1
             
         ki.save()
+
+        
+        WI = WishListItem(
+            cart=self,
+            item_variation=item_variation,
+            item=item_variation.item,
+            picture = item_variation.get_image(),
+        )
+        if hasattr(self,'request'):
+            if self.request.user.is_authenticated():
+                WI.user = self.request.user
+        WI.save()
         
         self.calculate()
+        self.save()
+
 
     def add(self,item_variation):
         self.add_item_variation(item_variation)
@@ -132,8 +147,8 @@ class Kart(models.Model):
         self.total_tax = tax
         self.total_fees = processing 
         self.total_shipping = shipping       
-        self.grand_total = Decimal(self.total_tax + self.sub_total +self.total_fees + float(self.shipping_and_handling_cost or 0))
-        self.save()
+        self.grand_total = Decimal(self.total_tax + self.sub_total +self.total_fees + float(self.shipping_and_handling_cost))
+        
 
 
     @property
@@ -165,9 +180,13 @@ class Kart(models.Model):
 
 
     def totals_as_dict(self):
+        # print self.grand_total
         try:
-            if self.sub_total == 0:
+            if int(self.grand_total) == 0:
+                # print 'count:',self.get_count()
+                # print int(self.grand_total)
                 self.calculate()
+
             return dict(
                 total=self.sub_total,
                 tax=self.total_tax,
@@ -175,7 +194,9 @@ class Kart(models.Model):
                 processing=self.total_fees,
                 grand_total=self.grand_total
             )
-        except:
+        except Exception, e:
+            raise
+            print 'ERRROR:',e
             pass
 
     def totals_as_pretty_dict(self):
@@ -184,16 +205,20 @@ class Kart(models.Model):
             for k in d.keys():
                 d[k] = '%0.2f'%d[k]
             return d
-        except:
-            pass
+        except Exception, e:
+            print e
 
     @staticmethod
     def get_by_request(request,checked_out):
         if checked_out:
-            return request.session.get('checked_out_cart') 
+            return  Kart.objects.get(id=request.session.get('checked_out_cart'))
         if not request.session.get('cart',None):
-            request.session['cart'] = Kart.objects.create()
-        return request.session.get('cart')
+            K = Kart.objects.create()
+            request.session['cart'] = K.id
+        else:
+            K = Kart.objects.get(id=request.session['cart'])
+            K.request = request
+        return K
 
     def __iter__(self):
         return iter(self.items())
@@ -211,7 +236,6 @@ class Kart(models.Model):
 
 
     def checkout(self,request):
-
         # <QueryDict: {u'shipping-address': [u'2'], u'credit-card': [u'1552718934']}>
         shipping_address = ShippingInfo.objects.get(id=request.POST.get('shipping-address'))
         credit_card = CCToken.objects.get(token=request.POST.get('credit-card'))
@@ -225,18 +249,12 @@ class Kart(models.Model):
 
         if success:
             self.checked_out = True
-            request.session['checked_out_cart'] = self
+            self.wishlistitem_set.all().update(purchased=True)
+            request.session['checked_out_cart'] = self.id
             del(request.session['cart'])
             return True,None
         else:
             return False,error
-
-
-
-        
-
-
-
 
 
 
@@ -348,6 +366,22 @@ class KartItem(models.Model):
                 super(KartItem,self).save(*args,**kwargs)
                 return
         super(KartItem,self).save(*args,**kwargs)
+
+
+
+class WishListItem(models.Model):
+
+    item = models.ForeignKey('racks.Item')
+    item_variation = models.ForeignKey('racks.ItemType')
+
+    picture = models.ForeignKey('racks.ProductImage')
+    date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey('auth.User',null=True,blank=True)
+    cart = models.ForeignKey('kart.Kart',null=True,blank=True)
+
+    purchased = models.BooleanField(default=False)
+
+
 
 
 

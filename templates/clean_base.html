@@ -50,6 +50,7 @@
 </script>
     </head>
     <body data-role="{{page_role}}" class="{{page_role}} {% block body_class %}account{% endblock %} gallery" id="{% block body_id %}gallery{% endblock %}">
+      {% csrf_token %} 
         {% block facebook %}
              
                 <div id="fb-root"></div>
@@ -136,6 +137,7 @@
                               </div>
                             </li>
                             <li class="drop_item" id="wishlist">
+                              <a href="{% url wishlist %}"><div>w i s h l i s t</div></a>
                               wishlist
                             </li>
                             <li id="friends">
@@ -169,62 +171,8 @@
                         </p>
                     </div><!--/.nav.bar#footer-nav -->
                 </div><!--/.wrap -->
-                {% if debug %}
-                <div id="debug">
-                  <h2>Queries</h2>
-                  <p>
-                    {{ sql_queries|length }} Quer{{ sql_queries|pluralize:"y,ies" }}
-                    {% ifnotequal sql_queries|length 0 %}
-                    (<span style="cursor: pointer;" onclick="var s=document.getElementById('debugQueryTable').style;s.display=s.display=='none'?'':'none';this.innerHTML=this.innerHTML=='Show'?'Hide':'Show';">Show</span>)
-                    {% endifnotequal %}
-                  </p>
-                  <table id="debugQueryTable" style="display: none;">
-                    <col width="1"></col>
-                    <col></col>
-                    <col width="1"></col>
-                    <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">SQL</th>
-                      <th scope="col">Time</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for query in sql_queries %}<tr class="{% cycle odd,even %}">
-                      <td>{{ forloop.counter }}</td>
-                      <td>{{ query.sql|escape }}</td>
-                      <td>{{ query.time }}</td>
-                    </tr>{% endfor %}
-                    </tbody>
-                  </table>
-                </div>
-                <br><br><br>
-                {% endif %}
+
             </div><!--/.footer -->
-            {% if request.subdomain != 'stylists' %}
-            <div class="item-send clearfix" id="send_to_admirer_reduced_form" style="opacity: 0; display: none; width: 270px;">
-                <form action="{% url send_item_to_admirer %}" id="reduced_send_to_admirer_form" method="POST" >
-                    {% csrf_token %}
-                    <div class="item-send-right">
-                        <textarea name="message" id="reduced_message" placeholder="PERSONAL MESSAGE: Less then 160 characters"></textarea>
-                        <input type="hidden" id="reduced_item_id" name="item_id" value="" />
-                        <input type="hidden" id="reduced_admirer_id" name="admirer" value=""/>
-                        <input type="hidden" id="reduced_admirer_type" name="admirer_type" value=""/>
-                        <input type="hidden" id="reduced_admirer_name" name="admirer_name" value=""/>
-                        <div class="btn-wrap bootstrap" style="margin-bottom: 0">
-                            <input type="button" class="btn btn-primary" id="send_it_to_admirer_reduced" value="Send It" />
-                        </div>
-                        <center>
-                            <div id="loading2">
-                                <div class="spinner"></div>
-                            </div>
-                            <span class="confirmation" id="send_item_confirmation_reduced">Sent!</span>
-                            <!--                     <p id='bigform-error-reduced'></p> -->
-                        </center>
-                    </div>
-                </form>
-            </div>
-            {% endif %}
         </div>
 
         {% block login_modal_box %}
@@ -246,18 +194,17 @@
                     <!-- <div><a class="login-href-button" href="/login/google-oauth2/"><div class="googlelogin" style="cursor:pointer"></div></a>-->
                      </div>
                      <!-- <div class="fb-login-button" data-show-faces="true" data-width="500" data-max-rows="1"></div> -->
-                 </div>
-                 
-             </div>
-             <div class="foot">
+              <div class="foot">
                  <!-- <a href="/retailers/create_profile">become a stunable stylist</a> -->
                 <!-- <a href="https://stylists.stunable.com/accounts/login">stylist login</a>-->
              </div>
-          </div></div></div></div></div></div>
+        </div>
+                 
+             
 
           {% endif %}
         {% endblock %}
-        </div>
+       
 
 <!-- 
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/swipe.js"></script>

@@ -431,7 +431,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 #page-content.cart{
 	overflow-y:auto;
 }
-#page-content.carousel{
+#page-content{
 	overflow-x:hidden;
 }
 #page-content #nav-handle{
@@ -458,10 +458,10 @@ a:hover, form .btn:hover { color:#8D8791;}
 
 	
 	/*TABS*/
-		.content.carousel div#stunable-tabs-nav{
+		.shop .content div#stunable-tabs-nav{
 			
 		}
-		#stunable-tabs-nav ul{
+		.shop #stunable-tabs-nav ul{
 			width:100%;
 			overflow-x:hidden;
 			overflow-y:hidden;
@@ -474,7 +474,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 			margin-top:6px;
 		}
 
-		.carouselbox #stunable-tabs-nav {
+		.shop #stunable-tabs-nav {
 			position:absolute;
 		}
 
@@ -530,7 +530,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 
 		}
 
-		.content.carousel div#stunable-tabs-nav li.tab.active{
+		.shop .content div#stunable-tabs-nav li.tab.active{
 			/*width:100px;*/
 			border:1px 1px 1px 0 solid #ccc;
 			background-color:white;
@@ -547,7 +547,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 
 /*CAROUSEL*/
-		.inner-page-content.carouselbox{
+		.inner-page-contentbox{
 			/*overflow-x:hidden;*/
 		}
 
@@ -558,7 +558,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 
 
-		.content.carousel div.item{
+		.shop .content div.item{
 			/*overflow:hidden;*/
 			/*white-space: nowrap;*/
 			display:inline-block;
@@ -576,13 +576,13 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 
 
-		.content.carousel div.item>div{
+		.shop .content div.item>div{
 			margin-top:3px;
 			margin-bottom:3px;
 		}
 
 
-		.content.carousel div.item a.pic-container {
+		.shop .content div.item a.pic-container {
 			height:300px;
 		}
 
@@ -592,13 +592,13 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 
 
-		.content.carousel div.item .picbox{
+		.shop .content div.item .picbox{
 			position:relative;
 			height:300px;
 			width:150px;
 		}
 
-		.content.carousel div.item:hover{
+		.shop .content div.item:hover{
 			border: 2px dashed #EC67F0;
 			padding: 9px;
 		}
@@ -638,7 +638,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 
 
-			.carousel_price_tag .sale {
+			_price_tag .sale {
 				color: red;
 			}
 
@@ -647,13 +647,13 @@ a:hover, form .btn:hover { color:#8D8791;}
 				vertical-align: top;
 			}
 
-			.carousel_price_tag {
+			_price_tag {
 				font-size: 1.1em;
 				color: #888;
 			}
 
 
-			.carousel .directional .btn {
+			 .directional .btn {
 				position:absolute;
 				top:85%;
 				height:31px;
@@ -665,20 +665,20 @@ a:hover, form .btn:hover { color:#8D8791;}
 				z-index:3;
 				overflow:hidden;
 			}
-			.carousel .directional .btn:hover {
+			 .directional .btn:hover {
 			/*	background-color:#E84E4B;*/
 			}
-			.carousel .directional .previous {
+			 .directional .previous {
 				left:0;
 				margin-left: 30px;
 			}
-			.carousel .directional .next {
+			 .directional .next {
 				right:10px;
 				margin-right: 30px;
 				background-position:-66px 0;
 			}
 
-			.carousel .directional .next, .carousel .directional .previous  {
+			 .directional .next,  .directional .previous  {
 				padding: 0;
 				border: none;
 			}

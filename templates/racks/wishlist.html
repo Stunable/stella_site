@@ -1,0 +1,39 @@
+{% extends "racks/rack_base.html" %} {% block title %} Stunable | Browse Items {% endblock %} {% block page_tab %}{% endblock %}
+
+
+
+
+
+{% block content %}
+
+<div class="content {% block content-class%}carousel{%endblock%}" id="page-content" >
+
+
+
+    <div data-type="list" data-orient="vertical" class="scrollbox inner-page-content item-list medium">
+            <!-- <div class="sizecontrols"><span>tiny</span><span>small</span><span>medium</span>large</span></div> -->
+            <div  id="container" >
+                                
+                            {% for list_3_items in rack_items_list %}
+                                {% for item in list_3_items %}
+                                    {% with item.item as item %}
+                                    {% if item.pk %}
+                                    
+                                        {% include "racks/includes/new_item_list_content.html" %}
+                                    
+                                    {% endif %}
+                                    {% endwith %}
+                                {% endfor %}
+                            {% endfor %}
+                               
+
+        </div>
+        <div id="carousel-nav-container" class="directional">
+            <div class="btn prev"></div>
+            <div class="btn next"></div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

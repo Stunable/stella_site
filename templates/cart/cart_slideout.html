@@ -1,5 +1,4 @@
 <div id="cart_data" class="bootstrap">
-    <!-- <span><span class="dollar">$</span>{{cart.totals_as_pretty_dict.grand_total}} </span> -->
     
 </div>
 <table id="cart_items" class="item-list" data-length="{{cart.count}}">
@@ -15,11 +14,6 @@
                 </div>
             </div>
 
-        <!--    <p class='quantity'>
-                Quantity: <span class='cart-item-quantity'>{{ item.quantity }}</span><a class='cart-change-quantity' href="/cart/update_cart/{{item.product.pk}}">change</a>
-            </p>
-            <input type="hidden" class="path" value="/cart/update_cart/{{item.product.pk}}/"/>
-            <a class='cart-remove' href="/cart/remove_from_cart/{{item.product.pk}}/">remove item</a> -->
         </td>
     </tr>
     {% endfor %}

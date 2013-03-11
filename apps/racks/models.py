@@ -106,7 +106,7 @@ class listImageMixin(object):
     @property
     def thumbnail(self):
         try:
-            return self.get_image().small.url
+            return self.get_image().tiny.url
         except:
             if self.image:
                 try:
@@ -290,7 +290,7 @@ class Item(models.Model,listImageMixin):
     def get_image_object(self):
         try:
             if self.featured_image:
-                print 'returning featured_image'
+                # print 'returning featured_image'
                 return self.featured_image
             try:
                 return self.item_image_set.all()[0]
@@ -321,7 +321,7 @@ class Item(models.Model,listImageMixin):
         return self.get_image()
 
     def price_range(self):
-	seq = []
+        seq = []
         for it in self.types.all():
              seq.extend([it.price,it.sale_price])
 
@@ -348,6 +348,8 @@ class Item(models.Model,listImageMixin):
         r.update({'sale':
             ' class="sale" ' if self.is_onsale else ''
         })
+        
+        print 'price text...'
         if not r['min'] == r['max'] and self.is_onsale:
             return '<span%(sale)s><span class="dollar">$</span>%(min)s</span> - <span class="dollar">$</span>%(max)s'%r
         return '<span class="dollar">$</span>%(min)s'%r
@@ -411,7 +413,8 @@ class Item(models.Model,listImageMixin):
         else:
             self.is_available = True
 
-        # self.set_price_text()
+        if not self.price_text:
+            self.set_price_text()
 
         self.is_onsale = False
         for i in self.types.all():
@@ -425,7 +428,6 @@ class Item(models.Model,listImageMixin):
 
 
     def set_price_text(self):
-        self.price_text = None
         self.price_text = self.price_range_text()
         
 
@@ -470,7 +472,7 @@ class ItemType(models.Model,DirtyFieldsMixin):
         return self.price
 
 
-    def __unicode__(self):
+    def get_name(self):
         color = self.custom_color_name
         return "%s in %s, Size: %s" %  (self.item.name, color, self.size.size)
 
@@ -492,7 +494,7 @@ def postSaveGeneric(sender, instance, created, **kwargs):
     if 'is_onsale' in instance.get_dirty_fields().keys():
         instance.item.save()
 
-class RackManager(models.Manager):
+class RackManaeger(models.Manager):
         
     def RacksSharedWithUser(self, user):
         return Rack.objects.filter(shared_users__username__contains=user)
@@ -541,7 +543,7 @@ class Rack(models.Model):
     rack_items = models.ManyToManyField(Item, through='Rack_Item')
     publicity = models.SmallIntegerField(null=True, blank=True)
 
-    objects = RackManager()
+    # objects = RackManager()
     
     def __unicode__(self):
         return self.name

@@ -1,10 +1,14 @@
+{% load cache %}
 
 <div title="drag me" id="list_item_{{item.id}}" class="touchcarousel-item item">
 
 	
 	<div class="picbox">
 	<a class="item-ref pic-container wp drag_item touchable"  rel="modal:open" data-options="item_modal_options" href="{% url item_modal item.slug %}" data-value="{{ item.id }}" >    
+		
+		{% cache 500 item_pic item.slug %}
 		 <img src="{{ item.get_image.medium.url }}"> 
+		{% endcache %}
 	</a>
 	</div>
 

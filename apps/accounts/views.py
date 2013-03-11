@@ -32,6 +32,8 @@ from django.core.files.base import File
 from social_auth.models import UserSocialAuth
 from friends.models import Friendship
 
+from apps.kart.models import WishListItem,Cart
+
 from StringIO import StringIO
 from PIL import Image
 
@@ -295,7 +297,7 @@ def new_user_join(request, confirmation_key, template="friends/admirers.html"):
         user.save()
         user = authenticate(username=user.email, password=password)
         login(request, user)
-        profile = get_or_create_profile(request)
+        # profile = get_or_create_profile(request)
 #        if request.user.vote_set.all().count() == 0:
 #            request.session['first_time_login'] = True
         return redirect(reverse("accounts.urls.profile_edit"))
@@ -384,6 +386,10 @@ def connect(request):
         except:
             P = UserProfile.objects.create(user=request.user)
             P.set_default_tags()
+
+        C = Cart(request)
+        WishListItem.objects.filter(cart=C).update(user=request.user)
+
 
 
         I = get_fb_avatar_image(sa)

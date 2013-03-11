@@ -118,8 +118,8 @@ var stunable = {
         })
 
 
-        var box = $('#login_box').clone()
-        box.modal({clickClose:false,escapeClose:false,showClose:false})   
+        // var box = $('#login_box').clone()
+        // box.modal({clickClose:false,escapeClose:false,showClose:false})   
 
     }
     ,shop: function(){            
@@ -127,8 +127,8 @@ var stunable = {
         
         // initRackEvents();
 
-        $('.carouselbox').damonscroll({
-
+        $('.scrollbox').damonscroll({
+          orientation: $('.scrollbox').data('orient'),
           target_element: $('#container'),
           
           add_function: function(items){
@@ -139,18 +139,30 @@ var stunable = {
 
         })
 
+        var isotope_options = {
+
+          'carousel':{
+           layoutMode: 'cellsByColumn',
+            cellsByRow: {
+              columnWidth: 100,
+              rowHeight: 100
+              // animationEngine : 'css'
+            }},
+
+          'list':{
+
+          }
+
+        }
+
+
+
 
         window.onload = function(){
-            $('#container').isotope({
-         layoutMode: 'cellsByColumn',
-          cellsByRow: {
-            columnWidth: 100,
-            rowHeight: 100
-            // animationEngine : 'css'
-          }})
-          initDrag($('.item'))
-          initDrop(); 
-        }
+          $('#container').isotope(isotope_options[$('.scrollbox').data('type')])
+            initDrag($('.item'))
+            initDrop(); 
+          }
 
     }
     ,racks: function(){

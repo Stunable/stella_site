@@ -15,8 +15,8 @@ FACEBOOK_APP_ID              = '396733507047008'
 FACEBOOK_API_SECRET          = '642be492d594607d661a6517b5529050'
 FACEBOOK_EXTENDED_PERMISSIONS = ['email']
 
-GOOGLE_OAUTH2_CLIENT_SECRET = 'C0mx2xzyvx8Xi5As3aEGL5nX'
-GOOGLE_OAUTH2_CLIENT_ID = '426462526110.apps.googleusercontent.com'
+GOOGLE_OAUTH2_CLIENT_SECRET = 'XEFZ7iOvh6gxmiEwEof_p4JI'
+GOOGLE_OAUTH2_CLIENT_ID = '79164646909.apps.googleusercontent.com'
 GOOGLE_OAUTH_EXTRA_SCOPE = ['https://www.google.com/m8/feeds','https://www.googleapis.com/auth/plus.me']
 
 TWITTER_CONSUMER_KEY = 'Fl9NGVMMdhpT2OTOKj9pvw'
