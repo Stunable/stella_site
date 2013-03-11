@@ -612,17 +612,14 @@ def prepare_ctx_with_num(query_set, ctx, num):
 
 def new(request, template="racks/new_carousel.html"):
     ctx = {}
-    ctx['categories'] = Category.objects.all()
+
     ctx['current'] = "new"
     get_context_variables(ctx, request)
     
     begin_date = datetime.date.today() - timedelta(days=14)
     
-    if settings.IS_PROD:
-        query_set = Item.objects.filter(created_date__gt=begin_date, approved=True).order_by('order')
-    else:
-        query_set = Item.objects.filter(created_date__gt=begin_date).order_by('order')
-    
+    query_set = Item.objects.filter(created_date__gt=begin_date, approved=True,is_available=True).order_by('created_date')
+        
     return pagination(request, ctx, template, query_set)
 #    return direct_to_template(request, template, ctx)
 
