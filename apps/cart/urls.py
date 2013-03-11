@@ -10,6 +10,10 @@ urlpatterns = patterns('cart.views',
     url(r'^add_to_cart/(?P<product_id>\d+)/(?P<quantity>\d+)/(?P<size>.*)$',
         view='add_to_cart',
         name='add_to_cart'
+    ),       
+    url(r'^update_wishlist/(?P<product_id>\d+)/(?P<quantity>\d+)/(?P<size>.*)$',
+        view='update_wishlist',
+        name='update_wishlist'
     ),                  
     url(r'^update_cart/(?P<product_id>\d+)/?$',
         view='update_cart',

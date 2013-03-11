@@ -38,6 +38,8 @@ SHOPIFY_API_SCOPE = ['read_products', 'read_orders', 'write_products'
 ]
 
 
+AWS_PRELOAD_METADATA = True
+
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/accounts/connect/'
 LOGIN_ERROR_URL = '/login/'

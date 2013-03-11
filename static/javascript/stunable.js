@@ -210,8 +210,12 @@ var refclickFunctions = {
         window.location.reload();
     },
     'remove' : function(selection,data){
-        console.log($(selection.data('target')))
+        console.log(selection)
         $(selection.data('target')).fadeOut('slow')
+    },
+    'remove_and_close' : function(selection,data){
+        $(selection.data('target')).fadeOut('slow');
+        $.modal.close();
     },
     'downvote': function(selection,data){
         $(selection.data('target')).removeClass('upvoted').addClass('downvoted')
@@ -244,6 +248,9 @@ function init_refclicks(selection){
                 if (response.callback){
                     refclickFunctions[response.callback]($t)
                 }
+            }
+            if ($t.data('callback')){
+                refclickFunctions[$t.data('callback')]($t)
             }
         },'json')
     })
@@ -804,42 +811,7 @@ function setupCustomTabs(selection){
 // }
 
 
-function setupRackIt(){
-    // prevent more binds when close fancy box
-    $('.rack-icon').unbind("click");
-    $('.rack-icon').click(function(event){
-        event.preventDefault();
-        var href = $(this).attr('href');
-        var item_id = $(this).attr('data-value');
-        var containers = $('.private-racks').find('li span');
-        if (containers.length > 0){
-            rack_id = $(containers[0]).attr('data-value');
-        }else{
-            rack_id = "myrack";
-        }
-        
-        var link = href + 'item_id=' + item_id +'&rack=' + rack_id;
-        $.get(link, function(result){
-            if(result['result'] == 'ok'){
-                alert("Item Added!");
-                if(result['new_rack_id']){
-                    // add a new rack name My Rack into the left-nav by using javascript
-                    $('.private-racks').html('<li class="drop_item ui-droppable">'+
-                                            '<span data-value="'+ result['new_rack_id'] +'"><a href="/racks/detail/' + result['new_rack_id'] + '">' +
-                                            'My Rack</a></span></li>');
-                    initDragDrop();
-                    fixDragDropIssue();
-                }
-                // check if fancy box is opened
-                if($('#fu').length > 0){
-                    parent.$.fancybox.close();
-                }
-            }else{
-                alert(result['Error']);
-            }
-        });
-    });
-}
+
 
 
 function initFriendDragDrop() { 

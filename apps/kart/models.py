@@ -53,39 +53,48 @@ class Kart(models.Model):
     def available_shipping_options(self):
         return get_shipping_options()
 
-    def add_item_variation(self,item_variation):
+    def manage_variations(self,item_variation,wishlist_only=False):
+        if not wishlist_only:
+            ki,created         = KartItem.objects.get_or_create(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
+            ki.unit_price      = item_variation.get_current_price()
+            ki.picture         = item_variation.get_image().small.url
+            ki.item_name       = item_variation.get_name()
+
+            if created:
+                ki.shipping_method = get_default_shipping()
+                self.total_items = self.total_items + 1
+            else:    
+                ki.quantity = ki.quantity + 1
+                
+            ki.save()
+
+            self.calculate()
+            self.save()
+
+
         
-        ki,created         = KartItem.objects.get_or_create(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
-        ki.unit_price      = item_variation.get_current_price()
-        ki.picture         = item_variation.get_image().small.url
-        ki.item_name       = item_variation.get_name()
+        existingWIs = WishListItem.objects.filter(item_variation=item_variation,user=self.request.user)
+        if existingWIs.count():
+            existingWIs.delete()
 
-        if created:
-            ki.shipping_method = get_default_shipping()
-            self.total_items = self.total_items + 1
-        else:    
-            ki.quantity = ki.quantity + 1
-            
-        ki.save()
+        else:
 
+            WI = WishListItem(
+                cart=self,
+                item_variation=item_variation,
+                item=item_variation.item,
+                picture = item_variation.get_image(),
+            )
+            if hasattr(self,'request'):
+                if self.request.user.is_authenticated():
+                    WI.user = self.request.user
+            WI.save()
         
-        WI = WishListItem(
-            cart=self,
-            item_variation=item_variation,
-            item=item_variation.item,
-            picture = item_variation.get_image(),
-        )
-        if hasattr(self,'request'):
-            if self.request.user.is_authenticated():
-                WI.user = self.request.user
-        WI.save()
-        
-        self.calculate()
-        self.save()
 
 
-    def add(self,item_variation):
-        self.add_item_variation(item_variation)
+
+    def add(self,item_variation,wishlist_only=False):
+        self.manage_variations(item_variation,wishlist_only=wishlist_only)
 
 
     def remove(self,item_variation):
@@ -211,13 +220,15 @@ class Kart(models.Model):
     @staticmethod
     def get_by_request(request,checked_out):
         if checked_out:
-            return  Kart.objects.get(id=request.session.get('checked_out_cart'))
+            K = Kart.objects.get(id=request.session.get('checked_out_cart'))
+            K.request = request
+            return K
         if not request.session.get('cart',None):
             K = Kart.objects.create()
             request.session['cart'] = K.id
         else:
             K = Kart.objects.get(id=request.session['cart'])
-            K.request = request
+        K.request = request
         return K
 
     def __iter__(self):

@@ -47,11 +47,13 @@
                                 
                                 {% for list_3_items in rack_items_list %}
                                 {% for item in list_3_items %}
+                                {% with item as target_item %}
                                     {% if item.pk %}
                                     
                                         {% include "racks/includes/new_item_list_content.html" %}
                                     
                                     {% endif %}
+                                {% endwith %}
                                 {% endfor %}
                                 {% endfor %}
                                

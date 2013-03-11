@@ -11,7 +11,7 @@ from django.core.urlresolvers import reverse
 from apps.racks.forms import *
 from friends.models import Friendship
 from django.contrib.auth.models import User
-from apps.racks.models import Rack, Rack_Item, Item, Category,ProductImage
+from apps.racks.models import Rack, Rack_Item, Item, Category,ProductImage,ItemType
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from apps.friends.views import json_view
@@ -158,7 +158,7 @@ def trendsetters(request, user_id=None, template='racks/trendsetters.html'):
 
 def wishlist(request):
 
-    return _all(request,template='racks/wishlist.html',query_set=WishListItem.objects.select_related('item').filter(user=request.user))
+    return _all(request,template='racks/wishlist.html',query_set=WishListItem.objects.select_related('item').filter(user=request.user),is_wishlist=True)
 
 
 @login_required
@@ -453,42 +453,26 @@ def item(request, template='racks/item_management.html'):
     return direct_to_template(request, template, ctx)
 
 
+
+def variation_modal(request,item_variation_id, template='racks/item_modal.html'):
+    iv = ItemType.objects.select_related('item').get(id=item_variation_id)
+    item = iv.item
+
+    return item_modal(request, item.slug,ctx={'wished_variation':iv})
+
 #@login_required
-def item_modal(request, item_slug, template='racks/item_modal.html'):
+def item_modal(request, item_slug, template='racks/item_modal.html', ctx=None):
     
-    # if request.user.is_anonymous():
-    #     template = "racks/view_error.html"
-    #     return direct_to_template(request, template)
+    if not ctx:
+        ctx = {}
     
-
-    ctx = {}
-    
-
     item = get_object_or_404(Item, slug=item_slug)
     ctx['item'] = item
 
-    
-    size2color = {}
-    for inventory in item.types.all():
-        ##print inventory
-        if size2color.has_key(inventory.size.size):
-            size2color[inventory.size.size].append(inventory.custom_color_name)
-        else:
-            size2color[inventory.size.size]= [inventory.custom_color_name,]
-    
-    inventories = [{'imgid':i.get_image_id(), 'regularprice':'%.2f'%float(i.price),'saleprice':'%.2f'%float(i.get_current_price()),'is_onsale':float(i.is_onsale),'size': i.size.size, 'color': i.custom_color_name, 'id': i.id, 'stock': i.inventory,
-                    'add_cart_url': reverse('add_to_cart',kwargs={'product_id':i.pk, 'quantity':1, 'size':''})} for i in item.types.filter(inventory__gte=1).order_by('position').order_by('size')]
-    
-    colors = []
-    for color_list in size2color.values():
-        colors += color_list
-
-    print 's2c:',size2color
-
-    ctx.update({'size2color': json.dumps(size2color),     
-                'sizes': set(size2color.keys()),
-                'colors': set(colors),
-                'inventories': json.dumps(inventories)}) 
+    ctx.update({
+                'variations_by_size': item.types.select_related('size').filter(inventory__gte=1).order_by('size'),
+                'variations_by_color': item.types.select_related('size').filter(inventory__gte=1).order_by('custom_color_name')
+                }) 
                
 
     return direct_to_template(request, template, ctx)
@@ -636,8 +620,8 @@ def new(request, template="racks/new_carousel.html"):
 #    return direct_to_template(request, template, ctx)
 
 #@login_required
-def _all(request, slug=None, template='racks/new_carousel.html',query_set = None):
-    ctx = {}
+def _all(request, slug=None, template='racks/new_carousel.html',query_set = None,is_wishlist = False):
+    ctx = {'is_wishlist':is_wishlist}
     if not query_set:
         
         if request.GET.get('item_id', None):
@@ -671,28 +655,20 @@ def pagination(request, ctx, template, query_set):
     
     if request.is_ajax():
         template = 'racks/patial_carousel.html'
-        if page == '1':
-            prepare_ctx_with_num(query_set, ctx, 20)
+        try:
+            page = int(page)
+        except:
+            page = 1
+        _from = item_per_page * page
+        _to = _from+item_per_page
+        if query_set.count() < _to+item_per_page:
+            next = 1
         else:
-            try:
-                page = int(page)
-            except:
-                page = 1
-            _from = item_per_page * page
-            _to = _from+item_per_page
-            if query_set.count() < _to+item_per_page:
-                next = 1
-            else:
-                next = page+1
+            next = page+1
 
-            user_items = query_set[_from:_to]
-#            ctx['items'] = user_items
-            print user_items
-            rack_items_list = []
-            rack_items_list.append(user_items)
-            ctx['rack_items_list'] = rack_items_list
-            ctx['user_items'] = Item.objects.filter(pk__in=[i.pk for i in user_items])
-            ctx['next'] = next   
+        ctx['rack_items_list'] = [query_set[_from:_to]]
+
+        ctx['next'] = next   
     else:
         # template = 'racks/new_carousel.html'
         prepare_ctx_with_num(query_set, ctx, item_per_page)

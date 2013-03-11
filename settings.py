@@ -46,7 +46,7 @@ AWS_S3_CUSTOM_DOMAIN = 'images.stunable.com'
 DEFAULT_BUCKET = "images.stunable.com"
 AWS_S3_SECURE_URLS = False
 AWS_QUERYSTRING_AUTH = False
-AWS_PRELOAD_METADATA = True
+
 
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 

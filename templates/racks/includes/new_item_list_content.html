@@ -1,23 +1,26 @@
 {% load cache %}
+{% if item.slug %}
+	<div title="drag me" data-id="{{target_item.id}}" id="list_item_{{target_item.id}}" class="touchcarousel-item item">
 
-<div title="drag me" id="list_item_{{item.id}}" class="touchcarousel-item item">
+		<div class="picbox">
 
-	
-	<div class="picbox">
-	<a class="item-ref pic-container wp drag_item touchable"  rel="modal:open" data-options="item_modal_options" href="{% url item_modal item.slug %}" data-value="{{ item.id }}" >    
+		<a class="item-ref pic-container wp drag_item touchable"  rel="modal:open" data-options="item_modal_options" 
+		{% if is_wishlist %}href="{% url variation_modal wishlistitem.item_variation.id %}"
+			{%else%}href="{% url item_modal item.slug %}"
+		{% endif %} data-value="{{ item.id }}" >    
+			
+			 <img src="{{ target_item.get_image.medium.url }}"> 
+		</a>
+		</div>
+
 		
-		{% cache 500 item_pic item.slug %}
-		 <img src="{{ item.get_image.medium.url }}"> 
-		{% endcache %}
-	</a>
+		<div class="carousel_price_tag">
+		    {{item.price_range_text|safe}}
+		</div>
+		<div class="item-name"><a rel="modal:open" data-options="item_modal_options" class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.slug %}">{{item.name}}</a></div>
+
+		<div class="item-label"><span>{{item.brand}}</span></div>
+
 	</div>
 
-	
-	<div class="carousel_price_tag">
-	    {{item.price_range_text|safe}}
-	</div>
-	<div class="item-name"><a rel="modal:open" data-options="item_modal_options" class="item-ref top-ref" data-value="{{ item.id }}" href="{% url item_modal item.slug %}">{{item.name}}</a></div>
-
-	<div class="item-label"><span>{{item.brand}}</span></div>
-
-</div>
+{% endif %}

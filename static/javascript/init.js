@@ -75,14 +75,14 @@ var stunable = {
           // return false;
         })
 
-        $('.left-panel').toggle(
-            function(){
-              $('#page-content').animate({'left':'20px'},400)
-            },
-            function(){
-              $('#page-content').animate({'left': '220px'},400)
-            }
-        )
+        // $('.left-panel').toggle(
+        //     function(){
+        //       $('#page-content').animate({'left':'20px'},400)
+        //     },
+        //     function(){
+        //       $('#page-content').animate({'left': '220px'},400)
+        //     }
+        // )
 
         $('#nav-handle').toggle(
             function(){

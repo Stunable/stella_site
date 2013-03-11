@@ -164,7 +164,8 @@
                         success: function(data) {
                             var items = $(data).find('.item')
                             self._add_function(items)
-                            self._next_page = $(data).attr('data-nextpage')
+                            self._next_page = $(data).data('nextpage')
+                            console.log($(data).data('nextpage'))
                             self._loading = false;
                         }
                         ,dataType:'html'

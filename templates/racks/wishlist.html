@@ -15,13 +15,15 @@
             <div  id="container" >
                                 
                             {% for list_3_items in rack_items_list %}
-                                {% for item in list_3_items %}
-                                    {% with item.item as item %}
+                                {% for wishlistitem in list_3_items %}
+                                    {% with wishlistitem.item_variation as target_item %}
+                                    {% with wishlistitem.item as item %}
                                     {% if item.pk %}
-                                    
+                                        
                                         {% include "racks/includes/new_item_list_content.html" %}
                                     
                                     {% endif %}
+                                    {% endwith %}
                                     {% endwith %}
                                 {% endfor %}
                             {% endfor %}

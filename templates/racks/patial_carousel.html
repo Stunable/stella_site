@@ -2,7 +2,9 @@
 {% for items in rack_items_list %}
 	<div class="slide items-{{ item_per_page }}" data-nextpage="{{next}}"style="width: 860px; float:left;">
 		{% for item in items %}
+		{% with item as target_item %}
 	        {% include "racks/includes/new_item_list_content.html" %}
+	    {% endwith %}
 		{% endfor %}
 	</div>
 {% endfor %}
