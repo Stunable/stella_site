@@ -232,7 +232,7 @@ class Kart(models.Model):
             K.request = request
             return K
         except:
-            delete(request.session['cart'])
+            del(request.session['cart'])
             K = Kart.objects.create()
             request.session['cart'] = K.id
             return K
