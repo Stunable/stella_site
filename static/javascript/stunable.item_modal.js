@@ -216,8 +216,8 @@ function init_item_modal(){
 			
 		})
 
-		$('#retailer-header .modalitem').textfill(25)
-		$('#retailer-header .retailer').textfill(40)
+		// $('#retailer-header .modalitem').textfill(25)
+		// $('#retailer-header .retailer').textfill(40)
 	}
 		
 	   

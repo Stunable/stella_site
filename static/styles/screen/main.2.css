@@ -1264,16 +1264,16 @@ form .info_modal{
 
 .modal.current .modal_inner_frame>div{
 	display:inline;
-	height:600px;
+
 }
 
 .modal_inner_frame .item-visuals{
 	float:left;
 }
 
-.wide .modal_inner_frame .item-visuals{
+/*.wide .modal_inner_frame .item-visuals{
 	float:none;
-}
+}*/
 
 
 .modal.current .foot a{
@@ -1314,7 +1314,6 @@ form .info_modal{
 	
 }
 
-
 .modal-item-details .item-data{
 	height:400px;
 	display:block;
@@ -1326,9 +1325,8 @@ form .info_modal{
 
 .wide .modal-item-details .item-data{
 	display:inline-block;
-	width:200px;
+	width:50%;
 	height:200px;
-	min-height: 200px;
 }
 
 
@@ -1370,13 +1368,17 @@ form .info_modal{
 
 
 
-.wide .modal-item-details .item-description{
+/*.wide .modal-item-details .item-description{
 	font-size:.8em;
 	font-family: serif;
 	width:200px;
 }
+*/
 
-
+.modal.current .wide .item-actions{
+	float:right;
+	width:40%;
+}
 
 .modal.current  .item-actions{
 	display:block;
@@ -1416,14 +1418,29 @@ form .info_modal{
 	/*border-radius:10px;*/
 }
 
+.modal.current .wide .item-visuals #images li{
+	position:relative;
+	height:400px;
+	overflow:hidden;
+	/*border-radius:10px;*/
+}
+
 .modal.current .item-visuals img.zoom_this{
 	height:620px;
 }
 
 .modal.current .wide .item-visuals img.zoom_this{
-	width:600px;
-	height:inherit;
+	height:400px;
 }
+
+ .modal.current .wide .item-visuals #images{
+
+ 	width:600px;
+ 	height:400px;
+ 	overflow:hidden;
+ 	display:block;
+
+ }
 
 
 .modal.current .item-price span.dollard-sign{
@@ -1460,6 +1477,10 @@ form .info_modal{
 	font-size: .8em;
 }
 
+.modal.current .item-color-list,.modal.current .item-size-list{
+	height:30px;
+}
+
 .modal.current .item-size-list a, .modal.current .item-color-list a{
 	color: #7f10b5;
 	padding: 2px;
@@ -1476,6 +1497,7 @@ form .info_modal{
 	min-width: 22px;
 	text-align: center;
 	border-radius: 5px;
+	margin-top:5px;
 }
 
 .modal.current .item-size-list span.onsale{
