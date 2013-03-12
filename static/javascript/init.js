@@ -160,15 +160,15 @@ var stunable = {
 
         window.onload = function(){
           $('#container').isotope(isotope_options[$('.scrollbox').data('type')])
-            initDrag($('.item'))
-            initDrop(); 
+            // initDrag($('.item'))
+            // initDrop(); 
           }
 
     }
     ,racks: function(){
       // console.log('racks setup')
-      initDrop(); 
-      initDrag($('.item'))
+      // initDrop(); 
+      // initDrag($('.item'))
       initRackEvents();
 
      

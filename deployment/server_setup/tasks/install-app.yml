@@ -17,6 +17,12 @@
     apt: pkg=python-all-dev
 
   - name: supervisor installed
-    apt: pkg=supervisor
+    apt: pkg=supervisor state=installed
+
+  - name: redis installed
+    apt: pkg=redis-server state=installed
+
+  - name: postgres dev installed
+    apt: pkg=libpq-dev state=installed
 
 

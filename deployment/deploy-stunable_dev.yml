@@ -1,6 +1,6 @@
 ---
 # easy Ubuntu nginx playbook as an example.
-- hosts: stunable:&nginx
+- hosts: stunable:&dev
   user: ubuntu 
   sudo: True
 
@@ -12,7 +12,7 @@
      app_name: "dev.stunable.com"
      app_db_name: "dev_stunable_db"
      app_port: 8080
-     project_root: /data/$app_name
+     project_root: /home/ubuntu/$app_name
      repo: git@github.com:Stunable/stella_site.git
      repo_branch: carouselRevision
      manage_path: $project_root/project/
@@ -26,9 +26,9 @@
      - sec/passwords.yml
 
   tasks:
-     # - include: server_setup/tasks/add-people.yml 
-     # - include: nginx/tasks/nginx-task.yml
-     # - include: server_setup/tasks/install-app.yml
+     - include: server_setup/tasks/add-people.yml 
+     - include: nginx/tasks/nginx-task.yml
+     - include: server_setup/tasks/install-app.yml
      - include: postgres/tasks/setup-postgres-app-task.yml
      - include: server_setup/tasks/update-app.yml
 
