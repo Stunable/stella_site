@@ -2291,3 +2291,36 @@ margin-top:3px;
 	font-weight: bold;
 }
 
+.careers .body-copy{
+	/*font-family: 'Advent Pro', sans-serif;*/
+	padding: 0 20px;
+}
+.careers h2 {
+	text-transform: uppercase;
+	margin: 20px 20px;
+	background: white url(/static/images/gui/pink-dot-bg.png) repeat-x 0 center;
+	width: 91%;
+	text-align: left;
+}
+.careers h2 span{
+	background-color: white;
+}
+.careers .bold {
+	font-weight: bold;
+}
+.careers .no-space{
+	margin-bottom: 0;
+}
+
+.careers .body-copy ul{
+	list-style-type: disc;
+	list-style-position: inside;
+}
+
+.careers #page-content .separator {
+	height:5px;
+	width: 100%;
+	border-bottom: 1px #e492be dashed;
+	margin-bottom: 20px;
+}
+
