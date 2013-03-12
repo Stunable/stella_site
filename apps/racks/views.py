@@ -650,7 +650,6 @@ def _all(request, slug=None, template='racks/new_carousel.html',query_set = None
         
 
         ctx['current'] = "all"
-        get_context_variables(ctx, request)
         
         if not query_set:
             # if settings.IS_PROD:
@@ -660,6 +659,9 @@ def _all(request, slug=None, template='racks/new_carousel.html',query_set = None
         # else:
             # query_set = Item.objects.all().order_by('?')
     # print len(query_set)
+
+    get_context_variables(ctx, request)
+    
     return pagination(request, ctx, template, query_set)
             
 #    return direct_to_template(request, template, ctx)
@@ -993,8 +995,6 @@ def add_color(request, template="racks/add_color_dialog.html"):
 
 def sale_items(request, template="racks/item_list.html"):
 
-    # private_racks = Rack.objects.PrivateRacksForUser(user)
-    # shared_racks = Rack.objects.SharedRacksForUser(user)
     return _all(request,query_set=Item.objects.filter(is_onsale=True,is_available=True,approved=True),is_wishlist=False)
 
 def recent_added_items(request, template="racks/item_list.html"):
