@@ -45,6 +45,8 @@ class Kart(models.Model):
     total_shipping       = models.DecimalField(default=0.00,max_digits=10, decimal_places=2)
 
     total_items          = models.PositiveIntegerField(default=0)
+
+    user                 = models.ForeignKey('auth.User',null=True,blank=True)
     
 
     def __unicode__(self):
@@ -224,14 +226,27 @@ class Kart(models.Model):
                 K = Kart.objects.get(id=request.session.get('checked_out_cart'))
                 K.request = request
                 return K
+
+            if request.user.is_authenticated():
+                try:
+                    K = Kart.objects.get(user=request.user)
+                    request.session['cart'] = K.id
+                except:
+                    pass
             if not request.session.get('cart',None):
                 K = Kart.objects.create()
                 request.session['cart'] = K.id
             else:
                 K = Kart.objects.get(id=request.session['cart'])
             K.request = request
+
+            if not K.user:
+                if request.user.is_authenticated():
+                    K.user = request.user
+                    K.save()
             return K
         except:
+            
             del(request.session['cart'])
             K = Kart.objects.create()
             request.session['cart'] = K.id

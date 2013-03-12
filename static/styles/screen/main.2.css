@@ -576,7 +576,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 		.shop .content div#stunable-tabs-nav li.tab.active{
 			/*width:100px;*/
 			border:1px 1px 1px 0 solid #ccc;
-			background-color:white;
+			background-color:#7f10b5;
 		}
 /*
 		.tab.active a{
@@ -586,7 +586,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 			height:40px;
 		}*/
 		.tab.active a span{
-			color:black;
+			color:white;
 		}
 
 /*CAROUSEL*/
@@ -702,7 +702,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 			left:-4px;
 		}
 
-			_price_tag .sale {
+			.carousel_price_tag .sale {
 				color: red;
 			}
 
