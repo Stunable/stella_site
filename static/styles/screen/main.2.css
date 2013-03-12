@@ -88,6 +88,9 @@ a:hover, form .btn:hover { color:#8D8791;}
 }
 */
 
+body.flatpage{
+	overflow:auto;
+}
 
 .global{
 	position: fixed;
@@ -374,6 +377,10 @@ a:hover, form .btn:hover { color:#8D8791;}
 	/*padding:20px*/
 }
 
+body.flatpage #left-panel{
+	position:fixed;
+}
+
 	#left-panel>ul{
 		margin-top:50%;
 		/*background-color:#bbb;*/
@@ -433,29 +440,30 @@ a:hover, form .btn:hover { color:#8D8791;}
 
 
 
-#page-content{
-	display:inline-block;
-	position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 60px;
-    right: 0;
-    /*background-color:white;*/
-    background: white url(/static/images/gui/background.png) repeat 0 0;
-    min-height:700px;
-    padding-left:40px;
-    /*padding-right:10px;*/
-    /*box-shadow: -4px 0px 4px 4px rgba(0,0,0,.2);*/
-    /*overflow:hidden;*/
-}
+	#page-content{
+		display:inline-block;
+		position: absolute;
+	    top: 0;
+	    bottom: 0;
+	    left: 60px;
+	    right: 0;
+	    /*background-color:white;*/
+	    background: white url(/static/images/gui/background.png) repeat 0 0;
+	    min-height:700px;
+	    padding-left:40px;
+	    /*padding-right:10px;*/
+	    /*box-shadow: -4px 0px 4px 4px rgba(0,0,0,.2);*/
+	    /*overflow:hidden;*/
+	}
 
 
-.flatpage #page-content{
+	.flatpage #page-content{
 
-	width: 60%;
-	margin: auto;
-	top: 100px;
-}
+		width: 60%;
+		margin: auto;
+		top: 100px;
+		background-color:#eee;
+	}
 
 
 
@@ -2165,6 +2173,7 @@ margin-top:3px;
 
 /*THIS IS PROBABLY EVIL*/
 
+
 .flatpage h2 {
 	text-transform: uppercase;
 	margin: 20px 15px;
@@ -2190,6 +2199,8 @@ margin-top:3px;
 .flatpage .title{
 	font-weight: bold;
 }
+
+
 
 .privacy .body-copy {
 	padding: 0 20px;
