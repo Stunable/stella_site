@@ -378,12 +378,13 @@ class KartItem(models.Model):
                 KIs = KartItem.objects.filter(retailer=self.retailer,kart=self.kart)
                 KIs.update(shipping_method=self.shipping_method)
                 self.kart.calculate()
+                self.kart.save()
 
             else:
                 super(KartItem,self).save(*args,**kwargs)
                 return
         super(KartItem,self).save(*args,**kwargs)
-        
+
 
 
 class WishListItem(models.Model):
