@@ -1447,7 +1447,7 @@ form .info_modal{
 
 .modal.current .item-price .sale{
 	line-height: .9em;
-	font-weight: 400;
+	/*font-weight: 400;*/
 }
 
 .modal.current label{

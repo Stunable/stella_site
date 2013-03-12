@@ -94,7 +94,7 @@ def split_strip(input, delimiter=u','):
         return []
 
     words = [w.strip() for w in input.split(delimiter)]
-    return [w for w in words if w]
+    return [w.strip(delimiter) for w in words if w]
 
 def edit_string_for_tags(tags):
     """
