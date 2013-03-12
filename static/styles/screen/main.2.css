@@ -1377,7 +1377,7 @@ form .info_modal{
 
 .modal.current .wide .item-actions{
 	float:right;
-	width:40%;
+	width:45%;
 }
 
 .modal.current  .item-actions{
@@ -1386,9 +1386,14 @@ form .info_modal{
 	height:200px;
 }
 
-.modal.current .item-actions div{
+.modal.current .item-actions>div{
 	margin-top:5px;
 	margin-bottom:5px;
+}
+
+.modal.current .item-actions #variation_choices div{
+
+margin-top:3px;
 }
 
 .modal.current .item-actions .action-buttons{
@@ -1482,6 +1487,13 @@ form .info_modal{
 .modal.current .item-color-list,.modal.current .item-size-list{
 	height:30px;
 	overflow:auto;
+	padding:5px;
+}
+
+.modal.current .wide .item-color-list,.modal.current .item-size-list{
+	max-height:60px;
+	overflow:auto;
+	padding:5px;
 }
 
 .modal.current .item-size-list a, .modal.current .item-color-list a{
