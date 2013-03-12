@@ -317,6 +317,10 @@ class Item(models.Model,listImageMixin):
             return self._retailer.user
         self.retailers.all()[0] 
         
+
+    def retailer_profile(self):
+        return self._retailer
+        
     def get_full_size_image(self):
         return self.get_image()
 

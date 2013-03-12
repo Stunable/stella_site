@@ -46,6 +46,7 @@ table {
 
 html {
 	height: 100%;
+	overflow:hidden;
 }
 
 body {
@@ -134,6 +135,14 @@ a:hover, form .btn:hover { color:#8D8791;}
 		border: #e3dbe3 3px solid;
 		border-radius: 4px;
 	}
+
+	.icon.x{
+		display: inline-block;
+		height: 17px;
+		width: 17px;
+		background: url(../../images/gui/iconset-misc.png) no-repeat 0 -288px;
+	}
+
 
 	.global .menu li {
 		position:relative;
@@ -289,6 +298,15 @@ a:hover, form .btn:hover { color:#8D8791;}
 
 .isotope,
 .isotope .isotope-item {
+  -webkit-transition-duration: 0.3s;
+     -moz-transition-duration: 0.3s;
+      -ms-transition-duration: 0.3s;
+       -o-transition-duration: 0.3s;
+          transition-duration: 0.3s;
+}
+
+.scrollbox.carouselbox .isotope,
+.scrollbox.carouselbox .isotope .isotope-item {
   -webkit-transition-duration: 0.0s;
      -moz-transition-duration: 0.0s;
       -ms-transition-duration: 0.0s;
@@ -455,17 +473,9 @@ a:hover, form .btn:hover { color:#8D8791;}
 }
 
 
-
-#page-content #nav-handle{
-	position:absolute;
-	left:0px;
-	top:340px;
-	height:60px;
-	width:16px;
-	background-color: gray;
-	border-radius:1px 10px 10px 1px;
-	cursor:pointer;
-}
+	.inner-page-content{
+		position:absolute;
+	}
 
 		.inner-page-content{
 			margin-top:40px;
@@ -488,6 +498,8 @@ a:hover, form .btn:hover { color:#8D8791;}
 	/*TABS*/
 		.shop .content div#stunable-tabs-nav{
 			width:90%;
+			z-index:100;
+			background-color:inherit;
 		}
 		.shop #stunable-tabs-nav ul{
 			width:100%;
@@ -503,7 +515,9 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 
 		.shop #stunable-tabs-nav {
-			position:absolute;
+			position:fixed;
+			top:80px;
+			padding-top:10px;
 		}
 
 		.bigplus{
@@ -676,6 +690,16 @@ a:hover, form .btn:hover { color:#8D8791;}
 			font-size: .8em;
 		}
 
+		div.item .controls{
+			position:relative;
+
+		}
+
+		div.item .controls .x{
+			position: absolute;
+			top:-12px;
+			left:-4px;
+		}
 
 			_price_tag .sale {
 				color: red;

@@ -55,7 +55,9 @@
            </table>
            <a class="btn big btn-primary login-check" data-href="/cart/details">checkout</a>
             </div>
-        </div>  
+        </div> 
+
+        {% if cart.get_count %}
         <div id="cart-item-list">
             {% regroup cart by retailer as item_list %}
             {% for retailer_group in item_list %}
@@ -107,6 +109,12 @@
                 </div>
             {% endfor %}
         </div>
+        {% else %}
+        <h1>
+            Your cart is empty...
+            <a href="/">Go Buy Things!!!</a>
+        </h1>
+        {% endif %}
         
     </div>
     {% endblock %}

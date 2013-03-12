@@ -69,7 +69,9 @@ def add_to_cart(request, product_id, wishlist_only=False):
 
 
 def update_wishlist(request, product_id):
-    return add_to_cart(request,product_id,wishlist_only=True)
+    add_to_cart(request,product_id,wishlist_only=True)
+
+    return HttpResponse(json.dumps({'success':True,'callback':'remove'}, ensure_ascii=False), mimetype='application/json')
 
 @login_required
 def update_cart(request, product_id):

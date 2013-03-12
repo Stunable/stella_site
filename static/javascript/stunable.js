@@ -210,7 +210,12 @@ var refclickFunctions = {
         window.location.reload();
     },
     'remove' : function(selection,data){
-        $(selection.data('target')).fadeOut('slow')
+        if($(selection.data('target')).hasClass('isotope-item')){
+            $('#container').isotope('remove', $(selection.data('target')))
+            return false;
+        }else{
+            $(selection.data('target')).fadeOut('slow',function(){$(this).remove()})
+        }
     },
     'remove_and_close' : function(selection,data){
         $(selection.data('target')).fadeOut('slow');
