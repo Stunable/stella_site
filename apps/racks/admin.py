@@ -97,6 +97,7 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
     def set_price_text(self,request,queryset):
         for obj in queryset:
             obj.price_text = None
+            obj.set_price_text()
             obj.save()
 
     def make_featured_pretty(self,request,queryset):
