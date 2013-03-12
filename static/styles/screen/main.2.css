@@ -498,7 +498,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 	/*TABS*/
 		.shop .content div#stunable-tabs-nav{
 			width:90%;
-			z-index:100;
+			z-index:1;
 			background-color:inherit;
 		}
 		.shop #stunable-tabs-nav ul{
