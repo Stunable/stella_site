@@ -229,7 +229,7 @@ class Kart(models.Model):
 
             if request.user.is_authenticated():
                 try:
-                    K = Kart.objects.get(user=request.user)
+                    K = Kart.objects.get(user=request.user,checked_out=False)
                     request.session['cart'] = K.id
                 except:
                     pass
@@ -246,11 +246,13 @@ class Kart(models.Model):
                     K.save()
             return K
         except:
-            
-            del(request.session['cart'])
-            K = Kart.objects.create()
-            request.session['cart'] = K.id
-            return K
+            try:
+                del(request.session['cart'])
+                K = Kart.objects.create()
+                request.session['cart'] = K.id
+                return K
+            except:
+                pass
 
     def __iter__(self):
         return iter(self.items())
