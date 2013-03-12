@@ -232,11 +232,10 @@ var refclickFunctions = {
     },
     'add_tab':function(selection,data){
         var el = $(data),
-            t = $(selection.data('target'));
-
+        t = $(selection.data('target'));
         t.append(el.hide().fadeIn().css('display','inline'))
         $(t).animate({scrollLeft:$(t).width()},400);
-        window.location(el.find('a').attr('href'))
+        window.location = el.find('a').attr('href')
         init_refclicks(el.find('.refclick'));
     }
 }

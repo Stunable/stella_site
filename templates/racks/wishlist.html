@@ -9,36 +9,7 @@
 <div class="content {% block content-class%}carousel{%endblock%}wishlist" id="page-content" >
 
     <div data-type="list" data-orient="vertical" class="scrollbox listbox inner-page-content item-list medium">
-         <div id="stunable-tabs-nav">
-            <ul id="tabs-container" class="nav tabbed clearfix">
 
-                        <li class="stunable-tab tab {% if current == 'all' %} active{% endif %}">
-                            <a href="/" title="" class="text-link"><span>all</span></a>
-                        </li>
-                        <li class="stunable-tab tab">
-                            <a href="{% url new %}"  title="" class="text-link"><span class="identity">new</span></a>
-                        </li>
-                        <li class="stunable-tab tab">
-                            <a href="/shop/sale" title="" class="text-link"><span>sale</span></a>
-                        </li>
-                        
-                        {% include 'racks/includes/tag_tabs.html' %}
-
-                        {% if request.user.is_authenticated %}
-                        <li class="stunable-tab tab">
-                            <a class="click-show" data-target="#tab-adder" href="" title="" class="text-link"><span>+</span><input id="tab-adder" style="display:none" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text"></a>
-                        </li>
-                        {% else %}
-                            <li class="stunable-tab tab">
-                            <a data-href="/" class="login-check"><span><a data-href="/" href="" class="login-check"><span>+</span></span>&nbsp&nbsp&nbsp&nbsp&nbsp</a>
-                        </li>
-                        {% endif %}
-                        
-                   
-            </ul>
-            <div id="new_tab_field">
-             <!--     <input data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text"> -->
-            </div>
         </div>
             <!-- <div class="sizecontrols"><span>tiny</span><span>small</span><span>medium</span>large</span></div> -->
             <div  id="container" >

@@ -449,21 +449,9 @@ a:hover, form .btn:hover { color:#8D8791;}
     padding-left:40px;
     /*padding-right:10px;*/
     /*box-shadow: -4px 0px 4px 4px rgba(0,0,0,.2);*/
-    overflow-x:auto;
-    overflow-y:auto;
-
+    overflow:hidden;
 }
 
-#page-content.carousel{
-	overflow-y:hidden;
-}
-
-#page-content.cart{
-	overflow-y:auto;
-}
-#page-content{
-	overflow-x:hidden;
-}
 
 .flatpage #page-content{
 
@@ -473,19 +461,20 @@ a:hover, form .btn:hover { color:#8D8791;}
 }
 
 
-	.inner-page-content{
-		position:absolute;
-	}
 
 		.inner-page-content{
+			position:static;
 			margin-top:40px;
 			background-color:rgb(250,250,250);
 			width:100%;
 			border-radius: 10px;
-			overflow-x:auto;
-			overflow-y:hidden;
 			border:1px solid #eee;
 			padding:20px;
+		}
+
+		.carouselbox.inner-page-content{
+			overflow-x:auto;
+			overflow-y:hidden;
 		}
 
 		.listbox.inner-page-content{
@@ -751,7 +740,6 @@ a:hover, form .btn:hover { color:#8D8791;}
 .cart .inner-page-content{
 	white-space: nowrap;
 	width:100%;
-	min-width:868px;
 }
 
 .cart .container-box{
@@ -761,6 +749,8 @@ a:hover, form .btn:hover { color:#8D8791;}
 .content.cart #cart-item-list{
 	width:60%;
 	min-width:558px;
+	overflow-y:auto;
+	height:600px;
 }
 
 .content.cart #cart-item-list.purchased{
@@ -770,7 +760,6 @@ a:hover, form .btn:hover { color:#8D8791;}
 }
 .content.cart #cart-totals{
 	float:right;
-	width:25%;
 	padding:20px;
 	margin-right:40px;
 }
@@ -838,6 +827,11 @@ table.retailer-item-group{
 	vertical-align: middle;
 
 }
+
+.cart-retailer-group:last-child{
+	margin-bottom:125px;
+}
+
 
 .content.cart tr.item-name{
 	font-size:1.2em;	
