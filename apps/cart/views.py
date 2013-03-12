@@ -99,7 +99,7 @@ def remove_from_cart(request, product_id):
     cart.remove(product)
     if request.is_ajax():
         # totals = cart.totals_as_pretty_dict()
-        return HttpResponse(json.dumps({'success':True,'callback':'remove'}),
+        return HttpResponse(json.dumps({'success':True,'callback':'reload'}),
                             mimetype='application/json') 
     
     return redirect(reverse('get_cart'))

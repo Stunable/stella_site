@@ -97,6 +97,8 @@ class Kart(models.Model):
 
     def remove(self,item_variation):
         KartItem.objects.get(kart=self,item_variation=item_variation).delete()
+        self.calculate()
+        self.save()
 
     def ref(self):
         return 'asdfasdfasdfasdf'

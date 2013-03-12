@@ -210,7 +210,6 @@ var refclickFunctions = {
         window.location.reload();
     },
     'remove' : function(selection,data){
-        console.log(selection)
         $(selection.data('target')).fadeOut('slow')
     },
     'remove_and_close' : function(selection,data){
