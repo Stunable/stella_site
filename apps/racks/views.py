@@ -610,6 +610,17 @@ def prepare_ctx_with_num(query_set, ctx, num):
     ctx['rack_items_list'] = rack_items_list
 
 
+def stylist(request, stylist_id, template="racks/new_carousel.html"):
+    ctx = {}
+
+    ctx['current'] = "stylist"
+    get_context_variables(ctx, request)
+    
+    
+    query_set = Item.objects.filter(_retailer__id=stylist_id, approved=True,is_available=True)
+        
+    return pagination(request, ctx, template, query_set)
+
 def new(request, template="racks/new_carousel.html"):
     ctx = {}
 

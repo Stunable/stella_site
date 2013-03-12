@@ -42,11 +42,7 @@
 				    <span class="locality">{{ retailer.city }}</span>
 				    <span class="region">{{ retailer.state }}</span>
 				</div>
-				{% if user.is_authenticated %}
-				    <a class='action' href="{% url view_all_products retailer.id %}">View Products</a>
-				{% else %}
-				    <a class='action' href="{% url auth_login %}">Login to view Products</a>
-				{% endif %}
+				    <a class='action' href="{{settings.WWW_ROOT}}/shop/stylist/{{retailer.id}}">View Products</a>
 			    </div>
 			</div>
 		    </div>

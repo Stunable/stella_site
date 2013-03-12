@@ -10,7 +10,7 @@ urlpatterns = patterns('',
                        # url(r'^shop', _all, name='all'),
                        url(r'^new', new, name='new'),
 
-                       
+                       url(r'^stylist/(?P<stylist_id>\d+)', stylist, name="stylist"),
 
 
 
