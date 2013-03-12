@@ -1414,8 +1414,9 @@ form .info_modal{
 }
 
 .modal.current .item-visuals #images li{
-	position:absolute;
-	/*border-radius:10px;*/
+	position: relative;
+	width: 410px;
+	overflow: hidden;
 }
 
 .modal.current .wide .item-visuals #images li{
