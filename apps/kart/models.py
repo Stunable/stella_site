@@ -377,11 +377,13 @@ class KartItem(models.Model):
             if self.shipping_method != KartItem.objects.get(id=self.id).shipping_method:
                 KIs = KartItem.objects.filter(retailer=self.retailer,kart=self.kart)
                 KIs.update(shipping_method=self.shipping_method)
+                self.kart.calculate()
+
             else:
                 super(KartItem,self).save(*args,**kwargs)
                 return
         super(KartItem,self).save(*args,**kwargs)
-
+        
 
 
 class WishListItem(models.Model):
