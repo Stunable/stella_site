@@ -142,8 +142,8 @@ class Purchase(models.Model):
         self.checkout.check_complete()
             
     def notify_retailer(self):
-        url = u"http://%s%s" % (
-            unicode(Site.objects.get_current()),
+        url = u"%s%s" % (
+            RETAILER_SUBDOMAIN.rstrip('/'),
             reverse("retailer_order_history"),
         )
 

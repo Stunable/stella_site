@@ -678,14 +678,18 @@ a:hover, form .btn:hover { color:#8D8791;}
 		}
 
 		div.item .controls{
-			position:relative;
-
+			position:absolute;
+			top:0px;
+			width:100%;
+			text-align: right;
 		}
 
 		div.item .controls .x{
 			position: absolute;
-			top:-12px;
-			left:-4px;
+			right:9px;
+			top:-4px;
+			overflow:hidden;
+			text-indent:100px;
 		}
 
 			.carousel_price_tag .sale {
@@ -885,9 +889,9 @@ table.retailer-item-group{
 }
 
 #payment_shipping_info{
-	min-width:880px;
-	overflow:hidden;
-	height:1000px;
+	min-width: 880px;
+	overflow: auto;
+	height: 500px;
 
 }
 
@@ -918,10 +922,7 @@ table.retailer-item-group{
 	margin:10px;
 }
 
-.existing_payment_option{
-	margin:20px;
-	padding:10px;
-}
+
 
 #btn-place-an-order{
 	margin-left:40%;
