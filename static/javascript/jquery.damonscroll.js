@@ -43,7 +43,7 @@
 
         init: function() {
             this.is_animating = false;
-            this.anim_duration = 2000;
+            this.anim_duration = 900;
             this._next_page = this.options.first_page || 2;
             this.num_per_page = this.options.num_per_page || 6;
             this._add_function= this.options.add_function || function(items){
