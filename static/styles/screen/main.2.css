@@ -2200,3 +2200,94 @@ margin-top:3px;
 }
 
 
+.about .body-copy, .team .body-copy, .return .body-copy{
+	/*font-family: 'Advent Pro', sans-serif;*/
+	padding: 0 20px;
+}
+.about h2, .team h2, .return h2 {
+	text-transform: uppercase;
+	margin: 20px 20px; 
+	background: white url(/static/images/gui/pink-dot-bg.png) repeat-x 0 center;
+	width: 91%;
+	text-align: left;
+}
+.about h2 span, .team h2 span, .return h2 span{
+	background-color: white;
+}
+.about .bold, .team .bold{
+	font-weight: bold;
+}
+.about #page-content .separator {
+	height:5px;
+	width: 100%;
+	border-bottom: 1px #e492be dashed;
+	margin-bottom: 20px;
+}
+.about .header {
+	display: block;
+	text-align: center;
+}
+
+.about h1, .team h1, .return h1 {
+	font-weight: bold;
+	margin: 0 0;
+	font-size: 1.1em;
+}
+
+.team .body-copy .section{
+	margin-top: 30px;
+}
+
+.team .body-copy img{
+	margin-right: 10px;
+}
+
+.team .interview {
+	margin-top: 10px;
+}
+
+.team .heading {
+	font-weight: bold;
+	margin: 20px 0;
+	text-align: center;
+	font-size: 22px;
+}
+
+.return .body-copy ul{
+	list-style-type: disc;
+	list-style-position: inside;
+}
+
+.devs .body-copy{
+	/*font-family: 'Advent Pro', sans-serif;*/
+	margin: 10px 20px;
+}
+
+.devs h2 {
+	text-transform: uppercase;
+	margin: 20px 20px;
+	background: white url(/static/images/gui/pink-dot-bg.png) repeat-x 0 center;
+	width: 91%;
+}
+.devs h2 span, img {
+	background-color: white;
+}
+
+.friend-img-item img{
+	vertical-align: middle;
+}
+
+.friend-img-item{
+	position: relative;
+}
+
+.devs h2 span {
+	font-size: 40px;
+	vertical-align: bottom;
+	line-height: 51px;
+	padding-left: 10px;
+}
+.devs .bold {
+	font-weight: bold;
+}
+
