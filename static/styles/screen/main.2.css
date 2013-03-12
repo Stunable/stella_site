@@ -1253,14 +1253,12 @@ form .info_modal{
 }
 
 
-
-.modal.current .inner_content{
-	padding:100px;
-	background-color:rgba(0,0,0,.4);
-	border:2px solid rgba(255,255,255,.1);
-	/*border-radius:10px*/
+.modal.current .modal_inner_frame{
+	max-width:700px;
+	height:620px;
+	overflow:hidden;
+	background-color:#eee;
 }
-
 
 .modal.current .modal_inner_frame>div{
 	display:inline;
@@ -1271,16 +1269,6 @@ form .info_modal{
 	float:left;
 }
 
-/*.wide .modal_inner_frame .item-visuals{
-	float:none;
-}*/
-
-
-.modal.current .foot a{
-	float:right;
-	margin:2px;
-	margin-right:6px;
-}
 
 .modal.current .item-price {
 	font-size: 1.2em;
@@ -1298,7 +1286,7 @@ form .info_modal{
 .modal.current .modal-item-details{
 	float:right;
 	color:black;
-	background-color:#eee;
+
 	padding:10px;
 	height:600px;
 	width:160px;
@@ -1414,13 +1402,13 @@ margin-top:3px;
 
 
 .modal.current .item-visuals #images{
-	width:410px;
+	/*width:410px;*/
 	/*border-radius:10px;*/
 }
 
 .modal.current .item-visuals #images li{
-	position: relative;
-	width: 410px;
+	/*position: relative;*/
+	/*width: 410px;*/
 	overflow: hidden;
 }
 
