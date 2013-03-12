@@ -2391,3 +2391,6 @@ background-color: white;
 	margin: auto;
 }
  
+.account_info td{
+	padding:12px;
+}

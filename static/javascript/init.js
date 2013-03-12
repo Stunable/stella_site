@@ -719,8 +719,7 @@ var stunable = {
         $('.errorlist').remove();
     }
 
-    function process_form_errors(json, form)
-    {
+    function process_form_errors(json, form){
         var curField;
         
         hide_form_errors();
@@ -746,7 +745,8 @@ var stunable = {
                 curField.parents('.control-group:first').addClass('error')
             }
         }
-  
+      }
+
         $(".quest").click(function() {
             $("#upload_avatar").click();
         });
@@ -807,7 +807,7 @@ var stunable = {
             }
         })
 
-      }}
+      }
           //         // the validation code
           //     container = $('#bigform-error1');
           //     // validate form on keyup and submit
