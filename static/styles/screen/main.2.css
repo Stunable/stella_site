@@ -2191,6 +2191,29 @@ margin-top:3px;
 	font-style: italic;
 }
 
+
+
+.privacy h2 {
+text-transform: uppercase;
+margin: 20px auto;
+background: white url(/static/images/gui/pink-dot-bg.png) repeat-x 0 center;
+width: 91%;
+text-align: left;
+}
+
+.privacy span {
+background-color: white;
+}
+
+.privacy .body-copy {
+	width: 90%;
+	margin: auto;
+	outline: none;
+	position: relative;
+	padding-bottom: 0;
+}
+
+
 .terms-conditions .body-copy {
 	padding: 0 20px;
 }
