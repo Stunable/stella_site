@@ -518,7 +518,7 @@ def carousel(request, slug, template='racks/new_carousel.html'):
     #     query_set = Item.objects.filter(category=current_category, approved=True)
     # else:
     #     query_set = Item.objects.filter(category=current_category)  
-    query_set = Item.objects.with_any(current_tag)
+    query_set = Item.objects.with_any(current_tag).filter(approved=True,is_available=True)
     
     return pagination(request, ctx, template, query_set)
 

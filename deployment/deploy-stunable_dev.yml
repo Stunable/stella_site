@@ -35,3 +35,6 @@
   handlers:
      - name: restart nginx
        action: service name=nginx state=restarted
+
+
+# alter table racks_item alter column featured_image_id type integer using (featured_image_id::integer); 
