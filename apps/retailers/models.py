@@ -128,8 +128,8 @@ class RetailerProfile(models.Model):
         if self.id:
             old_obj = RetailerProfile.objects.get(pk=self.id)
             if not old_obj.approved and self.approved:
-                accept_url = u"http://%s%s" % (
-                    unicode(Site.objects.get_current()),
+                url = u"%s%s" % (
+                    settings.RETAILER_SUBDOMAIN.rstrip('/'),
                     reverse("auth_login"),
                 )
                 ctx = {
