@@ -143,7 +143,7 @@ class Purchase(models.Model):
             
     def notify_retailer(self):
         url = u"%s%s" % (
-            RETAILER_SUBDOMAIN.rstrip('/'),
+            settings.RETAILER_SUBDOMAIN.rstrip('/'),
             reverse("retailer_order_history"),
         )
 

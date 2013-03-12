@@ -286,6 +286,11 @@ body.flatpage{
 	}
 
 
+#footer{
+	position:absolute;
+	bottom:0px;
+}
+
 /**** Isotope Filtering ****/
 
 .isotope-item {
@@ -475,6 +480,7 @@ body.flatpage #left-panel{
 			border-radius: 10px;
 			border:1px solid #eee;
 			padding:20px;
+			overflow:auto;
 		}
 
 		.carouselbox.inner-page-content{
@@ -488,6 +494,10 @@ body.flatpage #left-panel{
 			height:600px;
 		}
 
+
+		#page-content .section-intro{
+			margin:20px;
+		}
 	
 	/*TABS*/
 		.shop .content div#stunable-tabs-nav{
@@ -2173,6 +2183,9 @@ margin-top:3px;
 
 /*THIS IS PROBABLY EVIL*/
 
+#flatpage-content{
+	min-height: 800px;
+}
 
 .flatpage h2 {
 	text-transform: uppercase;
