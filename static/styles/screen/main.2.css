@@ -1422,6 +1422,7 @@ form .info_modal{
 .modal.current .wide .item-visuals #images li{
 	position:relative;
 	height:400px;
+	width:600px;
 	overflow:hidden;
 	/*border-radius:10px;*/
 }
