@@ -2347,3 +2347,22 @@ background-color: white;
 	margin-bottom: 20px;
 }
 
+
+
+.terms-conditions h2 {
+	text-transform: uppercase;
+	margin: 20px auto;
+	background: white url(/static/images/gui/pink-dot-bg.png) repeat-x 0 center;
+	width: 91%;
+	text-align: left;
+}
+
+.terms-conditions h2 span {
+	background-color: white;
+}
+
+.terms-conditions .body-copy {
+	width: 90%;
+	margin: auto;
+}
+ 
