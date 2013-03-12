@@ -446,6 +446,16 @@ a:hover, form .btn:hover { color:#8D8791;}
 #page-content{
 	overflow-x:hidden;
 }
+
+.flatpage #page-content{
+
+	width: 60%;
+	margin: auto;
+	top: 100px;
+}
+
+
+
 #page-content #nav-handle{
 	position:absolute;
 	left:0px;
@@ -2134,6 +2144,59 @@ margin-top:3px;
 
 .bootstrap form {
   margin: 0 0 18px;
+}
+
+
+
+
+/*THIS IS PROBABLY EVIL*/
+
+.flatpage h2 {
+	text-transform: uppercase;
+	margin: 20px 15px;
+	background: white url(/static/images/gui/pink-dot-bg.png) repeat-x 0 center;
+	width: 91%;
+	text-align: left;
+}
+
+.flatpage h2 span{
+	background-color: white;
+} 
+.flatpage .body-content{
+	/*font-family: 'Advent Pro', sans-serif;*/
+	width: 630px;
+	margin: 10px auto;
+}
+.flatpage .body-content .header{
+	font-weight: bold;
+	margin-bottom: 0;
+	font-size: 1.3em;
+}
+
+.flatpage .title{
+	font-weight: bold;
+}
+
+.privacy .body-copy {
+	padding: 0 20px;
+}
+
+.privacy .body-copy ul{
+	list-style-type: disc;
+	list-style-position: inside;
+	font-family: 'Advent Pro', sans-serif;
+}
+
+.privacy .emphasize, .team .emphasize{
+	font-style: italic;
+}
+
+.terms-conditions .body-copy {
+	padding: 0 20px;
+}
+
+.terms-conditions .emphasize {
+	font-style: italic;
 }
 
 
