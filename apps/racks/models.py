@@ -348,8 +348,7 @@ class Item(models.Model,listImageMixin):
         r.update({'sale':
             ' class="sale" ' if self.is_onsale else ''
         })
-        
-        print 'price text...'
+
         if not r['min'] == r['max'] and self.is_onsale:
             return '<span%(sale)s><span class="dollar">$</span>%(min)s</span> - <span class="dollar">$</span>%(max)s'%r
         return '<span class="dollar">$</span>%(min)s'%r

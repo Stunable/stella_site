@@ -45,14 +45,17 @@
 			<div class="item-visuals" id="item_visual_{{item.pk}}">
 				<ul id="images">
 
-				<li>
-					<img class="zoom_this featured" data-big="{{item.get_image.extralarge.url}}"  src="{{item.get_image.large.url}}">
+				<li class="active-image">
+					<img class="zoom_this featured item-image-{{item.get_image.id}}" data-big="{{item.get_image.extralarge.url}}"  src="{{item.get_image.large.url}}">
 				</li>
+
+
 				{% for each_image in item.get_additional_images %}
-				<li>
-	                <img style="display:none" class="zoom_this" data-big="{{each_image.extralarge.url}}"  src="{{each_image.large.url}}">
+				<li style="display:none">
+	                <img class="zoom_this item-image-{{each_image.id}}" data-big="{{each_image.extralarge.url}}"  data-src="{{each_image.large.url}}">
 				</li>
 				{% endfor %}
+				
 			</div><!--/.item-visuals-->
 			<!-- <div id="retailer-header">
 				<div class="modalitem"><span>{{item.name}}</span></div>
@@ -60,9 +63,25 @@
 			</div> -->
 			<div class="modal-item-details">
 				<div class="item-data"> 
-					<div class="description">
+					<div class="item-retailer">{{item.retailer}}</div>
+					<div class="item-description">
 						{{item.description|safe}}
 					</div>	
+
+
+					<div class="item-price">
+							{{item.price_text|safe}}
+					</div>
+
+					<div class="item-pictures">
+						<img class="active click-to-big item-image-{{item.get_image.id}}" data-target=".item-image-{{item.get_image.id}}" src="{{item.get_image.tiny.url}}">
+
+						{% for each_image in item.get_additional_images %}
+						
+			              <img class="item-image-{{each_image.id}} click-to-big" data-target=".item-image-{{each_image.id}}" data-big="{{each_image.extralarge.url}}"  src="{{each_image.tiny.url}}">
+						
+						{% endfor %}
+					</div>
 				</div>
 				{% if not wished_variation %}
 				<div class="item-actions">						
@@ -70,6 +89,7 @@
 						<div id="variation_choices">
 							<div style="color:black">SELECT SIZE:</div>
 							<div class="item-size-list">
+								
 								{% regroup variations_by_size by size as sizes %}
 									{% for size in sizes %}
 									<span data-target=".color-in-sizes" class="size-in-colors{% for v in size.list %} color-{{v.custom_color_name|slugify}}{% endfor %}" data-name="size-{{size.grouper|slugify}}">
@@ -80,43 +100,57 @@
 									</span>
 
 										{# {{size.list}} #}
-								{% endfor %}
+									{% endfor %}
+
 							</div>
-							<br>
+						
 							<div style="color:black">SELECT COLOR:</div>
 							
 							<div class="item-color-list">
 								{% regroup variations_by_color by custom_color_name as colors %}
-								{% for color in colors %}
-									
-									<span data-target=".size-in-colors" data-name="color-{{color.grouper|slugify}}" class="color-in-sizes{% for v in color.list %} size-{{v.size|slugify}}{% endfor %}">
-										<a href="#">{{color.grouper}}</a>
-									</span>
-								{% endfor %}
+									{% for color in colors %}
+										
+										<span data-target=".size-in-colors" data-name="color-{{color.grouper|slugify}}" class="color-in-sizes{% for v in color.list %} size-{{v.size|slugify}}{% endfor %}">
+											<a href="#">{{color.grouper}}</a>
+										</span>
+									{% endfor %}
 							</div>
+
 							
 						</div>
 				{% endif %}		
 						
+						
 						<div class="buy-wrapper bootstrap">
+							
 							{% if request.user.is_authenticated %}
 								{% if wished_variation %}
 								{# FOR WISH LIST MODAL #}
-								<!-- 	<a data-callback="remove_and_close" data-target="#list_item_{{wished_variation.id}}" class="btn btn-primary refclick" data-href="{% url update_wishlist wished_variation.id %}">Remove From Wishlist</a>
-									<a class="btn btn-primary" data-href="{% url add_to_cart wished_variation.id %}" id="add-to-cart-link">ADD TO CART</a> -->
+								<div>
+									<a data-callback="remove_and_close" data-target="#list_item_{{wished_variation.id}}" class="btn btn-primary refclick" data-href="{% url update_wishlist wished_variation.id %}">Remove From Wishlist</a>
+								</div>
+								<div>
+									<a class="btn btn-primary" data-href="{% url add_to_cart wished_variation.id %}" id="add-to-cart-link">ADD TO CART</a>
+								</div>
 								{% else %}
-								{# FOR NORMAL ITEM MODAL #}
-								<!-- 	<a class="btn btn-primary click_to_cart" data-href="/cart/update_wishlist/" href="" id="add-to-wishlist-link">Add To Wish List</a> -->
-								<a class="btn btn-primary click_to_cart" data-href="/cart/add_to_cart/" href="" id="add-to-cart-link">ADD TO CART</a>
 								{% endif %}
-							{% endif %}					
+								{% endif %}	
+								{# FOR NORMAL ITEM MODAL #}
+						
+								<div class="action-buttons">
+							<div>
+								<a class="" data-href="/cart/update_wishlist/" href="" id="add-to-wishlist-link">Wish List  </a>
+								<a class="btn btn-primary click_to_cart" data-href="/cart/add_to_cart/" href="" id="add-to-cart-link">ADD TO CART</a>
+							</div>
+								</div>
+											
 						</div>
 					</div>
 				</div>
-				<ul class="sharelinks">
+				<!-- ul class="sharelinks">
 					<li><a href="http://www.facebook.com/GreatAmericanArt"><span class="share iconFacebook"></span> Facebook</a></li>
 					<li><a href="http://www.twitter.com"><span class="share iconTwitter"></span> Twitter</a></li>
-				</ul>	
+				</ul>	 -->
 			</div>
 		</div>
 

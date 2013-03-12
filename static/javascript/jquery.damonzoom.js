@@ -52,7 +52,7 @@
                 
                     var container = $('<div class="damonzoomcontainer"></div>').css({
                             position: 'absolute',
-                            top: el.position().top,
+                            top: '0px',
                             left: el.position().left,
                             // opacity: 0,
                             width: el.outerWidth(),

@@ -57,11 +57,7 @@ function setItemDetailsEvent(){
 					},'html')
 				}
 
-				return false;
-
-					
-
-				
+				return false;			
 			});
 
 		}
@@ -178,6 +174,47 @@ function init_item_modal(){
 		setItemDetailsEvent();
 
 		$('.zoom_this.featured').load(function(){$(this).damonzoom()});
+
+		$('.modal-item-details .item-pictures img').click(function(e){
+
+			if($(this).hasClass('active')){
+				return false;
+			}
+			
+			$(this).siblings().removeClass('active');
+			$(this).addClass('active');
+
+
+			var target_img  = $('.item-visuals').find($(this).data('target'));
+
+			console.log(target_img)
+
+			if (!target_img.attr('src')){
+				target_img.attr('src',target_img.data('src')).load(function(){
+					// $('body').append(this);
+					$('.damonzoomcontainer').hide();
+					$(this).parent().fadeIn();
+					$(this).damonzoom();
+					$('.item-visuals .active-image').fadeOut();
+					$('.active-image').removeClass('active-image');
+					$(this).parent().addClass('active-image');
+					
+				});
+			}else{
+				$('.damonzoomcontainer').hide();
+				$(target_img).parent().fadeIn();
+				$(target_img).damonzoom();
+				$('.item-visuals .active-image').fadeOut();
+				$('.active-image').removeClass('active-image');
+				$(target_img).parent().addClass('active-image');
+
+			}
+
+			
+
+
+			
+		})
 
 		$('#retailer-header .modalitem').textfill(25)
 		$('#retailer-header .retailer').textfill(40)

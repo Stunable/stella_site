@@ -597,10 +597,13 @@ a:hover, form .btn:hover { color:#8D8791;}
 		    width:201px;
 		    font-size:.9em;
 			text-align:center;
-			
+			display:none;
 
 		}
 
+		.shop .content div.item.isotope-item{
+			display:inline-block;
+		}
 
 		.shop .content div.item>div{
 			margin-top:3px;
@@ -1114,8 +1117,8 @@ MODAL CSS
 
 .close-modal {
 	position: absolute;
-	top: 10px;
-	right:10px;
+	top: 0px;
+	right:0px;
 	height: 24px;
 	width: 24px;
 	margin: 0;
@@ -1245,8 +1248,8 @@ form .info_modal{
 }
 
 .damonzoomcontainer{
-	/*border-radius: 10px;*/
-	overflow-x:hidden;
+	position:absolute;
+	overflow:hidden;
 }
 
 
@@ -1280,22 +1283,17 @@ form .info_modal{
 }
 
 .modal.current .item-price {
-	font-size: 2.5em;
-	float: right;
-	width: 190px;
+	font-size: 1.5em;
+	width:100%;
 	/*width: 230px;*/
-	margin: 5px 0 15px 0;
 	overflow: hidden;
-	font-weight: 200;
+
 	text-align: right;
 	white-space: nowrap;
-	line-height: :.5em;
+	color:black;
 	/*background: url(../../images/x_sm.png) no-repeat 155px -9px;*/
 }
 
-.modal.current .item-price{
-	white-space: nowrap;
-}
 
 .modal.current .modal-item-details{
 	float:right;
@@ -1318,8 +1316,12 @@ form .info_modal{
 
 
 .modal-item-details .item-data{
-	min-height:350px;
+	height:400px;
 	display:block;
+}
+
+.modal-item-details .item-data div{
+	margin:5px;
 }
 
 .wide .modal-item-details .item-data{
@@ -1330,69 +1332,87 @@ form .info_modal{
 }
 
 
-.modal-item-details .description{
+.modal-item-details .item-description{
 	font-size:.8em;
 	font-family: serif;
+	max-height:250px;
+	overflow:auto;
 }
 
-.wide .modal-item-details .description{
+.modal-item-details .item-retailer{
+	font-size:1.1em;
+	margin-bottom:10px;
+}
+
+
+.modal-item-details .item-pictures{
+	white-space: nowrap;
+	overflow:auto;
+	width:100%;
+}
+.modal-item-details .item-pictures img{
+	width:40px;
+	margin:1px;
+	cursor:pointer;
+}
+
+.modal-item-details .item-pictures img:hover{
+	border:1px solid black;
+	margin:0px;
+}
+
+.modal-item-details .item-pictures img.active{
+	border:1px solid #7f10b5;
+	margin:0px;
+	opacity:.5;
+}
+
+
+
+
+.wide .modal-item-details .item-description{
 	font-size:.8em;
 	font-family: serif;
 	width:200px;
 }
 
-.item-actions{
+
+
+.modal.current  .item-actions{
 	display:block;
 	color:white;
+	height:200px;
 }
 
-.modal.current .buy-wrapper{
-	position:absolute;
-	top:580px;
-	right:13px;
+.modal.current .item-actions div{
+	margin-top:5px;
+	margin-bottom:5px;
 }
 
-.modal.current #retailer-header{
-	width:400px;
-	position: absolute;
-	top:630px;
-	height:70px;
-	left:0px;
-	/*border-radius:0px 0px 0px 10px;*/
-	font-family: serif;
-	background-color:rgba(0,0,0,.5);
-}
-
-
-
-.modal.current #retailer-header div{
-	
-
-}
-
-.modal.current #retailer-header .modalitem{
-	font-size: 1.5em;
-	color:white;
-	font-weight: bolder;
-	position:absolute;
-	height:20px;
-	width:400px;
-}
-
-.modal.current #retailer-header .retailer{
-	position:absolute;
-	color:#f054ba;
-	font-weight: bolder;
-	right:0px;
-	text-align: right;
-	padding-right:4px;
-	top:22px;
-	height:40px;
-	width:400px;
+.modal.current .item-actions .action-buttons{
+	position:relative;
 	white-space: nowrap;
+	width:300px;
 }
 
-.modal.current .item-visuals {
+.modal.current .item-actions .action-buttons div{
+	position:absolute;
+	top:40px;
+	left:-7px;
+}
+.modal.current .item-actions .action-buttons a{
+	margin:2px;
+}
+
+
+
+.modal.current .item-visuals #images{
+	width:410px;
+	/*border-radius:10px;*/
+}
+
+.modal.current .item-visuals #images li{
+	position:absolute;
 	/*border-radius:10px;*/
 }
 
@@ -1438,10 +1458,6 @@ form .info_modal{
 .modal.current .item-size{
 	color: white;
 	font-size: .8em;
-}
-
-.modal.current .item-size-list, .modal.current .item-color-list {
-	margin: 5px 0;
 }
 
 .modal.current .item-size-list a, .modal.current .item-color-list a{
