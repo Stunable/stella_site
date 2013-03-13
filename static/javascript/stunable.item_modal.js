@@ -23,7 +23,7 @@
 	}
 
 function setItemDetailsEvent(){
-		console.log('setItemDetailsEvent')
+		// console.log('setItemDetailsEvent')
 			
 			$('.modal-item-details #variation_choices span').click(function() {	
 				$(this).siblings().removeClass('selected');
