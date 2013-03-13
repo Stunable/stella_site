@@ -534,6 +534,7 @@ def order_history(request, template='orders/order_history.html'):
                 checkouts = checkouts.filter(last_modified__lte=_to)
                              
         ctx['checkouts']= checkouts.order_by('-last_modified')
+        ctx['retailer_profile'] = retailer
     except:
         raise
         #login as regular user

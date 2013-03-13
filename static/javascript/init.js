@@ -122,7 +122,7 @@ var stunable = {
         // box.modal({clickClose:false,escapeClose:false,showClose:false})   
 
     }
-    ,shop: function(){            
+    ,shop: function(){         
 
         
         // initRackEvents();
@@ -162,7 +162,11 @@ var stunable = {
           $('#container').isotope(isotope_options[$('.scrollbox').data('type')])
             // initDrag($('.item'))
             // initDrop(); 
-          }
+        }
+
+        $('.drag_item').hover(function(){
+          $('.drop_item').toggleClass('drop_item_here')
+        })
 
     }
     ,racks: function(){

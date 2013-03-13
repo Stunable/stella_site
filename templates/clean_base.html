@@ -118,12 +118,14 @@
                     
                       {% block page_tab %}
                       {% endblock %}
-
-                      
+<!-- 
+                           <div id="drop_me_in_here"><img src="/static/images/new_buttons/drop_me_arrow.png">
+                            
+                          </div> -->
                         <div class="left-panel" id="left-panel">
+                     
                           <ul>
-                            
-                            
+
                             {% block left_panel %}
                             <li {% if page_role == 'shop' and page_sub_role != 'wishlist' %}class="active" {% endif %}id="shop-button" >
                               <a href="/"><div>shop</div></a>
