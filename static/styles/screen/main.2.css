@@ -1096,6 +1096,12 @@ table.retailer-item-group{
 	display:block;
 }
 
+
+.modal.current#login_box{
+	padding:50px;
+	background-color:rgba(255,255,255,.5);
+}
+
 .facebooklogin{
 	border-radius: 0px;
 	width:278px;
