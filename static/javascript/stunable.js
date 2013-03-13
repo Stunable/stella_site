@@ -33,6 +33,28 @@ function remember( selector ){
 }
 
 
+function cart_item_added(){
+    var SI  = setInterval(function(){
+        $('#cart-button').toggleClass('drop_item_hover')
+    },300)
+
+    setTimeout(function(){
+        window.clearInterval(SI);
+    },1900)
+}
+
+function wishlist_item_added(){
+    console.log('whisliasdfs')
+    var SI  = setInterval(function(){
+     
+        $('#wish-button').toggleClass('drop_item_hover')
+    },300)
+
+    setTimeout(function(){
+        window.clearInterval(SI);
+    },1900)
+}
+
 $.fn.serializeObject = function()
     {
         var o = {};
@@ -516,55 +538,30 @@ function getUserlist(input, list){
 // END USER BASE
 
 var DRAGGABLE_OPTIONS = {
-        helper : "clone",
-        appendTo : 'body',
+        helper: function () {
+            return $(this).clone().removeAttr('style').removeClass('isotope-item').addClass('drag-helper').appendTo('body');
+        },
+        // appendTo : 'body',
         // opacity : .8,
-        // cursorAt : {
-        //   top : 73,
-        //   left : 145    
-        // },
+        cursorAt : {
+          top : 73,
+          left : 60    
+        },
         zIndex: 2700,
         // snap: ".drop_item",
         start: function(event, ui) {
-           console.log(ui.helper)
-            $(ui.helper[0]).addClass("black");
-
-           //console.log('dragging',this)
-            if ($('.iosSlider').data('touchCarousel')){
-                $('.iosSlider').data('touchCarousel').freeze();
-            }
-
-            prevs = $(this).parent().parent().prevAll();            
-            $(prevs).each(function(){
-                if(!$(this).hasClass('prev')){
-                    $(this).addClass('prev');
-                }
-            });
-            next = $(this).parent().parent().next();
-            if(!$(next).hasClass('nxt')){
-                $(next).addClass('nxt');
-            }
-            
-            //$('.iosSlider').css('overflow','visible');
-            $('#prev').off('hover');
-            $('#next').off('hover');
+           // console.log(ui)
+           $('.drag_item').unbind('hover')
+           $('.drop_item').addClass('drop_item_here')
+       
         },
         stop: function(event, ui){
-            // slideNum = calcSlide();
-             if ($('.iosSlider').data('touchCarousel')){
-                $('.iosSlider').data('touchCarousel').unfreeze();
-            }
-            
-            $('.prev').each(function(){
-                $(this).removeClass('prev');
-            });
-            $('.nxt').each(function(){
-                $(this).removeClass('nxt');
-            });
-            $('.iosSlider').css('overflow','hidden');
-            $('#prev').on('hover');
-            $('#next').on('hover');
-        }
+
+        $('.drag_item').hover(function(){
+              $('.drop_item').toggleClass('drop_item_here')
+         })
+          
+        }   
     }
 
 var DROPPABLE_OPTIONS = {
@@ -573,16 +570,7 @@ var DROPPABLE_OPTIONS = {
         hoverClass : "drop_item_hover",
         activeClass: "drop_item_here",
         drop : function(event, ui) {
-            var temp="";
-            // find the next ul which have the 'nxt' class and remove it
-            $('.nxt').each(function(){
-                $(this).removeClass('nxt');
-            });
-            // var item_id = $(ui.draggable).find("a").attr('data-value');
-            // var item_id = $(ui.draggable).find('h4').find('a').attr('data-value');
-            var item_id = $(ui.draggable).find('a').attr('data-value');
-            var rack_id = $(this).find('span').attr('data-value');
-            var droppable = $(this).find('span');
+          
             $.post('/racks/add_item/?item_id=' + item_id + '&rack=' + rack_id, function(returnData) {
                 if (temp != "Item Added!"){
                     temp = $(droppable).html();
@@ -603,7 +591,7 @@ var DROPPABLE_OPTIONS = {
             // alert("You have dragged " + item_name + " into " + rack_name);
         },
         over: function(e, ui){
-            ////console.log(ui)
+            // $(ui.helper).addClass('tiny')
         }
     }
 

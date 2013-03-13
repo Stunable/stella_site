@@ -45,6 +45,8 @@ function setItemDetailsEvent(){
 
 				e.preventDefault();
 
+				var $t = $(this)
+
 				if ($('.item-size-list span.selected').length && $('.item-color-list span.selected').length ){
 					var selsize = $('.item-size-list span.selected'),
 						selcolor = $('.item-color-list span.selected');
@@ -54,6 +56,11 @@ function setItemDetailsEvent(){
 					$.post($(this).data('href')+variation_id,function(data){
 						$.modal.close()
 						var cs = reveal_cart(e,data,true);
+						if ($t.hasClass('cart')){
+							cart_item_added();
+						}else{
+							wishlist_item_added();
+						}
 					},'html')
 				}
 

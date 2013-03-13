@@ -123,7 +123,7 @@
                             
                           </div> -->
                         <div class="left-panel" id="left-panel">
-                     
+
                           <ul>
 
                             {% block left_panel %}
@@ -134,11 +134,15 @@
                               <a href="/cart" title="Cart"><div>cart</div></a>
                               
                             </li>
-                            {% if request.user.is_authenticated %}
+                            
                             <li class="drop_item{% if page_sub_role == 'wishlist' %} active{% endif %}" id="wish-button">
+                              {% if request.user.is_authenticated %}
                               <a href="/shop/wishlist/"><div>wish</div></a>
+                              {% else %}
+                              <a data-href="/shop/new" class="login-check">wish</a>
+                              {% endif %}
                             </li>
-                            {% endif %}
+                            
                             
                             
                           {% endblock %}
@@ -177,13 +181,13 @@
              <div class="inner_content">
                  
                  <div id="login_options">
-                     <!--<div><a class="login-href-button" href="/login/facebook/"><div class="facebooklogin" style="cursor:pointer"></div></a>-->
+                     <div><a class="login-href-button" href="/login/facebook/"><div class="facebooklogin" style="cursor:pointer"></div></a>
                      </div>
                      <div>
                      {{CMS.login_explain|safe}}
                       </div>                
                      or
-                    <!-- <div><a class="login-href-button" href="/login/google-oauth2/"><div class="googlelogin" style="cursor:pointer"></div></a>-->
+                     <div><a class="login-href-button" href="/login/google-oauth2/"><div class="googlelogin" style="cursor:pointer"></div></a>
                      </div>
                      <!-- <div class="fb-login-button" data-show-faces="true" data-width="500" data-max-rows="1"></div> -->
               <div class="foot">

@@ -75,20 +75,22 @@ class Kart(models.Model):
 
 
         if self.request.user.is_authenticated():
+            print "SAVING WISHLIST ITEM"
             existingWIs = WishListItem.objects.filter(item_variation=item_variation,user=self.request.user)
             if existingWIs.count():
+                print existingWIs
                 existingWIs.delete()
-
-        WI = WishListItem(
-            cart=self,
-            item_variation=item_variation,
-            item=item_variation.item,
-            picture = item_variation.get_image(),
-        )
-        if hasattr(self,'request'):
-            if self.request.user.is_authenticated():
-                WI.user = self.request.user
-        WI.save()
+            else:
+                WI = WishListItem(
+                    cart=self,
+                    item_variation=item_variation,
+                    item=item_variation.item,
+                    picture = item_variation.get_image(),
+                )
+                if hasattr(self,'request'):
+                    if self.request.user.is_authenticated():
+                        WI.user = self.request.user
+                WI.save()
             
 
 

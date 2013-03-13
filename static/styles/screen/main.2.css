@@ -438,7 +438,7 @@ body.flatpage #left-panel{
 
 	}
 
-	#left-panel #cart-button:hover{
+	#left-panel #cart-button:hover, #left-panel>ul>li#cart-button.drop_item_hover{
 		background:url('../../images/new_buttons/bag_hover.png');
 		background-size: 50px;
 		background-repeat: no-repeat;
@@ -458,7 +458,7 @@ body.flatpage #left-panel{
 
 	}
 
-	#left-panel #wish-button:hover{
+	#left-panel #wish-button:hover,#left-panel>ul>li#wish-button.drop_item_hover{
 		background:url('../../images/new_buttons/heart_hover.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
@@ -470,7 +470,7 @@ body.flatpage #left-panel{
 
 
 
-    #left-panel>ul>li:hover>a{
+    #left-panel>ul>li:hover>a,#left-panel>ul>li.drop_item_hover>a{
     	color:white;
     }
 
@@ -506,21 +506,12 @@ body.flatpage #left-panel{
 	}
 
 
-	.drop_item_hover {
-	border-width: 3px !important;
-	border-color: gray !important;
-	padding-top:-3px !important;
-	padding-bottom:-3px !important;
-	margin:0px !important;
-	}
-
 	#left-panel>ul>li.drop_item_here {
 		background-color:#eee;
-	
 		border-top: 1px #444 dashed;
 		border-bottom: 1px #444 dashed;
 		border-radius:3px;
-		/*background-color:gold!important;*/
+		box-shadow: -4px 0px 4px 4px rgba(180,0,200,.2);
 	}
 
 
@@ -548,7 +539,8 @@ body.flatpage #left-panel{
 		width: 60%;
 		margin: auto;
 		top: 100px;
-		background-color:#eee;
+		/*background-color:#eee;*/
+		border:none;
 	}
 
 
@@ -642,6 +634,12 @@ body.flatpage #left-panel{
 			padding-bottom: 20px;
 			text-transform: lowercase;
 			font-size:.85em;
+		}
+
+		div#stunable-tabs-nav ul li a{
+			padding-right:20px;
+			padding-top:20px;
+			padding-bottom:20px;
 		}
 
 		.content.cart div#stunable-tabs-nav{
@@ -810,7 +808,7 @@ body.flatpage #left-panel{
 
 			 .directional .btn {
 				position:absolute;
-				top:85%;
+				top:50%;
 				height:31px;
 				width:33px;
 				margin:0;
@@ -819,6 +817,8 @@ body.flatpage #left-panel{
 				cursor:pointer;
 				z-index:3;
 				overflow:hidden;
+				opacity:.7;
+
 			}
 			 .directional .btn:hover {
 			/*	background-color:#E84E4B;*/
@@ -1115,32 +1115,41 @@ table.retailer-item-group{
 
 
 .item.ui-draggable-dragging {
-	height:170px;
-	
-	border:1px solid #F05C68 !important;
+
 	background-color:rgba(255,255,255,.4) !important;
 	color:black;
+	height:200px;
+
 }
 
 .item.ui-draggable-dragging .item-name{
 	color:black !important;
+	width:100%;
+	text-align: center;
+	/*display:none;*/
 }
 
 .item.ui-draggable-dragging .item-label{
-	background-color:rgba(255,255,255,.4) !important;
+	text-align: center;
+	width:100%;
+	background:none;
+	/*display:none;*/
+	/*background-color:rgba(255,255,255,.4) !important;*/	
 }
 
 .item.ui-draggable-dragging .touchable{
 	/*visibility:hidden;*/
 }
 
-.item.ui-draggable-dragging .picbox{
-	visibility: visible;
-	text-align:center;
-	display:inline;
-	position:inherit;
-	margin-left:10%;
 
+.item.ui-draggable-dragging .picbox{
+	opacity:.8;
+	position:static;
+	margin:auto;
+}
+
+.item.ui-draggable-dragging .carousel_price_tag{
+	display:none;
 }
 
 .item.ui-draggable-dragging img{
@@ -1151,22 +1160,6 @@ table.retailer-item-group{
 
 
 
-
-.left-panel .my-closet-menu li.drop_item{
-	margin-bottom:3px;
-	margin-top:2px;
-	padding-top:4px;
-	padding-left:5px;
-	padding-bottom:4px;
-}
-
-.drop_item_hover {
-	border-width: 3px !important;
-	border-color: gray !important;
-	padding-top:-3px !important;
-	padding-bottom:-3px !important;
-	margin:0px !important;
-}
 
 
 
@@ -1409,7 +1402,7 @@ form .info_modal{
 
 	padding:10px;
 	height:600px;
-	width:160px;
+	width:220px;
 	/*border-radius:0px 0px 10px 0px;*/
 }
 
@@ -1615,7 +1608,7 @@ margin-top:3px;
 .modal.current .item-size-list span, .modal.current .item-color-list span{
 	display: inline-block;
 	padding: 2px;
-	border: 1px dashed #dec5df;
+	/*border: 1px dashed #dec5df;*/
 	margin-right: 5px;
 	min-width: 22px;
 	text-align: center;
@@ -1634,7 +1627,7 @@ margin-top:3px;
 
 .modal.current .item-size-list span.selected a, .modal.current .item-size-list span:hover a{
 	color: #FFFFFF;
-	border: 1px dashed #db8ec1;
+	/*border: 1px dashed #db8ec1;*/
 	border-radius: 5px;
 }
 
@@ -1645,7 +1638,7 @@ margin-top:3px;
 
 .modal.current .item-color-list span.selected a, .modal.current .item-color-list span:hover a{
 	color: #FFFFFF;
-	border: 1px dashed #db8ec1;
+	/*border: 1px dashed #db8ec1;*/
 	border-radius: 5px;
 }
 
