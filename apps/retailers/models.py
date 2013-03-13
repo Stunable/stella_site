@@ -133,7 +133,7 @@ class RetailerProfile(models.Model):
                     reverse("auth_login"),
                 )
                 ctx = {
-                    "accept_url": accept_url,
+                    "accept_url": url,
                     "retailer": self 
                 }
                 subject = render_to_string(RETAILER_SUBJECT, ctx)
