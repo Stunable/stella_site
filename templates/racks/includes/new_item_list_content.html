@@ -4,27 +4,36 @@
 
 		<div class="picbox">
 
-		<a class="item-ref pic-container wp drag_item touchable"  rel="modal:open" data-options="item_modal_options" 
-		{% if is_wishlist %}href="{% url variation_modal wishlistitem.id %}"
-			{%else%}href="{% url item_modal item.slug %}"
-		{% endif %} data-value="{{ item.id }}" >    
-			
-			 <img src="{{ target_item.get_image.medium.url }}"> 
-		</a>
+			<a class="item-ref pic-container wp drag_item touchable"  rel="modal:open" data-options="item_modal_options" 
+			{% if is_wishlist %}href="{% url variation_modal wishlistitem.id %}"
+				{%else%}href="{% url item_modal item.slug %}"
+			{% endif %} data-value="{{ item.id }}" >    
+				
+				 <img src="{{ target_item.get_image.medium.url }}"> 
+			</a>
 		</div>
 
 		
-		<div class="carousel_price_tag">
-		    {{item.price_range_text|safe}}
-		</div>
-		<div class="item-name"><a rel="modal:open" data-options="item_modal_options" class="item-ref top-ref" data-value="{{ item.id }}" {% if is_wishlist %}href="{% url variation_modal wishlistitem.id %}"
+		
+		
+
+		<div class="item-label"><span>{{item.brand}}</span></div>
+		
+		 <div class="item-name"><a rel="modal:open" data-options="item_modal_options" class="item-ref top-ref" data-value="{{ item.id }}" {% if is_wishlist %}href="{% url variation_modal wishlistitem.id %}"
 			{%else%}href="{% url item_modal item.slug %}"
 		{% endif %}>{{item.name}}</a></div>
 
-		<div class="item-label"><span>{{item.brand}}</span></div>
-		 {% if is_wishlist %}
-		 <div class="controls">
-		 <a href="" data-target="#list_item_{{target_item.id}}" data-href="{% url update_wishlist wishlistitem.item_variation.id %}" title="Remove this item." class="icon x remove refclick">REMOVE</a></div>{% endif %}
+		 <div class="carousel_price_tag">
+		    {{item.price_range_text|safe}}
+		</div>
+
+
+
+ 		{% if is_wishlist %}
+			 <div class="controls">
+			 <a href="" data-target="#list_item_{{target_item.id}}" data-href="{% url update_wishlist wishlistitem.item_variation.id %}" title="Remove this item." class="icon x remove refclick">REMOVE</a></div>
+		 {% endif %}
+
 		
 	</div>
 

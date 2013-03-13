@@ -125,19 +125,15 @@
                             
                             
                             {% block left_panel %}
-                            <li {% if page_role == 'shop' and page_sub_role != 'wishlist' %}class="active" {% endif %}id="shop" >
+                            <li {% if page_role == 'shop' and page_sub_role != 'wishlist' %}class="active" {% endif %}id="shop-button" >
                               <a href="/"><div>shop</div></a>
                             </li>
-                            <li class="drop_item{% if page_role == 'cart' %} active{% endif %}"  id="cart">
+                            <li class="drop_item{% if page_role == 'cart' %} active{% endif %}"  id="cart-button">
                               <a href="/cart" title="Cart"><div>cart</div></a>
-                              <div id="cart_slide"> 
-                                  <div id="cart_contents_container">
-                                      {% include "cart/cart_slideout.html" %}
-                                  </div>
-                              </div>
+                              
                             </li>
                             {% if request.user.is_authenticated %}
-                            <li class="drop_item{% if page_sub_role == 'wishlist' %} active{% endif %}" id="wishlist">
+                            <li class="drop_item{% if page_sub_role == 'wishlist' %} active{% endif %}" id="wish-button">
                               <a href="/shop/wishlist/"><div>wish</div></a>
                             </li>
                             {% endif %}
