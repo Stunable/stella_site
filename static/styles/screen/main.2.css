@@ -412,19 +412,21 @@ body.flatpage #left-panel{
 
 
 	#left-panel #shop-button{
+		height:90px;
+		width:90px;
 		background:url('../../images/new_buttons/logo.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position-y: 30px;
-		background-position-x: 16px;
+		/*background-position-y: 30px;*/
+		/*background-position-x: 16px;*/
+		background-position:16px 16px;
 	}
 
 	#left-panel #shop-button:hover{
 		background:url('../../images/new_buttons/logo_hover.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position-y: 30px;
-		background-position-x: 16px;
+		background-position:16px 16px;
 		background-color:#7f10b5;
 	}
 
@@ -433,8 +435,7 @@ body.flatpage #left-panel{
 		background:url('../../images/new_buttons/bag.png');
 		background-size: 50px;
 		background-repeat: no-repeat;
-		background-position-y: 35px;
-		background-position-x: 22px;
+		background-position:23px 30px;
 
 	}
 
@@ -442,8 +443,7 @@ body.flatpage #left-panel{
 		background:url('../../images/new_buttons/bag_hover.png');
 		background-size: 50px;
 		background-repeat: no-repeat;
-		background-position-y: 35px;
-		background-position-x: 22px;
+		background-position:23px 30px;
 		background-color:#7f10b5;
 
 	}
@@ -453,8 +453,7 @@ body.flatpage #left-panel{
 		background:url('../../images/new_buttons/heart.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position-y: 30px;
-		background-position-x: 16px;
+		background-position:16px 16px;
 
 	}
 
@@ -462,8 +461,7 @@ body.flatpage #left-panel{
 		background:url('../../images/new_buttons/heart_hover.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position-y: 30px;
-		background-position-x: 16px;
+		background-position:16px 16px;
 		background-color:#7f10b5;
 
 	}

@@ -130,16 +130,16 @@
                             <li {% if page_role == 'shop' and page_sub_role != 'wishlist' %}class="active" {% endif %}id="shop-button" >
                               <a href="/"><div>shop</div></a>
                             </li>
+                            
                             <li class="drop_item{% if page_role == 'cart' %} active{% endif %}"  id="cart-button">
-                              <a href="/cart" title="Cart"><div>cart</div></a>
-                              
+                              <a href="/cart" title="Cart"><div>cart</div></a>  
                             </li>
                             
                             <li class="drop_item{% if page_sub_role == 'wishlist' %} active{% endif %}" id="wish-button">
                               {% if request.user.is_authenticated %}
                               <a href="/shop/wishlist/"><div>wish</div></a>
                               {% else %}
-                              <a data-href="/shop/new" class="login-check">wish</a>
+                              <a data-href="/shop/new" class="login-check"><div>wish</div></a>
                               {% endif %}
                             </li>
                             
