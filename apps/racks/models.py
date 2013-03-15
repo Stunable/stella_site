@@ -240,7 +240,7 @@ class Item(models.Model,listImageMixin):
     sizes =          models.ManyToManyField(Size, through='racks.ItemType', null=True, blank=True)
     colors =         models.ManyToManyField(Color,blank=True)
     created_date =   models.DateField(auto_now=True, auto_now_add=True, default=datetime.date.today)
-    price_text =     models.CharField(max_length=128,default=None,blank=True,null=True)
+    price_text =     models.CharField(max_length=255,default=None,blank=True,null=True)
     
     slug = models.SlugField(max_length=128,unique=True)
 
