@@ -3,13 +3,12 @@
 	<div data-id="{{target_item.id}}" id="list_item_{{target_item.id}}" class="touchcarousel-item item retailer-{{item.retailer_profile.id}}">
 
 		<div class="picbox">
-
 			<a class="item-ref pic-container wp drag_item touchable"  rel="modal:open" data-options="item_modal_options" 
 			{% if is_wishlist %}href="{% url variation_modal wishlistitem.id %}"
 				{%else%}href="{% url item_modal item.slug %}"
 			{% endif %} data-value="{{ item.id }}" >    
 				
-				 <img src="{{ target_item.get_image.medium.url }}"> 
+				 <img alt="{{target_item.name}} by {{target_item.retailer}}"src="{{ target_item.get_image.medium.url }}"> 
 			</a>
 		</div>
 

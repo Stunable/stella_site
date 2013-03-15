@@ -4,15 +4,13 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title>{% block title %}Stunable | Your Admirers{% endblock %}</title>
-        <meta name="robots" content="index, follow" />
-        <meta name="MSSmartTagsPreventParsing" content="true" />
-        <meta http-equiv="imagetoolbar" content="false" />
-        <meta name="title" content="Welcome to Stunable" />
-        <meta name="DC.title" content="Stunable" />
-        <meta name="author" content="Stunable" />
-        <meta name="description" content="Shopping online has never been sassier!" />
+        <title>{% block title %}Welcome to Stunable{% endblock %}</title>
+        <META name="robots" content="index, follow" />
+        <META NAME="COPYRIGHT" CONTENT="&copy; 2013 Stunable LLC">
+        <META http-equiv="content-type" content="text/html; charset=UTF-8">
+        <META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="en-US,fr">
+        <META name="author" content="Stunable" />
+        <META name="description" content="Shopping online has never been sassier!" />
        <!--  <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/main.css" type="text/css" media="screen, projection" />
         <link rel="stylesheet" href="{{ STATIC_URL }}styles/screen/touchcarousel.css" type="text/css" media="screen, projection" />
 
@@ -55,7 +53,7 @@
                   window.fbAsyncInit = function() {
                     FB.init({
                       appId      : {{FACEBOOK_APPID}}, // App ID from the App Dashboard
-                      channelUrl : 'http://stunable.com/channel.html', // Channel File for x-domain communication
+                    channelUrl : 'http://stunable.com{{ STATIC_URL }}channel.html', // Channel File for x-domain communication
                       status     : true, // check the login status upon init?
                       cookie     : true, // set sessions cookies to allow your server to access the session?
                       xfbml      : true  // parse XFBML tags on this page?
@@ -156,7 +154,6 @@
                 </div><!--/.wrap -->
 
             </div><!--/.footer -->
-        </div>
 
         {% block login_modal_box %}
 
