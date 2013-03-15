@@ -651,7 +651,7 @@ def _all(request, slug=None, template='racks/new_carousel.html',query_set = None
         if not query_set:
             # if settings.IS_PROD:
                 #print "PROD"
-                print 'getting items'
+                # print 'getting items'
                 query_set = Item.objects.select_related('featured_image').filter(approved=True,is_available=True).order_by('?')
         # else:
             # query_set = Item.objects.all().order_by('?')
