@@ -1,12 +1,4 @@
 
-  var add_rack_modal_options = {
-    afterOpenFunction:init_add_rack_modal,
-  }
-
-  var item_modal_options = {
-    afterOpenFunction:init_item_modal,
-  }
-
 var stunable = {
 
     common : function() {
@@ -119,16 +111,14 @@ var stunable = {
           $($(this).data('target')).show().focus();
         })
 
-
+        tabs_find_active()
         // var box = $('#login_box').clone()
         // box.modal({clickClose:false,escapeClose:false,showClose:false})   
 
     }
     ,shop: function(){         
 
-        
-        // initRackEvents();
-        console.log($('.scrollbox').data('orient'))
+      
         $('.scrollbox').damonscroll({
           orientation: $('.scrollbox').data('orient'),
           target_element: $('#container'),
@@ -136,7 +126,7 @@ var stunable = {
           add_function: function(items){
               // initDrag(items)
               $('#container').isotope('insert', items)
-          },
+          }
 
 
         })
@@ -176,9 +166,7 @@ var stunable = {
       // console.log('racks setup')
       // initDrop(); 
       // initDrag($('.item'))
-      initRackEvents();
-
-     
+      initRackEvents();    
 
     }
     ,cart: function(){
@@ -330,8 +318,7 @@ var stunable = {
               }
             })
 
-
-      },
+    },
       retailers:function(){
         $('#select_all').click(function(e){
           $('.ship_check').attr('checked',$(this).attr('checked')==='checked');
@@ -658,66 +645,26 @@ var stunable = {
                 $('#account-information-menu-item').addClass('active-menu');
         
         // make inline edit
-    $('.editable').hide();
-        
-    // $('.edit').click(function(event){
-    //     event.preventDefault();
-    //     if ($(this).html() == 'Edit'){
-    //         $(this).html("Close");
-    //     }else{
-    //         $(this).html("Edit");
-    //     }
-        
-    //     var stc = $(this).parent().parent().find('.static');
-    //     var editable = $(this).parent().parent().find('.editable');
-        
-    //     if ($(stc).css('display')=='none'){
-    //         $(stc).css('display', '');
-    //         $(editable).css('display', 'none');
-    //     }else{
-    //         $(stc).css('display', 'none');
-    //         $(editable).css('display','');
-    //     }
-
-    //     $('#id_tags').chosen();
-    //     $('#id_sizes').after("<a class='icon plus-icon item-ref' href='{% url add_size %}'>&nbsp</a>");
-    //     $('#id_colors').after("<a class='icon plus-icon item-ref' href='{% url add_color %}'>&nbsp</a>");
-        
-    //     var add_item_form = $('#add-item-form'); 
-        
-    //     add_item_form.ajaxForm({
-    //         url : this.action,
-    //         dataType : 'json',
-    //         success : function(json)
-    //         {
-    //             if (json.success == false && json.errors != undefined)
-    //                 process_form_errors(json, add_item_form)
-    //             else {
-    //                 //do something if there aren't errors
-    //                 // $('#paypal-form').submit();
-    //             }
-    //         }
-    //       }); 
-    //     })
-      },
-      accounts:function(){
-        $('#tester').focus()
-                var login_form = $('#mng-account-form');
-        
-        login_form.ajaxForm({
-            url : this.action,
-            dataType : 'json',
-            success : function(json)
-            {
-                if (json.success == false && json.errors != undefined)
-                    process_form_errors(json, login_form)
-                else {
-                    //do something if there aren't errors
-                    
-                    window.location.href = "/"; 
-                }
+        $('.editable').hide();
+  },
+  accounts:function(){
+    $('#tester').focus()
+            var login_form = $('#mng-account-form');
+    
+    login_form.ajaxForm({
+        url : this.action,
+        dataType : 'json',
+        success : function(json)
+        {
+            if (json.success == false && json.errors != undefined)
+                process_form_errors(json, login_form)
+            else {
+                //do something if there aren't errors
+                
+                window.location.href = "/"; 
             }
-        }); 
+        }
+    }); 
 
     
 
@@ -814,80 +761,30 @@ var stunable = {
             }
         })
 
-      }
-          //         // the validation code
-          //     container = $('#bigform-error1');
-          //     // validate form on keyup and submit
-          //     validator = $('#waitlist-form').validate({
-          //       errorLabelContainer : container,
-          //       //errorClass : 'field-error',
-          //       errorElement : 'errorlist',
-          //       invalidHandler : function(form, validator) {
-          //         //display error on submit
-          //         var errors = validator.numberOfInvalids();
-          //         if(errors) {
-          //           if(validator.errorList[0].message) {
-          //             $('#bigform-error1').text = "";
-          //             $('#bigform-error1').animate({
-          //               "opacity" : "1"
-          //             }, "fast", function() {
-          //               changeError($('#bigform-error1')[0], validator.errorList[0].message);
-          //               $('#bigform-error1').css('display', 'inline').css('opacy', '1');
-          //             });
-          //             validator.errorList[0].element.focus();
-          //             $(validator.errorList[0].element).addClass('field-error');
-          //           }
-          //         }
-          //       },
-          //       showErrors : function(errorMap, errorList) {
-          //         //display error on blur
-          //         $("#waitlist-form'").find("input").each(function() {
-          //           $(this).removeClass("error");
-          //         });
-          //         $("#bigform-error1").html("");
-          //         if(errorList.length) {
-          //           $('#bigform-error1').animate({
-          //             "opacity" : "1"
-          //           }, "fast", function() {
-          //             changeError($('#bigform-error1')[0], errorList[0]['message']);
-          //             $('#bigform-error1').css('display', 'inline').css('opacy', '1');
-          //           });
-          //           $(errorList[0]['element']).addClass("field-error");
-          //         } else {
-          //           $("#waitlist-form").find("input").each(function() {
-          //             $(this).removeClass("field-error");
-          //           });
-          //         }
-          //       },
-          //       submitHandler : function(form) {
-          //         $(".field-error").removeClass("field-error");
-          //         form.submit();
-          //       },
-          //       rules : {
-          //         email : {
-          //           required : true,
-          //           email : true
-          //         },
-          //       },
-          //       messages : {
-          //         email : "Stella can't reach you there",
-          //       }
-          //     });
-     
-
+    }
 }
 
 
 
+
+var add_rack_modal_options = {
+    afterOpenFunction:init_add_rack_modal
+  }
+
+  var item_modal_options = {
+    afterOpenFunction:init_item_modal
+  }
 
 
 
     
 $(document).ready(function() {
     var pageScrLoader = $('body').attr('data-role');
-   console.log('page:',pageScrLoader)
+    console.log('page:',pageScrLoader);
     if ( pageScrLoader && stunable[pageScrLoader] ) {
-        return stunable[pageScrLoader].apply( this, stunable.common());
+        stunable.common()
+        stunable[pageScrLoader]();
+        return true;
     } else if ( !pageScrLoader ) {
         return stunable.common.apply( this );
     }else{

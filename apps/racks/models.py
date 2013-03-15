@@ -354,7 +354,7 @@ class Item(models.Model,listImageMixin):
         })
 
         if not r['min'] == r['max'] and self.is_onsale:
-            return '<span%(sale)s><span class="dollar">$</span>%(min)s</span> - <span class="dollar">$</span>%(max)s'%r
+            return '<span%(sale)s><span class="dollar">$</span>%(min)s</span> - <span class="struck"> <span class="dollar">$</span>%(max)s</span>'%r
         return '<span class="dollar">$</span>%(min)s'%r
 
     def total_inventory(self):
@@ -483,6 +483,20 @@ class ItemType(models.Model,DirtyFieldsMixin):
     @property
     def color(self):
         return Color(name=self.custom_color_name)
+
+
+    def price_range_text(self):
+        if self.price_text and self.price_text != 'none':
+            return self.price_text
+
+        r = self.price_range()
+        r.update({'sale':
+            ' class="sale" ' if self.is_onsale else ''
+        })
+
+        if not r['min'] == r['max'] and self.is_onsale:
+            return '<span%(sale)s><span class="dollar">$</span>%(min)s</span> - <span class="struck"> <span class="dollar">$</span>%(max)s</span>'%r
+        return '<span class="dollar">$</span>%(min)s'%r
 
 @receiver(post_save, sender=ItemType,dispatch_uid="item_type_post_inventorySave")
 def postSaveGeneric(sender, instance, created, **kwargs):

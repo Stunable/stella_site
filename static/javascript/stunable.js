@@ -1,3 +1,28 @@
+// Avoid `console` errors in browsers that lack a console.
+(function() {
+    var method;
+    var noop = function () {};
+    var methods = [
+        'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
+        'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
+        'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
+        'timeStamp', 'trace', 'warn'
+    ];
+    var length = methods.length;
+    var console = (window.console = window.console || {});
+
+    while (length--) {
+        method = methods[length];
+
+        // Only stub undefined methods.
+        if (!console[method]) {
+            console[method] = noop;
+        }
+    }
+}());
+
+
+
 function remember( selector ){
 
     $(selector).each(
@@ -44,9 +69,9 @@ function cart_item_added(){
 }
 
 function wishlist_item_added(){
-    console.log('whisliasdfs')
+
     var SI  = setInterval(function(){
-     
+
         $('#wish-button').toggleClass('drop_item_hover')
     },300)
 
@@ -262,6 +287,16 @@ var refclickFunctions = {
     }
 }
 
+
+function tabs_find_active(){
+    if ($('.stunable-tab.tab.active').length){
+    // console.log($('.stunable-tab.tab.active').offset().left)
+        $('#tabs-container').animate({
+             scrollLeft:$('.stunable-tab.tab.active').offset().left
+        })
+    }
+    
+}
 
 function init_refclicks(selection){
     selection.click(function(e){

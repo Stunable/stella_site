@@ -439,7 +439,7 @@ body.flatpage #left-panel{
 
 	}
 
-	#left-panel #cart-button:hover, #left-panel>ul>li#cart-button.drop_item_hover{
+	#left-panel #cart-button:hover, #left-panel>ul>li#cart-button.drop_item_hover,#left-panel>ul>li#cart-button.active .drop_item_hover{
 		background:url('../../images/new_buttons/bag_hover.png');
 		background-size: 50px;
 		background-repeat: no-repeat;
@@ -593,14 +593,16 @@ body.flatpage #left-panel{
 			position:fixed;
 			top:80px;
 			padding-top:10px;
+			padding-right:60px;
 		}
 
 		.bigplus{
-			font-size:1.2em;
+			font-size:1.4em;
+			margin:5px;
 		}
 		.tab-begone{
 			display:none;
-			top:-1px;
+			top:-20px;
 			right:2px;
 			padding:0px;
 			position:absolute;
@@ -616,59 +618,27 @@ body.flatpage #left-panel{
 			display:inline-block;
 		}
 
-
-		div#stunable-tabs-nav li{
-			margin-top:10px;
-			display:inline-block;
-			height:20px;
-			padding:12px;
-			border-left:1px solid #ccc;
-			/*border-right:1px solid #ccc;*/
-			/*border-top:2px solid #ccc;*/
+		div#stunable-tabs-nav ul li {
+			line-height:60px;
 			position:relative;
-			min-width:60px;
-			margin:1px;
-			background-color:rgb(250,250,250);
-			padding-bottom: 20px;
-			text-transform: lowercase;
-			font-size:.85em;
+			vertical-align: middle;
+			display:inline;
+			padding:20px;	
+			border-right:1px solid #ccc;
 		}
 
-		div#stunable-tabs-nav ul li a{
-			padding-right:20px;
-			padding-top:20px;
-			padding-bottom:20px;
+		div #stunable-tabs-nav li a span{
+			height:100%;
+			display:inline-block;
 		}
 
-		.content.cart div#stunable-tabs-nav{
-			overflow:normal;
-		}
-
-		.content.cart div#stunable-tabs-nav li.active{
+		div#stunable-tabs-nav li.active{
 			background-color:#7f10b5;
 			color:white;
 		}
 
 
-		.content.cart div#stunable-tabs-nav .cart-progress>li{
-			border:1px solid #999;
-			margin:20px;
-
-		}
-
-		.shop .content div#stunable-tabs-nav li.tab.active{
-			/*width:100px;*/
-			border:1px 1px 1px 0 solid #ccc;
-			background-color:#7f10b5;
-		}
-/*
-		.tab.active a{
-			top:-5px;
-			left:0px;
-			position:absolute;
-			height:40px;
-		}*/
-		.tab.active a span{
+		div#stunable-tabs-nav li.tab.active a{
 			color:white;
 		}
 
@@ -776,8 +746,8 @@ body.flatpage #left-panel{
 
 		div.item .controls{
 			position:absolute;
-			top:0px;
-			width:100%;
+			top:-4px;
+			width:96%;
 			text-align: right;
 		}
 
@@ -806,9 +776,9 @@ body.flatpage #left-panel{
 
 			 .directional .btn {
 				position:absolute;
-				top:50%;
-				height:31px;
-				width:33px;
+				top:84%;
+				height:60px;
+				width:60px;
 				margin:0;
 				background:transparent url(../../images/gui/icon-arrows.png) no-repeat 0 0;
 				text-indent:-999em;
@@ -926,7 +896,7 @@ table.retailer-item-group{
 }
 
 .cart-retailer-group:last-child{
-	margin-bottom:125px;
+	margin-bottom:425px;
 }
 
 
@@ -1565,13 +1535,14 @@ margin-top:3px;
 	font-size: .7em;
 }
 
-.modal.current .item-price .struck{
+.struck{
 	text-decoration: line-through;
 }
 
 .modal.current .item-price .sale{
 	line-height: .9em;
 	font-weight: 300;
+	color:red;
 }
 
 .modal.current label{

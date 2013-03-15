@@ -1,11 +1,8 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]><html class="ie6 ie no-js" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><![endif]-->
-<!--[if IE 7 ]>  <html class="ie7 ie no-js" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><![endif]-->
-<!--[if IE 8 ]>  <html class="ie8 ie no-js" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><![endif]-->
-<!--[if IE 9 ]>  <html class="ie9 ie no-js" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><![endif]-->
-<!--[if!(IE)]><!-->
-<html lang="en">
-    <!--<![endif]-->
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <title>{% block title %}Stunable | Your Admirers{% endblock %}</title>
@@ -76,16 +73,6 @@
                    }(document, /*debug*/ false));
                 </script>
              
-                <!--[if IE]>
-                <div class="container ie8 ie">
-                <![endif]-->
-                <!--[if IE 7]>
-                <div class="container ie7 ie">
-                <![endif]-->
-                <!--[if lt IE 7]>
-                <div class="container ie6 ie">
-                <![endif]-->
-                <!--[if !IE]><!-->
             
         {% endblock %}
 
@@ -139,7 +126,7 @@
                               {% if request.user.is_authenticated %}
                               <a href="/shop/wishlist/"><div>wish</div></a>
                               {% else %}
-                              <a data-href="/shop/new" class="login-check"><div>wish</div></a>
+                              <a data-href="/shop/wishlist/" class="login-check" href=""><div>wish</div></a>
                               {% endif %}
                             </li>
                             
@@ -226,7 +213,7 @@
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.form.js"></script>
 
 
-        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.modal.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.modal.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.validate.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.damonzoom.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.damonscroll.js"></script>

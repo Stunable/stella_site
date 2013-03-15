@@ -1,6 +1,6 @@
 {% load cache %}
 {% if item.slug %}
-	<div title="drag me" data-id="{{target_item.id}}" id="list_item_{{target_item.id}}" class="touchcarousel-item item retailer-{{item.retailer_profile.id}}">
+	<div data-id="{{target_item.id}}" id="list_item_{{target_item.id}}" class="touchcarousel-item item retailer-{{item.retailer_profile.id}}">
 
 		<div class="picbox">
 
@@ -31,7 +31,7 @@
 
  		{% if is_wishlist %}
 			 <div class="controls">
-			 <a href="" data-target="#list_item_{{target_item.id}}" data-href="{% url update_wishlist wishlistitem.item_variation.id %}" title="Remove this item." class="icon x remove refclick">REMOVE</a></div>
+			 <a href="" data-target="#list_item_{{target_item.id}}" data-href="{% url update_wishlist wishlistitem.item_variation.id %}" title="Remove this item." class="icon close-modal  refclick"></a></div>
 		 {% endif %}
 
 		

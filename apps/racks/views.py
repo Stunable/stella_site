@@ -64,10 +64,7 @@ def get_context_variables(ctx, request):
         ctx['tags'] = Tag.objects.get_for_object(request.user) 
         # profile = get_or_create_profile(request)
     else:
-        if request.session.has_key('anonymous_profile'):
-           #print request.session
-            # profile = request.session.get('anonymous_profile')
-            ctx['tags'] = Tag.objects.filter(is_default=True) 
+        ctx['tags'] = Tag.objects.filter(is_default=True) 
            #print profile.first_login
     
     return ctx
@@ -993,9 +990,13 @@ def add_color(request, template="racks/add_color_dialog.html"):
     return direct_to_template(request, template, ctx)
 
 
-def sale_items(request, template="racks/item_list.html"):
+def sale_items(request, template="racks/new_carousel.html"):
+    ctx = {'current':'sale'}
+    query_set=Item.objects.filter(is_onsale=True,is_available=True,approved=True)
 
-    return _all(request,query_set=Item.objects.filter(is_onsale=True,is_available=True,approved=True),is_wishlist=False)
+    get_context_variables(ctx, request)
+    
+    return pagination(request, ctx, template, query_set)
 
 def recent_added_items(request, template="racks/item_list.html"):
     today = datetime.date.today()

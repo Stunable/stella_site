@@ -20,7 +20,7 @@
             nextkey : $('.next'),
             prevkey : $('.prev'),
             keynav : true,
-            scrollstep:3,
+            scrollstep:3
         };
 
     // The actual plugin constructor
@@ -92,7 +92,7 @@
             this.handler.next_page();
         },
         go_to_prevpage: function(number){
-            console.log('prev')
+            // console.log('prev')
             this.handler.prev_page();
         },
         onScroll: function() {
@@ -165,7 +165,7 @@
                             var items = $(data).find('.item')
                             self._add_function(items)
                             self._next_page = $(data).data('nextpage')
-                            console.log($(data).data('nextpage'))
+                            // console.log($(data).data('nextpage'))
                             self._loading = false;
                         }
                         ,dataType:'html'

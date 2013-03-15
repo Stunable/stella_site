@@ -49,7 +49,7 @@ urlpatterns = patterns('',
                        url(r'brands', get_brands, name='get_brands'),  
                        url(r'recommendations/(?P<slug>[-\w]+)', _all, name='item_link'),  
                        
-                       url(r'sale', sale_items, name='my_closet_sale_items'),
+                       url(r'sale', sale_items, name='sale'),
                        url(r'recent_added', recent_added_items, name='my_closet_recent_added_items'),
                        url(r'purchased', purchased_items, name='my_closet_purchased_items'),
                        

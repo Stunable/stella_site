@@ -15,25 +15,25 @@
             <ul id="tabs-container" class="nav tabbed clearfix">
 
                         <li class="stunable-tab tab {% if current == 'all' %} active{% endif %}">
-                            <a href="/" title="" class="text-link"><span>all</span></a>
+                            <a href="/"><span>all</span></a>
                         </li>
-                        <li class="stunable-tab tab">
-                            <a href="{% url new %}"  title="" class="text-link"><span class="identity">new</span></a>
+                        <li class="stunable-tab tab{% if current == 'new' %} active{% endif %}">
+                            <a href="{% url new %}"  title=""><span>new</span></a>
                         </li>
-                        <li class="stunable-tab tab">
-                            <a href="/shop/sale" title="" class="text-link"><span>sale</span></a>
+                        <li class="stunable-tab tab{% if current == 'sale' %} active{% endif %}">
+                            <a href="{% url sale %}"  title=""><span>sale</span></a>
                         </li>
                         
                         {% include 'racks/includes/tag_tabs.html' %}
 
                         {% if request.user.is_authenticated %}
-                        <li class="stunable-tab tab">
-                            <a class="click-show" data-target="#tab-adder" href="" title="" class="text-link"><span>+</span><input id="tab-adder" style="display:none" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text"></a>
-                        </li>
+                            <li class="stunable-tab tab">
+                                <a class="click-show" data-target="#tab-adder" href="" title="" class="text-link"><span class="bigplus">+</span> more<input id="tab-adder" style="display:none" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text"></a>
+                            </li>
                         {% else %}
                             <li class="stunable-tab tab">
-                            <a data-href="/" class="login-check"><span><a data-href="/" href="" class="login-check"><span>+</span></span>&nbsp&nbsp&nbsp&nbsp&nbsp</a>
-                        </li>
+                                 <a data-href="/" class="login-check" href="" class="login-check"><span class="bigplus">+</span><span class="under"> more</span></a>
+                            </li>
                         {% endif %}
                         
                    

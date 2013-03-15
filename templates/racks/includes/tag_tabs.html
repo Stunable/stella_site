@@ -1,4 +1,5 @@
 {% for tag in tags %}<li id="stunable-tab{{tag.slug}}" class="stunable-tab tab {% if current == tag.slug %}active{% endif %}">
                         <a href="/shop/tab/{{tag.slug}}" class="text-link"><span>{{tag.name}}</span></a>
-                        <div data-target="#stunable-tab{{tag.slug}}" data-href="/shop/remove-tab/{{tag.slug}}" title="remove this tab" class="tab-begone refclick">x</div>
+                        {% if request.user.is_authenticated %}
+                        <div data-target="#stunable-tab{{tag.slug}}" data-href="/shop/remove-tab/{{tag.slug}}" title="remove this tab" class="tab-begone refclick">x</div>{% endif %}
                     </li>{% endfor %}
