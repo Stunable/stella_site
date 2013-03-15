@@ -721,9 +721,6 @@ body.flatpage #left-panel{
 		}
 
 
-		div.item .item-label{
-			background: white url(/static/images/gui/gray-dotted-bg.jpg) repeat-x 0 center;
-		}
 
 		div.item .item-label span, .content.cart .retailer-header{
 			height: 18px;
