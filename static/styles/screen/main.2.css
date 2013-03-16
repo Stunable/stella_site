@@ -402,7 +402,7 @@ body.flatpage #left-panel{
 		height:90px;
 		width:90px;
 		overflow:hidden;
-		border-radius: 12px 0px 0px 12px;
+		border-radius: 4px 0px 0px 4px;
 		cursor:pointer;
 		position:relative;
 		border:1px solid #ddd;
@@ -553,6 +553,7 @@ body.flatpage #left-panel{
 		}
 
 		.carouselbox{
+			-webkit-overflow-scrolling: touch;
 			overflow-x:auto;
 			overflow-y:hidden;
 		}

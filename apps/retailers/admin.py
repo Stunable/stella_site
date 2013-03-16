@@ -21,12 +21,13 @@ admin.site.register(StylistItem)
 admin.site.register(ShippingType)
 admin.site.register(ProductUpload)
 
-admin.site.register(ShopifyProduct)
-admin.site.register(ShopifyVariation)
+# admin.site.register(ShopifyProduct)
+# admin.site.register(ShopifyVariation)
 
 
 
 class APIConnectionAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__','last_updated',)
     actions=('refresh_all_products',)
 
     def refresh_all_products(self,request,queryset):
