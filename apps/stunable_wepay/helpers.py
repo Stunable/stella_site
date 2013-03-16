@@ -74,18 +74,18 @@ class WePayPayment(object):
                 else:
                     fail.append((item,response))
             
-            if len(success) == len(items):
-                for item,transaction in success:
-                    wpt = WePayTransaction.objects.create(
-                        checkout_id = transaction['checkout_id'],
-                        state = transaction['state'],
-                        user = self.request.user
-                    )
+            
+            for item,transaction in success:
+                wpt = WePayTransaction.objects.create(
+                    checkout_id = transaction['checkout_id'],
+                    state = transaction['state'],
+                    user = self.request.user
+                )
 
-                    wpt.save()
+                wpt.save()
 
-                    print 'authorized payment for ',item
-                    payment_was_successful.send(sender=wpt, item=item,shipping_address=self.shipping_address)
+                # print 'authorized payment for ',item
+                payment_was_successful.send(sender=wpt, item=item,shipping_address=self.shipping_address)
 
                 
                            
@@ -97,6 +97,7 @@ class WePayPayment(object):
 
                 send_mail('new checkout', email_message, settings.DEFAULT_FROM_EMAIL, ['gdamon@gmail.com','admin@stunable.com'])
 
+            if len(success) == len(items):
                 return True, success , error
             else:
                 return False, fail, error

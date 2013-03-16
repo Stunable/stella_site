@@ -6,6 +6,8 @@ import urllib
 import pprint
 import tempfile
 
+import datetime
+
 from django.contrib.contenttypes.models import ContentType
 from racks.models import Item,ItemType,Color,Size,ProductImage
 from django.core.files import File
@@ -160,16 +162,19 @@ def save_inventory_modification(api_connection,variant):
 
 
 @task
-def save_shopify_inventory_update(api_connection,source_id,new_value):
+def save_shopify_inventory_update(api_connection,source_id,item_variation,number_sold):
     SV = api_connection.shopifyconnection.get_session().Variant.find(source_id)
-    if SV.attributes['inventory_quantity'] != new_value:
-        print 'updating inventory for variant:',SV
-        SV.attributes['inventory_quantity'] = new_value
-        try:
-            SV.save()
-            print 'success'
-        except:
-            raise
+    print 'updating inventory for variant:',SV
+    print 'with number sold:',number_sold
+    SV.attributes['inventory_quantity'] = SV.attributes['inventory_quantity']  - number_sold
+    try:
+        SV.save()
+        print 'success'
+
+        item_variation.inventory = SV.attributes['inventory_quantity']
+        item_variation.save()
+    except:
+        raise
 
 
 @task
@@ -288,9 +293,11 @@ def process_API_products(list_of_products,api_connection):
             print 'ERROR:',e
             print 'done updating items'
             api_connection.update_in_progress = False
+            api_connection.last_updated = datetime.datetime.now()
             api_connection.save()
     print 'done updating items'
     api_connection.update_in_progress = False
+    api_connection.last_updated = datetime.datetime.now()
     api_connection.save()
 
 #     ctx = {

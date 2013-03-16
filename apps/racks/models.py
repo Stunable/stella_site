@@ -457,6 +457,16 @@ class ItemType(models.Model,DirtyFieldsMixin):
     object_id       = models.PositiveIntegerField(null=True,blank=True)
     api_connection  = generic.GenericForeignKey('api_type', 'object_id')
 
+
+    def update_inventory(self,number_sold):
+
+        if self.api_connection:
+            self.api_connection.update_inventory(self,number_sold)
+
+        else:
+            self.inventory = self.inventory - number_sold
+            self.save()
+
     def get_image(self):
         img = self.image
         if img:
@@ -498,17 +508,7 @@ class ItemType(models.Model,DirtyFieldsMixin):
             return '<span%(sale)s><span class="dollar">$</span>%(min)s</span> - <span class="struck"> <span class="dollar">$</span>%(max)s</span>'%r
         return '<span class="dollar">$</span>%(min)s'%r
 
-@receiver(post_save, sender=ItemType,dispatch_uid="item_type_post_inventorySave")
-def postSaveGeneric(sender, instance, created, **kwargs):
-    dks = instance.get_dirty_fields().keys()
 
-    if 'inventory' in dks and not created and instance._original_state['inventory'] is not None:
-        if instance.api_connection:
-            instance.api_connection.update_inventory(instance.inventory)
-        instance.item.save()
-
-    if 'is_onsale' in instance.get_dirty_fields().keys():
-        instance.item.save()
 
 class RackManaeger(models.Manager):
         

@@ -457,9 +457,8 @@ def payment_was_successful_callback(sender, **kwargs):
     retailer = kwargs['item'].retailer
 
     itemtype = kwargs['item'].item_variation
-    itemtype.inventory = min(0,itemtype.inventory-kwargs['item'].quantity)
-    itemtype.save()
-    # itemtype.item.save() # this is to trigger a check for total remaining inventory on this item
+    itemtype.update_inventory(int(kwargs['item'].quantity))
+
 
     try:
         checkout = Checkout.objects.get(cart=kwargs['item'].cart, retailer=retailer.user)

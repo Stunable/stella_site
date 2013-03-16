@@ -209,8 +209,9 @@ class ShopifyProduct(APIProductConnection):
 class ShopifyVariation(APIProductConnection):
 
     
-    def update_inventory(self,new_value):
-        save_shopify_inventory_update.delay(self.api_connection.shopifyconnection,self.source_id,new_value)    
+    def update_inventory(self,item_variation,number_sold):
+
+        save_shopify_inventory_update.delay(self.api_connection.shopifyconnection,self.source_id,item_variation,number_sold)    
 
 
     @staticmethod
