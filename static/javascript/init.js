@@ -116,18 +116,37 @@ var stunable = {
         // box.modal({clickClose:false,escapeClose:false,showClose:false})   
 
     }
-    ,shop: function(){         
+    ,shop: function(){    
 
+      var add_function = function(items){
+            // $('#container').isotope('insert', items)
+            $('#container').append(items)
+      }
+
+
+      if (navigator.userAgent.toLowerCase().indexOf("iphone") == -1){ 
+          window.onload = function(){
+            console.log('not iphone')
+            $('#container').isotope(isotope_options[$('.scrollbox').data('type')])
+            // initDrag($('.item'))
+            // initDrop(); 
+            // fixDragDropIssue()  
+
+          
+        }
+        add_function = function(items){
+            $('#container').isotope('insert', items)
+        }
+
+      }     
+
+      console.log($('.scrollbox').data('orient'))
       
         $('.scrollbox').damonscroll({
           orientation: $('.scrollbox').data('orient'),
           target_element: $('#container'),
-          
-          add_function: function(items){
-              // initDrag(items)
-              $('#container').isotope('insert', items)
-          }
-
+                // $('#container').append(items)
+          add_function: add_function
 
         })
 
@@ -150,12 +169,6 @@ var stunable = {
 
 
 
-        window.onload = function(){
-          $('#container').isotope(isotope_options[$('.scrollbox').data('type')])
-            // initDrag($('.item'))
-            // initDrop(); 
-            // fixDragDropIssue()  
-        }
 
         $('.drag_item').hover(function(){
           $('.drop_item').toggleClass('drop_item_here')

@@ -50,6 +50,16 @@ AWS_QUERYSTRING_AUTH = False
 
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
+
+from datetime import date, timedelta
+oneyear = date.today() + timedelta(days=365)
+# Expires 10 years in the future at 8PM GMT
+AWS_HEADERS = {
+    'Expires': oneyear.strftime('%a, %d %b %Y 20:00:00 GMT')
+}
+
+
+
 AWS_HEADERS = {
     'Cache-Control': 'max-age=186400000',
 }
