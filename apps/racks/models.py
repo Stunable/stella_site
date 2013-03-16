@@ -443,7 +443,7 @@ class ItemType(models.Model,DirtyFieldsMixin):
     item = models.ForeignKey('Item', related_name='types')
     size = models.ForeignKey('Size',default=1)
     SKU = models.CharField(max_length=64,null=True,blank=True)
-    custom_color_name = models.CharField(max_length=100, 
+    custom_color_name = models.CharField(max_length=255, 
                                          help_text="An optional name for the color of this item",verbose_name="Style Name")
     position = models.IntegerField(default=0,blank=True,null=True)
 
