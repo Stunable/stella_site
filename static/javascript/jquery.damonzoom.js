@@ -106,8 +106,6 @@
                                     $(document).mousemove(move);
                                     container.fadeIn(600)
                                 })
-
-                            $(el).click($(el).mouseenter())
                             $(container).mouseleave(
                                 function(e){
                                     container.fadeOut(600);
