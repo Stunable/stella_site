@@ -447,7 +447,7 @@ class ItemType(models.Model,DirtyFieldsMixin):
                                          help_text="An optional name for the color of this item",verbose_name="Style Name")
     position = models.IntegerField(default=0,blank=True,null=True)
 
-    inventory = models.PositiveIntegerField(default=None,null=True,verbose_name="inventory quantity")
+    inventory = models.IntegerField(default=0,null=True,verbose_name="inventory quantity")
     price = models.DecimalField(blank=True,null=True,max_digits=19, decimal_places=2, verbose_name='Special Price for this color/size/inventory')
     
     is_onsale = models.BooleanField(default=False, verbose_name='Currently On Sale?')
