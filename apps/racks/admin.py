@@ -110,6 +110,16 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
             obj.save()
 
 
+
+class ItemTypeAdmin(admin.ModelAdmin):
+    list_display = ('item',)
+    actions = ('test_inventory_update',)
+
+
+    def test_inventory_update(self,request,queryset):
+        for obj in queryset:
+            obj.update_inventory(3)
+
     
 
 class SizeAdmin(admin.ModelAdmin):
@@ -149,6 +159,7 @@ class ProductImageAdmin(admin.ModelAdmin):
 admin.site.register(Size, SizeAdmin)
 admin.site.register(Rack)
 admin.site.register(Rack_Item)
+admin.site.register(ItemType, ItemTypeAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Category)
 admin.site.register(Brand)

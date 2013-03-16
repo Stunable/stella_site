@@ -165,6 +165,7 @@ def save_inventory_modification(api_connection,variant):
 def save_shopify_inventory_update(api_connection,source_id,item_variation,number_sold):
     SV = api_connection.shopifyconnection.get_session().Variant.find(source_id)
     print 'updating inventory for variant:',SV
+    print 'current inventory',SV.attributes['inventory_quantity']
     print 'with number sold:',number_sold
     SV.attributes['inventory_quantity'] = SV.attributes['inventory_quantity']  - number_sold
     try:
@@ -173,6 +174,8 @@ def save_shopify_inventory_update(api_connection,source_id,item_variation,number
 
         item_variation.inventory = SV.attributes['inventory_quantity']
         item_variation.save()
+        print 'api inventory:',SV.attributes['inventory_quantity']
+        print 'stunable inventory:',item_variation.inventory
     except:
         raise
 

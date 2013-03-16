@@ -1,4 +1,4 @@
 from settings import *
-DEBUG = True
+DEBUG = False
 
 print BROKER_BACKEND
