@@ -19,6 +19,10 @@ from django.conf import settings
 
 from celery import task
 
+
+from johnny.cache import enable
+
+
 def find_image(folder,image):
     for f in os.listdir(folder):
         # print f.lower()
@@ -163,6 +167,8 @@ def save_inventory_modification(api_connection,variant):
 
 @task
 def save_shopify_inventory_update(api_connection,source_id,item_variation,number_sold):
+
+    enable()
     SV = api_connection.shopifyconnection.get_session().Variant.find(source_id)
     print 'updating inventory for variant:',SV
     print 'current inventory',SV.attributes['inventory_quantity']
@@ -182,6 +188,7 @@ def save_shopify_inventory_update(api_connection,source_id,item_variation,number
 
 @task
 def update_API_products(api_connection):
+    enable()
     print 'updating products for '+str(api_connection)
 
     for product_list in api_connection.get_products():
@@ -189,6 +196,7 @@ def update_API_products(api_connection):
     
 @task
 def process_API_products(list_of_products,api_connection):
+    enable()
     product_count = 0
     Retailer = ContentType.objects.get(app_label="retailers", model="retailerprofile").model_class().objects.get(user=api_connection.retailer)
 
