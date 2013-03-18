@@ -1631,25 +1631,57 @@ form .info_modal{
 	float:left;
 }
 
-/*.modal_inner_frame .item-visuals #item-header{
+.modal_inner_frame .item-visuals #item-header{
 	height:75px;
-	width:100%;
 	position:absolute;
-	background-color:;
+	background-color:#ccc;
+	opacity:.8;
+	bottom:0px;
+	padding:3px;
 }
-*/
+
+.wide .modal_inner_frame .item-visuals #item-header{
+
+	top:0px;
+	bottom:100%;
+}
+
+.modal_inner_frame .item-visuals #item-header div{
+	white-space: nowrap;
+	font-family: serif;
+	line-height: 25px;
+}
+
+
+.item-visuals #item-header .item-retailer{
+	font-size:2em;
+	color:#7f10b5;
+	text-transform: uppercase;
+	/*line-height: .8;*/
+
+}
+
+.item-visuals #item-header .item-name{
+	margin:auto;
+	font-size:1.3em;
+	color:#7f10b5;
+	color:black;
+	float:right;
+	text-transform: lowercase;
+}
+
 
 
 
 .modal.current .item-price {
 	font-size: 1.2em;
-	width:100%;
+	/*width:100%;*/
 	/*width: 230px;*/
-	overflow: hidden;
-
 	text-align: right;
-	white-space: nowrap;
 	color:black;
+	clear:right;
+	float:right;
+	font-style: italic;
 	/*background: url(../../images/x_sm.png) no-repeat 155px -9px;*/
 }
 
@@ -1674,7 +1706,7 @@ form .info_modal{
 }
 
 .modal-item-details .item-data{
-	height:400px;
+	height:350px;
 	display:block;
 }
 
@@ -1736,36 +1768,33 @@ form .info_modal{
 
 .modal.current .wide .item-actions{
 	float:right;
-	width:45%;
+	width:auto;
+	margin-right:10px;
+	max-width:45%;
 }
 
 .modal.current  .item-actions{
 	display:block;
 	color:white;
-	height:200px;
+	height:250px;
+	text-align: right;
 }
 
-.modal.current .item-actions>div{
-	margin-top:5px;
-	margin-bottom:5px;
+.modal.current  .item-actions .actionheader{
+	text-align: left;
+	width:100%;
+	margin-top:10px;
 }
 
-.modal.current .item-actions #variation_choices div{
-
-margin-top:3px;
-}
 
 .modal.current .item-actions .action-buttons{
-	position:relative;
-	white-space: nowrap;
-	width:300px;
+	position:absolute;
+	width:100%;
+	bottom:0px;
+	right:0px;
 }
 
-.modal.current .item-actions .action-buttons div{
-	position:absolute;
-	top:40px;
-	left:-7px;
-}
+
 .modal.current .item-actions .action-buttons a{
 	margin:2px;
 }

@@ -48,6 +48,12 @@ function setItemDetailsEvent(){
 					$('.item-pictures '+variation.data('imagetarget')).click();
 				}
 
+				console.log(variation.data('price'))
+				console.log(variation.data('name'))
+				console.log($('#item-header .item-price'))
+				console.log('<span class="dollar">$</span>'+variation.data('price'))
+				$('#item-header .item-price').html('<span class="big">'+variation.data('size')+'</span>'+',<span class="big">'+variation.data('name')+' - </span>' + '<span class="dollar">$</span>'+'<span class="big">'+variation.data('price')+'</span>');
+
 			});
 			
 			$('#add-to-cart-link, .buy-now, #add-to-wishlist-link').click(function(e) {
@@ -169,8 +175,8 @@ function init_item_modal(){
 			
 		})
 
-		// $('#retailer-header .modalitem').textfill(25)
-		// $('#retailer-header .retailer').textfill(40)
+		$('#item-header .modalitem').textfill(25)
+		$('#item-header .retailer').textfill(40)
 	}
 		
 	   

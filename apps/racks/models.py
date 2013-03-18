@@ -491,10 +491,17 @@ class ItemType(models.Model,DirtyFieldsMixin):
         color = self.custom_color_name
         return "%s in %s, Size: %s" %  (self.item.name, color, self.size.size)
 
+    def get_size_color_name(self):
+        color = self.custom_color_name
+        return "%s in %s" %  (self.size.size, color)
 
     @property
     def color(self):
         return Color(name=self.custom_color_name)
+
+
+    def current_price_text(self):
+        return '<span class="dollar">$</span>%s'%self.get_current_price
 
 
     def price_range_text(self):

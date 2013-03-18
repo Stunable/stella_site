@@ -43,9 +43,7 @@
 		<div class="modal_inner_frame">
 			<div id="item-header"></div>
 			<div class="item-visuals" id="item_visual_{{item.pk}}">
-				<div id="item-header">
 
-				</div>
 				<ul id="images">
 
 				<li class="active-image">
@@ -58,6 +56,12 @@
 	                <img class="zoom_this item-image-{{each_image.id}}" data-big="{{each_image.extralarge.url}}"  data-src="{{each_image.large.url}}">
 				</li>
 				{% endfor %}
+
+				<div id="item-header">
+					<div class="item-retailer">{{item.retailer}}</div>
+					<div class="item-name">{{item.name}}</div>
+					<div class="item-price">{{item.price_text|safe}}</div>
+				</div>
 				
 			</div><!--/.item-visuals-->
 			<!-- <div id="retailer-header">
@@ -66,16 +70,11 @@
 			</div> -->
 			<div class="modal-item-details">
 				<div class="item-data"> 
-					<div class="item-retailer">{{item.retailer}}</div>
-					<div class="item-name">{{item.name}}</div>
 					<div class="item-description">
 						{{item.description|safe}}
 					</div>	
 
 
-					<div class="item-price">
-							{{item.price_text|safe}}
-					</div>
 
 					<div class="item-pictures">
 						<img class="active click-to-big item-image-{{item.get_image.id}}" data-target=".item-image-{{item.get_image.id}}" src="{{item.get_image.tiny.url}}">
@@ -91,7 +90,7 @@
 				<div class="item-actions">						
 					<div class="item-size">
 						<div id="variation_choices">
-							<div style="color:black">SELECT SIZE:</div>
+							<div class="actionheader" style="color:black">SELECT SIZE:</div>
 							<div class="item-size-list">
 								
 								{% regroup variations_by_size by size as sizes %}
@@ -99,7 +98,7 @@
 									<span data-target=".color-in-sizes" class="size-in-colors{% for v in size.list %} color-{{v.custom_color_name|slugify}}{% endfor %} {% if forloop.first %}selected{%endif%}" data-name="size-{{size.grouper|slugify}}">
 										<a href="#">{{size.grouper.size}}</a>
 										{% for v in size.list %}
-											<input {% if v.image %}data-imagetarget=".item-image-{{v.image.id}}" {% endif %}type="hidden" class="size-{{v.size|slugify}} color-{{v.custom_color_name|slugify}}" value="{{v.id}}">
+											<input data-size="{{v.size}}" data-name="{{v.custom_color_name}}" data-price="{{v.get_current_price}}" {% if v.image %}data-imagetarget=".item-image-{{v.image.id}}" {% endif %}type="hidden" class="size-{{v.size|slugify}} color-{{v.custom_color_name|slugify}}" value="{{v.id}}">
 										{% endfor %}
 									</span>
 
@@ -108,7 +107,7 @@
 
 							</div>
 						
-							<div style="color:black">SELECT COLOR:</div>
+							<div class="actionheader" style="color:black">SELECT COLOR:</div>
 							
 							<div class="item-color-list">
 								{% regroup variations_by_color by custom_color_name as colors %}
