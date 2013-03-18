@@ -170,9 +170,9 @@ var stunable = {
 
 
 
-        $('.drag_item').hover(function(){
-          $('.drop_item').toggleClass('drop_item_here')
-        })
+        // $('.drag_item').hover(function(){
+        //   $('.drop_item').toggleClass('drop_item_here')
+        // })
 
     }
     ,racks: function(){
