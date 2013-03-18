@@ -517,12 +517,6 @@ body.flatpage #left-panel{
 	    width:90%;
 	}
 
-
-	.cart #page-content{
-		width:auto;
-	}
-
-
 	.flatpage #page-content{
 
 		width: 60%;
@@ -654,6 +648,15 @@ body.flatpage #left-panel{
 			min-width:2000px;
 			white-space: nowrap;
 		}
+
+		.scrollbox.listbox.inner-page-content #container{
+			white-space: auto;
+			width:100%;
+			min-width: 0px;
+			height:auto;
+		}
+
+
 
 
 		.scrollbox{
@@ -819,6 +822,34 @@ body.flatpage #left-panel{
 					height:100%;
 					overflow:hidden;
 				}
+
+
+				#footer{
+					height:0px;
+					clear:both;
+				}
+
+
+				#carousel-container{
+					width:100%;
+					overflow:hidden;
+					height:auto;
+					position:relative;
+				}
+
+				.listbox{
+					overflow-x:hidden;
+					overflow-y:auto;
+					height:1200px;
+					width:100%;
+				}
+
+				.scrollbox.listbox div.item{
+					display:block;
+
+				}
+
+
 				
 				#left-panel{
 					float:none;
@@ -881,7 +912,7 @@ body.flatpage #left-panel{
 								background-position:center; 
 							}
 
-							#left-panel #shop-button:hover{
+							#left-panel #shop-button.active,#left-panel #shop-button:hover{
 								background:url('../../images/new_buttons/logo_hover.png');
 								background-size: none;
 								background-repeat: no-repeat;
@@ -898,7 +929,7 @@ body.flatpage #left-panel{
 
 							}
 
-							#left-panel #cart-button:hover, #left-panel>ul>li#cart-button.drop_item_hover,#left-panel>ul>li#cart-button.active .drop_item_hover{
+							#left-panel #cart-button.active,#left-panel #cart-button:hover, #left-panel>ul>li#cart-button.drop_item_hover,#left-panel>ul>li#cart-button.active .drop_item_hover{
 								background:url('../../images/new_buttons/bag_hover.png');
 								background-size: none;
 								background-repeat: no-repeat;
@@ -916,7 +947,7 @@ body.flatpage #left-panel{
 
 							}
 
-							#left-panel #wish-button:hover,#left-panel>ul>li#wish-button.drop_item_hover{
+							#left-panel #wish-button.active,#left-panel #wish-button:hover,#left-panel>ul>li#wish-button.drop_item_hover{
 								background:url('../../images/new_buttons/heart_hover.png');
 								background-size: none;
 								background-repeat: no-repeat;
@@ -932,7 +963,7 @@ body.flatpage #left-panel{
 					position: relative;
 					width:100%;
 					left:0;
-					top:-60px;
+					top:-20px;
 				    min-height:700px;
 				    padding-left:0px;
 				    border-left:1px solid #ccc;
@@ -974,6 +1005,7 @@ body.flatpage #left-panel{
 
 					div#stunable-tabs-nav li.tab a span{
 						font-size: 2em;
+						padding-top:20px;
 					}
 
 
@@ -1003,6 +1035,7 @@ body.flatpage #left-panel{
 				.inner-page-content #container div.item{
 					/*width:600px;*/
 					min-width:600px;
+					width:auto;
 					margin:20px;
 					margin-top:0px;
 					margin-bottom:0px;

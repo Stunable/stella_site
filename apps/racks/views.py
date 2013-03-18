@@ -153,9 +153,12 @@ def trendsetters(request, user_id=None, template='racks/trendsetters.html'):
     ctx = {'trendsetter': rack_user, 'racks': racks}
     return direct_to_template(request, template, ctx)
 
+
 def wishlist(request):
     if request.user.is_authenticated():
-        qs = WishListItem.objects.select_related('item').filter(user=request.user)
+        qs = WishListItem.objects.select_related('item','item_variation').filter(user=request.user)
+    elif settings.DEBUG:
+        qs = WishListItem.objects.select_related('item','item_variation').all()
     else:
         qs = WishListItem.objects.none()
 

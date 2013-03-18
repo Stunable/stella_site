@@ -140,7 +140,6 @@ var stunable = {
 
       }     
 
-      console.log($('.scrollbox').data('orient'))
       
         $('.scrollbox').damonscroll({
           orientation: $('.scrollbox').data('orient'),

@@ -116,7 +116,8 @@
                             </li>
 
                             <li class="drop_item{% if page_sub_role == 'wishlist' %} active{% endif %}" id="wish-button">
-                              {% if request.user.is_authenticated %}
+
+                              {% if request.user.is_authenticated or debug %}
                               <a href="/shop/wishlist/"><div>wish</div></a>
                               {% else %}
                               <a data-href="/shop/wishlist/" class="login-check" href=""><div>wish</div></a>
@@ -145,7 +146,7 @@
                     {% block content1 %}
                     {% endblock %}
             </div><!--/.container#viewport -->
-            
+
             
             <div class="section content" id="footer">
                 <div class="wrap">
