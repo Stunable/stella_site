@@ -41,8 +41,11 @@
 </script>
 	<div id="modal_contents" style="background-color:{{item.get_image.color}}" class="{{item.get_image.orientation}}">
 		<div class="modal_inner_frame">
-			
+			<div id="item-header"></div>
 			<div class="item-visuals" id="item_visual_{{item.pk}}">
+				<div id="item-header">
+
+				</div>
 				<ul id="images">
 
 				<li class="active-image">
@@ -96,7 +99,7 @@
 									<span data-target=".color-in-sizes" class="size-in-colors{% for v in size.list %} color-{{v.custom_color_name|slugify}}{% endfor %} {% if forloop.first %}selected{%endif%}" data-name="size-{{size.grouper|slugify}}">
 										<a href="#">{{size.grouper.size}}</a>
 										{% for v in size.list %}
-											<input type="hidden" class="size-{{v.size|slugify}} color-{{v.custom_color_name|slugify}}" value="{{v.id}}">
+											<input {% if v.image %}data-imagetarget=".item-image-{{v.image.id}}" {% endif %}type="hidden" class="size-{{v.size|slugify}} color-{{v.custom_color_name|slugify}}" value="{{v.id}}">
 										{% endfor %}
 									</span>
 

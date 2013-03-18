@@ -1631,6 +1631,15 @@ form .info_modal{
 	float:left;
 }
 
+/*.modal_inner_frame .item-visuals #item-header{
+	height:75px;
+	width:100%;
+	position:absolute;
+	background-color:;
+}
+*/
+
+
 
 .modal.current .item-price {
 	font-size: 1.2em;
