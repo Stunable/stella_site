@@ -126,7 +126,7 @@ var stunable = {
 
       if (navigator.userAgent.toLowerCase().indexOf("iphone") == -1){ 
           window.onload = function(){
-            console.log('not iphone')
+            // console.log('not iphone')
             $('#container').isotope(isotope_options[$('.scrollbox').data('type')])
             // initDrag($('.item'))
             // initDrop(); 

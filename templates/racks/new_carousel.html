@@ -7,9 +7,6 @@
 {% block content %}
 
 <div class="content {% block content-class%}carousel{%endblock%}" id="page-content" >
-
-
-
     <div class="inner-page-content">
         <div id="stunable-tabs-nav">
             <ul id="tabs-container" class="nav tabbed clearfix">
@@ -42,28 +39,31 @@
              <!--     <input data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text"> -->
             </div>
         </div>
-        <div data-orient="horizontal" data-type="carousel" class="carouselbox item-list medium scrollbox">
-        
-            <!-- <div class="sizecontrols"><span>tiny</span><span>small</span><span>medium</span>large</span></div> -->
-            <div id="container" >
-                                
-                                {% for list_3_items in rack_items_list %}
-                                {% for item in list_3_items %}
-                                {% with item as target_item %}
-                                    {% if item.pk %}
+        <div id="carousel-container">
+            <div data-orient="horizontal" data-type="carousel" class="carouselbox item-list medium scrollbox">
+            
+                <!-- <div class="sizecontrols"><span>tiny</span><span>small</span><span>medium</span>large</span></div> -->
+                <div id="container" >
                                     
-                                        {% include "racks/includes/new_item_list_content.html" %}
-                                    
-                                    {% endif %}
-                                {% endwith %}
-                                {% endfor %}
-                                {% endfor %}
-                               
+                                    {% for list_3_items in rack_items_list %}
+                                    {% for item in list_3_items %}
+                                    {% with item as target_item %}
+                                        {% if item.pk %}
+                                        
+                                            {% include "racks/includes/new_item_list_content.html" %}
+                                        
+                                        {% endif %}
+                                    {% endwith %}
+                                    {% endfor %}
+                                    {% endfor %}
+                                   
 
-        </div>
-        <div id="carousel-nav-container" class="directional">
-            <div class="btn prev"></div>
-            <div class="btn next"></div>
+                </div>
+                <div id="carousel-nav-container" class="directional">
+                    <div class="btn prev"></div>
+                    <div class="btn next"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
