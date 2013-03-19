@@ -672,6 +672,7 @@ body.flatpage #left-panel{
 			height:100%;
 			display:inline-block;
 			color:grey;
+			text-transform: lowercase;
 		}
 
 		div#stunable-tabs-nav li.active{
