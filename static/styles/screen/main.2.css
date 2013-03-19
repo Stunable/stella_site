@@ -1098,9 +1098,10 @@ body.flatpage #left-panel{
 	padding:20px;
 }
 .content.cart #cart-item-list{
-	width:60%;
+	/*width:60%;*/
 	min-width:558px;
 	overflow-y:auto;
+	overflow-x:hidden;
 	height:600px;
 }
 
