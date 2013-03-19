@@ -243,7 +243,11 @@ def process_API_products(list_of_products,api_connection):
                 if not Picture:
                     out = tempfile.NamedTemporaryFile()
                     out.write(urllib.urlopen(path).read())
-                    Picture = api_connection.IMAGE_CLASS.objects.create(identifier=identifier,image=File(out, os.path.basename(path)[:99]),retailer=api_connection.retailer,item=I)
+                    Picture = api_connection.IMAGE_CLASS.objects.create(
+                        identifier=str(identifier),
+                        image=File(out, os.path.basename(path)[:99]),
+                        retailer=api_connection.retailer,
+                        item=I)
 
                 if index == 0:
                     I.featured_image = Picture
