@@ -188,7 +188,7 @@ def save_shopify_inventory_update(api_connection,source_id,item_variation,number
 
 @task 
 def refresh_all_api_products():
-    for api_connection in ContentType.objects.get(app_label="retailers", model="APIConnection").model_class().objects.all():
+    for api_connection in ContentType.objects.get(app_label="retailers", model="apiconnection").model_class().objects.all():
         print api_connection
 
 
