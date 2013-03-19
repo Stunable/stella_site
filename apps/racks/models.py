@@ -205,8 +205,7 @@ class ProductImage(models.Model,listImageMixin):
     def save(self,instant=None,*args,**kwargs):
         this_id = self.id
 
-        if len(self.identifier) > 255:
-            self.identifier = self.identifier[255:]
+        self.identifier = self.identifier[255:]
 
         super(ProductImage,self).save()
 
