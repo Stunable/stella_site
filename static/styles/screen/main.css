@@ -4740,6 +4740,14 @@ MODAL CSS
 	z-index: 1103;
 }
 
+div.item a.close-modal{
+	width:0px;
+}
+
+.item:hover .close-modal{
+	width:24px;
+}
+
 
 /*.modal-spinner {
   display: none;

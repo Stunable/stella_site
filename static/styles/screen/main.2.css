@@ -1535,6 +1535,15 @@ MODAL CSS
 	z-index: 1103;
 }
 
+div.item .close-modal{
+	width:0px;
+}
+
+div.item:hover .close-modal{
+	width:24px;
+}
+
+
 
 ul.address_confirm{
 	white-space: nowrap;

@@ -393,7 +393,11 @@ function init_refsubmits(selection){
           ac_cache[ term ] = data;
           response( data );
         });
-      }
+      },
+    open: function(){
+        $(this).autocomplete('widget').css('z-index', 100);
+        return false;
+    }
       
     });
 }
