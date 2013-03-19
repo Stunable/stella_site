@@ -1677,7 +1677,7 @@ form .info_modal{
 	min-width:600px;
 	height:620px;
 	overflow:hidden;
-	background-color:#eee;
+	background-color:#bbb;
 }
 
 .modal.current .modal_inner_frame>div{
