@@ -279,7 +279,7 @@ CELERY_IMPORTS = (
     'apps.cms'
 )
 
-CELERYBEAT_SCHEDULER = 'edjcelery.schedulers.DatabaseScheduler'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 djcelery.setup_loader()
 
 # django-registration
