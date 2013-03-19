@@ -1,6 +1,7 @@
 from utils import getXLSdata
 import zipfile
 import os
+import sys
 import copy
 import urllib
 import pprint
@@ -187,7 +188,8 @@ def refresh_all_api_products():
     enable()
     for api_connection in ContentType.objects.get(app_label="retailers", model="apiconnection").model_class().objects.all():
         for api_type in ['shopifyconnection']:
-            update_API_products.delay(getattr(api_connection,api_type))
+            if hasattr(api_connection,api_type):
+                update_API_products.delay(getattr(api_connection,api_type))
 
 
 @task
@@ -305,8 +307,9 @@ def process_API_products(list_of_products,api_connection):
 
 
         except Exception,e:
-            print 'ERROR:',e
-            print 'done updating items'
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print('ERROR:',e, exc_type, fname, exc_tb.tb_lineno)
             api_connection.update_in_progress = False
             api_connection.last_updated = datetime.datetime.now()
             api_connection.save()
