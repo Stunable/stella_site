@@ -29,8 +29,7 @@
                                 <td>
                                     <div class="shipping-options">
                                     
-                                        {{first_purchase.shipping_method.name}} Shipping<br>
-                                        Estimated Arrival:{{first_purchase.shipping_method.estimated_arrival_time}}<br>
+
                                         Return Policy:{% if checkout.retailer.not_accept_refund %}
                                         Final Sale
                                         {% else %}
@@ -61,9 +60,9 @@
                                     <br>quantity:<span>{{ item.quantity }}</span>
                                 </td>
                                     
-                                <td><span class="item-status-{{item.pk}}">{{ purchase.status}}</span><br />
-                    {% if purchase.status == "shipped" %} tracking no. <span class="item-tracking-no-{{item.pk}}">{% if purchase.most_recent_shipment %}#{{purchase.last_tracking_number}}{% endif %}</span>{% endif %}
-                                </td>
+                            <td>
+                                {% include purchase_actions %}
+                            </td>
                                     
                             </tr>
                             {% endwith %}

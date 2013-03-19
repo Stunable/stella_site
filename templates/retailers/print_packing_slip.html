@@ -63,6 +63,7 @@ ol li{
             {% if not shipping_label %}
             <th>shipping<br>now? <input id="select_all" type="checkbox"></th>
             {% endif %}
+            <th>price</th>
         </tr>
         
         {% for purchase in purchases %}
@@ -73,6 +74,7 @@ ol li{
                     <td>{{ item.item_variation.size }}</td>
                     <td>{{ item.item_variation.color }}</td>
                     <td align="center">{{ item.quantity }}</td>
+                    <td align="right">${{ item.unit_price|floatformat:2 }}</td>
                 </tr>
             {% endwith %}
         {% endif %}

@@ -663,7 +663,7 @@ def create_shipping_label(request, ref=None, template='retailers/retailer_shippi
 
                 shipment.save()
 
-                return redirect(reverse(redirect_url))
+                return redirect(reverse('view_shipping_label', kwargs={'shipping_number':shipment.tracking_number}))
 
             ctx['shipment'] = shipment
     try:

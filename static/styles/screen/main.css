@@ -742,16 +742,14 @@ body {
 .retailer.wrap{
 	top:100px;
 	margin-right:10%;
+	min-width:1200px;
 }
 
 
 .internal #hdr-logo {
 	position:relative;
 }
-.internal .wrap {
-	/*width:1150px;*/
-	margin:0 auto;
-}
+
 .internal #main .wrap {
 	padding-top:41px;
 /*	min-height: 700px;*/
