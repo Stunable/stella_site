@@ -10,6 +10,15 @@
     <div class="inner-page-content">
         <div id="stunable-tabs-nav">
             <ul id="tabs-container" class="nav tabbed clearfix">
+                        {% if request.user.is_authenticated %}
+                            <li title="click to add a new tab" class="stunable-tab tab">
+                                <div class="click-show" data-target="#tab-adder" href="" title="" class="text-link"><span class="bigplus">+</span> more<input id="tab-adder" style="display:none" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text"></div>
+                            </li>
+                        {% else %}
+                            <li class="stunable-tab tab">
+                                 <a data-href="/" class="login-check" href="" ><span class="bigplus">+</span><span>more</span></a>
+                            </li>
+                        {% endif %}
 
                         <li class="stunable-tab tab {% if current == 'all' %} active{% endif %}">
                             <a href="/"><span>all</span></a>
@@ -23,15 +32,7 @@
                         
                         {% include 'racks/includes/tag_tabs.html' %}
 
-                        {% if request.user.is_authenticated %}
-                            <li class="stunable-tab tab">
-                                <a class="click-show" data-target="#tab-adder" href="" title="" class="text-link"><span class="bigplus">+</span> more<input id="tab-adder" style="display:none" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text"></a>
-                            </li>
-                        {% else %}
-                            <li class="stunable-tab tab">
-                                 <a data-href="/" class="login-check" href="" ><span class="bigplus">+</span><span class="under"> more</span></a>
-                            </li>
-                        {% endif %}
+                        
                         
                    
             </ul>

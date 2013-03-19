@@ -481,8 +481,10 @@ def item_modal(request, item_slug, template='racks/item_modal.html', ctx=None):
                 'variations_by_color': item.types.select_related('size').filter(inventory__gte=1).order_by('custom_color_name')
                 }) 
                
+    if request.is_ajax():
+        return direct_to_template(request, template, ctx)
 
-    return direct_to_template(request, template, ctx)
+    return _all(request,ctx=ctx)
 
 def divide_into_list(list_item):
     # first_value = 0
@@ -635,8 +637,10 @@ def new(request, template="racks/new_carousel.html"):
 #    return direct_to_template(request, template, ctx)
 
 #@login_required
-def _all(request, slug=None, template='racks/new_carousel.html',query_set = None,is_wishlist = False):
-    ctx = {'is_wishlist':is_wishlist}
+def _all(request, slug=None, template='racks/new_carousel.html',query_set = None,is_wishlist = False, ctx=None):
+    if not ctx:
+        ctx = {'is_wishlist':is_wishlist}
+
     if not query_set:
         
         if request.GET.get('item_id', None):

@@ -292,7 +292,7 @@ function tabs_find_active(){
     if ($('.stunable-tab.tab.active').length){
     // console.log($('.stunable-tab.tab.active').offset().left)
         $('#tabs-container').animate({
-             scrollLeft:$('.stunable-tab.tab.active').position().left - 100
+             scrollLeft:$('.stunable-tab.tab.active').position().left - 220
         })
     }
     

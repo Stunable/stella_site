@@ -1,6 +1,6 @@
 {% load cache %}
 {% if item.slug %}
-	<div data-id="{{target_item.id}}" id="list_item_{{target_item.id}}" class="touchcarousel-item item retailer-{{item.retailer_profile.id}}">
+	<div data-id="{{target_item.id}}" id="list_item_{{target_item.id}}" class="touchcarousel-item item retailer-{{item.retailer_profile.id}} {{item.get_image.orientation}}">
 
 		<div class="picbox">
 			<a class="item-ref pic-container wp drag_item touchable"  rel="modal:open" data-options="item_modal_options" 
@@ -10,19 +10,21 @@
 				
 				 <img alt="{{target_item.name}} by {{target_item.retailer}}" src="{{ target_item.get_image.medium.url }}"> 
 			</a>
+			<div class="item-info">
+			<div class="item-label"><span>{{item.brand}}</span></div>
+			
+			 <div class="item-name"><span>{{item.name}}<span></div>
+
+			 <div class="carousel_price_tag">
+			    {{item.price_range_text|safe}}
+			</div>
+		</div>
 		</div>
 
 		
 		
 		
-
-		<div class="item-label"><span>{{item.brand}}</span></div>
 		
-		 <div class="item-name"><span>{{item.name}}<span></div>
-
-		 <div class="carousel_price_tag">
-		    {{item.price_range_text|safe}}
-		</div>
 
 
 

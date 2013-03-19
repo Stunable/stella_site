@@ -94,7 +94,8 @@ var stunable = {
         //       $('#page-content').animate({'left': '20px'},400)
         //     })
 
-        $('.click-toggle').toggle(function(){
+        $('.click-toggle').toggle(function(e){
+          e.stopPropagation();
           $($(this).data('target')).fadeIn()
 
         },function(){
