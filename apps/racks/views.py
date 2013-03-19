@@ -37,7 +37,7 @@ import urllib
 
 from apps.retailers.models import RetailerProfile
 
-from apps.kart.models import WishListItem
+from apps.kart.models import WishListItem,KartItem
 
 
 import random
@@ -1008,12 +1008,11 @@ def recent_added_items(request, template="racks/item_list.html"):
     ctx = {'items': qs, "title": "recently added"}
     return direct_to_template(request, template, ctx)
 
-from cart.models import Item as CartItem
 
 @login_required
 def purchased_items(request, template="racks/item_list.html"):
-    qs = Item.objects.filter(pk__in=[ci.object_id for ci in CartItem.objects.filter(cart__purchase__purchaser=request.user)])
-    ctx = {'items': qs, "title": "purchased"}
+    # qs = Item.objects.filter(pk__in=[ci.object_id for ci in KartItem.objects.filter(cart__purchase__purchaser=request.user)])
+    ctx = {'items': [], "title": "purchased"}
     return direct_to_template(request, template, ctx)
 
 @login_required

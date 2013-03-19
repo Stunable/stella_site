@@ -12,7 +12,7 @@ from apps.common import json_view
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files import File
 
-from cart.models import Item as CartItem, Purchase,Shipment,Checkout
+from cart.models import Purchase,Shipment,Checkout
 import datetime
 from django.http import HttpResponse,HttpResponseRedirect
 from apps.racks.forms import item_inventory_form_factory
@@ -55,11 +55,14 @@ import os
 
 
 def get_retailer_profile(request,retailer_id=None):
-    if retailer_id:
-        return RetailerProfile.objects.get(id=retailer_id)
-    if request.user.is_staff:
-        return RetailerProfile.objects.get(id=request.GET.get('retailer',None))
-    return RetailerProfile.objects.get(user=request.user)
+    try:
+        if retailer_id:
+            return RetailerProfile.objects.get(id=retailer_id)
+        if request.user.is_staff:
+            return RetailerProfile.objects.get(id=request.GET.get('retailer',None))
+        return RetailerProfile.objects.get(user=request.user)
+    except:
+        return None
 
 
 
@@ -677,45 +680,39 @@ def create_shipping_label(request, ref=None, template='retailers/retailer_shippi
 @login_required
 def print_packing_slip(request, shipping_number=None, template='retailers/print_packing_slip.html'):
     ctx={}
-    try:
-        # retailer_profile = RetailerProfile.objects.get(user=request.user)
-        shipment = Shipment.objects.get(tracking_number = shipping_number)
-        # items = [p.item for p in shipment.purchases.all()]
-        purchases = shipment.purchases.all()
-        # ctx.update({'retailer_profile': retailer_profile})
-        try:
-            ctx['packing_slip_text'] = SiteTextContent.objects.get(item_name='packing_slip_retailer')
-        except:
-            ctx['packing_slip_text'] = SiteTextContent.objects.get(item_name='packing_slip_customer')
+
+    # retailer_profile = RetailerProfile.objects.get(user=request.user)
+    shipment = Shipment.objects.get(tracking_number = shipping_number)
+    # items = [p.item for p in shipment.purchases.all()]
+    purchases = shipment.purchases.all()
+    # ctx.update({'retailer_profile': retailer_profile}) .,
+    if get_retailer_profile(request):
+        ctx['packing_slip_text'] = SiteTextContent.objects.get(item_name='packing_slip_retailer')
+    else:
+        ctx['packing_slip_text'] = SiteTextContent.objects.get(item_name='packing_slip_customer')
 
 
-        ctx['shipping_label'] = shipment
-        ctx['purchases']= purchases
-    except:
-        raise
-        #login as regular user
-        return redirect(reverse("home"))
+    ctx['shipping_label'] = shipment
+    ctx['purchases']= purchases
+
     return direct_to_template(request, template, ctx)
 
 def view_shipping_label(request, shipping_number=None,template='retailers/retailer_shipping_label.html'):
     ctx={}
-    try:
-        shipment = Shipment.objects.get(tracking_number = shipping_number)
-        # items = [p.item for p in shipment.purchases.all()]
-        purchases = shipment.purchases.all()
-        # ctx.update({'retailer_profile': retailer_profile})
 
-        try:
-            ctx['advice_text'] = SiteTextContent.objects.get(item_name='shipping_label_instructions')
-        except:
-            ctx['advice_text'] = SiteTextContent.objects.get(item_name='return_label_instructions')
+    shipment = Shipment.objects.get(tracking_number = shipping_number)
+    # items = [p.item for p in shipment.purchases.all()]
+    purchases = shipment.purchases.all()
+    # ctx.update({'retailer_profile': retailer_profile})
 
-        ctx['shipping_label'] = shipment
-        ctx['purchases']= purchases
-    except:
-        raise
-        #login as regular user
-        return redirect(reverse("home"))
+    if get_retailer_profile(request):
+        ctx['advice_text'] = SiteTextContent.objects.get(item_name='shipping_label_instructions')
+    else:
+        ctx['advice_text'] = SiteTextContent.objects.get(item_name='return_label_instructions')
+
+    ctx['shipping_label'] = shipment
+    ctx['purchases']= purchases
+  
     return direct_to_template(request, template, ctx)
 
 

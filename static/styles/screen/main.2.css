@@ -366,6 +366,9 @@ body.flatpage{
 	white-space: nowrap;
 }
 
+.flatpage #main{
+	white-space: normal;
+}
 
 
 #left-panel{
@@ -517,8 +520,9 @@ body.flatpage #left-panel{
 	.flatpage #page-content{
 
 		width: 60%;
-		margin: auto;
-		top: 100px;
+		margin-top: 100px;
+		margin-left:10%;
+		margin-right:10%;
 		/*background-color:#eee;*/
 		border:none;
 	}
@@ -1097,7 +1101,7 @@ body.flatpage #left-panel{
 	background-color:white;
 	padding:20px;
 }
-.content.cart #cart-item-list{
+#cart-item-list{
 	/*width:60%;*/
 	min-width:558px;
 	overflow-y:auto;

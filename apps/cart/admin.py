@@ -1,11 +1,10 @@
 from django.contrib import admin 
-from apps.cart.models import Cart, Purchase, Checkout,Item,Shipment
+from apps.cart.models import  Purchase, Checkout,Shipment
 from apps.kart.models import Kart,KartItem,WishListItem
 from plugins.track_shipment import track_it
 class CartAdmin(admin.ModelAdmin):
     list_display=('__unicode__','checked_out','ref','grand_total','creation_date')
 
-admin.site.register(Cart,CartAdmin)
 admin.site.register(Kart,CartAdmin)
 admin.site.register(KartItem)
 
@@ -61,6 +60,4 @@ class CheckoutAdmin(admin.ModelAdmin):
 
 admin.site.register(Checkout,CheckoutAdmin)
 
-
-admin.site.register(Item)
 admin.site.register(Shipment)

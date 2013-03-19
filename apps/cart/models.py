@@ -44,26 +44,6 @@ def base35encode(number):
 
     return base36 or alphabet[0]
 
-
-# THIS IS NO LONGER USED AND HAS BEEN REPLACED WITH kart.Kart
-class Cart(models.Model):
-    creation_date = models.DateTimeField(verbose_name=_('creation date'))
-    checked_out = models.BooleanField(default=False, verbose_name=_('checked out'))
-    grand_total = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2)
-    shipping_and_handling_cost = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2)
-    shipping_method = models.ForeignKey(ShippingType, blank=True, null=True, default=4)
-    destination_zip_code = models.CharField(max_length=10,null=True,blank=True,default='60606')
-
-    ref = models.CharField(max_length=250, blank=True, null=True)
-
-    class Meta:
-        verbose_name = _('cart')
-        verbose_name_plural = _('carts')
-        ordering = ('-creation_date',)
-
-    def __unicode__(self):
-        return unicode(self.creation_date)
-
     
 
 class ItemManager(models.Manager):
@@ -219,6 +199,63 @@ class Shipment(models.Model):
     @property
     def image(self):
         return self.label
+
+
+
+
+from stunable_wepay.signals import payment_was_successful
+from django.dispatch import receiver    
+
+@receiver(payment_was_successful,dispatch_uid="payment_authorization_callback")
+def payment_was_successful_callback(sender, **kwargs):
+    print 'received signal that payment was successful for', kwargs['item']
+    transaction = sender
+
+    print 'retailer:',kwargs['item'].retailer.user
+    retailer = kwargs['item'].retailer
+
+    itemtype = kwargs['item'].item_variation
+    itemtype.update_inventory(int(kwargs['item'].quantity))
+
+
+    try:
+        checkout = Checkout.objects.get(cart=kwargs['item'].cart, retailer=retailer.user)
+    except:
+        checkout = Checkout.objects.create(cart=kwargs['item'].cart,retailer=retailer.user,purchaser=transaction.user)
+    
+    p = Purchase.objects.create(
+        item = kwargs['item'],
+        purchaser = transaction.user,
+        transaction = transaction,
+        cart = kwargs['item'].cart,
+        checkout = checkout,
+        shipping_method=kwargs['item'].shipping_method,
+        shipping_address=kwargs['shipping_address']
+    )
+            
+    p.save()
+
+
+
+# THIS IS NO LONGER USED AND HAS BEEN REPLACED WITH kart.Kart
+class Cart(models.Model):
+    creation_date = models.DateTimeField(verbose_name=_('creation date'))
+    checked_out = models.BooleanField(default=False, verbose_name=_('checked out'))
+    grand_total = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2)
+    shipping_and_handling_cost = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2)
+    shipping_method = models.ForeignKey(ShippingType, blank=True, null=True, default=4)
+    destination_zip_code = models.CharField(max_length=10,null=True,blank=True,default='60606')
+
+    ref = models.CharField(max_length=250, blank=True, null=True)
+
+    class Meta:
+        verbose_name = _('cart')
+        verbose_name_plural = _('carts')
+        ordering = ('-creation_date',)
+
+    def __unicode__(self):
+        return unicode(self.creation_date)
+
 
 # THIS IS NO LONGER USED AND HAS BEEN REPLACED WITH kart.KartItem
 class Item(models.Model):
@@ -443,39 +480,3 @@ class Item(models.Model):
         if not amount:
             amount = self.sub_total
         return settings.WEPAY_FIXED_FEE + settings.WEPAY_PERCENTAGE*.01 * amount
-
-
-from stunable_wepay.signals import payment_was_successful
-from django.dispatch import receiver    
-
-@receiver(payment_was_successful,dispatch_uid="payment_authorization_callback")
-def payment_was_successful_callback(sender, **kwargs):
-    print 'received signal that payment was successful for', kwargs['item']
-    transaction = sender
-
-    print 'retailer:',kwargs['item'].retailer.user
-    retailer = kwargs['item'].retailer
-
-    itemtype = kwargs['item'].item_variation
-    itemtype.update_inventory(int(kwargs['item'].quantity))
-
-
-    try:
-        checkout = Checkout.objects.get(cart=kwargs['item'].cart, retailer=retailer.user)
-    except:
-        checkout = Checkout.objects.create(cart=kwargs['item'].cart,retailer=retailer.user,purchaser=transaction.user)
-    
-    p = Purchase.objects.create(
-        item = kwargs['item'],
-        purchaser = transaction.user,
-        transaction = transaction,
-        cart = kwargs['item'].cart,
-        checkout = checkout,
-        shipping_method=kwargs['item'].shipping_method,
-        shipping_address=kwargs['shipping_address']
-    )
-            
-    p.save()
-
-        
-
