@@ -315,6 +315,9 @@ var stunable = {
               }
 
               if (shipping_choice && payment_choice){
+                $('<div class="info_modal"><div>We are placing your order.  Please Wait a moment.</div><img src="/static/images/loading.gif"> </div>').modal({clickClose: false,escapeClose:false,showClose:false})
+                // return false;
+
                 $.post('/cart/order_placed',
                   $.extend($('#shipping-choice-form').serializeObject(),$('#payment-choice-form').serializeObject()),
                     function(data){

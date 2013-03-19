@@ -738,11 +738,18 @@ body {
 .wrap {
 	text-align:left;
 }
+
+.retailer.wrap{
+	top:100px;
+	margin-right:10%;
+}
+
+
 .internal #hdr-logo {
 	position:relative;
 }
 .internal .wrap {
-	width:1150px;
+	/*width:1150px;*/
 	margin:0 auto;
 }
 .internal #main .wrap {
@@ -1062,7 +1069,6 @@ body {
 
 .gallery .retailer-left-panel {
 	position: relative;
-	top: 39px;
 }
 
 .gallery .retailer-left-panel .panel-content{

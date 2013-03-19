@@ -285,11 +285,15 @@ class Kart(models.Model):
 
         if success:
             self.checked_out = True
+            self.save()
+
+
             self.wishlistitem_set.all().update(purchased=True)
             request.session['checked_out_cart'] = self.id
             del(request.session['cart'])
             return True,None
         else:
+            raise
             return False,error
 
 

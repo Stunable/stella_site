@@ -114,6 +114,7 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
 class ItemTypeAdmin(admin.ModelAdmin):
     list_display = ('item',)
     actions = ('test_inventory_update',)
+    list_per_page = 500
 
 
     def test_inventory_update(self,request,queryset):

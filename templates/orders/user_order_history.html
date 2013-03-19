@@ -6,112 +6,77 @@
 {% block content-class%}round-corner-shadow{%endblock%}
 
 {% block content %}
-<style>
 
-    .common td input[type="text"] {
-        width: 40px;
-    }
-    .common th {
-        border: thin solid #EBEBEB;
-        vertical-align: middle;
-        text-align: center;
-        background-color: #eee;
-        font-weight: 600;
-    }
-    .common table, .common .no-border td {
-        border: none;
-    }
-    h3 {
-        text-transform: uppercase;
-        text-align: center;
-    }
-    
-    .bootstrap input {
-        width: 100px;
-    }
-    .order-action ul {
-        position:absolute;top: 0; left:0;display:none;background-color: white;width: 200px;cursor: pointer;
-        border: gray 1px solid;
-    }
-    
-    .order-action ul li {
-    }
-    
-    .order-action {
-        position:relative; cursor: pointer;
-    }
-</style>
 <div id="page-content">
 
 
-<div class="section-intro">
-    <h2><form class="bootstrap"> <span>Order history</span>
-<!--         <span style="float:right;font-size: 15px;font-weight: 400;">From:
-        <input type="text" value="{{request.GET.from}}" id="datepicker-from">
-        To:
-        <input type="text" id="datepicker-to" value="{{request.GET.to}}">
-        </span> -->
-</form>
-    </h2>
-</div>
-<div class="body-copy inner-page-content">
-{% for checkout in checkouts %}
-        <table id="checkout-table">
-            <tr>
-                <th>Picture</th>
-                <th style="width: 17%;">Purchase Date</th>
-                <th style="width: 35%;">Product Name</th>
-                <th style="width: 7%;">Price</th>
-                <th>Size</th>
-                <th>Color</th>
-                <th style="width: 7%;">Quantity</th>
-                <th style="width: 20%;">Status</th>
-                <th style="width: 10%;">Action</th>
-            </tr>
-            <tr><td></td></tr>
-            {% for purchase in checkout.purchase_set.all %}
-            {% with item=purchase.item %}
 
-            {% ifchanged purchase.purchased_at|date:"YMDH" %}
-            <tr>
-                <th colspan="3" style="width: 17%;">Reference number: {{checkout.ref}}</th>
-                
-                <th colspan="5">Purchased by : {{purchase.purchaser}}</th>
-                <th></th>
-                <th></th>
-            </tr>
-            {% endifchanged %}
-           
-            <tr id="product-item-{{item.product.pk}}">
-                <td><img style="width:60px" src="{{ item.picture}}"></td>
-                <td>{{ purchase.purchased_at}}</td>
-                <td>{{ item.item_name }}</td>
-                <td>{{ item.total_price }}</td>
-                <td>{{ item.item_variation.size }}</td>
-                <td>{{ item.item_variation.color }}</td>
-                <td align="center">{{ item.quantity }}</td>
-                <td><span class="item-status-{{item.pk}}">{{ purchase.status}}</span><br />
+    <div class="body-copy inner-page-content">
+        <div id="cart-item-list" class="purchased">
+             
+        {% for checkout in checkouts %}
+        {% with checkout.purchase_set.all.0 as first_purchase %}
+        <div class="cart-retailer-group">
+                <table cellpadding="0" cellspacing="0" width="100%" border="0" class="retailer-item-group">
+                            <tr>
+                                <td colspan="2" class="retailer-header">
+                                    {{first_purchase.purchased_at}}<br>
+                                    <span class="item-retailer">{{checkout.retailer}}</span>    
+                                </td>
+                                <td style="text-align:right" class="cart-item-shipping-edit">
+                                    reference number: <span class="reference-number"> {{checkout.ref}} </span>
+                                </td>
+                                <td>
+                                    <div class="shipping-options">
+                                    
+                                        {{first_purchase.shipping_method.name}} Shipping<br>
+                                        Estimated Arrival:{{first_purchase.shipping_method.estimated_arrival_time}}<br>
+                                        Return Policy:{% if checkout.retailer.not_accept_refund %}
+                                        Final Sale
+                                        {% else %}
+                                        Return within 14 Days
+                                        {% endif %}
+
+                                    
+                                    </div>
+                                </td>
+                                
+
+                            </tr>
+                            {% for purchase in checkout.purchase_set.all %}
+                            {% with item=purchase.item %}
+                            <tr class="item-name cart-item-{{item.id}}">
+                                <td colspan="4">
+                                    {{ item.item_name }}
+                                </td>
+                            </tr>
+                            <tr class="item cart-item-{{item.id}}">  
+                               
+                                <td class="item-img">
+                                    <img src="{{item.picture}}">
+                                </td>
+                                <td colspan="2" class="item-info">
+                                    <br>size:<span>{{ item.item_variation.size }}</span>
+                                    <br>color:<span>{{ item.item_variation.color }}</span>
+                                    <br>quantity:<span>{{ item.quantity }}</span>
+                                </td>
+                                    
+                                <td><span class="item-status-{{item.pk}}">{{ purchase.status}}</span><br />
                     {% if purchase.status == "shipped" %} tracking no. <span class="item-tracking-no-{{item.pk}}">{% if purchase.most_recent_shipment %}#{{purchase.last_tracking_number}}{% endif %}</span>{% endif %}
-                </td>
-                <td>
-                    {% include purchase_actions %}
-                </td>
-            </tr>
-        {% endwith %}
-        
-        <br />
-        {% empty %}
-        <p>
-            There is no entry
-        </p>
-        {% endfor %}
-        </table>
-{% endfor %}
-</div>
-</div>
+                                </td>
+                                    
+                            </tr>
+                            {% endwith %}
+                            {% endfor %}
+                </table>
+                </div>
+            {% endwith %}
+            {% endfor %}
+
+    </div>
+    </div>
 </div>
 {% endblock %}
 
 
-{% block content1 %}{% endblock %}
 

@@ -1,9 +1,6 @@
 @charset "UTF-8";
 @import "chosen.css";
 
-@charset "UTF-8";
-@import "chosen.css";
-
 /* CSS Document */
 
 
@@ -1092,6 +1089,9 @@ body.flatpage #left-panel{
 /*CART*/
 
 
+.cart .inner-page-content{
+	width:90%;
+}
 
 .cart .container-box{
 	background-color:white;
@@ -1614,9 +1614,12 @@ form .info_modal{
 	overflow:hidden;
 }
 
+.modal_inner_frame{
+	white-space: nowrap;
+}
 
 .modal.current .modal_inner_frame{
-	max-width:700px;
+	min-width:600px;
 	height:620px;
 	overflow:hidden;
 	background-color:#eee;
@@ -1653,13 +1656,21 @@ form .info_modal{
 }
 
 
-.item-visuals #item-header .item-retailer{
-	font-size:2em;
+.item-retailer{
 	color:#7f10b5;
 	text-transform: uppercase;
-	/*line-height: .8;*/
-
 }
+
+.item-visuals #item-header .item-retailer{
+	font-size:2em;
+	text-transform: uppercase;
+	/*line-height: .8;*/
+}
+
+#cart-item-list .item-retailer,#cart-item-list .reference-number{
+	font-weight:bold;
+}
+
 
 .item-visuals #item-header .item-name{
 	margin:auto;

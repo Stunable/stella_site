@@ -111,7 +111,7 @@
                  </div><!--/.wrap-->
             </div><!--/.header-->
             <div class="section" id="main">
-                <div class="wrap" id="carousel-wrapper">
+                <div class="wrap">
                     {% block local_nav %} <!--LOCAL NAVIGATION LINKS-->
                     {% if request.subdomain == 'stylists' %}
                         {% include "includes/retailer_nav.html" %}
@@ -121,7 +121,7 @@
                     {% endblock %}
                     {% block rack %}
 
-                  
+                  <div class="wrap retailer">
                     {% block left_panel %}
                     <div class="left-panel" id="left-panel">
                         <div class="panel-header clearfix">
@@ -254,6 +254,7 @@
                     {% endblock %}
                     {% block content1 %}
                     {% endblock %}
+                </div>
                 </div><!--/.section-->
             </div><!--/.container#viewport -->
             <div class="section content" id="footer">

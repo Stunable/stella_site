@@ -463,7 +463,8 @@ class ItemType(models.Model,DirtyFieldsMixin):
         print self.api_type, self.object_id
         if self.api_type and self.object_id:
             print 'calling inventory update on :',self.api_connection
-            self.api_connection.update_inventory(self,number_sold)
+            if not settings.DEBUG:
+                self.api_connection.update_inventory(self,number_sold)
 
         else:
             self.inventory = self.inventory - number_sold

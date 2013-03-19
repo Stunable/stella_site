@@ -623,8 +623,12 @@ def create_shipping_label(request, ref=None, template='retailers/retailer_shippi
             receiver = ShippingInfo.objects.get(customer=checkout.purchaser.get_profile(),is_default=True)
             purchase_status = 'placed'
             redirect_url = "retailer_order_history"
-        else:
-            raise
+        elif request.user.is_staff:
+            sender = get_retailer_profile(request)
+            receiver = ShippingInfo.objects.get(customer=checkout.purchaser.get_profile(),is_default=True)
+            purchase_status = 'placed'
+            redirect_url = "retailer_order_history"
+            
 
         purchases = checkout.purchase_set.all()
         ctx['checkout'] = checkout
