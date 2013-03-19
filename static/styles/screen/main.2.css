@@ -556,6 +556,8 @@ body.flatpage #left-panel{
 			margin:20%;
 			width:60%;
 			min-height:300px;
+			white-space: normal;
+			overflow:auto;
 		}
 
 		.inner-page-content>div{
