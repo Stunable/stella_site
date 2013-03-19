@@ -147,7 +147,7 @@ class ProductImage(models.Model,listImageMixin):
     large       = models.ImageField(upload_to='upload/l/%Y/%m/%d/', null=True, blank=True,  verbose_name="%d,%d"%(settings.THUMB_SIZES['large'][0],settings.THUMB_SIZES['large'][1]),storage=queued_s3storage)
     extralarge  = models.ImageField(upload_to='upload/xl/%Y/%m/%d/', null=True, blank=True, verbose_name="900,1800",storage=queued_s3storage)
 
-    identifier = models.CharField(max_length=256,blank=True,null=True)
+    identifier = models.CharField(max_length=255,blank=True,null=True)
 
     def orientation(self):
         if self.width>self.height:
@@ -204,6 +204,10 @@ class ProductImage(models.Model,listImageMixin):
 
     def save(self,instant=None,*args,**kwargs):
         this_id = self.id
+
+        if len(self.identifier) > 255:
+            self.identifier = self.identifier[255:]
+
         super(ProductImage,self).save()
 
         if not this_id:
