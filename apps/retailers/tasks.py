@@ -160,10 +160,6 @@ def extract_zip(filepath):
     return outdir    
 
 
-@task
-def save_inventory_modification(api_connection,variant):
-    pass
-
 
 @task
 def save_shopify_inventory_update(api_connection,source_id,item_variation,number_sold):
@@ -188,8 +184,9 @@ def save_shopify_inventory_update(api_connection,source_id,item_variation,number
 
 @task 
 def refresh_all_api_products():
+    enable()
     for api_connection in ContentType.objects.get(app_label="retailers", model="apiconnection").model_class().objects.all():
-        print api_connection
+        update_API_products.delay(api_connection)
 
 
 
