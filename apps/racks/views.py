@@ -165,6 +165,11 @@ def wishlist(request):
     return _all(request,template='racks/wishlist.html',query_set=qs,is_wishlist=True)
 
 
+def friends(request):
+    qs = WishListItem.objects.none()
+
+    return _all(request,template='racks/friends.html',query_set=qs,is_wishlist=True)
+
 @login_required
 def index(request, template='racks/closet.html'):
     ctx = {}

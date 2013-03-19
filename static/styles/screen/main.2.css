@@ -423,17 +423,16 @@ body.flatpage #left-panel{
 
 	#left-panel #friends-button{
 		background:url('../../images/new_buttons/people_dancing.png');
-		background-size: 90px;
+		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position:0px 0px;
-		background-position:0px 0px;
+		background-position:16px 16px;
 	}
 
 	#left-panel #friends-button:hover,#left-panel #friends-button.active{
 		background:url('../../images/new_buttons/people_dancing_hover.png');
-		background-size: 90px;
+		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position:0px 0px;
+		background-position:16px 16px;
 		background-color: whitesmoke;
 	}
 
@@ -550,6 +549,13 @@ body.flatpage #left-panel{
 			border-radius: 10px;
 			border:1px solid #eee;
 			overflow:auto;
+			min-height:600px;
+		}
+
+		.friends .inner-page-content #maincontent{
+			margin:20%;
+			width:60%;
+			min-height:300px;
 		}
 
 		.inner-page-content>div{

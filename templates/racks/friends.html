@@ -1,0 +1,23 @@
+{% extends "racks/rack_base.html" %} {% block title %} Stunable | Browse Items {% endblock %} {% block page_tab %}{% endblock %}
+
+
+
+
+
+{% block content %}
+<div class="info-modal"></div>
+<div class="content {% block content-class%}carousel{%endblock%} friends" id="page-content" >
+    
+    <div class="inner-page-content">
+
+        <div id="maincontent">
+        {{ CMS.friends_placeholder|safe }}
+            <!-- <div class="sizecontrols"><span>tiny</span><span>small</span><span>medium</span>large</span></div> -->
+        hi
+        </div>
+      
+    </div>
+</div>
+
+
+{% endblock %}
