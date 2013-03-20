@@ -727,7 +727,7 @@ body.flatpage #left-panel{
 		    font-size:.9em;
 			text-align:center;
 			min-height:400px;
-			/*display:none;*/
+			display:none;
 
 		}
 
