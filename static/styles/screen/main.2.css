@@ -817,40 +817,42 @@ body.flatpage #left-panel{
 				vertical-align: top;
 			}
 
-			_price_tag {
+			.carousel_price_tag {
 				font-size: 1.1em;
 				color: #888;
 			}
 
+			.directional{
+				width:85%;
+				white-space: nowrap;
+				position:absolute;
+				top:500px;
+				/*height:200px;*/
+				/*background-color: black;*/
+				left:5%;
+			}
 
 			 .directional .btn {
 				position:absolute;
-				top:84%;
 				height:60px;
 				width:60px;
-				margin:0;
 				background:transparent url(../../images/gui/icon-arrows.png) no-repeat 0 0;
 				text-indent:-999em;
 				cursor:pointer;
 				z-index:3;
 				overflow:hidden;
-				opacity:.7;
+			}
 
-			}
-			 .directional .btn:hover {
-			/*	background-color:#E84E4B;*/
-			}
+
 			 .directional .previous {
-				left:0;
-				margin-left: 30px;
+				left:0px;
 			}
 			 .directional .next {
-				right:10px;
-				margin-right: 30px;
 				background-position:-66px 0;
+				right:0px;
 			}
 
-			 .directional .next,  .directional .previous  {
+			 .directional .next, .directional .previous  {
 				padding: 0;
 				border: none;
 			}
