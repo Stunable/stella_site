@@ -49,6 +49,7 @@
             this._add_function= this.options.add_function || function(items){
                 this._t.append(items);
             }
+            this.items_to_add = [];
 
             if (!this.options.target_element){
                 throw('you must specify a "target_element" selector which should be a container element that scrolls inside a bigger scrolling element')
@@ -62,6 +63,18 @@
             $(this.element).scroll(function(){
                 self.onScroll()
             })
+
+            // $(this.element).bind('mousewheel', function(event) {
+            //     console.log(event)
+            //    var delta = event.originalEvent.wheelDeltaY;
+            //     if(delta>0){
+            //         self.go_to_nextpage()}
+            //     else{
+            //         self.go_to_prevpage();
+            //     }
+
+            //     return false;
+            // });
 
             // $(this.element).bind("mousewheel",function(ev, delta) {
             //     var scrollTop = $(this).scrollTop();
@@ -114,11 +127,12 @@
                     return {'p':100*$element.scrollLeft()/total,'dir':'horizontal'}
                 }
                 ,animate: function(number){
-                    self.is_animating = true;
-                    $e.stop(true).animate({
-                        scrollLeft: $e.scrollLeft()+number
-                     }, self.anim_duration,function(){self.is_animating = false;self.post_anim_callback()});
-
+                    if (!self.is_animating){
+                        self.is_animating = true;
+                        $e.stop(true).animate({
+                            scrollLeft: $e.scrollLeft()+number
+                         }, self.anim_duration,function(){self.is_animating = false;self.post_anim_callback()});
+                    }   
                 },
                 next_page: function(){
                     self.handler.animate($e.width()*.66)
@@ -141,11 +155,12 @@
                     return {'p':100*$element.scrollTop()/total,'dir':'vertical'}
                 }
                 ,animate: function(number){
-                    self.is_animating = true;
-                    $e.stop(true).animate({
-                        scrollTop: $e.scrollTop()+number
-                     }, self.anim_duration,function(){self.is_animating = false;self.post_anim_callback()});
-
+                    if (!self.is_animating){
+                        self.is_animating = true;
+                        $e.stop(true).animate({
+                            scrollTop: $e.scrollTop()+number
+                         }, self.anim_duration,function(){self.is_animating = false;self.post_anim_callback()});
+                    }
                 }
                 ,next_page: function(){
                     self.handler.animate($e.height()*.66);
@@ -163,7 +178,10 @@
                         url: '?page=' + this._next_page + '&item_per_page=' + this.num_per_page,
                         success: function(data) {
                             var items = $(data).find('.item')
-                            self._add_function(items)
+                            self.items_to_add= items;
+                            if (!self.is_animating){
+                                self.post_anim_callback();
+                            }
                             self._next_page = $(data).data('nextpage')
                             // console.log($(data).data('nextpage'))
                             self._loading = false;
@@ -176,7 +194,9 @@
             return this.options.url || window.location
         },
         post_anim_callback:function(){
-            // console.log('hi')
+            if (this.items_to_add.length){
+                this._add_function(this.items_to_add)
+            }
         }
 
     };
