@@ -119,27 +119,25 @@ var stunable = {
     }
     ,shop: function(){    
 
-      var add_function = function(items){
-            // $('#container').isotope('insert', items)
-            $('#container').append(items)
-      }
+      // var add_function = function(items){
+      //       // $('#container').isotope('insert', items)
+      //       $('#container').append(items)
+      // }
 
 
-      if (navigator.userAgent.toLowerCase().indexOf("iphone") == -1){ 
+      // if (navigator.userAgent.toLowerCase().indexOf("iphone") == -1){ 
           window.onload = function(){
             // console.log('not iphone')
             $('#container').isotope(isotope_options[$('.scrollbox').data('type')])
             // initDrag($('.item'))
             // initDrop(); 
-            // fixDragDropIssue()  
-
-          
+            // fixDragDropIssue()     
         }
         add_function = function(items){
             $('#container').isotope('insert', items)
         }
 
-      }     
+      // }     
 
       
         $('.scrollbox').damonscroll({
@@ -778,6 +776,7 @@ var stunable = {
         })
 
     }
+    
 }
 
 
