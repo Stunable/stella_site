@@ -440,7 +440,7 @@ body.flatpage #left-panel{
 	}
 
 
-	#modal-cart-button,#cart-button{
+	#cart-button{
 		background:url('../../images/new_buttons/bag_hover.png');
 		background-size: 50px;
 		background-repeat: no-repeat;
@@ -448,7 +448,7 @@ body.flatpage #left-panel{
 
 	}
 
-	#modal-cart-button:hover,#cart-button.active,#left-panel #cart-button:hover, #left-panel>ul>li#cart-button.drop_item_hover,#left-panel>ul>li#cart-button.active .drop_item_hover{
+	#modal-cart-button,#cart-button.active,#left-panel #cart-button:hover, #left-panel>ul>li#cart-button.drop_item_hover,#left-panel>ul>li#cart-button.active .drop_item_hover{
 		background:url('../../images/new_buttons/bag.png');
 		background-size: 50px;
 		background-repeat: no-repeat;
@@ -465,7 +465,7 @@ body.flatpage #left-panel{
 
 	}
 
-	#modal-wish-button:hover,#wish-button:hover,#left-panel #wish-button.active,#left-panel>ul>li#wish-button.drop_item_hover{
+	#modal-wish-button,#wish-button:hover,#left-panel #wish-button.active,#left-panel>ul>li#wish-button.drop_item_hover{
 		background:url('../../images/new_buttons/heart.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
