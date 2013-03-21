@@ -654,6 +654,7 @@ def daily(request, template="racks/new_carousel.html"):
     query_set = DailySpecial.objects.select_related('Item').filter(
         Q(start_date__lte = today,end_date__gte=today)|
         Q(start_date__lte = today,end_date=None)|
+        Q(start_date = None,end_date=None)|
         Q(start_date = None,end_date__gte=today)).filter(weekday__contains=str(today.weekday())+',')
 
 
