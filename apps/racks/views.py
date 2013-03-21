@@ -704,10 +704,10 @@ def pagination(request, ctx, template, query_set):
         ctx['next'] = next   
     else:
         # template = 'racks/new_carousel.html'
-        ctx['rack_items_list'] = [query_set[:12]]
+        ctx['rack_items_list'] = [query_set[:10]]
     
         ctx['next'] = 3
-    ctx['item_per_page'] = 10
+    ctx['item_per_page'] = 8
             
     return direct_to_template(request, template, ctx)
 
