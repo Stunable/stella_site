@@ -73,6 +73,16 @@
 
                     img = $("<img/>");
                      // Make in memory copy of image to avoid css issues
+
+
+                     $(el).bind('mouseenter',function(){
+                        $(el).after('<div class="spin_container" style="position:absolute;width:100%;height:100%;top:0px"><div class="img_load_spin"></div></div>')
+                        // console.log(el)
+                     })
+
+
+
+
                     img.attr("src", el.data('big'))
                     .load(function() {
                            outerWidth = el.outerWidth();
@@ -81,11 +91,11 @@
                            yRatio = (this.height - outerHeight) / el.outerHeight();
                            offset = el.offset();
                     
-                           // console.log(outerWidth)
-                           // console.log(outerHeight)
+                           $('.spin_container').remove();
+                           $(el).unbind('mouseenter');
+                           
 
                            el.after(container);
-
                            container.append(img)
 
 
@@ -102,7 +112,7 @@
                             }
 
                             $(el).mouseenter(
-                                function(e){
+                                function(e){         
                                     $(document).mousemove(move);
                                     container.fadeIn(600)
                                 })

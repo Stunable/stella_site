@@ -155,18 +155,19 @@ function init_item_modal(){
 			if (!target_img.attr('src')){
 				target_img.attr('src',target_img.data('src')).load(function(){
 					// $('body').append(this);
-					$('.damonzoomcontainer').hide();
-					$(this).parent().fadeIn();
+					$('.damonzoomcontainer').fadeOut();
 					$(this).damonzoom();
+					$(this).parent().show();
+					
 					$('.item-visuals .active-image').fadeOut();
 					$('.active-image').removeClass('active-image');
 					$(this).parent().addClass('active-image');
 					
 				});
 			}else{
-				$('.damonzoomcontainer').hide();
-				$(target_img).parent().fadeIn();
+				$('.damonzoomcontainer').fadeOut();
 				$(target_img).damonzoom();
+				$(target_img).parent().show();
 				$('.item-visuals .active-image').fadeOut();
 				$('.active-image').removeClass('active-image');
 				$(target_img).parent().addClass('active-image');

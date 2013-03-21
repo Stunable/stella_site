@@ -1468,7 +1468,17 @@ form .info_modal{
 }
 
 
+.modal.current .img_load_spin{
+	opacity:.5;
+	width:48px;
+	height:48px;
+	background:url('/static/images/spinner_48_w.gif') 0 0  no-repeat;
+}
 
+
+.modal.current .wide .img_load_spin{
+	margin-top:80px;
+}
 
 .modal.current .item-price {
 	font-size: 1.2em;
