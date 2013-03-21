@@ -234,7 +234,6 @@ INSTALLED_APPS = (
     'trends',
     'voting',
     'tagging',
-    'tagging_autocomplete',
     'stella_crawler',
     'blog',
     'inlines',
