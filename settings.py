@@ -234,6 +234,7 @@ INSTALLED_APPS = (
     'trends',
     'voting',
     'tagging',
+    'tagging_autocomplete',
     'stella_crawler',
     'blog',
     'inlines',
@@ -434,6 +435,9 @@ TAX_USE_TAXCLOUD_AUTHORIZATION = True
 TAX_TAXCLOUD_API_ID = '15B54040'
 TAX_TAXCLOUD_API_KEY = '0D678AA9-B974-44AF-B1E5-6DB714D26E55'
 USPS_ID = '193BURLE8091'
+
+
+TAGGING_AUTOCOMPLETE_JS_BASE_URL = STATIC_URL+'javascript'
 
 
 try:                        

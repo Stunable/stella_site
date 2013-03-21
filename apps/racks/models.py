@@ -21,6 +21,9 @@ from apps.accounts.models import AnonymousProfile
 from django.dispatch import receiver
 from django.db.models.signals import post_save,pre_save
 
+
+from apps.weekday_field.fields import WeekdayField
+
 from queued_storage.backends import QueuedStorage
 from storages.backends.s3boto import S3BotoStorage
 
@@ -518,6 +521,34 @@ class ItemType(models.Model,DirtyFieldsMixin):
         if not r['min'] == r['max'] and self.is_onsale:
             return '<span%(sale)s><span class="dollar">$</span>%(min)s</span> - <span class="struck"> <span class="dollar">$</span>%(max)s</span>'%r
         return '<span class="dollar">$</span>%(min)s'%r
+
+
+
+
+class DailySpecial(models.Model):
+    start_date  = models.DateField(null=True,blank=True)
+    end_date    = models.DateField(null=True,blank=True)
+
+    weekday = WeekdayField(null=True,blank=True)
+
+    Item = models.ForeignKey('Item')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

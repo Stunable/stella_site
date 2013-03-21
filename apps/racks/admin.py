@@ -1,5 +1,5 @@
 from django.contrib import admin 
-from apps.racks.models import Rack, Item, Rack_Item, Category, Size, Brand, Color, ItemType, PriceCategory,ProductImage
+from apps.racks.models import Rack, Item, Rack_Item, Category, Size, Brand, Color, ItemType, PriceCategory,ProductImage,DailySpecial
 
 import os
 from PIL import Image
@@ -12,6 +12,9 @@ from django.utils.safestring import mark_safe
 
 
 from django.forms.models import BaseInlineFormSet
+
+
+from weekday_field.forms import WeekdayFormField
 
 
 class AdminImageMixin(object):
@@ -50,8 +53,12 @@ class ItemTypeInlineFormset(BaseInlineFormSet):
 class ItemTypeInline(admin.TabularInline):
     model = ItemType
     extra = 0
+    max_num = 0
     formset = ItemTypeInlineFormset
     exclude = ('api_type','object_id')
+
+    def has_add_permission(self, request):
+        return False
    
 
 
@@ -65,14 +72,15 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
     class Media:
         css = {
             "all": ("styles/imageselect.css",
-                    "styles/admin.css"
+                    "styles/admin.css",
+                    'styles/smoothness/jquery-ui-1.10.2.custom.min.css'
                 )
         }
-        js = ('javascript/jquery.js',
+        js = (
+            'javascript/jquery.js',
+            'javascript/jquery-ui-1.8.22.custom.min.js',
             'javascript/imageselect.js',
-
-
-                "javascript/admin.js",)
+            "javascript/admin.js",)
 
 
     def get_form(self, request, obj=None, **kwargs):
@@ -155,7 +163,16 @@ class ProductImageAdmin(admin.ModelAdmin):
             print PI.item, PI.identifier, PI.height
 
 
-    
+
+class DailySpecialAdmin(admin.ModelAdmin):
+
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        # print db_field.name
+        if 'weekday' in db_field.name:
+            return WeekdayFormField()
+        sup = super(DailySpecialAdmin, self)
+        return sup.formfield_for_dbfield(db_field, **kwargs)
 
 admin.site.register(Size, SizeAdmin)
 admin.site.register(Rack)
@@ -167,6 +184,8 @@ admin.site.register(Brand)
 admin.site.register(Color, ColorAdmin)
 admin.site.register(PriceCategory)
 admin.site.register(ProductImage,ProductImageAdmin)
+
+admin.site.register(DailySpecial,DailySpecialAdmin)
 
 
 

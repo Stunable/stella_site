@@ -113,7 +113,7 @@ urlpatterns = patterns('',
                        
                        (r'^ckeditor/', include('ckeditor.urls')),
                        (r'^api/', include('api.urls')),
-                      
+                       (r'^tagging_autocomplete/', include('tagging_autocomplete.urls')),
                        (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps})
                        # # paypal integration app
                        # (r'^purchased/(?P<uid>\d+)/(?P<id>\d+)/$', 'paypal.views.purchased' ), # purchase callback
