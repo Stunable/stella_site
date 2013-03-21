@@ -109,7 +109,13 @@ var stunable = {
 
         $('.click-show').click(function(e){
           e.preventDefault();
-          $($(this).data('target')).show().focus();
+          var t = $($(this).data('target'))
+          if (t.is(':visible')){
+            t.hide();
+          }else{
+ 
+            $($(this).data('target')).show().focus();
+          }
         })
 
         tabs_find_active()

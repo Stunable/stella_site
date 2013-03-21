@@ -32,7 +32,7 @@ $(document).ready(function(){
           // custom minLength
           var term = extractLast( this.value );
           if ( term.length < 2 ) {
-            return false;
+            return false; 
           }
         },
         focus: function() {
@@ -40,11 +40,11 @@ $(document).ready(function(){
           return false;
         },
         select: function( event, ui ) {
-          var terms = split( this.value );
+          var terms = split( this.label );
           // remove the current input
           terms.pop();
           // add the selected item
-          terms.push( ui.item.value );
+          terms.push( ui.item.label );
           // add placeholder to get the comma-and-space at the end
           terms.push( "" );
           this.value = terms.join( ", " );
