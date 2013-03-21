@@ -526,12 +526,18 @@ class ItemType(models.Model,DirtyFieldsMixin):
 
 
 class DailySpecial(models.Model):
+
+
+    def __unicode__(self):
+        return str(self.item)+' :' +str(self.start_date)+'----'+str(self.end_date)
+
+
     start_date  = models.DateField(null=True,blank=True)
     end_date    = models.DateField(null=True,blank=True)
 
     weekday = WeekdayField(null=True,blank=True)
 
-    Item = models.ForeignKey('Item')
+    item = models.ForeignKey('Item')
 
 
 

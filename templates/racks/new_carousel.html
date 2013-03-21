@@ -23,9 +23,9 @@
                         <li class="stunable-tab tab {% if current == 'all' %} active{% endif %}">
                             <a href="/"><span>all</span></a>
                         </li>
-                       <!--  <li class="stunable-tab tab{% if current == 'daily' %} active{% endif %}">
-                            <a href="{% url daily %}"  title=""><span>new</span></a>
-                        </li> -->
+                        <li class="stunable-tab tab{% if current == 'daily' %} active{% endif %}">
+                            <a href="{% url daily %}"  title=""><span>daily</span></a>
+                        </li>
                         <li class="stunable-tab tab{% if current == 'new' %} active{% endif %}">
                             <a href="{% url new %}"  title=""><span>new</span></a>
                         </li>
@@ -51,6 +51,18 @@
                                     
                                     {% for list_3_items in rack_items_list %}
                                     {% for item in list_3_items %}
+                                    {% if item.item %}
+                                    {% with item.item as item %}
+                                        {% with item as target_item %}
+                                        {% if item.pk %}
+                                        
+                                            {% include "racks/includes/new_item_list_content.html" %}
+                                        
+                                        {% endif %}
+                                        {% endwith %}
+                                        {% endwith %}
+
+                                    {% else %}
                                     {% with item as target_item %}
                                         {% if item.pk %}
                                         
@@ -58,6 +70,7 @@
                                         
                                         {% endif %}
                                     {% endwith %}
+                                    {% endif %}
                                     {% endfor %}
                                     {% endfor %}
                                    

@@ -11,7 +11,7 @@ from django.core.urlresolvers import reverse
 from apps.racks.forms import *
 from friends.models import Friendship
 from django.contrib.auth.models import User
-from apps.racks.models import Rack, Rack_Item, Item, Category,ProductImage,ItemType
+from apps.racks.models import Rack, Rack_Item, Item, Category,ProductImage,ItemType,DailySpecial
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from apps.friends.views import json_view
@@ -647,10 +647,18 @@ def daily(request, template="racks/new_carousel.html"):
 
     ctx['current'] = "daily"
     get_context_variables(ctx, request)
+        
+
+    today = datetime.date.today()
+
+    query_set = DailySpecial.objects.select_related('item').filter(
+        Q(start_date__lte = today,end_date__gte=today)|
+        Q(start_date__lte = today,end_date=None)|
+        Q(start_date = None,end_date__gte=today)).filter(weekday__contains=str(today.weekday())+',')
+
+
     
-    begin_date = datetime.date.today() - timedelta(days=14)
-    
-    query_set = Item.objects.filter(created_date__gt=begin_date, approved=True,is_available=True).order_by('created_date')
+    #query_set = Item.objects.filter(created_date__gt=begin_date, approved=True,is_available=True).order_by('created_date')
         
     return pagination(request, ctx, template, query_set)
 #    return direct_to_template(request, template, ctx)
@@ -692,6 +700,9 @@ def _all(request, slug=None, template='racks/new_carousel.html',query_set = None
 def pagination(request, ctx, template, query_set):
     page = request.GET.get('page')
     item_per_page = int(request.GET.get('item_per_page', '2'))
+
+
+    print query_set
     
     if request.is_ajax():
         template = 'racks/patial_carousel.html'
