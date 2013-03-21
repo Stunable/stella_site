@@ -639,6 +639,20 @@ def new(request, template="racks/new_carousel.html"):
     query_set = Item.objects.filter(created_date__gt=begin_date, approved=True,is_available=True).order_by('created_date')
         
     return pagination(request, ctx, template, query_set)
+
+
+
+def daily(request, template="racks/new_carousel.html"):
+    ctx = {}
+
+    ctx['current'] = "daily"
+    get_context_variables(ctx, request)
+    
+    begin_date = datetime.date.today() - timedelta(days=14)
+    
+    query_set = Item.objects.filter(created_date__gt=begin_date, approved=True,is_available=True).order_by('created_date')
+        
+    return pagination(request, ctx, template, query_set)
 #    return direct_to_template(request, template, ctx)
 
 #@login_required

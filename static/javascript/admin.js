@@ -5,9 +5,6 @@ $(document).ready(function(){
    $('.imageselector').ImageSelect();
 
 
-   // $('#id_tags').autocomplete("/tagging_autocomplete/list", { multiple: true });
-
-
    function split( val ) {
       return val.split( /,\s*/ );
     }

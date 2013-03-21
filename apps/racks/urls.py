@@ -9,6 +9,7 @@ urlpatterns = patterns('',
                        url(r'^carousel/stella_choice', stella_choice, name="stella_choice"),
                        # url(r'^shop', _all, name='all'),
                        url(r'^new', new, name='new'),
+                       url(r'^daily', daily, name='daily'),
 
                        url(r'^stylist/(?P<stylist_id>\d+)', stylist, name="stylist"),
 
