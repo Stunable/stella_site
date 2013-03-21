@@ -529,7 +529,7 @@ class DailySpecial(models.Model):
 
 
     def __unicode__(self):
-        return str(self.item)+' :' +str(self.start_date)+'----'+str(self.end_date)
+        return str(self.Item)+' :' +str(self.start_date)+'----'+str(self.end_date)
 
 
     start_date  = models.DateField(null=True,blank=True)
@@ -537,7 +537,7 @@ class DailySpecial(models.Model):
 
     weekday = WeekdayField(null=True,blank=True)
 
-    item = models.ForeignKey('Item')
+    Item = models.ForeignKey('Item')
 
 
 
