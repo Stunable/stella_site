@@ -40,7 +40,7 @@ $(document).ready(function(){
           return false;
         },
         select: function( event, ui ) {
-          var terms = split( this.label );
+          var terms = split( this.value );
           // remove the current input
           terms.pop();
           // add the selected item

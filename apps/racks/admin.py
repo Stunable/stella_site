@@ -49,6 +49,8 @@ class ItemTypeInlineFormset(BaseInlineFormSet):
         if form.instance:
             if hasattr(form.instance,'item'):
                 form.fields['image'].queryset = ProductImage.objects.filter(item=form.instance.item)
+            else:
+                form.fields['image'].queryset = ProductImage.objects.none()
 
 class ItemTypeInline(admin.TabularInline):
     model = ItemType
