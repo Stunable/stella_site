@@ -156,9 +156,9 @@ def trendsetters(request, user_id=None, template='racks/trendsetters.html'):
 
 def wishlist(request):
     if request.user.is_authenticated():
-        qs = WishListItem.objects.select_related('item','item_variation').filter(user=request.user)
+        qs = WishListItem.objects.select_related('item','item_variation','item___retailer','item__featured_image').filter(user=request.user)
     elif settings.DEBUG:
-        qs = WishListItem.objects.select_related('item','item_variation').all()
+        qs = WishListItem.objects.select_related('item','item_variation','item___retailer','item__featured_image').all()
     else:
         qs = WishListItem.objects.none()
 
@@ -599,23 +599,6 @@ def prepare_ctx(query_set, ctx):
     ctx['page_count'] = (length + 2)/3
     ctx['rack_items_list'] = rack_items_list
 
-def prepare_ctx_with_num(query_set, ctx, num):
-    length = query_set.count()
-    items = query_set[:12]
-    rack_items_list = []
-
-    for i in xrange(0, len(items), num):
-        rack_items_list.append( items[i:i+num])
-    
-    user_items = []
-    for l in rack_items_list:
-        user_items.extend([i.pk for i in l])
-        
-    ctx['user_items'] = Item.objects.filter(pk__in=user_items)
-    ctx['item_count'] = length
-    ctx['page_count'] = (length + num-1)/num
-    ctx['rack_items_list'] = rack_items_list
-
 
 def stylist(request, stylist_id, template="racks/new_carousel.html"):
     ctx = {}
@@ -687,7 +670,7 @@ def _all(request, slug=None, template='racks/new_carousel.html',query_set = None
             # if settings.IS_PROD:
                 #print "PROD"
                 # print 'getting items'
-                query_set = Item.objects.select_related('featured_image').filter(approved=True,is_available=True).order_by('?')
+                query_set = Item.objects.select_related('featured_image','_retailer').filter(approved=True,is_available=True).order_by('?')
         # else:
             # query_set = Item.objects.all().order_by('?')
     # print len(query_set)
@@ -702,9 +685,7 @@ def pagination(request, ctx, template, query_set):
     page = request.GET.get('page')
     item_per_page = int(request.GET.get('item_per_page', '2'))
 
-
-    print query_set
-    
+   
     if request.is_ajax():
         template = 'racks/patial_carousel.html'
         try:
@@ -723,7 +704,7 @@ def pagination(request, ctx, template, query_set):
         ctx['next'] = next   
     else:
         # template = 'racks/new_carousel.html'
-        prepare_ctx_with_num(query_set, ctx, item_per_page)
+        ctx['rack_items_list'] = [query_set[:12]]
     
         ctx['next'] = 3
     ctx['item_per_page'] = 10
