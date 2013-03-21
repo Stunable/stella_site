@@ -11,11 +11,11 @@
         <div id="stunable-tabs-nav">
             <ul id="tabs-container" class="nav tabbed clearfix">
                         {% if request.user.is_authenticated %}
-                            <li title="click to add a new tab" class="stunable-tab tab">
+                            <li id="more-tabs-tab" title="click to add a new tab" class="stunable-tab tab">
                                 <div class="click-show" data-target="#tab-adder" href="" title="" class="text-link"><span class="bigplus">+</span> more<input id="tab-adder" style="display:none" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text"></div>
                             </li>
                         {% else %}
-                            <li class="stunable-tab tab">
+                            <li id="more-tabs-tab" class="stunable-tab tab">
                                  <a data-href="/" class="login-check" href="" ><span class="bigplus">+</span><span>more</span></a>
                             </li>
                         {% endif %}
