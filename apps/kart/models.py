@@ -75,22 +75,23 @@ class Kart(models.Model):
 
 
         if self.request.user.is_authenticated():
-            print "SAVING WISHLIST ITEM"
-            existingWIs = WishListItem.objects.filter(item_variation=item_variation,user=self.request.user)
-            if existingWIs.count():
-                print existingWIs
-                existingWIs.delete()
-            else:
-                WI = WishListItem(
-                    cart=self,
-                    item_variation=item_variation,
-                    item=item_variation.item,
-                    picture = item_variation.get_image(),
-                )
-                if hasattr(self,'request'):
-                    if self.request.user.is_authenticated():
-                        WI.user = self.request.user
-                WI.save()
+            user = self.request.user
+        else:
+            user = None
+
+        existingWIs = WishListItem.objects.filter(item_variation=item_variation,user=user)
+        if user and existingWIs.count() and self.request.GET.get('remove',None):
+            existingWIs.delete()
+        else:
+            WI = WishListItem(
+                cart=self,
+                item_variation=item_variation,
+                item=item_variation.item,
+                picture = item_variation.get_image(),
+                user = user
+            )
+
+            WI.save()
             
 
 
@@ -221,33 +222,70 @@ class Kart(models.Model):
         except Exception, e:
             print e
 
+
     @staticmethod
     def get_by_request(request,checked_out):
+        #print 'getting cart'
+        K = None
         try:
             if checked_out:
                 K = Kart.objects.get(id=request.session.get('checked_out_cart'))
                 K.request = request
                 return K
-
             if request.user.is_authenticated():
+                # if we have a logged in user
+                #print 'got user'
                 try:
-                    K = Kart.objects.get(user=request.user,checked_out=False)
-                    request.session['cart'] = K.id
-                except:
-                    pass
-            if not request.session.get('cart',None):
-                K = Kart.objects.create()
+                    # now look for an existing cart that user may have had from a previous session
+                    K = Kart.objects.filter(user=request.user,checked_out=False).order_by('-creation_date')[0]
+                    #print 'have user kart:',K.id
+                except Exception,e:
+                    #print 'no user kart:',e
+                    K = None
+
+                try:
+                    # check for existing carts from the session before the user logged in
+                    #print 'getting session cart- id:',request.session.get('cart')
+                    sk = Kart.objects.get(id=request.session.get('cart'),user=None)
+
+                    #print 'have session kart'
+                except Exception,e:
+                    #print 'no old session kart needs converting',e
+                    sk = None
+            
+                if sk and K:
+                    #print 'updating existing user kart with incoming session kart'
+                    # if we have both a user kart and a session kart, add the session stuff into the user's stuff
+                    session_kart_items = sk.kartitem_set.all()
+
+                    session_kart_items.update(kart=K)
+                    # change the kart in the sessions items to be the user's kart
+
+                    session_wishlist_items = sk.wishlistitem_set.all()
+                    
+                    session_wishlist_items.update(user=request.user,cart=K)
+                    # do the same with the wish list items 
+                    sk.delete()# the old session kart from this user's non logged in state is now empty and unnecessary
+
+            if K:
                 request.session['cart'] = K.id
             else:
-                K = Kart.objects.get(id=request.session['cart'])
+                if not request.session.get('cart',None):
+                    K = Kart.objects.create()
+                    request.session['cart'] = K.id
+                else:
+                    K = Kart.objects.get(id=request.session['cart'])
+            
             K.request = request
 
             if not K.user:
                 if request.user.is_authenticated():
                     K.user = request.user
                     K.save()
+            print 'current kart:',K.id
             return K
-        except:
+        except Exception,e:
+            print 'MAJOR CART EXCEPTION', e
             try:
                 del(request.session['cart'])
                 K = Kart.objects.create()

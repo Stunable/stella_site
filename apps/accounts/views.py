@@ -388,10 +388,7 @@ def connect(request):
             P.set_default_tags()
 
         C = Cart(request)
-        WishListItem.objects.filter(cart=C).update(user=request.user)
-
-
-
+      
         I = get_fb_avatar_image(sa)
         if I:
             try: 

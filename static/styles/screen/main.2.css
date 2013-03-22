@@ -536,10 +536,13 @@ body.flatpage #left-panel{
 
 	#page-content{
 		display:inline-block;
-		position: absolute;
-		left:90px;
 	    border-left:1px solid #ccc;
 	    width:100%;
+	}
+
+	.lt-ie9 #page-content{
+		position: absolute;
+		left:90px;
 	}
 
 	.flatpage #page-content{
@@ -695,6 +698,7 @@ body.flatpage #left-panel{
 			height:100%;
 			display:inline-block;
 			color:grey;
+			text-transform: lowercase;
 		}
 
 		div#stunable-tabs-nav li.active{
@@ -1434,6 +1438,10 @@ form .info_modal{
 	background-color:#bbb;
 }
 
+.lt-ie9 .modal.current .modal_inner_frame{
+	max-width:700px;
+}
+
 .modal.current .modal_inner_frame>div{
 	display:inline;
 
@@ -1461,7 +1469,7 @@ form .info_modal{
 
 .modal_inner_frame .item-visuals #item-header div{
 	white-space: nowrap;
-	font-family: serif;
+	/*font-family: serif;*/
 	line-height: 25px;
 }
 
@@ -1556,7 +1564,7 @@ form .info_modal{
 
 .modal-item-details .item-description{
 	font-size:.8em;
-	font-family: serif;
+	/*font-family: serif;*/
 	max-height:250px;
 	overflow:auto;
 	width:100%;

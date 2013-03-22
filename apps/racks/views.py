@@ -37,7 +37,7 @@ import urllib
 
 from apps.retailers.models import RetailerProfile
 
-from apps.kart.models import WishListItem,KartItem
+from apps.kart.models import WishListItem,KartItem,Cart
 
 
 import random
@@ -153,14 +153,15 @@ def trendsetters(request, user_id=None, template='racks/trendsetters.html'):
     ctx = {'trendsetter': rack_user, 'racks': racks}
     return direct_to_template(request, template, ctx)
 
-
+@login_required
 def wishlist(request):
+
+    cart=Cart(request)
+    
     if request.user.is_authenticated():
         qs = WishListItem.objects.select_related('item','item_variation','item___retailer','item__featured_image').filter(user=request.user)
-    elif settings.DEBUG:
-        qs = WishListItem.objects.select_related('item','item_variation','item___retailer','item__featured_image').all()
     else:
-        qs = WishListItem.objects.none()
+        qs = WishListItem.objects.select_related('item','item_variation','item___retailer','item__featured_image').filter(cart=cart)
 
     return _all(request,template='racks/wishlist.html',query_set=qs,is_wishlist=True)
 

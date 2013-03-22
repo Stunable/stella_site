@@ -30,7 +30,7 @@
 
  		{% if is_wishlist %}
 			 <div class="controls">
-			 <a href="" data-target="#list_item_{{target_item.id}}" data-href="{% url update_wishlist wishlistitem.item_variation.id %}" title="Remove this item." class="icon close-modal  refclick"></a></div>
+			 <a href="" data-target="#list_item_{{target_item.id}}" data-href="{% url update_wishlist wishlistitem.item_variation.id %}?remove=1" title="Remove this item." class="icon close-modal  refclick"></a></div>
 		 {% endif %}
 
 		

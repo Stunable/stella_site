@@ -8,7 +8,12 @@ class CartAdmin(admin.ModelAdmin):
 admin.site.register(Kart,CartAdmin)
 admin.site.register(KartItem)
 
-admin.site.register(WishListItem)
+
+class WishlistItemAdmin(admin.ModelAdmin):
+    raw_id_fields = ('item_variation','item','picture','user')
+
+
+admin.site.register(WishListItem,WishlistItemAdmin)
 
 
 

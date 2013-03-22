@@ -41,7 +41,7 @@
                                 </li>
                                 <li class="navlink" id="nav-account">
                                     {% if request.user.is_authenticated %}
-                                        <div class="personbox" ><img alt="your lovely face" src="{{request.user.get_profile.avatar_image.url }}">
+                                        <div class="personbox" ><img alt="your picture" src="{{request.user.get_profile.avatar_image.url }}">
                                             <span>{{ request.user.first_name }}</span>
                                         </div>
                                     {% else %}
