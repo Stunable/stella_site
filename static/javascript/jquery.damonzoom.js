@@ -112,7 +112,8 @@
                             }
 
                             $(el).mouseenter(
-                                function(e){         
+                                function(e){        
+                                    console.log(e) 
                                     $(document).mousemove(move);
                                     container.fadeIn(600)
                                 })

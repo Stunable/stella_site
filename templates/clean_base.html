@@ -111,7 +111,7 @@
                           <ul>
 
                             {% block left_panel %}
-                            <li {% if page_role == 'shop' and page_sub_role != 'wishlist' %}class="active" {% endif %}id="shop-button" >
+                            <li {% if page_role == 'shop' and page_sub_role != 'wishlist' and page_sub_role != 'friends' %}class="active" {% endif %}id="shop-button" >
                               <a href="/"><div>shop</div></a>
                             </li>
 

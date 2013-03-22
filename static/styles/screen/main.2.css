@@ -420,7 +420,6 @@ body.flatpage #left-panel{
 		background-size: 60px;
 		background-repeat: no-repeat;
 		background-position:16px 16px;
-		background-color: whitesmoke;
 	}
 
 
@@ -453,7 +452,6 @@ body.flatpage #left-panel{
 		background-size: 50px;
 		background-repeat: no-repeat;
 		background-position:23px 30px;
-		background-color: whitesmoke;
 	}
 
 
@@ -470,8 +468,12 @@ body.flatpage #left-panel{
 		background-size: 60px;
 		background-repeat: no-repeat;
 		background-position:16px 16px;
-		background-color: whitesmoke;
 	}
+
+		#left-panel>ul>li.active,#left-panel>ul>li:hover{
+		background-color: whitesmoke!important;
+	}
+
 
 
 
@@ -498,6 +500,14 @@ body.flatpage #left-panel{
 		text-align: center;
 	}
 
+	.modal.current ul.action-buttons>li>a{
+		color:white;
+	}
+
+	.modal.current ul.action-buttons>li div{
+		position:relative;
+		top:4px;
+	}
 
 	#left-panel>ul>li.active{
 
@@ -978,6 +988,10 @@ table.retailer-item-group{
 }
 
 
+.content.cart .item td.item-remove{
+	vertical-align: top;
+}
+
 
 .content.cart .item .cart-remove{
 	padding:2px 4px 2px 4px;
@@ -985,8 +999,8 @@ table.retailer-item-group{
 	/*border:1px solid #e5e5e5;*/
 	display:inline;
 	font-size:1em;
-	position:absolute;
-	top:0px;
+	position:relative;
+	/*top:0px;*/
 }
 
 .content.cart .item .item-label{
@@ -1520,6 +1534,7 @@ form .info_modal{
 	display:block;
 	float:left;
 	clear:both;
+	padding:0px;
 	
 }
 
@@ -1612,7 +1627,7 @@ form .info_modal{
 	bottom:0px;
 	right:0px;
 	white-space: nowrap;
-	background-color: white;
+	/*background-color: white;*/
 }
 
 .action-buttons #modal-cart-button, .action-buttons #modal-wish-button{
@@ -1631,14 +1646,12 @@ form .info_modal{
 
 
 .modal.current .item-visuals #images{
-	/*width:410px;*/
-	/*border-radius:10px;*/
+	width:420px;
+	overflow:hidden;
 }
 
 .modal.current .item-visuals #images li{
-	/*position: relative;*/
-	/*width: 410px;*/
-	overflow: hidden;
+	position:absolute;
 }
 
 .modal.current .wide .item-visuals #images li{
@@ -2030,7 +2043,7 @@ background-color: white;
 	background: white url(/static/images/gui/pink-dot-bg.png) repeat-x 0 center;
 	width: 91%;
 }
-.devs h2 span, img {
+.devs h2 span, .devs h2 img {
 	background-color: white;
 }
 
