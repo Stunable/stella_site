@@ -63,6 +63,8 @@
                             display:'none'
                     })
 
+                    $('#images').css({'width':el.outerWidth()})
+
                     var outerWidth
                         ,outerHeight
                         ,xRatio
@@ -85,6 +87,8 @@
 
                     img.attr("src", el.data('big'))
                     .load(function() {
+
+
                            outerWidth = el.outerWidth();
                            outerHeight = el.outerHeight();
                            xRatio = (this.width - outerWidth) / el.outerWidth();

@@ -194,7 +194,7 @@ class ProductImage(models.Model,listImageMixin):
                             'height': self.height * settings.THUMB_SIZES['medium'][1]/settings.THUMB_SIZES['large'][1]
                             },
                 'large': {  
-                            'width' : self.width * self.height/620,
+                            'width' : self.width,
                             'height': self.height
                             },
                 'extralarge': {  
