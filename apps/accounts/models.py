@@ -66,7 +66,9 @@ class UserProfile(models.Model,ProfileBase):
     @property
     def avatar_image(self):
         """Gets profile picture as a thumbnail and returns the url or returns the default image"""
-        return self.avatar or "/static/images/default_avatar.gif"
+        if self.avatar:
+            return self.avatar.url
+        return "/static/images/default_avatar.gif"
         
     @property
     def location(self):
