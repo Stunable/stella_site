@@ -44,7 +44,7 @@
 			<div id="item-header"></div>
 			<div class="item-visuals" id="item_visual_{{item.pk}}">
 
-				<ul id="images">
+				<ul id="images" style="width:{{item.get_image.image_dims.large.width}}">
 
 				<li class="active-image">
 					<img class="zoom_this featured item-image-{{item.get_image.id}}" data-big="{{item.get_image.extralarge.url}}"  src="{{item.get_image.large.url}}">
