@@ -13,20 +13,23 @@
         
             <!-- <div class="sizecontrols"><span>tiny</span><span>small</span><span>medium</span>large</span></div> -->
             <div  id="container" >
-                                
-                            {% for list_3_items in rack_items_list %}
-                                {% for wishlistitem in list_3_items %}
+
+                                {% for wishlistitem in rack_items_list %}
                                     {% with wishlistitem.item_variation as target_item %}
                                     {% with wishlistitem.item as item %}
-                                    {% if item.pk %}
+                                   
                                         
                                         {% include "racks/includes/new_item_list_content.html" %}
                                     
-                                    {% endif %}
+                                  
                                     {% endwith %}
                                     {% endwith %}
+
+                                {% empty %}
+                                <div class="content-message">
+                                    {{CMS.empty_wishlist|safe}}
+                                </div>
                                 {% endfor %}
-                            {% endfor %}
                                
 
         </div>

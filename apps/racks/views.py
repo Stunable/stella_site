@@ -157,12 +157,14 @@ def trendsetters(request, user_id=None, template='racks/trendsetters.html'):
 def wishlist(request):
 
     cart=Cart(request)
-    
+
     if request.user.is_authenticated():
         qs = WishListItem.objects.select_related('item','item_variation','item___retailer','item__featured_image').filter(user=request.user)
     else:
         qs = WishListItem.objects.select_related('item','item_variation','item___retailer','item__featured_image').filter(cart=cart)
 
+
+    print 'wish list items',qs
     return _all(request,template='racks/wishlist.html',query_set=qs,is_wishlist=True)
 
 
@@ -653,7 +655,7 @@ def _all(request, slug=None, template='racks/new_carousel.html',query_set = None
     if not ctx:
         ctx = {'is_wishlist':is_wishlist}
 
-    if not query_set:
+    if query_set is None:
         
         if request.GET.get('item_id', None):
             linked_item = Item.objects.filter(id=request.GET.get('item_id'))
@@ -667,14 +669,9 @@ def _all(request, slug=None, template='racks/new_carousel.html',query_set = None
 
         ctx['current'] = "all"
         
-        if not query_set:
-            # if settings.IS_PROD:
-                #print "PROD"
-                # print 'getting items'
-                query_set = Item.objects.select_related('featured_image','_retailer').filter(approved=True,is_available=True).order_by('?')
-        # else:
-            # query_set = Item.objects.all().order_by('?')
-    # print len(query_set)
+        if query_set is None:
+            query_set = Item.objects.select_related('featured_image','_retailer').filter(approved=True,is_available=True).order_by('?')
+
 
     get_context_variables(ctx, request)
     
@@ -700,12 +697,12 @@ def pagination(request, ctx, template, query_set):
         else:
             next = page+1
 
-        ctx['rack_items_list'] = [query_set[_from:_to]]
+        ctx['rack_items_list'] = query_set[_from:_to]
 
         ctx['next'] = next   
     else:
         # template = 'racks/new_carousel.html'
-        ctx['rack_items_list'] = [query_set[:10]]
+        ctx['rack_items_list'] = query_set[:10]
     
         ctx['next'] = 3
     ctx['item_per_page'] = 8

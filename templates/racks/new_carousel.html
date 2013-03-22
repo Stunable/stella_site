@@ -49,29 +49,31 @@
                 <!-- <div class="sizecontrols"><span>tiny</span><span>small</span><span>medium</span>large</span></div> -->
                 <div id="container" >
                                     
-                                    {% for list_3_items in rack_items_list %}
-                                    {% for item in list_3_items %}
-                                    {% if item.Item %}
-                                    {% with item.Item as item %}
-                                        {% with item as target_item %}
-                                        {% if item.pk %}
-                                        
-                                            {% include "racks/includes/new_item_list_content.html" %}
-                                        
-                                        {% endif %}
-                                        {% endwith %}
-                                        {% endwith %}
+                                    {% for item in rack_items_list %}
+                                        {% if item.Item %}
+                                        {% with item.Item as item %}
+                                            {% with item as target_item %}
+                                            {% if item.pk %}
+                                            
+                                                {% include "racks/includes/new_item_list_content.html" %}
+                                            
+                                            {% endif %}
+                                            {% endwith %}
+                                            {% endwith %}
 
-                                    {% else %}
-                                    {% with item as target_item %}
-                                        {% if item.pk %}
-                                        
-                                            {% include "racks/includes/new_item_list_content.html" %}
-                                        
+                                        {% else %}
+                                        {% with item as target_item %}
+                                            {% if item.pk %}
+                                            
+                                                {% include "racks/includes/new_item_list_content.html" %}
+                                            
+                                            {% endif %}
+                                        {% endwith %}
                                         {% endif %}
-                                    {% endwith %}
-                                    {% endif %}
-                                    {% endfor %}
+                                         {% empty %}
+                                        <div class="content-message">
+                                            {{CMS.empty_carousel|safe}}
+                                        </div>
                                     {% endfor %}
                                    
 

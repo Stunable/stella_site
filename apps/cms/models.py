@@ -22,7 +22,7 @@ class SiteTextContent(models.Model):
 
     item_name = models.CharField(help_text="something like this: 'a_name_with_no_spaces_or_funny_symbols'", max_length = 64)
     html = models.TextField(help_text="html tags work in this field", default="cms content placeholder", blank=True,null=True)
-    component = models.CharField(help_text="what part of the site is this for?  ex:'retailers' or 'cart'",max_length=32,default='All')
+    component = models.CharField(help_text="what part of the site is this for?  ex:'retailers' or 'cart'",max_length=32,default='all')
 
 
 
