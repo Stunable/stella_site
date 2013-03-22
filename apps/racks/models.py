@@ -187,19 +187,19 @@ class ProductImage(models.Model,listImageMixin):
         return {
                 'small': {  
                             'width' : self.width  * settings.THUMB_SIZES['small'][0]/settings.THUMB_SIZES['large'][0], 
-                            'height': self.height * settings.THUMB_SIZES['small'][1]//settings.THUMB_SIZES['large'][1]
+                            'height': self.height * settings.THUMB_SIZES['small'][1]/settings.THUMB_SIZES['large'][1]
                             },
                 'medium': {  
-                            'width' : self.width  * settings.THUMB_SIZES['medium'][0]//settings.THUMB_SIZES['large'][0], 
-                            'height': self.height * settings.THUMB_SIZES['medium'][1]//settings.THUMB_SIZES['large'][1]
+                            'width' : self.width  * settings.THUMB_SIZES['medium'][0]/settings.THUMB_SIZES['large'][0], 
+                            'height': self.height * settings.THUMB_SIZES['medium'][1]/settings.THUMB_SIZES['large'][1]
                             },
                 'large': {  
-                            'width' : self.width,
+                            'width' : self.width * self.height/620,
                             'height': self.height
                             },
                 'extralarge': {  
-                            'width' : self.width * settings.THUMB_SIZES['extralarge'][0]//settings.THUMB_SIZES['large'][0], 
-                            'height': self.height * settings.THUMB_SIZES['extralarge'][1]//settings.THUMB_SIZES['large'][1], 
+                            'width' : self.width * settings.THUMB_SIZES['extralarge'][0]/settings.THUMB_SIZES['large'][0], 
+                            'height': self.height * settings.THUMB_SIZES['extralarge'][1]/settings.THUMB_SIZES['large'][1], 
                             }
             }
 
