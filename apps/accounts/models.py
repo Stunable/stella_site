@@ -13,6 +13,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.localflavor.us.us_states import STATE_CHOICES
 from django.contrib.localflavor.us.models import PhoneNumberField
 
+from django.db.models.signals import post_save,pre_save
+from django.dispatch import receiver
+
 from apps.common.forms import FedexTestAddress
 
 from django.forms.models import model_to_dict
@@ -37,8 +40,11 @@ class ProfileBase(object):
         Tag.objects.update_tags(self, ','.join(tags))
 
     def set_default_tags(self):
+        print 'setting tags for ', self
         tags = [tag.name for tag in Tag.objects.filter(is_default=True)]
-        Tag.objects.update_tags(self.user, ','.join(tags))
+        tags += [tag.name for tag in Tag.objects.get_for_object(self)]
+
+        Tag.objects.update_tags(self.user, ','.join(set(tags)))
 
 
 class UserProfile(models.Model,ProfileBase):
@@ -73,6 +79,20 @@ class UserProfile(models.Model,ProfileBase):
     @property
     def location(self):
         return "San Francisco, CA"
+
+
+@receiver(post_save, sender=User)
+def postSaveUser(sender, instance, created, **kwargs):
+    try:
+        UP,created = UserProfile.objects.get_or_create(user=instance)
+        UP.set_default_tags()
+    except:
+        raise
+        pass
+    
+
+
+
         
 
 
