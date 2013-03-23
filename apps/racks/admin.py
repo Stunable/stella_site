@@ -102,16 +102,19 @@ class ItemAdmin(AdminImageMixin,admin.ModelAdmin):
         for obj in queryset:
             if obj.types.all().count():
                 obj.approved = True
+                obj.set_price_text()
                 obj.save()
 
     def set_price_text(self,request,queryset):
         for obj in queryset:
-            obj.price_text = None
+            obj.set_price_text()
             obj.save()
 
     def make_featured_pretty(self,request,queryset):
         for obj in queryset:
+            obj.set_price_text()
             obj.make_featured_pretty()
+            obj.save()
 
     def set_item_slugs(self,request,queryset):
         for obj in queryset:
