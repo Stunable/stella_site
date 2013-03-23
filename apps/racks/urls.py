@@ -7,7 +7,7 @@ urlpatterns = patterns('',
                        url(r'^add_color', add_color, name="add_color"),
                        url(r'^detail/(?P<rack_id>\d+)', detail, name="racks_detail"),
                        url(r'^carousel/stella_choice', stella_choice, name="stella_choice"),
-                       # url(r'^shop', _all, name='all'),
+                       url(r'^all', _all, {'all_items':True}, name='all'),
                        url(r'^new', new, name='new'),
 
                        url(r'^stylist/(?P<stylist_id>\d+)', stylist, name="stylist"),

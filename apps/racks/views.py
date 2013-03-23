@@ -651,7 +651,7 @@ def new(request, template="racks/new_carousel.html"):
 
 
 #@login_required
-def _all(request, slug=None, template='racks/new_carousel.html',query_set = None,is_wishlist = False, ctx=None):
+def _all(request, slug=None, template='racks/new_carousel.html',query_set = None,is_wishlist = False, ctx=None, all_items=False):
     if not ctx:
         ctx = {'is_wishlist':is_wishlist}
 
@@ -674,11 +674,8 @@ def _all(request, slug=None, template='racks/new_carousel.html',query_set = None
                 query_set =  linked_item #| Item.objects.filter(brand=linked_item[0].brand).filter(~Q(id =linked_item[0].id))
 
         # profile = None
-        
 
-        
-        
-        if query_set is None:
+        if all_items or query_set is None:
             query_set = Item.objects.select_related('featured_image','_retailer').filter(approved=True,is_available=True).order_by('?')
             ctx['current'] = "all"
 

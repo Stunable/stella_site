@@ -20,13 +20,13 @@
                             </li>
                         {% endif %}
 
-                        
+
 
                          {% with specials as tags %}
                             {% include 'racks/includes/tag_tabs.html' %}
                         {% endwith %}
                         <li class="stunable-tab tab {% if current == 'all' %} active{% endif %}">
-                            <a href="/"><span>all</span></a>
+                            <a href="/shop/all"><span>all</span></a>
                         </li>
                         <li class="stunable-tab tab{% if current == 'new' %} active{% endif %}">
                             <a href="{% url new %}"  title=""><span>new</span></a>
