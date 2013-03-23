@@ -78,6 +78,12 @@ a, form .btn { color:#7f10b5; }
 
 a:hover, form .btn:hover { color:#8D8791;}
 
+input{
+	padding: 5px;
+	border-radius: 3px;
+	border: 1px solid #7f10b5;
+	font-size: 1.2em;
+}
 
 /*@media all and (max-width: 699px) and (min-width: 520px), (min-width: 1151px) {
   body {

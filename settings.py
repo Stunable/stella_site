@@ -48,6 +48,10 @@ AWS_S3_SECURE_URLS = False
 AWS_QUERYSTRING_AUTH = False
 
 
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/accounts/connect/'
+
+
+
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 
@@ -284,7 +288,7 @@ djcelery.setup_loader()
 
 # django-registration
 ACCOUNT_ACTIVATION_DAYS = 14
-LOGIN_REDIRECT_URL = "/accounts/connect"
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -381,15 +385,14 @@ FACEBOOK_EXTENDED_PERMISSIONS = ['email']
 # FACEBOOK_SCOPE = 'publish_stream'
 
 AUTHENTICATION_BACKENDS = (
-    'social_auth.backends.facebook.FacebookBackend',
-    'social_auth.backends.google.GoogleOAuth2Backend',
+    'apps.social_auth.backends.facebook.FacebookBackend',
+    'apps.social_auth.backends.google.GoogleOAuth2Backend',
     'apps.social_auth.backends.twitter.TwitterBackend',
     'django.contrib.auth.backends.ModelBackend',
     'apps.accounts.backends.EmailAuthenticationBackend',
 )
 
-SOCIAL_AUTH_ENABLE_BACKENDS = ('facebook', 'google','twitter')
-SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
+
 
 PRODUCT_GROUPS = {
     'product_group_a': (0, 60),

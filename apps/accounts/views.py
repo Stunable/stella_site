@@ -376,48 +376,80 @@ def add_fb_friends_to_list(list, js):
             add_fb_friends_to_list(list, js)
 
 
+
+
+
+
+
+
+
 def connect(request):
     print 'connecting'
-    for sa in request.user.social_auth.filter(provider='facebook'):
-        friends = get_facebook_friends(sa)
-        P = None
-        try:
-            P = request.user.get_profile()
-        except:
-            P = UserProfile.objects.create(user=request.user)
-            P.set_default_tags()
 
-        C = Cart(request)
-      
-        I = get_fb_avatar_image(sa)
-        if I:
-            try: 
-                temp = NamedTemporaryFile(delete=True)
-                I.save(temp.name+str(P.id),'jpeg')
-                P.avatar.save("%d_avatar.jpg"%P.id, File(open(temp.name+str(P.id),'rb')))
-                P.first_login = False
-                P.save()
-            except:
-                pass
-
-    fb_friend_users = {}
-    fb_stunable_friends = []
-    for u in UserSocialAuth.objects.filter(provider='facebook',uid__in=[f['id'] for f in friends]):
-        if not Friendship.objects.are_friends(request.user,u.user):
-            f = Friendship.objects.create(from_user=request.user,to_user=u.user)
-        fb_friend_users[u.uid] = u.user
-
-    for index,f in enumerate(friends):
-        if f['id'] in fb_friend_users.keys():
-            f['user'] = fb_friend_users[f['id']]
-            fb_stunable_friends.append(f)
-            friends.pop(index)
+    P = None
+    try:
+        P = request.user.get_profile()
+    except:
+        P = UserProfile.objects.create(user=request.user)
 
 
-    request.session['fb_friends'] = friends
-    request.session['fb_stunable_friends'] = fb_stunable_friends
 
-    request.session['fb_token'] = sa.tokens['access_token']
+    # yes this is bad, but we'll improve it later
+    for backend in request.user.social_auth.all():
+
+        if backend.provider == 'facebook':
+
+            sa = backend
+            
+            friends = get_facebook_friends(sa)
+            
+
+            C = Cart(request)
+          
+            I = get_fb_avatar_image(sa)
+            if I:
+                try: 
+                    temp = NamedTemporaryFile(delete=True)
+                    I.save(temp.name+str(P.id),'jpeg')
+                    P.avatar.save("%d_avatar.jpg"%P.id, File(open(temp.name+str(P.id),'rb')))
+                    P.first_login = False
+                    P.save()
+                except:
+                    pass
+
+            fb_friend_users = {}
+            fb_stunable_friends = []
+            for u in UserSocialAuth.objects.filter(provider='facebook',uid__in=[f['id'] for f in friends]):
+                if not Friendship.objects.are_friends(request.user,u.user):
+                    f = Friendship.objects.create(from_user=request.user,to_user=u.user)
+                fb_friend_users[u.uid] = u.user
+
+            for index,f in enumerate(friends):
+                if f['id'] in fb_friend_users.keys():
+                    f['user'] = fb_friend_users[f['id']]
+                    fb_stunable_friends.append(f)
+                    friends.pop(index)
+
+
+            request.session['fb_friends'] = friends
+            request.session['fb_stunable_friends'] = fb_stunable_friends
+
+            request.session['fb_token'] = sa.tokens['access_token']
+
+
+        if backend.provider == 'google-oauth2':
+
+            I = get_google_avatar_image(backend)
+            if I:
+                try: 
+                    temp = NamedTemporaryFile(delete=True)
+                    I.save(temp.name+str(P.id),'jpeg')
+                    P.avatar.save("%d_avatar.jpg"%P.id, File(open(temp.name+str(P.id),'rb')))
+                    P.first_login = False
+                    P.save()
+                except:
+                    pass
+
     if request.session.has_key('next'):
         try:
             print 'accounts/connect redirecting to'+request.session.get('next')
@@ -491,6 +523,29 @@ def get_fb_avatar_image(social_user):
     content = urllib2.urlopen(req)
     I = Image.open(StringIO(content.read()))
     return I
+   
+
+def get_google_avatar_image(social_user):
+    access_token = social_user.tokens['access_token']
+    url = 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + access_token
+    req = urllib2.Request(url=url)
+    content = urllib2.urlopen(req)
+    d = json.loads(content.read())
+
+    print d
+
+    if d.has_key('picture'):
+
+        url = d['picture']+'?access_token=' + access_token
+
+        print url
+
+        req = urllib2.Request(url=url)
+        content = urllib2.urlopen(req)
+        # print StringIO(content.read())
+        # print content.read()
+        I = Image.open(StringIO(content.read()))
+        return I
    
 
 

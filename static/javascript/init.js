@@ -28,7 +28,7 @@ var stunable = {
                 var box = $('#login_box').clone()
                 box.find('.login-href-button').each(function(){
                  var orig =  $(this).attr('href');
-                 $(this).attr('href',orig+'?next='+dest);
+                 $(this).attr('href',orig+'?go='+dest);
                 })
                box.modal({})   
                 // $('<div style="height:400px;width:400px" class="info_modal">Your Upload is in progress.  When this goes away, that means it\'s done!</div>').modal({clickClose: false,escapeClose:false,showClose:false})

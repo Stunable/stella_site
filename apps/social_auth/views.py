@@ -22,9 +22,11 @@ LOGIN_ERROR_URL = setting('LOGIN_ERROR_URL', setting('LOGIN_URL'))
 PIPELINE_KEY = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
 
 
+
+
 @dsa_view(setting('SOCIAL_AUTH_COMPLETE_URL_NAME', 'socialauth_complete'))
 def auth(request, backend):
-    print 'social auth, GO'
+    print 'default redirect:',DEFAULT_REDIRECT
     """Start authentication process"""
     return auth_process(request, backend)
 
@@ -93,8 +95,11 @@ def auth_process(request, backend):
 
 def complete_process(request, backend, *args, **kwargs):
     """Authentication complete process"""
+    print 'REDIRECT_FIELD_NAME:',REDIRECT_FIELD_NAME
+
     # pop redirect value before the session is trashed on login()
     redirect_value = request.session.get(REDIRECT_FIELD_NAME, '')
+    print 'redirect_value:',redirect_value
     user = auth_complete(request, backend, *args, **kwargs)
 
     if isinstance(user, HttpResponse):
