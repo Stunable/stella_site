@@ -167,6 +167,8 @@ class ProductImageAdmin(admin.ModelAdmin):
 
 class DailySpecialAdmin(admin.ModelAdmin):
 
+    filter_horizontal = ('Items',)
+    prepopulated_fields = {"slug": ("display_name",)}
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         # print db_field.name

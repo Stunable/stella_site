@@ -65,7 +65,23 @@ def get_context_variables(ctx, request):
         # profile = get_or_create_profile(request)
     else:
         ctx['tags'] = Tag.objects.filter(is_default=True) 
+
+
+
+    today = datetime.date.today()
+
+    print today.weekday()
+
+    specials = DailySpecial.objects.filter(
+        Q(start_date__lte = today,end_date__gte=today)|
+        Q(start_date__lte = today,end_date=None)|
+        Q(start_date = None,end_date=None)|
+        Q(start_date = None,end_date__gte=today)).filter(weekday__contains=str(today.weekday()))
            #print profile.first_login
+
+    print specials
+
+    ctx['specials'] = specials
     
     return ctx
 
@@ -520,7 +536,13 @@ def carousel(request, slug, template='racks/new_carousel.html'):
     # profile = get_or_create_profile(request)
     
 
-    current_tag = get_object_or_404(Tag, slug=slug)
+    try:
+        current_tag = Tag.objects.get(slug=slug)
+        query_set = Item.objects.with_any(current_tag).filter(approved=True,is_available=True)
+    except:
+        current_tag = DailySpecial.objects.get(slug=slug)
+        query_set = current_tag.get_items()
+
     ctx['current'] = current_tag.slug
     get_context_variables(ctx, request)
     
@@ -528,7 +550,7 @@ def carousel(request, slug, template='racks/new_carousel.html'):
     #     query_set = Item.objects.filter(category=current_category, approved=True)
     # else:
     #     query_set = Item.objects.filter(category=current_category)  
-    query_set = Item.objects.with_any(current_tag).filter(approved=True,is_available=True)
+    
     
     return pagination(request, ctx, template, query_set)
 
@@ -628,52 +650,39 @@ def new(request, template="racks/new_carousel.html"):
 
 
 
-def daily(request, template="racks/new_carousel.html"):
-    ctx = {}
-
-    ctx['current'] = "daily"
-    get_context_variables(ctx, request)
-        
-
-    today = datetime.date.today()
-
-    query_set = DailySpecial.objects.select_related('Item').filter(
-        Q(start_date__lte = today,end_date__gte=today)|
-        Q(start_date__lte = today,end_date=None)|
-        Q(start_date = None,end_date=None)|
-        Q(start_date = None,end_date__gte=today)).filter(weekday__contains=str(today.weekday())+',')
-
-
-    
-    #query_set = Item.objects.filter(created_date__gt=begin_date, approved=True,is_available=True).order_by('created_date')
-        
-    return pagination(request, ctx, template, query_set)
-#    return direct_to_template(request, template, ctx)
-
 #@login_required
 def _all(request, slug=None, template='racks/new_carousel.html',query_set = None,is_wishlist = False, ctx=None):
     if not ctx:
         ctx = {'is_wishlist':is_wishlist}
 
+    get_context_variables(ctx, request)
+
+    
     if query_set is None:
+
+        if ctx.has_key('specials'):
+            if len(ctx['specials']):
+                ctx['current'] = ctx['specials'][0].slug
+                query_set = ctx['specials'][0].get_items()
         
-        if request.GET.get('item_id', None):
-            linked_item = Item.objects.filter(id=request.GET.get('item_id'))
-            query_set =  linked_item #| Item.objects.filter(brand=linked_item[0].brand).filter(~Q(id =linked_item[0].id))
-        if slug:
-            linked_item = Item.objects.filter(slug=slug)
-            query_set =  linked_item #| Item.objects.filter(brand=linked_item[0].brand).filter(~Q(id =linked_item[0].id))
+        if query_set is None:
+            if request.GET.get('item_id', None):
+                linked_item = Item.objects.filter(id=request.GET.get('item_id'))
+                query_set =  linked_item #| Item.objects.filter(brand=linked_item[0].brand).filter(~Q(id =linked_item[0].id))
+            if slug:
+                linked_item = Item.objects.filter(slug=slug)
+                query_set =  linked_item #| Item.objects.filter(brand=linked_item[0].brand).filter(~Q(id =linked_item[0].id))
 
         # profile = None
         
 
-        ctx['current'] = "all"
+        
         
         if query_set is None:
             query_set = Item.objects.select_related('featured_image','_retailer').filter(approved=True,is_available=True).order_by('?')
+            ctx['current'] = "all"
 
 
-    get_context_variables(ctx, request)
     
     return pagination(request, ctx, template, query_set)
             

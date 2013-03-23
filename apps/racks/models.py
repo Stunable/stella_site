@@ -527,17 +527,34 @@ class ItemType(models.Model,DirtyFieldsMixin):
 
 class DailySpecial(models.Model):
 
+    can_be_removed = False
 
     def __unicode__(self):
-        return str(self.Item)+' :' +str(self.start_date)+'----'+str(self.end_date)
+        return self.display_name+ ':'+ str(self.start_date)+'-'+str(self.end_date)
 
+
+    display_name = models.CharField(max_length = 64)
+
+    slug = models.SlugField(max_length=128,null=True)
 
     start_date  = models.DateField(null=True,blank=True)
     end_date    = models.DateField(null=True,blank=True)
 
     weekday = WeekdayField(null=True,blank=True)
 
-    Item = models.ForeignKey('Item')
+    Items = models.ManyToManyField('Item')
+
+
+    def get_items(self):
+        return self.Items.filter(approved=True,is_available=True)
+
+    def name(self):
+        return self.display_name
+
+    def save(self,*args,**kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(DailySpecial,self).save(*args,**kwargs)
 
 
 

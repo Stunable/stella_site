@@ -458,6 +458,8 @@ class TaggedItemManager(models.Manager):
 ##########
 
 class Tag(models.Model):
+
+    can_be_removed = True
     """
     A tag.
     """
