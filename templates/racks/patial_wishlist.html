@@ -1,0 +1,11 @@
+
+	<div class="slide items-{{ item_per_page }}" data-nextpage="{{next}}"style="width: 860px; float:left;">
+		{% for wishlistitem in rack_items_list %}
+	        {% with wishlistitem.item_variation as target_item %}
+	        {% with wishlistitem.item as item %}
+		        {% include "racks/includes/new_item_list_content.html" %}
+		    {% endwith %}
+		    {% endwith %}
+		{% endfor %}
+	</div>
+	

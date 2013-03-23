@@ -171,6 +171,9 @@
             }
         },
         procure_elements: function(){
+            if (this._no_more_items){
+                return false
+            }
             if (!this._loading){
                 this._loading = true;
                 var self = this;
@@ -178,6 +181,11 @@
                         url: '?page=' + this._next_page + '&item_per_page=' + this.num_per_page,
                         success: function(data) {
                             var items = $(data).find('.item')
+
+                            if (! items.length){
+                                self._no_more_items = true;
+                            }
+
                             self.items_to_add= items;
                             if (!self.is_animating){
                                 self.post_anim_callback();

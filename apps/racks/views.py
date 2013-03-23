@@ -179,8 +179,6 @@ def wishlist(request):
     else:
         qs = WishListItem.objects.select_related('item','item_variation','item___retailer','item__featured_image').filter(cart=cart)
 
-
-    print 'wish list items',qs
     return _all(request,template='racks/wishlist.html',query_set=qs,is_wishlist=True)
 
 
@@ -692,17 +690,16 @@ def pagination(request, ctx, template, query_set):
    
     if request.is_ajax():
         template = 'racks/patial_carousel.html'
+        if ctx['is_wishlist']:
+            template = 'racks/patial_wishlist.html'
+
         try:
             page = int(page)
         except:
             page = 1
         _from = item_per_page * page
         _to = _from+item_per_page
-        if query_set.count() < _to+item_per_page:
-            next = 1
-        else:
-            next = page+1
-
+        next = page+1
         ctx['rack_items_list'] = query_set[_from:_to]
 
         ctx['next'] = next   
