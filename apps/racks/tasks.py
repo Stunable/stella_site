@@ -70,6 +70,7 @@ def prettify(instance,refresh=False):
 
             if outpic:            
                 for key,val in settings.THUMB_SIZES.items():
+                    print 'size:',key,val
                     temp = NamedTemporaryFile(delete=True)
                     newpic = outpic.copy()
                     newpic.thumbnail(val,Image.ANTIALIAS)
