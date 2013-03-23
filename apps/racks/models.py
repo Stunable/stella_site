@@ -535,7 +535,7 @@ class DailySpecial(models.Model):
 
     display_name = models.CharField(max_length = 64)
 
-    slug = models.SlugField(max_length=128,null=True)
+    slug = models.SlugField(max_length=128,null=True,unique=True)
 
     start_date  = models.DateField(null=True,blank=True)
     end_date    = models.DateField(null=True,blank=True)
