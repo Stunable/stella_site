@@ -44,14 +44,15 @@ function setItemDetailsEvent(){
 					selcolor = $('.item-color-list span.selected'),
 					variation = $('.'+selsize.data('name')+'.'+selcolor.data('name'))
 
+				if (!variation.length){
+					target_spans.first().click()
+					return false;
+				}
+
 				if(variation.data('imagetarget')){
 					$('.item-pictures '+variation.data('imagetarget')).click();
 				}
 
-				console.log(variation.data('price'))
-				console.log(variation.data('name'))
-				console.log($('#item-header .item-price'))
-				console.log('<span class="dollar">$</span>'+variation.data('price'))
 				$('#item-header .item-price').html('<span class="big">'+variation.data('size')+'</span>'+',<span class="big">'+variation.data('name')+' - </span>' + '<span class="dollar">$</span>'+'<span class="big">'+variation.data('price')+'</span>');
 
 			});
