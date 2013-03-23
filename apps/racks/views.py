@@ -690,7 +690,7 @@ def pagination(request, ctx, template, query_set):
    
     if request.is_ajax():
         template = 'racks/patial_carousel.html'
-        if ctx['is_wishlist']:
+        if ctx.has_key('is_wishlist') and ctx['is_wishlist']:
             template = 'racks/patial_wishlist.html'
 
         try:
