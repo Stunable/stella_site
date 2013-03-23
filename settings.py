@@ -385,9 +385,9 @@ FACEBOOK_EXTENDED_PERMISSIONS = ['email']
 # FACEBOOK_SCOPE = 'publish_stream'
 
 AUTHENTICATION_BACKENDS = (
-    'apps.social_auth.backends.facebook.FacebookBackend',
-    'apps.social_auth.backends.google.GoogleOAuth2Backend',
-    'apps.social_auth.backends.twitter.TwitterBackend',
+    'social_auth.backends.facebook.FacebookBackend',
+    'social_auth.backends.google.GoogleOAuth2Backend',
+    'social_auth.backends.twitter.TwitterBackend',
     'django.contrib.auth.backends.ModelBackend',
     'apps.accounts.backends.EmailAuthenticationBackend',
 )
