@@ -22,10 +22,10 @@ from urllib2 import HTTPError
 from django.utils import simplejson
 from django.contrib.auth import authenticate
 
-from apps.social_auth.backends import BaseOAuth2, OAuthBackend, USERNAME
-from apps.social_auth.utils import sanitize_log_data, backend_setting, setting, \
+from social_auth.backends import BaseOAuth2, OAuthBackend, USERNAME
+from social_auth.utils import sanitize_log_data, backend_setting, setting, \
                               log, dsa_urlopen
-from apps.social_auth.backends.exceptions import AuthException, AuthCanceled, \
+from social_auth.backends.exceptions import AuthException, AuthCanceled, \
                                             AuthFailed, AuthTokenError, \
                                             AuthUnknownError
 
