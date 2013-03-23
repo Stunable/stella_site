@@ -8,15 +8,16 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        pass
         # Adding model 'DailySpecial'
-        db.create_table('racks_dailyspecial', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('start_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
-            ('end_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
-            ('weekday', self.gf('apps.weekday_field.fields.WeekdayField')(max_length=14, null=True, blank=True)),
-            ('Item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['racks.Item'])),
-        ))
-        db.send_create_signal('racks', ['DailySpecial'])
+        # db.create_table('racks_dailyspecial', (
+        #     ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+        #     ('start_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
+        #     ('end_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
+        #     ('weekday', self.gf('apps.weekday_field.fields.WeekdayField')(max_length=14, null=True, blank=True)),
+        #     ('Item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['racks.Item'])),
+        # ))
+        # db.send_create_signal('racks', ['DailySpecial'])
 
 
     def backwards(self, orm):

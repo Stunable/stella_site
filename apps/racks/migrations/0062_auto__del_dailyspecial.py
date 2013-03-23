@@ -8,11 +8,12 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting model 'DailySpecial'
-        db.delete_table('racks_dailyspecial')
+        # # Deleting model 'DailySpecial'
+        # db.delete_table('racks_dailyspecial')
 
-        # Removing M2M table for field Items on 'DailySpecial'
-        db.delete_table('racks_dailyspecial_Items')
+        # # Removing M2M table for field Items on 'DailySpecial'
+        # db.delete_table('racks_dailyspecial_Items')
+        pass
 
 
     def backwards(self, orm):

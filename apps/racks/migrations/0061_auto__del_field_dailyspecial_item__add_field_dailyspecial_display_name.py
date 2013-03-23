@@ -8,26 +8,27 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting field 'DailySpecial.item'
-        db.delete_column('racks_dailyspecial', 'item_id')
+        # # Deleting field 'DailySpecial.item'
+        # db.delete_column('racks_dailyspecial', 'item_id')
 
-        # Adding field 'DailySpecial.display_name'
-        db.add_column('racks_dailyspecial', 'display_name',
-                      self.gf('django.db.models.fields.CharField')(default='today special', max_length=64),
-                      keep_default=False)
+        # # Adding field 'DailySpecial.display_name'
+        # db.add_column('racks_dailyspecial', 'display_name',
+        #               self.gf('django.db.models.fields.CharField')(default='today special', max_length=64),
+        #               keep_default=False)
 
-        # Adding field 'DailySpecial.slug'
-        db.add_column('racks_dailyspecial', 'slug',
-                      self.gf('django.db.models.fields.SlugField')(max_length=128, null=True),
-                      keep_default=False)
+        # # Adding field 'DailySpecial.slug'
+        # db.add_column('racks_dailyspecial', 'slug',
+        #               self.gf('django.db.models.fields.SlugField')(max_length=128, null=True),
+        #               keep_default=False)
 
-        # Adding M2M table for field Items on 'DailySpecial'
-        db.create_table('racks_dailyspecial_Items', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('dailyspecial', models.ForeignKey(orm['racks.dailyspecial'], null=False)),
-            ('item', models.ForeignKey(orm['racks.item'], null=False))
-        ))
-        db.create_unique('racks_dailyspecial_Items', ['dailyspecial_id', 'item_id'])
+        # # Adding M2M table for field Items on 'DailySpecial'
+        # db.create_table('racks_dailyspecial_Items', (
+        #     ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+        #     ('dailyspecial', models.ForeignKey(orm['racks.dailyspecial'], null=False)),
+        #     ('item', models.ForeignKey(orm['racks.item'], null=False))
+        # ))
+        # db.create_unique('racks_dailyspecial_Items', ['dailyspecial_id', 'item_id'])
+        pass
 
 
     def backwards(self, orm):

@@ -8,8 +8,8 @@ class Migration(DataMigration):
 
     def forwards(self, orm):
         # Rename 'name' field to 'full_name'
-        db.rename_column('racks_dailyspecial', 'Item', 'item')
-
+        # db.rename_column('racks_dailyspecial', 'Item', 'item')
+        pass
 
 
 
