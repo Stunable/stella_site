@@ -149,7 +149,7 @@ class ProductImageAdmin(admin.ModelAdmin):
                 print 'now'
                 obj.generate_pretty_picture(instant=True,refresh=True)                
             else:
-                obj.generate_pretty_picture(instant=True,refresh=True)
+                obj.generate_pretty_picture(instant=False,refresh=True)
 
     def set_size(self,request,queryset):
         for obj in queryset:
