@@ -420,13 +420,16 @@ class Item(models.Model,listImageMixin):
         else:
             self.is_available = True
 
+        if self.approved:
+            if not self.price_text:
+                self.set_price_text()
 
         self.is_onsale = False
         for i in self.types.all():
             if i.is_onsale:
                 self.is_onsale = True
 
-        super(Item,self).save()
+        super(Item,self).save(*args,**kwargs)
 
     def set_slug(self):
         self.slug = None
