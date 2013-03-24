@@ -8,8 +8,14 @@
 <div class="control-group">
 	<label class="control-label">{{ field.label }}</label>
 	<div class="controls">
-		{{field}}
 		{{field.errors}}
+		{{field}}
 	</div>
 </div>
 {% endfor %}
+
+{% if make_submit_button %}
+<div class="spinbox control-group">
+    <input class="submit-button" type="submit">
+</div>
+{% endif %}

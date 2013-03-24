@@ -395,12 +395,25 @@ function init_form_errors(context){
         }
       })
     }
+    
     if (context == 'cart'){
      $('.address_action').click(function(e){
         var t = $(this);
         if (t.data('val')=='suggested'){
             $.modal.close();
             $('#btn-place-an-order').click()
+        }else{
+            $.modal.close();
+        }
+      })
+    }
+
+    if (context == 'accounts'){
+     $('.address_action').click(function(e){
+        var t = $(this);
+        if (t.data('val')=='suggested'){
+            $.modal.close();
+            submit_shipping_option_form();
         }else{
             $.modal.close();
         }
@@ -1101,3 +1114,95 @@ function initTouch()
             $('#id_' + prefix + field).after(errors[field]);
         }
     }
+
+
+
+var PAYMENT_FORM_VALIDATE_OPTIONS = {
+          submitHandler:function(form) {
+            
+            var d = $(form).serializeObject();
+
+
+            var data ={
+              "client_id":WEPAY_CLIENT_ID,
+              "user_name":d.firstname+' '+d.lastname,
+              "email":USER_EMAIL,
+              "cc_number":$('#id_acct').val(),
+              "cvv":$('#id_cvv2').val(),
+              "expiration_month":$('#id_expdate_0').val(),
+              "expiration_year":$('#id_expdate_1').val(),
+              "address":
+                {
+                  "address1":d.street,
+                  "city":d.city,
+                  "state":d.state,
+                  "country":d.countrycode,
+                  "zip":d.zip
+                }
+            }
+
+            var response = WePay.credit_card.create( data, function(data) {
+              if (data.error) {
+
+                pop_modal('There is a problem with your credit card information: <div class="form_error">'+ data.error_description+'</div>')
+
+                // handle error response
+              } else {
+                $('#wepay_id').val(data.credit_card_id)
+                $('#wepay_state').val(data.state)
+                
+                $.post($('#wepay_info').attr('action'),$('#wepay_info').serialize(),function(result){
+                  if(result.success){
+                    $('#payment-choice-form').html(result.html);
+                    $('#payment-choice-form').fadeIn();
+                    $('#payment-form').fadeOut();
+                    $('.btn-place-an-order').click();
+                  }
+                },'json')
+
+              }
+            } );
+
+            if (response.error) {
+              alert(response.error_description)
+              // handle error response
+            }
+              },
+              rules: {
+                firstname: "required",    // simple rule, converted to {required:true}
+                lastname: "required",
+                street: "required",
+                city: "required",
+                state: "required",
+                countrycode: "required",
+                zip: "required",
+                acct: "required",
+                expdate_0: "required",
+                expdate_1: "required",
+                cvv2: "required"
+              },
+              messages: {
+                
+              }
+        }
+
+function submit_shipping_option_form(){
+    var form = $('#shipping-form');
+    $.post(form.attr('action'),form.serialize(),function(result){
+      if(result.success){
+        $('#shipping-choice-form').html(result.html);
+        $('#shipping-choice-form').fadeIn();
+
+        form.fadeOut();
+        $('.btn-place-an-order').click();
+
+      }else{
+        // we had errors validating the shipping address form
+        form.html(result.html)
+        init_form_errors($('body').attr('data-role'));
+      }
+    },'json')
+
+    return false;
+}
+

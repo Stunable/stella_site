@@ -3,21 +3,17 @@ var stunable = {
 
     common : function() {
 
+
+
       var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
       $(document).ajaxSend(function(e, xhr, settings) {
         xhr.setRequestHeader('X-CSRFToken', csrfToken);
       });
 
-      $($('.private-racks')[1]).sortable({
-          stop : function(e, ui) {
-          }
-      });
-      $($('.public-racks')[1]).sortable({
-          stop : function(e, ui) {
-          }
-      });
 
-       $('.login-check').click(function(e){
+      init_form_errors();
+
+      $('.login-check').click(function(e){
         e.preventDefault();
           var dest = $(this).data('href')
           $.post('/accounts/check_login',function(data){
@@ -38,9 +34,9 @@ var stunable = {
       })
 
       setupCustomTabs($('#left-panel'));  
-      $('.panel-inner-content').html($('.panel-header .active').find('.tab-content').html()).fadeIn(1000, function() {
 
-        });             
+
+      $('.panel-inner-content').html($('.panel-header .active').find('.tab-content').html()).fadeIn(1000, function() {});             
 
       init_refclicks($('.refclick'))
       init_choiceclicks($('.choiceclick'))
@@ -120,7 +116,10 @@ var stunable = {
 
         tabs_find_active()
         // var box = $('#login_box').clone()
-        // box.modal({clickClose:false,escapeClose:false,showClose:false})   
+        // box.modal({clickClose:false,escapeClose:false,showClose:false})  
+
+        // $('form').submit($(this).find('.spinbox').append('<img src="/static/images/loading.gif">'))
+
 
     }
     ,shop: function(){    
@@ -210,133 +209,47 @@ var stunable = {
             $(this).parent().append("<div class='bootstrap' style='margin-top: 5px;'><form class='item-change-form form-horizontal' action='" + url + "' method='post'>" + "<div class='control-group'><input type='text' class='cart-new-quantity' name='quantity'>" + "<input style='margin-left: 5px;' type='submit' class='btn btn-primary' value='submit'></div></form></div>");
         });
 
-        $('#zipcode_form').submit(function(e){
-          e.preventDefault()
-        })
-
 
         $('.clear_choice_on_change').find('input').focus(function(e){
           $($(this).closest('form').data('choicetarget')).find("input:checked").attr('checked',false)
         })
 
-        $('#payment-form').validate({
-          submitHandler:function(form) {
-            
-            var d = $(form).serializeObject();
-
-
-            var data ={
-              "client_id":WEPAY_CLIENT_ID,
-              "user_name":d.firstname+' '+d.lastname,
-              "email":USER_EMAIL,
-              "cc_number":$('#id_acct').val(),
-              "cvv":$('#id_cvv2').val(),
-              "expiration_month":$('#id_expdate_0').val(),
-              "expiration_year":$('#id_expdate_1').val(),
-              "address":
-                {
-                  "address1":d.street,
-                  "city":d.city,
-                  "state":d.state,
-                  "country":d.countrycode,
-                  "zip":d.zip
-                }
-            }
-
-            var response = WePay.credit_card.create( data, function(data) {
-              if (data.error) {
-
-                pop_modal('There is a problem with your credit card information: <div class="form_error">'+ data.error_description+'</div>')
-
-                // handle error response
-              } else {
-                $('#wepay_id').val(data.credit_card_id)
-                $('#wepay_state').val(data.state)
-                
-                $.post($('#wepay_info').attr('action'),$('#wepay_info').serialize(),function(result){
-                  if(result.success){
-                    $('#payment-choice-form').html(result.html);
-                    $('#payment-form').fadeOut();
-                    $('.btn-place-an-order').click();
-
-                  }
-                },'json')
-
-              }
-            } );
-
-            if (response.error) {
-              console.log(response);
-              console.log(data);
-              alert(response.error_description)
-              // handle error response
-            }
-              },
-              rules: {
-                firstname: "required",    // simple rule, converted to {required:true}
-                lastname: "required",
-                street: "required",
-                city: "required",
-                state: "required",
-                countrycode: "required",
-                zip: "required",
-                acct: "required",
-                expdate_0: "required",
-                expdate_1: "required",
-                cvv2: "required"
-              },
-              messages: {
-                
-              }
-            })
+        $('#payment-form').validate(PAYMENT_FORM_VALIDATE_OPTIONS)
             
 
-            $('.btn-place-an-order').click(function(e){
-              console.log('place order clicked')
-              e.preventDefault();
+        $('.btn-place-an-order').click(function(e){
+          e.preventDefault();
 
-              var shipping_choice = $('#shipping-choice-form').find("input:checked" )
-              var payment_choice = $('#payment-choice-form').find("input:checked" )
+          var shipping_choice = $('#shipping-choice-form').find("input:checked" )
+          var payment_choice = $('#payment-choice-form').find("input:checked" )
 
 
-              if(!shipping_choice.length){
-                var form = $('#shipping-form');
-                $.post(form.attr('action'),form.serialize(),function(result){
-                  if(result.success){
-                    $('#shipping-choice-form').html(result.html);
-                    form.fadeOut();
-                    $('.btn-place-an-order').click();
+          if(!shipping_choice.length){
+            submit_shipping_option_form()
+          }
 
+          if(!payment_choice.length){
+              $('#payment-form').submit()             
+          }
+
+          if (shipping_choice.length && payment_choice.length){
+            $('<div class="info_modal"><div>We are placing your order.  Please Wait a moment.</div><img src="/static/images/loading.gif"> </div>').modal({clickClose: false,escapeClose:false,showClose:false})
+            // return false;
+
+            $.post('/cart/order_placed',
+              $.extend($('#shipping-choice-form').serializeObject(),$('#payment-choice-form').serializeObject()),
+                function(data){
+                  if (data.success){
+                    window.location = data.redirect;
                   }else{
-                    // we had errors validating the shipping address form
-                    form.html(result.html)
-                    init_form_errors($('body').attr('data-role'));
+                    pop_modal(data.error)
                   }
-                },'json')
-              }
 
-              if(!payment_choice.length){
-                  $('#payment-form').submit()             
-              }
-
-              if (shipping_choice && payment_choice){
-                $('<div class="info_modal"><div>We are placing your order.  Please Wait a moment.</div><img src="/static/images/loading.gif"> </div>').modal({clickClose: false,escapeClose:false,showClose:false})
-                // return false;
-
-                $.post('/cart/order_placed',
-                  $.extend($('#shipping-choice-form').serializeObject(),$('#payment-choice-form').serializeObject()),
-                    function(data){
-                      if (data.success){
-                        window.location = data.redirect;
-                      }else{
-                        pop_modal(data.error)
-                      }
-
-                    }                
-                )
-              // $('#shipping-form').submit()
-              }
-            })
+                }                
+            )
+          // $('#shipping-form').submit()
+          }
+        })
 
     },
       retailers:function(){
@@ -668,6 +581,27 @@ var stunable = {
         $('.editable').hide();
   },
   accounts:function(){
+
+
+    $('#payment-form').validate(PAYMENT_FORM_VALIDATE_OPTIONS)
+
+
+    $('#shipping-form').submit(function(){
+      $(this).find('.submit-button').hide()
+      $(this).find('.spinbox').append('<img src="/static/images/loading.gif">')
+      submit_shipping_option_form()
+      return false;
+    })
+
+
+
+
+
+
+/*
+  THIS IS ALL STYLISTS ACCOUNTS STUFF (SOON TO BE REMOVED HOPEFULLY)
+*/
+
     $('#tester').focus()
             var login_form = $('#mng-account-form');
     
@@ -782,6 +716,14 @@ var stunable = {
         })
 
     }
+/*
+  END STYLISTS ACCOUNTS STUFF
+*/
+
+
+
+
+
     
 }
 

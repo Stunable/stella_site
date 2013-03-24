@@ -365,27 +365,12 @@ def wpp(request):
     except:
         default_ccS = None
     try:
-        default_shipping = ShippingInfo.objects.filter(customer=user_profile).filter(is_default=True)[0]
+        default_shipping = ShippingInfo.objects.filter(customer=user_profile)
     except:
         default_shipping = None
 
 
     shipping_addresses = ShippingInfo.objects.filter(customer=user_profile)
-
-
-
-
-    # shipping_form = ShippingInfoForm(request.POST, instance=default_shipping)
-    #     if shipping_form.is_valid():
-    #         shipping_info = shipping_form.save(commit=False)
-    #         shipping_info.customer=user_profile
-    #         if not default_shipping:
-    #             shipping_info.is_default=True
-    #         shipping_info.save()
-    #         return HttpResponseRedirect(reverse('express_checkout'))
-    #     else:
-    #         ctx['shipping'] = shipping_form
-
 
 
     kw = {

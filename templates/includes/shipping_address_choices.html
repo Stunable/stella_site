@@ -1,3 +1,5 @@
 {% for addr in shipping_addresses %}
-		<label for="address-{{addr.id}}"><input {% if addr.is_default %} checked="checked" {% endif %}name="shipping-address" value="{{addr.id}}"  data-id="{{addr.id}}" type="radio" id="address-{{addr.id}}"> {{addr}}</label><br>
+	<div>
+	<label for="address-{{addr.id}}"><input {% if addr.is_default %} checked="checked" {% endif %}name="shipping-address" value="{{addr.id}}"  data-id="{{addr.id}}" type="radio" id="address-{{addr.id}}"> {{addr}}</label>
+	</div>
 {% endfor %}

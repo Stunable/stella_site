@@ -10,29 +10,14 @@ from accounts.views import add_facebook_friend
 urlpatterns = patterns('',
     url(r'^profile$', profile_edit ,name='profile_edit'),
     url(r'^check_login$', check_login ,name='check_login'),
-    url(r'^update_profile$', update_profile, name='update_profile'),
-    url(r'^create_new_shipping_info', create_new_shipping_info, name='create_new_shipping_info'),
-    url(r'^(?P<info_id>\d+)/update_shipping_info', update_shipping_info, name='update_shipping_info'),
-    url(r'^(?P<info_id>\d+)/make_default', make_default, name="make_default"),
-    url(r'^cc/set_default/(?P<id>\d+)/', cc_set_default, name='cc_set_default'),
-    url(r'^update_answers$', update_answers, name='account_update_answers'),
-    url(r'^create/complete$',
-         direct_to_template,
-         {'template': 'accounts/account_create_confirm.html'},
-         name = 'create_confirm'),
+
     url(r'^avatar/upload', avatar_upload, name='avatar_upload'),
     url(r'^logout$',
        auth_views.logout,
        {'next_page': '/',
         'template_name': 'rec/main.html'},
        name='logout'),
-    url(r'^welcome$', welcome, name="accouns_welcome"),
-    url(r'^invite_waitlist/$',
-        invite_waitlist,
-        name='invite_waitlist'),
-    url(r'^new_user_join/(?P<confirmation_key>\w+)', new_user_join, name='new_user_join'),
-    url(r'^connect', connect, name="connect"),
-    url(r'^add_facebook_friend', add_facebook_friend, name="add_facebook_friend")
+    url(r'^connect', connect, name="connect")
 
 )
 
@@ -72,16 +57,6 @@ urlpatterns += patterns('django.contrib.auth.views',
 )
 
 
-if settings.WAITLIST_ACTIVE:
-    urlpatterns += patterns('',
-        url(r'^invite_waitlist', invite_waitlist, name='account_create'),
-        url(r'^login_with_fb$', invite_waitlist, name='login_with_fb'),
-        url(r'^create$', invite_waitlist),
-    )
-else:
-    urlpatterns += patterns('',
-        url(r'^create$', create, name='account_create'),
-        url(r'^login_with_fb$', login_with_fb, name='login_with_fb'),
-    )
+
 
 
