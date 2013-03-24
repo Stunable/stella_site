@@ -148,17 +148,19 @@ def connect(request):
 
 
         if backend.provider == 'google-oauth2':
-
-            I = get_google_avatar_image(backend)
-            if I:
-                try: 
-                    temp = NamedTemporaryFile(delete=True)
-                    I.save(temp.name+str(P.id),'jpeg')
-                    P.avatar.save("%d_avatar.jpg"%P.id, File(open(temp.name+str(P.id),'rb')))
-                    P.first_login = False
-                    P.save()
-                except:
-                    pass
+            try:
+                I = get_google_avatar_image(backend)
+                if I:
+                    try: 
+                        temp = NamedTemporaryFile(delete=True)
+                        I.save(temp.name+str(P.id),'jpeg')
+                        P.avatar.save("%d_avatar.jpg"%P.id, File(open(temp.name+str(P.id),'rb')))
+                        P.first_login = False
+                        P.save()
+                    except:
+                        pass
+            except:
+                pass
 
     if request.session.has_key('next'):
         try:
