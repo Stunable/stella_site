@@ -1,275 +1,94 @@
-{% extends "clean_base.html" %}
+{% extends 'cart/cart.html' %}
 
-{% block title %} Stunable | Manage Account {% endblock %}
-
-{% block body_id %}gallery{% endblock %}
-
-{% block body_class %}profile_edit common large_common{% endblock %}
-
-{% block content-class%}profile{%endblock%}
-
-{% block extra_css %}
-<style>
-    
-    .image-holder, .link {
-        float: left;
-    }
-    .edit {
-        display: inline;
-        margin-left: 10px;
-    }
-    .common table {
-        width: 70%;
-    }
-    .shipping_information, .billing_information {
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-    .static {
-        margin-bottom: 10px;
-    }
-    .details {
-        margin: 0 !important;
-    }
-    .shipping-wrapper {
-        width: 260px;
-        min-height: 70px;
-    }
-    .shipping-wrapper .static {
-        float: left;
-        min-width: 150px;
-    }
-    .shipping-wrapper .action-link {
-        float: left;
-        width: 100px;
-        margin: 0;
-    }
-    .alert {
-        width: 92% !important;
-        margin-top: 0 !important;
-        text-align: center;
-    }
-    .first {
-        width: 15%;
-    }
-    .first label {
-        margin-bottom: 0;
-    }
-    .common table {
-        border: none;
-    }
-    .common table td {
-        border: none;
-    }
-    .edit_name {
-        display: inline;
-    }
-</style>
-{% endblock %}
+{% block inner_content %}
 
 
-
-
-
-{% block content %}
-
-<div id="page-content">
-    <div class="inner-page-content">
-    <center style="margin-top: 10px">
-        <div id="avatar-error" style="display: none" class="alert" ></div>
-    </center>
-    <h2><span>{% if profile.user.first_name and profile.user.last_name %}manage{%else%}setup{%endif%} your account</span></h2>
-    <h3> {% if profile.user.first_name %}
-    <div>
-        <span class="static">{{ profile.user.get_full_name }}</span>
-        <div class="editable edit_name" style="margin-left: 10px;">
-            <form action="{% url update_profile %}" class="form-horizontal" style="display: inline" method="POST">
-                <input type="text" id="first_name" name="first_name" value="{{ profile.user.first_name }}" />
-                <input type="text" id="last_name" name="last_name" value="{{ profile.user.last_name }}" />
-                <input type="submit" class="btn btn-primary" value="Save"/>
-            </form>
-        </div>
-        <span> <a style="float: none; font-size: 16px;" class="edit">Edit</a> </span>
-    </div> {% endif %} </h3>
-
-<div class="section body-copy bootstrap">
-    {% if profile.user.first_name %}
-    <form style="margin: 0px; height: 0px;" action="{% url avatar_upload %}" method="POST" id="avatar-upload-form" enctype="multipart/form-data" >
-        {% csrf_token %}
-        <input style="visibility: collapse" type="file" id="upload_avatar" name="avatar">
-    </form>
-    <div class="avatar-field">
-        <div class="image-holder">
-            {% load thumbnail %}
-            {% thumbnail profile.avatar_image "100x100" as im %} <img src="{{ im.url }}" alt="[username]" width="100" height="100" class="acct-avatar" />
-            {% empty %} <img src="{{ profile.avatar_image }}" alt="[username]" class="acct-avatar" />
-            {% endthumbnail %}
-        </div>
-        <div class="link">
-            <p>
-                <!-- <a href="#">Take my picture</a> -->
-            </p>
-            <p>
-                <!-- <a class="quest">Select a Profile Photo</a> -->
-            </p>
-        </div>
-    </div>
-    <div class="account-info">
-        <table class="account_info">
-            <tr>
-                <td class="first"><label>Email: </label></td>
-                <td>
-                <p>
-                    <a class="edit">Edit</a>
-                </p>
-                <p class="static">
-                    {{ profile.user.email }}
-                </p>
-                <div class="editable" style="margin-left: 10px;">
-                    <form action='{% url update_profile %}' class="form-horizontal" method="POST">
-                        <div class="control-group">
-                            <input type="text" name="email" value="{{ profile.user.email }}" />
-                            <input type="submit" class="btn btn-primary" value="Save"/>
-                        </div>
-                    </form>
-                </div></td>
-            </tr>
-            <tr>
-                <td class="first"><label>Password: </label></td>
-                <td>
-                <p>
-                    <a class="edit">Edit</a>
-                </p>
-                <p class="static">
-                    *****
-                </p>
-                <div class="editable" style="margin-left: 10px;">
-                    <form action="{% url update_profile %}" class="form-horizontal" id="password_form" method="POST" >
-                        <div class="control-group">
-                            <input type="password" id="edit_password" name="password" placeholder="password" />
-                            <input type="password" id="edit_password_confirm" name="retype-password" placeholder="retype-password" />
-                            <span></span>
-                            <input type="submit" class="btn btn-primary" value="Save"/>
-                        </div>
-                    </form>
-                </div></td>
-            </tr>
-            <tr>
-                <td class="first"><label>View Happenings?</label></td>
-                <td>
-                <p>
-                    <a class="edit">Edit</a>
-                </p>
-                <p class="static">
-                    {% if profile.view_happenings %} On {% else %} Off {% endif %}
-                </p>
-                <div class="editable" style="margin-left: 10px;">
-                    <form action="{% url update_profile %}" class="form-horizontal" method="POST" >
-                        <div class="control-group">
-                            <input type="checkbox" name="view_happenings" {% if profile.view_happenings %}checked="checked"{%endif%} />
-                            <input type="submit" class="btn btn-primary" value="Save"/>
-                        </div>
-                    </form>
-                </div></td>
-            </tr>
-        </table>
-    </div>
-    <div class="wrapper">
-        <div class="shipping_information" style="float: left">
-            <h3>Shipping Information</h3>
-            {% for shipping_info in shipping_infos %}
-            <div class="shipping-wrapper">
-                <div class="static">
-                    <p class="details">
-                        {{ shipping_info.firstname }} {{ shipping_info.lastname }}
-                    </p>
-                    <p class="details">
-                        {{ shipping_info.line1 }} {{ shipping_info.line2 }}
-                    </p>
-                    <p class="details">
-                        {{ shipping_info.city }}, {{ shipping_info.state }} {{ shipping_info.zip_code }}
-                    </p>
-                </div>
-                <p class="action-link">
-                    {% if shipping_info.is_default %} <a href="#">(default)</a>
-                    <a href="#" class="edit">Edit</a>
-                    {% else %} <a href="{% url make_default shipping_info.id %}">Make default</a>
-                    {% endif %}
-                </p>
-                <div class="editable">
-                    <form action="{% url update_shipping_info shipping_info.id %}" class="form-horizontal" method="POST">
-                        {% csrf_token %}
-                        <div class="control-group">
-                            <input type="text" name="firstname" value="{{ shipping_info.firstname }}" />
-                            <input type="text" name="lastname" value="{{ shipping_info.lastname }}" />
-                            <input type="text" name="line1" value="{{ shipping_info.line1 }}" />
-                            <input type="text" name="line2" value="{{ shipping_info.line2 }}" />
-                            <input type="text" name="city" value="{{ shipping_info.city }}" />
-                            <input type="text" name="state" value="{{ shipping_info.state }}" />
-                            <input type="text" name="zip_code" value="{{ shipping_info.zip_code }}" />
-                            <input type="submit" class="btn btn-primary" value="Save"/>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            {% endfor %}
-            <div>
-                <a href="{% url create_new_shipping_info %}" class="item-ref">Add New Shipping Address</a>
-            </div>
-        </div>
-<!--         <div class="billing_information" style="float: left; margin-left: 100px;">
-            <h3>Billing information</h3>
-            <div class="static">
-                <p class="details">
-                    PayPal Email Address:{{ profile.paypay_email }}
-                </p>
-            </div>
-        </div> -->
+<span class="static">{{ profile.user.get_full_name }}</span>
         
-        <p class="clearfix">
-        	<h3>Credit Card</h3>
-        	<div class="static">
-        		
-        		{% for cc in cc_tokens %}
-                <p class="details">
-            		Card holder: {{ cc.first_name }} {{cc.last_name }} <br />
-            		CC Number: ***{{ cc.cc_last_four_digits }} 
-            		{% if not cc.is_default %}  <a href="{% url cc_set_default cc.id %}" class="btn">Set as default</a>
-            		{% else %}
-            		<br /> Default credit card
-            		{% endif %}
-                </p>
-                
-                <br />
-                {% empty %}
-                Your credit card will be shown after successful payments                                           
-                {% endfor %}
-            </div>
+
+<div class="">
+    {% if profile.user %}
+
+       <img style="width:50px" src="{{ profile.avatar_image }}" alt="[username]" class="acct-avatar" />
+          
+        <p class="static">
+            {{ profile.user.email }}
         </p>
-    </div>
-        
-    {% else %}
+</div>
+    {%endif%}
+
+
+
+
     
-    <div class="bootstrap">
-    <form method="POST" action="{% url profile_edit %}" id="mng-account-form" class="form-horizontal" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% for field in form %}
-        <div class="control-group">
-            <label class="control-label">{{ field.label }}</label>
-            <div class="controls">
-                {{ field }}
-                <span class="help-inline">{{ field.errors }}</span>
-            </div>
-        </div>
-        {% endfor %}
-        <div class="form-actions">
-            <input type="submit" class="btn btn-primary" value="Save" id="btn-update"/>
+<div id="payment-form-container" class="body-copy bootstrap">
+    <div class="section-intro">
+    <h2><span>Your Payment Methods</span></h2>
+    </div>
+
+    <div class="bootstrap existing_payment_option">
+        
+        <form id="payment-choice-form" {% if not default_ccS.count %}class="hidden"{% endif %}>
+        <div>You can pay with one of your saved credit cards: </div>
+            {% include "includes/credit_card_choices.html" %}
+        </form>
+    </div>
+    <a data-target="#payment-form" class="click-toggle">Enter a new credit card</a>
+    <form id="payment-form" class="form-horizontal hidden clear_choice_on_change" data-choicetarget="#payment-choice-form" novalidate="novalidate"> 
+                    {% csrf_token %}           
+                
+    {% include "cart/includes/payment_info_form.html" %}
+    <div class="spinbox">
+            <input class="submit-button" type="submit">
         </div>
     </form>
-    </div>
-    {% endif %}
 </div>
-</div>
-</div>
-{% endblock %}
 
+
+<div id="shipping-form-container">
+    <div class="section-intro">
+        <h2><span>Shipping Info</span></h2>
+        </div>
+
+    <form id="shipping-choice-form" class="choiceform {% if not shipping_addresses.0 %}hidden{% endif %}">
+        <div class="bootstrap existing_payment_option">
+   
+        <div>Here are your current Shipping Addresses</div>       
+            {% include "includes/shipping_address_choices.html" %}     
+        </div>
+    </form>
+    
+    
+    
+    <a data-target="#shipping-form" class="click-toggle">Enter a new Shipping Address</a>
+   
+
+
+    <div class="body-copy bootstrap">
+        <form action="/cart/validate_address" method="POST" id="shipping-form" class="form-horizontal validated_address_form {% if shipping_addresses|length > 0%}hidden{% endif %} clear_choice_on_change" data-choicetarget="#shipping-choice-form">
+        {% include "includes/shipping_address_form.html" %}
+        
+        <div class="spinbox">
+            <input class="submit-button" type="submit">
+        </div>
+
+        </form>
+    </div>
+</div>
+
+</div>
+
+<form id="wepay_info" method="post" action="/cart/validate_cc">
+        {% csrf_token %}
+        <input id="wepay_id" type="hidden" name="credit_card_id">
+        <input id="wepay_state" type="hidden" name="state">
+    </form>
+<script type="text/javascript" src="https://wepay.com/min/js/tokenization.v2.js">
+</script>
+<script type="text/javascript">
+    WePay.set_endpoint("{{mode}}"); // change to "production" when live
+    var WEPAY_CLIENT_ID = "{{wepay_client_id}}";
+    var USER_EMAIL = "{{request.user.email}}"
+</script>
+
+{% endblock %}

@@ -11,13 +11,14 @@
 
 	
 <div id="payment-form-container" class="body-copy bootstrap">
-<div class="section-intro">
-<h2><span>Payment Methods</span></h2>
-</div>
+	
+	<div class="section-intro">
+		<h2><span>Payment Methods</span></h2>
+	</div>
 
 	<div class="bootstrap existing_payment_option">
 		
-		<form id="payment-choice-form" {% if not default_ccS %}class="hidden"{% endif %}>
+		<form id="payment-choice-form" class="choiceform {% if not default_ccS %}hidden{% endif %}">
 		<div>You can pay with one of your saved credit cards: </div>
 		
 		{% include "includes/credit_card_choices.html" %}
@@ -32,122 +33,13 @@
 	{% else %}
 	<span style="color:black">Enter a Credit Card</span>
 	{% endif %}
-	
 
+	<form id="payment-form" class="form-horizontal {% if default_ccS|length > 0%}hidden{% endif %} clear_choice_on_change" data-choicetarget="#payment-choice-form" novalidate="novalidate"> 
+                    {% csrf_token %}           
+	{% include "cart/includes/payment_info_form.html" %}
+	</form>
 
-		<form id="payment-form" class="form-horizontal {% if default_ccS|length > 0%}hidden{% endif %} clear_choice_on_change" data-choicetarget="#payment-choice-form" novalidate="novalidate">			
-				
-				<div class="control-group">
-					<label class="control-label">First Name</label>
-					<div class="controls">
-						<input id="id_firstname" type="text" name="firstname" maxlength="255">
-						<span class="help-inline"></span>
-					</div>
-				</div>
-				
-				<div class="control-group">
-					<label class="control-label">Last Name</label>
-					<div class="controls">
-						<input id="id_lastname" type="text" name="lastname" maxlength="255">
-						<span class="help-inline"></span>
-					</div>
-				</div>
-				
-				<div class="control-group">
-					<label class="control-label">Street Address</label>
-					<div class="controls">
-						<input id="id_street" type="text" name="street" maxlength="255">
-						<span class="help-inline"></span>
-					</div>
-				</div>
-				
-				<div class="control-group">
-					<label class="control-label">City</label>
-					<div class="controls">
-						<input id="id_city" type="text" name="city" maxlength="255">
-						<span class="help-inline"></span>
-					</div>
-				</div>
-				
-				<div class="control-group">
-					<label class="control-label">State</label>
-					<div class="controls">
-						{% include 'cart/states_and_countries.html' %}
-						<span class="help-inline"></span>
-					</div>
-				</div>
-				
-				<div class="control-group">
-					<label class="control-label">Postal / Zip Code</label>
-					<div class="controls">
-						<input id="id_zip" type="text" name="zip" maxlength="32">
-						<span class="help-inline"></span>
-					</div>
-				</div>
-				
-				<div class="control-group">
-					<label class="control-label">Credit Card Number</label>
-					<div class="controls">
-						<input id="id_acct" type="text" maxlength="20">
-						<span class="help-inline"></span>
-					</div>
-				</div>
-				
-				<div class="control-group">
-					<label class="control-label">Expiration Date</label>
-					<div class="controls">
-						<span style="white-space: nowrap"><select style="width:100px" id="id_expdate_0">
-		<option value="1">1</option>
-		<option value="2">2</option>
-		<option value="3">3</option>
-		<option value="4">4</option>
-		<option value="5">5</option>
-		<option value="6">6</option>
-		<option value="7">7</option>
-		<option value="8">8</option>
-		<option value="9">9</option>
-		<option value="10">10</option>
-		<option value="11">11</option>
-		<option value="12">12</option>
-		</select> / <select style="width:100px" id="id_expdate_1">
-		<option value="2013">2013</option>
-		<option value="2014">2014</option>
-		<option value="2015">2015</option>
-		<option value="2016">2016</option>
-		<option value="2017">2017</option>
-		<option value="2018">2018</option>
-		<option value="2019">2019</option>
-		<option value="2020">2020</option>
-		<option value="2021">2021</option>
-		<option value="2022">2022</option>
-		<option value="2023">2023</option>
-		<option value="2024">2024</option>
-		<option value="2025">2025</option>
-		<option value="2026">2026</option>
-		</select></span>
-						<span class="help-inline"></span>
-					</div>
-				</div>
-				
-				<div class="control-group">
-					<label class="control-label">Card Security Code</label>
-					<div class="controls">
-						<input id="id_cvv2" type="text" maxlength="4">
-						<span class="help-inline"></span>
-					</div>
-				</div>
-				
-
-				
-				<div>
-				</div>
-				</form>
-
-				<div >
-			{% csrf_token %}
-			
-		</div>
-	</div>
+</div>
 
 <div id="shipping-form-container">
 	<div class="section-intro">
@@ -157,7 +49,7 @@
 
 	
 
-		<form id="shipping-choice-form" class="{% if not shipping_addresses %}hidden{% endif %}">
+		<form id="shipping-choice-form" class="choiceform {% if not shipping_addresses %}hidden{% endif %}">
 		<div class="bootstrap existing_payment_option">
 		<div>You can choose an existing address that you've used before... </div>
 			
