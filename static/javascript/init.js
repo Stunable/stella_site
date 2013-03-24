@@ -3,6 +3,8 @@ var stunable = {
 
     common : function() {
 
+
+
       var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
       $(document).ajaxSend(function(e, xhr, settings) {
         xhr.setRequestHeader('X-CSRFToken', csrfToken);
@@ -114,7 +116,10 @@ var stunable = {
 
         tabs_find_active()
         // var box = $('#login_box').clone()
-        // box.modal({clickClose:false,escapeClose:false,showClose:false})   
+        // box.modal({clickClose:false,escapeClose:false,showClose:false})  
+
+        // $('form').submit($(this).find('.spinbox').append('<img src="/static/images/loading.gif">'))
+
 
     }
     ,shop: function(){    

@@ -41,29 +41,32 @@
 
 </div>
 
-<div id="shipping-form-container">
-	<div class="section-intro">
-		<h2><span>Shipping Info</span></h2>
-		</div>
+<div class="indent_format" id="shipping-form-container">
+
+	<div>
+		<h2>Shipping Info </h2>
 
 
 	
 
 		<form id="shipping-choice-form" class="choiceform {% if not shipping_addresses %}hidden{% endif %}">
 		<div class="bootstrap existing_payment_option">
-		<div>You can choose an existing address that you've used before... </div>
+		<div>You can choose an existing address... </div>
 			
 			{% include "includes/shipping_address_choices.html" %}
 			
 		</div>
 		</form>
 	
+	</div>
 	
-	
-	{% if shipping_addresses|length > 0%}Or <a data-target="#shipping-form" class="click-toggle">Enter a new Shipping Address</a>
+	{% if shipping_addresses|length > 0%}
+	<div>
+	Or <a data-target="#shipping-form" class="click-toggle">Enter a new Shipping Address</a>
+	</div>
 	{% else %}
-	<br>
-	<span style="color:black">Enter a new Shipping Address</span>
+
+	<div>Enter a new Shipping Address</div>
 	{% endif %}
 
 

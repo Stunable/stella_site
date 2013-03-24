@@ -1188,8 +1188,6 @@ var PAYMENT_FORM_VALIDATE_OPTIONS = {
 
 function submit_shipping_option_form(){
     var form = $('#shipping-form');
-
-
     $.post(form.attr('action'),form.serialize(),function(result){
       if(result.success){
         $('#shipping-choice-form').html(result.html);
@@ -1204,5 +1202,7 @@ function submit_shipping_option_form(){
         init_form_errors($('body').attr('data-role'));
       }
     },'json')
+
+    return false;
 }
 

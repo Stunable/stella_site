@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@import "chosen.css";
 
 /* CSS Document */
 
@@ -55,11 +54,19 @@ body {
 .btn, .global .text-link, form p, label, .tab .text, .rack-list h4, .rack-list li, .share-info .admirers .name, .help .seed p, .static .body-copy p, .static .body-copy li, .feed #page-content .hgroup h3 {
 	font-family:'Helvetica', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
-/* Custom handwriting font = "Nothing You Could Do" */
-h1, h2, h3, p, input.txt, .acct label, .acct .quest, .customStyleSelectBox, #local-nav .text-link, .tab .text-link, .item-actions label, #invitation-form label, #invitation-form1 label, .item-actions .confirmation {
-/*	font-family:'Nothing You Could Do', Georgia, serif;*/
-	font-family: 'Helvetica', sans-serif;
+
+h1 {
+	font-size: 1.3em;
+	font-weight: bold;
+	margin:0px 10px;
 }
+
+h2{
+	font-size:1.1em;
+	font-weight:bold;
+	margin:10px 10px 10px 0px;
+}
+
 
 body {
 	background-color:#FFFFFF;
@@ -78,13 +85,93 @@ a, form .btn { color:#7f10b5; }
 
 a:hover, form .btn:hover { color:#8D8791;}
 
+
+#shipping-form label, #payment-form label{
+	float:left;
+	font-size:.9em;
+	vertical-align: middle;
+	margin:8px;
+}
+
+#shipping-form input, #payment-form input,#shipping-form select, #payment-form select, #shipping-form .controls, #payment-form .controls{
+	float:right;
+}
+
+#payment-form .payment_deets div{
+	float:right;
+	display:inline;
+}
+#payment-form .payment_deets select{
+	float:none;
+}
+
+#payment-form select,#shipping-form select{
+	width:200px;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+
+
+#shipping-form, #payment-form{
+	width:400px;
+}
+
+div.control-group{
+	clear:both;
+}
+
+div.control-group .controls{
+	width:200px;
+	text-align: right;
+}
+div.control-group .controls input{
+	float:right;
+}
+div.control-group ul.errorlist{
+	font-size:.8em;
+	color:red;
+	position:relative;
+	top:30px;
+	left:220px;
+}
+
+
 input{
 	padding: 5px;
 	border-radius: 3px;
-	border: 1px solid #7f10b5;
+	border: 1px solid #cc78ff;
 	font-size: 1.2em;
 }
 
+input.submit-button{
+	background-color: #7f10b5;
+	color:white;
+	margin:20px;
+	float:right;
+}
+
+.spinbox{
+	float:right;
+}
+
+select{
+
+	background-color: #eee;
+	transparent;
+	background-image: none;
+	-webkit-appearance: none;
+	border: 1px solid #cc78ff;
+	box-shadow: none;
+	padding:3px;
+	width:100px;
+	text-align: right;
+
+}
+
+select option{
+	text-align: right;
+}
 /*@media all and (max-width: 699px) and (min-width: 520px), (min-width: 1151px) {
   body {
     background: #ccc;
@@ -894,6 +981,20 @@ body.flatpage #left-panel{
 
 
 
+.indent_format div{
+	margin-top:3px;
+	margin-left:10px;
+}
+
+
+
+.indent_format .section{
+	margin-top:20px;
+	padding-bottom:20px;
+}
+
+
+
 
 /*CART*/
 
@@ -1084,11 +1185,6 @@ table.retailer-item-group{
 }
 
 
-.choiceform label{
-	display:block;
-}
-
-
 
 #btn-place-an-order{
 	margin-left:40%;
@@ -1100,6 +1196,11 @@ table.retailer-item-group{
 }
 #purchased_bottom a{
 	margin:40px;
+}
+
+
+.click-toggle{
+	cursor:pointer;
 }
 
 

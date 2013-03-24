@@ -2,93 +2,69 @@
 
 {% block inner_content %}
 
+<h1>Your Account Info</h1>
+<div class="indent_format">
 
-<span class="static">{{ profile.user.get_full_name }}</span>
-        
-
-<div class="">
-    {% if profile.user %}
-
-       <img style="width:50px" src="{{ profile.avatar_image }}" alt="[username]" class="acct-avatar" />
-          
-        <p class="static">
-            {{ profile.user.email }}
-        </p>
-</div>
-    {%endif%}
-
-
-
-
-    
-<div id="payment-form-container" class="body-copy bootstrap">
-    <div class="section-intro">
-    <h2><span>Your Payment Methods</span></h2>
-    </div>
-
-    <div class="bootstrap existing_payment_option">
-        
-        <form id="payment-choice-form" {% if not default_ccS.count %}class="hidden"{% endif %}>
-        <div>You can pay with one of your saved credit cards: </div>
-            {% include "includes/credit_card_choices.html" %}
-        </form>
-    </div>
-    <a data-target="#payment-form" class="click-toggle">Enter a new credit card</a>
-    <form id="payment-form" class="form-horizontal hidden clear_choice_on_change" data-choicetarget="#payment-choice-form" novalidate="novalidate"> 
-                    {% csrf_token %}           
+    <div class="section">
+        <div class="well">
                 
-    {% include "cart/includes/payment_info_form.html" %}
-    <div class="spinbox">
-            <input class="submit-button" type="submit">
-        </div>
-    </form>
-</div>
-
-
-<div id="shipping-form-container">
-    <div class="section-intro">
-        <h2><span>Shipping Info</span></h2>
+            <img style="width:50px" src="{{ profile.avatar_image }}" alt="[username]" class="acct-avatar" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ profile.user.get_full_name }}
+           
+            <div>
+                email:&nbsp;&nbsp;&nbsp;&nbsp;{{ profile.user.email }}
+            </div>
         </div>
 
-    <form id="shipping-choice-form" class="choiceform {% if not shipping_addresses.0 %}hidden{% endif %}">
-        <div class="bootstrap existing_payment_option">
-   
-        <div>Here are your current Shipping Addresses</div>       
-            {% include "includes/shipping_address_choices.html" %}     
+
+
+
+            
+        <div id="payment-form-container" class="body-copy bootstrap">
+            <div class="existing_payment_option">
+                <form id="payment-choice-form" {% if not default_ccS.count %}class="hidden"{% endif %}>
+                <div>Your saved credit cards: </div>
+                    {% with "True" as can_delete %}
+                        {% include "includes/credit_card_choices.html" %}
+                    {% endwith %}
+                </form>
+            </div>
         </div>
-    </form>
-    
-    
-    
-    <a data-target="#shipping-form" class="click-toggle">Enter a new Shipping Address</a>
-   
+    </div>
 
-
-    <div class="body-copy bootstrap">
-        <form action="/cart/validate_address" method="POST" id="shipping-form" class="form-horizontal validated_address_form {% if shipping_addresses|length > 0%}hidden{% endif %} clear_choice_on_change" data-choicetarget="#shipping-choice-form">
-        {% include "includes/shipping_address_form.html" %}
+    <div class="section" id="shipping-form-container">
         
-        <div class="spinbox">
-            <input class="submit-button" type="submit">
-        </div>
+        <div>
+            <div>
+            <h2>Shipping Info</h2>
+            </div>
 
-        </form>
+
+            <form id="shipping-choice-form" class="choiceform {% if not shipping_addresses.0 %}hidden{% endif %}">
+                <div class="bootstrap existing_payment_option">
+           
+                <div>Here are your current Shipping Addresses 
+                    {% with "True" as can_delete %}   
+                        {% include "includes/shipping_address_choices.html" %}  
+                    {% endwith %}   
+                </div>
+                </div>   
+            </form>
+            
+            <br>
+            <div><a data-target="#shipping-form" class="click-toggle">Enter a new Shipping Address</a></div>
+           
+
+
+            <div class="body-copy bootstrap">
+                
+                <form action="/cart/validate_address" method="POST" id="shipping-form" class="form-horizontal validated_address_form {% if shipping_addresses|length > 0%}hidden{% endif %} clear_choice_on_change" data-choicetarget="#shipping-choice-form">
+                {% with "True" as make_submit_button %}
+                 {% include "includes/shipping_address_form.html" %}
+                {% endwith %}
+                </form>
+            </div>
+        </div>
     </div>
 </div>
-
-</div>
-
-<form id="wepay_info" method="post" action="/cart/validate_cc">
-        {% csrf_token %}
-        <input id="wepay_id" type="hidden" name="credit_card_id">
-        <input id="wepay_state" type="hidden" name="state">
-    </form>
-<script type="text/javascript" src="https://wepay.com/min/js/tokenization.v2.js">
-</script>
-<script type="text/javascript">
-    WePay.set_endpoint("{{mode}}"); // change to "production" when live
-    var WEPAY_CLIENT_ID = "{{wepay_client_id}}";
-    var USER_EMAIL = "{{request.user.email}}"
-</script>
 
 {% endblock %}
