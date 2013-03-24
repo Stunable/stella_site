@@ -25,7 +25,7 @@ class PurchaseAdmin(admin.ModelAdmin):
     list_display=('cart','item','status','last_tracking_number','delivery_date','transaction_status')
     actions = ('track_package','check_payment_status','capture_payment')
     list_filter=('status',)
-    raw_id_fields = ("item","cart")
+    raw_id_fields = ("item","cart","purchaser","transaction","shipping_address")
 
     def transaction_status(self,instance):
         return instance.transaction.state
