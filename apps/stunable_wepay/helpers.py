@@ -40,7 +40,7 @@ class WePayPayment(object):
 
                 WEPAY = WePay(settings.WEPAY_PRODUCTION, item.retailer.wepay_token)
                 
-                app_fee = item.get_app_fee
+                app_fee = item.get_app_fee()
                 if settings.DEBUG:
                     if item.get_app_fee() * 5 >item.get_wepay_amounts()[0]:
                         app_fee = 3

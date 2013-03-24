@@ -343,6 +343,12 @@ def Cart(request,checked_out = False):
 
 
 class KartItem(models.Model):
+
+    def __unicode__(self):
+        return self.item_name
+
+
+
     kart = models.ForeignKey(Kart)
     
     #normalized info for performance
