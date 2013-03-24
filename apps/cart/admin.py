@@ -6,13 +6,17 @@ class CartAdmin(admin.ModelAdmin):
     list_display=('__unicode__','checked_out','ref','grand_total','creation_date')
 
 admin.site.register(Kart,CartAdmin)
-admin.site.register(KartItem)
+
 
 
 class WishlistItemAdmin(admin.ModelAdmin):
     raw_id_fields = ('item_variation','item','picture','user')
 
 
+class KartItemAdmin(admin.ModelAdmin):
+    raw_id_fields = ('item_variation','kart')
+
+admin.site.register(KartItem,KartItemAdmin)
 admin.site.register(WishListItem,WishlistItemAdmin)
 
 
