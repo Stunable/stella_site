@@ -62,6 +62,7 @@ class PurchaseInline(admin.TabularInline):
 
 class CheckoutAdmin(admin.ModelAdmin):
     list_display=('ref','complete','cart')
+    raw_id_fields = ('cart','retailer','purchaser')
 
     inlines = [PurchaseInline]
 
