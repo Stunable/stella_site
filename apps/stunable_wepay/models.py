@@ -38,6 +38,12 @@ class WePayTransaction(models.Model):
                     'checkout_id'       : self.checkout_id,
                      "cancel_reason"    : "Unintended Purchase (internal testing)"
                 })
+
+                if response.has_key('state'):
+                    self.state = response['state']
+                    self.save()
+
+                    print response
             except:
                 raise
 
