@@ -99,7 +99,8 @@ PURCHASE_STATUS_CHOICES = (
     # AFTER THIS CANNOT HAPPEN IF STATUS == COMPLETED
     ('return requested','return_requested'), #buyer has generated a return shipment label
     ('return shipped','return_delivered'), #fedex confirmed dropoff/pickup of return shipment
-    ('return completed','return_completed') #fedex confirmed delivery of return item
+    ('return completed','return_completed'), #fedex confirmed delivery of return item
+    ('cancelled', 'cancelled')
 )
 
 class Purchase(models.Model):
