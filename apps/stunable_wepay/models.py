@@ -41,9 +41,15 @@ class WePayTransaction(models.Model):
         if self.state == 'authorized' and self.get_retailer():
             try:
                 WEPAY = WePay(settings.WEPAY_PRODUCTION, self.get_retailer().wepay_token)
+
+                if self.purchase_set.all()[0].reason_for_return:
+                    reason = self.purchase_set.all()[0].reason_for_return
+                else:
+                    reason = 'No reason given. email admin@stunable.com for details'
+
                 response = WEPAY.call('/checkout/cancel', {
                     'checkout_id'       : self.checkout_id,
-                     "cancel_reason"    : "Unintended Purchase (internal testing)"
+                     "cancel_reason"    : reason
                 })
 
                 self.last_response = str(response)
@@ -59,15 +65,19 @@ class WePayTransaction(models.Model):
 
     def refund_transaction(self):
         # not implemented
-        return
-
 
         if self.state == 'authorized' and self.get_retailer():
             try:
                 WEPAY = WePay(settings.WEPAY_PRODUCTION, self.get_retailer().wepay_token)
-                response = WEPAY.call('/checkout/cancel', {
+
+                if self.purchase_set.all()[0].reason_for_return:
+                    reason = self.purchase_set.all()[0].reason_for_return
+                else:
+                    reason = 'No reason given. email admin@stunable.com for details'
+
+                response = WEPAY.call('/checkout/refund', {
                     'checkout_id'       : self.checkout_id,
-                     "cancel_reason"    : "Unintended Purchase (internal testing)"
+                     "refund_reason"    : reason
                 })
 
                 self.last_response = str(response)

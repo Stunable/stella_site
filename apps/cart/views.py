@@ -283,7 +283,8 @@ def validate_address(request):
         if shipping_form.is_valid():
             shipping_info = shipping_form.save(commit=False)
             shipping_info.customer=user_profile
-            shipping_info.is_default=True
+            if not default_shipping:
+                shipping_info.is_default=True
             shipping_info.save()
 
             shipping_addresses = ShippingInfo.objects.filter(customer=user_profile)
