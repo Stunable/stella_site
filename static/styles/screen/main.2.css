@@ -995,6 +995,60 @@ body.flatpage #left-panel{
 
 
 
+.shipping_label .inner-page-content{
+	padding:20px;
+}
+
+
+
+
+
+	.shipping_label .common td input[type="text"] {
+		width: 40px;
+	}
+	.shipping_label .common th {
+		border: thin solid #EBEBEB;
+		vertical-align: middle;
+		text-align: center;
+		background-color: #eee;
+		font-weight: 600;
+	}
+	.shipping_label .common table, .common .no-border td {
+		border: none;
+	}
+	.shipping_label h3 {
+		text-transform: uppercase;
+		text-align: center;
+	}
+	
+	.shipping_label .bootstrap input {
+		width: 100px;
+	}
+	.shipping_label .order-action ul {
+		position:absolute;top: 0; left:0;display:none;background-color: white;width: 200px;cursor: pointer;
+		border: gray 1px solid;
+	}
+	
+	.shipping_label .order-action ul li {
+	}
+	
+	.shipping_label .order-action {
+		position:relative; cursor: pointer;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*CART*/
 

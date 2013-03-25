@@ -1,0 +1,14 @@
+{% if checkout %}
+    <p> {{advice_text.html|safe}} </p>
+    <p>Please attempt to ship all items in one shipment.</p>
+
+    <p class="error_msg">{{error_message}}</p>
+    <form action="{% url print_shipping_label ref=checkout.ref %}" method="post">
+    {% csrf_token %}
+    {% else %}
+    {% if shipping_label %}
+    <a href="{% url print_packing_slip shipping_number=shipping_label.tracking_number %}">click here for a printable packing slip</a>
+    {% endif %}
+{% endif %}
+    {% include 'retailers/packing_slip.html' %}
+    </form>

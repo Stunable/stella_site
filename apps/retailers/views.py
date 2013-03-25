@@ -620,17 +620,18 @@ def create_shipping_label(request, ref=None, template='retailers/retailer_shippi
             sender = checkout.purchase_set.all()[0].shipping_address
             receiver = RetailerProfile.objects.get(user=checkout.retailer)
             purchase_status = 'return requested'
-            redirect_url = "order_history"
+            redirect_url = "user_view_shipping_label"
+            template='orders/user_shipping_label.html'
         elif request.user == checkout.retailer:
             sender = RetailerProfile.objects.get(user=checkout.retailer)
             receiver = checkout.purchase_set.all()[0].shipping_address
             purchase_status = 'placed'
-            redirect_url = "retailer_order_history"
+            redirect_url = "view_shipping_label"
         elif request.user.is_staff:
             sender = get_retailer_profile(request)
             receiver = checkout.purchase_set.all()[0].shipping_address
             purchase_status = 'placed'
-            redirect_url = "retailer_order_history"
+            redirect_url = "view_shipping_label"
             
 
         purchases = checkout.purchase_set.all()
@@ -665,10 +666,10 @@ def create_shipping_label(request, ref=None, template='retailers/retailer_shippi
                     shipment.purchases.add(purchase)
                     print 'adding purchase to shipment',purchase,shipment
 
-                shipment.save()
                 print shipment.purchases.all()
+                shipment.save()
 
-                return redirect(reverse('view_shipping_label', kwargs={'shipping_number':shipment.tracking_number}))
+                return redirect(reverse(redirect_url, kwargs={'shipping_number':shipment.tracking_number}))
 
             ctx['shipment'] = shipment
     try:
@@ -685,6 +686,8 @@ def print_packing_slip(request, shipping_number=None, template='retailers/print_
 
     # retailer_profile = RetailerProfile.objects.get(user=request.user)
     shipment = Shipment.objects.get(tracking_number = shipping_number)
+    if not shipment.originator.retailerprofile_set.all().count():
+        template = 'orders/user_print_packing_slip.html'
     # items = [p.item for p in shipment.purchases.all()]
     purchases = shipment.purchases.all()
     # ctx.update({'retailer_profile': retailer_profile}) .,
@@ -705,6 +708,9 @@ def view_shipping_label(request, shipping_number=None,template='retailers/retail
     shipment = Shipment.objects.get(tracking_number = shipping_number)
     # items = [p.item for p in shipment.purchases.all()]
     purchases = shipment.purchases.all()
+
+    if not shipment.originator.retailerprofile_set.all().count():
+        template = 'orders/user_shipping_label.html'
     # ctx.update({'retailer_profile': retailer_profile})
 
     if get_retailer_profile(request):
