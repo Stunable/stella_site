@@ -14,6 +14,8 @@ class WePayTransaction(models.Model):
     date_created = models.DateTimeField(auto_now=True)
     date_modified = models.DateTimeField(auto_now_add=True)
 
+    last_response = models.TextField(null=True,blank=True)
+
     def capture_funds(self):
         if self.state != 'captured':
             try:
@@ -21,6 +23,8 @@ class WePayTransaction(models.Model):
                 response = WEPAY.call('/checkout/capture', {
                     'checkout_id': self.checkout_id
                 })
+
+                self.last_response = str(response)
                 if response.has_key('state'):
                     self.state = response['state']
                     self.save()
@@ -38,6 +42,8 @@ class WePayTransaction(models.Model):
                     'checkout_id'       : self.checkout_id,
                      "cancel_reason"    : "Unintended Purchase (internal testing)"
                 })
+
+                self.last_response = str(response)
 
                 if response.has_key('state'):
                     self.state = response['state']
@@ -62,7 +68,8 @@ class WePayTransaction(models.Model):
             'checkout_id': self.checkout_id
         })
 
-        print response
+        self.last_response = str(response)
+        
         self.state = response['state']
         self.save()
 
