@@ -58,21 +58,24 @@ class WePayPayment(object):
                     'fee_payer':'payee'
                 }
 
-                response = WEPAY.call('/checkout/create',data)
+                try:
+                    response = WEPAY.call('/checkout/create',data)
 
-                if response['state'] == "authorized":
-                    success.append((item,response))
-                    data.update({
-                        'subtotal': item.sub_total,
-                        'grand_total': item.grand_total,
-                        'unit_price':item.unit_price,
-                        'quantity':item.quantity,
-                        'shipping_amount':item.shipping_amount,
-                        'wepay_fees': item.get_additional_fees()
-                    }) 
-                    data_success.append(data)
-                else:
-                    fail.append((item,response))
+                    if response['state'] == "authorized":
+                        success.append((item,response))
+                        data.update({
+                            'subtotal': item.sub_total,
+                            'grand_total': item.grand_total,
+                            'unit_price':item.unit_price,
+                            'quantity':item.quantity,
+                            'shipping_amount':item.shipping_amount,
+                            'wepay_fees': item.get_additional_fees()
+                        }) 
+                        data_success.append(data)
+                    else:
+                        fail.append((item,response))
+                except Exception, e:
+                    fail.append((item,str(e)))
             
             
             for item,transaction in success:

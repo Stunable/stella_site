@@ -22,6 +22,8 @@ from apps.notification.models import send_notification_on
 
 from apps.cart.plugins.rate_request import get_rate as fedex_rate_request
 
+from plugins.track_shipment import track_it
+
 
 
 # from apps.cart.plugins.taxcloud import TaxCloudClient
@@ -196,6 +198,13 @@ class Purchase(models.Model):
 
 
 
+class ShipmentTrackingEvent(models.Model):
+
+    data = models.TextField()
+    date = models.DateTimeField(auto_now=True)
+    shipment = models.ForeignKey('Shipment')
+
+
 class Shipment(models.Model):
     purchases = models.ManyToManyField('Purchase',blank=True)
     tracking_number = models.CharField(max_length=250, blank=True, null=True)
@@ -205,9 +214,22 @@ class Shipment(models.Model):
     status = models.CharField(max_length=128)#this should be taken straight from the shipping vendor
     originator = models.ForeignKey(User,null=True,blank=True)
 
+
+
     @property
     def image(self):
         return self.label
+
+
+    def update_tracking_info(self):
+        if self.tracking_number:
+            try:
+                for tracking_response in track_it(self.tracking_number):
+                    print tracking_response
+                
+            except Exception,e:
+                print e
+
 
 
 

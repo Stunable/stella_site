@@ -99,7 +99,7 @@ a:hover, form .btn:hover { color:#8D8791;}
 
 #payment-form .payment_deets div{
 	float:right;
-	display:inline;
+	display:inlinecart-item-list;
 }
 #payment-form .payment_deets select{
 	float:none;
@@ -1013,6 +1013,10 @@ body.flatpage #left-panel{
 	overflow-y:auto;
 	overflow-x:hidden;
 	height:600px;
+}
+
+#cart-item-list .item-retailer{
+	color:#666;
 }
 
 .content.cart #cart-item-list.purchased{

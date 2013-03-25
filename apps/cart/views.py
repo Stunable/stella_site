@@ -399,7 +399,7 @@ def place_order(request):
         cart = Cart(request)
     #current_cart.cart.save()
     
-        result,error = cart.checkout(request)
+        result,item_list = cart.checkout(request)
 
         if result is True:
             return HttpResponse(json.dumps(
@@ -410,10 +410,16 @@ def place_order(request):
 
             ), mimetype='application/json') 
         else:
+            errors = {}
+
+            for item,error in item_list:
+                print error
+
+
             return HttpResponse(json.dumps(
                 {
                     'success':False,
-                    'error': str(error)
+                    'error':error
                 }
 
             ), mimetype='application/json')  

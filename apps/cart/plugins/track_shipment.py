@@ -32,11 +32,11 @@ def track_it(package_identifier,package_type='TRACKING_NUMBER_OR_DOORTAG'):
     # query), and show a few details about each shipment.
     print "== Results =="
     for match in track.response.TrackDetails:
-        logging.info(match)
-        if match.StatusDescription == 'Delivered':                                                                     #2012-10-19 08:40:00
-            return match.ActualDeliveryTimestamp
-        else:
-            return None
+        yield match
+        # if match.StatusDescription == 'Delivered':                                                                     #2012-10-19 08:40:00
+        #     return match.ActualDeliveryTimestamp
+        # else:
+        #     return None
 
 
 def test_track_it(package_identifier,package_type='TRACKING_NUMBER_OR_DOORTAG'):
