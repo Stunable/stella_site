@@ -108,6 +108,8 @@ class Purchase(models.Model):
     shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
     shipping_address = models.ForeignKey('accounts.ShippingInfo',blank=True,null=True)
 
+    reason_for_return = models.TextField(null=True,blank=True)
+
     def save(self,*args, **kwargs):
         pk_before_save = self.pk
         super(Purchase, self).save()
