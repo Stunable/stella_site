@@ -617,18 +617,18 @@ def create_shipping_label(request, ref=None, template='retailers/retailer_shippi
         checkout = Checkout.objects.get(ref=ref)
 
         if request.user == checkout.purchaser:
-            sender = ShippingInfo.objects.get(customer=request.user.get_profile(),is_default=True)
+            sender = checkout.purchase_set.all()[0].shipping_address
             receiver = RetailerProfile.objects.get(user=checkout.retailer)
             purchase_status = 'return requested'
             redirect_url = "order_history"
         elif request.user == checkout.retailer:
             sender = RetailerProfile.objects.get(user=checkout.retailer)
-            receiver = ShippingInfo.objects.get(customer=checkout.purchaser.get_profile(),is_default=True)
+            receiver = checkout.purchase_set.all()[0].shipping_address
             purchase_status = 'placed'
             redirect_url = "retailer_order_history"
         elif request.user.is_staff:
             sender = get_retailer_profile(request)
-            receiver = ShippingInfo.objects.get(customer=checkout.purchaser.get_profile(),is_default=True)
+            receiver = checkout.purchase_set.all()[0].shipping_address
             purchase_status = 'placed'
             redirect_url = "retailer_order_history"
             
