@@ -188,6 +188,13 @@ class Purchase(models.Model):
             return self.most_recent_shipment.delivery_date
 
 
+    def remove_inventory(self):
+        self.item.item_variation.update_inventory(self.item.quantity)
+
+    def restock(self):
+        self.item.item_variation.update_inventory(-1*self.item.quantity)
+
+
 
 class Shipment(models.Model):
     purchases = models.ManyToManyField('Purchase',blank=True)
@@ -217,7 +224,7 @@ def payment_was_successful_callback(sender, **kwargs):
     retailer = kwargs['item'].retailer
 
     itemtype = kwargs['item'].item_variation
-    itemtype.update_inventory(int(kwargs['item'].quantity))
+    
 
 
     try:
@@ -236,6 +243,19 @@ def payment_was_successful_callback(sender, **kwargs):
     )
             
     p.save()
+
+    p.remove_inventory()
+
+
+
+
+
+
+
+
+
+
+
 
 
 
