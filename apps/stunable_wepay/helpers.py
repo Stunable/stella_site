@@ -79,7 +79,8 @@ class WePayPayment(object):
                 wpt = WePayTransaction.objects.create(
                     checkout_id = transaction['checkout_id'],
                     state = transaction['state'],
-                    user = self.request.user
+                    user = self.request.user,
+                    retailer = item.retailer
                 )
 
                 wpt.save()

@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from apps.retailers.models import RetailerProfile
 
+import datetime
+
 from django.conf import settings
 
 from wepay import WePay
@@ -11,7 +13,8 @@ class WePayTransaction(models.Model):
     checkout_id = models.CharField(max_length=128)
     state = models.CharField(max_length=64)
     user = models.ForeignKey(User)
-    date_created = models.DateTimeField(auto_now=True)
+    retailer = models.ForeignKey(RetailerProfile,null=True)
+    date_created = models.DateTimeField(default=datetime.datetime.now())
     date_modified = models.DateTimeField(auto_now_add=True)
 
     last_response = models.TextField(null=True,blank=True)
@@ -56,9 +59,13 @@ class WePayTransaction(models.Model):
 
 
     def get_retailer(self):
+        if self.retailer:
+            return self.retailer
         try:
             P = self.purchase_set.all()[0]
             R = RetailerProfile.objects.get(user=P.checkout.retailer)
+            self.retailer = R
+            self.save()
             return R
         except:
             return None
