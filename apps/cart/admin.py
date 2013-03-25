@@ -70,6 +70,7 @@ admin.site.register(Checkout,CheckoutAdmin)
 
 
 class ShipmentAdmin(admin.ModelAdmin):
+    list_filter = ('status','originator')
     list_display = ('status','originator','ship_date','delivery_date','tracking_number')
     actions = ('track_shipment',)
 
