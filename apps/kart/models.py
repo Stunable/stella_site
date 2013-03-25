@@ -331,8 +331,7 @@ class Kart(models.Model):
             del(request.session['cart'])
             return True,None
         else:
-            raise
-            return False,error
+            return False,item_list
 
 
 

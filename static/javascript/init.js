@@ -242,7 +242,7 @@ var stunable = {
                   if (data.success){
                     window.location = data.redirect;
                   }else{
-                    pop_modal(data.error)
+                    pop_modal('<div>Sorry, An error occured:</div><div>'+data.error+'</div>');
                   }
 
                 }                
