@@ -85,7 +85,8 @@ class UserProfile(models.Model,ProfileBase):
 def postSaveUser(sender, instance, created, **kwargs):
     try:
         UP,created = UserProfile.objects.get_or_create(user=instance)
-        UP.set_default_tags()
+        if created:
+            UP.set_default_tags()
     except:
         raise
         pass

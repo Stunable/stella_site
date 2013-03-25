@@ -17,7 +17,7 @@ class WePayTransaction(models.Model):
     last_response = models.TextField(null=True,blank=True)
 
     def capture_funds(self):
-        if self.state != 'captured':
+        if self.state != 'captured' and self.get_retailer():
             try:
                 WEPAY = WePay(settings.WEPAY_PRODUCTION, self.get_retailer().wepay_token)
                 response = WEPAY.call('/checkout/capture', {
@@ -35,7 +35,7 @@ class WePayTransaction(models.Model):
 
 
     def cancel_transaction(self):
-        if self.state == 'authorized':
+        if self.state == 'authorized' and self.get_retailer():
             try:
                 WEPAY = WePay(settings.WEPAY_PRODUCTION, self.get_retailer().wepay_token)
                 response = WEPAY.call('/checkout/cancel', {
@@ -56,22 +56,26 @@ class WePayTransaction(models.Model):
 
 
     def get_retailer(self):
-        P = self.purchase_set.all()[0]
-        R = RetailerProfile.objects.get(user=P.checkout.retailer)
-        return R
+        try:
+            P = self.purchase_set.all()[0]
+            R = RetailerProfile.objects.get(user=P.checkout.retailer)
+            return R
+        except:
+            return None
 
 
     def get_status(self):
-        WEPAY = WePay(settings.WEPAY_PRODUCTION, self.get_retailer().wepay_token)
+        if self.get_retailer():
+            WEPAY = WePay(settings.WEPAY_PRODUCTION, self.get_retailer().wepay_token)
 
-        response = WEPAY.call('/checkout/', {
-            'checkout_id': self.checkout_id
-        })
+            response = WEPAY.call('/checkout/', {
+                'checkout_id': self.checkout_id
+            })
 
-        self.last_response = str(response)
-        
-        self.state = response['state']
-        self.save()
+            self.last_response = str(response)
+
+            self.state = response['state']
+            self.save()
 
 
 
