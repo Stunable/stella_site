@@ -67,4 +67,17 @@ class CheckoutAdmin(admin.ModelAdmin):
 
 admin.site.register(Checkout,CheckoutAdmin)
 
-admin.site.register(Shipment)
+
+
+class ShipmentAdmin(admin.ModelAdmin):
+    list_display = ('originator','ship_date','delivery_date','tracking_number')
+    actions = ('track_shipment',)
+
+    def track_shipment(self,request,queryset):
+        for obj in queryset:
+            obj.update_tracking_info()
+
+
+
+
+admin.site.register(Shipment,ShipmentAdmin)
