@@ -1,5 +1,5 @@
 from django.contrib import admin 
-from apps.cart.models import  Purchase, Checkout,Shipment
+from apps.cart.models import  Purchase, Checkout,Shipment,ShipmentTrackingEvent
 from apps.kart.models import Kart,KartItem,WishListItem
 from plugins.track_shipment import track_it
 class CartAdmin(admin.ModelAdmin):
@@ -70,7 +70,7 @@ admin.site.register(Checkout,CheckoutAdmin)
 
 
 class ShipmentAdmin(admin.ModelAdmin):
-    list_display = ('originator','ship_date','delivery_date','tracking_number')
+    list_display = ('status','originator','ship_date','delivery_date','tracking_number')
     actions = ('track_shipment',)
 
     def track_shipment(self,request,queryset):
@@ -81,3 +81,4 @@ class ShipmentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Shipment,ShipmentAdmin)
+admin.site.register(ShipmentTrackingEvent)

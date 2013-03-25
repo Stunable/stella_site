@@ -654,6 +654,7 @@ def create_shipping_label(request, ref=None, template='retailers/retailer_shippi
                 shipment.originator = request.user
                 shipment.label.save(tracking_number+'.png', f)
                 shipment.tracking_number = tracking_number
+                shipment.shipping_method = purchases[0].shipping_method
                 
 
                 for purchase_id in purchase_list:

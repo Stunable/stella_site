@@ -24,6 +24,8 @@ from apps.cart.plugins.rate_request import get_rate as fedex_rate_request
 
 from plugins.track_shipment import track_it
 
+import json
+
 
 
 # from apps.cart.plugins.taxcloud import TaxCloudClient
@@ -201,8 +203,20 @@ class Purchase(models.Model):
 class ShipmentTrackingEvent(models.Model):
 
     data = models.TextField()
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(null=True,blank=True)
     shipment = models.ForeignKey('Shipment')
+    description = models.CharField(max_length=128,null=True,blank=True)
+
+
+
+def convert_track_event_to_dict(track_event):
+    info = []
+    for attr in (a for a in dir(track_event) if not a.startswith('_')):
+        if type(getattr(track_event,attr)).__name__ == 'instance':
+            info.append((attr, convert_track_event_to_dict(getattr(track_event,attr))))
+        else:
+            info.append((attr, getattr(track_event,attr)))
+    return dict(info)
 
 
 class Shipment(models.Model):
@@ -214,6 +228,8 @@ class Shipment(models.Model):
     status = models.CharField(max_length=128)#this should be taken straight from the shipping vendor
     originator = models.ForeignKey(User,null=True,blank=True)
 
+    shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
+
 
 
     @property
@@ -222,13 +238,31 @@ class Shipment(models.Model):
 
 
     def update_tracking_info(self):
-        if self.tracking_number:
+        if self.tracking_number and not self.status == 'Delivered':
             try:
                 for tracking_response in track_it(self.tracking_number):
-                    print tracking_response
+                    TE =  tracking_response.Events[0]
+                    event,created  = ShipmentTrackingEvent.objects.get_or_create(
+                        description = TE.EventDescription,
+                        shipment=self
+                    )
+
+                    info  = convert_track_event_to_dict(TE)
+                    if info.has_key('Timestamp'):
+                        event.date=info['Timestamp']
+                        del(info['Timestamp'])
+                    event.data = json.dumps(info)
+                    event.save()
                 
             except Exception,e:
                 print e
+
+        delivered_events = self.shipmenttrackingevent_set.all().order_by('-date')
+        if delivered_events.count():
+            self.status = delivered_events[0].description
+            self.delivery_date = delivered_events[0].date
+            self.save()
+
 
 
 
