@@ -57,6 +57,29 @@ class WePayTransaction(models.Model):
                 raise
 
 
+    def refund_transaction(self):
+        # not implemented
+        return
+
+
+        if self.state == 'authorized' and self.get_retailer():
+            try:
+                WEPAY = WePay(settings.WEPAY_PRODUCTION, self.get_retailer().wepay_token)
+                response = WEPAY.call('/checkout/cancel', {
+                    'checkout_id'       : self.checkout_id,
+                     "cancel_reason"    : "Unintended Purchase (internal testing)"
+                })
+
+                self.last_response = str(response)
+
+                if response.has_key('state'):
+                    self.state = response['state']
+                    self.save()
+
+                    print response
+            except:
+                raise
+
 
     def get_retailer(self):
         if self.retailer:
