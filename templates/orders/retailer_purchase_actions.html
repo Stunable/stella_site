@@ -12,8 +12,8 @@
         NA              
     {% endif %} -->
 <span>
-    {% if purchase.last_tracking_number %}
-        <a href="{% url view_shipping_label shipping_number=purchase.last_tracking_number %}"><strong>view</strong> label</a>  
+    {% if purchase.most_recent_shipment %}
+        <a href="{% url view_shipping_label shipping_number=purchase.most_recent_shipment.tracking_number %}"><strong>view</strong> label</a>  
     {% else %}
         <a href="{% url print_shipping_label ref=purchase.checkout.ref %}"><strong>get</strong> label</a>
     {% endif %}

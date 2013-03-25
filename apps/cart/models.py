@@ -26,6 +26,8 @@ from plugins.track_shipment import track_it
 
 import json
 
+import datetime
+
 
 
 # from apps.cart.plugins.taxcloud import TaxCloudClient
@@ -176,16 +178,10 @@ class Purchase(models.Model):
     @property
     def most_recent_shipment(self):
         try:
-            return self.shipment_set.all().order_by('-id')[:1][0]
-        except:
+            return self.shipment_set.all()[0]
+        except Exception,e:
             pass
 
-    @property
-    def last_tracking_number(self):
-        try:
-            return self.most_recent_shipment.tracking_number
-        except:
-            pass
 
     def delivery_date(self):
         if self.most_recent_shipment:
@@ -197,6 +193,16 @@ class Purchase(models.Model):
 
     def restock(self):
         self.item.item_variation.update_inventory(-1*self.item.quantity)
+
+    def check_if_complete(self):
+        ship = self.most_recent_shipment
+        if ship:
+            if ship.originator == self.checkout.retailer:
+                if ship.delivery_date:
+                    if (datetime.datetime.now() - ship.delivery_date).days >= 14:
+                        self.status = 'completed'
+                        self.save()
+                        # self.transaction.capture_funds()
 
 
 
@@ -225,7 +231,7 @@ class Shipment(models.Model):
     delivery_date = models.DateTimeField(blank=True,null=True)
     ship_date = models.DateTimeField(blank=True,null=True)
     label = models.ImageField(upload_to="shipping_labels",null=True,blank=True)
-    status = models.CharField(max_length=128)#this should be taken straight from the shipping vendor
+    status = models.CharField(max_length=128,default="Label Created")#this should be taken straight from the shipping vendor
     originator = models.ForeignKey(User,null=True,blank=True)
 
     shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
@@ -264,8 +270,10 @@ class Shipment(models.Model):
             self.status = E.description
             if E.description == 'Delivered':
                 self.delivery_date = E.date
+                self.purchases.all().update(status='delivered')
             if E.description == "Picked up":
                 self.ship_date = E.date
+                self.purchases.all().update(status='shipped')
             self.save()
 
 

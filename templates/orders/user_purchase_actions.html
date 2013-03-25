@@ -16,7 +16,7 @@
         {% if purchase.status == "return requested" %}
             <a href="{% url user_view_shipping_label shipping_number=purchase.last_tracking_number %}"><strong>view</strong> return&nbsplabel</a>
         {% else %}
-            {{purchase.status}}
+            {{purchase.most_recent_shipment.status}}
         {% endif %}
     {% else %}
         {% if purchase.status == "delivered" %}
