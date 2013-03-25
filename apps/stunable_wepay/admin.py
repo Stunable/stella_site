@@ -15,7 +15,7 @@ class WePayTransactionAdmin(admin.ModelAdmin):
 
     def cancel_transaction(self,request,queryset):
         for obj in queryset:
-            obj.capture_funds()
+            obj.cancel_transaction()
 
     def get_wepay_status(self,request,queryset):
         for obj in queryset:
