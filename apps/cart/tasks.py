@@ -16,6 +16,6 @@ def update_active_shipments():
 
 @task()
 def check_for_complete_purchases():
-	for P in Purchase.object.filter(status='delivered'):
+	for P in Purchase.objects.filter(status='delivered'):
 		P.check_if_complete()
 

@@ -197,8 +197,12 @@ class Purchase(models.Model):
     def check_if_complete(self):
         ship = self.most_recent_shipment
         if ship:
+            print 'have shipment'
             if ship.originator == self.checkout.retailer:
+                print 'have outgoing shipment'
                 if ship.delivery_date:
+                    print ship.delivery_date
+                    print 'days:',(datetime.datetime.now() - ship.delivery_date).days
                     if (datetime.datetime.now() - ship.delivery_date).days >= 14:
                         self.status = 'completed'
                         self.save()
