@@ -59,6 +59,8 @@ class WePayTransaction(models.Model):
                     self.save()
 
                     print response
+
+                    self.get_purchase().restock()
             except:
                 raise
 
@@ -87,6 +89,8 @@ class WePayTransaction(models.Model):
                     self.save()
 
                     print response
+
+                    self.get_purchase().restock()
             except:
                 raise
 
@@ -117,6 +121,9 @@ class WePayTransaction(models.Model):
             self.state = response['state']
             self.save()
 
+
+    def get_purchase(self):
+        return self.purchase_set.all()[0]
 
 
 
