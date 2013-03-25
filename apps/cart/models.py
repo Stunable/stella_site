@@ -257,10 +257,15 @@ class Shipment(models.Model):
             except Exception,e:
                 print e
 
-        delivered_events = self.shipmenttrackingevent_set.all().order_by('-date')
-        if delivered_events.count():
-            self.status = delivered_events[0].description
-            self.delivery_date = delivered_events[0].date
+        events = self.shipmenttrackingevent_set.all().order_by('-date')
+        if events.count():
+
+            E = events[0]
+            self.status = E.description
+            if E.description == 'Delivered':
+                self.delivery_date = E.date
+            if E.description == "Picked up":
+                self.ship_date = E.date
             self.save()
 
 
