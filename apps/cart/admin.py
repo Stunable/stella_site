@@ -22,8 +22,8 @@ admin.site.register(WishListItem,WishlistItemAdmin)
 
 
 class PurchaseAdmin(admin.ModelAdmin):
-    list_display=('cart','item','status','last_tracking_number','delivery_date','transaction_status')
-    actions = ('track_package','check_payment_status','capture_payment')
+    list_display=('cart','item','status','delivery_date','transaction_status')
+    actions = ('check_payment_status','capture_payment')
     list_filter=('status',)
     raw_id_fields = ("item","cart","purchaser","transaction","shipping_address")
 
@@ -38,17 +38,7 @@ class PurchaseAdmin(admin.ModelAdmin):
         for obj in queryset:
             obj.transaction.capture_funds()
 
-    def track_package(self,request,queryset):
-        for obj in queryset:
-            if obj.last_tracking_number:
-                try:
-                    delivery_date = track_it(obj.last_tracking_number)
-                    if delivery_date:
-                        obj.delivery_date = delivery_date
-                        obj.save()
-                except Exception,e:
-                    print e
-
+    
 
 admin.site.register(Purchase,PurchaseAdmin)
 
@@ -65,6 +55,7 @@ class CheckoutAdmin(admin.ModelAdmin):
 
 
 
+
 admin.site.register(Checkout,CheckoutAdmin)
 
 
@@ -73,6 +64,7 @@ class ShipmentAdmin(admin.ModelAdmin):
     list_filter = ('status','originator')
     list_display = ('status','originator','ship_date','delivery_date','tracking_number')
     actions = ('track_shipment',)
+    exclude=('purchases',)
 
     def track_shipment(self,request,queryset):
         for obj in queryset:

@@ -666,6 +666,7 @@ def create_shipping_label(request, ref=None, template='retailers/retailer_shippi
                     print 'adding purchase to shipment',purchase,shipment
 
                 shipment.save()
+                print shipment.purchases.all()
 
                 return redirect(reverse('view_shipping_label', kwargs={'shipping_number':shipment.tracking_number}))
 
