@@ -200,7 +200,7 @@ body.flatpage{
 	
 	.global .logo {
 		height: 42px;
-		width: 248px;
+		width: 278px;
 		background: url(../../images/new_logo.png) no-repeat 0px 0;
 		position: absolute;
 		top:-2px;
@@ -381,6 +381,12 @@ body.flatpage{
 	height:300px;
 	clear:both;
 }
+
+#footer .center{
+	width:100%;
+	text-align: center;
+}
+
 
 /**** Isotope Filtering ****/
 
