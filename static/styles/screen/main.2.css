@@ -139,7 +139,7 @@ div.control-group ul.errorlist{
 
 input{
 	padding: 5px;
-	border-radius: 3px;
+	border-radius: 1px;
 	border: 1px solid #cc78ff;
 	font-size: 1.2em;
 }
@@ -1104,13 +1104,12 @@ body.flatpage #left-panel{
 	color:#aaa;
 }
 
-.content.cart .big{
+.big {
 	font-size:1.3em;
 	font-weight: bold;
 }
 .content.cart .small{
 	font-size:.8em;
-	
 }
 
 .content.cart .reference-number{
@@ -1119,9 +1118,9 @@ body.flatpage #left-panel{
 }
 
 #cart-totals .btn{
-	margin:20px;
-	font-size:1.1em;
-	padding:.3em;
+	margin-top:20px;
+	margin-bottom:20px;
+	padding:.5em;
 }
 
 
@@ -2045,7 +2044,7 @@ form .info_modal{
   padding: 6px 12px 6px;
   margin-bottom: 0;
   *margin-left: .3em;
-  font-size: 13px;
+  /*font-size: 13px;*/
   line-height: 18px;
   *line-height: 20px;
   color: white;
@@ -2060,18 +2059,18 @@ form .info_modal{
 
 
 .bootstrap .btn:hover {
-   display: inline-block;
-  *display: inline;
-  padding: 6px 12px 6px;
-  margin-bottom: 0;
-  *margin-left: .3em;
-  font-size: 13px;
-  line-height: 18px;
-  *line-height: 20px;
+   /*display: inline-block;*/
+  /**display: inline;*/
+  /*padding: 6px 12px 6px;*/
+  /*margin-bottom: 0;*/
+  /**margin-left: .3em;*/
+  /*font-size: 13px;*/
+  /*line-height: 18px;*/
+  /**line-height: 20px;*/
   color: #7f10b5;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
+  /*text-align: center;*/
+  /*vertical-align: middle;*/
+  /*cursor: pointer;*/
   background-color:white;
   border:1px solid #7f10b5;
 }
