@@ -322,12 +322,12 @@ class ShopifyConnection(APIConnection):
 
         }
         for o in pd['options']:
-            if o['name'] in ['size','Size']:
+            if o['name'] in ['size','Size','Chain Lengh',]:
                 out['itemtype']['fields']['size'] = 'option'+str(o['position'])
-            if o['name'] == 'Color':
+            if o['name'] in['color', 'Color', 'Style', 'style']:
                 out['itemtype']['fields']['custom_color_name'] = 'option'+str(o['position'])
 
-        if not out['itemtype']['fields'].get('custom_color_name',None) or not out['itemtype']['fields'].get('size',None):
+        if not out['itemtype']['fields'].get('custom_color_name',None) and not out['itemtype']['fields'].get('size',None):
             print "COULD NOT FIND COLOR OR SIZE IN:",pd['options']
 
         return out
