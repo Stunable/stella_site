@@ -181,6 +181,12 @@ class RetailerProfile(models.Model):
 
     admin_link.allow_tags = True
 
+    def return_policy(self):
+        if self.accept_refund:
+            return "14 days"
+        else:
+            return "No Returns"
+
 
 class StylistItem(models.Model):
     stylist = models.ForeignKey(User)
