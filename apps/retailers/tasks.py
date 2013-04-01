@@ -227,7 +227,7 @@ def process_API_products(list_of_products,api_connection):
             if created:
                  I.description = api_connection.get_description(d)
                  I._retailer = Retailer
-            I.save(no_price_text=True)
+            I.save()
 
             if created:
                 product_count += 1
