@@ -52,7 +52,7 @@
                 </tr>
            </table>
            {% if request.user.is_authenticated %}
-           <a class="btn big btn-primary " href="/cart/details">checkout</a>
+           <a class="btn big btn-primary " href="{{SECURE_ROOT}}/cart/details">checkout</a>
            {% else %}
            <a class="btn big btn-primary login-check" data-href="/cart">checkout</a>
            {% endif %}

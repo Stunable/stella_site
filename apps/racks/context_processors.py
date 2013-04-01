@@ -7,6 +7,8 @@ from django.conf import settings
 
 def racks(request):
     context = {'URL':settings.WWW_ROOT,'STATIC_URL':settings.STATIC_URL}
+    if not settings.DEBUG:
+        context['SECURE_ROOT'] = settings.WWW_ROOT.rstrip('/')
     context['FACEBOOK_APPID'] = settings.FACEBOOK_APP_ID
     user = request.user
     
