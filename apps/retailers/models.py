@@ -327,6 +327,9 @@ class ShopifyConnection(APIConnection):
             if o['name'] == 'Color':
                 out['itemtype']['fields']['custom_color_name'] = 'option'+str(o['position'])
 
+        if not out['itemtype']['fields'].get('custom_color_name',None) or not out['itemtype']['fields'].get('size',None):
+            print "COULD NOT FIND COLOR OR SIZE IN:",pd['options']
+
         return out
 
     @staticmethod
