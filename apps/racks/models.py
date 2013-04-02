@@ -153,12 +153,22 @@ class ProductImage(models.Model,listImageMixin):
     identifier = models.CharField(max_length=255,blank=True,null=True)
 
     def orientation(self):
+        ar = self.width/self.height
         if self.width>self.height and self.height < 300:
             return 'wide short'
         if self.width>self.height:
             return 'zoom wide'
         return 'zoom tall'
 
+
+    def css_style(self):
+        if self.width>self.height:
+            if self.height<320:
+                return 'h300'
+            else:
+                return ''
+        else:
+            return 'h540'
 
     def css_width(self):
         if self.height < 300:

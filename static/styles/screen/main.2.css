@@ -1857,13 +1857,16 @@ form .info_modal{
 	/*border-radius:10px;*/
 }
 
-.modal.current .zoom .item-visuals img.zoom_this{
-	height:620px;
+.modal.current .item-visuals img.h540{
+	height:540px;
 }
 
-.modal.current .wide.zoom .item-visuals img.zoom_this{
-	height:400px;
+.modal.current .item-visuals img.h300{
+	/*width:600px;*/
+	position:relative;
+	top:90px;
 }
+
 
 .modal.current .wide.short .item-visuals img{
 	position:relative;
