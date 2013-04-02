@@ -40,12 +40,14 @@ class ProfileBase(object):
         Tag.objects.update_tags(self, ','.join(tags))
 
     def set_default_tags(self):
-        print 'setting tags for ', self
-        tags = [tag.name for tag in Tag.objects.filter(is_default=True)]
-        tags += [tag.name for tag in Tag.objects.get_for_object(self)]
+        try:
+            print 'setting tags for ', self
+            tags = [tag.name for tag in Tag.objects.filter(is_default=True)]
+            tags += [tag.name for tag in Tag.objects.get_for_object(self)]
 
-        Tag.objects.update_tags(self.user, ','.join(set(tags)))
-
+            Tag.objects.update_tags(self.user, ','.join(set(tags)))
+        except:
+            print 'TAG FAILURE FOR:',self
 
 class UserProfile(models.Model,ProfileBase):
     """
@@ -88,7 +90,6 @@ def postSaveUser(sender, instance, created, **kwargs):
         if created:
             UP.set_default_tags()
     except:
-        raise
         pass
     
 

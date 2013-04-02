@@ -1613,6 +1613,7 @@ form .info_modal{
 
 .modal.current .modal_inner_frame{
 	min-width:600px;
+	max-width:760px;
 	height:620px;
 	overflow:hidden;
 	background-color:#bbb;
@@ -1725,6 +1726,12 @@ form .info_modal{
 	padding:0px;
 	
 }
+
+.modal.current .short.wide .modal-item-details{
+	width:700px;
+}
+
+
 
 .modal-item-details .item-data{
 	height:350px;
@@ -1850,13 +1857,22 @@ form .info_modal{
 	/*border-radius:10px;*/
 }
 
-.modal.current .item-visuals img.zoom_this{
+.modal.current .zoom .item-visuals img.zoom_this{
 	height:620px;
 }
 
-.modal.current .wide .item-visuals img.zoom_this{
+.modal.current .wide.zoom .item-visuals img.zoom_this{
 	height:400px;
 }
+
+.modal.current .wide.short .item-visuals img{
+	position:relative;
+	/*height:290px;*/
+	top:80px;
+}
+
+
+
 
  .modal.current .wide .item-visuals #images{
 

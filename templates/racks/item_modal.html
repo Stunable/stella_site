@@ -44,19 +44,20 @@
 			<div id="item-header"></div>
 			<div class="item-visuals" id="item_visual_{{item.pk}}">
 
-				<ul id="images" style="width:{{item.get_image.image_dims.large.width}}px">
 
-				<li class="active-image">
-					<img class="zoom_this featured item-image-{{item.get_image.id}}" data-big="{{item.get_image.extralarge.url}}"  src="{{item.get_image.large.url}}">
-				</li>
+				<ul id="images" style="width:{{item.get_image.css_width}}">
+					{{item.get_image.orientation}}
+					<li class="active-image">
+						<img class="zoom_this featured item-image-{{item.get_image.id}}" data-big="{{item.get_image.extralarge.url}}"  src="{{item.get_image.large.url}}">
+					</li>
 
 
-				{% for each_image in item.get_additional_images %}
-				<li style="display:none">
-	                <img class="zoom_this item-image-{{each_image.id}}" data-big="{{each_image.extralarge.url}}"  data-src="{{each_image.large.url}}">
-				</li>
-				{% endfor %}
-
+					{% for each_image in item.get_additional_images %}
+					<li style="display:none">
+		                <img class="zoom_this item-image-{{each_image.id}}" data-big="{{each_image.extralarge.url}}"  data-src="{{each_image.large.url}}">
+					</li>
+					{% endfor %}
+				</ul>
 				<div id="item-header">
 					<div class="item-retailer">{{item.retailer}}</div>
 					<div class="item-name">{{item.name}}</div>
