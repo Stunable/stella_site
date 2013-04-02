@@ -163,7 +163,7 @@ class ProductImage(models.Model,listImageMixin):
 
     def css_style(self):
         if self.width>self.height:
-            if self.height<320:
+            if self.height<420:
                 return 'h300'
             else:
                 return ''
