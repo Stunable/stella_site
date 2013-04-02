@@ -132,14 +132,14 @@ function setItemDetailsEvent(){
 
 function init_item_modal(){
 		
-		
-	
-		
 		init_refclicks($('.refclick'))
 		
 		setItemDetailsEvent();
 
-		$('.zoom .zoom_this.featured').load(function(){$(this).damonzoom()});
+		$('.zoom .zoom_this.featured').load(function(){$(this).damonzoom()
+
+			$('.text-fill').textfill()
+		});
 
 		$('.modal-item-details .item-pictures img').click(function(e){
 
@@ -178,8 +178,8 @@ function init_item_modal(){
 			
 		})
 
-		$('#item-header .modalitem').textfill(25)
-		$('#item-header .retailer').textfill(40)
+		// $('#item-header .modalitem').textfill(25)
+		
 	}
 		
 	   

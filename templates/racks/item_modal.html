@@ -53,12 +53,12 @@
 
 					{% for each_image in item.get_additional_images %}
 					<li style="display:none">
-		                <img style="{{item.get_image.css_style}}"  class="zoom_this item-image-{{each_image.id}} each_image.css_style" data-big="{{each_image.extralarge.url}}"  data-src="{{each_image.large.url}}">
+		                <img class="zoom_this item-image-{{each_image.id}} {{each_image.css_style}}" data-big="{{each_image.extralarge.url}}"  data-src="{{each_image.large.url}}">
 					</li>
 					{% endfor %}
 				</ul>
 				<div id="item-header">
-					<div class="item-retailer">{{item.retailer}}</div>
+					<div style="width:440px;height:30px" class="item-retailer text-fill"><span>{{item.retailer}}</span></div>
 					<div class="item-name">{{item.name}}</div>
 					<div class="item-price">{{item.price_text|safe}}</div>
 				</div>
