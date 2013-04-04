@@ -678,6 +678,12 @@ body.flatpage #left-panel{
 			min-width:400px;
 		}
 
+		.inner-page-content>div.center{
+			width:90%;
+			text-align: center;
+			padding-top:100px;
+		}
+
 
 		.inner-page-content>div{
 			margin-top:10px;
@@ -1329,6 +1335,42 @@ table.retailer-item-group{
 }
 
 
+
+
+/* retailer signup */
+
+.inner-page-content.retailer.login{
+	min-height: 700px;
+	border:none;
+}
+
+.retailer.login #bigform-error{
+	color:purple;
+	font-weight: bold;
+}
+.retailer.login form{
+	width:500px;
+	white-space: normal;
+	display:inline-block;
+}
+
+.retailer.login form>div{
+	white-space: nowrap;
+}
+
+.retailer.login form input,.retailer.login form div{
+	margin:10px;
+	display:inline;
+	clear:both;
+}
+
+.retailer.login form input{
+	font-size:.9em;
+}
+
+
+/* end retailer signup*/
+
 .modal.current#login_box{
 	padding:50px;
 	background-color:rgba(255,255,255,.7);
@@ -1544,27 +1586,6 @@ form .info_modal{
 
 }
 
-.new_button,.login #page-content form a,.login #page-content form input{
-	padding:8px;
-	/*background: white;*/
-	font:inherit;
-}
-.new_button{
-	padding:4px;
-}
-
-.new_button,.login #page-content form .fix input,.login #page-content form .fix a,.address_confirm li.address_action{
-	color:#d337da;
-	border: 1px #F3CBE0 dashed;
-	border-radius: 30px;
-	cursor:pointer;
-}
-
-.new_button:hover,.login #page-content form .fix input:hover,.login #page-content form .fix a:hover,.address_confirm li.address_action:hover{
-	color:white!important;
-	background-color:#d337da;
-	border:1px solid;
-}
 
 /*.modal-spinner {
   display: none;
@@ -2061,14 +2082,12 @@ form .info_modal{
    display: inline-block;
   *display: inline;
   font-weight: bold;
-  margin-bottom: 0;
   *margin-left: .3em;
   /*font-size: 13px;*/
   line-height: 18px;
   *line-height: 20px;
   color: white;
   text-align: center;
-  vertical-align: middle;
   cursor: pointer;
   background-color:#7f10b5;
   border:1px solid #7f10b5;
