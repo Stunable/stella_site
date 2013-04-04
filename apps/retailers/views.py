@@ -121,67 +121,73 @@ RETAILER_INFORM_MESSAGE = "retailers/retailer_inform_message.txt"
 
 
 def setup_wepay(request):
+    ctx = {}
     code = request.GET.get('code',None)
+
+
     if code:
-        url = 'https://'+{'stage':'stage.','production':'' }[settings.WEPAY_STAGE]+'wepayapi.com/v2/oauth2/token'
-        data = {
-          "client_id":settings.WEPAY_CLIENT_ID,
-          "client_secret":settings.WEPAY_CLIENT_SECRET,
-          "redirect_uri":settings.RETAILER_SUBDOMAIN+'wepay/',
-          "code":code,
-        }
-
-        url += '?'+urllib.urlencode(data)
-        # print url
-        response = urllib2.urlopen(url)
-        resp_data = json.loads(response.read())
-        # print resp_data
-        print request.session.keys()
-        #{"user_id":121042660,"access_token":"e4423c3a3a3a3f62aa53151a9b2fca1718af0bc78b40dba6578716b9a2979fa5","token_type":"BEARER"}
-        if request.session.get('retailer_id',None):
-
-            retailer_profile = get_retailer_profile(request, retailer_id=request.session.get('retailer_id'))
-        else:
-            retailer_profile = get_retailer_profile(request)
-        # retailer_profile.wepay_acct = resp_data['user_id']
-        retailer_profile.wepay_token = resp_data['access_token']
-
-        WEPAY = WePay(settings.WEPAY_PRODUCTION, resp_data['access_token'])
-
-
-        # response = WEPAY.call('/account/find', {
-        #     'name': 'stunable payments account',
-        # })
-
-        # if type(response) == type([]):
-        #     if len(response):
-        #         retailer_profile.wepay_acct = response[-1]['account_id']
-        #     else:
         try:
-            response = WEPAY.call('/account/create', {
-                'reference_id': 'stunable_payment_account_001',
-                'name': 'stunable payments account',
-                'description': 'your account for transactions with Stunable.com. Email payment@stunable.com for any questions.'
-            })
 
-            retailer_profile.wepay_acct = response['account_id']
-        except:
+            url = 'https://'+{'stage':'stage.','production':'' }[settings.WEPAY_STAGE]+'wepayapi.com/v2/oauth2/token'
+            data = {
+              "client_id":settings.WEPAY_CLIENT_ID,
+              "client_secret":settings.WEPAY_CLIENT_SECRET,
+              "redirect_uri":settings.RETAILER_SUBDOMAIN+'wepay/',
+              "code":code,
+            }
+
+            url += '?'+urllib.urlencode(data)
+            # print url
+            response = urllib2.urlopen(url)
+            resp_data = json.loads(response.read())
+            # print resp_data
+            print request.session.keys()
+            #{"user_id":121042660,"access_token":"e4423c3a3a3a3f62aa53151a9b2fca1718af0bc78b40dba6578716b9a2979fa5","token_type":"BEARER"}
+            if request.session.get('retailer_id',None):
+
+                retailer_profile = get_retailer_profile(request, retailer_id=request.session.get('retailer_id'))
+            else:
+                retailer_profile = get_retailer_profile(request)
+            # retailer_profile.wepay_acct = resp_data['user_id']
+            retailer_profile.wepay_token = resp_data['access_token']
+
+            WEPAY = WePay(settings.WEPAY_PRODUCTION, resp_data['access_token'])
+
+
+            # response = WEPAY.call('/account/find', {
+            #     'name': 'stunable payments account',
+            # })
+
+            # if type(response) == type([]):
+            #     if len(response):
+            #         retailer_profile.wepay_acct = response[-1]['account_id']
+            #     else:
             try:
-                response  = WEPAY.call('/account/find',{
+                response = WEPAY.call('/account/create', {
                     'reference_id': 'stunable_payment_account_001',
                     'name': 'stunable payments account',
-                })[0]
+                    'description': 'your account for transactions with Stunable.com. Email payment@stunable.com for any questions.'
+                })
+
                 retailer_profile.wepay_acct = response['account_id']
-                print 'user already had stunable_payment_account_001'
             except:
-                raise
+                try:
+                    response  = WEPAY.call('/account/find',{
+                        'reference_id': 'stunable_payment_account_001',
+                        'name': 'stunable payments account',
+                    })[0]
+                    retailer_profile.wepay_acct = response['account_id']
+                    print 'user already had stunable_payment_account_001'
+                except:
+                    raise
+        
+            retailer_profile.save()
 
-
-
-        retailer_profile.save()
+        except:
+            ctx['error'] = 'There was an error setting up your payments.<br><a href="/wepay">click here</a> to try again.'
 
         template="accounts/thank-you.html"
-        ctx = {'retailer': True}
+        ctx.update( {'retailer': True})
         return direct_to_template(request, template, ctx)
 
 

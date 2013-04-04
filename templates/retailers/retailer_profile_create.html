@@ -63,13 +63,22 @@
     }
 </style>
 
-<div id="page-content" class="section clearfix round-corner-shadow">
+{% block left_panel %}
+<div>
+
+</div>
+
+{% endblock %}
+
+<div id="page-content" class="section clearfix retailer center">
 	<div class="page-header">
 		<div class="section intro">
 			<h2><span>Interested in Becoming a Stunable Stylist?</span></h2>
 			<h3><span>Please complete our application below and we'll be in touch.</span></h3>
 		</div>
 	</div>
+
+	<div  class="inner-page-content retailer profile">
 	<div class="section body-copy bootstrap">
 		<form action="" method="POST" class="user-entry validated_address_form" id="account-form" enctype="multipart/form-data">
 			{% csrf_token %}
@@ -78,7 +87,6 @@
 				{% include "includes/address_validation_dialog.html" %}
 
             {% endif %}
-            </div>
 			<table style="width: 100%">
 				<tbody>
 					<tr>
@@ -229,6 +237,7 @@
 			</table>
 		</form>
 	</div>
+</div>
 	<div id="hidden-items">
 		<div id="return-policy" class="info_modal">
            {{CMS.retailer_return_policy|safe}}
@@ -236,5 +245,6 @@
 		<!-- ********************************************* Modal-Window for Invite Friends START ********************************************* -->
 		{% include 'retailers/retailer_terms_and_cons.html' %}
 	</div>
+</div>
 </div>
 {% endblock %} 

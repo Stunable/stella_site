@@ -1,20 +1,26 @@
-{% extends "user_base.html" %}
+{% extends "clean_base.html" %}
 
 {% block body_class %}thank-you{% endblock %}
 {% block body_id %}gallery{% endblock %}
 {% block left_panel %}
 {% endblock %}
 {% block content1 %}
-<div class="section clearfix round-corner-shadow" id="page-content">
-	<div class="section" class="intro">
-	    {% if retailer %}
-	    <h2><span class="font-bella">Application Submitted</span></h2>
-      <p>Thanks for requesting to become a Stunable Stylist. We’ll review your information and a member of our sales team will contact you shortly.</p>
+<div class="section clearfix round-corner-shadow center" id="page-content">
+	<div class="section box" class="intro">
+		 {% if error %}
+	    <p>{{error|safe}}</p>
 	    {% else %}
-		<h2><span class="font-bella">We have you covered!</span></h2>
-		<p>
-Thanks for requesting an invite to Stunable. We're spread pretty thin right now, but you'll be the first to know when we're ready to assist more shoppers!
-		</p>
+		    {% if retailer %}
+		    <h2><span class="font-bella">Application Submitted</span></h2>
+	      <p>Thanks for requesting to become a Stunable Stylist. We’ll review your information and a member of our sales team will contact you shortly.</p>
+	      <br><br>
+	      <p class="big"><a href="http://www.stunable.com">check out stunable</a></p>
+		    {% else %}
+			<h2><span class="font-bella">We have you covered!</span></h2>
+			<p>
+	Thanks for requesting an invite to Stunable. We're spread pretty thin right now, but you'll be the first to know when we're ready to assist more shoppers!
+			</p>
+			{% endif %}
 		{% endif %}
 	</div><!--/.section#intro-->
 </div><!--/.section#page-content"-->

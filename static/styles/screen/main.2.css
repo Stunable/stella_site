@@ -137,11 +137,17 @@ div.control-group ul.errorlist{
 }
 
 
-input{
+input[type="text"], select, input[type="password"]{
 	padding: 5px;
 	border-radius: 1px;
 	border: 1px solid #cc78ff;
 	font-size: 1.2em;
+}
+
+input[type="file"]{
+	padding:6px;
+	font-size: 1.2em;
+	vertical-align: middle;
 }
 
 input.submit-button{
@@ -163,9 +169,10 @@ select{
 	-webkit-appearance: none;
 	border: 1px solid #cc78ff;
 	box-shadow: none;
-	padding:3px;
+	padding:6px;
 	width:100px;
 	text-align: right;
+	font-size: .9em;
 
 }
 
@@ -654,7 +661,12 @@ body.flatpage #left-panel{
 		border:none;
 	}
 
-
+	.retailers #page-content{
+		padding:30px;
+		width:100%;
+		white-space: normal;
+		float:none;
+	}
 
 		.inner-page-content{
 			position:static;
@@ -678,7 +690,7 @@ body.flatpage #left-panel{
 			min-width:400px;
 		}
 
-		.inner-page-content>div.center{
+		.inner-page-content>div.center, .center{
 			width:90%;
 			text-align: center;
 			padding-top:100px;
@@ -689,6 +701,20 @@ body.flatpage #left-panel{
 			margin-top:10px;
 			margin-bottom:10px;
 		}
+
+
+		.retailers .inner-page-content.profile{
+			width:60%;
+			min-width: 700px;
+			float:none;
+			overflow-x:hidden;
+			text-align: left;
+			display:inline-block;
+			padding:50px;
+		}
+
+
+
 
 		#carousel-container{
 			width:100%;
@@ -712,6 +738,16 @@ body.flatpage #left-panel{
 
 		#page-content .section-intro{
 			margin:20px;
+		}
+
+
+		.section.box{
+			width:500px;
+			display:inline-block;
+			border:1px solid #7f10b5;
+			padding:60px;
+			margin-top:100px;
+			border-radius: 8px;
 		}
 	
 	/*TABS*/
@@ -1364,9 +1400,6 @@ table.retailer-item-group{
 	clear:both;
 }
 
-.retailer.login form input{
-	font-size:.9em;
-}
 
 
 /* end retailer signup*/
@@ -2083,7 +2116,7 @@ form .info_modal{
   *display: inline;
   font-weight: bold;
   *margin-left: .3em;
-  /*font-size: 13px;*/
+  font-size: 18px;
   line-height: 18px;
   *line-height: 20px;
   color: white;
@@ -2094,6 +2127,9 @@ form .info_modal{
  
 }
 
+.bootstrap .btn.disabled{
+	color:#bd4bf5;
+}
 
 
 .bootstrap .btn:hover {
@@ -2110,6 +2146,24 @@ form .info_modal{
   /*vertical-align: middle;*/
   /*cursor: pointer;*/
   background-color:white;
+  border:1px solid #7f10b5;
+}
+
+
+.bootstrap .btn.disabled:hover {
+   /*display: inline-block;*/
+  /**display: inline;*/
+  /*padding: 6px 12px 6px;*/
+  /*margin-bottom: 0;*/
+  /**margin-left: .3em;*/
+  /*font-size: 13px;*/
+  /*line-height: 18px;*/
+  /**line-height: 20px;*/
+  color: #7f10b5;
+  /*text-align: center;*/
+  /*vertical-align: middle;*/
+  /*cursor: pointer;*/
+  background-color:#9a1ad8;
   border:1px solid #7f10b5;
 }
 

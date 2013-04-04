@@ -279,7 +279,7 @@ var stunable = {
         $('#terms-label').css('color', 'black');
 
         $('#terms-input').change(function(){
-            $('#terms-continue-btn').attr('href', $(this).data('href')).css('color', 'black').click(function(e){
+            $('#terms-continue-btn').attr('href', $(this).data('href')).removeClass('disabled').click(function(e){
                 if (!$('#terms-input').is(':checked')) {
                     e.preventDefault();
                 } 

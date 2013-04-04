@@ -28,10 +28,10 @@
 	<div class="section body-copy">
 		{% include 'retailers/retailer_terms_and_cons.html' %}
 		
-		<p style="text-align: right;" class="bootstrap">
+		<p class="bootstrap">
 			<input data-href="{% url retailer_terms_complete retailer_id %}" type="checkbox" name="terms" id="terms-input" /><span style="color:gray; margin-left:10px;" id="terms-label">I Agree to the Stunable Term Of Use</span>
 			<br/><br/>
-			<a type="button" href="#" class="new_button" value="Continue" id="terms-continue-btn" style="color: #eee;">Continue</a>
+			<a type="button" href="#" class="btn disabled" value="Continue" id="terms-continue-btn">Continue</a>
 			<br /><br />
 		</p>
 	</div>
