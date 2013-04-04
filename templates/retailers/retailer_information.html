@@ -5,7 +5,7 @@
 {% block body_class %}common large_common{% endblock %}
 {% block content-class%}round-corner-shadow{%endblock%}
 
-{% block content %}
+{% block inner_content %}
 
 <style type="text/css">
 	.retailer-logo {
@@ -62,11 +62,8 @@
 
 </style>
 
-
-<div class="content" id="page-content">
-    
-
-    <div  class="inner-page-content retailer profile">
+<div>
+    <div class="profile">
 
         <div class="section intro clearfix">
             <h2><span>Account Information:</span></h2><h3><span class="big">{{ retailer_profile.name }}</span></h3>
@@ -238,6 +235,6 @@
             </form>
         </div>
     </div>
-</div>
+    </div>
 </div></div>
 {% endblock %} 

@@ -5,53 +5,9 @@
 {% block body_class %}common large_common{% endblock %}
 {% block content-class%}round-corner-shadow{%endblock%}
 
-{% block content %}
-<style>
-    .common #page-content {
-/*      margin: 41px 10px 200px auto;*/
-        position: relative;
-        padding-bottom: 0;
-        float: right;
-        min-height: 667px;
-    }
-    .common .body-copy {
-        font-family: 'Advent Pro', sans-serif;
-        margin: 0px 40px;
-    }
-    .common td input[type="text"] {
-        width: 40px;
-    }
-    .common th {
-        border: thin solid #EBEBEB;
-        vertical-align: middle;
-        text-align: center;
-        background-color: #eee;
-        font-weight: 600;
-    }
-    .common table, .common .no-border td {
-        border: none;
-    }
-    h3 {
-        text-transform: uppercase;
-        text-align: center;
-    }
-    
-    .bootstrap input {
-        width: 100px;
-    }
-    .order-action ul {
-        position:absolute;top: 0; left:0;display:none;background-color: white;width: 200px;cursor: pointer;
-        border: gray 1px solid;
-    }
-    
-    .order-action ul li {
-    }
-    
-    .order-action {
-        position:relative; cursor: pointer;
-    }
-</style>
+{% block inner_content %}
 
+<div class="profile">
 <div class="section-intro">
     <h2><form class="bootstrap"> <span>Order history</span>
 <!--         <span style="float:right;font-size: 15px;font-weight: 400;">From:
@@ -62,7 +18,7 @@
     </form>
     </h2>
 </div>
-<div class="body-copy">
+<div class="body-copy common">
 {% for checkout in checkouts %}
         <table id="checkout-table">
             <tr>
@@ -116,9 +72,7 @@
         </table>
 {% endfor %}
 </div>
-
+</div>
 {% endblock %}
 
-
-{% block content1 %}{% endblock %}
 

@@ -8,8 +8,8 @@
 {% load pagination %}
 
 
+{% block inner_content %}
 
-{% block content %}
 
 <style type="text/css">
 	.account #page-content {
@@ -183,9 +183,7 @@
 <script>var updates_in_progress = {{updates_in_progress|length}};</script>
 
 
-<div class="content" id="page-content">  
 
-    <div  class="inner-page-content retailer profile">
 
 <div class="section intro clearfix">
             <h2><span>Product List:</span></h2><h3><span class="big">{{ retailer_profile.name }}</span></h3>
@@ -324,6 +322,5 @@
 {% if action or confirm %}
 </form>
 {% endif %}
-</div>
 {% endblock %}
 

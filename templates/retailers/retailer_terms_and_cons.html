@@ -1,3 +1,5 @@
+
+{% block inner_content %}
 <style>
     ol {
         list-style-type:upper-roman;
@@ -15,10 +17,10 @@
         margin-left: 30px;
     }
 </style>
-<div  class="inner-page-content retailer profile">
-<div id="terms-and-cons-modal" class="clearfix sub-page">
-    <div class="user-entry sub-page-content">
-        {{CMS.retailer_tos|safe}}    
-    </div>
-</div>
-</div>
+        <div id="terms-and-cons-modal" class="clearfix sub-page">
+            <div class="user-entry sub-page-content">
+                {{CMS.retailer_tos|safe}}    
+            </div>
+        </div>
+
+{% endblock %}

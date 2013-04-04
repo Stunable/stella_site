@@ -1,11 +1,11 @@
-{% extends "clean_base.html" %}
+{% extends "retailers/retailer_base.html" %}
 
 {% block body_class %}thank-you{% endblock %}
 {% block body_id %}gallery{% endblock %}
 {% block left_panel %}
 {% endblock %}
-{% block content1 %}
-<div class="section clearfix round-corner-shadow center" id="page-content">
+{% block inner_content %}
+<div class="center">
 	<div class="section box" class="intro">
 		 {% if error %}
 	    <p>{{error|safe}}</p>

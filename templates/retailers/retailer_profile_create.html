@@ -6,7 +6,7 @@
 
 {% block body_id %}homepage{% endblock %}
 
-{% block content %}
+{% block inner_content %}
 <style type="text/css">
 	select {
 		display: inline;
@@ -41,6 +41,7 @@
 		margin: 0;
 	}
 	h3 span {
+
 		margin-left: 31px;
 	}
 	.common table, .common table td {
@@ -53,6 +54,7 @@
 		text-shadow: none;
 		text-transform: uppercase;
 		font-size: 1em;
+		text-align: left;
 	}
 	td span {
 		/*		width: 50px;*/
@@ -70,7 +72,8 @@
 
 {% endblock %}
 
-<div id="page-content" class="section clearfix retailer center">
+<div class="center">
+	<div class="profile">
 	<div class="page-header">
 		<div class="section intro">
 			<h2><span>Interested in Becoming a Stunable Stylist?</span></h2>
@@ -78,7 +81,6 @@
 		</div>
 	</div>
 
-	<div  class="inner-page-content retailer profile">
 	<div class="section body-copy bootstrap">
 		<form action="" method="POST" class="user-entry validated_address_form" id="account-form" enctype="multipart/form-data">
 			{% csrf_token %}
@@ -238,6 +240,7 @@
 		</form>
 	</div>
 </div>
+</div>
 	<div id="hidden-items">
 		<div id="return-policy" class="info_modal">
            {{CMS.retailer_return_policy|safe}}
@@ -245,6 +248,4 @@
 		<!-- ********************************************* Modal-Window for Invite Friends START ********************************************* -->
 		{% include 'retailers/retailer_terms_and_cons.html' %}
 	</div>
-</div>
-</div>
 {% endblock %} 

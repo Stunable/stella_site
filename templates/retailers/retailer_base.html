@@ -12,25 +12,24 @@
 {% block facebook %}
 {% endblock %}
 
-
 {% block left_panel %}
-
+    {% if retailer_profile %}
     <div class="retailer-left-panel">
         <div class="panel-header clearfix">
             <div class="panel-tab active my-closet begin-tab clearfix one-tab">
                 <div class="list-header big">Stylist Admin</div>
                 <div class="tab-content hidden">
                     <h4 class="list-header" id="company-information-menu-item">
-                    	<a href="{% url retailer_information name=retailer_profile.name %}{% if request.user.is_staff %}?retailer={{retailer_profile.id}}{% endif %}">Account Information</a></h4>
+                        <a href="{% url retailer_information name=retailer_profile.name %}{% if request.user.is_staff %}?retailer={{retailer_profile.id}}{% endif %}">Account Information</a></h4>
                     
                     
                     <div class="separator"></div>
                     <h4 class="list-header" id="product-inventory-menu-item">
-                    		<a href="{% url product_list %}{% if request.user.is_staff %}?retailer={{retailer_profile.id}}{% endif %}">Product Inventory</a></h4>
+                            <a href="{% url product_list %}{% if request.user.is_staff %}?retailer={{retailer_profile.id}}{% endif %}">Product Inventory</a></h4>
                     
                     <div class="separator"></div>
                     <h4 class="list-header" id="order-history-menu-item">
-                    	<a href="{% url retailer_order_history %}{% if request.user.is_staff %}?retailer={{retailer_profile.id}}{% endif %}">Order history</a></h4>
+                        <a href="{% url retailer_order_history %}{% if request.user.is_staff %}?retailer={{retailer_profile.id}}{% endif %}">Order history</a></h4>
 
                     <div class="separator"></div>
                     <h4 class="list-header" id="order-history-menu-item">
@@ -45,9 +44,22 @@
             </div>
         </div> 
     </div>
+    {% endif %}
 
 {% endblock %}
 
+
+{% block content %}
+
+<div class="content" id="page-content">  
+
+ <div  class="inner-page-content retailer">
+{% block inner_content %}
+{% endblock %}
+
+</div></div>
+
+{% endblock %}
 
 {% block login_modal_box %}
 {% endblock %}

@@ -51,6 +51,29 @@ table {
 	min-width: 40px;
 }
 
+	.common th {
+		border: thin solid #EBEBEB;
+		vertical-align: middle;
+		text-align: center;
+		background-color: #eee;
+		font-weight: 600;
+	}
+	.common table, .common .no-border td {
+		border: none;
+	}
+	h3 {
+		text-transform: uppercase;
+		text-align: center;
+	}
+
+	
+	.bootstrap .alert-info {
+		background-color: #D9EDF7;
+		border-color: #BCE8F1;
+		color: #3A87AD;
+	}
+
+
 /* TYPOGRAPHY
 ----------------------------------------*/
 
@@ -141,9 +164,11 @@ div.control-group .controls{
 div.control-group .controls input{
 	float:right;
 }
+ul.errorlist{
+	color:red;
+}
 div.control-group ul.errorlist{
 	font-size:.8em;
-	color:red;
 	position:relative;
 	top:30px;
 	left:220px;
@@ -702,6 +727,8 @@ body.flatpage #left-panel{
 		}
 
 
+
+
 		.inner-page-content .content-message{
 			width:40%;
 			height:350px;
@@ -712,10 +739,14 @@ body.flatpage #left-panel{
 			min-width:400px;
 		}
 
+		.inner-page-content.retailer{
+			border:none;
+		}
+
 		.inner-page-content>div.center, .center{
-			width:90%;
+			width:100%;
 			text-align: center;
-			padding-top:100px;
+			padding-top:50px;
 		}
 
 
@@ -723,16 +754,21 @@ body.flatpage #left-panel{
 			margin-top:10px;
 			margin-bottom:10px;
 		}
+/*
+		.center>div{
+			display:inline-block;
+			text-align: left;
+		}*/
 
 
-		.retailers .inner-page-content.profile{
+		.retailers .inner-page-content .profile{
 			width:60%;
 			min-width: 700px;
 			float:none;
 			overflow-x:hidden;
 			text-align: left;
 			display:inline-block;
-			padding:50px;
+			/*padding:50px;*/
 		}
 
 
@@ -1603,22 +1639,17 @@ ul.address_confirm{
 	margin:0px;
 }
 
-.address_confirm li.heading{
-	font-size:.8em;
-	color:black;
-	font-weight:400;
-}
 
 .address_confirm li.diff{
 	color:red;
 }
 
 .address_confirm .address_action{
-	float:right;
+	/*float:right;*/
 	display:inline;
-	padding:4px;
-	width:60px;
 	text-align:center;
+	border:1px solid;
+	margin-left:10px;
 }
 
 form .info_modal{

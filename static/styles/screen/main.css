@@ -3873,6 +3873,42 @@ background-color: white;
 .common td input[type="text"] {
 	min-width: 40px;
 }
+	.common #page-content {
+		margin: 41px 10px 200px auto;
+		position: relative;
+		padding-bottom: 0;
+		float: right;
+	}
+	.common .body-copy {
+		font-family: 'Helvetica', sans-serif;
+		width: 804px;
+		margin: 0px auto;
+	}
+	.common td input[type="text"] {
+		width: 40px;
+	}
+	.common th {
+		border: thin solid #EBEBEB;
+		vertical-align: middle;
+		text-align: center;
+		background-color: #eee;
+		font-weight: 600;
+	}
+	.common table, .common .no-border td {
+		border: none;
+	}
+	h3 {
+		text-transform: uppercase;
+		text-align: center;
+	}
+
+	
+	.bootstrap .alert-info {
+		background-color: #D9EDF7;
+		border-color: #BCE8F1;
+		color: #3A87AD;
+	}
+	
 
 .large_common #page-content{
 	margin-top: 5px;
