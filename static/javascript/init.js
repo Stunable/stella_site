@@ -3,7 +3,7 @@ var stunable = {
 
     common : function() {
 
-      
+
 
       var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
       $(document).ajaxSend(function(e, xhr, settings) {
@@ -366,6 +366,7 @@ var stunable = {
               });
               
               $('.add-size-popup-btn .plus-icon').click(function() {
+                console.log('efwefwef')
                 $('.fixed-popup').remove();
                 $(this).parent().append('<div class="fixed-popup">' + $('.add-size-dlg').html() + '<div>');
                 $('.fixed-popup').show('fast');

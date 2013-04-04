@@ -592,10 +592,8 @@ def item_action(request, template="retailers/product_list.html"):
             retailer_profile = get_retailer_profile(request)
             pl = []
             s = set()
-            for si in StylistItem.objects.filter(stylist=request.user):
-                if si.item.pk not in s and si.item.pk in [int(pk) for pk in request.POST.getlist('selected_items')]:
-                    pl.append(si.item)
-                    s.add(si.item.pk)
+            pl = retailer_profile.retailer_item_set.filter(id__in =[int(pk) for pk in request.POST.getlist('selected_items')])
+            
             if request.POST.get('action_name','None') and request.POST.get('confirm_%s'%request.POST.get('action_name')):
                 for i in pl:
                     getattr(i,request.POST.get('action_name','None'))()
@@ -605,6 +603,7 @@ def item_action(request, template="retailers/product_list.html"):
                     'action_name': request.POST.get('action_name')
                 }
 
+                print pl
                 pl = get_paginator(pl, request)
 
                 ctx = {'retailer_profile': retailer_profile, 'product_list': pl, 'confirm': data,'action':True}

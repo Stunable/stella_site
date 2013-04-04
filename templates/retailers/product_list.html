@@ -187,86 +187,86 @@
 
 <div class="section intro clearfix">
             <h2><span>Product List:</span></h2><h3><span class="big">{{ retailer_profile.name }}</span></h3>
-        </div>
+</div>
 <div class="section productlist body-copy bootstrap {% if not confirm %}not{% endif %}confirm">
     
     {% if action %}
-    <form class="action_submit" action="/item_action?next={% url product_list %}" method="post">
-        <p> Are you sure you want to delete the following items?</p>
+        <form class="action_submit" action="/item_action?next={% url product_list %}" method="post">
+        <p class="emphasize"> Are you sure you want to delete the following items?</p>
+        <br>
         <input type="hidden" name="confirm_{{confirm.action_name}}" value="True">
         <input type="hidden" name="action_name" value="{{confirm.action_name}}">
     {% else %}
-    {% if upload %}
-            Thank you for uploading your products.  We have sent you an email to confirm we got the upload and we will get them up on the site as soon as possible.
+        {% if upload %}
+            <p>
+                Thank you for uploading your products.  We have sent you an email to confirm we got the upload and we will get them up on the site as soon as possible.
 
-           <!--  Here are the results of your upload.
-            {% if upload.uploaderror_set.all|length %}
-            <p> Looks like there were a few issues:</p>
-            <div style="margin-left:25px;background-color:#eee;padding:5px">
-                {% for error in upload.uploaderror_set.all %}
-                    <p>{{error|safe}}</p>
-                {% endfor %}
-            {% endif %}
-            </div> -->
+               <!--  Here are the results of your upload.
+                {% if upload.uploaderror_set.all|length %}
+                <p> Looks like there were a few issues:</p>
+                <div style="margin-left:25px;background-color:#eee;padding:5px">
+                    {% for error in upload.uploaderror_set.all %}
+                        <p>{{error|safe}}</p>
+                    {% endfor %}
+                {% endif %}
+                </div> -->
 
-        </p>
+            </p>
     {% endif %}
-
     {% if bulk_upload_form %}
-    <div>
 
-    <div id="addbuttons" class="expandable collapsed">
-        <div class="click_to_expand"><a href=""><H1 class="big">Add Items</H1></a><br></div>
-        <div><a href="{% url add_item %}"><img src="/static/images/gui/add_item.png"></a></div>
-        <div id="bulk_add_box" class="expandable collapsed">
-            <a href="" class="click_to_expand"><img src="/static/images/gui/add_lots_of_items.png"></a>
-            <p style="margin:10px">If you have lots of items to sell, and would like to upload them in large batches,  just follow these two steps:<br><br>
-                1.&nbsp <a href="{{ STATIC_URL }}stunable_upload_example.zip" target="blank"><strong class="big red">download this example file </strong></a> <br><br>
+        <div id="addbuttons" class="expandable collapsed">
+            <div class="click_to_expand"><a href=""><H1 class="big">Add Items</H1></a><br></div>
+            <div><a href="{% url add_item %}"><img src="/static/images/gui/add_item.png"></a></div>
+            <div id="bulk_add_box" class="expandable collapsed">
+                <a href="" class="click_to_expand"><img src="/static/images/gui/add_lots_of_items.png"></a>
+                <p style="margin:10px">If you have lots of items to sell, and would like to upload them in large batches,  just follow these two steps:<br><br>
+                    1.&nbsp <a href="{{ STATIC_URL }}stunable_upload_example.zip" target="blank"><strong class="big red">download this example file </strong></a> <br><br>
 
-                2.&nbsp unzip it, put your own files and information in it, and send it back right here.
+                    2.&nbsp unzip it, put your own files and information in it, and send it back right here.
 
-                  <p>Uploads need to be <strong>.zip</strong> files with a .XLS file and then an image for each item.  Upload it here and you'll know what to do next.  Email us if you have questions</p>
-            <form class="long_process_submit_form" style="float:right" action="{% url bulk_upload %}" method="POST"enctype="multipart/form-data">
-                {{bulk_upload_form.as_p}}
-                {{bulk_upload_form.errors}}
-                {% csrf_token %}
-            <div class="submit_holder">
-            <input disabled="disabled" type="submit" value="Submit">
+                      <p>Uploads need to be <strong>.zip</strong> files with a .XLS file and then an image for each item.  Upload it here and you'll know what to do next.  Email us if you have questions</p>
+                <form class="long_process_submit_form" style="float:right" action="{% url bulk_upload %}" method="POST"enctype="multipart/form-data">
+                    {{bulk_upload_form.as_p}}
+                    {{bulk_upload_form.errors}}
+                    {% csrf_token %}
+                <div class="submit_holder">
+                <input disabled="disabled" type="submit" value="Submit">
+                </div>
+                </form>    
             </div>
-            </form>    
-        </div>
-        <div id="API_Forms" class="expandable collapsed">
-            <a href="" class="click_to_expand"><img src="/static/images/gui/load_from_api.png"></a>
-            <div id="apiList">
-            <div class="api_form collapsed expandable">
-                <img class="click_to_expand" src="/static/images/APIs/shopify.png">
-                <form action="{% url apps.shopify_app.views.authenticate %}" method="post">{% csrf_token %}     
-                  <br>
-                  <label for='shop'><strong>Enter The URL of your Shopify Shop</strong>
-                   (YOUR SHOP NAME).myshopify.com
-                  </label>
-                  <p>
-                    <input id="shop" name="shop" size="45" type="text" />
-                    <input name="commit" type="submit" value="Install" />
-                  </p>
-                </form>
-            </div>
-                <!-- <div class="api_form collapsed expandable">
-                    <img class="click_to_expand" src="/static/images/APIs/magento.gif">
-                    <form action="{% url apps.shopify_app.views.authenticate %}" method="post">{% csrf_token %}
+            <div id="API_Forms" class="expandable collapsed">
+                <a href="" class="click_to_expand"><img src="/static/images/gui/load_from_api.png"></a>
+                <div id="apiList">
+                <div class="api_form collapsed expandable">
+                    <img class="click_to_expand" src="/static/images/APIs/shopify.png">
+                    <form action="{% url apps.shopify_app.views.authenticate %}" method="post">{% csrf_token %}     
                       <br>
-                      <label for='shop'><strong>Enter your Magento Shop Name</strong>
-                        <span class="hint">It's found in your Magento login page thing whatever</span>
+                      <label for='shop'><strong>Enter The URL of your Shopify Shop</strong>
+                       (YOUR SHOP NAME).myshopify.com
                       </label>
                       <p>
                         <input id="shop" name="shop" size="45" type="text" />
                         <input name="commit" type="submit" value="Install" />
                       </p>
                     </form>
-                 </div> -->
+                </div>
+                    <!-- <div class="api_form collapsed expandable">
+                        <img class="click_to_expand" src="/static/images/APIs/magento.gif">
+                        <form action="{% url apps.shopify_app.views.authenticate %}" method="post">{% csrf_token %}
+                          <br>
+                          <label for='shop'><strong>Enter your Magento Shop Name</strong>
+                            <span class="hint">It's found in your Magento login page thing whatever</span>
+                          </label>
+                          <p>
+                            <input id="shop" name="shop" size="45" type="text" />
+                            <input name="commit" type="submit" value="Install" />
+                          </p>
+                        </form>
+                     </div> -->
+                </div>
             </div>
         </div>
-    </div>
     
     {% if updates_in_progress %}
     <p>Your Products are updating, the page will automatically every few seconds until they are finished.</p>
@@ -286,7 +286,9 @@
     {% endif %}
     {% csrf_token %}
     <div id="product_table">
-    {% pagination product_list %}
+    {% if not action %}
+        {% pagination product_list %}
+    {% endif %}
     <div class="vertscroll">
     <table class="product_list_table">
         <tbody>
@@ -309,7 +311,9 @@
             {% endfor %}
         </tbody>
     </table>
-    {% pagination product_list %}
+    {% if not action %}
+        {% pagination product_list %}
+    {% endif %}
     </div>
     </div>
     {% if confirm %}

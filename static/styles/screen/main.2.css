@@ -63,7 +63,7 @@ table {
 	}
 	h3 {
 		text-transform: uppercase;
-		text-align: center;
+		/*text-align: center;*/
 	}
 
 	
@@ -869,6 +869,7 @@ body.flatpage #left-panel{
 			font-size:1.7em;
 			margin:5px;
 		}
+
 		.tab-begone{
 			display:none;
 			top:-20px;
@@ -1422,6 +1423,16 @@ table.retailer-item-group{
 	.global .icon-list #nav-googleplus {
 		background-position:-200px -64px;
 	}
+
+	.icon.plus-icon {
+			width: 20px;
+			height: 20px;
+			display: inline-block;
+			background: transparent url(/static/images/gui/icons.png) no-repeat 0 -26px;
+			/*margin: 15px;*/
+			position:relative;
+			top:8px;
+		}
 
 
 
