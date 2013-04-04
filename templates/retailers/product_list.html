@@ -183,13 +183,13 @@
 <script>var updates_in_progress = {{updates_in_progress|length}};</script>
 
 
+<div class="content" id="page-content">  
+
+    <div  class="inner-page-content retailer profile">
+
 <div class="section intro clearfix">
-    <h2><span>
-        {#% if upload %}Upload: {{upload.filename}}{% else %#}
-        Product Inventory
-        {#% endif %#}
-    </span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
-</div>
+            <h2><span>Product List:</span></h2><h3><span class="big">{{ retailer_profile.name }}</span></h3>
+        </div>
 <div class="section productlist body-copy bootstrap {% if not confirm %}not{% endif %}confirm">
     
     {% if action %}
@@ -213,6 +213,7 @@
 
         </p>
     {% endif %}
+
     {% if bulk_upload_form %}
     <div>
 
@@ -288,6 +289,7 @@
     {% csrf_token %}
     <div id="product_table">
     {% pagination product_list %}
+    <div class="vertscroll">
     <table class="product_list_table">
         <tbody>
             {% if not confirm %}
@@ -309,6 +311,8 @@
             {% endfor %}
         </tbody>
     </table>
+    {% pagination product_list %}
+    </div>
     </div>
     {% if confirm %}
    

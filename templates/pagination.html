@@ -7,7 +7,7 @@
 
         {% for pnum in begin %}
             {% ifequal page.number pnum %}
-                <span class="current">{{ pnum }}</span>
+                <span class="emphasize">{{ pnum }}</span>
             {% else %}
                 <a href="?page={{ pnum }}">{{ pnum }}</a>
             {% endifequal %}
@@ -17,7 +17,7 @@
             <span class="continue">...</span>
             {% for pnum in middle %}
                 {% ifequal page.number pnum %}
-                    <span class="current">{{ pnum }}</span>
+                    <span class="big">{{ pnum }}</span>
                 {% else %}
                     <a href="?page={{ pnum }}">{{ pnum }}</a>
                 {% endifequal %}
@@ -28,7 +28,7 @@
             <span class="continue">...</span>
             {% for pnum in end %}
                 {% ifequal page.number pnum %}
-                    <span class="current">{{ pnum }}</span>
+                    <span class="emphasize">{{ pnum }}</span>
                 {% else %}
                     <a href="?page={{ pnum }}">{{ pnum }}</a>
                 {% endifequal %}

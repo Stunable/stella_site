@@ -18,7 +18,7 @@
     <div class="retailer-left-panel">
         <div class="panel-header clearfix">
             <div class="panel-tab active my-closet begin-tab clearfix one-tab">
-                <span class="text-link">Stylist Admin</span>
+                <div class="list-header big">Stylist Admin</div>
                 <div class="tab-content hidden">
                     <h4 class="list-header" id="company-information-menu-item">
                     	<a href="{% url retailer_information name=retailer_profile.name %}{% if request.user.is_staff %}?retailer={{retailer_profile.id}}{% endif %}">Account Information</a></h4>
@@ -46,15 +46,17 @@
         </div> 
     </div>
 
-
 {% endblock %}
+
+
 {% block login_modal_box %}
 {% endblock %}
 {% block login_modal_script %}
 {% endblock %}
-{% block content %}
-{% endblock %}
+
 {% block extra_script%}
 
 
 {% endblock %}
+
+{% block footermessage %}Run Your Own Show.{% endblock %}

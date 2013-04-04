@@ -38,6 +38,19 @@ table {
 	border-spacing: 0;
 }
 
+.common table { 
+	border: #EBEBEB 1px solid;
+	width: 100%;
+}
+.common td { 
+	border: thin solid #EBEBEB;
+	vertical-align: middle;
+}
+
+.common td input[type="text"] {
+	min-width: 40px;
+}
+
 /* TYPOGRAPHY
 ----------------------------------------*/
 
@@ -485,6 +498,15 @@ body.flatpage{
 	top:-55px;
 }
 
+#left-panel .retailer-left-panel{
+	text-align: right;
+}
+
+#left-panel .retailer-left-panel .list-header{
+	margin:8px;
+}
+
+
 body.flatpage #left-panel{
 	position:fixed;
 }
@@ -749,6 +771,11 @@ body.flatpage #left-panel{
 			margin-top:100px;
 			border-radius: 8px;
 		}
+
+	/*	.inner-page-content .vertscroll{
+			max-height:1280px;
+			overflow:auto;
+		}*/
 	
 	/*TABS*/
 		div#stunable-tabs-nav{
@@ -1150,6 +1177,10 @@ body.flatpage #left-panel{
 	font-size:1.3em;
 	font-weight: bold;
 }
+.emphasize{
+	font-weight: bold;
+}
+
 .content.cart .small{
 	font-size:.8em;
 }

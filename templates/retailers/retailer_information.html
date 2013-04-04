@@ -66,20 +66,17 @@
 <div class="content" id="page-content">
     
 
-    <div  class="inner-page-content retailer login">
-
-
-        <div class="center">
+    <div  class="inner-page-content retailer profile">
 
         <div class="section intro clearfix">
-            <h2><span>Account Information:</span></h2><h3><span>{{ retailer_profile.name }}</span></h3>
+            <h2><span>Account Information:</span></h2><h3><span class="big">{{ retailer_profile.name }}</span></h3>
         </div>
 
 
 
     <div id="public_info" class="wrapper">
          <h3>
-            This information will be visible to Stunable Shoppers 
+            This information <span class="emphasize">will</span> be visible to Stunable Shoppers 
         </h3>
         <br>
         <div class="retailer-wrapper">
@@ -93,7 +90,7 @@
                 {% empty %}
                 <img src="{{ retailer_profile.logo_image }}" class="retailer-logo" />
             {% endthumbnail %}
-            &nbsp;<br>&nbsp&nbsp&nbsp<a class="quest">Update Logo</a>
+            &nbsp;<br>&nbsp&nbsp&nbsp<a href="" class="quest">Update Logo</a>
         </div>
         <p id="bigform-error"></p>
         
@@ -123,7 +120,7 @@
     <div id="private_info" class="wrapper">
 
          <h3>
-            This information will be <strong>not</strong> visible to Stunable Shoppers 
+            This information will <span class="emphasize">not</span> be visible to Stunable Shoppers 
         </h3>
 
         <div>
@@ -242,5 +239,5 @@
         </div>
     </div>
 </div>
-</div></div></div>
+</div></div>
 {% endblock %} 

@@ -3,7 +3,7 @@ var stunable = {
 
     common : function() {
 
-
+      
 
       var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
       $(document).ajaxSend(function(e, xhr, settings) {
@@ -33,10 +33,8 @@ var stunable = {
           return false
       })
 
-      setupCustomTabs($('#left-panel'));  
 
-
-      $('.panel-inner-content').html($('.panel-header .active').find('.tab-content').html()).fadeIn(1000, function() {});             
+      // $('.panel-inner-content').html($('.panel-header .active').find('.tab-content').html()).fadeIn(1000, function() {});             
 
       init_refclicks($('.refclick'))
       init_choiceclicks($('.choiceclick'))
