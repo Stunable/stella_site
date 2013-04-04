@@ -17,7 +17,7 @@
 {% if form.errors %}
 
 <p id="bigform-error">
-	{{form.errors}}
+	{{form.non_field_errors}}
 </p>
 {% endif %}
 		<form action="{% url auth_login %}" class="user-entry php-form bootstrap" id="signin-form" method="POST">
