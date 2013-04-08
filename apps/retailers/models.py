@@ -12,11 +12,15 @@ from django.contrib.localflavor.us.models import PhoneNumberField
 from racks.models import Item,ProductImage,ItemType,Size
 import shopify
 
+
+from apps.shopping_platforms.models import APIPlatformConnection,APIProductConnection
+
 import apps.portable as portable
+
 
 from apps.common.forms import FedexTestAddress
 
-from tasks import process_upload,save_shopify_inventory_update,update_API_products
+from tasks import process_upload,save_shopify_inventory_update
 
 
 
@@ -200,22 +204,13 @@ class StylistItem(models.Model):
         except:
             return '-deleted- '
 
-class APIProductConnection(models.Model):
-    class Meta:
-        abstract=True
-    source_id = models.IntegerField()
-    api_connection= models.ForeignKey('APIConnection')
-    parent = models.ForeignKey('self',null=True,blank=True)
 
-    
-    def update_inventory(self,item_variation,number_sold):
-        raise NotImplementedError('you need to create a method to update the inventory for this api product connection')
             
 
 class ShopifyProduct(APIProductConnection):
     pass
 
-
+    
 class ShopifyVariation(APIProductConnection):
 
     def update_inventory(self,item_variation,number_sold):
@@ -223,77 +218,38 @@ class ShopifyVariation(APIProductConnection):
         save_shopify_inventory_update.delay(self.api_connection.shopifyconnection,self.source_id,item_variation,number_sold)    
 
 
-    @staticmethod
-    def get_prices(variation_object,Map):
-        """ shopify variants don't always have a "compare at price" so we need to handle that"""
-
-        sale_price = variation_object[Map['itemtype']['fields']['sale_price']]
-        price = sale_price
-
-        if variation_object[Map['itemtype']['fields']['price']]:
-            price = variation_object[Map['itemtype']['fields']['price']]
-
-        return price,sale_price
-
-class APIConnection(models.Model):
-
-    # these are per API
-    ITEM_API_CLASS = ShopifyProduct
-    VARIATION_API_CLASS = ShopifyVariation
-    
-    # these probably won't need to change but are helpful for avoiding circular imports
-    SIZE_CLASS = Size
-    ITEM_TYPE_CLASS = ItemType
-    ITEM_CLASS = Item
-    IMAGE_CLASS = ProductImage
-    STYLIST_ITEM_CLASS = StylistItem
-
-
-    variants_Have_Prices = False
-    # class Meta:
-    #     abstract=True
-
-    #fields
-    retailer = models.ForeignKey(User)
-    update_in_progress = models.BooleanField(default=False)
-    last_updated = models.DateTimeField(auto_now_add=True)
+class APIConnection(APIPlatformConnection):
+    pass
 
 
 
-
-class APIConnectionMixin(object):
-
-    def refresh_all_products(self):
-        if settings.DEBUG:
-            update_API_products(self)
-        else:
-            update_API_products.delay(self)
-
-
-    def get_variations(self,product_dict):
-        return product_dict[self.field_mapping(product_dict)['itemtype']['source']]
-
-
-    def get_products(self):
-        raise NotImplementedError('you need to create a method that returns a list of products for this api')
-
-
-    def get_url(self):
-        return self.api_url
-
-class ShopifyConnection(APIConnection,APIConnectionMixin):
+class ShopifyConnection(APIConnection):
 
     def __unicode__(self):
         return self.shop_url
 
     ITEM_API_CLASS = ShopifyProduct
     VARIATION_API_CLASS = ShopifyVariation
+    
+    # these probably won't need to change
+    SIZE_CLASS = Size
+    ITEM_TYPE_CLASS = ItemType
+    ITEM_CLASS = Item
+    IMAGE_CLASS = ProductImage
 
     shop_url = models.TextField()
     access_token = models.TextField()
 
     
     variants_Have_Prices = True
+
+    def authenticate(self):
+        try:
+            return self.get_session().Shop.current().to_dict()['email']
+        except:
+            raise
+            return False
+
 
     def get_session(self):
         """ return an object which is authenticated and can interact with the API"""
@@ -338,8 +294,6 @@ class ShopifyConnection(APIConnection,APIConnectionMixin):
                     'source_id':'id',
                     'SKU':'sku',
                     'inventory':'inventory_quantity',
-                    'price':'compare_at_price',
-                    'sale_price':'price',
                     'position':'position'
                 }
             }
@@ -355,6 +309,10 @@ class ShopifyConnection(APIConnection,APIConnectionMixin):
             print "COULD NOT FIND COLOR OR SIZE IN:",pd['options']
 
         return out
+
+    @staticmethod
+    def get_id(pd):
+        return pd['id']
 
     @staticmethod
     def get_images(pd):
@@ -369,20 +327,37 @@ class ShopifyConnection(APIConnection,APIConnectionMixin):
             desc = pd['body_html']
         return desc
 
+    @staticmethod
+    def get_name(product_dict):
+        return product_dict['title']
+
+    @staticmethod
+    def get_brand(product_dict):
+        return product_dict['vendor']
+
+    @staticmethod
+    def get_prices(variation_object):
+        """ shopify variants don't always have a "compare at price" so we need to handle that"""
+
+        sale_price = variation_object['price']
+        price = sale_price
+
+        if variation_object['compare_at_price']:
+            price = variation_object['compare_at_price']
+
+        return price,sale_price
+
+
 
 class PortableProduct(APIProductConnection):
     pass
 
-    @staticmethod
-    def get_prices(pd):
-        return float(pd['price'])/100,float(pd['sale_price'])/100
-
-
+    
 class PortableVariation(APIProductConnection):
     pass
 
 
-class PortableConnection(APIConnection,APIConnectionMixin):
+class PortableConnection(APIConnection):
 
     def __unicode__(self):
         return self.api_url+self.access_token
@@ -390,18 +365,30 @@ class PortableConnection(APIConnection,APIConnectionMixin):
     ITEM_API_CLASS = PortableProduct
     VARIATION_API_CLASS = PortableVariation
 
+    SIZE_CLASS = Size
+    ITEM_TYPE_CLASS = ItemType
+    ITEM_CLASS = Item
+    IMAGE_CLASS = ProductImage
+
     api_url = 'https://api.portableshops.com/'
     access_token = models.CharField(max_length=64,null=True)
 
 
     variants_Have_Prices = False
 
+    def authenticate(self):
+        api = portable.ShoppingPlatformAPI(self)
+        T = api.test_authenticate()
+        return T
 
     def get_products(self):
         api = portable.ShoppingPlatformAPI(self)
 
         l = api.extract_product_list()
         return api.extract_product_list()
+
+    def get_variations(self,product_dict):
+        return product_dict['variation']
 
     @staticmethod
     def get_full_size_media_path(data):
@@ -410,25 +397,29 @@ class PortableConnection(APIConnection,APIConnectionMixin):
             [
                 data['media_dimension']['template']['width'],
                 data['media_dimension']['template']['height'],
-                data['media_dimension']['template']['extension']
+                data['extension']
             ]
         )
 
         return '.'.join(out)
 
-    @staticmethod
-    def get_images(pd):
+    def get_images(self,pd):
         path = 'http://images.portableshops.com/'
         yield path+ self.get_full_size_media_path(pd['primary_media']),pd['primary_media']['id']
         for img in pd['media']:
-            yield path+ self.get_full_size_media_path(img)
+            yield path+ self.get_full_size_media_path(img),img['id']
+
+    @staticmethod
+    def get_id(pd):
+        return pd['item']['id']
+
+    @staticmethod
+    def get_description(pd):
+        return pd['item']['description']
        
     @staticmethod
     def field_mapping(pd):
         out = {
-            'API':{
-                'source_id':'id'
-            },
             'item':{
                 'source':'item',
                 'fields':{
@@ -442,231 +433,26 @@ class PortableConnection(APIConnection,APIConnectionMixin):
                 'source':'variation',
                 'fields':{
                     'source_id':'id',
-                    'SKU':'sku',
-                    'inventory':'inventory_quantity',
-                    'price':'compare_at_price',
-                    'sale_price':'price',
-                    'position':'position'
+                    'SKU':'UPC',
+                    'inventory':'stock',
+                    'position':'sort',
+                    'size':'size',
+                    'custom_color_name':'colour'
                 }
             }
 
         }
-        for o in pd['options']:
-            if o['name'] in ['size','Size','Chain Lengh',]:
-                out['itemtype']['fields']['size'] = 'option'+str(o['position'])
-            if o['name'] in['color', 'Color', 'Style', 'style']:
-                out['itemtype']['fields']['custom_color_name'] = 'option'+str(o['position'])
-
-        if not out['itemtype']['fields'].get('custom_color_name',None) and not out['itemtype']['fields'].get('size',None):
-            print "COULD NOT FIND COLOR OR SIZE IN:",pd['options']
 
         return out
 
+    @staticmethod
+    def get_prices(pd):
+        return float(pd['item']['price'])/100,float(pd['item']['sale_price'])/100
 
-"""
-    {   u'item': {   u'condition_id': u'2',
-                     u'created': u'2013-04-06 11:48:00',
-                     u'description': u'<p>nice jeans, couple of holes...</p>',
-                     u'designer_name': u'deisel',
-                     u'featured': u'0',
-                     u'friendly_url': u'my_jeans',
-                     u'id': u'16903',
-                     u'item_collection_id': u'16185',
-                     u'modified': u'2013-04-07 08:01:08',
-                     u'name': u'my jeans',
-                     u'price': u'10000',
-                     u'primary_media': u'75308',
-                     u'sale_price': u'7999',
-                     u'sort': u'1',
-                     u'swappable': u'0',
-                     u'visible': u'1'},
-        u'media': [   {   u'caption': u'',
-                          u'created': u'2013-04-06 11:49:38',
-                          u'extension': u'jpg',
-                          u'id': u'75308',
-                          u'item_id': u'16903',
-                          u'jobs_remaining': u'',
-                          u'media_dimension': {   u'': {   u'height': u'269',
-                                                           u'width': u'190'},
-                                                  u'facebook': {   u'height': u'220',
-                                                                   u'width': u'150'},
-                                                  u'keep_size': {   u'height': u'0',
-                                                                    u'width': u'0'},
-                                                  u'project_thumb': {   u'height': u'137',
-                                                                        u'width': u'137'},
-                                                  u'small_thumb': {   u'height': u'50',
-                                                                      u'width': u'50'},
-                                                  u'store_main': {   u'height': u'585',
-                                                                     u'width': u'384'},
-                                                  u'store_thumb': {   u'height': u'216',
-                                                                      u'width': u'144'},
-                                                  u'store_thumb2': {   u'height': u'64',
-                                                                       u'width': u'64'},
-                                                  u'template': {   u'height': u'422',
-                                                                   u'width': u'670'},
-                                                  u'thumb': {   u'height': u'150',
-                                                                u'width': u'150'}},
-                          u'media_server_id': u'515f71224fe59',
-                          u'media_type_id': u'0',
-                          u'media_variation': [],
-                          u'mimetype': u'',
-                          u'modified': u'2013-04-07 08:01:08',
-                          u's3': u'1',
-                          u'size': u'132909',
-                          u'sort': u'1',
-                          u'user_id': u'35443'},
-                      {   u'caption': u'',
-                          u'created': u'2013-04-06 11:49:21',
-                          u'extension': u'jpg',
-                          u'id': u'75307',
-                          u'item_id': u'16903',
-                          u'jobs_remaining': u'',
-                          u'media_dimension': {   u'': {   u'height': u'269',
-                                                           u'width': u'190'},
-                                                  u'facebook': {   u'height': u'220',
-                                                                   u'width': u'150'},
-                                                  u'keep_size': {   u'height': u'0',
-                                                                    u'width': u'0'},
-                                                  u'project_thumb': {   u'height': u'137',
-                                                                        u'width': u'137'},
-                                                  u'small_thumb': {   u'height': u'50',
-                                                                      u'width': u'50'},
-                                                  u'store_main': {   u'height': u'585',
-                                                                     u'width': u'384'},
-                                                  u'store_thumb': {   u'height': u'216',
-                                                                      u'width': u'144'},
-                                                  u'store_thumb2': {   u'height': u'64',
-                                                                       u'width': u'64'},
-                                                  u'template': {   u'height': u'422',
-                                                                   u'width': u'670'},
-                                                  u'thumb': {   u'height': u'150',
-                                                                u'width': u'150'}},
-                          u'media_server_id': u'515f711138c2b',
-                          u'media_type_id': u'0',
-                          u'media_variation': [],
-                          u'mimetype': u'',
-                          u'modified': u'2013-04-07 08:01:08',
-                          u's3': u'1',
-                          u'size': u'160426',
-                          u'sort': u'2',
-                          u'user_id': u'35443'},
-                      {   u'caption': u'',
-                          u'created': u'2013-04-07 07:59:15',
-                          u'extension': u'jpg',
-                          u'id': u'75324',
-                          u'item_id': u'16903',
-                          u'jobs_remaining': u'',
-                          u'media_dimension': {   u'': {   u'height': u'269',
-                                                           u'width': u'190'},
-                                                  u'facebook': {   u'height': u'220',
-                                                                   u'width': u'150'},
-                                                  u'keep_size': {   u'height': u'0',
-                                                                    u'width': u'0'},
-                                                  u'project_thumb': {   u'height': u'137',
-                                                                        u'width': u'137'},
-                                                  u'small_thumb': {   u'height': u'50',
-                                                                      u'width': u'50'},
-                                                  u'store_main': {   u'height': u'585',
-                                                                     u'width': u'384'},
-                                                  u'store_thumb': {   u'height': u'216',
-                                                                      u'width': u'144'},
-                                                  u'store_thumb2': {   u'height': u'64',
-                                                                       u'width': u'64'},
-                                                  u'template': {   u'height': u'422',
-                                                                   u'width': u'670'},
-                                                  u'thumb': {   u'height': u'150',
-                                                                u'width': u'150'}},
-                          u'media_server_id': u'51609ab30ac92',
-                          u'media_type_id': u'0',
-                          u'media_variation': [],
-                          u'mimetype': u'',
-                          u'modified': u'2013-04-07 08:01:08',
-                          u's3': u'1',
-                          u'size': u'203755',
-                          u'sort': u'3',
-                          u'user_id': u'35443'}],
-        u'primary_media': {   u'caption': u'',
-                              u'created': u'2013-04-06 11:49:38',
-                              u'extension': u'jpg',
-                              u'id': u'75308',
-                              u'item_id': u'16903',
-                              u'jobs_remaining': u'',
-                              u'media_dimension': {   u'': {   u'height': u'269',
-                                                               u'width': u'190'},
-                                                      u'facebook': {   u'height': u'220',
-                                                                       u'width': u'150'},
-                                                      u'keep_size': {   u'height': u'0',
-                                                                        u'width': u'0'},
-                                                      u'project_thumb': {   u'height': u'137',
-                                                                            u'width': u'137'},
-                                                      u'small_thumb': {   u'height': u'50',
-                                                                          u'width': u'50'},
-                                                      u'store_main': {   u'height': u'585',
-                                                                         u'width': u'384'},
-                                                      u'store_thumb': {   u'height': u'216',
-                                                                          u'width': u'144'},
-                                                      u'store_thumb2': {   u'height': u'64',
-                                                                           u'width': u'64'},
-                                                      u'template': {   u'height': u'422',
-                                                                       u'width': u'670'},
-                                                      u'thumb': {   u'height': u'150',
-                                                                    u'width': u'150'}},
-                              u'media_server_id': u'515f71224fe59',
-                              u'media_type_id': u'0',
-                              u'mimetype': u'',
-                              u'modified': u'2013-04-07 08:01:08',
-                              u's3': u'1',
-                              u'size': u'132909',
-                              u'sort': u'1',
-                              u'user_id': u'35443'},
-        u'tag': [],
-        u'variation': [   {   u'SKU': u'515F70575A91C',
-                              u'UPC': u'BMJ30',
-                              u'colour': u'Blue',
-                              u'created': u'2013-04-06 11:48:00',
-                              u'gender': u'Female',
-                              u'id': u'57453',
-                              u'item_id': u'16903',
-                              u'location': u'EMPTY',
-                              u'modified': u'2013-04-06 11:48:43',
-                              u'size': u'30',
-                              u'sort': u'0',
-                              u'stock': u'20'},
-                          {   u'SKU': u'515F706E23248',
-                              u'UPC': u'BMJ32',
-                              u'colour': u'Blue',
-                              u'created': u'2013-04-06 11:48:10',
-                              u'gender': u'Female',
-                              u'id': u'57454',
-                              u'item_id': u'16903',
-                              u'location': u'EMPTY',
-                              u'modified': u'2013-04-06 11:48:43',
-                              u'size': u'32',
-                              u'sort': u'1',
-                              u'stock': u'15'},
-                          {   u'SKU': u'515F7083615A3',
-                              u'UPC': u'RMJ34',
-                              u'colour': u'Red',
-                              u'created': u'2013-04-06 11:48:21',
-                              u'gender': u'Female',
-                              u'id': u'57455',
-                              u'item_id': u'16903',
-                              u'location': u'EMPTY',
-                              u'modified': u'2013-04-06 11:48:43',
-                              u'size': u'34',
-                              u'sort': u'2',
-                              u'stock': u'20'},
-                          {   u'SKU': u'515F70935BB16',
-                              u'UPC': u'RMJ32',
-                              u'colour': u'Red',
-                              u'created': u'2013-04-06 11:48:32',
-                              u'gender': u'Female',
-                              u'id': u'57456',
-                              u'item_id': u'16903',
-                              u'location': u'EMPTY',
-                              u'modified': u'2013-04-06 11:48:43',
-                              u'size': u'32',
-                              u'sort': u'3',
-                              u'stock': u'15'}]}]
-"""
-    
+    @staticmethod
+    def get_name(product_dict):
+        return product_dict['item']['name']
+
+    @staticmethod
+    def get_brand(product_dict):
+        return product_dict['item']['designer_name']

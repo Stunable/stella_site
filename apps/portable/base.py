@@ -126,6 +126,20 @@ class ShoppingPlatformAPI(object):
             'access_token':django_api_connection_object.access_token
         }
 
+
+    def test_authenticate(self):
+        """
+            returns an email address or False if unable to access API.
+        """
+        
+        url = '%(api_url)s/%(access_token)s.json'%self.connection_dict
+
+        try:
+            response = self.get(url)
+            return response['data']['store_data']['store']['email']
+        except:
+            return False
+
     def extract_product_list(self,page=None,limit=None):
         url = '%(api_url)s/%(access_token)s/items.json'%self.connection_dict
         
@@ -141,9 +155,7 @@ class ShoppingPlatformAPI(object):
         if len(q):
             url += '?'+'&'.join(q)
 
-
         data = self.get(url)['data']['item_data']
-
         # PP.pprint(data)
         return [data]
 

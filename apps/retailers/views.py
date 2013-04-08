@@ -41,7 +41,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # from apps.cart.plugins.taxcloud import TaxCloudClient
 # TCC = TaxCloudClient()
 
-from tasks import update_API_products
+from shopping_platforms.tasks import update_API_products
 
 from cart.plugins.create_shipment import ship_it
 
