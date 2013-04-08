@@ -198,7 +198,11 @@ def update_API_products(api_connection):
     print 'updating products for '+str(api_connection)
 
     for product_list in api_connection.get_products():
-        process_API_products.delay(product_list,api_connection)
+        # print 'product list:',product_list
+        if settings.DEBUG:
+            process_API_products(product_list,api_connection)
+        else:
+            process_API_products.delay(product_list,api_connection)
     
 @task
 def process_API_products(list_of_products,api_connection):
@@ -206,9 +210,13 @@ def process_API_products(list_of_products,api_connection):
     product_count = 0
     Retailer = ContentType.objects.get(app_label="retailers", model="retailerprofile").model_class().objects.get(user=api_connection.retailer)
 
+    print list_of_products
+
     for product in list_of_products:
         try:
-            d = product.to_dict()
+            d = product
+            print 'A PRODUCT:',d
+
             Map = api_connection.field_mapping(d)
 
             # PP.pprint(Map)
@@ -229,13 +237,16 @@ def process_API_products(list_of_products,api_connection):
                  I._retailer = Retailer
             I.save()
 
+            if not api_connection.variants_Have_Prices:
+                regular_price,sale_price = I.get_prices(d)
+
             if created:
                 product_count += 1
             
-            api_connection.STYLIST_ITEM_CLASS.objects.get_or_create(
-                                                                    stylist=api_connection.retailer,
-                                                                    item=I
-                                                                )
+            # api_connection.STYLIST_ITEM_CLASS.objects.get_or_create(
+            #                                                         stylist=api_connection.retailer,
+            #                                                         item=I
+            #                                                     )
             # get all the images associated with this product
             for index,image in enumerate(api_connection.get_images(d)):
                 path,identifier = image
@@ -290,7 +301,8 @@ def process_API_products(list_of_products,api_connection):
                 it.object_id = api_variation_object.id
                 it.inventory = int(v[Map['itemtype']['fields']['inventory']])
 
-                regular_price,sale_price = api_variation_object.get_prices(v,Map)
+                if api_connection.variants_Have_Prices:
+                    regular_price,sale_price = api_variation_object.get_prices(v,Map)
 
                 if regular_price != sale_price:
                     it.is_onsale = True

@@ -36,6 +36,8 @@ class APIConnectionAdmin(admin.ModelAdmin):
 
 admin.site.register(ShopifyConnection,APIConnectionAdmin)
 
+admin.site.register(PortableConnection,APIConnectionAdmin)
+
 class UploadErrorAdmin(admin.ModelAdmin):
     list_display = ('text','upload')
 
