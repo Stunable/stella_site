@@ -80,7 +80,7 @@ def add_product_image(request):
 
     if form.is_valid():
         im = form.save(commit=False)
-        im.retailer = retailer.user
+        im.retailer_profile = retailer
         im.save(instant=True)
         try:
             path = im.small.url
