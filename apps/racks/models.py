@@ -62,6 +62,7 @@ class Size(models.Model):
     size = models.CharField(max_length=30)
     description = models.TextField(null=True, blank=True)
     retailer = models.ForeignKey(User, blank=True, null=True)
+    retailer_profile = models.ForeignKey('retailers.RetailerProfile',null=True,blank=True)
     
     def __unicode__(self):
         return self.size
@@ -138,6 +139,7 @@ class ProductImage(models.Model,listImageMixin):
     image = models.ImageField(max_length=255,upload_to='upload/%Y/%m/%d/', null=True, blank=True, verbose_name="Product Image",storage=queued_s3storage)
     pretty_image = models.ImageField(upload_to='pretty/%Y/%m/%d/', null=True, blank=True, verbose_name="Product pretty Image",storage=queued_s3storage)
     bg_color = models.CharField(max_length=32,default='white',blank=True,null=True)
+    retailer_profile = models.ForeignKey('retailers.RetailerProfile',null=True,blank=True)
     retailer = models.ForeignKey(User,null=True,blank=True)
     item = models.ForeignKey('Item',null=True, blank=True,related_name='item_image_set')
 

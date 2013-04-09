@@ -140,9 +140,9 @@ class SizeAdmin(admin.ModelAdmin):
     #readonly_fields = ['retailer']
 
 class ProductImageAdmin(admin.ModelAdmin):
-    list_display = ['image','retailer','list_image']
+    list_display = ['image','retailer_profile','list_image']
     #readonly_fields = ['retailer']
-    list_filter = ('retailer',)
+    list_filter = ('retailer_profile',)
     search_fields = ('image','identifier')
     actions = ('make_pretty','premake_thumbs','delete_orphans')
 

@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from retailers.forms import RetailerProfileCreationForm, RetailerEditForm, ItemForm,\
                             ItemEditForm, LogoUploadForm
-from retailers.models import RetailerProfile, StylistItem, ShippingType,ProductUpload,APIConnection,ShopifyConnection
+from retailers.models import RetailerProfile, StylistItem, ShippingType,ProductUpload,APIConnection,ShopifyConnection,get_retailer_profile
 from racks.models import Item, Rack, Rack_Item
 from apps.common import json_view
 from django.views.decorators.csrf import csrf_exempt

@@ -39,7 +39,8 @@ class APIPlatformConnection(models.Model):
     #     abstract=True
 
     #fields
-    retailer = models.ForeignKey(User)
+    retailer = models.ForeignKey(User,null=True)
+    retailer_profile = models.ForeignKey('retailers.RetailerProfile',null=True)
     update_in_progress = models.BooleanField(default=False)
     last_updated = models.DateTimeField(auto_now_add=True)
 
