@@ -180,6 +180,7 @@ MIDDLEWARE_CLASSES = (
      'johnny.middleware.QueryCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'apps.common.middleware.SubdomainsMiddleware',    
+    'apps.common.middleware.FilterPersistMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -269,12 +270,6 @@ INSTALLED_APPS = (
     'debug_toolbar'
 )
 
-BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
-BROKER_HOST = "127.0.0.1" # this will be our master server IP
-BROKER_PORT = 5672
-BROKER_VHOST = "/"
-BROKER_USER = "guest"
-BROKER_PASSWORD = "guest"
 
 import djcelery
 CELERY_IMPORTS = (

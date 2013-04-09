@@ -254,7 +254,8 @@ def process_API_products(list_of_products,api_connection):
                     I.save()
 
             # get all the variations
-            for v in api_connection.get_variations(d):
+            variation_list = api_connection.get_variations(d)
+            for v in variation_list:
                 
 
                 api_variation_object,created = api_connection.VARIATION_API_CLASS.objects.get_or_create(source_id=v[Map['itemtype']['fields']['source_id']],api_connection=api_connection)
@@ -262,7 +263,7 @@ def process_API_products(list_of_products,api_connection):
                 color_string = 'ONE COLOR'
 
                 # PP.pprint( Map['itemtype']['fields'])
-                if Map['itemtype']['fields'].has_key('size'):
+                if Map['itemtype']['fields'].has_key('size') and len(variation_list) > 1:
                     size_string = v[Map['itemtype']['fields']['size']]
 
                 s,created = api_connection.SIZE_CLASS.objects.get_or_create(
@@ -270,7 +271,7 @@ def process_API_products(list_of_products,api_connection):
                     retailer = api_connection.retailer,
                 )
 
-                if Map['itemtype']['fields'].has_key('custom_color_name'):
+                if Map['itemtype']['fields'].has_key('custom_color_name') and len(variation_list) > 1:
                     color_string =v[Map['itemtype']['fields']['custom_color_name']]
                 
                 try:
