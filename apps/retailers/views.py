@@ -56,6 +56,8 @@ import os
 
 def get_retailer_profile(request,retailer_id=None):
     try:
+        if request.session.get('active_retailer_profile',None):
+            return request.session.get('active_retailer_profile')
         if retailer_id:
             return RetailerProfile.objects.get(id=retailer_id)
         if request.user.is_staff:

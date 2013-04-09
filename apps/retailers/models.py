@@ -396,10 +396,10 @@ class PortableConnection(APIConnection):
 
 
 
-        connection,created = cls.objects.get_or_create(access_token=request.POST.get('access_token'))
+        connection,created = cls.objects.get_or_create(access_token=request.POST.get('access_token'),retailer_profile=retailer)
         if connection.authenticate():
             update_API_products(connection)
-            return connection
+            return connection,retailer
         else:
             return False
 

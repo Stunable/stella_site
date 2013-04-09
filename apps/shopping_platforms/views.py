@@ -26,6 +26,7 @@ def hookup(request,API=None):
 
 	if connection:
 		request.session['active_api_connection'] = connection
+		request.session['active_retailer_profile'] = retailer_profile
 
 
 	return redirect(reverse('create_retailer_profile'))
