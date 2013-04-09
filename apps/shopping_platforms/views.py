@@ -16,17 +16,16 @@ from apps.retailers.models import PortableConnection,ShopifyConnection
 def get_api(api):
 
 	return {
-
 		'portable':PortableConnection
 
 	}[api]()
 
 def hookup(request,API=None):
 
-	connection = get_api(API).get_or_create_from_request(request)
+	connection,retailer_profile = get_api(API).get_or_create_from_request(request)
 
 	if connection:
 		request.session['active_api_connection'] = connection
-	
+
 
 	return redirect(reverse('create_retailer_profile'))

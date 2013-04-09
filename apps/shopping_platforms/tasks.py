@@ -39,7 +39,7 @@ def update_API_products(api_connection):
 def process_API_products(list_of_products,api_connection):
     enable()
     product_count = 0
-    Retailer = ContentType.objects.get(app_label="retailers", model="retailerprofile").model_class().objects.get(user=api_connection.retailer)
+    Retailer = api_connection.retailer_profile
 
     print list_of_products
 
@@ -80,14 +80,14 @@ def process_API_products(list_of_products,api_connection):
             # get all the images associated with this product
             for index,image in enumerate(api_connection.get_images(d)):
                 path,identifier = image
-                Picture = api_connection.IMAGE_CLASS.already_exists(identifier,api_connection.retailer)
+                Picture = api_connection.IMAGE_CLASS.already_exists(identifier,Retailer)
                 if not Picture:
                     out = tempfile.NamedTemporaryFile()
                     out.write(urllib.urlopen(path).read())
                     Picture = api_connection.IMAGE_CLASS.objects.create(
                         identifier=str(identifier),
                         image=File(out, os.path.basename(path)[:99]),
-                        retailer=api_connection.retailer,
+                        retailer_profile=Retailer,
                         item=I)
 
                 if index == 0:
@@ -108,7 +108,7 @@ def process_API_products(list_of_products,api_connection):
 
                 s,created = api_connection.SIZE_CLASS.objects.get_or_create(
                     size=size_string,
-                    retailer = api_connection.retailer,
+                    retailer = Retailer,
                 )
 
                 if Map['itemtype']['fields'].has_key('custom_color_name'):

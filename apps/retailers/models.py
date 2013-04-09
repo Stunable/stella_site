@@ -24,6 +24,16 @@ from apps.common.forms import FedexTestAddress
 from tasks import process_upload,save_shopify_inventory_update
 
 
+def get_retailer_profile(request,retailer_id=None):
+    try:
+        if retailer_id:
+            return RetailerProfile.objects.get(id=retailer_id)
+        if request.user.is_staff:
+            return RetailerProfile.objects.get(id=request.GET.get('retailer',None))
+        return RetailerProfile.objects.get(user=request.user)
+    except:
+        return None
+
 
 RETAILER_SUBJECT = 'accounts/retailer_welcome_subject.txt'
 RETAILER_MESSAGE = 'accounts/retailer_welcome_message.txt'
@@ -91,7 +101,7 @@ class RetailerProfile(models.Model):
     Company profile model
     """
 
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255,null=True)
     user = models.ForeignKey(User, blank=True, null=True)
     address1 = models.CharField(max_length=255, null=True,blank=True)
     address2 = models.CharField(max_length=255, null=True,blank=True)
@@ -100,9 +110,9 @@ class RetailerProfile(models.Model):
     zip_code = models.CharField(max_length=10,null=True,blank=True)
     hours = models.CharField(max_length=50, null=True, blank=True)
     phone_number = PhoneNumberField(null=True,blank=True)
-    email_address = models.EmailField()
+    email_address = models.EmailField(null=True)
     company_logo = models.ImageField(upload_to='upload',null=True,blank=True)
-    description = models.TextField()
+    description = models.TextField(null=True)
     selling_options = models.CharField(max_length=100,null=True,blank=True)
     more_details = models.CharField(max_length=100, blank=True, null=True)
     wepay_acct = models.CharField(max_length=64,null=True,blank=True)
@@ -374,11 +384,18 @@ class PortableConnection(APIConnection):
     api_url = 'https://api.portableshops.com/'
     access_token = models.CharField(max_length=64,null=True)
 
-
     variants_Have_Prices = False
 
     @classmethod
     def get_or_create_from_request(cls,request):
+
+        retailer = get_retailer_profile(request)
+
+        if not retailer:
+            retailer = RetailerProfile.objects.create()
+
+
+
         connection,created = cls.objects.get_or_create(access_token=request.POST.get('access_token'))
         if connection.authenticate():
             update_API_products(connection)
