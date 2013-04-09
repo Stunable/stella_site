@@ -13,6 +13,11 @@ from django.conf import settings
 
 import datetime
 
+import tempfile
+import os
+from django.core.files import File
+import urllib
+
 @task 
 def refresh_all_api_products():
     enable()
@@ -108,7 +113,7 @@ def process_API_products(list_of_products,api_connection):
 
                 s,created = api_connection.SIZE_CLASS.objects.get_or_create(
                     size=size_string,
-                    retailer = Retailer,
+                    retailer_profile = Retailer,
                 )
 
                 if Map['itemtype']['fields'].has_key('custom_color_name'):

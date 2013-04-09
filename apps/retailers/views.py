@@ -32,6 +32,9 @@ from django.conf import settings
 from django.forms.models import modelform_factory
 from wepay import WePay
 
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+
 import urllib
 import urllib2
 from datetime import date,timedelta
@@ -98,12 +101,23 @@ def retailer_help(request,  template="retailers/retailer_help.html"):
 
 def create_retailer_profile(request, template="retailers/retailer_profile_create.html"):
 
+    retailer_profile = get_retailer_profile(request)
     if request.method == "POST":
-        form = RetailerProfileCreationForm(request.POST, request.FILES)
+        form = RetailerProfileCreationForm(request.POST, request.FILES,instance=retailer_profile)
         if form.is_valid():
             new_retailer = form.save()
             request.session['retailer_id'] = new_retailer.id
-            print request.session.items()
+            
+
+            if new_retailer.email_address:
+                new_user = User.objects.get(username=new_retailer.email_address)
+                new_user.is_active = True
+                new_user.save()
+
+                new_user.backend = 'django.contrib.auth.backends.ModelBackend'
+                login(request, new_user)
+
+
             template = "accounts/thank-you.html"
             return redirect(reverse('retailer_terms', args=[new_retailer.id]))
         else:
@@ -229,7 +243,7 @@ def update_retailer_profile(request, template="retailers/account_information.htm
         retailer_profile = get_retailer_profile(request)
         if request.method == "POST":
             form = RetailerEditForm(request.POST, instance=retailer_profile)
-            if form.is_valid():
+            if forms.is_valid():
                 # print 'VALID'
                 user = request.user
                 # TODO: check and fix bug here

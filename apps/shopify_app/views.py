@@ -8,7 +8,7 @@ import shopify
 from decorators import shop_login_required
 
 from racks.models import Item,ItemType,Color,Size,ProductImage
-from retailers.models import ShopifyProduct,ShopifyVariation,ShopifyConnection,StylistItem,RetailerProfile
+from retailers.models import ShopifyProduct,ShopifyVariation,ShopifyConnection,StylistItem,RetailerProfile,get_retailer_profile
 from retailers.tasks import *
 
 
@@ -77,11 +77,20 @@ def logout(request):
 
 @shop_login_required
 def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,VARIATION_API_CLASS= ShopifyVariation):
-    shopify_connection,created = APICONNECTION.objects.get_or_create(retailer=request.user,shop_url=request.session['shopify']['shop_url'])
+    retailer_profile = get_retailer_profile(request)
+
+    if not retailer_profile:
+        retailer_profile = RetailerProfile.objects.create()
+
+    shopify_connection,created = APICONNECTION.objects.get_or_create(retailer=request.user,retailer_profile=retailer_profile,shop_url=request.session['shopify']['shop_url'])
+
+    request.session['active_api_connection'] = shopify_connection
+    request.session['active_retailer_profile'] = retailer_profile
+
     shopify_connection.access_token = request.session['shopify']['access_token']
     shopify_connection.update_in_progress = True
     shopify_connection.save()
     update_API_products.delay(shopify_connection)
-    return redirect(reverse("product_list"))
+    return redirect(reverse("create_retailer_profile"))
 
 

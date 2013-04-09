@@ -101,7 +101,7 @@ class RetailerProfile(models.Model):
     Company profile model
     """
 
-    name = models.CharField(max_length=255,null=True)
+    name = models.CharField(max_length=255,null=True,default='')
     user = models.ForeignKey(User, blank=True, null=True)
     address1 = models.CharField(max_length=255, null=True,blank=True)
     address2 = models.CharField(max_length=255, null=True,blank=True)
@@ -141,7 +141,7 @@ class RetailerProfile(models.Model):
         """Gets profile picture as a thumbnail and returns the url or returns the default image"""
         return self.company_logo or "upload/default_avatar.gif"
         
-    def save(self):
+    def save(self,*args,**kwargs):
         if self.id:
             old_obj = RetailerProfile.objects.get(pk=self.id)
             if not old_obj.approved and self.approved:
@@ -155,19 +155,25 @@ class RetailerProfile(models.Model):
                 }
                 subject = render_to_string(RETAILER_SUBJECT, ctx)
                 email_message = render_to_string(RETAILER_MESSAGE, ctx)
-                try:
-                    new_user = User.objects.get(username=self.email_address)
-                    new_user.is_active = True
-                    new_user.save()
-                    self.user = new_user                    
-                except User.DoesNotExist:
-                    pass                    
                 
 #                send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [self.email_address])
                 send_mail(subject, email_message, settings.EMAIL_HOST_USER, [self.email_address])
                 subject = "NEW RETAILER:%s"%self.name
                 email_message = "THE FOLLOWING EMAIL WAS SENT TO %s\n"%self.email_address + email_message
                 send_mail(subject, email_message, settings.EMAIL_HOST_USER, [settings.RETAILER_EMAIL])
+        try:
+            if self.email_address:
+                new_user = User.objects.get(username=self.email_address)
+                new_user.is_active = True
+                new_user.save()
+                self.user = new_user
+
+                for obj in self.retailer_item_set.all():
+                    obj.set_slug()
+                    obj.save()
+
+        except User.DoesNotExist:
+            pass                    
         super(RetailerProfile, self).save()
 
     @property
@@ -394,14 +400,12 @@ class PortableConnection(APIConnection):
         if not retailer:
             retailer = RetailerProfile.objects.create()
 
-
-
         connection,created = cls.objects.get_or_create(access_token=request.POST.get('access_token'),retailer_profile=retailer)
-        if connection.authenticate():
-            update_API_products(connection)
-            return connection,retailer
-        else:
-            return False
+        # if connection.authenticate():
+        update_API_products(connection)
+        return connection,retailer
+        # else:
+            # return connection,retailer
 
     def authenticate(self):
         api = portable.ShoppingPlatformAPI(self)
