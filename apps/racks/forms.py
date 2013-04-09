@@ -117,8 +117,8 @@ class ItemInventoryForm(AjaxModelForm):
 def item_inventory_form_factory(retailer):
     class ItemInventoryForm(AjaxModelForm):
         item = forms.ModelChoiceField(queryset=Item.objects.all(), widget=forms.HiddenInput())
-        size = forms.ModelChoiceField(required=True,queryset=Size.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
-        image = forms.ModelChoiceField(required=False,queryset=ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)))
+        size = forms.ModelChoiceField(required=True,queryset=Size.objects.filter(Q(retailer_profile=None)|Q(retailer_profile=retailer)))
+        image = forms.ModelChoiceField(required=False,queryset=ProductImage.objects.filter(Q(retailer_profile=None)|Q(retailer_profile=retailer)))
 
 
         class Meta:
@@ -143,7 +143,7 @@ def item_inventory_form_factory(retailer):
 
         def __init__(self,*args,**kwargs):
             super(ItemInventoryForm,self).__init__(*args,**kwargs)
-            addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(Q(retailer=None)|Q(retailer=retailer)),'#','Product Image')
+            addPlus(self.fields['image'].widget, 'image', None, ProductImage.objects.filter(Q(retailer_profile=None)|Q(retailer_profile=retailer)),'#','Product Image')
             self.fields['image'].widget.attrs['class'] = "imageselector"
             self.fields['image'].empty_label = '/static/images/choosepic.png'
             self.fields['size'].initial = None

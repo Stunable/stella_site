@@ -347,7 +347,7 @@ def edit_item(request, item_id=None, template='retailers/add_item.html'):
                 item_instance._retailer = retailer
             print 'after save item form'
             
-            inventory_form = inventory_type_formset_factory(request.user, post, item_instance)        
+            inventory_form = inventory_type_formset_factory(retailer, post, item_instance)        
             # print inventory_form
             if not inventory_form.is_valid():
                 response.update({'success' : False})
