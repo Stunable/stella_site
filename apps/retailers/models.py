@@ -12,9 +12,16 @@ from django.contrib.localflavor.us.models import PhoneNumberField
 from racks.models import Item,ProductImage,ItemType,Size
 import shopify
 
+
+from apps.shopping_platforms.models import APIPlatformConnection,APIProductConnection
+from shopping_platforms.tasks import update_API_products
+
+import apps.portable as portable
+
+
 from apps.common.forms import FedexTestAddress
 
-from tasks import process_upload,save_shopify_inventory_update,update_API_products
+from tasks import process_upload,save_shopify_inventory_update
 
 
 
@@ -198,61 +205,22 @@ class StylistItem(models.Model):
         except:
             return '-deleted- '
 
-class APIProductConnection(models.Model):
-    class Meta:
-        abstract=True
-    source_id = models.IntegerField()
-    api_connection= models.ForeignKey('APIConnection')
 
-    
-
-
+            
 
 class ShopifyProduct(APIProductConnection):
     pass
 
-
+    
 class ShopifyVariation(APIProductConnection):
 
-    
     def update_inventory(self,item_variation,number_sold):
 
         save_shopify_inventory_update.delay(self.api_connection.shopifyconnection,self.source_id,item_variation,number_sold)    
 
 
-    @staticmethod
-    def get_prices(variation_object,Map):
-        """ shopify variants don't always have a "compare at price" so we need to handle that"""
-
-        sale_price = variation_object[Map['itemtype']['fields']['sale_price']]
-        price = sale_price
-
-        if variation_object[Map['itemtype']['fields']['price']]:
-            price = variation_object[Map['itemtype']['fields']['price']]
-
-        return price,sale_price
-
-class APIConnection(models.Model):
-
-    # these are per API
-    ITEM_API_CLASS = ShopifyProduct
-    VARIATION_API_CLASS = ShopifyVariation
-    
-    # these probably won't need to change but are helpful for avoiding circular imports
-    SIZE_CLASS = Size
-    ITEM_TYPE_CLASS = ItemType
-    ITEM_CLASS = Item
-    IMAGE_CLASS = ProductImage
-    STYLIST_ITEM_CLASS = StylistItem
-
-    # class Meta:
-    #     abstract=True
-
-    #fields
-    retailer = models.ForeignKey(User)
-    update_in_progress = models.BooleanField(default=False)
-    last_updated = models.DateTimeField(auto_now_add=True)
-
+class APIConnection(APIPlatformConnection):
+    pass
 
 
 
@@ -263,12 +231,26 @@ class ShopifyConnection(APIConnection):
 
     ITEM_API_CLASS = ShopifyProduct
     VARIATION_API_CLASS = ShopifyVariation
+    
+    # these probably won't need to change
+    SIZE_CLASS = Size
+    ITEM_TYPE_CLASS = ItemType
+    ITEM_CLASS = Item
+    IMAGE_CLASS = ProductImage
 
     shop_url = models.TextField()
     access_token = models.TextField()
 
-    def refresh_all_products(self):
-        update_API_products.delay(self)
+    
+    variants_Have_Prices = True
+
+    def authenticate(self):
+        try:
+            return self.get_session().Shop.current().to_dict()['email']
+        except:
+            raise
+            return False
+
 
     def get_session(self):
         """ return an object which is authenticated and can interact with the API"""
@@ -286,11 +268,10 @@ class ShopifyConnection(APIConnection):
             resp = self.get_session().Product.find(limit=10,page=page)
             if not len(resp):
                 return
-            yield resp
+            yield [p.to_dict() for p in  resp]
             page += 1
        
-    def get_variations(self,product_dict):
-        return product_dict[self.field_mapping(product_dict)['itemtype']['source']]
+    
 
     @staticmethod
     def field_mapping(pd):
@@ -314,8 +295,6 @@ class ShopifyConnection(APIConnection):
                     'source_id':'id',
                     'SKU':'sku',
                     'inventory':'inventory_quantity',
-                    'price':'compare_at_price',
-                    'sale_price':'price',
                     'position':'position'
                 }
             }
@@ -333,6 +312,10 @@ class ShopifyConnection(APIConnection):
         return out
 
     @staticmethod
+    def get_id(pd):
+        return pd['id']
+
+    @staticmethod
     def get_images(pd):
         for img in pd['images']:
             # this needs to output the url/path to the image and some sort of unique identifier to prevent duplicates
@@ -345,7 +328,141 @@ class ShopifyConnection(APIConnection):
             desc = pd['body_html']
         return desc
 
+    @staticmethod
+    def get_name(product_dict):
+        return product_dict['title']
+
+    @staticmethod
+    def get_brand(product_dict):
+        return product_dict['vendor']
+
+    @staticmethod
+    def get_prices(variation_object):
+        """ shopify variants don't always have a "compare at price" so we need to handle that"""
+
+        sale_price = variation_object['price']
+        price = sale_price
+
+        if variation_object['compare_at_price']:
+            price = variation_object['compare_at_price']
+
+        return price,sale_price
 
 
+
+class PortableProduct(APIProductConnection):
+    pass
+
     
-    
+class PortableVariation(APIProductConnection):
+    pass
+
+
+class PortableConnection(APIConnection):
+
+    def __unicode__(self):
+        return self.api_url+self.access_token
+
+    ITEM_API_CLASS = PortableProduct
+    VARIATION_API_CLASS = PortableVariation
+
+    SIZE_CLASS = Size
+    ITEM_TYPE_CLASS = ItemType
+    ITEM_CLASS = Item
+    IMAGE_CLASS = ProductImage
+
+    api_url = 'https://api.portableshops.com/'
+    access_token = models.CharField(max_length=64,null=True)
+
+
+    variants_Have_Prices = False
+
+    @classmethod
+    def get_or_create_from_request(cls,request):
+        connection,created = cls.objects.get_or_create(access_token=request.POST.get('access_token'))
+        if connection.authenticate():
+            update_API_products(connection)
+            return connection
+        else:
+            return False
+
+    def authenticate(self):
+        api = portable.ShoppingPlatformAPI(self)
+        T = api.test_authenticate()
+        return T
+
+    def get_products(self):
+        api = portable.ShoppingPlatformAPI(self)
+
+        l = api.extract_product_list()
+        return api.extract_product_list()
+
+    def get_variations(self,product_dict):
+        return product_dict['variation']
+
+    @staticmethod
+    def get_full_size_media_path(data):
+        out = [data['media_server_id']]
+        out.extend(
+            [
+                data['media_dimension']['template']['width'],
+                data['media_dimension']['template']['height'],
+                data['extension']
+            ]
+        )
+
+        return '.'.join(out)
+
+    def get_images(self,pd):
+        path = 'http://images.portableshops.com/'
+        yield path+ self.get_full_size_media_path(pd['primary_media']),pd['primary_media']['id']
+        for img in pd['media']:
+            yield path+ self.get_full_size_media_path(img),img['id']
+
+    @staticmethod
+    def get_id(pd):
+        return pd['item']['id']
+
+    @staticmethod
+    def get_description(pd):
+        return pd['item']['description']
+       
+    @staticmethod
+    def field_mapping(pd):
+        out = {
+            'item':{
+                'source':'item',
+                'fields':{
+                    'name':'name',
+                    'category':'product_type',
+                    'tags':'tags',
+                    'brand':'designer_name'
+                }
+            },
+            'itemtype':{
+                'source':'variation',
+                'fields':{
+                    'source_id':'id',
+                    'SKU':'UPC',
+                    'inventory':'stock',
+                    'position':'sort',
+                    'size':'size',
+                    'custom_color_name':'colour'
+                }
+            }
+
+        }
+
+        return out
+
+    @staticmethod
+    def get_prices(pd):
+        return float(pd['item']['price'])/100,float(pd['item']['sale_price'])/100
+
+    @staticmethod
+    def get_name(product_dict):
+        return product_dict['item']['name']
+
+    @staticmethod
+    def get_brand(product_dict):
+        return product_dict['item']['designer_name']

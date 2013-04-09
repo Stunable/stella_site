@@ -1,5 +1,5 @@
 {% extends 'clean_base.html' %}
-
+{% block title %}Stunable | Cart{% endblock %}
 {% block body_class %}common{% endblock %}
 {% block content-class%}round-corner-shadow{%endblock%}
 
@@ -43,7 +43,7 @@
                 </tr>
                 <tr class="hidden">
                    
-                    <td>processing fees:</td>
+                    <td>handling: </td>
                     <td>${{cart.totals_as_pretty_dict.processing}}</td>
                 </tr>
                 <tr class="big" >

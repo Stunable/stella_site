@@ -1,12 +1,27 @@
 {% extends 'cart/cart.html' %}
 
+
+
 {% block inner_content %}
 
+
+<div id="stunable-tabs-nav">
+            <ul class="cart-progress">
+                <li {% if request.path == '/cart/'%}class="active"{% endif %}>1. Shopping Cart</li> >
+                <li {% if shipping_form %} class="active"{% endif %}>2. Payment/Shipping</li> >
+                <li {% if checkouts %} class="active"{% endif %}>3. Confirmation</li>
+            </ul>
+         </div>
 
 
 <div class="container-box bootstrap">
 	<input type="submit" class="btn btn-primary btn-place-an-order" value="Place an order" id="btn-place-an-order" />
 	<br><br>
+
+
+
+
+
 <div id="payment_shipping_info">
 
 	

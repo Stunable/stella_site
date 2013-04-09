@@ -41,7 +41,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # from apps.cart.plugins.taxcloud import TaxCloudClient
 # TCC = TaxCloudClient()
 
-from tasks import update_API_products
+from shopping_platforms.tasks import update_API_products
 
 from cart.plugins.create_shipment import ship_it
 
@@ -183,6 +183,7 @@ def setup_wepay(request):
         
             retailer_profile.save()
 
+            return redirect(reverse('product_list'))
         except:
             ctx['error'] = 'There was an error setting up your payments.<br><a href="/wepay">click here</a> to try again.'
 

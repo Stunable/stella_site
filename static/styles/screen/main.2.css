@@ -1363,9 +1363,8 @@ table.retailer-item-group{
 
 
 #btn-place-an-order{
-	margin-left:40%;
-	margin-right:40%;
-	margin-top:20px;
+	position: absolute;
+	right: 100px;
 }
 #purchased_bottom{
 	margin:20px;
@@ -1663,6 +1662,11 @@ ul.address_confirm{
 	margin-left:10px;
 }
 
+
+.info_modal.modal.current{
+
+}
+
 form .info_modal{
 	display:none;
 }
@@ -1677,6 +1681,7 @@ form .info_modal{
 	padding:20px;
 	overflow-y:auto;
 	background-color:white;
+	min-height:80px;
 }
 
 .info_modal ul{

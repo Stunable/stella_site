@@ -20,21 +20,28 @@ admin.site.register(RetailerProfile, RetailerProfileAdmin)
 admin.site.register(StylistItem)
 admin.site.register(ShippingType)
 admin.site.register(ProductUpload)
-
-# admin.site.register(ShopifyProduct)
-# admin.site.register(ShopifyVariation)
+admin.site.register(ShopifyProduct)
+admin.site.register(ShopifyVariation)
+admin.site.register(PortableProduct)
+admin.site.register(PortableVariation)
 
 
 
 class APIConnectionAdmin(admin.ModelAdmin):
     list_display = ('__unicode__','last_updated',)
-    actions=('refresh_all_products',)
+    actions=('refresh_all_products','test_auth')
 
     def refresh_all_products(self,request,queryset):
         for o in queryset:
             o.refresh_all_products()
 
+    def test_auth(self,request,queryset):
+        for o in queryset:
+            o.authenticate()
+
 admin.site.register(ShopifyConnection,APIConnectionAdmin)
+
+admin.site.register(PortableConnection,APIConnectionAdmin)
 
 class UploadErrorAdmin(admin.ModelAdmin):
     list_display = ('text','upload')

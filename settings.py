@@ -187,6 +187,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
     'shopify_app.middleware.LoginProtection',
+    'apps.common.middleware.XsSharing',
+
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
@@ -267,7 +269,8 @@ INSTALLED_APPS = (
     'djcelery',
     'storages',
     'queued_storage',
-    'debug_toolbar'
+    'debug_toolbar',
+    'shopping_platforms'
 )
 
 
@@ -398,11 +401,7 @@ PRODUCT_GROUPS = {
 }
 
 
-PAYPAL_TEST = True           # Testing mode on
-PAYPAL_WPP_USER = "thanh_1346909527_biz_api1.simpleunion.com"      # Get from PayPal
-PAYPAL_WPP_PASSWORD = "1346909592"
-PAYPAL_WPP_SIGNATURE = "AuNpYqzF97TLkPdB7Ifqg4fv0yT4ADn0-4ImkElljllTI3S6XkW26Hy3"
-PAYPAL_RECEIVER_EMAIL = "thanh_1346909527_biz@simpleunion.com"
+
 
 
 WEPAY_FIXED_FEE = .30
@@ -433,6 +432,8 @@ TAX_USE_TAXCLOUD_AUTHORIZATION = True
 TAX_TAXCLOUD_API_ID = '15B54040'
 TAX_TAXCLOUD_API_KEY = '0D678AA9-B974-44AF-B1E5-6DB714D26E55'
 USPS_ID = '193BURLE8091'
+
+
 
 
 try:                        
