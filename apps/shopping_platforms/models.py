@@ -44,6 +44,11 @@ class APIPlatformConnection(models.Model):
     last_updated = models.DateTimeField(auto_now_add=True)
 
 
+    @classmethod
+    def get_or_create_from_request(cls,request):
+        raise NotImplementedError('create an api model instance')
+
+
     def refresh_all_products(self):
         if settings.DEBUG:
             update_API_products(self)

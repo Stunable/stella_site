@@ -14,6 +14,7 @@ import shopify
 
 
 from apps.shopping_platforms.models import APIPlatformConnection,APIProductConnection
+from shopping_platforms.tasks import update_API_products
 
 import apps.portable as portable
 
@@ -375,6 +376,15 @@ class PortableConnection(APIConnection):
 
 
     variants_Have_Prices = False
+
+    @classmethod
+    def get_or_create_from_request(cls,request):
+        connection,created = cls.objects.get_or_create(access_token=request.POST.get('access_token'))
+        if connection.authenticate():
+            update_API_products(connection)
+            return connection
+        else:
+            return False
 
     def authenticate(self):
         api = portable.ShoppingPlatformAPI(self)

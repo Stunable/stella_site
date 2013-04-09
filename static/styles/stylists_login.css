@@ -1,0 +1,211 @@
+@charset "UTF-8";
+/* Simple fluid media
+   Note: Fluid media requires that you remove the media's height and width attributes from the HTML
+   http://www.alistapart.com/articles/fluid-images/ 
+*/
+img, object, embed, video {
+	max-width: 100%;
+}
+/* IE 6 does not support max-width so default to width 100% */
+.ie6 img {
+	width:100%;
+}
+
+
+#APIs td img, .modal.current img.logo{
+	max-height:70px;
+}
+
+/*
+	Dreamweaver Fluid Grid Properties
+	----------------------------------
+	dw-num-cols-mobile:		5;
+	dw-num-cols-tablet:		8;
+	dw-num-cols-desktop:	12;
+	dw-gutter-percentage:	25;
+	
+	Inspiration from "Responsive Web Design" by Ethan Marcotte 
+	http://www.alistapart.com/articles/responsive-web-design
+	
+	and Golden Grid System by Joni Korpi
+	http://goldengridsystem.com/
+*/
+
+/* Mobile Layout: 480px and below. */
+
+.modal.current{
+	background-color:white;
+	padding:20px;
+}
+
+.black{
+	background-color: black;
+}
+
+.center{
+width:100%;
+text-align: center;
+}
+.gridContainer {
+	display:inline-block;
+	background-image:url(../images/StylistLogin_bg.jpg);
+	/*background-repeat:no-repeat;*/
+	background-size:auto;
+	width: 1350px;
+	
+}
+#LayoutDiv1 {
+	clear: both;
+	float: left;
+	margin-left: 0;
+	width: 100%;
+	display: block;
+}
+#header {
+	clear: both;
+	float: left;
+	margin-left: 0;
+	width: 100%;
+	display: block;
+	background-image:url(../images/gui/header_bg.png);
+	height:50px;
+
+}
+#nav {
+	clear: both;
+	float: left;
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 90%;
+	display: block;
+	height:30px;
+	padding-top:20px;
+	font:Arial, Helvetica, sans-serif;
+	font-size:16px;
+
+}
+#body {
+	clear: both;
+	float: left;
+	margin-left: 0;
+	margin-top:50px;
+	margin-bottom:10px;
+	width: 100%;
+	display: block;
+	height:10em;
+	font-family:Arial, Helvetica, sans-serif;
+
+}
+#footer {
+	clear: both;
+	float: left;
+	margin-left: 0;
+	width: 100%;
+	display: block;
+	height:10em;
+	padding-top:30px;
+	
+}
+#video {
+	clear: none;
+	float: left;
+	width: 100%;
+	display: block;
+	height:20em;
+
+}
+#login {
+	padding-top:20px;
+	padding-bottom:20px;
+	clear: both;
+	float: left;
+	margin-left: 0;
+	width: 100%;
+	display: block;
+	opacity:.9;
+
+
+
+	
+}
+
+.btn {
+	/*padding:.5em;*/
+   display: inline-block;
+  *display: inline;
+  font-weight: bold;
+  *margin-left: .3em;
+  font-size: 18px;
+  line-height: 18px;
+  *line-height: 20px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  background-color:#7f10b5;
+  border:1px solid #7f10b5;
+ 
+}
+
+.btn.disabled{
+	color:#bd4bf5;
+}
+
+
+ .btn:hover {
+   /*display: inline-block;*/
+  /**display: inline;*/
+  /*padding: 6px 12px 6px;*/
+  /*margin-bottom: 0;*/
+  /**margin-left: .3em;*/
+  /*font-size: 13px;*/
+  /*line-height: 18px;*/
+  /**line-height: 20px;*/
+  color: #7f10b5;
+  /*text-align: center;*/
+  /*vertical-align: middle;*/
+  /*cursor: pointer;*/
+  background-color:white;
+  border:1px solid #7f10b5;
+}
+
+
+.btn.disabled:hover {
+   /*display: inline-block;*/
+  /**display: inline;*/
+  /*padding: 6px 12px 6px;*/
+  /*margin-bottom: 0;*/
+  /**margin-left: .3em;*/
+  /*font-size: 13px;*/
+  /*line-height: 18px;*/
+  /**line-height: 20px;*/
+  color: #7f10b5;
+  /*text-align: center;*/
+  /*vertical-align: middle;*/
+  /*cursor: pointer;*/
+  background-color:#9a1ad8;
+  border:1px solid #7f10b5;
+}
+
+.btn:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+#header form .txt{
+	margin:0px;
+	position:relative;
+	top:-2px;
+}
+/* Tablet Layout: 481px to 768px. Inherits styles from: Mobile Layout. */
+
+@media only screen and (min-width: 481px) {
+
+
+}
+
+/* Desktop Layout: 769px to a max of 1232px.  Inherits styles from: Mobile Layout and Tablet Layout. */
+
+@media only screen and (min-width: 769px) {
+
+}

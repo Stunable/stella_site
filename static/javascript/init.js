@@ -33,17 +33,11 @@ var stunable = {
           return false
       })
 
-
-      // $('.panel-inner-content').html($('.panel-header .active').find('.tab-content').html()).fadeIn(1000, function() {});             
+            
 
       init_refclicks($('.refclick'))
       init_choiceclicks($('.choiceclick'))
       init_refsubmits($('.refsubmit'))
-
-      // $('.cart_slide_trigger').hover(reveal_cart)
-      // $('.cart_slide_trigger').click(reveal_cart)
-
-      // initTouch()
 
       $('.arbitrary_modal').click(function(e){
         console.log( $($(this).data('target')))
@@ -63,15 +57,6 @@ var stunable = {
           // return false;
         })
 
-        // $('.left-panel').toggle(
-        //     function(){
-        //       $('#page-content').animate({'left':'20px'},400)
-        //     },
-        //     function(){
-        //       $('#page-content').animate({'left': '220px'},400)
-        //     }
-        // )
-
         $('#nav-handle').toggle(
             function(){
               $('#page-content').animate({'left':'20px'},400)
@@ -81,13 +66,7 @@ var stunable = {
             }
         )
 
-        // $('.left-panel').hover(function(){
-        //       $('#page-content').animate({'left':'220px'},400)
-        //     },
-        //     function(){
-        //       $('#page-content').animate({'left': '20px'},400)
-        //     })
-
+     
         $('.click-toggle').toggle(function(e){
           e.stopPropagation();
           $($(this).data('target')).fadeIn()
@@ -97,10 +76,7 @@ var stunable = {
 
         })
 
-        // $('.click-toggle').click(function(e){
-        //   $($(this).data('target')).toggle();
-        // })
-
+      
         $('.click-show').click(function(e){
           e.preventDefault();
           var t = $($(this).data('target'))
@@ -113,11 +89,14 @@ var stunable = {
         })
 
         tabs_find_active()
-        // var box = $('#login_box').clone()
-        // box.modal({clickClose:false,escapeClose:false,showClose:false})  
+      
 
-        // $('form').submit($(this).find('.spinbox').append('<img src="/static/images/loading.gif">'))
-
+        $('.hover_help').hover(
+          function(){
+            $($(this).data('target')).fadeIn();
+          },function(){
+            $($(this).data('target')).fadeOut();
+        })
 
     }
     ,shop: function(){    
@@ -231,23 +210,35 @@ var stunable = {
           }
 
           if (shipping_choice.length && payment_choice.length){
-            $('<div class="info_modal"><div>We are placing your order.  Please Wait a moment.</div><img src="/static/images/loading.gif"> </div>').modal({clickClose: false,escapeClose:false,showClose:false})
-            // return false;
+             $('<div class="info_modal"><div class="bootstrap">Ready to place your order. Are you sure?<div style="float:right;margin:8px"><a id="place_order_for_real_btn" class="btn" href="">Yes.</a></div></div></div>').modal(
 
-            $.post('/cart/order_placed',
-              $.extend($('#shipping-choice-form').serializeObject(),$('#payment-choice-form').serializeObject()),
-                function(data){
-                  if (data.success){
-                    window.location = data.redirect;
-                  }else{
-                    pop_modal('<div>Sorry, An error occured:</div><div>'+data.error+'</div>');
-                  }
+              {
+                afterOpenFunction:function(){
+                    console.log('order place post open')
+                    $('#place_order_for_real_btn').click(function (e){
+                          $('<div class="info_modal"><div>We are placing your order.  Please Wait a moment.</div><img src="/static/images/loading.gif"> </div>').modal({clickClose: false,escapeClose:false,showClose:false})
+                          $.post('/cart/order_placed',
+                              $.extend($('#shipping-choice-form').serializeObject(),$('#payment-choice-form').serializeObject()),
+                                function(data){
+                                  if (data.success){
+                                    window.location = data.redirect;
+                                  }else{
+                                    pop_modal('<div>Sorry, An error occured:</div><div>'+data.error+'</div>');
+                                  }
 
-                }                
-            )
-          // $('#shipping-form').submit()
-          }
-        })
+                                }                
+                            )
+                        return false;
+                        })
+                      }
+                })
+       
+
+            }
+          })
+
+
+        
 
     },
       retailers:function(){
@@ -736,8 +727,6 @@ var add_rack_modal_options = {
   var item_modal_options = {
     afterOpenFunction:init_item_modal
   }
-
-
 
     
 $(document).ready(function() {

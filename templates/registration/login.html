@@ -1,16 +1,84 @@
-{% extends "retailers/retailer_base.html" %}
+<!doctype html>
+<!--[if lt IE 7]> <html class="ie6 oldie"> <![endif]-->
+<!--[if IE 7]>    <html class="ie7 oldie"> <![endif]-->
+<!--[if IE 8]>    <html class="ie8 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welcome Esteemed Stylist</title>
+<link href="{{ STATIC_URL }}styles/boilerplate.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="{{ STATIC_URL }}styles/stylists_login.css" type="text/css">
+<link href="{{ STATIC_URL }}fancybox/source/jquery.fancybox.css" rel="stylesheet" type="text/css">
+<!-- 
+To learn more about the conditional comments around the html tags at the top of the file:
+paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
 
-{% block title %} Stunable | Home {% endblock %}
+Do the following if you're using your customized build of modernizr (http://www.modernizr.com/):
+* insert the link to your js here
+* remove the link below to the html5shiv
+* add the "no-js" class to the html tags at the top
+* you can also remove the link to respond.min.js if you included the MQ Polyfill in your modernizr build 
+-->
+<!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<!-- Add jQuery library -->
 
-{% block body_class %}login {% endblock %}"
+</head>
+<body data-role="retailers">
+<div class="center black">
+<div class="gridContainer clearfix">
+  <div id="header">
+  <img style="position:absolute;top:-2px;left:0px" src="{{ STATIC_URL }}images/new_logo.png" alt="logo"> 
+  		<form style="width:100%;text-align:right;position:relative;top:3px;right:10px" action="{% url auth_login %}" class="user-entry php-form bootstrap" id="signin-form" method="POST">
+			{% csrf_token %}
+			<input width:"32" id="tester" class="txt" name="email" type="text" placeholder="email address"/>
+			<input  class="txt pass" name="password" type="password" placeholder="password"/>
+			<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{% url product_list %}{% endif %}" />
 
-{% block content-class%}round-corner-shadow{%endblock%}
+				<input class="btn" type="submit" value="login" />		
 
-{% block body_id %}homepage{% endblock %}
+				<!-- <a href="/accounts/password_reset" title="Click here to retrieve your password."><span style="display: block">-- FORGOT PASSWORD? --</span></a> -->
+		</form><!--/.section.user-entry#signin-form-->
 
 
+</div>
+  <div id="body">
+ <center><font color="#FFFFFF" size="+3"> Join Stunable's growing community of unique clothing retailers.</font></center>
+ <br>
+ <center><font color="#FFFFFF" size="+2"> We take the work out of looking stunning. </font></center>
+  </div>
+  <div id="video">
+  <a class="fancyYoutube" rel="modal:open" href="#dialog-modal"><img src="{{ STATIC_URL }}images/png.png"style="cursor:pointer; margin:0px auto; display:block"width="146" height="146"/></a>
+  </div>
+  
+  <div id="login">
+  <table id="APIs" width="100%" cellspacing="10px" cellpadding="1px">
+  <tr>
+    <td><center>
+    	<a rel="modal:open" href="#shopify_login"><img src="{{ STATIC_URL }}images/shopify_login.png" alt="shopify"></a>
+    </center></td>
+    <td><center><a rel="modal:open" href="#portable_login"> <img src="{{ STATIC_URL }}images/portableshops_login.png" alt="portable"></a>
+    </center></td>
+    <td><center>
+      <a href="#coming_soon" rel="modal:open"> <img src="{{ STATIC_URL }}images/volusion_login.png" alt="volusion"></a>
+    </center></td>
+    <td><center><a href="#coming_soon" rel="modal:open"> <img src="{{ STATIC_URL }}images/magento_login.png" alt="magento"></a>
+    </center></td>
+      <td><center>
+        <a href="#coming_soon" rel="modal:open"> <img src="{{ STATIC_URL }}images/lightspeed_login.png" alt="lightspeed"></a>
+      </center></td>
+  </tr>
+</table>
 
-{% block inner_content %}
+  </div>
+<div id="footer">
+ <center><font color="#FFFFFF" size="2">Don't see your inventory management platform listed? <br> Email us at <a style="color:#000" href="mailto:stylists@stunable.com?subject=API Integration Inquiry">stylists@stunable.com</a> to inquire about our custom API integrations or to suggest a new platform!</font></center></div>
+</div>
+</div>
 
 
 	<div class="center retailer login">
@@ -20,26 +88,72 @@
 	{{form.non_field_errors}}
 </p>
 {% endif %}
-		<form action="{% url auth_login %}" class="user-entry php-form bootstrap" id="signin-form" method="POST">
-			{% csrf_token %}
-			<div><input width:"32" id="tester" class="txt" name="email" type="text" placeholder="email address"/>
-<input  class="txt pass" name="password" type="password" placeholder="password"/></div>
-			<div><input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{% url retailer_information %}{% endif %}" />
-				<input class="btn" type="submit" value="login" />
-			</div>
-				
-				<div>or</div>
-				<div><a class="btn reverse" href="{% url create_retailer_profile %}">create account</a></div>
 
-			<div class="forgot-pass">
-				<a href="/accounts/password_reset" title="Click here to retrieve your password."><span style="display: block">-- FORGOT PASSWORD? --</span></a>
-			</div>
-		</form><!--/.section.user-entry#signin-form-->
 	</div>
 
-{% endblock %} 
 
-  {% block login_modal_box %}
-  {% endblock %}
+<div id="dialog-modal" Title="Youtube Video" style="display:none">
+	<iframe width="640" height="360" src="http://www.youtube.com/embed/qE0eZ2suLT0?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+</div>
 
+<div style="height:0px;overflow:hidden">
+	<div style="width:600px" id="shopify_login">
+		<div class="center">
+		<img class="logo" src="{{ STATIC_URL }}images/shopify_login.png" alt="shopify">
+		<form action="{% url apps.shopify_app.views.authenticate %}" method="post">{% csrf_token %}     
+		  <label for='shop'><strong>Enter The URL of your Shopify Shop</strong>
+		   (YOUR SHOP NAME).myshopify.com
+		  </label>
+		  <p>
+		    <input id="shop" name="shop" size="45" type="text" />
+		    <input class="btn" name="commit" type="submit" value="Install" />
+		  </p>
+		</form>
+		</div>
+	</div>	
+
+	<div style="width:600px" id="portable_login">
+		<div class="center">
+		<img class="logo" src="{{ STATIC_URL }}images/portableshops_login.png" alt="shopify">
+		<form action="/platforms/hookup/portable" method="post">{% csrf_token %}     
+		  <label for='shop'><strong>Enter Your API Access Token</strong>
+		   <a class="hover_help" data-target="#portable_help" target="blank" href="https://portableshops.com/my/dashboard/">what is this token?</a>
+		  </label>
+		  <p>
+		    <input name="access_token" size="45" type="text" />
+		    <input class="btn" name="commit" type="submit" value="Install" />
+		  </p>
+		</form>
+		</div>
+
+		<div style="display:none;position:absolute;left:-200px;top:-250px" id="portable_help" class="popup_help"><img style="height:320px" src="{{STATIC_URL}}images/portable_help.png"></div>
+	</div>	
+
+
+
+	<div id="coming_soon" style="width:400px">
+		<div class="big"><h1>coming soon!</h1></div>
+	</div>
+</div>
+</body>
+   		<script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery-ui-1.8.22.custom.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.spritely-0.6.1.js" ></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/chosen.jquery.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.form.js"></script>
+
+
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.modal.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.validate.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.damonzoom.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.damonscroll.js"></script>
+
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/imageselect.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.isotope.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/stunable.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/stunable.item_modal.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/init.js"></script>
+
+
+</html>
 

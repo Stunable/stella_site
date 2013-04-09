@@ -76,8 +76,12 @@
 	<div class="profile">
 	<div class="page-header">
 		<div class="section intro">
-			<h2><span>Interested in Becoming a Stunable Stylist?</span></h2>
+			{% if request.session.active_api_connection %}<h2><span>awesome. we're loading in your products right now!  <br>In the meantime, we'll need a little info from you.</span></h2>{% else %}
+
+			h2><span>Interested in Becoming a Stunable Stylist?</span></h2>
 			<h3><span>Please complete our application below and we'll be in touch.</span></h3>
+			{% endif %}
+			
 		</div>
 	</div>
 

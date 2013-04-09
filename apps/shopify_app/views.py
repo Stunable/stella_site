@@ -28,6 +28,7 @@ import os
 PP = pprint.PrettyPrinter(indent=4)
 
 def _return_address(request):
+    print "NO SHOP?!?!?!?!"
     return request.session.get('return_to') or reverse('shopify_root_path')
 
 def login(request):

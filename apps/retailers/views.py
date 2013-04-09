@@ -183,6 +183,7 @@ def setup_wepay(request):
         
             retailer_profile.save()
 
+            return redirect(reverse('product_list'))
         except:
             ctx['error'] = 'There was an error setting up your payments.<br><a href="/wepay">click here</a> to try again.'
 
