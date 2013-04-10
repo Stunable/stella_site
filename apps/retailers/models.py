@@ -26,6 +26,8 @@ from tasks import process_upload,save_shopify_inventory_update
 
 def get_retailer_profile(request,retailer_id=None):
     try:
+        if request.session.get('active_retailer_profile',None):
+            return request.session.get('active_retailer_profile')
         if retailer_id:
             return RetailerProfile.objects.get(id=retailer_id)
         if request.user.is_staff:
@@ -238,6 +240,21 @@ class ShopifyVariation(APIProductConnection):
 class APIConnection(APIPlatformConnection):
     pass
 
+    @classmethod
+    def get_or_create_from_request(cls,request):
+
+        retailer = get_retailer_profile(request)
+
+        if not retailer:
+            retailer = RetailerProfile.objects.create()
+
+        connection,created = cls.objects.get_or_create(access_token=request.POST.get('access_token'),retailer_profile=retailer)
+        # request.session['active_retailer_profile'] = retailer
+        # if connection.authenticate():
+        update_API_products(connection)
+        return connection,retailer
+        # else:
+            # return connection,retailer
 
 
 class ShopifyConnection(APIConnection):
@@ -391,21 +408,6 @@ class PortableConnection(APIConnection):
     access_token = models.CharField(max_length=64,null=True)
 
     variants_Have_Prices = False
-
-    @classmethod
-    def get_or_create_from_request(cls,request):
-
-        retailer = get_retailer_profile(request)
-
-        if not retailer:
-            retailer = RetailerProfile.objects.create()
-
-        connection,created = cls.objects.get_or_create(access_token=request.POST.get('access_token'),retailer_profile=retailer)
-        # if connection.authenticate():
-        update_API_products(connection)
-        return connection,retailer
-        # else:
-            # return connection,retailer
 
     def authenticate(self):
         api = portable.ShoppingPlatformAPI(self)

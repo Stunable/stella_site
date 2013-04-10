@@ -57,18 +57,6 @@ import os
 
 
 
-def get_retailer_profile(request,retailer_id=None):
-    try:
-        if request.session.get('active_retailer_profile',None):
-            return request.session.get('active_retailer_profile')
-        if retailer_id:
-            return RetailerProfile.objects.get(id=retailer_id)
-        if request.user.is_staff:
-            return RetailerProfile.objects.get(id=request.GET.get('retailer',None))
-        return RetailerProfile.objects.get(user=request.user)
-    except:
-        return None
-
 
 
 @login_required
@@ -217,14 +205,7 @@ def setup_wepay(request):
 def terms_complete(request, retailer_id, template="accounts/thank-you.html"):
     ctx = {'retailer': True}
 
-    if int(request.session['retailer_id']) != int(retailer_id):
-        print request.session['retailer_id']
-        raise
-
-    # print request.session.items()
-    
-    # send email to notify user
-    retailer = get_object_or_404(RetailerProfile, pk=retailer_id)
+    retailer = get_retailer_profile(request)
     email_ctx = {"retailer": retailer}
     subject = render_to_string(RETAILER_INFORM_SUBJECT, email_ctx)
     email_message = render_to_string(RETAILER_INFORM_MESSAGE, email_ctx)
