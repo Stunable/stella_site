@@ -165,7 +165,7 @@ class ProductImageAdmin(admin.ModelAdmin):
     def safe_delete(self,request,queryset):
         for PI in queryset:
             if PI.item_featured_image_set.all().count() or PI.item_variation_image_set.all().count():
-                return
+                pass
             else:
                 PI.delete()
 
