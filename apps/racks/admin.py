@@ -144,7 +144,7 @@ class ProductImageAdmin(admin.ModelAdmin):
     #readonly_fields = ['retailer']
     list_filter = ('retailer_profile',)
     search_fields = ('image','identifier')
-    actions = ('make_pretty','premake_thumbs','delete_orphans')
+    actions = ('make_pretty','premake_thumbs','safe_delete')
 
     def make_pretty(self,request,queryset):
         for obj in queryset:
@@ -162,10 +162,12 @@ class ProductImageAdmin(admin.ModelAdmin):
         for obj in queryset:
             obj.get_thumbs()
 
-    def delete_orphans(self,request,queryset):
+    def safe_delete(self,request,queryset):
         for PI in queryset:
-            print PI.item, PI.identifier, PI.height
-
+            if PI.item_featured_image_set.all().count() or PI.item_variation_image_set.all().count():
+                return
+            else:
+                PI.delete()
 
 
 class DailySpecialAdmin(admin.ModelAdmin):

@@ -467,7 +467,7 @@ class ItemType(models.Model,DirtyFieldsMixin):
     class Meta:
         unique_together = (('item', 'size','custom_color_name'))
 
-    image = models.ForeignKey(ProductImage,null=True,blank=True)
+    image = models.ForeignKey(ProductImage,null=True,blank=True,related_name='item_variation_image_set')
     item = models.ForeignKey('Item', related_name='types')
     size = models.ForeignKey('Size',default=1)
     SKU = models.CharField(max_length=64,null=True,blank=True)
