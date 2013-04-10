@@ -239,7 +239,7 @@ class ProductImage(models.Model,listImageMixin):
     @staticmethod
     def already_exists(unique_string,retailer):
         try:
-            P = ProductImage.objects.get(identifier=unique_string,retailer=retailer)
+            P = ProductImage.objects.get(identifier=unique_string,retailer_profile=retailer)
             return P
         except:
             return None
