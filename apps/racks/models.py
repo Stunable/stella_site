@@ -222,6 +222,10 @@ class ProductImage(models.Model,listImageMixin):
                             }
             }
 
+    def zoom_or_not(self):
+        if self.width < 700 and self.height < 700:
+            return 'not'
+        return 'zoom_this'
 
 
     def save(self,instant=None,*args,**kwargs):
