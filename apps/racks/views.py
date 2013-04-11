@@ -530,18 +530,22 @@ def divide_into_list(list_item):
 
 # @login_required
 def carousel(request, slug, template='racks/new_carousel.html'):
-    ctx = {}
+    ctx = {'current':'all'}
     # profile = get_or_create_profile(request)
-    
+    current_tag = None
 
     try:
         current_tag = Tag.objects.get(slug=slug)
         query_set = Item.objects.with_any(current_tag).filter(approved=True,is_available=True)
     except:
-        current_tag = DailySpecial.objects.get(slug=slug)
-        query_set = current_tag.get_items()
+        try:
+            current_tag = DailySpecial.objects.get(slug=slug)
+            query_set = current_tag.get_items()
+        except:
+            pass
 
-    ctx['current'] = current_tag.slug
+    if current_tag:
+        ctx['current'] = current_tag.slug
     get_context_variables(ctx, request)
     
     # if settings.IS_PROD:
