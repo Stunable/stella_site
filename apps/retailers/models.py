@@ -336,7 +336,7 @@ class ShopifyConnection(APIConnection):
         for o in pd['options']:
             if o['name'] in ['size','Size','Chain Lengh',]:
                 out['itemtype']['fields']['size'] = 'option'+str(o['position'])
-            if for n in ['color', 'style','material','frame','gemstone','title']:
+            for n in ['color', 'style','material','frame','gemstone','title']:
                 if n in o['name'].lower():
                     out['itemtype']['fields']['custom_color_name'] = 'option'+str(o['position'])
                     continue
