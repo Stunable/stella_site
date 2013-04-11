@@ -282,7 +282,6 @@ CELERY_IMPORTS = (
 )
 
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
-djcelery.setup_loader()
 
 # django-registration
 ACCOUNT_ACTIVATION_DAYS = 14

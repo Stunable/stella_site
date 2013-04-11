@@ -9,7 +9,7 @@ from decorators import shop_login_required
 
 from racks.models import Item,ItemType,Color,Size,ProductImage
 from retailers.models import ShopifyProduct,ShopifyVariation,ShopifyConnection,StylistItem,RetailerProfile,get_retailer_profile
-from retailers.tasks import *
+from apps.shopping_platforms.tasks import *
 
 
 
