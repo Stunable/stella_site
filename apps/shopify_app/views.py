@@ -82,7 +82,7 @@ def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,V
     if not retailer_profile:
         retailer_profile = RetailerProfile.objects.create()
 
-    shopify_connection,created = APICONNECTION.objects.get_or_create(retailer=request.user,retailer_profile=retailer_profile,shop_url=request.session['shopify']['shop_url'])
+    shopify_connection,created = APICONNECTION.objects.get_or_create(retailer_profile=retailer_profile,shop_url=request.session['shopify']['shop_url'])
 
     request.session['active_api_connection'] = shopify_connection
     request.session['active_retailer_profile'] = retailer_profile
