@@ -224,7 +224,7 @@ def update_retailer_profile(request, template="retailers/account_information.htm
         retailer_profile = get_retailer_profile(request)
         if request.method == "POST":
             form = RetailerEditForm(request.POST, instance=retailer_profile)
-            if forms.is_valid():
+            if form.is_valid():
                 # print 'VALID'
                 user = request.user
                 # TODO: check and fix bug here
