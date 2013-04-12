@@ -57,7 +57,12 @@ import os
 
 
 
-
+def slash(request):
+    retailer_profile = get_retailer_profile(request)
+    if retailer_profile:
+        return redirect(reverse('product_list'))
+    else:
+        return redirect('accounts/login')
 
 @login_required
 def add_product_image(request):
