@@ -20,7 +20,7 @@
                 <div class="list-header big">Stylist Admin</div>
                 <div class="tab-content hidden">
                     <h4 class="list-header" id="company-information-menu-item">
-                        <a href="{% url retailer_information name=retailer_profile.name %}{% if request.user.is_staff %}?retailer={{retailer_profile.id}}{% endif %}">Account Information</a></h4>
+                        <a href="{% url retailer_information %}{% if request.user.is_staff %}?retailer={{retailer_profile.id}}{% endif %}">Account Information</a></h4>
                     
                     
                     <div class="separator"></div>

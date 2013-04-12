@@ -141,7 +141,7 @@ class RetailerProfile(models.Model):
     @property
     def logo_image(self):
         """Gets profile picture as a thumbnail and returns the url or returns the default image"""
-        return self.company_logo or "upload/default_avatar.gif"
+        return self.company_logo or "media/upload/default_avatar.gif"
         
     def save(self,*args,**kwargs):
         if self.id:
@@ -213,6 +213,10 @@ class RetailerProfile(models.Model):
             return "No Returns"
 
 
+    def get_APIs(self):
+        return APIConnection.objects.filter(retailer_profile=self).select_related('ShopifyConnection','PortableConnection')
+
+
 class StylistItem(models.Model):
     stylist = models.ForeignKey(User)
     item = models.ForeignKey(Item)
@@ -238,7 +242,11 @@ class ShopifyVariation(APIProductConnection):
 
 
 class APIConnection(APIPlatformConnection):
-    pass
+    
+    def get_child(self):
+        for api_type in ['shopifyconnection','portableconnection']:
+            if hasattr(self,api_type):
+                return getattr(self,api_type)
 
     @classmethod
     def get_or_create_from_request(cls,request):
@@ -258,6 +266,8 @@ class APIConnection(APIPlatformConnection):
 
 
 class ShopifyConnection(APIConnection):
+
+    logo = 'images/portableshops_login.png'
 
     def __unicode__(self):
         return self.shop_url
@@ -394,6 +404,8 @@ class PortableVariation(APIProductConnection):
 
 
 class PortableConnection(APIConnection):
+
+    logo = 'images/portableshops_login.png'
 
     def __unicode__(self):
         return self.api_url+self.access_token

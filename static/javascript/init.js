@@ -242,6 +242,51 @@ var stunable = {
 
     },
       retailers:function(){
+
+
+        $(".quest").click(function(e) {
+            e.preventDefault()
+            $("#upload_avatar").click();
+        });
+        $('#avatar-upload-form').ajaxForm(function(data) {
+            message = "";
+            console.log(data);
+            if(data.result == "ok") {
+                $('.retailer-logo').attr('src', data.source);
+                $('#avatar-error').css('display', 'none');
+                // message = "Upload Successful!";
+            } else {
+                message = data.error;
+                $('#avatar-error').stop();
+                $('#avatar-error').animate({
+                    "opacity" : "1"
+                }, "fast", function() {
+                    changeError($('#avatar-error')[0], message);
+                    $('#avatar-error').css('display', 'inline');
+                });
+                // message = "There were errors with your image upload. Please try again!";
+            }
+        });
+        $('#upload_avatar').bind('change', function(e) {
+          e.preventDefault();
+            var str = "";
+            str = $(this).val();
+            console.log(str)
+            if(str != "" && str.length > 0) {
+                if(str.match(/.*\.(jpg|png|gif)$/)) {
+                    $("#avatar-upload-form").submit();
+                } else {
+                    $('#avatar-error').stop();
+                    $('#avatar-error').animate({
+                        "opacity" : "1"
+                    }, "fast", function() {
+                        changeError($('#avatar-error')[0], "Please Upload a valid image!");
+                        $('#avatar-error').css('display', 'inline');
+                    });
+                }
+            }
+        })
+
         $('#select_all').click(function(e){
           $('.ship_check').attr('checked',$(this).attr('checked')==='checked');
         })
@@ -496,45 +541,6 @@ var stunable = {
 
                   $('#company-information-menu-item').addClass('active-menu');
 
-        $(".quest").click(function() {
-            $("#upload_avatar").click();
-        });
-        $('#avatar-upload-form').ajaxForm(function(data) {
-            message = "";
-            if(data.result == "ok") {
-                $('.retailer-logo').attr('src', data.source);
-                message = "Upload Successful!";
-            } else {
-                message = "There was an error. Please try again!";
-            }
-            $('#bigform-error').stop();
-            $('#bigform-error').animate({
-                "opacity" : "1"
-            }, "fast", function() {
-                changeError($('#bigform-error')[0], message);
-                $('#bigform-error').css('display', 'inline');
-                $('#bigform-error').delay(2000).fadeOut(1000);
-            });
-        });
-        $('input[type=file]').bind('change', function() {
-            var str = "";
-            str = $(this).val();
-            if(str != "" && str.length > 0) {
-                if(str.match(/.*\.(jpg|png|gif)$/)) {
-                    $("#avatar-upload-form").submit();
-                } else {
-                    $('#bigform-error').stop();
-                    $('#bigform-error').animate({
-                        "opacity" : "1"
-                    }, "fast", function() {
-                        changeError($('#bigform-error')[0], "Please Upload a valid image!");
-                        $('#bigform-error').css('display', 'inline');
-                        $('#bigform-error').delay(2000).fadeOut(1000);
-                    });
-                }
-            }
-        }).change();
-
         $('#new_shipping_type').hide();
 
         $('#others').change(function() {
@@ -645,45 +651,7 @@ var stunable = {
         }
       }
 
-        $(".quest").click(function() {
-            $("#upload_avatar").click();
-        });
-        $('#avatar-upload-form').ajaxForm(function(data) {
-            message = "";
-            console.log(data);
-            if(data.result == "ok") {
-                $('.acct-avatar').attr('src', data.source);
-                $('#avatar-error').css('display', 'none');
-                // message = "Upload Successful!";
-            } else {
-                message = data.error;
-                $('#avatar-error').stop();
-                $('#avatar-error').animate({
-                    "opacity" : "1"
-                }, "fast", function() {
-                    changeError($('#avatar-error')[0], message);
-                    $('#avatar-error').css('display', 'inline');
-                });
-                // message = "There were errors with your image upload. Please try again!";
-            }
-        });
-        $('#upload_avatar').bind('change', function() {
-            var str = "";
-            str = $(this).val();
-            if(str != "" && str.length > 0) {
-                if(str.match(/.*\.(jpg|png|gif)$/)) {
-                    $("#avatar-upload-form").submit();
-                } else {
-                    $('#avatar-error').stop();
-                    $('#avatar-error').animate({
-                        "opacity" : "1"
-                    }, "fast", function() {
-                        changeError($('#avatar-error')[0], "Please Upload a valid image!");
-                        $('#avatar-error').css('display', 'inline');
-                    });
-                }
-            }
-        }).change();
+
         $('.editable').hide();
         $('.edit').click(function(event) {
             event.preventDefault();

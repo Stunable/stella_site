@@ -32,8 +32,11 @@ Do the following if you're using your customized build of modernizr (http://www.
 <div class="center black">
 <div class="gridContainer clearfix">
   <div id="header">
-  <img style="position:absolute;top:-2px;left:0px" src="{{ STATIC_URL }}images/new_logo.png" alt="logo"> 
-  		<form style="width:100%;text-align:right;position:relative;top:3px;right:10px" action="{% url auth_login %}" class="user-entry php-form bootstrap" id="signin-form" method="POST">
+  	<img style="position:absolute;top:-2px;left:0px" src="{{ STATIC_URL }}images/new_logo.png" alt="logo"> 
+  		{% if request.user.is_authenticated %}
+  		<a style="float:right;margin:10px;color:white;font-size:1.2em;text-decoration:none" href="/accounts/logout" title="Sign out of Stunable." class="text-link">Log Out</a>
+  		{% else %}
+  		<form style="float:right;text-align:right;position:relative;top:3px;right:10px;display:inline-block" action="{% url auth_login %}" class="user-entry php-form bootstrap" id="signin-form" method="POST">
 			{% csrf_token %}
 			<input width:"32" id="tester" class="txt" name="email" type="text" placeholder="email address"/>
 			<input  class="txt pass" name="password" type="password" placeholder="password"/>
@@ -41,11 +44,11 @@ Do the following if you're using your customized build of modernizr (http://www.
 
 				<input class="btn" type="submit" value="login" />		
 
-				<!-- <a href="/accounts/password_reset" title="Click here to retrieve your password."><span style="display: block">-- FORGOT PASSWORD? --</span></a> -->
+				<a href="/accounts/password_reset" title="Click here to retrieve your password."><span style="display: block;color:#aaa;margin-right:120px;margin-top:-2px">forgot?</span></a>
 		</form><!--/.section.user-entry#signin-form-->
-
-
-</div>
+		<div class="errors">{{form.non_field_errors}}</div>
+		{% endif %}
+	</div>	
   <div id="body">
  <center><font color="#FFFFFF" size="+3"> Join Stunable's growing community of unique clothing retailers.</font></center>
  <br>

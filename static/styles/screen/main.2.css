@@ -228,6 +228,10 @@ body.flatpage{
 	overflow:auto;
 }
 
+#hidden-items {
+	display: none;
+}
+
 .global{
 	position: fixed;
 	top: 0;
@@ -504,6 +508,11 @@ body.flatpage{
 */
 
 
+#APIs td img, .modal.current img.logo{
+	max-height:70px;
+}
+
+
 #main{
 	margin-top:40px;
 	margin-bottom:40px;
@@ -530,6 +539,7 @@ body.flatpage{
 #left-panel .retailer-left-panel .list-header{
 	margin:8px;
 }
+
 
 
 body.flatpage #left-panel{
@@ -747,6 +757,11 @@ body.flatpage #left-panel{
 			width:100%;
 			text-align: center;
 			padding-top:50px;
+		}
+
+		.inner-page-content .left{
+			display:inline-block;
+			text-align: left;
 		}
 
 

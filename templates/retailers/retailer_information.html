@@ -59,7 +59,9 @@
         border-top:1px solid #bbb;
         padding:10px;
     }
-
+    .retailer-logo{
+        max-width: 200px;
+    }
 </style>
 
 <div>
@@ -68,7 +70,6 @@
         <div class="section intro clearfix">
             <h2><span>Account Information:</span></h2><h3><span class="big">{{ retailer_profile.name }}</span></h3>
         </div>
-
 
 
     <div id="public_info" class="wrapper">
@@ -81,12 +82,7 @@
                 {% csrf_token %}
                 <input style="visibility: collapse" type="file" id="upload_avatar" name="company_logo">
             </form>
-            {% load thumbnail %}
-            {% thumbnail retailer_profile.logo_image "120x100" as im %}
-                <img src="{{ im.url }}" class="retailer-logo">
-                {% empty %}
-                <img src="{{ retailer_profile.logo_image }}" class="retailer-logo" />
-            {% endthumbnail %}
+            <img src="{{ retailer_profile.logo_image }}" class="retailer-logo" />
             &nbsp;<br>&nbsp&nbsp&nbsp<a href="" class="quest">Update Logo</a>
         </div>
         <p id="bigform-error"></p>
@@ -95,15 +91,15 @@
 
         <div class="description">
             <div>
-                <h3 class="inline">Company Description</h3><a class="edit" href="#">Edit</a>
+                <h3 class="inline">Company Description</h3><a target="#retailer_desc" class="edit" href="#">Edit</a>
             </div>
 
-            <div class="desctext">
-                <p class="static">
+            <div class="desctext static">
+                <p id="retailer_desc">
                     {{ retailer_profile.description }}
                 </p>
             </div>
-            <div class="editable">
+            <div class="editable bootstrap">
                 <form action='{% url update_retailer_profile %}' method="POST">
                     <textarea name="description">{{ retailer_profile.description }}</textarea>
                     <input type="hidden" name="account_page" value="yes" />
