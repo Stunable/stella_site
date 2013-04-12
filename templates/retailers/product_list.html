@@ -219,7 +219,7 @@
     {% if bulk_upload_form %}
     <div>
       <table class="noborders" id="APIs" cellspacing="10px" cellpadding="1px">
-        <tr><td style="text-align:left">Products connected through </td></tr>
+        <tr><td style="text-align:left">Products connected and synced through </td></tr>
           <tr>
            {% for api in retailer_profile.get_APIs %}
     <td style="text-align:left">
@@ -227,6 +227,13 @@
     </td>
 
       {% endfor %}
+       <tr><td class="small" style="text-align:left">All product attributes will be synced with their original sources several times daily.<br>
+                                        Modifications to products on Stunable will not affect the originals on the API from whence they came.<br>
+                                        Changes to product descriptions on Stunable will not be overwritten by changes made on the originals.<br>
+                                        Any questions?  Email us at <a style="color:#000" href="mailto:stylists@stunable.com?subject=API Integration Product Sync">stylists@stunable.com</a> 
+                                        <br>
+
+       </td></tr>
         </table>
     </div>
     {% if updates_in_progress %}
