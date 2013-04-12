@@ -477,7 +477,7 @@ def product_list(request, upload=None, template="retailers/product_list.html"):
 
         ctx = {'retailer_profile': retailer_profile, 'product_list': products,'bulk_upload_form':form,'updates_in_progress':in_progress, 'upload':upload}
     except:
-        raise
+        
         return redirect(reverse("home"))
     return direct_to_template(request, template, ctx)
 

@@ -22,7 +22,7 @@ import urllib
 def refresh_all_api_products():
     enable()
     for api_connection in ContentType.objects.get(app_label="retailers", model="apiconnection").model_class().objects.all():
-        for api_type in ['shopifyconnection']:
+        for api_type in ['shopifyconnection','portableconnection']:
             if hasattr(api_connection,api_type):
                 update_API_products.delay(getattr(api_connection,api_type))
 

@@ -50,7 +50,7 @@ AWS_QUERYSTRING_AUTH = False
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/accounts/connect/'
 
-
+LOGIN_REDIRECT_URL = '/info'
 
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 

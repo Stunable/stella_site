@@ -32,6 +32,19 @@ img, object, embed, video {
 */
 
 /* Mobile Layout: 480px and below. */
+.close-modal {
+	position: absolute;
+	top: 0px;
+	right:0px;
+	height: 24px;
+	width: 24px;
+	margin: 0;
+	padding: 0;
+	background: url(../images/gui/icons.png) no-repeat -24px -1px;
+	text-indent: -999em;
+	cursor: pointer;
+	z-index: 1103;
+}
 
 .modal.current{
 	background-color:white;
@@ -71,6 +84,21 @@ text-align: center;
 	height:50px;
 
 }
+
+#header .errors{
+	display:inline-block;
+	color:white;
+	float: right;
+	margin-right:30px;
+	position:relative;
+	top:-5px;
+}
+
+
+
+
+
+
 #nav {
 	clear: both;
 	float: left;

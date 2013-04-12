@@ -177,6 +177,9 @@
         font-size: 1.5em;
     }
 
+    table.noborders td{
+        border:none;
+    }
 
 </style>
 
@@ -214,60 +217,18 @@
             </p>
     {% endif %}
     {% if bulk_upload_form %}
+    <div>
+      <table class="noborders" id="APIs" cellspacing="10px" cellpadding="1px">
+        <tr><td style="text-align:left">Products connected through </td></tr>
+          <tr>
+           {% for api in retailer_profile.get_APIs %}
+    <td style="text-align:left">
+        <a><img src="{{ STATIC_URL }}{{api.get_child.logo}}" alt="shopify"></a>
+    </td>
 
-        <div id="addbuttons" class="expandable collapsed">
-            <div class="click_to_expand"><a href=""><H1 class="big">Add Items</H1></a><br></div>
-            <div><a href="{% url add_item %}"><img src="/static/images/gui/add_item.png"></a></div>
-            <div id="bulk_add_box" class="expandable collapsed">
-                <a href="" class="click_to_expand"><img src="/static/images/gui/add_lots_of_items.png"></a>
-                <p style="margin:10px">If you have lots of items to sell, and would like to upload them in large batches,  just follow these two steps:<br><br>
-                    1.&nbsp <a href="{{ STATIC_URL }}stunable_upload_example.zip" target="blank"><strong class="big red">download this example file </strong></a> <br><br>
-
-                    2.&nbsp unzip it, put your own files and information in it, and send it back right here.
-
-                      <p>Uploads need to be <strong>.zip</strong> files with a .XLS file and then an image for each item.  Upload it here and you'll know what to do next.  Email us if you have questions</p>
-                <form class="long_process_submit_form" style="float:right" action="{% url bulk_upload %}" method="POST"enctype="multipart/form-data">
-                    {{bulk_upload_form.as_p}}
-                    {{bulk_upload_form.errors}}
-                    {% csrf_token %}
-                <div class="submit_holder">
-                <input disabled="disabled" type="submit" value="Submit">
-                </div>
-                </form>    
-            </div>
-            <div id="API_Forms" class="expandable collapsed">
-                <a href="" class="click_to_expand"><img src="/static/images/gui/load_from_api.png"></a>
-                <div id="apiList">
-                <div class="api_form collapsed expandable">
-                    <img class="click_to_expand" src="/static/images/APIs/shopify.png">
-                    <form action="{% url apps.shopify_app.views.authenticate %}" method="post">{% csrf_token %}     
-                      <br>
-                      <label for='shop'><strong>Enter The URL of your Shopify Shop</strong>
-                       (YOUR SHOP NAME).myshopify.com
-                      </label>
-                      <p>
-                        <input id="shop" name="shop" size="45" type="text" />
-                        <input name="commit" type="submit" value="Install" />
-                      </p>
-                    </form>
-                </div>
-                    <!-- <div class="api_form collapsed expandable">
-                        <img class="click_to_expand" src="/static/images/APIs/magento.gif">
-                        <form action="{% url apps.shopify_app.views.authenticate %}" method="post">{% csrf_token %}
-                          <br>
-                          <label for='shop'><strong>Enter your Magento Shop Name</strong>
-                            <span class="hint">It's found in your Magento login page thing whatever</span>
-                          </label>
-                          <p>
-                            <input id="shop" name="shop" size="45" type="text" />
-                            <input name="commit" type="submit" value="Install" />
-                          </p>
-                        </form>
-                     </div> -->
-                </div>
-            </div>
-        </div>
-    
+      {% endfor %}
+        </table>
+    </div>
     {% if updates_in_progress %}
     <p>Your Products are updating, the page will automatically every few seconds until they are finished.</p>
     <div id="progress_box"></div>
