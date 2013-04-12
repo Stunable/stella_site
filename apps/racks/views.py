@@ -542,7 +542,7 @@ def carousel(request, slug, template='racks/new_carousel.html'):
             current_tag = DailySpecial.objects.get(slug=slug)
             query_set = current_tag.get_items()
         except:
-            pass
+            query_set = Item.objects.select_related('featured_image','_retailer').filter(approved=True,is_available=True).order_by('?')
 
     if current_tag:
         ctx['current'] = current_tag.slug
