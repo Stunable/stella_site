@@ -830,9 +830,9 @@ body.flatpage #left-panel{
 	
 	/*TABS*/
 		div#stunable-tabs-nav{
-			width:90%;
+			/*width:90%;*/
 			z-index:1;
-			display:block;
+			display:inline-block;
 			top:80px;
 			padding-top:10px;
 			padding-right:60px;
@@ -843,6 +843,7 @@ body.flatpage #left-panel{
 			overflow-x:auto;
 			overflow-y:hidden;
 			white-space: nowrap;
+			display:inline;
 		}
 
 		#stunable-tabs-nav div#new_tab_field{
@@ -1570,7 +1571,7 @@ table.retailer-item-group{
 
 
 .ui-autocomplete{
-/*	border: 1px solid #666;*/
+	border: 1px solid #7f10b5;
 /*	background: #333333;*/
 	background: white;
     max-height: 245px;
@@ -1588,7 +1589,7 @@ table.retailer-item-group{
 }
 
 .ui-autocomplete li a{
-    display: block;
+    display:inline-block;
     font-size: 0.85em;
     height: 100%;
     /*width: 94%;*/
@@ -1598,6 +1599,21 @@ table.retailer-item-group{
 .ui-autocomplete li .ui-state-hover{
 
 	background-color: highlight;
+}
+
+.ui-autocomplete li .menu-space{
+
+	width:50px;
+}
+
+.ui-autocomplete li.separator{
+	background-color:#7f10b5;
+	width:100%;
+	height:1px;
+}
+
+li.menu-flavor:first-child{
+	/*border-bottom:1px solid black!important;*/
 }
 
 

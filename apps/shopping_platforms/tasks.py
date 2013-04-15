@@ -46,12 +46,12 @@ def process_API_products(list_of_products,api_connection):
     product_count = 0
     Retailer = api_connection.retailer_profile
 
-    print list_of_products
+    # print list_of_products
 
     for product in list_of_products:
         try:
             d = product
-            print 'A PRODUCT:',d
+            # print 'A PRODUCT:',d
 
             Map = api_connection.field_mapping(d)
 
@@ -150,8 +150,8 @@ def process_API_products(list_of_products,api_connection):
                     it.save()
                 except Exception,e:
 
-                    print 'PRODUCT:',d
-                    print 'VARIATION:',v
+                    # print 'PRODUCT:',d
+                    # print 'VARIATION:',v
                     print 'ERROR:',e
                     pass
                     # raise (Exception)

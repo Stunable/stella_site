@@ -38,6 +38,7 @@ var stunable = {
       init_refclicks($('.refclick'))
       init_choiceclicks($('.choiceclick'))
       init_refsubmits($('.refsubmit'))
+      init_search($('.refsearch'));
 
       $('.arbitrary_modal').click(function(e){
         console.log( $($(this).data('target')))

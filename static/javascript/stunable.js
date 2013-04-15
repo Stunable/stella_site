@@ -432,41 +432,117 @@ function init_choiceclicks(selection){
 
 var ac_cache = {};
 
-function init_refsubmits(selection){
-    var $t = selection;
-    
-    selection.autocomplete({
-      minLength: 2,
-      select: function( event, ui ) {
 
-        $.post(selection.data('href')+ui.item.slug,function(response){
-            if (response.result || response.success){
-                if (response.callback){
-                    refclickFunctions[response.callback]($t,response.data)
+$.widget( "custom.catcomplete", $.ui.autocomplete, {
+    _renderItem: function( ul, item ) {
+        var label_box = item.category != this.currentCategory ? $( '<a class="menu-space">' ).text( item.category ) :  $( '<a class="menu-space">').text( '');
+        return $( '<li class="menu-'+item.category+'">' )
+            .append( label_box)
+            .append( $( "<a>" ).text( item.label ) )
+            .appendTo( ul );
+    },
+    _renderMenu: function( ul, items ) {
+      var that = this;
+
+      that.currentCategory = "";
+      $.each( items, function( index, item ) {
+        if ( item.category != that.currentCategory ) {
+          ul.append( "<li class='separator'></li>" );
+        }
+        that._renderItemData( ul, item ); 
+        that.currentCategory = item.category;
+      });
+      
+
+    }
+  });
+
+
+
+//this is for the tag/tab adding functionality
+function init_refsubmits(selection){
+
+    $.each(selection,function(){
+        var $t = $(this);
+        
+        selection.autocomplete({
+          minLength: 2,
+          select: function( event, ui ) {
+
+            $.post($t.data('href')+ui.item.slug,function(response){
+                if (response.result || response.success){
+                    if (response.callback){
+                        refclickFunctions[response.callback]($t,response.data)
+                    }
                 }
+            })
+            $(this).val('')
+            return false;
+          },
+          source: function( request, response ) {
+            var term = request.term;
+            if ( term in ac_cache ) {
+              response( ac_cache[ term ] );
+              return;
             }
+            $.getJSON( $t.data('lookup'), request, function( data, status, xhr ) {
+              ac_cache[ term ] = data;
+              response( data );
+            });
+          },
+        open: function(){
+            $(this).autocomplete('widget').css('z-index', 100);
+            return false;
+        },
+
+         messages: {
+            noResults: '',
+            results: function() {}
+        }
 
         })
-        $(this).val('')
-        return false;
-      },
-      source: function( request, response ) {
-        var term = request.term;
-        if ( term in ac_cache ) {
-          response( ac_cache[ term ] );
-          return;
+    })
+}
+
+
+
+//this is for the integrated flavor/item/tag search
+function init_search(selection){
+
+    $.each(selection,function(){
+        var $t = $(this);
+        
+        selection.catcomplete({
+          minLength: 3,
+          select: function( event, ui ) {
+
+            window.location = '/shop/'+ui.item.category+'/'+ui.item.slug
+            $(this).val('')
+            return false;
+          },
+          source: function( request, response ) {
+            var term = request.term;
+            if ( term in ac_cache ) {
+              response( ac_cache[ term ] );
+              return;
+            }
+            $.getJSON( $t.data('lookup'), request, function( data, status, xhr ) {
+              ac_cache[ term ] = data;
+              response( data );
+            });
+          },
+        open: function(){
+            $(this).catcomplete('widget').css('z-index', 100);
+            return false;
+        },
+
+         messages: {
+            noResults: '',
+            results: function() {}
         }
-        $.getJSON( "/lookups/tagging/tag", request, function( data, status, xhr ) {
-          ac_cache[ term ] = data;
-          response( data );
-        });
-      },
-    open: function(){
-        $(this).autocomplete('widget').css('z-index', 100);
-        return false;
-    }
-      
-    });
+
+        })
+    })
 }
 
 function reveal_cart(event,data,add){
