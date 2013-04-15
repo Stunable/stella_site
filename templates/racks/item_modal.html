@@ -31,12 +31,13 @@
 <script>
 	// var size2color = {{size2color|safe}};
 	// var inventories = {{inventories|safe}};
-    
+    {% if item.get_image.image_dims.large.width %}
 	var thumb_image_width = {{item.get_image.image_dims.large.width}};
 	var thumb_image_height= {{item.get_image.image_dims.large.height}};
 
 	var source_image_width  = {{item.get_image.image_dims.extralarge.width}};
 	var source_image_height = {{item.get_image.image_dims.extralarge.height}};
+	{% endif %}
 
 </script>
 	<div id="modal_contents" style="background-color:{{item.get_image.color}}" class="{{item.get_image.orientation}}">

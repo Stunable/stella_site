@@ -270,7 +270,8 @@ INSTALLED_APPS = (
     'storages',
     'queued_storage',
     'debug_toolbar',
-    'shopping_platforms'
+    'shopping_platforms',
+    'stunable_search'
 )
 
 

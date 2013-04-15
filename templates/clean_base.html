@@ -197,7 +197,7 @@
         <!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> -->
 
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery-ui-1.8.22.custom.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery-ui-1.10.2.custom.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.spritely-0.6.1.js" ></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/chosen.jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.form.js"></script>
@@ -214,6 +214,7 @@
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/stunable.item_modal.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/init.js"></script>
 
+        {% if debug %}
         <script type="text/javascript">
           adroll_adv_id = "CLIUOIRXUZD2HCUYGZ74TX";
           adroll_pix_id = "SHABUB7ULRAV3PT5MP34PI";
@@ -231,7 +232,17 @@
              if(oldonload){oldonload()}};
           }());
           </script>
-        
+        {% endif %}
+
+
+        {% if direct_link_item %}
+          <script type="text/javascript">
+          $(document).ready(function(){
+             $('#list_item_{{direct_link_item.id}} a.item-ref').click()
+          })
+           
+          </script>
+        {% endif %}
     </body>
 
 </html>

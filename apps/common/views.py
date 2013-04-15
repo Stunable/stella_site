@@ -4,6 +4,9 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.template.defaultfilters import slugify
 from django.db.models.loading import get_model
 from apps.friends.views import json_view
+from apps.stunable_search.models import Flavor
+from tagging.models import Tag
+from apps.racks.models import Item
 
 
 def export(qs, fields=None):
@@ -105,5 +108,18 @@ def lookup(request, model_name, app_label, queryset=None, fields=None, list_disp
         out = qs.filter(name__istartswith=request.GET.get('term'))
     return HttpResponse(json.dumps([{'slug':o.slug,'label':o.name,'value':o.slug} for o in out]),mimetype="application/json")
 
+
+def combo_lookup(request):
+    if request.GET.get('term',None):
+        flavors = Flavor.objects.filter(name__icontains=request.GET.get('term'))
+        tags = Tag.objects.filter(name__istartswith=request.GET.get('term'))
+        items = Item.objects.filter(name__icontains=request.GET.get('term')).order_by('?')[:3]
+
+    return HttpResponse(json.dumps(
+            [{'category':'flavor','slug':o.slug,'label':o.name,'value':o.slug} for o in flavors]+
+            [{'category':'tab','slug':o.slug,'label':o.name,'value':o.slug} for o in tags]+
+            [{'category':'item','slug':o.slug,'label':o.name,'value':o.slug} for o in items]
+        # }
+        ),mimetype="application/json")
 
 

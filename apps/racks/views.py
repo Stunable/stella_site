@@ -38,6 +38,7 @@ import urllib
 from apps.retailers.models import RetailerProfile
 
 from apps.kart.models import WishListItem,KartItem,Cart
+from apps.stunable_search.models import Flavor
 
 
 import random
@@ -79,7 +80,7 @@ def get_context_variables(ctx, request):
         Q(start_date = None,end_date__gte=today)).filter(weekday__contains=str(today.weekday()))
            #print profile.first_login
 
-    print specials
+    # print specials
 
     ctx['specials'] = specials
     
@@ -506,6 +507,7 @@ def item_modal(request, item_slug, template='racks/item_modal.html', ctx=None):
     if request.is_ajax():
         return direct_to_template(request, template, ctx)
 
+    ctx['direct_link_item'] = item
     return _all(request,ctx=ctx)
 
 def divide_into_list(list_item):
@@ -528,8 +530,30 @@ def divide_into_list(list_item):
     
     return list_item
 
+
+
+def flavor(request, slug, mode=None,template='racks/new_carousel.html'):
+    ctx={'current':'all'}
+
+
+    query_set = Item.objects.with_any(
+            Flavor.objects.get(slug=slug).get_contained_tags()
+        ).filter(approved=True,is_available=True)
+
+    get_context_variables(ctx, request)
+    
+    ctx['current'] = slug
+    # if settings.IS_PROD:
+    #     query_set = Item.objects.filter(category=current_category, approved=True)
+    # else:
+    #     query_set = Item.objects.filter(category=current_category)  
+    
+    
+    return pagination(request, ctx, template, query_set)
+
+
 # @login_required
-def carousel(request, slug, template='racks/new_carousel.html'):
+def carousel(request, slug, mode=None,template='racks/new_carousel.html'):
     ctx = {'current':'all'}
     # profile = get_or_create_profile(request)
     current_tag = None

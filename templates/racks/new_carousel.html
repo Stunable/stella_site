@@ -9,16 +9,22 @@
 <div class="content {% block content-class%}carousel{%endblock%}" id="page-content" >
     <div class="inner-page-content">
         <div id="stunable-tabs-nav">
-            <ul id="tabs-container" class="nav tabbed clearfix">
+            <div style="display:inline-block" id="more-tabs-tab" title="search" class="stunable-tab tab">
+                                <div class="text-link"><input data-lookup="{% url search_api %}" id="tab-search" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsearch" placeholder="search" type="text"></div>
+                            </div>
+            <ul id="tabs-container" class="nav tabbed">
+                            
+                        {% comment %}
                         {% if request.user.is_authenticated %}
                             <li id="more-tabs-tab" title="click to add a new tab" class="stunable-tab tab">
-                                <div class="click-show" data-target="#tab-adder" href="" title="" class="text-link"><span class="bigplus">+</span> more<input id="tab-adder" style="display:none" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text"></div>
+                                <div class="click-show" data-target="#tab-adder" href="" title="" class="text-link"><span class="bigplus">+</span> more<input data-lookup="/lookups/tagging/tag" id="tab-adder" style="display:none" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text"></div>
                             </li>
                         {% else %}
                             <li id="more-tabs-tab" class="stunable-tab tab">
                                  <a data-href="/" class="login-check" href="" ><span class="bigplus">+</span><span>more</span></a>
                             </li>
                         {% endif %}
+                        {% endcomment %}
 
 
 
@@ -50,7 +56,19 @@
             
                 <!-- <div class="sizecontrols"><span>tiny</span><span>small</span><span>medium</span>large</span></div> -->
                 <div id="container" >
-                                    
+                                    {% if direct_link_item %}
+                                        {% with direct_link_item as item %}
+                                        {% with item as target_item %}
+                                            {% if item.pk %}
+                                            
+                                                {% include "racks/includes/new_item_list_content.html" %}
+                                            
+                                            {% endif %}
+                                        {% endwith %}
+                                        {% endwith %}
+                                    {% endif %}
+
+
                                     {% for item in rack_items_list %}
                                         {% if item.Item %}
                                         {% with item.Item as item %}

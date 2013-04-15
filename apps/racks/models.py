@@ -248,7 +248,7 @@ class ProductImage(models.Model,listImageMixin):
 class Item(models.Model,listImageMixin):
 
     def get_absolute_url(self):
-        return '/shop/recommendations/%s'%self.slug
+        return '/shop/item/%s'%self.slug
 
     featured_image = models.ForeignKey(ProductImage,null=True,blank=True,related_name='item_featured_image_set')
     gender =         models.CharField(max_length=1,default='F',choices=[('F','F'),('M','M'),('B','B')])

@@ -16,10 +16,15 @@ urlpatterns = patterns('',
 
 #                       url(r'^carousel/change_it_up', change_it_up, name="change_it_up"),
                        url(r'^trendsetters/(?P<user_id>\d+)?$', trendsetters, name='trendsetters'),
+
+
                        url(r'^tab/(?P<slug>[-\w]+)', carousel, name="tagged_carousel"),
+                       url(r'^flavor/(?P<slug>[-\w]+)', flavor, name="tagged_carousel"),
+                       url(r'^item/(?P<item_slug>[-\w]+)', item_modal, name='item_modal'),
 
                        url(r'^remove-tab/(?P<slug>[-\w]+)', tab_handler, {'method': 'remove'}, name="remove_tab"),
                        url(r'^add-tab/(?P<slug>[-\w]+)?', tab_handler, {'method': 'add'}, name="add_tab"),
+
 
 
                        url(r'^sent_to_admirer/', send_item_to_admirer, name="send_item_to_admirer"),
@@ -38,23 +43,15 @@ urlpatterns = patterns('',
                        url(r'^add_admirer/(?P<rack_id>\d+)/(?P<friend_id>\d+)', add_admirer, name="add_admirer"),
                        url(r'^remove_admirer/(?P<rack_id>\d+)/(?P<friend_id>\d+)', remove_admirer, name="remove_admirer"),
                        # url(r'^item$', item, name='item'),
-                       url(r'^item/(?P<item_slug>[-\w]+)', item_modal, name='item_modal'),
+                       
                        url(r'^wishlist_item/(?P<wishlist_item_id>[-\w]+)?', variation_modal, name='variation_modal'),
 
                        url(r'^wishlist', wishlist, name='wishlist'),
                        url(r'^friends', friends, name='friends'),
                        url(r'^jean_submit/', jean_submit, name='jean_submit'),
-                       #url(r'^item_add/(?P<rack_id>\d+)', rack_item_add, name="rack_item_add"),
-                       #url(r'^item_add_new/(?P<rack_id>\d+)', rack_item_add_new, name="rack_item_add_new"),
-                       url(r'search', search, name='rack_search'),
-                       url(r'brands', get_brands, name='get_brands'),  
-                       url(r'recommendations/(?P<slug>[-\w]+)', _all, name='item_link'),  
+                       
                        
                        url(r'sale', sale_items, name='sale'),
-                       url(r'recent_added', recent_added_items, name='my_closet_recent_added_items'),
-                       url(r'purchased', purchased_items, name='my_closet_purchased_items'),
-                       
-                       url(r'^steal/(?P<rack_id>\d+)/$', steal_rack, name='steal_rack'),
-                       url(r'^get_new_notifications/$', get_new_notifications, name='get_new_notifications'),
+
                        url(r'^display_notice_table/$', display_notice_table, name='display_notice_table'),
                        )
