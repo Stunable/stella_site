@@ -21,7 +21,7 @@ urlpatterns = patterns('',
                        url(r'^wishlist', wishlist, name='wishlist'),
 
                        url(r'^new', new, name='new'),
-                       url(r'sale', sale_items, name='sale'),
+                       url(r'^sale', sale_items, name='sale'),
 
 
                        url(r'(?P<group>[-\w]+)/(?P<slug>[-\w]+)',flavor)

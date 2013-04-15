@@ -120,7 +120,7 @@ def combo_lookup(request):
             [{'category':'stylist','slug':o.slug,'label':o.name.lower(),'value':o.slug} for o in retailers]+
             [{'category':o.group,'slug':o.slug,'label':o.name.lower(),'value':o.slug} for o in flavors]+
             # [{'category':'keyword','slug':o.slug,'label':o.name,'value':o.slug} for o in tags]+
-            [{'category':'product','slug':o.slug,'label':o.name.lower(),'value':o.slug} for o in items]
+            [{'category':'item','slug':o.slug,'label':o.name.lower(),'value':o.slug} for o in items]
         # }
         ),mimetype="application/json")
 
