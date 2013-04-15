@@ -513,7 +513,7 @@ function init_search(selection){
         var $t = $(this);
         
         selection.catcomplete({
-          minLength: 3,
+          minLength: 2,
           select: function( event, ui ) {
 
             window.location = '/shop/'+ui.item.category+'/'+ui.item.slug
