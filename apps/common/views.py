@@ -113,7 +113,7 @@ def combo_lookup(request):
     if request.GET.get('term',None):
         flavors = Flavor.objects.filter(name__icontains=request.GET.get('term'))
         tags = Tag.objects.filter(name__istartswith=request.GET.get('term'))
-        items = Item.objects.filter(name__icontains=request.GET.get('term')).order_by('?')[:3]
+        items = Item.objects.filter(name__icontains=request.GET.get('term')).order_by('?')[:40]
 
     return HttpResponse(json.dumps(
             [{'category':'flavor','slug':o.slug,'label':o.name,'value':o.slug} for o in flavors]+
