@@ -56,7 +56,8 @@ class Category(models.Model):
         super(Category,self).save(*args,**kwargs)
     
 class ItemManager(RecommenderManager):
-    pass
+    def carousel_items(self):
+        return super(RecommenderManager,self).filter(approved=True, is_available=True,)
 
 class Size(models.Model):
     size = models.CharField(max_length=30)

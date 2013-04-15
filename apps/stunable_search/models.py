@@ -3,7 +3,9 @@ from django.template.defaultfilters import slugify
 # Create your models here.
 
 class Flavor(models.Model):
-    name = models.CharField(max_length = 64)
+    name  = models.CharField(max_length = 64)
+    group = models.CharField('a name for a group of flavors like "mood", "occasion", "color"',max_length = 64,blank=True,null=True)
+
     slug = models.SlugField()
     Tags = models.ManyToManyField('tagging.Tag')
     Flavor = models.ForeignKey('Flavor',null=True,blank=True)

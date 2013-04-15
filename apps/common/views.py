@@ -7,7 +7,7 @@ from apps.friends.views import json_view
 from apps.stunable_search.models import Flavor
 from tagging.models import Tag
 from apps.racks.models import Item
-
+from apps.retailers.models import RetailerProfile
 
 def export(qs, fields=None):
     model = qs.model
@@ -111,14 +111,16 @@ def lookup(request, model_name, app_label, queryset=None, fields=None, list_disp
 
 def combo_lookup(request):
     if request.GET.get('term',None):
-        flavors = Flavor.objects.filter(name__icontains=request.GET.get('term'))
-        tags = Tag.objects.filter(name__istartswith=request.GET.get('term'))
-        items = Item.objects.filter(name__icontains=request.GET.get('term')).order_by('?')[:40]
+        flavors = Flavor.objects.filter(name__icontains=request.GET.get('term')).order_by('group')
+        # tags = Tag.objects.filter(name__istartswith=request.GET.get('term'))
+        items = Item.objects.carousel_items().filter(name__icontains=request.GET.get('term')).order_by('name')[:20]
+        retailers = RetailerProfile.objects.filter(name__icontains=request.GET.get('term'))
 
     return HttpResponse(json.dumps(
-            [{'category':'flavor','slug':o.slug,'label':o.name,'value':o.slug} for o in flavors]+
-            [{'category':'tab','slug':o.slug,'label':o.name,'value':o.slug} for o in tags]+
-            [{'category':'item','slug':o.slug,'label':o.name,'value':o.slug} for o in items]
+            [{'category':'stylist','slug':o.slug,'label':o.name,'value':o.slug} for o in retailers]+
+            [{'category':o.group,'slug':o.slug,'label':o.name,'value':o.slug} for o in flavors]+
+            # [{'category':'keyword','slug':o.slug,'label':o.name,'value':o.slug} for o in tags]+
+            [{'category':'product','slug':o.slug,'label':o.name,'value':o.slug} for o in items]
         # }
         ),mimetype="application/json")
 
