@@ -223,7 +223,10 @@
           <tr>
            {% for api in retailer_profile.get_APIs %}
     <td style="text-align:left">
-        <a><img src="{{ STATIC_URL }}{{api.get_child.logo}}" alt="shopify"></a>
+        <div style="float:left;text-align:center">
+        <a><img src="{{ STATIC_URL }}{{api.get_child.logo}}" alt="shopify"></a><br>
+        {{api.get_child.name}}
+        </div>
     </td>
 
       {% endfor %}

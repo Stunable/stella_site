@@ -273,6 +273,7 @@ class APIConnection(APIPlatformConnection):
 class ShopifyConnection(APIConnection):
 
     logo = 'images/shopify_button.png'
+    name = 'Shopify'
 
     def __unicode__(self):
         return self.shop_url
@@ -411,6 +412,7 @@ class PortableVariation(APIProductConnection):
 class PortableConnection(APIConnection):
 
     logo = 'images/portableshops_button.png'
+    name = 'Portable Shops'
 
     def __unicode__(self):
         return self.api_url+self.access_token
