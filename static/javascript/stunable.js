@@ -443,7 +443,7 @@ $.widget( "custom.catcomplete", $.ui.autocomplete, {
     },
     _renderMenu: function( ul, items ) {
       var that = this;
-
+      ul.append('<li>click to create a new tab</li>')
       that.currentCategory = "";
       $.each( items, function( index, item ) {
         if ( item.category != that.currentCategory ) {
@@ -452,8 +452,6 @@ $.widget( "custom.catcomplete", $.ui.autocomplete, {
         that._renderItemData( ul, item ); 
         that.currentCategory = item.category;
       });
-      
-
     }
   });
 

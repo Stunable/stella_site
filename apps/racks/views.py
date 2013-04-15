@@ -531,13 +531,18 @@ def divide_into_list(list_item):
     return list_item
 
 
+def shop(request,hint):
+    if hint in ['tab']:
+        return 
 
-def flavor(request, slug, mode=None,template='racks/new_carousel.html'):
+
+
+def flavor(request, group, slug, mode=None,template='racks/new_carousel.html'):
     ctx={'current':'all'}
 
 
     query_set = Item.objects.with_any(
-            Flavor.objects.get(slug=slug).get_contained_tags()
+            get_object_or_404(Flavor,group=group, slug=slug).get_contained_tags()
         ).filter(approved=True,is_available=True)
 
     get_context_variables(ctx, request)
@@ -564,9 +569,9 @@ def carousel(request, slug, mode=None,template='racks/new_carousel.html'):
     except:
         try:
             current_tag = DailySpecial.objects.get(slug=slug)
-            query_set = current_tag.get_items()
+            query_set = current_tag.get_items().filter(approved=True,is_available=True)
         except:
-            query_set = Item.objects.select_related('featured_image','_retailer').filter(approved=True,is_available=True).order_by('?')
+            query_set = Item.objects.carousel_items().select_related('featured_image','_retailer').order_by('?')
 
     if current_tag:
         ctx['current'] = current_tag.slug
@@ -623,9 +628,9 @@ def stella_choice(request, template='racks/new_carousel.html'):
         
         # leave place to implement the real stella choice logic
         if settings.IS_PROD:
-            query_set = Item.objects.filter(created_date__gt=begin_date, approved=True).order_by('order')
+            query_set = Item.carousel_items().order_by('order')
         else:
-            query_set = Item.objects.filter(created_date__gt=begin_date).order_by('order')
+            query_set = Item.carousel_items().order_by('order')
         
 #        ctx['user_items'] = items
 #        rack_items_list = divide_into_list(items)
@@ -645,20 +650,22 @@ def prepare_ctx(query_set, ctx):
     for l in rack_items_list:
         user_items.extend([i.pk for i in l])
         
-    ctx['user_items'] = Item.objects.filter(pk__in=user_items)
+    ctx['user_items'] = Item.carousel_items().filter(pk__in=user_items)
     ctx['item_count'] = length
     ctx['page_count'] = (length + 2)/3
     ctx['rack_items_list'] = rack_items_list
 
 
-def stylist(request, stylist_id, template="racks/new_carousel.html"):
+def stylist(request, slug, template="racks/new_carousel.html"):
     ctx = {}
 
     ctx['current'] = "stylist"
     get_context_variables(ctx, request)
+
+    retailer = RetailerProfile.objects.get(slug=slug)
     
     
-    query_set = Item.objects.filter(_retailer__id=stylist_id, approved=True,is_available=True)
+    query_set = Item.objects.carousel_items().filter(_retailer=retailer).order_by('-created_date')
         
     return pagination(request, ctx, template, query_set)
 
@@ -670,7 +677,7 @@ def new(request, template="racks/new_carousel.html"):
     
     begin_date = datetime.date.today() - timedelta(days=14)
     
-    query_set = Item.objects.filter(created_date__gt=begin_date, approved=True,is_available=True).order_by('created_date')
+    query_set = Item.objects.carousel_items().filter(created_date__gt=begin_date).order_by('created_date')
         
     return pagination(request, ctx, template, query_set)
 
@@ -702,7 +709,7 @@ def _all(request, slug=None, template='racks/new_carousel.html',query_set = None
         # profile = None
 
         if all_items or query_set is None:
-            query_set = Item.objects.select_related('featured_image','_retailer').filter(approved=True,is_available=True).order_by('?')
+            query_set = Item.objects.carousel_items().select_related('featured_image','_retailer').order_by('?')
             ctx['current'] = "all"
 
 
@@ -1040,7 +1047,7 @@ def add_color(request, template="racks/add_color_dialog.html"):
 
 def sale_items(request, template="racks/new_carousel.html"):
     ctx = {'current':'sale'}
-    query_set=Item.objects.filter(is_onsale=True,is_available=True,approved=True)
+    query_set=Item.objects.carousel_items().filter(is_onsale=True)
 
     get_context_variables(ctx, request)
     

@@ -12,6 +12,7 @@ from django.contrib.localflavor.us.models import PhoneNumberField
 from racks.models import Item,ProductImage,ItemType,Size
 import shopify
 
+from django.template.defaultfilters import slugify
 
 from apps.shopping_platforms.models import APIPlatformConnection,APIProductConnection
 from shopping_platforms.tasks import update_API_products
@@ -124,6 +125,8 @@ class RetailerProfile(models.Model):
     welcome_message_sent = models.BooleanField(default=False)
     not_accept_refund = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
+
+    slug = models.SlugField(blank=True)
 #    terms = models.BooleanField(default=False, null=True, blank=True)
     
     def __unicode__(self):
@@ -144,6 +147,8 @@ class RetailerProfile(models.Model):
         return self.company_logo or "media/upload/default_avatar.gif"
         
     def save(self,*args,**kwargs):
+        self.slug = slugify(self.name)
+
         if self.id:
             old_obj = RetailerProfile.objects.get(pk=self.id)
             if not old_obj.approved and self.approved:
@@ -267,7 +272,7 @@ class APIConnection(APIPlatformConnection):
 
 class ShopifyConnection(APIConnection):
 
-    logo = 'images/portableshops_login.png'
+    logo = 'images/shopify_button.png'
 
     def __unicode__(self):
         return self.shop_url
@@ -405,7 +410,7 @@ class PortableVariation(APIProductConnection):
 
 class PortableConnection(APIConnection):
 
-    logo = 'images/portableshops_login.png'
+    logo = 'images/portableshops_button.png'
 
     def __unicode__(self):
         return self.api_url+self.access_token

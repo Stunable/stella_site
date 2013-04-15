@@ -1614,8 +1614,8 @@ table.retailer-item-group{
 }
 
 .ui-autocomplete li .menu-space{
-
 	width:50px;
+	margin-right:10px;
 }
 
 .ui-autocomplete li.separator{
