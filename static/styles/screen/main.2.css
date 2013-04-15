@@ -829,6 +829,13 @@ body.flatpage #left-panel{
 		}*/
 	
 	/*TABS*/
+
+		#tabs-container-container{
+			width:1000px;
+			display:inline-block;
+			overflow-x:auto;
+
+		}
 		div#stunable-tabs-nav{
 			/*width:90%;*/
 			z-index:1;
@@ -839,11 +846,8 @@ body.flatpage #left-panel{
 			width:90%;
 		}
 		.shop #stunable-tabs-nav ul{
-			width:100%;
-			overflow-x:auto;
-			overflow-y:hidden;
 			white-space: nowrap;
-			display:inline;
+			display:inline-block;
 		}
 
 		#stunable-tabs-nav div#new_tab_field{
@@ -864,6 +868,10 @@ body.flatpage #left-panel{
 			
 			/*box-shadow: -3px 6px 6px 3px rgba(0,0,0,.1);*/
 
+		}
+
+		div#search_tab {
+			margin:10px;
 		}
 
 		#stunable-tabs-nav li#more-tabs-tab{
@@ -1567,7 +1575,10 @@ table.retailer-item-group{
 
 
 
-
+#tab-search{
+	font-size:.7em;
+	width:200px;
+}
 
 
 .ui-autocomplete{
