@@ -117,10 +117,10 @@ def combo_lookup(request):
         retailers = RetailerProfile.objects.filter(name__icontains=request.GET.get('term'))
 
     return HttpResponse(json.dumps(
-            [{'category':'stylist','slug':o.slug,'label':o.name,'value':o.slug} for o in retailers]+
-            [{'category':o.group,'slug':o.slug,'label':o.name,'value':o.slug} for o in flavors]+
+            [{'category':'stylist','slug':o.slug,'label':o.name.lower(),'value':o.slug} for o in retailers]+
+            [{'category':o.group,'slug':o.slug,'label':o.name.lower(),'value':o.slug} for o in flavors]+
             # [{'category':'keyword','slug':o.slug,'label':o.name,'value':o.slug} for o in tags]+
-            [{'category':'product','slug':o.slug,'label':o.name,'value':o.slug} for o in items]
+            [{'category':'product','slug':o.slug,'label':o.name.lower(),'value':o.slug} for o in items]
         # }
         ),mimetype="application/json")
 

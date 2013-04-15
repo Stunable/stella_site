@@ -7,7 +7,7 @@ class FlavorAdmin(admin.ModelAdmin):
 
     filter_horizontal = ('Tags',)
     prepopulated_fields = {"slug": ("name",)}
-    list_display = ('name',)
+    list_display = ('name','group')
 
     
 
