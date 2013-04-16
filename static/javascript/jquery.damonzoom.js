@@ -112,7 +112,7 @@
                                     top:(top * - yRatio) + 'px'
                                 }
 
-                                $(img).stop(true).animate(d,400,'swing')
+                                $(img).stop(true).animate(d,700,'easeOutCubic')
                             }
 
                             $(el).mouseenter(
