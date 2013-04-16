@@ -633,6 +633,13 @@ body.flatpage #left-panel{
 		background-position:16px 36px;
 	}
 
+	#modal-wish-button{
+		background:url('../../images/new_buttons/heart.png');
+		background-size: 60px;
+		background-repeat: no-repeat;
+		background-position:16px 36px;
+	}
+
 		#left-panel>ul>li.active,#left-panel>ul>li:hover{
 		background-color: whitesmoke!important;
 	}
@@ -2006,10 +2013,10 @@ form .info_modal{
 }
 
 .action-buttons #modal-wish-button{
-	background-position: 16px 10px;
+	background-position: 16px 30px;
 }
 .action-buttons #modal-cart-button{
-	background-position: 23px 16px;
+	background-position: 19px 29px;
 
 }
 
