@@ -575,14 +575,14 @@ body.flatpage #left-panel{
 		background-repeat: no-repeat;
 		/*background-position-y: 30px;*/
 		/*background-position-x: 16px;*/
-		background-position:16px 16px;
+		background-position:16px 26px;
 	}
 
 	#left-panel #shop-button:hover,#left-panel #shop-button.active{
 		background:url('../../images/new_buttons/logo.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position:16px 16px;
+		background-position:16px 36px;
 	}
 
 
@@ -590,15 +590,15 @@ body.flatpage #left-panel{
 		background:url('../../images/new_buttons/people_dancing.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position:16px 16px;
+		background-position:16px 26px;
 	}
 
 	#left-panel #friends-button:hover,#left-panel #friends-button.active{
 		background:url('../../images/new_buttons/people_dancing_hover.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position:16px 16px;
-		background-color: whitesmoke;
+		background-position:16px 36px;
+		/*background-color: whitesmoke;*/
 	}
 
 
@@ -606,7 +606,7 @@ body.flatpage #left-panel{
 		background:url('../../images/new_buttons/bag_hover.png');
 		background-size: 50px;
 		background-repeat: no-repeat;
-		background-position:23px 30px;
+		background-position:20px 30px;
 
 	}
 
@@ -614,7 +614,7 @@ body.flatpage #left-panel{
 		background:url('../../images/new_buttons/bag.png');
 		background-size: 50px;
 		background-repeat: no-repeat;
-		background-position:23px 30px;
+		background-position:20px 36px;
 	}
 
 
@@ -622,7 +622,7 @@ body.flatpage #left-panel{
 		background:url('../../images/new_buttons/heart_hover.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position:16px 16px;
+		background-position:16px 26px;
 
 	}
 
@@ -630,7 +630,7 @@ body.flatpage #left-panel{
 		background:url('../../images/new_buttons/heart.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position:16px 16px;
+		background-position:16px 36px;
 	}
 
 		#left-panel>ul>li.active,#left-panel>ul>li:hover{

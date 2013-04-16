@@ -7,7 +7,7 @@ urlpatterns = patterns('',
                        url(r'^add_color', add_color, name="add_color"),
 
                        url(r'^stylist/(?P<slug>[-\w]+)', stylist, name="stylist"),
-
+                       url(r'^friends', friends, name='friends'),
 
                        url(r'^tab/(?P<slug>[-\w]+)', carousel, name="tagged_carousel"),                     
                        url(r'^item/(?P<item_slug>[-\w]+)', item_modal, name='item_modal'),
