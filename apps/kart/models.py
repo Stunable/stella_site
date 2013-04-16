@@ -410,10 +410,7 @@ class KartItem(models.Model):
         return self.total_price * .05
         
     def shipping_amount(self):
-        if self.shipping_method.name == 'Expedited':
-            return 20.00
-        else:
-            return 0
+        return float(self.shipping_method.estimated_price)
 
     def get_shipping_form(self):
         f = modelform_factory(KartItem, fields=("shipping_method",))(instance=self,prefix=self.id)
