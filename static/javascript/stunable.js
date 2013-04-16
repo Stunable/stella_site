@@ -436,7 +436,7 @@ var ac_cache = {};
 $.widget( "custom.catcomplete", $.ui.autocomplete, {
     _renderItem: function( ul, item ) {
         var label_box = item.category != this.currentCategory ? $( '<a class="menu-space">' ).text( item.category ) :  $( '<a class="menu-space">').text( '');
-        return $( '<li class="menu-'+item.category+'">' )
+        return $( '<li id="acmenu-'+item.slug+'">' )
             .append( label_box)
             .append( $( "<a>" ).text( item.label ) )
             .appendTo( ul );
@@ -512,8 +512,16 @@ function init_search(selection){
         
         selection.catcomplete({
           minLength: 2,
-          select: function( event, ui ) {
+          delay:200,
+          focus: function( event, ui ) {
+            // event.preventDefault();
+            $('.acmenu-active').removeClass('acmenu-active');
+            $('#acmenu-'+ui.item.slug).addClass('acmenu-active');
 
+            $(event.target).val(ui.item.label)
+            return false;
+          },
+          select: function( event, ui ) {
             window.location = '/shop/'+ui.item.category+'/'+ui.item.slug
             $(this).val('')
             return false;

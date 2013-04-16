@@ -1631,10 +1631,16 @@ table.retailer-item-group{
 	height:1px;
 }
 
-li.menu-flavor:first-child{
-	/*border-bottom:1px solid black!important;*/
+.ui-autocomplete li.acmenu-active{
+		background-color:#7f10b5;
 }
+.ui-autocomplete li.acmenu-active a{
 
+	color:white;
+}
+.ui-helper-hidden-accessible{
+	display:none;
+}
 
 /*MODAL*/
 /*
