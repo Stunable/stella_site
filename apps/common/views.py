@@ -116,7 +116,7 @@ def combo_lookup(request):
         flavors = Flavor.objects.filter(name__icontains=request.GET.get('term')).order_by('group')
         # tags = Tag.objects.filter(name__istartswith=request.GET.get('term'))
         items = Item.objects.carousel_items().filter(name__icontains=request.GET.get('term')).order_by('name')[:20]
-        retailers = RetailerProfile.objects.filter(name__icontains=request.GET.get('term'))
+        retailers = RetailerProfile.objects.filter(name__icontains=request.GET.get('term'),approved=True)
 
     return HttpResponse(json.dumps(
             [{'category':'brand','slug':o.slug,'label':o.name.lower(),'value':o.slug} for o in retailers]+
