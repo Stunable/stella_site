@@ -53,11 +53,9 @@ def authenticate(request):
 def finalize(request):
     shop_url = request.REQUEST.get('shop')
     try:
-        try:
-            shopify_session = shopify.Session(shop_url, request.REQUEST)
-        except shopify.ValidationException:
-            messages.error(request, "Could not log in to Shopify store.")
-    except;
+        shopify_session = shopify.Session(shop_url, request.REQUEST)
+    except shopify.ValidationException:
+        messages.error(request, "Could not log in to Shopify store.")
         return authenticate(request)
 
     request.session['shopify'] = {
