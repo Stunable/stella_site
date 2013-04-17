@@ -20,6 +20,9 @@ class Flavor(models.Model):
     # picture = models.ImageField(blank=True,null=True,)
 
 
+    class Meta:
+        unique_together = (("slug", "group"),)
+
     def save(self,*args,**kwargs):
         # if not self.slug:
         self.slug = slugify(self.name)

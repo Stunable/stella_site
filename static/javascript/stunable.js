@@ -345,8 +345,8 @@ var refclickFunctions = {
 function tabs_find_active(){
     if ($('.stunable-tab.tab.active').length){
     // console.log($('.stunable-tab.tab.active').offset().left)
-        $('#tabs-container').animate({
-             scrollLeft:$('.stunable-tab.tab.active').position().left - 220
+        $('#tabs-container-container').animate({
+             scrollLeft:$('.stunable-tab.tab.active').position().left + 200
         })
     }
     

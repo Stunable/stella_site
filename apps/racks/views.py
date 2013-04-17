@@ -30,6 +30,7 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
 from django.contrib.contenttypes.models import ContentType
+from django.db.models.loading import get_model
 from django.forms.models import modelform_factory
 from racks.models import PriceCategory
 from social_auth.models import UserSocialAuth
@@ -50,6 +51,46 @@ if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
 else:
     notification = None
+
+
+
+
+def checkAddTab(function):
+    
+    def wrap(request, *args, **kwargs):
+
+        if request.GET.get('a',None):
+            try:
+                m = {
+                    'stylist': ('retailers','retailerprofile'),
+                    'item_modal': ('racks','item'),
+                    'flavor':('stunable_search','flavor')
+                }[function.__name__]
+                # get the model class
+                model = get_model(*m)
+
+                # get its content type
+                c = ContentType.objects.get_for_model(model)
+
+                # get the instance of the model class
+                obj = model.objects.get(slug=kwargs['slug'])
+
+                # create or get the correct search tab
+                t,created = UserSearchTab.objects.get_or_create(content_type=c,object_id=obj.id)
+
+                # add the user to the tab
+                t.users.add(request.user)
+            except:
+                pass
+
+            return redirect(reverse(function.__name__,kwargs=kwargs))
+
+        return function(request, *args, **kwargs)
+
+
+    wrap.__doc__=function.__doc__
+    wrap.__name__=function.__name__
+    return wrap
 
 def gethome(request):
     try:
@@ -108,12 +149,13 @@ def variation_modal(request,wishlist_item_id, template='racks/item_modal.html'):
     return item_modal(request, item.slug,ctx={'wished_variation':iv})
 
 #@login_required
-def item_modal(request, item_slug, template='racks/item_modal.html', ctx=None):
+@checkAddTab
+def item_modal(request, slug, template='racks/item_modal.html', ctx=None):
     
     if not ctx:
         ctx = {}
     
-    item = get_object_or_404(Item, slug=item_slug)
+    item = get_object_or_404(Item, slug=slug)
     ctx['item'] = item
 
     ctx.update({
@@ -125,6 +167,7 @@ def item_modal(request, item_slug, template='racks/item_modal.html', ctx=None):
         return direct_to_template(request, template, ctx)
 
     ctx['direct_link_item'] = item
+    ctx['current'] = slug
     return _all(request,ctx=ctx)
 
 def divide_into_list(list_item):    
@@ -132,7 +175,7 @@ def divide_into_list(list_item):
 
 
 
-
+@checkAddTab
 def flavor(request, group, slug, mode=None,template='racks/new_carousel.html'):
     ctx={'current':'all'}
 
@@ -149,6 +192,7 @@ def flavor(request, group, slug, mode=None,template='racks/new_carousel.html'):
 
 
 # @login_required
+@checkAddTab
 def carousel(request, slug, mode=None,template='racks/new_carousel.html'):
     ctx = {'current':'all'}
     # profile = get_or_create_profile(request)
@@ -203,17 +247,18 @@ def tab_handler(request, slug, method=None):
 
         return {}
 
-
+@checkAddTab
 def stylist(request, slug, template="racks/new_carousel.html"):
     ctx = {}
 
-    ctx['current'] = "stylist"
     get_context_variables(ctx, request)
 
     retailer = RetailerProfile.objects.get(slug=slug)
     
     
     query_set = Item.objects.carousel_items().filter(_retailer=retailer).order_by('-created_date')
+
+    ctx['current'] = slug
         
     return pagination(request, ctx, template, query_set)
 
@@ -256,7 +301,8 @@ def _all(request, slug=None, template='racks/new_carousel.html',query_set = None
 
         if all_items or query_set is None:
             query_set = Item.objects.carousel_items().select_related('featured_image','_retailer').order_by('?')
-            ctx['current'] = "all"
+            if not ctx.has_key('current'):
+                ctx['current'] = "all"
 
 
     
