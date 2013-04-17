@@ -46,7 +46,6 @@ def authenticate(request):
     if shop:
         scope = settings.SHOPIFY_API_SCOPE
         permission_url = shopify.Session.create_permission_url(shop.strip(), scope)
-        print permission_url
         return redirect(permission_url)
 
     return redirect(_return_address(request))
@@ -57,7 +56,7 @@ def finalize(request):
         shopify_session = shopify.Session(shop_url, request.REQUEST)
     except shopify.ValidationException:
         messages.error(request, "Could not log in to Shopify store.")
-        return redirect(reverse('shopify_app.views.login'))
+        return authenticate(request)
 
     request.session['shopify'] = {
                 "shop_url": shop_url,

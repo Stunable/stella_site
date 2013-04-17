@@ -14,7 +14,7 @@ from apps.retailers.models import PortableConnection,ShopifyConnection
 
 
 def get_api(api):
-
+	# shopify has its own thing...
 	return {
 		'portable':PortableConnection
 
