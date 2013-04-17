@@ -16,6 +16,8 @@ class FlavorAdmin(admin.ModelAdmin):
 
 class SearchTabAdmin(admin.ModelAdmin):
 
+	readonly_fields = ('group','name','slug')
+
 	class Media:
 	        css = {
 	            "all": ("styles/imageselect.css",
@@ -28,7 +30,7 @@ class SearchTabAdmin(admin.ModelAdmin):
 	            'javascript/jquery-ui-1.8.22.custom.min.js',
 	            'javascript/imageselect.js',
 	            "javascript/admin.js",)
-	        
+
 admin.site.register(Flavor,FlavorAdmin)
 
 admin.site.register(UserSearchTab,SearchTabAdmin)

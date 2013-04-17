@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from tagging.models import Tag
+from stunable_search.models import UserSearchTab
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.localflavor.us.us_states import STATE_CHOICES
 from django.contrib.localflavor.us.models import PhoneNumberField
@@ -42,10 +43,11 @@ class ProfileBase(object):
     def set_default_tags(self):
         try:
             print 'setting tags for ', self
-            tags = [tag.name for tag in Tag.objects.filter(is_default=True)]
-            tags += [tag.name for tag in Tag.objects.get_for_object(self)]
+            for ust in UserSearchTab.objects.filter(is_default=True):
+                ust.users.add(self.user)
+            
 
-            Tag.objects.update_tags(self.user, ','.join(set(tags)))
+            
         except:
             print 'TAG FAILURE FOR:',self
 

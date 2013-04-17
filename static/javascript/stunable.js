@@ -522,7 +522,7 @@ function init_search(selection){
             return false;
           },
           select: function( event, ui ) {
-            window.location = '/shop/'+ui.item.category+'/'+ui.item.slug
+            window.location = '/shop/'+ui.item.category+'/'+ui.item.slug+'?a=1'
             $(this).val('')
             return false;
           },

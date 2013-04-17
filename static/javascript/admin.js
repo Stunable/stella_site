@@ -149,7 +149,7 @@ $(document).ready(function(){
       $('.stunable_search-usersearchtab #id_content_type').closest('.form-row').hide()
         var f = $('.stunable_search-usersearchtab #id_object_id').closest('.form-row')
         f.hide()
-        f.after('<div class="form-row"><label for="id_object_type_id_combo">Tab Source Object:</label> <input data-val_target="#id_object_id" data-type_target="#id_content_type" data-min="4" data-action="assign_combo" data-app="specialcombo" data-model="usersearchtab" class="ac_search combo_input" type="text" id="id_object_type_id_combo" style="width:300px"></div>')
+        f.after('<div class="form-row"><label for="id_object_type_id_combo">Source Object (search in here):</label> <input data-val_target="#id_object_id" data-type_target="#id_content_type" data-min="4" data-action="assign_combo" data-app="specialcombo" data-model="usersearchtab" class="ac_search combo_input" type="text" id="id_object_type_id_combo" style="width:300px"></div>')
 
         init_AC($('.ac_search'));
 

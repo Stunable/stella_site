@@ -35,12 +35,18 @@ class Flavor(models.Model):
 
 
 class UserSearchTab(models.Model):
-    group = models.CharField('group name',max_length = 64,blank=True)
+
+    def __unicode__(self):
+        return self.group + '-' + self.name
+
+    can_be_removed = True
+
+    group = models.CharField(max_length = 64,blank=True)
     slug = models.SlugField(blank=True)
     name = models.CharField(max_length = 200,blank=True,null=True)
 
     is_default = models.BooleanField(default=False)
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(User,blank=True)
 
     # these should not be queried, they are only for diagnostic/testing/dev
     content_type = models.ForeignKey(ContentType)

@@ -57,7 +57,7 @@ class Category(models.Model):
     
 class ItemManager(RecommenderManager):
     def carousel_items(self):
-        return super(RecommenderManager,self).filter(approved=True, is_available=True,)
+        return super(RecommenderManager,self).select_related('featured_image','_retailer').filter(approved=True, is_available=True,)
 
 class Size(models.Model):
     size = models.CharField(max_length=30)
@@ -553,6 +553,8 @@ class ItemType(models.Model,DirtyFieldsMixin):
 
 
 class DailySpecial(models.Model):
+
+    group = 'daily'
 
     can_be_removed = False
 

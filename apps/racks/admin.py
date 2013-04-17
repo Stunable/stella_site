@@ -182,6 +182,15 @@ class DailySpecialAdmin(admin.ModelAdmin):
         sup = super(DailySpecialAdmin, self)
         return sup.formfield_for_dbfield(db_field, **kwargs)
 
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(DailySpecialAdmin,self).get_form(request, obj,**kwargs)
+        # form class is created per request by modelform_factory function
+        # so it's safe to modify
+        #we modify the the queryset
+        form.base_fields['Items'].queryset = Item.objects.carousel_items()
+        return form
+
 admin.site.register(Size, SizeAdmin)
 admin.site.register(Rack)
 admin.site.register(Rack_Item)

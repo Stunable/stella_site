@@ -154,16 +154,16 @@ def lookup(request, model_name, app_label, queryset=None, fields=None, list_disp
             
             ll = {
                 'usersearchtab' : [
-                                {'model_name':'flavor',     'model':get_model('stunable_search','flavor')},
-                                {'model_name':'item',       'model':get_model('racks','item')},
-                                {'model_name':'brand',      'model':get_model('retailers','retailerprofile')},
+                                {'model_name':'flavor',     'queryset':get_model('stunable_search','flavor').objects.all()},
+                                {'model_name':'item',       'queryset':get_model('racks','item').objects.carousel_items()},
+                                {'model_name':'brand',      'queryset':get_model('retailers','retailerprofile').objects.filter(approved=True)},
                     ]
             }
 
             if request.GET.get('term',None):
                 for m in ll[model_name]:#TODO: clean this up querywise     
-                    cType = ContentType.objects.get_for_model(m['model'])
-                    out += [{'type':cType.id,'label':m['model_name']+': '+o.name,'value':o.id} for o in get_model_query(m['model'],request.GET.get('term'),m['model_name'])]
+                    cType = ContentType.objects.get_for_model(m['queryset'].model)
+                    out += [{'type':cType.id,'label':m['model_name']+': '+o.name,'value':o.id} for o in get_model_query(m['queryset'],request.GET.get('term'),m['model_name'])]
 
             return HttpResponse(json.dumps(out),mimetype="application/json")
         
@@ -175,7 +175,7 @@ def lookup(request, model_name, app_label, queryset=None, fields=None, list_disp
     return HttpResponse(json.dumps([{'label':o.name,'value':o.id} for o in out]),mimetype="application/json")
 
 
-def get_model_query(model_class,term,model_name):
+def get_model_query(model_query_set,term,model_name):
 
-    return model_class.objects.filter(name__icontains = term)
+    return model_query_set.filter(name__icontains = term)
 
