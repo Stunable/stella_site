@@ -28,7 +28,6 @@ import os
 PP = pprint.PrettyPrinter(indent=4)
 
 def _return_address(request):
-    print "NO SHOP?!?!?!?!"
     return request.session.get('return_to') or reverse('shopify_root_path')
 
 def login(request):
@@ -78,9 +77,14 @@ def logout(request):
 def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,VARIATION_API_CLASS= ShopifyVariation):
     retailer_profile = get_retailer_profile(request)
 
-    if not retailer_profile:
-        retailer_profile = RetailerProfile.objects.create()
+    print 'profile:',retailer_profile
 
+    if retailer_profile:
+        redirect_url = reverse("product_list")
+    else:
+        retailer_profile = RetailerProfile.objects.create()
+        redirect_url = reverse("create_retailer_profile")
+     
     shopify_connection,created = APICONNECTION.objects.get_or_create(retailer_profile=retailer_profile,shop_url=request.session['shopify']['shop_url'])
 
     request.session['active_api_connection'] = shopify_connection
@@ -90,6 +94,6 @@ def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,V
     shopify_connection.update_in_progress = True
     shopify_connection.save()
     update_API_products.delay(shopify_connection)
-    return redirect(reverse("create_retailer_profile"))
+    return redirect(redirect_url)
 
 

@@ -27,14 +27,22 @@ from tasks import process_upload,save_shopify_inventory_update
 
 def get_retailer_profile(request,retailer_id=None):
     try:
+        if request.user.is_authenticated():
+            try:
+                return RetailerProfile.objects.filter(user=request.user)[0]
+            except Exception,e:
+                print e
+                print 'no retailer for logged in user',request.user
+                pass
         if request.session.get('active_retailer_profile',None):
+            print 'found session retailer:',request.session.get('active_retailer_profile')
             return request.session.get('active_retailer_profile')
         if retailer_id:
             return RetailerProfile.objects.get(id=retailer_id)
         if request.user.is_staff:
             return RetailerProfile.objects.get(id=request.GET.get('retailer',None))
-        return RetailerProfile.objects.get(user=request.user)
     except:
+        print 'could not find retailer profile for ',request.user
         return None
 
 
