@@ -68,6 +68,7 @@ urlpatterns = patterns('',
 
 
                        url(r'^lookups/(?P<app_label>[\d\w]+)/(?P<model_name>[\d\w]+)','common.views.lookup'),
+                       url(r'^reverselookup/(?P<type_id>[\d\w-]+)/(?P<obj_id>[\d\w]+)','common.views.reverselookup'),
                        url(r'^search/','common.views.combo_lookup',name="search_api"),
 #                       url(r'^privacy/$',
 #                       url(r'^privacy/$',

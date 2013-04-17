@@ -9,6 +9,8 @@ from tagging.models import Tag
 from apps.racks.models import Item
 from apps.retailers.models import RetailerProfile
 
+from django.contrib.contenttypes.models import ContentType
+
 def export(qs, fields=None):
     model = qs.model
     response = HttpResponse(mimetype='text/csv')
@@ -101,12 +103,12 @@ def admin_list_export(request, model_name, app_label, queryset=None, fields=None
     return export(queryset, fields)
 
 
-def lookup(request, model_name, app_label, queryset=None, fields=None, list_display=True):
-    model = get_model(app_label, model_name)
-    qs = model.objects.all()
-    if request.GET.get('term',None):
-        out = qs.filter(name__istartswith=request.GET.get('term'))
-    return HttpResponse(json.dumps([{'slug':o.slug,'label':o.name,'value':o.slug} for o in out]),mimetype="application/json")
+# def lookup(request, model_name, app_label, queryset=None, fields=None, list_display=True):
+#     model = get_model(app_label, model_name)
+#     qs = model.objects.all()
+#     if request.GET.get('term',None):
+#         out = qs.filter(name__istartswith=request.GET.get('term'))
+#     return HttpResponse(json.dumps([{'slug':o.slug,'label':o.name,'value':o.slug} for o in out]),mimetype="application/json")
 
 
 def combo_lookup(request):
@@ -124,4 +126,56 @@ def combo_lookup(request):
         # }
         ),mimetype="application/json")
 
+
+
+def reverselookup(request,type_id,obj_id):
+    out = {}
+    m = None
+    try:
+        int(type_id)
+        m = ContentType.objects.get(id=type_id).model_class().objects.get(id=obj_id)
+    except:
+        m = get_model(*type_id.split('-')).objects.get(id=obj_id)
+
+    if m:
+        out = {'label':str(m),'value':m.id}
+    return HttpResponse(json.dumps(out),mimetype="application/json")
+
+
+def lookup(request, model_name, app_label, queryset=None, fields=None, list_display=True):
+    """
+        this is to simplify the useage of generic foreign keys in the admin
+    """
+
+
+    out = []
+    if request.user.is_staff:
+        if app_label == 'specialcombo':
+            
+            ll = {
+                'usersearchtab' : [
+                                {'model_name':'flavor',     'model':get_model('stunable_search','flavor')},
+                                {'model_name':'item',       'model':get_model('racks','item')},
+                                {'model_name':'brand',      'model':get_model('retailers','retailerprofile')},
+                    ]
+            }
+
+            if request.GET.get('term',None):
+                for m in ll[model_name]:#TODO: clean this up querywise     
+                    cType = ContentType.objects.get_for_model(m['model'])
+                    out += [{'type':cType.id,'label':m['model_name']+': '+o.name,'value':o.id} for o in get_model_query(m['model'],request.GET.get('term'),m['model_name'])]
+
+            return HttpResponse(json.dumps(out),mimetype="application/json")
+        
+        else:
+            model = get_model(app_label, model_name)
+            if request.GET.get('term',None):
+                out = get_model_query(model,request.GET.get('term'),model_name)
+            
+    return HttpResponse(json.dumps([{'label':o.name,'value':o.id} for o in out]),mimetype="application/json")
+
+
+def get_model_query(model_class,term,model_name):
+
+    return model_class.objects.filter(name__icontains = term)
 

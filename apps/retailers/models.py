@@ -104,6 +104,10 @@ class RetailerProfile(models.Model):
     Company profile model
     """
 
+
+    search_group_name = 'brand'
+
+
     name = models.CharField(max_length=255,null=True,default='')
     user = models.ForeignKey(User, blank=True, null=True)
     address1 = models.CharField(max_length=255, null=True,blank=True)
@@ -220,6 +224,7 @@ class RetailerProfile(models.Model):
 
     def get_APIs(self):
         return APIConnection.objects.filter(retailer_profile=self).select_related('ShopifyConnection','PortableConnection')
+
 
 
 class StylistItem(models.Model):

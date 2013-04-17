@@ -38,7 +38,7 @@ import urllib
 from apps.retailers.models import RetailerProfile
 
 from apps.kart.models import WishListItem,KartItem,Cart
-from apps.stunable_search.models import Flavor
+from apps.stunable_search.models import Flavor,UserSearchTab
 
 
 import random
@@ -62,25 +62,19 @@ def gethome(request):
 def get_context_variables(ctx, request):
 
     if request.user.is_authenticated():
-        ctx['tags'] = Tag.objects.get_for_object(request.user) 
-        # profile = get_or_create_profile(request)
+        ctx['tags'] = request.user.usersearchtab_set.all()
     else:
-        ctx['tags'] = Tag.objects.filter(is_default=True) 
+        ctx['tags'] = UserSearchTab.objects.filter(is_default=True) 
 
 
 
     today = datetime.date.today()
-
-    print today.weekday()
-
     specials = DailySpecial.objects.filter(
         Q(start_date__lte = today,end_date__gte=today)|
         Q(start_date__lte = today,end_date=None)|
         Q(start_date = None,end_date=None)|
         Q(start_date = None,end_date__gte=today)).filter(weekday__contains=str(today.weekday()))
            #print profile.first_login
-
-    # print specials
 
     ctx['specials'] = specials
     

@@ -248,6 +248,8 @@ class ProductImage(models.Model,listImageMixin):
 
 class Item(models.Model,listImageMixin):
 
+    search_group_name = 'item'
+
     def get_absolute_url(self):
         return '/shop/item/%s'%self.slug
 
