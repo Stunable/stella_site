@@ -105,7 +105,7 @@ def get_context_variables(ctx, request):
     if request.user.is_authenticated():
         ctx['tags'] = request.user.usersearchtab_set.all()
     else:
-        ctx['default_tags'] = UserSearchTab.objects.filter(is_default=True) 
+        ctx['tags'] = UserSearchTab.objects.filter(is_default=True) 
 
     today = datetime.date.today()
     specials = DailySpecial.objects.filter(
