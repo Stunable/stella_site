@@ -159,8 +159,8 @@ def item_modal(request, slug, template='racks/item_modal.html', ctx=None):
     ctx['item'] = item
 
     ctx.update({
-                'variations_by_size': item.types.select_related('size').filter(inventory__gte=1).order_by('size'),
-                'variations_by_color': item.types.select_related('size').filter(inventory__gte=1).order_by('custom_color_name')
+                'variations_by_size': item.types.select_related('size').filter(inventory__gte=1,approved=True).order_by('size'),
+                'variations_by_color': item.types.select_related('size').filter(inventory__gte=1,approved=True).order_by('custom_color_name')
                 }) 
                
     if request.is_ajax():

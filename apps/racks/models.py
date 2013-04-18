@@ -477,6 +477,7 @@ class ItemType(models.Model,DirtyFieldsMixin):
     custom_color_name = models.CharField(max_length=255, 
                                          help_text="An optional name for the color of this item",verbose_name="Style Name")
     position = models.IntegerField(default=0,blank=True,null=True)
+    approved = models.BooleanField(default=True)
 
     inventory = models.IntegerField(default=0,null=True,verbose_name="inventory quantity")
     price = models.DecimalField(blank=True,null=True,max_digits=19, decimal_places=2, verbose_name='Special Price for this color/size/inventory')
