@@ -48,13 +48,13 @@
 
 				<ul id="images">
 					<li class="active-image">
-						<img class="{{item.get_image.zoom_or_not}}  featured item-image-{{item.get_image.id}} {{item.get_image.css_style}}" data-big="{{item.get_image.extralarge.url}}"  src="{{item.get_image.large.url}}">
+						<img class="{{item.get_image.zoom_or_not}}  featured item-image-{{item.get_image.id}} {{item.get_image.css_style}}" data-big="{% if item.get_image.extralarge %}{{item.get_image.extralarge.url}}{% endif %}"  src="{{item.get_image.large.url}}">
 					</li>
 
 
 					{% for each_image in item.get_additional_images %}
 					<li style="display:none">
-		                <img class="{{each_image.zoom_or_not}} item-image-{{each_image.id}} {{each_image.css_style}}" data-big="{{each_image.extralarge.url}}"  data-src="{{each_image.large.url}}">
+		                <img class="{{each_image.zoom_or_not}} item-image-{{each_image.id}} {{each_image.css_style}}" data-big="{% if each_image.extralarge %}{{each_image.extralarge.url}}{% endif %}"  data-src="{{each_image.large.url}}">
 					</li>
 					{% endfor %}
 				</ul>
