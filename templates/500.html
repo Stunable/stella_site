@@ -1,20 +1,14 @@
 {% extends "clean_base.html" %}
 
-{% block title %}Stunable | 404{% endblock %}
+{% block title %}Stunable | 500{% endblock %}
+
+{% block body_class %}flatpage{% endblock %}
 
 {% block content %}
-
-<div class="section clearfix round-corner-shadow" id="page-content">
-	<div class="section intro">
-		<h2><span class="font-static">There's Nothing Here</span></h2>
-	</div>
-	<!--/.section#intro-->
-	<div class="section body-copy">
-		<div class="header">
-			<span class="bold">
-				<p>Something bad happened and we don't know what yet. Don't worry, we'll fix it soon. In the meantime, click <a href="/">here </a>to go back.</p>
-			</span>
-		</div>
+<div id="flatpage-content">
+	<h1>Problems.</h1>
+	<div id="flatpage-inner-content">
+		Sorry about this but we seem to be having some sort of technical difficulty.  The right people are being made aware of it and it should be ok... Maybe try hitting your browser's back button?
 	</div>
 </div>
 {% endblock %}

@@ -3,31 +3,7 @@
 {% load voting_tags %}
 
 {% votes_by_user user on user_items as vote_dict %}
-<style>
-	#bigform-error, #bigform-error1 {
-		height: 25px;
-		width: 100%;
-		text-align: center;
-		color: #E84E4B;
-		top: 0px;
-		font-family: 'Play', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-		font-size: 1.2em;
-		text-transform: none;
-		display: none;
-		opacity: 0;
-		margin-bottom: 15px;
-	}
-	#add-to-cart-link {
-		text-transform: uppercase;
-	}
-	#loading1 {
-	    display: inline;
-	}
-	#loading1 img{
-	    vertical-align: bottom;
-	}
-	
-</style>
+
 <script>
 	// var size2color = {{size2color|safe}};
 	// var inventories = {{inventories|safe}};
@@ -134,8 +110,8 @@
 							
 						<ul class="action-buttons">
 							
-								<li id="modal-wish-button"><a class="wishlist" data-href="/cart/update_wishlist/" href="" id="add-to-wishlist-link"><div>Wish List</div></a></li>
-								<li id="modal-cart-button"><a class="cart btn btn-primary click_to_cart" data-href="/cart/add_to_cart/" href="" id="add-to-cart-link"><div>Cart</div></a></li>
+								<li id="modal-wish-button"><a class="wishlist" data-href="/cart/update_wishlist/" href="" id="add-to-wishlist-link"><div>wish list</div></a></li>
+								<li id="modal-cart-button"><a class="cart btn btn-primary click_to_cart" data-href="/cart/add_to_cart/" href="" id="add-to-cart-link"><div>cart</div></a></li>
 							
 								
 											

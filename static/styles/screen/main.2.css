@@ -1568,8 +1568,6 @@ table.retailer-item-group{
 
 
 
-
-
 #tab-search{
 	font-size:.8em;
 	width:250px;
@@ -1872,7 +1870,7 @@ form .info_modal{
 }
 
 .modal.current .item-price {
-	font-size: 1.2em;
+	font-size: 1em;
 	/*width:100%;*/
 	/*width: 230px;*/
 	text-align: right;
@@ -2010,10 +2008,16 @@ form .info_modal{
 }
 
 .action-buttons #modal-wish-button{
-	background-position: 16px 30px;
+	background: url('../../images/new_buttons/heart_big_white.png');
+	background-size: 70px;
+	background-repeat: no-repeat;
+	background-position: 2px 24px;
 }
 .action-buttons #modal-cart-button{
-	background-position: 19px 29px;
+	background:url('../../images/new_buttons/bag_big_white.png');
+	background-size: 70px;
+	background-repeat: no-repeat;
+	background-position: 2px 15px;
 
 }
 
