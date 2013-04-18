@@ -53,9 +53,11 @@
 
 
 					{% for each_image in item.get_additional_images %}
-					<li style="display:none">
-		                <img class="{{each_image.zoom_or_not}} item-image-{{each_image.id}} {{each_image.css_style}}" data-big="{% if each_image.extralarge %}{{each_image.extralarge.url}}{% endif %}"  data-src="{{each_image.large.url}}">
-					</li>
+					{% if each_image.large %}
+						<li style="display:none">
+			                <img class="{{each_image.zoom_or_not}} item-image-{{each_image.id}} {{each_image.css_style}}" data-big="{% if each_image.extralarge %}{{each_image.extralarge.url}}{% endif %}"  data-src="{{each_image.large.url}}">
+						</li>
+					{% endif %}
 					{% endfor %}
 				</ul>
 				<div id="item-header">
