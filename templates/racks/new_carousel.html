@@ -8,11 +8,11 @@
 
 <div class="content {% block content-class%}carousel{%endblock%}" id="page-content" >
     <div class="inner-page-content">
-        <div id="stunable-tabs-nav">
+        <div class="stunable-tabs-nav">
             <div style="display:inline-block" id="search_tab" title="search" class="stunable-tab tab">
-                                <div class="text-link"><input data-lookup="{% url search_api %}" id="tab-search" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsearch" placeholder="brand, product, mood, or occasion..." type="text"></div>
+                                <div class="text-link"><input data-append="body" data-lookup="{% url search_api %}" id="tab-search" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsearch" placeholder="brand, product, mood, or occasion..." type="text"></div>
                             </div>
-            <div id="tabs-container-container">
+            <div class="tabs-container-container">
             <ul id="tabs-container" class="nav tabbed">
                             
                         {% comment %}

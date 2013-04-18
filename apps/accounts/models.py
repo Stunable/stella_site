@@ -22,6 +22,24 @@ from apps.common.forms import FedexTestAddress
 from django.forms.models import model_to_dict
 
 
+from queued_storage.backends import QueuedStorage
+from storages.backends.s3boto import S3BotoStorage
+
+
+if settings.DEBUG:
+    queued_s3storage = QueuedStorage(
+        'django.core.files.storage.FileSystemStorage',
+        'django.core.files.storage.FileSystemStorage',
+        # 'storages.backends.s3boto.S3BotoStorage'
+        )
+else:
+    queued_s3storage = QueuedStorage(
+    'django.core.files.storage.FileSystemStorage',
+    'storages.backends.s3boto.S3BotoStorage'
+    )   
+
+
+
 AGE_RANGE_CHOICE = (
     ('','optional'),
     ('20 or younger','20 or younger'),
@@ -57,7 +75,7 @@ class UserProfile(models.Model,ProfileBase):
     """
 
     user = models.ForeignKey(User, unique=True)
-    avatar = models.ImageField(upload_to='upload', null=True, blank=True)
+    avatar = models.ImageField(upload_to='upload', null=True, blank=True,storage=queued_s3storage)
     zipcode = models.CharField(max_length=6, null=True, blank=True)
     age_range = models.CharField(max_length=30,choices=AGE_RANGE_CHOICE, default='optional')
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)

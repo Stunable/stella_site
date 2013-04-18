@@ -4,6 +4,10 @@ var stunable = {
     common : function() {
 
 
+      $('.menu').click(function(){
+
+        $(this).find('ul').show()
+      })
 
       var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
       $(document).ajaxSend(function(e, xhr, settings) {
@@ -41,7 +45,6 @@ var stunable = {
       init_search($('.refsearch'));
 
       $('.arbitrary_modal').click(function(e){
-        console.log( $($(this).data('target')))
         $($(this).data('target')).modal()
       })
 
@@ -98,6 +101,18 @@ var stunable = {
           },function(){
             $($(this).data('target')).fadeOut();
         })
+
+
+
+        if (!logged_in){
+          // console.log('not logged in')
+          // console.log($.cookie('welcome_dismissed'));
+          if (!$.cookie('welcome_dismissed')){
+            $('#welcome_box').modal()
+          }
+          
+        }
+
 
     }
     ,shop: function(){    
@@ -697,6 +712,12 @@ var add_rack_modal_options = {
     afterOpenFunction:init_item_modal
   }
 
+var welcome_box_modal_options = {
+  afterOpenFunction: function(){
+    init_search($('.modal.current').find('.refsearch'))
+  },
+  afterCloseFunction:set_welcome_dismissed
+}
     
 $(document).ready(function() {
     var pageScrLoader = $('body').attr('data-role');

@@ -188,6 +188,27 @@
                 </div>
             </div>
         </div>
+
+        <div style="display:none;padding:50px;border: 2px solid #7f10b5;" class="info_modal" id="welcome_box" data-options="welcome_box_modal_options">
+          <div class="inner_content">
+              Stunable is your online personal shopper.<br>
+              It's a new way to shop - clothes and accessories handpicked for you! <br>
+              <br>
+                <div id="search_append" class="text-link"><input data-append="#search_append" style="font-size:1.5em;width:100%" data-lookup="{% url search_api %}" id="tab-search" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsearch" placeholder="enter a brand, product, mood, or occasion..." type="text"></div>
+                <br>
+                
+                <br>
+                or try some we've already created!
+                <br>
+                <div class="stunable-tabs-nav">
+                  <div class="tabs-container-container">
+                    <ul class="nav tabbed">
+                      {% include 'racks/includes/tag_tabs.html' %}
+                    </ul>
+                  </div>
+                </div>
+          </div>
+        </div>
              
 
           {% endif %}
@@ -201,6 +222,7 @@
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.spritely-0.6.1.js" ></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/chosen.jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.form.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.cookie.js"></script>
 
 
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.modal.min.js"></script>
@@ -214,7 +236,7 @@
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/stunable.item_modal.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}javascript/init.js"></script>
 
-        {% if debug %}
+        {% if not debug %}
         <script type="text/javascript">
           adroll_adv_id = "CLIUOIRXUZD2HCUYGZ74TX";
           adroll_pix_id = "SHABUB7ULRAV3PT5MP34PI";
