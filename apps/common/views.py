@@ -168,7 +168,7 @@ def lookup(request, model_name, app_label, queryset=None, fields=None, list_disp
             return HttpResponse(json.dumps(out),mimetype="application/json")
         
         else:
-            model = get_model(app_label, model_name)
+            model = get_model(app_label, model_name).objects.all()
             if request.GET.get('term',None):
                 out = get_model_query(model,request.GET.get('term'),model_name)
             
