@@ -24,6 +24,21 @@ from apps.common.forms import FedexTestAddress
 
 from tasks import process_upload,save_shopify_inventory_update
 
+from queued_storage.backends import QueuedStorage
+from storages.backends.s3boto import S3BotoStorage
+
+
+if settings.DEBUG:
+    queued_s3storage = QueuedStorage(
+        'django.core.files.storage.FileSystemStorage',
+        'django.core.files.storage.FileSystemStorage',
+        # 'storages.backends.s3boto.S3BotoStorage'
+        )
+else:
+    queued_s3storage = QueuedStorage(
+    'django.core.files.storage.FileSystemStorage',
+    'storages.backends.s3boto.S3BotoStorage'
+    )   
 
 def get_retailer_profile(request,retailer_id=None):
     try:
@@ -126,7 +141,7 @@ class RetailerProfile(models.Model):
     hours = models.CharField(max_length=50, null=True, blank=True)
     phone_number = PhoneNumberField(null=True,blank=True)
     email_address = models.EmailField(null=True)
-    company_logo = models.ImageField(upload_to='upload',null=True,blank=True)
+    company_logo = models.ImageField(upload_to='upload',null=True,blank=True,storage=queued_s3storage)
     description = models.TextField(null=True)
     selling_options = models.CharField(max_length=100,null=True,blank=True)
     more_details = models.CharField(max_length=100, blank=True, null=True)
