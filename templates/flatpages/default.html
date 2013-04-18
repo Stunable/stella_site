@@ -1,0 +1,16 @@
+{% extends "clean_base.html" %}
+
+{% block title %}Stunable | {{flatpage.title}}{% endblock %}
+
+{% block body_class %}flatpage{% endblock %}
+
+{% block content %}
+<div id="flatpage-content">
+	<h1>{{flatpage.title}}</h1>
+	<div id="flatpage-inner-content">
+		{{ flatpage.content }}
+	</div>
+</div>
+{% endblock %}
+
+

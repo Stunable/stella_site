@@ -59,8 +59,7 @@ urlpatterns = patterns('',
                        url(r'^help$', 
                            direct_to_template,
                            {'template' : 'static/stella_help.html'},
-                           name="main-help"),
-                       url(r'^contact/', include('contact_form.urls')),                       
+                           name="main-help"),                     
                        url(r'^thankyou/$',
                            direct_to_template,
                            {'template': 'static/stella_thank-you.html'},
@@ -133,6 +132,7 @@ urlpatterns += patterns('django.contrib.flatpages.views',
     url(r'^how_it_works/$', 'flatpage', {'url': '/how_it_works/'}, name='hiw'),
     url(r'^privacy/$', 'flatpage', {'url': '/privacy/'}, name="main-privacy"),
     url(r'^terms/$', 'flatpage', {'url': '/terms/'}, name="terms"),
+    url(r'^contact/', 'flatpage', {'url': '/contact/'}, name="main-contact"),
 )
 
 from django.conf import settings
