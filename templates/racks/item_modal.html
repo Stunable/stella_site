@@ -80,12 +80,14 @@
 
 
 					<div class="item-pictures">
+						{% if item.get_image.tiny %}
 						<img class="active click-to-big item-image-{{item.get_image.id}}" data-target=".item-image-{{item.get_image.id}}" src="{{item.get_image.tiny.url}}">
+						{% endif %}
 
 						{% for each_image in item.get_additional_images %}
-						
+							{% if each_image.tiny %}
 			              <img class="item-image-{{each_image.id}} click-to-big" data-target=".item-image-{{each_image.id}}" data-big="{% if each_image.extralarge %}{{each_image.extralarge.url}}{% endif %}"  src="{{each_image.tiny.url}}">
-						
+							{% endif %}
 						{% endfor %}
 					</div>
 				</div>
