@@ -1571,8 +1571,9 @@ table.retailer-item-group{
 
 
 #tab-search{
-	font-size:.7em;
-	width:200px;
+	font-size:.8em;
+	width:250px;
+	line-height: 2em;
 }
 
 
@@ -2296,12 +2297,10 @@ body.flatpage #left-panel{
 
 
 #flatpage-content{
-	margin-left:auto;
-	margin-right:auto;
+	margin-left:70px;
 	margin-top:100px;
 	left:180px;
-	width:100%;
-	width: 680px;
+	width: 900px;
 }
 
 #flatpage-inner-content{
