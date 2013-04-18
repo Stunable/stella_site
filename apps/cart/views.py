@@ -57,11 +57,14 @@ def add_to_cart(request, product_id, wishlist_only=False):
     if request.method == 'POST':
         inventory = ItemType.objects.get(id=product_id)
         cart = Cart(request)    
-        cart.add(inventory,wishlist_only=wishlist_only)
-    
+        item = cart.add(inventory,wishlist_only=wishlist_only)
+
+        annotation = "This item has been added to your cart.  We will hold it for you for 30 minutes."
+        if wishlist_only:
+            annotation = "This item has been added to your wishlist."
 
         return render_to_response("cart/cart_slideout.html", 
-                                  {'cart': cart }, 
+                                  {'item': item ,'annotation':annotation}, 
                                   context_instance=RequestContext(request) )
 
 
@@ -69,7 +72,7 @@ def add_to_cart(request, product_id, wishlist_only=False):
 
 
 def update_wishlist(request, product_id):
-    add_to_cart(request,product_id,wishlist_only=True)
+    return add_to_cart(request,product_id,wishlist_only=True)
 
     return HttpResponse(json.dumps({'success':True,'callback':'remove'}, ensure_ascii=False), mimetype='application/json')
 

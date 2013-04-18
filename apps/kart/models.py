@@ -56,6 +56,7 @@ class Kart(models.Model):
         return get_shipping_options()
 
     def manage_variations(self,item_variation,wishlist_only=False):
+        outval = None
         if not wishlist_only:
             ki,created         = KartItem.objects.get_or_create(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
             ki.unit_price      = item_variation.get_current_price()
@@ -77,6 +78,7 @@ class Kart(models.Model):
             self.calculate()
             self.save()
 
+            outval = ki
 
         if self.request.user.is_authenticated():
             user = self.request.user
@@ -96,12 +98,14 @@ class Kart(models.Model):
             )
 
             WI.save()
+
+            outval = WI
             
 
-
+        return outval
 
     def add(self,item_variation,wishlist_only=False):
-        self.manage_variations(item_variation,wishlist_only=wishlist_only)
+        return self.manage_variations(item_variation,wishlist_only=wishlist_only)
 
 
     def remove(self,item_variation):
@@ -467,6 +471,13 @@ class WishListItem(models.Model):
     cart = models.ForeignKey('kart.Kart',null=True,blank=True)
 
     purchased = models.BooleanField(default=False)
+
+
+    def retailer(self):
+        return self.item_variation.item._retailer
+
+    def item_name(self):
+        return self.item_variation.get_name()
 
 
 
