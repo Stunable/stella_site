@@ -40,7 +40,7 @@
 	{% endif %}
 
 </script>
-	<div id="modal_contents" style="background-color:{{item.get_image.color}}" class="{{item.get_image.orientation}}">
+	<div id="modal_contents" class="{{item.get_image.orientation}}">
 		<div class="modal_inner_frame">
 			<div id="item-header"></div>
 			<div class="item-visuals" id="item_visual_{{item.pk}}">
@@ -61,7 +61,7 @@
 					{% endfor %}
 				</ul>
 				<div id="item-header">
-					<div style="width:440px;height:30px" class="item-retailer text-fill"><span>{{item.retailer}}</span></div>
+					<div style="width:440px;" class="item-retailer text-fill"><span>{{item.retailer}}</span></div>
 					<div class="item-name">{{item.name}}</div>
 					<div class="item-price">{{item.price_text|safe}}</div>
 				</div>
@@ -135,7 +135,7 @@
 						<ul class="action-buttons">
 							
 								<li id="modal-wish-button"><a class="wishlist" data-href="/cart/update_wishlist/" href="" id="add-to-wishlist-link"><div>Wish List</div></a></li>
-								<li id="modal-cart-button"><a class="cart btn btn-primary click_to_cart" data-href="/cart/add_to_cart/" href="" id="add-to-cart-link"><div>BUY</div></a></li>
+								<li id="modal-cart-button"><a class="cart btn btn-primary click_to_cart" data-href="/cart/add_to_cart/" href="" id="add-to-cart-link"><div>Cart</div></a></li>
 							
 								
 											

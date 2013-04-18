@@ -521,7 +521,8 @@ select option{
 	position:absolute;
 	text-align:center;
 	z-index: 10000;
-	top:-50px;
+	/*top:-50px;*/
+	top:10px;
 }
 
 #left-panel .retailer-left-panel{
@@ -534,12 +535,12 @@ select option{
 
 	#left-panel>ul{
 		margin-top:190px;
-		background-color:rgba(0,0,0,.5);	
+		
 	}
 
 	.modal.current ul.action-buttons>li, #left-panel>ul>li{
-		height:90px;
-		width:90px;
+		height:75px;
+		width:75px;
 		overflow:hidden;
 		/*border-radius: 4px 0px 0px 4px;*/
 		cursor:pointer;
@@ -549,11 +550,13 @@ select option{
 		/*box-shadow: 0px 4px 2px 2px rgba(0,0,0,.3);*/
 	}
 	#left-panel>ul>li{
-		margin-top:16px;
+		/*margin-top:16px;*/
 		margin-bottom:16px;
 		/*border:1px solid #ddd;*/
 		border-right:0px;
 		z-index: 1001;
+		/*box-shadow: 4px 4px 10px 4px rgba(0,0,0,.5);*/
+		background-color:rgba(127,16,181,.7)!important;	
 	}
 
 
@@ -563,14 +566,14 @@ select option{
 		background-repeat: no-repeat;
 		/*background-position-y: 30px;*/
 		/*background-position-x: 16px;*/
-		background-position:16px 26px;
+		background-position:8px 29px;
 	}
 
 	#left-panel #shop-button:hover,#left-panel #shop-button.active{
 		background:url('../../images/new_buttons/logo.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position:16px 36px;
+		background-position:8px 31px;
 	}
 
 
@@ -578,14 +581,14 @@ select option{
 		background:url('../../images/new_buttons/people_dancing.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position:16px 26px;
+		background-position:8px 23px;
 	}
 
 	#left-panel #friends-button:hover,#left-panel #friends-button.active{
 		background:url('../../images/new_buttons/people_dancing_hover.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position:16px 36px;
+		background-position:8px 27px;
 		/*background-color: whitesmoke;*/
 	}
 
@@ -594,7 +597,7 @@ select option{
 		background:url('../../images/new_buttons/bag_hover.png');
 		background-size: 50px;
 		background-repeat: no-repeat;
-		background-position:20px 30px;
+		background-position:13px 27px;
 
 	}
 
@@ -602,7 +605,7 @@ select option{
 		background:url('../../images/new_buttons/bag.png');
 		background-size: 50px;
 		background-repeat: no-repeat;
-		background-position:20px 36px;
+		background-position:13px 33px;
 	}
 
 
@@ -610,7 +613,7 @@ select option{
 		background:url('../../images/new_buttons/heart_hover.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position:16px 26px;
+		background-position:9px 30px;
 
 	}
 
@@ -618,14 +621,14 @@ select option{
 		background:url('../../images/new_buttons/heart.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position:16px 36px;
+		background-position:9px 33px;
 	}
 
 	#modal-wish-button{
 		background:url('../../images/new_buttons/heart.png');
 		background-size: 60px;
 		background-repeat: no-repeat;
-		background-position:16px 36px;
+		background-position:16px 33px;
 	}
 
 	#left-panel>ul>li.active,#left-panel>ul>li:hover{
@@ -634,12 +637,10 @@ select option{
 	}
 
 
-
-
     #left-panel>ul>li:hover>a,#left-panel>ul>li.drop_item_hover>a,#left-panel>ul>li.active>a{
-		color:#fff;
+		color:#000;
 		font-size: 1.1em;
-		font-weight: 400;
+		font-weight: 600;
 		/*background-color: whitesmoke;*/
     }
 
@@ -667,7 +668,7 @@ select option{
 
 	.modal.current ul.action-buttons>li div{
 		position:relative;
-		top:4px;
+		top:px;
 	}
 
 	#left-panel>ul>li.active{
@@ -678,7 +679,7 @@ select option{
 
 
 	#left-panel>ul>li>a div{
-		padding-top:10px;
+		padding-top:6px;
 		width:100%;
 		/*text-transform:uppercase;*/
 		/*height:100%;*/
@@ -713,6 +714,7 @@ select option{
 		width:100%;
 		white-space: normal;
 		float:none;
+		margin-left: 150px;
 	}
 
 		.inner-page-content{
@@ -943,6 +945,7 @@ select option{
 			min-height:500px;
 			min-width:2000px;
 			white-space: nowrap;
+			padding-left:75px;
 		}
 
 		.scrollbox.listbox.inner-page-content #container{
@@ -1823,7 +1826,7 @@ form .info_modal{
 .modal_inner_frame .item-visuals #item-header div{
 	white-space: nowrap;
 	/*font-family: serif;*/
-	line-height: 25px;
+	line-height: 19px;
 }
 
 
@@ -1833,9 +1836,10 @@ form .info_modal{
 }
 
 .item-visuals #item-header .item-retailer{
-	font-size:2em;
+	font-size:1.3em;
 	text-transform: uppercase;
 	/*line-height: .8;*/
+	margin-bottom:2px;
 }
 
 #cart-item-list .item-retailer,#cart-item-list .reference-number{
@@ -1845,7 +1849,7 @@ form .info_modal{
 
 .item-visuals #item-header .item-name{
 	margin:auto;
-	font-size:1.3em;
+	font-size:1em;
 	color:#7f10b5;
 	color:white;
 	float:left;
@@ -1875,6 +1879,8 @@ form .info_modal{
 	clear:left;
 	float:left;
 	font-style: italic;
+	position: absolute;
+	bottom: 4px;
 	/*background: url(../../images/x_sm.png) no-repeat 155px -9px;*/
 }
 
@@ -2183,49 +2189,27 @@ form .info_modal{
 }
 
 
-#cart_items{
-	height:162px;
-	display:block;
-	overflow:auto;
+.modal.current div.cart_item_added{
+	position:absolute;
+	margin:auto;
+	width:300px;
+
+	background-color:white;
+	display:inline-block;
+	text-align:center;
 }
-
-.add #cart_items{
-	height:81px;
-	overflow:hidden;
+.cart_item_added div{
+	margin:5px;
+	text-align: right;
+	color:black!important;
+	display:inline-block;
+	font-size:.9em;
 }
-	#cart_items tr{
-
-		font-size:.6em;
-	}
-	#cart_items td{
-		border-bottom:1px dashed #ccc;
-		padding-top:10px;
-		padding-bottom:10px;
-		text-align: right;
-		height:60px;
-		padding-right:;
-	}
-	#cart_items td span{
-		vertical-align:top;
-		display:block;
-		line-height: 1.2em;
-	}
-
-	#cart_items.item-list .item-label{
-		width: 100%;
-		text-align: right;
-		background:none;
-	}
-
-#cart_data{
-	/*margin-top:71px;*/
-	border-bottom:1px dashed #ccc;
-	height:40px;
-	width:100%;
-	color:#aaa;
-	vertical-align: middle;
+.cart_item_added img{
+	margin-top:10px;
+	width:40%;
+	float:left;
 }
-
 
 
 .bootstrap .btn {

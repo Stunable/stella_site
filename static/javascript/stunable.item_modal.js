@@ -53,7 +53,7 @@ function setItemDetailsEvent(){
 					$('.item-pictures '+variation.data('imagetarget')).click();
 				}
 
-				$('#item-header .item-price').html('<span class="big">'+variation.data('size')+'</span>'+',<span class="big">'+variation.data('name')+' - </span>' + '<span class="dollar">$</span>'+'<span class="big">'+variation.data('price')+'</span>');
+				$('#item-header .item-price').html('<span class="">'+variation.data('size')+'</span>'+',<span class="">'+variation.data('name')+' - </span>' + '<span class="dollar">$</span>'+'<span class="">'+variation.data('price')+'</span>');
 
 			});
 			
@@ -70,13 +70,16 @@ function setItemDetailsEvent(){
 					var variation_id = $('.'+selsize.data('name')+'.'+selcolor.data('name')).val();
 
 					$.post($(this).data('href')+variation_id,function(data){
-						$.modal.close()
-						var cs = reveal_cart(e,data,true);
+					
+						$('#modal_contents').html(data)
+
+						setTimeout(function(){$.modal.close()},3000);
 						if ($t.hasClass('cart')){
 							cart_item_added();
 						}else{
 							wishlist_item_added();
 						}
+
 					},'html')
 				}
 
@@ -177,7 +180,10 @@ function init_item_modal(){
 			}
 			
 		})
-
+	
+		if ($('.item-color-list span').length < 2){
+			$('.item-color-list span').first().click();
+		}
 		// $('#item-header .modalitem').textfill(25)
 		
 	}

@@ -59,7 +59,11 @@ class Kart(models.Model):
         if not wishlist_only:
             ki,created         = KartItem.objects.get_or_create(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
             ki.unit_price      = item_variation.get_current_price()
-            ki.picture         = item_variation.get_image().small.url
+            try:
+                ki.picture     = item_variation.get_image().small.url
+            except:
+                ki.picture     = item_variation.item.get_image().medium.url
+
             ki.item_name       = item_variation.get_name()
 
             if created:

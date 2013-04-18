@@ -1,20 +1,10 @@
-<div id="cart_data" class="bootstrap">
-    
+{% with cart.by_date.0 as item %}
+<div class="cart_item_added">
+  <img class="product_image" src="{% if item.item_variation.get_image.medium %} {{item.item_variation.get_image.medium.url}} {% else %}{{ item.item_variation.item.get_image.medium.url }}{% endif %}">
+  <div style="float:right;margin:20px;display:inline-block;width:45%">
+     <div class="big">{{ item.item_name }}</div>
+     <div>by {{ item.retailer }}</div>
+     <div>This item has been added to your cart.  We will hold it for you for 30 minutes.</div>
+  </div>
 </div>
-<table id="cart_items" class="item-list" data-length="{{cart.count}}">
-    {% for item in cart.by_date %}
-    <tr>
-      <td id="product-item-{{item.product.pk}}">
-            <div>
-               <img style="width:40px;display:inline;float:left" class="product_image" src="{{ item.picture }}">
-               <div style="display:inline">
-               <span class="item-label">{{ item.item_name }}</span>
-               <span>by {{ item.retailer }}</span>
-               <span>${{ item.unit_price|floatformat:2 }}</span>
-                </div>
-            </div>
-
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+{% endwith %}
