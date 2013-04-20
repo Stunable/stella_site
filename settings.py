@@ -176,8 +176,8 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     # 'sslify.middleware.SSLifyMiddleware',
-     'johnny.middleware.LocalStoreClearMiddleware',
-     'johnny.middleware.QueryCacheMiddleware',
+    'johnny.middleware.LocalStoreClearMiddleware',
+    'johnny.middleware.QueryCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'apps.common.middleware.SubdomainsMiddleware',    
     'apps.common.middleware.FilterPersistMiddleware',
@@ -195,13 +195,24 @@ MIDDLEWARE_CLASSES = (
 JOHNNY_MIDDLEWARE_KEY_PREFIX='jc_st'
 # some johnny settings
 CACHES = {
+    'default' : dict(
+        BACKEND = 'johnny.backends.memcached.MemcachedCache',
+        LOCATION = ['127.0.0.1:11211'],
+        JOHNNY_CACHE = True,
+    )
+}
+
+
+
+"""
+CACHES = {
      'default' : dict(
          BACKEND = 'johnny.backends.redis.RedisCache',
          LOCATION = '127.0.0.1:6379',
          JOHNNY_CACHE = True,
      )
  }
-
+"""
 ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (

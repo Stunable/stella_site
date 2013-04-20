@@ -16,9 +16,9 @@
 
         <div class="stunable-tabs-nav">
             <ul class="cart-progress">
-                <li {% if request.path == '/cart/'%}class="active"{% endif %}>1. Shopping Cart</li> >
-                <li {% if shipping_form %} class="active"{% endif %}>2. Payment/Shipping</li> >
-                <li {% if checkouts %} class="active"{% endif %}>3. Confirmation</li>
+                <li class="stunable-tab{% if request.path == '/cart/'%} active{% endif %}">1. Shopping Cart</li>
+                <li class="stunable-tab{% if shipping_form %} active{% endif %}">2. Payment/Shipping</li>
+                <li class="stunable-tab{% if checkouts %} active{% endif %}">3. Confirmation</li>
             </ul>
          </div>
 

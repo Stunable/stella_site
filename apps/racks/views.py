@@ -79,7 +79,12 @@ def checkAddTab(function):
                 t,created = UserSearchTab.objects.get_or_create(content_type=c,object_id=obj.id)
 
                 # add the user to the tab
-                t.users.add(request.user)
+                if request.user.is_authenticated():
+                    t.users.add(request.user)
+                else:
+                    sesstabs = request.session.get('tabs',[])
+                    sesstabs.append(t)
+                    request.session['tabs'] = sesstabs
             except:
                 pass
 
@@ -105,7 +110,8 @@ def get_context_variables(ctx, request):
     if request.user.is_authenticated():
         ctx['tags'] = request.user.usersearchtab_set.all()
     else:
-        ctx['tags'] = UserSearchTab.objects.filter(is_default=True) 
+        ctx['tags'] = [t for t in UserSearchTab.objects.filter(is_default=True)] 
+        ctx['tags'] += request.session.get('tabs',[])
 
     today = datetime.date.today()
     specials = DailySpecial.objects.filter(

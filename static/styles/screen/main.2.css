@@ -905,7 +905,7 @@ select option{
 			display:inline-block;
 		}
 
-		div.stunable-tabs-nav ul li {
+		div.stunable-tabs-nav ul li.stunable-tab {
 			line-height:60px;
 			position:relative;
 			vertical-align: middle;
@@ -927,7 +927,7 @@ select option{
 			text-transform: lowercase;
 		}
 
-		div.stunable-tabs-nav li.active{
+		div.stunable-tabs-nav li.stunable-tab.active{
 			background-color:#bbb;
 			color:white;
 
