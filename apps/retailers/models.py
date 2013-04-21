@@ -291,7 +291,6 @@ class APIConnection(APIPlatformConnection):
             try:
                 connection = cls.objects.get(access_token=request.POST.get('access_token'))
                 retailer = connection.retailer_profile
-
                 return connection,retailer
             except:
             #we will only get to this if there is no existing connection for this access token

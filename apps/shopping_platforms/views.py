@@ -22,11 +22,13 @@ def get_api(api):
 
 def hookup(request,API=None):
 
-	connection,retailer_profile,created = get_api(API).get_or_create_from_request(request)
+	connection,retailer_profile = get_api(API).get_or_create_from_request(request)
 
 	if connection:
 		request.session['active_api_connection'] = connection
 		request.session['active_retailer_profile'] = retailer_profile
 
-
-	return redirect(reverse('create_retailer_profile'))
+	if retailer_profile.user:
+		return redirect(reverse('product_list'))
+	else:	
+		return redirect(reverse('create_retailer_profile'))
