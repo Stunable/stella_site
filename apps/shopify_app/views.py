@@ -12,6 +12,11 @@ from retailers.models import ShopifyProduct,ShopifyVariation,ShopifyConnection,S
 from apps.shopping_platforms.tasks import *
 
 
+from django.contrib.auth import authenticate
+
+from django.contrib.auth import login as django_login
+
+
 
 from django.db import transaction
 
@@ -87,7 +92,7 @@ def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,V
             retailer_profile = shopify_connection.retailer_profile
             user = retailer_profile.user
             user.backend = 'django.contrib.auth.backends.ModelBackend'
-            login(request, user)
+            django_login(request, user)
 
             update_API_products.delay(shopify_connection)
             return redirect(redirect_url) 
