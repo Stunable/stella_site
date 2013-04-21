@@ -92,7 +92,7 @@ def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,V
 
             retailer_profile = shopify_connection.retailer_profile
 
-            logger.info('shopify found existing retailer profile:',retailer_profile)
+            logger.info('shopify found existing retailer profile:%s'%str(retailer_profile))
 
 
             user = retailer_profile.user
