@@ -285,9 +285,18 @@ class APIConnection(APIPlatformConnection):
     def get_or_create_from_request(cls,request):
 
         retailer = get_retailer_profile(request)
+        connection = None
 
         if not retailer:
-            retailer = RetailerProfile.objects.create()
+            try:
+                connection = cls.objects.get(access_token=request.POST.get('access_token'))
+                retailer = connection.retailer_profile
+
+                return connection,retailer
+            except:
+            #we will only get to this if there is no existing connection for this access token
+                retailer = RetailerProfile.objects.create()
+
 
         connection,created = cls.objects.get_or_create(access_token=request.POST.get('access_token'),retailer_profile=retailer)
         # request.session['active_retailer_profile'] = retailer

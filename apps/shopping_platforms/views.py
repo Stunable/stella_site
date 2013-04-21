@@ -22,7 +22,7 @@ def get_api(api):
 
 def hookup(request,API=None):
 
-	connection,retailer_profile = get_api(API).get_or_create_from_request(request)
+	connection,retailer_profile,created = get_api(API).get_or_create_from_request(request)
 
 	if connection:
 		request.session['active_api_connection'] = connection

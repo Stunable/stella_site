@@ -83,18 +83,20 @@ def logout(request):
 def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,VARIATION_API_CLASS= ShopifyVariation):
     retailer_profile = get_retailer_profile(request)
 
+    shopify_connection = None
+
     if not retailer_profile:#we don't have a logged in retailer
         try:
             #check and see if there is already a retailer profile with shopify connection that matches this shop url
             #if so, it means we can login the user associated with that shopify account
-            shopify_connection = APICONNECTION.objects.filter(shop_url=request.session['shopify']['shop_url']).exclude(retailer_profile=None)[0] 
+            shopify_connection = APICONNECTION.objects.filter(shop_url=request.session['shopify']['shop_url'])[0] 
             redirect_url = reverse("product_list")
 
             retailer_profile = shopify_connection.retailer_profile
 
             logger.info('shopify found existing retailer profile:%s'%str(retailer_profile))
 
-
+            # at this point we attempt to login the profile's user which may or may not exist and therefore might fail...
             user = retailer_profile.user
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             django_login(request, user)
@@ -102,16 +104,23 @@ def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,V
             update_API_products.delay(shopify_connection)
             return redirect(redirect_url) 
         except Exception, e:
-            logger.info('shopify retailer profile/user not found:'+str(e))
+            logger.info('shopify retailer profile/user not found/error:'+str(e))
             pass #continue setting up this new shopify connection
 
+    # if we're still here it's because we couldn't log in a user from a retailer profile associated with an authenticated shopify store
+    redirect_url = reverse("create_retailer_profile")
+
+    
     if retailer_profile:
-        redirect_url = reverse("product_list")
+        pass
+        # if we have retailer profile at this point but did not get a user above,
+        # it's because one was created with this connection but the profile is incomplete
+        # we will redirect to the profile creation page to complete the info, but we do not need a new profile
     else:
         retailer_profile = RetailerProfile.objects.create()
-        redirect_url = reverse("create_retailer_profile")
-     
-    shopify_connection,created = APICONNECTION.objects.get_or_create(retailer_profile=retailer_profile,shop_url=request.session['shopify']['shop_url'])
+        
+    if not shopify_connection:
+        shopify_connection,created = APICONNECTION.objects.get_or_create(retailer_profile=retailer_profile,shop_url=request.session['shopify']['shop_url'])
 
     request.session['active_api_connection'] = shopify_connection
     request.session['active_retailer_profile'] = retailer_profile
