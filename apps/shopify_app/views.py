@@ -66,7 +66,7 @@ def finalize(request):
                 "shop_url": shop_url,
                 "access_token": shopify_session.token
             }
-    messages.info(request, "Logged in to shopify store.")
+    # messages.info(request, "Logged in to shopify store.")
 
     response = redirect(_return_address(request))
     request.session.pop('return_to', None)
@@ -74,7 +74,7 @@ def finalize(request):
 
 def logout(request):
     request.session.pop('shopify', None)
-    messages.info(request, "Successfully logged out.")
+    # messages.info(request, "Successfully logged out.")
 
     return redirect(reverse('shopify_app.views.login'))
 
@@ -96,7 +96,8 @@ def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,V
 
             update_API_products.delay(shopify_connection)
             return redirect(redirect_url) 
-        except:
+        except Exception, e:
+            print 'shopify retailer profile not found:',e
             pass #continue setting up this new shopify connection
 
     if retailer_profile:
