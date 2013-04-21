@@ -175,9 +175,9 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    # 'sslify.middleware.SSLifyMiddleware',
-    'johnny.middleware.LocalStoreClearMiddleware',
-    'johnny.middleware.QueryCacheMiddleware',
+    'apps.common.middleware.SSLMiddleware'
+     'johnny.middleware.LocalStoreClearMiddleware',
+     'johnny.middleware.QueryCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'apps.common.middleware.SubdomainsMiddleware',    
     'apps.common.middleware.FilterPersistMiddleware',
@@ -202,17 +202,6 @@ CACHES = {
     )
 }
 
-
-
-"""
-CACHES = {
-     'default' : dict(
-         BACKEND = 'johnny.backends.redis.RedisCache',
-         LOCATION = '127.0.0.1:6379',
-         JOHNNY_CACHE = True,
-     )
- }
-"""
 ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
@@ -430,7 +419,7 @@ WAITLIST_ACTIVE = True
 NOTICE_TIME_DIFF = 2 #minutes
 
 
-THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
+# THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
 THUMBNAIL_DEBUG = True
 
 EXTERNAL_CONTENT_URL = {
@@ -445,6 +434,11 @@ TAX_TAXCLOUD_API_KEY = '0D678AA9-B974-44AF-B1E5-6DB714D26E55'
 USPS_ID = '193BURLE8091'
 
 
+SSL_REQUIRED_PATHS =(
+    'login',
+    'accounts'
+
+)
 
 
 try:                        
