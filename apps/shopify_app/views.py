@@ -77,7 +77,22 @@ def logout(request):
 def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,VARIATION_API_CLASS= ShopifyVariation):
     retailer_profile = get_retailer_profile(request)
 
-    print 'profile:',retailer_profile
+    if not retailer_profile:#we don't have a logged in retailer
+        try:
+            #check and see if there is already a retailer profile with shopify connection that matches this shop url
+            #if so, it means we can login the user associated with that shopify account
+            shopify_connection = APICONNECTION.objects.get(shop_url=request.session['shopify']['shop_url']) 
+            redirect_url = reverse("product_list")
+
+            retailer_profile = shopify_connection.retailer_profile
+            user = retailer_profile.user
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+            login(request, user)
+
+            update_API_products.delay(shopify_connection)
+            return redirect(redirect_url) 
+        except:
+            pass #continue setting up this new shopify connection
 
     if retailer_profile:
         redirect_url = reverse("product_list")
