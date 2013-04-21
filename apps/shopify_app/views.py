@@ -81,7 +81,7 @@ def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,V
         try:
             #check and see if there is already a retailer profile with shopify connection that matches this shop url
             #if so, it means we can login the user associated with that shopify account
-            shopify_connection = APICONNECTION.objects.get(shop_url=request.session['shopify']['shop_url']) 
+            shopify_connection = APICONNECTION.objects.filter(shop_url=request.session['shopify']['shop_url']).exclude(retailer_profile=None)[0] 
             redirect_url = reverse("product_list")
 
             retailer_profile = shopify_connection.retailer_profile
