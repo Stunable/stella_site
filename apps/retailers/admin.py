@@ -28,7 +28,7 @@ admin.site.register(PortableVariation)
 
 
 class APIConnectionAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__','last_updated',)
+    list_display = ('__unicode__','retailer_profile','last_updated',)
     actions=('refresh_all_products','test_auth')
 
     def refresh_all_products(self,request,queryset):

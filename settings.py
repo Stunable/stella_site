@@ -175,7 +175,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'apps.common.middleware.SSLMiddleware'
+    'apps.common.middleware.SSLMiddleware',
      'johnny.middleware.LocalStoreClearMiddleware',
      'johnny.middleware.QueryCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -435,9 +435,8 @@ USPS_ID = '193BURLE8091'
 
 
 SSL_REQUIRED_PATHS =(
-    'login',
-    'accounts'
-
+    '/accounts',
+    '/platforms',
 )
 
 
