@@ -90,6 +90,10 @@ def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,V
             redirect_url = reverse("product_list")
 
             retailer_profile = shopify_connection.retailer_profile
+
+            print 'shopify found existing retailer profile:',retailer_profile
+
+
             user = retailer_profile.user
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             django_login(request, user)
@@ -97,7 +101,7 @@ def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,V
             update_API_products.delay(shopify_connection)
             return redirect(redirect_url) 
         except Exception, e:
-            print 'shopify retailer profile not found:',e
+            print 'shopify retailer profile/user not found:',e
             pass #continue setting up this new shopify connection
 
     if retailer_profile:
