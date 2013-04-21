@@ -16,7 +16,8 @@ from django.contrib.auth import authenticate
 
 from django.contrib.auth import login as django_login
 
-
+import logging
+logger = logging.getLogger('stunable_debug')
 
 from django.db import transaction
 
@@ -91,7 +92,7 @@ def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,V
 
             retailer_profile = shopify_connection.retailer_profile
 
-            print 'shopify found existing retailer profile:',retailer_profile
+            logger.info('shopify found existing retailer profile:',retailer_profile)
 
 
             user = retailer_profile.user
@@ -101,7 +102,7 @@ def load(request,APICONNECTION=ShopifyConnection,ITEM_API_CLASS=ShopifyProduct,V
             update_API_products.delay(shopify_connection)
             return redirect(redirect_url) 
         except Exception, e:
-            print 'shopify retailer profile/user not found:',e
+            logger.info('shopify retailer profile/user not found:'+str(e))
             pass #continue setting up this new shopify connection
 
     if retailer_profile:
