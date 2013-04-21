@@ -10,6 +10,8 @@ from django.conf import settings
 # these could be taken out of retailers to be made more generic
 from apps.retailers.models import PortableConnection,ShopifyConnection
 
+from django.contrib.auth import login
+
 
 
 
@@ -29,6 +31,12 @@ def hookup(request,API=None):
 		request.session['active_retailer_profile'] = retailer_profile
 
 	if retailer_profile.user:
+		user = retailer_profile.user
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(request, user)
+
+
+
 		return redirect(reverse('product_list'))
 	else:	
 		return redirect(reverse('create_retailer_profile'))
