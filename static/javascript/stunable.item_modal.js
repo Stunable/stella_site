@@ -71,9 +71,12 @@ function setItemDetailsEvent(){
 
 					$.post($(this).data('href')+variation_id,function(data){
 					
-						$('#modal_contents').html(data)
+						$.modal.close()
+						$('body').append($(data).hide().fadeIn());
+						// $('body').append(data)
 
-						setTimeout(function(){$.modal.close()},3000);
+						setTimeout(function(){$('.cart_item_added').fadeOut()},4000);
+
 						if ($t.hasClass('cart')){
 							cart_item_added();
 						}else{

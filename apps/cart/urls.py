@@ -15,7 +15,7 @@ urlpatterns = patterns('cart.views',
         view='update_wishlist',
         name='update_wishlist'
     ),                  
-    url(r'^update_cart/(?P<product_id>\d+)/?$',
+    url(r'^update_cart/(?P<kart_item_id>\d+)/?$',
         view='update_cart',
         name='update_cart'
     ),

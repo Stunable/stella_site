@@ -55,7 +55,7 @@ def process_API_products(list_of_products,api_connection):
 
             Map = api_connection.field_mapping(d)
 
-            PP.pprint(Map)
+            # PP.pprint(Map)
             pid = api_connection.get_id(d)
 
             item_class = api_connection.ITEM_API_CLASS

@@ -394,8 +394,8 @@ class ShopifyConnection(APIConnection):
                     continue
 
         if not out['itemtype']['fields'].get('custom_color_name',None) and not out['itemtype']['fields'].get('size',None):
-            print "COULD NOT FIND COLOR OR SIZE IN:",pd['options']
-
+            # print "COULD NOT FIND COLOR OR SIZE IN:",pd['options']
+            pass
         return out
 
     @staticmethod

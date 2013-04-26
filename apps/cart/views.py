@@ -53,16 +53,14 @@ def buy_rack(request, rack_id):
         cart.add(inventory, product.get_current_price(), 1, inventory.size.size, inventory.color.name)
     return redirect(reverse('get_cart'))
 
-def add_to_cart(request, product_id, wishlist_only=False):
+def add_to_cart(request, product_id, wishlist_only=False,remove=False):
+    callback = None
     if request.method == 'POST':
         inventory = ItemType.objects.get(id=product_id)
         cart = Cart(request)    
-        item = cart.add(inventory,wishlist_only=wishlist_only)
+        item = cart.add(inventory,wishlist_only=wishlist_only,remove=remove)
 
         annotation = "This item has been added to your cart.  We will hold it for you for 30 minutes."
-        if wishlist_only:
-            annotation = "This item has been added to your wishlist."
-
         return render_to_response("cart/cart_slideout.html", 
                                   {'item': item ,'annotation':annotation}, 
                                   context_instance=RequestContext(request) )
@@ -72,30 +70,27 @@ def add_to_cart(request, product_id, wishlist_only=False):
 
 
 def update_wishlist(request, product_id):
-    return add_to_cart(request,product_id,wishlist_only=True)
+    add_to_cart(request,product_id,wishlist_only=True,remove=request.GET.get('remove',False))
 
     return HttpResponse(json.dumps({'success':True,'callback':'remove'}, ensure_ascii=False), mimetype='application/json')
 
 @login_required
-def update_cart(request, product_id):
+def update_cart(request, kart_item_id):
     if request.method == 'POST':
-        inventory = ItemType.objects.get(id=product_id)
-        cart = Cart(request)
-        cart.update(inventory, inventory.item.get_current_price(), quantity, inventory.size.size, inventory.color.name)
-        if request.is_ajax():
-            try:
-                if request.session.get('recipient_zipcode'):
-                    cart.update_shipping_and_handling_cost()
-            except:
-                pass
-                
-            totals = cart.totals_as_dict()
-            totals.update(dict(quantity=quantity, size=inventory.size.size))
-            
-            return HttpResponse(json.dumps(totals),
-                                mimetype='application/json') 
         
-        return redirect(reverse('get_cart'))
+        cart = Cart(request)
+        item = cart.items().get(id=kart_item_id)
+        form = item.get_edit_form(request.POST)   
+
+        if form.is_valid():
+            form.instance.save()
+
+            cart = Cart(request)
+    
+        return HttpResponse(json.dumps({'success':True,'callback':'update_cart_totals','html':
+                render_to_string("cart/includes/cart_totals_table.html", {'cart':cart}),
+                'new_item_price':item.total_price
+                }, ensure_ascii=False), mimetype='application/json')
     
 
 def remove_from_cart(request, product_id):
@@ -148,13 +143,16 @@ def update_info(request, template="cart/info.html"):
     cart = Cart(request)
     print request.POST
     if request.method == "POST":
-        Ki = cart.items().filter(id=request.POST.get('id'))[0]
+        Ki = cart.items().get(id=request.POST.get('id'))
         if request.POST.get('attr') in allowed_attrs.keys():
             att = request.POST.get('attr')
 
             setattr(Ki,att,allowed_attrs[att].objects.get(id=request.POST.get('val')))
             Ki.save()
-            return HttpResponse(json.dumps({'success':True,'callback':'reload'}, ensure_ascii=False), mimetype='application/json')
+            return HttpResponse(json.dumps({'success':True,'callback':'update_cart_totals','html':
+                render_to_string("cart/includes/cart_totals_table.html", {'cart':cart}),
+                'new_item_price':Ki.total_price
+                }, ensure_ascii=False), mimetype='application/json')
 
     
     return direct_to_template(request, template, ctx)

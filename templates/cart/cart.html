@@ -27,29 +27,7 @@
             <div>
                 <a style="font-size:.8em" href="" class="click-toggle" data-target="#cart-totals-table .hidden">click for details</a>
             <table id="cart-totals-table" width="100%">   
-                <tr  class="hidden">
-                    <td>subtotal:</td>
-                    <td>${{cart.totals_as_pretty_dict.total}}</td>
-                </tr>
-                <tr class="hidden">
-                   
-                    <td>total tax:</td>
-                    <td>${{cart.totals_as_pretty_dict.tax}}</td>
-                </tr>
-                <tr class="hidden">
-                  
-                    <td>total shipping:</td>
-                    <td>${{cart.totals_as_pretty_dict.shipping_and_handling}}</td>
-                </tr>
-                <tr class="hidden">
-                   
-                    <td>handling: </td>
-                    <td>${{cart.totals_as_pretty_dict.processing}}</td>
-                </tr>
-                <tr class="big" >
-                    <td >grand total:</td>
-                    <td>${{cart.totals_as_pretty_dict.grand_total}}</td>
-                </tr>
+            {% include 'cart/includes/cart_totals_table.html' %}
            </table>
            {% if request.user.is_authenticated %}
                <a class="btn big btn-primary " href="{{SECURE_ROOT}}/cart/details">checkout</a>
@@ -101,9 +79,14 @@
                                 <img src="{{item.picture}}">
                             </td>
                             <td class="item-info">
+                                <form action="{%url update_cart item.id%}" method="post">
+                                    {% csrf_token %}
                                 <br>size:<span>{{ item.item_variation.size }}</span>
                                 <br>color:<span>{{ item.item_variation.color }}</span>
-                                <br>quantity:<span>{{ item.quantity }}</span>
+                                <br>quantity:<span>{{item.get_edit_form.quantity}}</span><a data-url="/cart/" class="cart-edit" style="font-size:.7em" href="">
+                                change quantity</a>
+
+                            </form>
                             </td>
                                 
                             <td>

@@ -55,7 +55,7 @@ class Kart(models.Model):
     def available_shipping_options(self):
         return get_shipping_options()
 
-    def manage_variations(self,item_variation,wishlist_only=False):
+    def manage_variations(self,item_variation,wishlist_only=False,remove=False):
         outval = None
         if not wishlist_only:
             ki,created         = KartItem.objects.get_or_create(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
@@ -104,8 +104,8 @@ class Kart(models.Model):
 
         return outval
 
-    def add(self,item_variation,wishlist_only=False):
-        return self.manage_variations(item_variation,wishlist_only=wishlist_only)
+    def add(self,item_variation,wishlist_only=False,remove=False):
+        return self.manage_variations(item_variation,wishlist_only=wishlist_only,remove=remove)
 
 
     def remove(self,item_variation):
@@ -137,7 +137,7 @@ class Kart(models.Model):
                     shipping += ki.get_shipping_cost()
                 retailer = ki.retailer
                 # print 'total without additional:',total
-                processing += ki.get_wepay_amounts()[2]
+                # processing += ki.get_wepay_amounts()[2]
             except:
                 raise
                 exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -414,8 +414,12 @@ class KartItem(models.Model):
     def get_retailer(self):
         return self.retailer
 
+    def get_tax_rate(self):
+        return .05
+
+
     def get_tax_amount(self, buyer=None, zipcode=None, refresh=None):
-        return self.total_price * .05
+        return self.total_price * self.get_tax_rate()
         
     def shipping_amount(self):
         return float(self.shipping_method.estimated_price)
@@ -444,19 +448,32 @@ class KartItem(models.Model):
         return settings.WEPAY_FIXED_FEE + settings.WEPAY_PERCENTAGE*.01 * amount
 
 
+    def get_edit_form(self,POST=None):
+        f = modelform_factory(KartItem, fields=["quantity"])
+        return f(POST,instance=self)
 
     def save(self, *args, **kwargs):
+        calculate_cart = False
         if self.id:
-            if self.shipping_method != KartItem.objects.get(id=self.id).shipping_method:
+            former_self = KartItem.objects.get(id=self.id)
+            if self.shipping_method != former_self.shipping_method:
                 KIs = KartItem.objects.filter(retailer=self.retailer,kart=self.kart)
                 KIs.update(shipping_method=self.shipping_method)
-                self.kart.calculate()
-                self.kart.save()
+                calculate_cart = True
+
+            if self.quantity != former_self.quantity:
+                calculate_cart = True
 
             else:
                 super(KartItem,self).save(*args,**kwargs)
+
+                if calculate_cart:
+                    self.kart.calculate()
+                    self.kart.save()
                 return
         super(KartItem,self).save(*args,**kwargs)
+
+        
 
 
 

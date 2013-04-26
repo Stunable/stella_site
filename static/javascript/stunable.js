@@ -419,6 +419,20 @@ var refclickFunctions = {
             $(selection.data('target')).fadeOut('slow',function(){$(this).remove()})
         }
     },
+    'update_cart_totals':function(selection,data){
+        var tr = $('#cart-totals-table').find('tr').first(),
+            vis = tr.is(':visible'),
+            d = $(data.html);
+
+        if (vis){
+            d.show()
+        }
+
+
+        $('#cart-totals-table').html(d)
+
+
+    },
     'remove_and_close' : function(selection,data){
         $(selection.data('target')).fadeOut('slow');
         $.modal.close();
@@ -472,6 +486,21 @@ function init_refclicks(selection){
 }
 
 
+
+
+
+
+function init_ajax_forms(selection){
+    selection.each(function(){
+        $t = $(this);
+
+
+
+    })
+
+
+}
+
 function init_form_errors(context){
     $('.form_errors').modal();
 
@@ -522,7 +551,7 @@ function init_choiceclicks(selection){
         $.post(url,{id:$(this).data('id'),val:$(this).val(),attr:$(this).data('attr')},function(response){
             if (response.result || response.success){
                 if (response.callback){
-                    refclickFunctions[response.callback]($t)
+                    refclickFunctions[response.callback]($t,response)
                 }
             }
         },'json')

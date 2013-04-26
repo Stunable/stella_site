@@ -1344,7 +1344,7 @@ table.retailer-item-group{
 }
 
 .content.cart form{
-	margin-top:20px;
+	/*margin-top:20px;*/
 }
 
 #payment_shipping_info{
@@ -2194,14 +2194,16 @@ form .info_modal{
 }
 
 
-.modal.current div.cart_item_added{
+div.cart_item_added{
 	position:absolute;
-	margin:auto;
+	/*margin:auto;*/
 	width:300px;
-
 	background-color:white;
 	display:inline-block;
 	text-align:center;
+	top:100px;
+	left:100px;
+	z-index:1000;
 }
 .cart_item_added div{
 	margin:5px;
