@@ -1967,13 +1967,15 @@ form .info_modal{
 }
 
 a.share_click{
-	position:relative;
+	position:absolute;
+	right:10px;
+	bottom:90px;
 }
 
 
 .wide a.share_click{
-	left:-150px;
-	top:-3px;
+	right:160px;
+	bottom:63px;
 }
 div.share_floater{
 	display:none;
