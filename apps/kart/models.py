@@ -160,7 +160,7 @@ class Kart(models.Model):
                     shipping += ki.get_shipping_cost()
                 retailer = ki.retailer
                 # print 'total without additional:',total
-                # processing += ki.get_wepay_amounts()[2]
+                processing += ki.get_wepay_amounts()[2]
             except:
                 raise
                 exc_type, exc_obj, exc_tb = sys.exc_info()
