@@ -188,6 +188,18 @@ function init_item_modal(){
 			$('.item-color-list span').first().click();
 		}
 		// $('#item-header .modalitem').textfill(25)
+
+		$('.share_click').click(function(e){
+			e.preventDefault();
+			$(this).find('.share_floater').show();
+			$(this).find('input').focus().select()
+
+			$('.modal').click(function(e){
+				$('.share_floater').fadeOut();
+			})
+
+			return false;
+		})
 		
 	}
 		

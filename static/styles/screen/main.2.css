@@ -1892,6 +1892,12 @@ form .info_modal{
 }
 
 
+.item-visuals #item-header .item-name a{
+	color:rgb(127,16,181);
+}
+
+
+
 .modal.current .img_load_spin{
 	opacity:.5;
 	width:48px;
@@ -1958,6 +1964,33 @@ form .info_modal{
 	display:inline-block;
 	width:50%;
 	height:200px;
+}
+
+a.share_click{
+	position:relative;
+}
+
+
+.wide a.share_click{
+	left:-150px;
+	top:-3px;
+}
+div.share_floater{
+	display:none;
+	position:absolute;
+	padding:10px;
+	background-color:white;
+	color:#7f10b5;
+	border:3px solid #7f10b5;
+	border-radius:10px;
+	right:0px;
+	top:-50px;
+
+}
+
+div.share_floater input{
+	width:95%;
+	font-size: .7em;
 }
 
 
@@ -2097,7 +2130,8 @@ form .info_modal{
 
  .modal.current .wide .item-visuals #images{
 
- 	width:600px;
+ 	width:700px;
+ 	/*max-width: 700px;*/
  	height:400px;
  	overflow:hidden;
  	display:block;
