@@ -530,7 +530,7 @@ class ItemType(models.Model,DirtyFieldsMixin):
 
     def get_name(self):
         color = self.custom_color_name
-        return "%s in %s, Size: %s" %  (self.item.name, color, self.size.size)
+        return "%s in %s, Size: %s" %  (self.item.show_name, color, self.size.size)
 
     def get_size_color_name(self):
         color = self.custom_color_name
