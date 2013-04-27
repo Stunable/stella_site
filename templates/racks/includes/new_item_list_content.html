@@ -8,12 +8,12 @@
 				{%else%}href="{% url item_modal item.slug %}"
 			{% endif %} data-value="{{ item.id }}" >    
 				
-				 <img alt="{{target_item.name}} by {{target_item.retailer}}" src="{{ target_item.get_image.medium.url }}"> 
+				 <img alt="{{target_item.show_name}} by {{target_item.retailer}}" src="{{ target_item.get_image.medium.url }}"> 
 			</a>
 			<div class="item-info">
 			<div class="item-label"><span>{{item.brand}}</span></div>
 			
-			 <div class="item-name"><span>{{item.name}}<span></div>
+			 <div class="item-name"><span>{{item.show_name}}<span></div>
 
 			 <div class="carousel_price_tag">
 			    {{item.price_range_text|safe}}

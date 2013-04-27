@@ -257,6 +257,9 @@ class Item(models.Model,listImageMixin):
     gender =         models.CharField(max_length=1,default='F',choices=[('F','F'),('M','M'),('B','B')])
     brand =          models.CharField(max_length=200, null=True, blank=True)
     name =           models.CharField(max_length=200, verbose_name='Product Name')
+
+    display_name =   models.CharField(max_length=200, verbose_name='Product Name Override',null=True,blank=True)
+
     price =          models.DecimalField(max_digits=19, decimal_places=2, verbose_name='Retail Price',null=True,blank=True)
     is_onsale =      models.BooleanField(default=False, verbose_name='Currently On Sale?')
     description =    models.TextField()
@@ -295,6 +298,11 @@ class Item(models.Model,listImageMixin):
         if FI:
             FI.generate_pretty_picture(refresh=True)
 
+    @property
+    def show_name(self):
+        if self.display_name:
+            return self.display_name
+        return self.name
 
     def cleanup_images(self):
         print self
