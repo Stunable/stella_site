@@ -87,8 +87,9 @@ def update_cart(request, kart_item_id):
 
             cart = Cart(request)
     
-        return HttpResponse(json.dumps({'success':True,'callback':'update_cart_totals','html':
-                render_to_string("cart/includes/cart_totals_table.html", {'cart':cart}),
+        return HttpResponse(json.dumps({'success':True,
+                                        'callback':'update,update_cart_totals',
+                                        'html': render_to_string("cart/includes/cart_totals_table.html", {'cart':cart}),
                 'new_item_price':item.total_price
                 }, ensure_ascii=False), mimetype='application/json')
     
@@ -99,7 +100,11 @@ def remove_from_cart(request, product_id):
     cart.remove(product)
     if request.is_ajax():
         # totals = cart.totals_as_pretty_dict()
-        return HttpResponse(json.dumps({'success':True,'callback':'reload'}),
+        return HttpResponse(json.dumps({
+            'success':True,
+            'callback':'remove,update_cart_totals',
+            'html': render_to_string("cart/includes/cart_totals_table.html", {'cart':cart})
+            ,}),
                             mimetype='application/json') 
     
     return redirect(reverse('get_cart'))
@@ -138,24 +143,20 @@ def order_history(request, template='orders/user_order_history.html'):
 
 def update_info(request, template="cart/info.html"):
     ctx = {}
-    allowed_attrs = {'shipping_method':ShippingType}
-
+    
     cart = Cart(request)
-    print request.POST
-    if request.method == "POST":
-        Ki = cart.items().get(id=request.POST.get('id'))
-        if request.POST.get('attr') in allowed_attrs.keys():
-            att = request.POST.get('attr')
+    item = cart.update_info(request)
+    print item
 
-            setattr(Ki,att,allowed_attrs[att].objects.get(id=request.POST.get('val')))
-            Ki.save()
-            return HttpResponse(json.dumps({'success':True,'callback':'update_cart_totals','html':
-                render_to_string("cart/includes/cart_totals_table.html", {'cart':cart}),
-                'new_item_price':Ki.total_price
-                }, ensure_ascii=False), mimetype='application/json')
+
+    if item:
+        return HttpResponse(json.dumps({'success':True,'callback':'update_cart_totals,update',
+            'html': render_to_string("cart/includes/cart_totals_table.html", {'cart':cart}),
+            'item_html':render_to_string("cart/includes/cart_list_item.html", {'item':item})
+            }, ensure_ascii=False), mimetype='application/json')
 
     
-    return direct_to_template(request, template, ctx)
+    return HttpResponse(json.dumps({'success':False}),mimetype='application/json')
 
 @login_required
 def update_zipcode(request):

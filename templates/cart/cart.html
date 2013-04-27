@@ -45,7 +45,7 @@
         <div id="cart-item-list">
             {% regroup cart by retailer as item_list %}
             {% for retailer_group in item_list %}
-                <div class="cart-retailer-group">
+                <div class="cart-retailer-group group-header">
                     
                     <table cellpadding="0" cellspacing="0" width="100%" border="0" class="retailer-item-group">
                         <tr>
@@ -66,34 +66,14 @@
 
                         </tr>
                         {% for item in retailer_group.list %}
-                        <tr class="item-name cart-item-{{item.id}}">
+                        <tr class="item-name cart-item-{{item.id}} item-list_item">
                             <td colspan="4">
                                 {{ item.item_name }}
                             </td>
                         </tr>
-                        <tr class="item cart-item-{{item.id}}">  
-                            <td class="item-remove">
-                                <a href=""  data-target=".cart-item-{{item.id}}" class="cart-remove refclick" data-href="/cart/remove_from_cart/{{item.item_variation.id}}/">x</a>
-                            </td>
-                            <td class="item-img">
-                                <img src="{{item.picture}}">
-                            </td>
-                            <td class="item-info">
-                                <form action="{%url update_cart item.id%}" method="post">
-                                    {% csrf_token %}
-                                <br>size:<span>{{ item.item_variation.size }}</span>
-                                <br>color:<span>{{ item.item_variation.color }}</span>
-                                <br>quantity:<span>{{item.get_edit_form.quantity}}</span><a data-url="/cart/" class="cart-edit" style="font-size:.7em" href="">
-                                change quantity</a>
-
-                            </form>
-                            </td>
-                                
-                            <td>
-                                ${{ item.total_price|floatformat:2 }}
-                            </td>
-                                
-                        </tr>   
+                        <tr id="cart-item-{{item.id}}" class="item cart-item-{{item.id}}">  
+                            {% include "cart/includes/cart_list_item.html" %}  
+                        </tr>
                         {% endfor %}
                     </table>
                 </div>

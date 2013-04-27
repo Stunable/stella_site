@@ -101,11 +101,34 @@ class Kart(models.Model):
 
             outval = WI
             
-
         return outval
 
     def add(self,item_variation,wishlist_only=False,remove=False):
         return self.manage_variations(item_variation,wishlist_only=wishlist_only,remove=remove)
+
+
+    def update_info(self,request):
+        Item = None
+        try:
+            allowed_attrs = {'shipping_method_id':ShippingType,'quantity':self}
+            if request.POST.get('attr') in allowed_attrs.keys():
+                att = request.POST.get('attr')
+                Item = self.items().get(id=request.POST.get('id'))
+                setattr(Item,att,int(request.POST.get('val')))
+                Item.save()
+                self.calculate()
+                self.save() 
+                
+                return Item
+            else:
+                raise
+
+        except Exception, e:
+            print e
+            raise
+            # return e
+
+       
 
 
     def remove(self,item_variation):
@@ -427,7 +450,7 @@ class KartItem(models.Model):
     def get_shipping_form(self):
         f = modelform_factory(KartItem, fields=("shipping_method",))(instance=self,prefix=self.id)
         f.fields['shipping_method'] = ChoiceField(widget=RadioSelect, choices=((x.id, x) for x in get_shipping_options()))
-        f.fields['shipping_method'].widget.attrs = {'data-attr':'shipping_method','class':'choiceclick','data-href':'update_info','data-id':self.id}
+        f.fields['shipping_method'].widget.attrs = {'data-attr':'shipping_method_id','class':'choiceclick','data-href':'update_info','data-id':self.id}
         return f
 
 
@@ -448,9 +471,13 @@ class KartItem(models.Model):
         return settings.WEPAY_FIXED_FEE + settings.WEPAY_PERCENTAGE*.01 * amount
 
 
-    def get_edit_form(self,POST=None):
-        f = modelform_factory(KartItem, fields=["quantity"])
-        return f(POST,instance=self)
+    def get_quantity_select(self,POST=None):
+        out = '<span class="hover_toggle change_quantity"><span>change quantity</span>'
+        for i in range(1,11):
+            out += '<a href="" data-id="%d" data-target="#cart-item-%d" data-val="%d" data-href="update_info/" data-attr="quantity" class="choiceclick">%d</a>'%(self.id,self.id,i,i)
+        out += '</span>'
+        return out
+
 
     def save(self, *args, **kwargs):
         calculate_cart = False

@@ -1,0 +1,17 @@
+
+                            <td class="item-remove">
+                                <a href=""  data-target=".cart-item-{{item.id}}" class="cart-remove refclick" data-href="/cart/remove_from_cart/{{item.item_variation.id}}/">x</a>
+                            </td>
+                            <td class="item-img">
+                                <img src="{{item.picture}}">
+                            </td>
+                            <td class="item-info">
+                                <div><span class="header">size:</span>    <span class="data">{{ item.item_variation.size }}</span></div>
+                                <div><span class="header">color:</span>   <span class="data">{{ item.item_variation.color }}</span></div>
+                                <div><span class="header">quantity:</span><span class="data">{{ item.quantity}}</span>{{item.get_quantity_select|safe}}</div>
+                            </td>
+                                
+                            <td>
+                                ${{ item.total_price|floatformat:2 }}
+                            </td>
+                                

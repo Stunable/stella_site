@@ -1326,13 +1326,48 @@ table.retailer-item-group{
 
 }
 
-.content.cart .item-info span{
-	/*float:right;
-	text-align:left;*/
-	margin:30px;
+.content.cart .item-info .change_quantity{
+	width:150px;
+	display:inline-block;
+	height:1em;
+	text-align: center;
+
 }
 
+.content.cart .item-info span.header{
+	display:inline-block;
+	width:90px;
+	text-align: left;
+}
 
+.content.cart .item-info span.data{
+	display:inline-block;
+	width:200px;
+	text-align: left;
+}
+
+.hover_toggle a{
+	display:none;
+	/*position:absolute;*/
+}
+.hover_toggle{
+	width:100%;
+	padding:3px;
+}
+.hover_toggle:hover span{
+	display:none;
+}
+.hover_toggle:hover a{
+	display:inline-block;
+	text-align: center;
+	padding-left:6px;
+	padding-right:6px;
+}
+
+.hover_toggle a:hover{
+	background-color:#7f10b5;
+	color:white;
+}
 
 .content.cart .retailer-header{
 	padding:4px;
