@@ -533,6 +533,8 @@ function init_choiceclicks(selection){
                         refclickFunctions[this]($t,response)
                     })
                 }
+            }else{
+                pop_modal(response.error)
             }
         },'json')
     })
