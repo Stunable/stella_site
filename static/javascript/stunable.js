@@ -495,14 +495,17 @@ function init_refclicks(selection){
                         refclickFunctions[this]($t,response)
                     })
                 }
-            }
-            if ($t.data('callback')){
-                var cbs=  $t.data('callback').split(',');
+            
+                if ($t.data('callback')){
+                    var cbs=  $t.data('callback').split(',');
 
-                $(cbs).each(function(){
-                    refclickFunctions[this]($t,data)
-                })
-                
+                    $(cbs).each(function(){
+                        refclickFunctions[this]($t,data)
+                    })
+                    
+                }
+            }else{
+                pop_modal(response.error)
             }
         },'json')
     })
