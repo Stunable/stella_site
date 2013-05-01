@@ -78,8 +78,6 @@ class Kart(models.Model):
                     
                 ki.save()
 
-                item_variation.update_holds(self,ki.quantity)
-
                 self.calculate()
                 self.save()
 
@@ -316,6 +314,7 @@ class Kart(models.Model):
             if K:
                 request.session['cart'] = K.id
             else:
+                # if we haven't found a kart yet, make one
                 if not request.session.get('cart',None):
                     K = Kart.objects.create()
                     request.session['cart'] = K.id
@@ -354,6 +353,9 @@ class Kart(models.Model):
     def items(self):
         return self.kartitem_set.select_related('retailer','item_variation','item_variation__size','shipping_method').order_by('retailer')
 
+    def release_holds(self):
+        self.variationhold_set.all().delete()
+
 
     def checkout(self,request):
         # <QueryDict: {u'shipping-address': [u'2'], u'credit-card': [u'1552718934']}>
@@ -370,6 +372,8 @@ class Kart(models.Model):
         if success:
             self.checked_out = True
             self.save()
+
+            self.release_holds()
 
 
             self.wishlistitem_set.all().update(purchased=True)
@@ -507,10 +511,9 @@ class KartItem(models.Model):
         return False
 
     def get_insufficient_inventory_message(self):
-        return "Sorry, but we don't have enough of that %s in Size: %s and Color: %s to fulfill your request."%(self.item_variation.item.name, self.item_variation.size,self.item_variation.custom_color_name)
+        return "Sorry, but we don't have enough of %s in Size: %s and Color: %s to fulfill your request."%(self.item_variation.item.name, self.item_variation.size,self.item_variation.custom_color_name)
 
         
-
 
     def save(self, *args, **kwargs):
         calculate_cart = False
@@ -522,17 +525,18 @@ class KartItem(models.Model):
                 calculate_cart = True
 
             if self.quantity != former_self.quantity:
-                self.item_variation.update_holds(self.kart,self.quantity)
+                self.item_variation.update_holds(self.kart,quantity=self.quantity)
                 calculate_cart = True
 
             else:
                 super(KartItem,self).save(*args,**kwargs)
-
                 if calculate_cart:
                     self.kart.calculate()
                     self.kart.save()
                 return
         super(KartItem,self).save(*args,**kwargs)
+
+        self.item_variation.update_holds(self.kart,quantity=self.quantity)
 
         
 
