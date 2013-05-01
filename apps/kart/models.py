@@ -499,8 +499,10 @@ class KartItem(models.Model):
 
 
     def validate_inventory(self,quantity=1):
-        total_holds = self.item_variation.get_hold_count()
+        total_holds = self.item_variation.get_other_cart_holds(self.kart)
         inventory = self.item_variation.inventory
+
+
         print 'holds:',total_holds
         print 'inventory:',inventory
         total_needed = total_holds + quantity

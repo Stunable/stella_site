@@ -585,10 +585,10 @@ class ItemType(models.Model,DirtyFieldsMixin):
         return 0
 
 
-    def get_holds_on_this_cart(self,kart):
+    def get_other_cart_holds(self,kart):
         thirty_minutes = datetime.timedelta(minutes = 30)
         thirty_minutes_ago = datetime.datetime.now()-thirty_minutes
-        h = self.variationhold_set.filter(date_created__gte=thirty_minutes_ago,kart=kart).aggregate(Sum('quantity'))['quantity__sum']
+        h = self.variationhold_set.filter(date_created__gte=thirty_minutes_ago).exclude(kart=kart).aggregate(Sum('quantity'))['quantity__sum']
         if h:
             return h
         return 0
