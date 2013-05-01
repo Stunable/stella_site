@@ -145,6 +145,7 @@ class Kart(models.Model):
 
 
     def remove(self,item_variation):
+        self.variationhold_set.filter(variation=item_variation).delete()
         KartItem.objects.get(kart=self,item_variation=item_variation).delete()
         self.calculate()
         self.save()
