@@ -94,6 +94,7 @@ class Kart(models.Model):
         existingWIs = WishListItem.objects.filter(item_variation=item_variation,user=user)
         if user and existingWIs.count() and self.request.GET.get('remove',None):
             existingWIs.delete()
+            message = 'removed item from wishlist'
         else:
             WI = WishListItem(
                 cart=self,
@@ -106,6 +107,7 @@ class Kart(models.Model):
             WI.save()
 
             outval = WI
+            message = 'added item to wishlist'
             
         return outval,message
 
