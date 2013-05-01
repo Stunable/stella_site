@@ -102,7 +102,6 @@ def process_API_products(list_of_products,api_connection):
             # get all the variations
             for v in api_connection.get_variations(d):
                 
-
                 api_variation_object,created = api_connection.VARIATION_API_CLASS.objects.get_or_create(source_id=v[Map['itemtype']['fields']['source_id']],api_connection=api_connection)
                 size_string = 'ONE SIZE'
                 color_string = 'ONE COLOR'

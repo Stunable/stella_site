@@ -57,10 +57,11 @@ def add_to_cart(request, product_id, wishlist_only=False,remove=False):
     callback = None
     if request.method == 'POST':
         inventory = ItemType.objects.get(id=product_id)
-        cart = Cart(request)    
-        item = cart.add(inventory,wishlist_only=wishlist_only,remove=remove)
 
-        annotation = "This item has been added to your cart.  We will hold it for you for 30 minutes."
+
+        cart = Cart(request)    
+        item,annotation = cart.add(inventory,wishlist_only=wishlist_only,remove=remove)
+
         return render_to_response("cart/cart_slideout.html", 
                                   {'item': item ,'annotation':annotation}, 
                                   context_instance=RequestContext(request) )
@@ -145,9 +146,7 @@ def update_info(request, template="cart/info.html"):
     ctx = {}
     
     cart = Cart(request)
-    item = cart.update_info(request)
-    print item
-
+    item,error = cart.update_info(request)
 
     if item:
         return HttpResponse(json.dumps({'success':True,'callback':'update_cart_totals,update',
@@ -156,7 +155,7 @@ def update_info(request, template="cart/info.html"):
             }, ensure_ascii=False), mimetype='application/json')
 
     
-    return HttpResponse(json.dumps({'success':False}),mimetype='application/json')
+    return HttpResponse(json.dumps({'success':False,'error':error}),mimetype='application/json')
 
 @login_required
 def update_zipcode(request):

@@ -82,7 +82,7 @@ class APIPlatformConnection(models.Model):
 
     @staticmethod
     def get_description(pd):
-        raise NotImplementedError('returnds "description')
+        raise NotImplementedError('returns "description')
 
     @staticmethod
     def get_name(product_dict):

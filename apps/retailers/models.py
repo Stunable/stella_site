@@ -16,9 +16,7 @@ from django.template.defaultfilters import slugify
 
 from apps.shopping_platforms.models import APIPlatformConnection,APIProductConnection
 from shopping_platforms.tasks import update_API_products
-
-import apps.portable as portable
-
+from shopping_platforms.connection import ShoppingPlatformAPI
 
 from apps.common.forms import FedexTestAddress
 
@@ -467,12 +465,12 @@ class PortableConnection(APIConnection):
     variants_Have_Prices = False
 
     def authenticate(self):
-        api = portable.ShoppingPlatformAPI(self)
+        api = ShoppingPlatformAPI(self)
         T = api.test_authenticate()
         return T
 
     def get_products(self):
-        api = portable.ShoppingPlatformAPI(self)
+        api = ShoppingPlatformAPI(self)
 
         l = api.extract_product_list()
         return api.extract_product_list()

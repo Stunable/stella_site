@@ -11,6 +11,7 @@ from django.db.models import Avg
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db.models.loading import get_model, get_models
+from django.db.models import Count, Min, Sum, Max, Avg
 
 from django.template.defaultfilters import slugify
 
@@ -474,6 +475,15 @@ class Item(models.Model,listImageMixin):
         self.price_text = self.price_range_text()
         
 
+
+class VariationHold(models.Model):
+    date_created = models.DateTimeField(default=datetime.datetime.now,blank=True)
+    variation    = models.ForeignKey('ItemType')
+    # user         = models.ForeignKey(User,null=True,blank=True)
+    quantity     = models.IntegerField(default=1)
+    kart         = models.ForeignKey('kart.Kart')
+
+
 class ItemType(models.Model,DirtyFieldsMixin):
 
     class Meta:
@@ -559,6 +569,29 @@ class ItemType(models.Model,DirtyFieldsMixin):
             return '<span%(sale)s><span class="dollar">$</span>%(min)s</span> - <span class="struck"> <span class="dollar">$</span>%(max)s</span>'%r
         return '<span class="dollar">$</span>%(min)s'%r
 
+    def update_holds(self,kart,quantity=1):
+        vh,created = VariationHold.objects.get_or_create(kart=kart,variation=self)
+        vh.quantity = quantity
+        vh.save()
+
+
+    def get_hold_count(self):
+        thirty_minutes = datetime.timedelta(minutes = 30)
+        thirty_minutes_ago = datetime.datetime.now()-thirty_minutes
+        h = self.variationhold_set.filter(date_created__gte=thirty_minutes_ago).aggregate(Sum('quantity'))['quantity__sum']
+
+        if h:
+            return h
+        return 0
+
+
+    def get_holds_on_this_cart(self,kart):
+        thirty_minutes = datetime.timedelta(minutes = 30)
+        thirty_minutes_ago = datetime.datetime.now()-thirty_minutes
+        h = self.variationhold_set.filter(date_created__gte=thirty_minutes_ago,kart=kart).aggregate(Sum('quantity'))['quantity__sum']
+        if h:
+            return h
+        return 0
 
 
 

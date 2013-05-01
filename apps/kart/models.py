@@ -58,27 +58,35 @@ class Kart(models.Model):
     def manage_variations(self,item_variation,wishlist_only=False,remove=False):
         outval = None
         if not wishlist_only:
-            ki,created         = KartItem.objects.get_or_create(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
-            ki.unit_price      = item_variation.get_current_price()
-            try:
-                ki.picture     = item_variation.get_image().small.url
-            except:
-                ki.picture     = item_variation.item.get_image().medium.url
+            test_ki = KartItem(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
 
-            ki.item_name       = item_variation.get_name()
+            if test_ki.validate_inventory():
+                ki,created         = KartItem.objects.get_or_create(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
+                ki.unit_price      = item_variation.get_current_price()
+                try:
+                    ki.picture     = item_variation.get_image().small.url
+                except:
+                    ki.picture     = item_variation.item.get_image().medium.url
 
-            if created:
-                ki.shipping_method = get_default_shipping()
-                self.total_items = self.total_items + 1
-            else:    
-                ki.quantity = ki.quantity + 1
-                
-            ki.save()
+                ki.item_name       = item_variation.get_name()
 
-            self.calculate()
-            self.save()
+                if created:
+                    ki.shipping_method = get_default_shipping()
+                    self.total_items = self.total_items + 1
+                else:    
+                    ki.quantity = ki.quantity + 1
+                    
+                ki.save()
 
-            outval = ki
+                item_variation.update_holds(self,ki.quantity)
+
+                self.calculate()
+                self.save()
+
+                outval = ki
+                message = "This item has been added to your cart.  We will hold it for you for 30 minutes."
+            else:
+                message = test_ki.get_insufficient_inventory_message()+ "We have added it to your wishlist for safe keeping."
 
         if self.request.user.is_authenticated():
             user = self.request.user
@@ -101,31 +109,38 @@ class Kart(models.Model):
 
             outval = WI
             
-        return outval
+        return outval,message
 
     def add(self,item_variation,wishlist_only=False,remove=False):
         return self.manage_variations(item_variation,wishlist_only=wishlist_only,remove=remove)
 
 
+
     def update_info(self,request):
-        Item = None
+        kartitem = None
         try:
             allowed_attrs = {'shipping_method_id':ShippingType,'quantity':self}
             if request.POST.get('attr') in allowed_attrs.keys():
                 att = request.POST.get('attr')
-                Item = self.items().get(id=request.POST.get('id'))
-                setattr(Item,att,int(request.POST.get('val')))
-                Item.save()
+
+                kartitem = self.items().get(id=request.POST.get('id'))
+
+                if att == 'quantity':
+                    if not kartitem.validate_inventory(quantity=int(request.POST.get('val'))):
+                        return None,kartitem.get_insufficient_inventory_message()
+
+
+                setattr(kartitem,att,int(request.POST.get('val')))
+                kartitem.save()
                 self.calculate()
                 self.save() 
                 
-                return Item
+                return kartitem,None
             else:
-                raise
+                return None,"Sorry, something went wrong please try that again."
 
         except Exception, e:
-            print e
-            raise
+            return None,str(e)
             # return e
 
        
@@ -479,6 +494,24 @@ class KartItem(models.Model):
         return out
 
 
+    def validate_inventory(self,quantity=1):
+        total_holds = self.item_variation.get_hold_count()
+        inventory = self.item_variation.inventory
+        print 'holds:',total_holds
+        print 'inventory:',inventory
+        total_needed = total_holds + quantity
+
+        if inventory >= total_needed:
+            return True
+
+        return False
+
+    def get_insufficient_inventory_message(self):
+        return "Sorry, but we don't have enough of that %s in Size: %s and Color: %s to fulfill your request."%(self.item_variation.item.name, self.item_variation.size,self.item_variation.custom_color_name)
+
+        
+
+
     def save(self, *args, **kwargs):
         calculate_cart = False
         if self.id:
@@ -489,6 +522,7 @@ class KartItem(models.Model):
                 calculate_cart = True
 
             if self.quantity != former_self.quantity:
+                self.item_variation.update_holds(self.kart,self.quantity)
                 calculate_cart = True
 
             else:
