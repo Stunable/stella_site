@@ -11,7 +11,7 @@ from django.forms.models import modelform_factory
 from retailers.models import ShippingType
 from stunable_wepay.helpers import WePayPayment
 
-from django.forms.fields import ChoiceField
+from django.forms.fields import ChoiceField,CharField
 from django.forms.widgets import RadioSelect
 
 from apps.accounts.models import ShippingInfo,CCToken
@@ -128,6 +128,16 @@ class Kart(models.Model):
         return self.manage_variations(item_variation,wishlist_only=wishlist_only,remove=remove)
 
 
+    def update_shipping_method_id(self,request):
+        print request.POST
+        Ks = self.items().filter(retailer__id=request.POST.get('id'))
+        if len(Ks):
+            
+
+            s =  ShippingType.objects.get(id=request.POST.get('val'))
+            Ks.update(shipping_method=s)
+
+            return Ks[0]
 
     def update_info(self,request):
         kartitem = None
@@ -136,15 +146,19 @@ class Kart(models.Model):
             if request.POST.get('attr') in allowed_attrs.keys():
                 att = request.POST.get('attr')
 
-                kartitem = self.items().get(id=request.POST.get('id'))
+                if hasattr(self,'update_'+att):
+                    kartitem = getattr(self,'update_'+att)(request)
 
-                if att == 'quantity':
-                    if not kartitem.validate_inventory(quantity=int(request.POST.get('val'))):
-                        return None,kartitem.get_insufficient_inventory_message()
+                else:
+                    kartitem = self.items().get(id=request.POST.get('id'))
+
+                    if att == 'quantity':
+                        if not kartitem.validate_inventory(quantity=int(request.POST.get('val'))):
+                            return None,kartitem.get_insufficient_inventory_message()
 
 
-                setattr(kartitem,att,int(request.POST.get('val')))
-                kartitem.save()
+                    setattr(kartitem,att,int(request.POST.get('val')))
+                    kartitem.save()
                 self.calculate()
                 self.save() 
                 
@@ -518,9 +532,10 @@ class KartItem(models.Model):
         return float(self.shipping_method.estimated_price)
 
     def get_shipping_form(self):
-        f = modelform_factory(KartItem, fields=("shipping_method",))(instance=self,prefix=self.id)
+        f = modelform_factory(KartItem, fields=("shipping_method","retailer"))(instance=self,prefix=self.id)
         f.fields['shipping_method'] = ChoiceField(widget=RadioSelect, choices=((x.id, x) for x in get_shipping_options()))
-        f.fields['shipping_method'].widget.attrs = {'data-attr':'shipping_method_id','class':'choiceclick','data-href':'update_info','data-id':self.id}
+        f.fields['retailer'] = CharField()
+        f.fields['shipping_method'].widget.attrs = {'data-attr':'shipping_method_id','class':'choiceclick','data-href':'update_info','data-id':self.retailer.id}
         return f
 
 
@@ -584,10 +599,6 @@ class KartItem(models.Model):
         calculate_cart = False
         if self.id:
             former_self = KartItem.objects.get(id=self.id)
-            if self.shipping_method != former_self.shipping_method:
-                KIs = KartItem.objects.filter(retailer=self.retailer,kart=self.kart)
-                KIs.update(shipping_method=self.shipping_method)
-                calculate_cart = True
 
             if self.quantity != former_self.quantity:
                 self.item_variation.update_holds(self.kart,quantity=self.quantity)

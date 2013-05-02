@@ -2297,6 +2297,26 @@ div.cart_item_added.fail{
 	display:inline;
 }
 
+#cart_fail{
+	width:560px;
+	text-align: center;
+}
+
+#cart_fail img{
+	/*height:60px;*/
+	max-width:60px;
+}
+#cart_fail span{
+	font-size: .8em;
+	display:inline-block;
+	text-align: right;
+	width:500px;
+	overflow:auto;
+	white-space: normal;
+	vertical-align:middle;
+	height:60px;
+}
+
 
 .bootstrap .btn {
 	padding:.5em;
