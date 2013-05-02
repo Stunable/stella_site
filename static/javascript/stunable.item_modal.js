@@ -70,20 +70,22 @@ function setItemDetailsEvent(){
 					var variation_id = $('.'+selsize.data('name')+'.'+selcolor.data('name')).val();
 
 					$.post($(this).data('href')+variation_id,function(data){
-					
+						
 						$.modal.close()
-						$('body').append($(data).hide().fadeIn());
+						$('body').append($(data.html).hide().fadeIn());
 						// $('body').append(data)
 
 						setTimeout(function(){$('.cart_item_added').fadeOut()},4000);
 
-						if ($t.hasClass('cart')){
-							cart_item_added();
-						}else{
-							wishlist_item_added();
+						if (data.success){
+							if ($t.hasClass('cart')){
+								cart_item_added();
+							}else{
+								wishlist_item_added();
+							}
 						}
 
-					},'html')
+					},'json')
 				}
 
 				return false;			

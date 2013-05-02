@@ -1,9 +1,9 @@
 
-<div class="cart_item_added">
+<div class="cart_item_added{% if not success %} fail{% endif %}">
   <img class="product_image" src="{% if item.item_variation.get_image.medium %} {{item.item_variation.get_image.medium.url}} {% else %}{{ item.item_variation.item.get_image.medium.url }}{% endif %}">
-  <div style="float:right;margin:20px;display:inline-block;width:45%">
+  <div style="float:right;margin:20px;display:block;width:90%">
      <div class="big">{{ item.item_name }}</div>
      <div>by {{ item.retailer }}</div>
-     <div>{{annotation}}</div>
+     <div>{{annotation|safe}}</div>
   </div>
 </div>

@@ -4,6 +4,7 @@ import sys
 from decimal import Decimal
 # Create your models here.
 from django.db import transaction
+from django.db.models import Count, Min, Sum, Max, Avg
 
 from django.forms.models import modelform_factory
 
@@ -14,6 +15,7 @@ from django.forms.fields import ChoiceField
 from django.forms.widgets import RadioSelect
 
 from apps.accounts.models import ShippingInfo,CCToken
+from racks.models import ItemType
 import datetime
 
 
@@ -56,11 +58,17 @@ class Kart(models.Model):
         return get_shipping_options()
 
     def manage_variations(self,item_variation,wishlist_only=False,remove=False):
+        message = None
         outval = None
-        if not wishlist_only:
-            test_ki = KartItem(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
+        success = False
 
-            if test_ki.validate_inventory():
+        if not wishlist_only:
+            test_ki = KartItem(kart=self,item_name=item_variation.get_name(),item_variation=item_variation,retailer=item_variation.item._retailer)
+            available = test_ki.validate_inventory(include_self=True,quantity=1)
+
+            print 'valid=',available
+
+            if available:
                 ki,created         = KartItem.objects.get_or_create(kart=self,item_variation=item_variation,retailer=item_variation.item._retailer)
                 ki.unit_price      = item_variation.get_current_price()
                 try:
@@ -83,7 +91,9 @@ class Kart(models.Model):
 
                 outval = ki
                 message = "This item has been added to your cart.  We will hold it for you for 30 minutes."
+                success = True
             else:
+                outval = test_ki
                 message = test_ki.get_insufficient_inventory_message()+ "We have added it to your wishlist for safe keeping."
 
         if self.request.user.is_authenticated():
@@ -106,10 +116,13 @@ class Kart(models.Model):
 
             WI.save()
 
-            outval = WI
-            message = 'added item to wishlist'
             
-        return outval,message
+            if wishlist_only:
+                outval = WI
+                message = 'added item to wishlist'
+                success = True
+            
+        return success,outval,message
 
     def add(self,item_variation,wishlist_only=False,remove=False):
         return self.manage_variations(item_variation,wishlist_only=wishlist_only,remove=remove)
@@ -143,7 +156,13 @@ class Kart(models.Model):
             return None,str(e)
             # return e
 
-       
+    
+    def bulk_remove(self,variation_list):
+        for v in variation_list:
+            id_list = [v.id for v in variation_list]
+            self.variationhold_set.filter(variation__in=id_list).delete()
+            KartItem.objects.get(kart=self,item_variation__in=id_list).delete()
+
 
 
     def remove(self,item_variation):
@@ -359,6 +378,37 @@ class Kart(models.Model):
     def release_holds(self):
         self.variationhold_set.all().delete()
 
+    def reset_hold_timers(self):
+        self.variationhold_set.all().update(date_created=datetime.datetime.now())
+
+
+    def pre_flight_checkout(self):
+
+        # first check and see if we have a valid hold on every item in this cart
+        # if we do, we're good to go.
+        self.failed_inventory_check = []
+
+        thirty_minutes = datetime.timedelta(minutes = 30)
+        thirty_minutes_ago = datetime.datetime.now()-thirty_minutes
+        # numbers = self.variationhold_set.all().select_related('variation').aggregate(Sum('quantity'),Sum('variation__inventory'))
+        hold_count = self.variationhold_set.filter(date_created__gte=thirty_minutes_ago).count()
+        item_count = self.items().all().count()
+
+        if hold_count >= item_count:
+            return True
+
+        for ki in self.kartitem_set.all():
+            if not ki.validate_inventory():
+                self.failed_inventory_check.append(ki)
+
+        # self.bulk_remove(self.failed_inventory_check)
+
+        if not len(self.failed_inventory_check):
+            return True
+
+        return False
+
+
 
     def checkout(self,request):
         # <QueryDict: {u'shipping-address': [u'2'], u'credit-card': [u'1552718934']}>
@@ -398,8 +448,6 @@ class KartItem(models.Model):
 
     def __unicode__(self):
         return self.item_name
-
-
 
     kart = models.ForeignKey(Kart)
     
@@ -501,22 +549,34 @@ class KartItem(models.Model):
         return out
 
 
-    def validate_inventory(self,quantity=1):
-        total_holds = self.item_variation.get_other_cart_holds(self.kart)
+    def validate_inventory(self,include_self=False,quantity=None):
+        if not quantity:
+            quantity = self.quantity
+
+        if include_self:  # this will tell us if there are any MORE of these available inclusive of what's already in THIS cart
+            total_holds = self.item_variation.get_hold_count()
+
+            print 'holds including this cart:',total_holds
+        
+        else: # we want to know how much availability there is NOT including what we already have in this cart.
+            total_holds = self.item_variation.get_other_cart_hold_count(self.kart)
+
         inventory = self.item_variation.inventory
-
-
-        print 'holds:',total_holds
-        print 'inventory:',inventory
+        
         total_needed = total_holds + quantity
+        total_available = inventory - total_needed
 
-        if inventory >= total_needed:
+        print 'needed:',total_needed
+        print 'total_available:',total_available
+
+        if total_available > 0:
+            print 'returning true'
             return True
 
         return False
 
     def get_insufficient_inventory_message(self):
-        return "Sorry, but we don't have enough of %s in Size: %s and Color: %s to fulfill your request."%(self.item_variation.item.name, self.item_variation.size,self.item_variation.custom_color_name)
+        return "Sorry, but we <strong>don't have enough</strong> of %s in Size: %s and Color: %s to fulfill your request."%(self.item_variation.item.name, self.item_variation.size,self.item_variation.custom_color_name)
 
         
 

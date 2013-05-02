@@ -73,6 +73,10 @@ table {
 		color: #3A87AD;
 	}
 
+strong {
+	font-weight:bold;
+
+}
 
 /* TYPOGRAPHY
 ----------------------------------------*/
@@ -2275,7 +2279,12 @@ div.cart_item_added{
 	top:100px;
 	left:100px;
 	z-index:1000;
+	border:1px solid #eee;
 }
+div.cart_item_added.fail{
+	border:2px solid red;
+}
+
 .cart_item_added div{
 	margin:5px;
 	text-align: right;
@@ -2285,8 +2294,7 @@ div.cart_item_added{
 }
 .cart_item_added img{
 	margin-top:10px;
-	width:40%;
-	float:left;
+	display:inline;
 }
 
 

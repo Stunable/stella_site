@@ -1,5 +1,5 @@
 from django.contrib import admin 
-from apps.racks.models import Rack, Item, Rack_Item, Category, Size, Brand, Color, ItemType, PriceCategory,ProductImage,DailySpecial
+from apps.racks.models import *
 
 import os
 from PIL import Image
@@ -203,6 +203,8 @@ admin.site.register(PriceCategory)
 admin.site.register(ProductImage,ProductImageAdmin)
 
 admin.site.register(DailySpecial,DailySpecialAdmin)
+
+admin.site.register(VariationHold)
 
 
 

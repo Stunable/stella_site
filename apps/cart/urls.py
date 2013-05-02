@@ -3,10 +3,7 @@ from apps.retailers.views import create_shipping_label,view_shipping_label,print
 
 
 urlpatterns = patterns('cart.views',
-    url(r'^buy_rack/(?P<rack_id>\d+)$',
-        view='buy_rack',
-        name='buy_rack'
-    ), 
+   
     url(r'^add_to_cart/(?P<product_id>\d+)$',
         view='add_to_cart',
         name='add_to_cart'
@@ -47,6 +44,15 @@ urlpatterns = patterns('cart.views',
         view='update_zipcode',
         name='update_zipcode'
     ),
+    url(r'^check_checkout',
+        view='check_checkout',
+        name="check_checkout"),
+
+
+
+
+
+
     url(r'^shopper_return_purchase',
         view='shopper_return_purchase',
         name='shopper_return_purchase'

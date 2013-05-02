@@ -7,10 +7,26 @@
 
 {% block content %}
 
-<div class="content cart" id="page-content">
-    
 
+<div class="content cart" id="page-content">
     <div  class="inner-page-content">
+
+
+{% if cart_failed %}
+    <div style="width:700px;padding:20px;text-align:center;border:1px solid">   
+        <div >
+            Bad news.  These items got snapped up since you added them to your cart. 
+        </div>
+        <ul style="display:inline-block;width:600px">
+            {% for item in cart_failed.failed_inventory_check %}
+            <li style="width:100%">
+                <span style="display:inline-block;width:100px"><img style="height:60px" src="{{item.picture}}"></span> <span style="position:relative;display:inline-block;width:500px;text-align:right;top:-20px;">{{item.retailer}}: {{item.item_name}}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
     
     {% block inner_content %}
 
@@ -30,7 +46,7 @@
             {% include 'cart/includes/cart_totals_table.html' %}
            </table>
            {% if request.user.is_authenticated %}
-               <a class="btn big btn-primary " href="{{SECURE_ROOT}}/cart/details">checkout</a>
+               <a class="btn big btn-primary " href="{{SECURE_ROOT}}/cart/check_checkout">checkout</a>
                {% else %}
                <a class="btn big btn-primary login-check" data-href="{{SECURE_ROOT}}/cart/details">checkout</a>
 

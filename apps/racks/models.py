@@ -569,6 +569,7 @@ class ItemType(models.Model,DirtyFieldsMixin):
             return '<span%(sale)s><span class="dollar">$</span>%(min)s</span> - <span class="struck"> <span class="dollar">$</span>%(max)s</span>'%r
         return '<span class="dollar">$</span>%(min)s'%r
 
+
     def update_holds(self,kart,quantity=1):
         vh,created = VariationHold.objects.get_or_create(kart=kart,variation=self)
         vh.quantity = quantity
@@ -585,7 +586,7 @@ class ItemType(models.Model,DirtyFieldsMixin):
         return 0
 
 
-    def get_other_cart_holds(self,kart):
+    def get_other_cart_hold_count(self,kart):
         thirty_minutes = datetime.timedelta(minutes = 30)
         thirty_minutes_ago = datetime.datetime.now()-thirty_minutes
         h = self.variationhold_set.filter(date_created__gte=thirty_minutes_ago).exclude(kart=kart).aggregate(Sum('quantity'))['quantity__sum']

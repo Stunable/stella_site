@@ -60,13 +60,12 @@ def add_to_cart(request, product_id, wishlist_only=False,remove=False):
 
 
         cart = Cart(request)    
-        item,annotation = cart.add(inventory,wishlist_only=wishlist_only,remove=remove)
+        success,item,annotation = cart.add(inventory,wishlist_only=wishlist_only,remove=remove)
 
-        return render_to_response("cart/cart_slideout.html", 
-                                  {'item': item ,'annotation':annotation}, 
-                                  context_instance=RequestContext(request) )
-
-
+        return HttpResponse(json.dumps({
+                    'success':success,
+                    'html': render_to_string("cart/cart_slideout.html", {'item': item ,'annotation':annotation,'success':success})}), mimetype='application/json')
+                
     return redirect(reverse('get_cart'))
 
 
@@ -354,6 +353,22 @@ def validate_cc(request,*args,**kw):
            
 
     return direct_to_template(request,  "cart/payment.html", ctx)
+
+
+
+def check_checkout(request):
+    cart = Cart(request)
+
+    ok = cart.pre_flight_checkout()
+
+    return direct_to_template(request, 'cart/cart.html', {'cart_failed':cart})
+    if ok:
+        return redirect(reverse('express_checkout'))
+    else:
+        return direct_to_template(request, 'cart/cart.html', {'cart_failed':cart})
+        # return redirect(reverse('get_cart'))
+
+
 
 
 @login_required
