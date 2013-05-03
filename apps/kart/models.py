@@ -116,6 +116,8 @@ class Kart(models.Model):
 
             WI.save()
 
+            print 'saved wishlist item:',WI
+
             
             if wishlist_only:
                 outval = WI
@@ -584,7 +586,7 @@ class KartItem(models.Model):
         print 'needed:',total_needed
         print 'total_available:',total_available
 
-        if total_available > 0:
+        if total_available >= 0:
             print 'returning true'
             return True
 
