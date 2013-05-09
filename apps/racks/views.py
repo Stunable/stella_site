@@ -142,7 +142,7 @@ def wishlist(request):
 def friends(request):
     qs = request.session.get('fb_friends',[])
 
-    ctx = {'friends':True}
+    ctx = {'friends':True,'first_page_count':50,'item_per_page':50}
 
     return _all(request,ctx=ctx,template='racks/friends.html',query_set=qs,is_wishlist=True)
 
@@ -361,10 +361,11 @@ def pagination(request, ctx, template, query_set):
         ctx['next'] = next   
     else:
         # template = 'racks/new_carousel.html'
-        ctx['rack_items_list'] = query_set[:10]
+        ctx['rack_items_list'] = query_set[:ctx.get('first_page_count',10)]
     
         ctx['next'] = 3
-    ctx['item_per_page'] = 8
+
+    ctx['item_per_page'] = ctx.get('item_per_page',8)
 
 
     if len(ctx['rack_items_list']) < 1:
