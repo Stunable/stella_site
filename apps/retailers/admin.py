@@ -1,25 +1,28 @@
 from django.contrib import admin
 from apps.retailers.models import *
 
+from apps.common.admin import NotificationSender
 
 
 
-class RetailerProfileAdmin(admin.ModelAdmin):
+class RetailerProfileAdmin(admin.ModelAdmin,NotificationSender):
     list_display  = ('name', 'approved','admin_link')
     list_filter   = ('approved',)
     search_fields = ('name',)
-    actions = ('verify_address',)
+    actions = ('verify_address','send_notifications')
     
 
 
 admin.site.register(RetailerProfile, RetailerProfileAdmin)
  
 
+class ProductUploadAdmin(admin.ModelAdmin,NotificationSender):
+    actions = ('send_notifications',)
 
 
 admin.site.register(StylistItem)
 admin.site.register(ShippingType)
-admin.site.register(ProductUpload)
+admin.site.register(ProductUpload,ProductUploadAdmin)
 admin.site.register(ShopifyProduct)
 admin.site.register(ShopifyVariation)
 admin.site.register(PortableProduct)

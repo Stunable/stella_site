@@ -255,6 +255,10 @@ var stunable = {
     $('#cart_fail').modal()
   }
           
+    $('#select_all').click(function(e){
+          $('.ship_check').attr('checked',$(this).attr('checked')==='checked');
+        })
+
 
     },
       retailers:function(){

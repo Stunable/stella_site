@@ -25,6 +25,11 @@ from tasks import process_upload,save_shopify_inventory_update
 from queued_storage.backends import QueuedStorage
 from storages.backends.s3boto import S3BotoStorage
 
+from django.dispatch import receiver
+from django.db.models.signals import pre_save,post_save
+
+from apps.notification.models import send_notification_on 
+
 
 if settings.DEBUG:
     queued_s3storage = QueuedStorage(
@@ -90,28 +95,23 @@ class ProductUpload(models.Model):
     uploaded_zip = models.FileField(upload_to='product_uploads')
     retailer = models.ForeignKey('RetailerProfile')
     processed = models.BooleanField(default=False)
-
-
-    def save(self,*args,**kwargs):
-        super(ProductUpload, self).save()
-        if not self.processed:
-            ctx = {
-                   'upload': self,
-
-                }
-            subject = 'stunable.com upload %d'%self.id
-            email_message = render_to_string(NEW_UPLOAD, ctx)
-                      
-            
-#                send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [self.email_address])
-            send_mail(subject, email_message, settings.RETAILER_EMAIL, [self.retailer.email_address])
-
-            email_message = "%sadmin/retailers/productupload/%d/ was uploaded by %s\n\n"%(settings.WWW_ROOT,self.id,self.retailer.email_address) + email_message
-            send_mail(subject, email_message, settings.EMAIL_HOST_USER, [settings.RETAILER_EMAIL])
-            # process_upload(self,StylistItem,UploadError)
-
+        
     def filename(self):
         return os.path.basename(self.uploaded_zip.name)
+
+
+    def send_uploaded_email(self):
+        send_notification_on("retailer-product_upload", recipient=self.retailer, upload=self)
+
+
+    def send_notifications(self):
+        self.send_uploaded_email()
+
+@receiver(post_save, sender=ProductUpload)
+def product_upload_created(sender, instance, created, **kwargs):
+    if created:
+        instance.send_uploaded_email()
+
 
 class UploadError(models.Model):
     def __unicode__(self):
@@ -174,25 +174,6 @@ class RetailerProfile(models.Model):
     def save(self,*args,**kwargs):
         self.slug = slugify(self.name)
 
-        if self.id:
-            old_obj = RetailerProfile.objects.get(pk=self.id)
-            if not old_obj.approved and self.approved:
-                url = u"%s%s" % (
-                    settings.RETAILER_SUBDOMAIN.rstrip('/'),
-                    reverse("auth_login"),
-                )
-                ctx = {
-                    "accept_url": url,
-                    "retailer": self 
-                }
-                subject = render_to_string(RETAILER_SUBJECT, ctx)
-                email_message = render_to_string(RETAILER_MESSAGE, ctx)
-                
-#                send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, [self.email_address])
-                send_mail(subject, email_message, settings.EMAIL_HOST_USER, [self.email_address])
-                subject = "NEW RETAILER:%s"%self.name
-                email_message = "THE FOLLOWING EMAIL WAS SENT TO %s\n"%self.email_address + email_message
-                send_mail(subject, email_message, settings.EMAIL_HOST_USER, [settings.RETAILER_EMAIL])
         try:
             if self.email_address:
                 new_user = User.objects.get(username=self.email_address)
@@ -216,6 +197,15 @@ class RetailerProfile(models.Model):
     def lastname(self):
         return self.user.last_name
 
+
+    @property
+    def first_name(self):
+        return self.user.first_name
+
+    @property
+    def last_name(self):
+        return self.user.last_name
+
     @property
     def company_name(self):
         return self.name
@@ -230,6 +220,20 @@ class RetailerProfile(models.Model):
         F = FedexTestAddress(data)
         return F.validate().processed()
 
+    @property
+    def email(self):
+        return self.email_address
+
+    def send_signup_email(self):
+        send_notification_on("retailer-signedup", recipient =self, retailer= self)
+
+    def send_welcome_email(self):
+        url = settings.RETAILER_SUBDOMAIN
+        send_notification_on("retailer-welcome", recipient =self, retailer= self,url=url)
+
+    def send_notifications(self):
+        self.send_signup_email()
+        self.send_welcome_email()
 
     def admin_link(self):
       return '<a href="%s?retailer=%s">admin page link</a>' %(reverse('product_list'),self.id)
@@ -245,6 +249,23 @@ class RetailerProfile(models.Model):
 
     def get_APIs(self):
         return APIConnection.objects.filter(retailer_profile=self).select_related('ShopifyConnection','PortableConnection')
+
+@receiver(post_save, sender=RetailerProfile)
+def retailer_profile_saved(sender, instance, created, **kwargs):
+
+    if created:
+        if instance.email_address:
+            instance.send_signup_email()
+
+    if instance.approved and not instance.welcome_message_sent:
+
+        instance.send_welcome_email()
+
+        instance.welcome_message_sent = True
+        instance.save()
+
+
+
 
 
 

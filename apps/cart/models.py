@@ -17,6 +17,8 @@ from accounts.models import ShippingInfo
 from stunable_wepay.models import WePayTransaction
 
 from accounts.models import CCToken
+from django.dispatch import receiver
+from django.db.models.signals import pre_save,post_save
 
 from apps.notification.models import send_notification_on 
 
@@ -68,6 +70,7 @@ class Checkout(models.Model):
     retailer = models.ForeignKey(User,blank=True,null=True,related_name="retailer_checkout_set")
     purchaser = models.ForeignKey(User,blank=True,null=True,related_name="purchaser_checkout_set")
     messages_sent = models.BooleanField(default=False,blank=True)
+    return_messages_sent = models.BooleanField(default=False,blank=True)
 
     def check_complete(self):
         try:
@@ -90,24 +93,49 @@ class Checkout(models.Model):
                 print e
                 pass
 
+
+    def send_return_requested_emails(self):
+
+        if not self.return_messages_sent:
+            url = u"%s%s" % (
+                settings.WWW_ROOT.rstrip('/'),
+                reverse("order_history"),
+                )+'?ref='+self.ref
+
+            send_notification_on("shopper-return_requested", recipient = self.retailer, checkout = self, url=url)
+
+
+            url = u"%s%s" % (
+                settings.RETAILER_SUBDOMAIN.rstrip('/'),
+                reverse("retailer_order_history"),
+            )+'?ref='+self.ref
+
+            send_notification_on("retailer-return_requested", recipient = self.retailer, checkout = self, url=url)
+
+        self.return_messages_sent = True
+        self.save()
+        
+
     def send_notifications(self):
         if not self.messages_sent:
             url = u"%s%s" % (
             settings.RETAILER_SUBDOMAIN.rstrip('/'),
             reverse("retailer_order_history"),
-            )+'#'+self.ref
+            )+'?ref='+self.ref
 
             send_notification_on("retailer-order-placed", recipient =self.retailer, checkout = self, url=url)
 
             url = u"%s%s" % (
             settings.WWW_ROOT.rstrip('/'),
             reverse("order_history"),
-            )+'#'+self.ref
+            )+'?ref='+self.ref
 
             send_notification_on("shopper-order-placed", recipient = self.purchaser, checkout = self, url=url)
 
             self.messages_sent = True
             self.save()
+
+        self.send_return_requested_emails()
 
             
 
@@ -140,15 +168,13 @@ class Purchase(models.Model):
     def save(self,*args, **kwargs):
         pk_before_save = self.pk
         super(Purchase, self).save()
-        
-        if pk_before_save != self.pk:
-            # new order has been made
-            self.ref = base35encode(self.purchaser.id+10000)+'S'+base35encode(self.id+10000)
+        if not self.ref:
+            self.ref = self.checkout.ref + '-'+ str(self.id)
             self.save()
 
         self.checkout.check_complete()
             
-    
+
     def name(self):
         return "Stunable.com"
 
@@ -230,6 +256,15 @@ class Purchase(models.Model):
     def send_notifications(self):
         self.send_ship_reminder()
 
+
+@receiver(post_save, sender=Purchase)
+def purchase_status_notifications(sender, instance, created, **kwargs):
+    if instance.status == 'return requested':
+        instance.checkout.send_return_requested_emails()
+
+
+
+
 class ShipmentTrackingEvent(models.Model):
 
     data = models.TextField()
@@ -306,27 +341,54 @@ class Shipment(models.Model):
         C = self.purchases.all()[0].checkout
         self.send_shipment_emails(C)
         self.send_shipment_delivered_email(C)
-        
+
 
     def send_shipment_delivered_email(self,checkout):
-        send_notification_on("retailer-purchase-delivered", recipient = checkout.retailer, checkout = checkout)
+        if self.originator == checkout.retailer:   
+            send_notification_on("retailer-purchase_delivered", recipient = checkout.retailer, checkout = checkout)
+        elif self.originator == checkout.purchaser:
+            send_notification_on("retailer-return_delivered", recipient = checkout.retailer, checkout = checkout)
+            
+            url = u"%s%s" % (
+                settings.WWW_ROOT.rstrip('/'),
+                reverse("order_history"),
+                )+'?ref='+checkout.ref
 
+            send_notification_on("shopper-return_delivered", recipient = checkout.purchaser, checkout = checkout, url=url)
 
 
     def send_shipment_emails(self,checkout):
-        pass
-
         track_url = 'https://www.fedex.com/fedextrack/?tracknumber=%s'%self.tracking_number
-        url = u"%s%s" % (
-            settings.WWW_ROOT.rstrip('/'),
-            reverse("order_history"),
-            )+'#'+checkout.ref
 
-        send_notification_on("user-purchase-shipped", recipient = checkout.purchaser, checkout = checkout, track_url=track_url, url=url)
+        if self.originator == checkout.retailer:        
+            url = u"%s%s" % (
+                settings.WWW_ROOT.rstrip('/'),
+                reverse("order_history"),
+                )+'?ref='+checkout.ref
 
+            send_notification_on("shopper-purchase_shipped", recipient = checkout.purchaser, checkout = checkout, track_url=track_url, url=url)
 
+            url = u"%s%s" % (
+                settings.RETAILER_SUBDOMAIN.rstrip('/'),
+                reverse("retailer_order_history"),
+            )+'?ref='+checkout.ref
 
-        send_notification_on("retailer-purchase-shipped", recipient = checkout.retailer, checkout = checkout, track_url=track_url, url=url)
+            send_notification_on("retailer-purchase_shipped", recipient = checkout.retailer, checkout = checkout, track_url=track_url, url=url)
+
+        elif self.originator == checkout.purchaser:
+            # url = u"%s%s" % (
+            #     settings.WWW_ROOT.rstrip('/'),
+            #     reverse("order_history"),
+            #     )+'?ref='+checkout.ref
+
+            # send_notification_on("shopper-return_shipped", recipient = checkout.purchaser, checkout = checkout, track_url=track_url, url=url)
+
+            url = u"%s%s" % (
+                settings.RETAILER_SUBDOMAIN.rstrip('/'),
+                reverse("retailer_order_history"),
+                )+'?ref='+checkout.ref
+
+            send_notification_on("retailer-return_shipped", recipient = checkout.retailer, checkout = checkout, track_url=track_url, url=url)
 
 
 
