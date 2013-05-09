@@ -1,9 +1,37 @@
 
 	<div class="slide items-{{ item_per_page }}" data-nextpage="{{next}}"style="width: 860px; float:left;">
+		{% if more_like_this %}
+			<div class="item">
+
+				<div class="big" style="width:150px;padding20px;text-align:center;margin:auto;margin-top:25%">Looks like we ran out of products in this area.
+
+				Here are some similar items you might be interested in!</div>
+
+
+			</div>
+
+			<span id="stop_loading_more_stuff"></span>
+			{% for o in more_like_this.list %}
+				<div class="item">
+					<div class="picbox">
+						<a class="pic-container" href="{{o.get_absolute_url}}">    
+				 		<img alt="{{o.name}}" src="{{o.get_image_url}}"> 
+						</a>
+
+					</div>
+					<div class="item-info">
+						<div class="item-label"><span>{{o}}</span></div>
+				
+				 		<!-- <div class="item-name"><span>{{item.show_name}}</span></div> -->
+					</div>
+				</div>
+			{% endfor %}
+		{% else %}
 		{% for item in rack_items_list %}
 		{% with item as target_item %}
 	        {% include "racks/includes/new_item_list_content.html" %}
 	    {% endwith %}
 		{% endfor %}
+		{% endif %}
 	</div>
 	

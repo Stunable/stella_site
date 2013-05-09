@@ -1968,6 +1968,7 @@ form .info_modal{
 	display:inline-block;
 	width:50%;
 	height:200px;
+	margin-left:8px;
 }
 
 a.share_click{
@@ -2003,10 +2004,14 @@ div.share_floater input{
 .modal-item-details .item-description{
 	font-size:.8em;
 	/*font-family: serif;*/
-	max-height:250px;
+	max-height:130px;
 	overflow:auto;
 	width:100%;
 	white-space: normal;
+}
+
+.wide .item-description{
+
 }
 
 .modal-item-details .item-retailer{

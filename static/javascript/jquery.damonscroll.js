@@ -42,6 +42,7 @@
     Plugin.prototype = {
 
         init: function() {
+
             this.is_animating = false;
             this.anim_duration = 900;
             this._next_page = this.options.first_page || 2;
@@ -109,7 +110,7 @@
             this.handler.prev_page();
         },
         onScroll: function() {
-            if (this.handler.get_percentage(this.element).p > this.options.threshold_percent){
+            if (this.handler.get_percentage(this.element).p > this.options.threshold_percent && !this._loading && !this._no_more_items){
                 this.procure_elements()
             }
 
@@ -174,9 +175,11 @@
             if (this._no_more_items){
                 return false
             }
-            if (!this._loading){
+            if (!this._loading && !this._no_more_items){
+                console.log('procure_elements')
                 this._loading = true;
                 var self = this;
+                console.log('calling ajax')
                 $.ajax({
                         url: '?page=' + this._next_page + '&item_per_page=' + this.num_per_page,
                         success: function(data) {
@@ -184,6 +187,10 @@
 
                             if (! items.length){
                                 self._no_more_items = true;
+                            }
+                            if ($(data).find('#stop_loading_more_stuff').length){
+                                self._no_more_items = true;
+                                console.log('no more...')
                             }
 
                             self.items_to_add= items;

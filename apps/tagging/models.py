@@ -482,6 +482,8 @@ class Tag(models.Model):
         self.slug = slugify(self.name)
         super(Tag,self).save(*args,**kwargs)
 
+
+
 class TaggedItem(models.Model):
     """
     Holds the relationship between a tag and the item being tagged.

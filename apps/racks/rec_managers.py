@@ -12,6 +12,7 @@ class RecommenderManager(ModelTaggedItemManager):
     MIN_RECOMMENDATION_VALUE = 0
     MIN_SIMILARITY_VALUE = 0.01
     MIN_CONTENT_BASED_RECOMMENDATION_VALUE = 0.01
+
     
     def get_best_items_for_user(self, user, user_list, item_list, min_value=MIN_RECOMMENDATION_VALUE):
         user_item_matrix = self.create_matrix(user_list, item_list)

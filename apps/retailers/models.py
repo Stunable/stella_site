@@ -166,6 +166,9 @@ class RetailerProfile(models.Model):
     #         return False
     #     return True
         
+    def get_absolute_url(self):
+        return '/shop/brand/%s'%self.slug
+
     @property
     def logo_image(self):
         """Gets profile picture as a thumbnail and returns the url or returns the default image"""
@@ -246,9 +249,19 @@ class RetailerProfile(models.Model):
         else:
             return "No Returns"
 
-
     def get_APIs(self):
         return APIConnection.objects.filter(retailer_profile=self).select_related('ShopifyConnection','PortableConnection')
+
+    def get_more(self):
+        return {'type' : 'Retailers','list':RetailerProfile.objects.filter(approved=True).exclude(id=self.id).order_by('?')[:3]}
+
+    def get_items(self):
+        return Item.objects.carousel_items().filter(_retailer=self).order_by('-created_date')
+
+    def get_image_url(self):
+        if self.get_items().count():
+            return self.get_items()[0].get_image_url()
+
 
 @receiver(post_save, sender=RetailerProfile)
 def retailer_profile_saved(sender, instance, created, **kwargs):
@@ -263,9 +276,6 @@ def retailer_profile_saved(sender, instance, created, **kwargs):
 
         instance.welcome_message_sent = True
         instance.save()
-
-
-
 
 
 

@@ -295,6 +295,9 @@ class Item(models.Model,listImageMixin):
     def __unicode__(self):
         return self.name
 
+    def get_image_url(self):
+        return self.get_image().small.url
+
     def make_featured_pretty(self):
         FI = self.get_image_object()
         if FI:
@@ -473,8 +476,14 @@ class Item(models.Model,listImageMixin):
 
     def set_price_text(self):
         self.price_text = self.price_range_text()
-        
 
+
+    def get_related(self,limit=3):
+        return Item.objects.related_to(self,num=limit)
+        
+    def get_more(self):
+        return {'type' : 'Item','list':self.get_related(limit=3)}
+ 
 
 class VariationHold(models.Model):
     date_created = models.DateTimeField(default=datetime.datetime.now,blank=True)

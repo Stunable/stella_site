@@ -169,12 +169,20 @@ def item_modal(request, slug, template='racks/item_modal.html', ctx=None):
                 'variations_by_color': item.types.select_related('size').filter(inventory__gte=1,approved=True).order_by('custom_color_name')
                 }) 
                
-    if request.is_ajax():
+    if request.is_ajax() and not request.GET.get('page',None):
         return direct_to_template(request, template, ctx)
 
-    ctx['direct_link_item'] = item
+    if request.GET.get('similar',None):
+        pass
+    else:
+        ctx['direct_link_item'] = item
     ctx['current'] = slug
-    return _all(request,ctx=ctx)
+    ctx['object'] = item
+
+    qs = item.get_related(limit=None)
+
+
+    return _all(request,ctx=ctx,query_set=qs)
 
 def divide_into_list(list_item):    
     return list_item
@@ -187,12 +195,13 @@ def flavor(request, group, slug, mode=None,template='racks/new_carousel.html'):
 
 
     query_set = Item.objects.with_any(
-            get_object_or_404(Flavor,group=group, slug=slug).get_contained_tags()
+            get_object_or_404(Flavor, group=group, slug=slug).get_contained_tags()
         ).filter(approved=True,is_available=True)
 
     get_context_variables(ctx, request)
     
     ctx['current'] = slug
+    ctx['object'] = Flavor.objects.get(slug=slug,group=group)
     
     return pagination(request, ctx, template, query_set)
 
@@ -213,6 +222,7 @@ def carousel(request, slug, mode=None,template='racks/new_carousel.html'):
 
     if current_tag:
         ctx['current'] = current_tag.slug
+        ctx['object'] = current_tag
     get_context_variables(ctx, request)
     
     return pagination(request, ctx, template, query_set)
@@ -229,6 +239,7 @@ def daily(request, slug, mode=None,template='racks/new_carousel.html'):
    
     if current_tag:
         ctx['current'] = current_tag.slug
+        ctx['object'] = current_tag
     get_context_variables(ctx, request)
     
     return pagination(request, ctx, template, query_set)
@@ -259,12 +270,18 @@ def stylist(request, slug, template="racks/new_carousel.html"):
 
     get_context_variables(ctx, request)
 
-    retailer = RetailerProfile.objects.get(slug=slug)
+    try:
+        retailer = RetailerProfile.objects.get(slug=slug)
+        query_set = retailer.get_items()
+    except:
+        retailer = RetailerProfile.objects.none()
+        query_set = Item.objects.none()
     
     
-    query_set = Item.objects.carousel_items().filter(_retailer=retailer).order_by('-created_date')
+    
 
     ctx['current'] = slug
+    ctx['object'] = retailer
         
     return pagination(request, ctx, template, query_set)
 
@@ -272,11 +289,9 @@ def new(request, template="racks/new_carousel.html"):
     ctx = {}
 
     ctx['current'] = "new"
-    get_context_variables(ctx, request)
-    
-    begin_date = datetime.date.today() - timedelta(days=14)
-    
-    query_set = Item.objects.carousel_items().filter(created_date__gt=begin_date).order_by('created_date')
+    get_context_variables(ctx, request)    
+    query_set = Item.objects.carousel_items().order_by('created_date')
+    ctx['object'] = query_set[0]
         
     return pagination(request, ctx, template, query_set)
 
@@ -294,6 +309,7 @@ def _all(request, slug=None, template='racks/new_carousel.html',query_set = None
             if len(ctx['specials']):
                 ctx['current'] = ctx['specials'][0].slug
                 query_set = ctx['specials'][0].get_items()
+                ctx['object'] = query_set[0]
         
         if query_set is None:
             if request.GET.get('item_id', None):
@@ -330,6 +346,9 @@ def pagination(request, ctx, template, query_set):
             page = int(page)
         except:
             page = 1
+
+
+        print 'getting items...'
         _from = item_per_page * page
         _to = _from+item_per_page
         next = page+1
@@ -342,6 +361,13 @@ def pagination(request, ctx, template, query_set):
     
         ctx['next'] = 3
     ctx['item_per_page'] = 8
+
+
+    if len(ctx['rack_items_list']) < 1:
+        print "NO MORERREEREREREER"
+        ctx['more_like_this'] = ctx['object'].get_more()
+    else:
+        print ctx['rack_items_list']
             
     return direct_to_template(request, template, ctx)
 
@@ -420,6 +446,8 @@ def sale_items(request, template="racks/new_carousel.html"):
     query_set=Item.objects.carousel_items().filter(is_onsale=True)
 
     get_context_variables(ctx, request)
+
+    ctx['object'] = query_set[0]
     
     return pagination(request, ctx, template, query_set)
 
@@ -428,6 +456,8 @@ def recent_added_items(request, template="racks/item_list.html"):
     thirty_days_ago = today - datetime.timedelta(days=30)
     qs = Item.objects.filter(rack_item__created_date__gte=thirty_days_ago)
     ctx = {'items': qs, "title": "recently added"}
+    ctx['object'] = qs[0]
+
     return direct_to_template(request, template, ctx)
 
 
