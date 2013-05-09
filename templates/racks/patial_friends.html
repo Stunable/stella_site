@@ -1,0 +1,9 @@
+
+	<div class="slide items-{{ item_per_page }}" data-nextpage="{{next}}"style="width: 860px; float:left;">
+		{% for f in rack_items_list %}
+	        <div class="item">
+                {{f.name}}
+            </div>
+		{% endfor %}
+	</div>
+	

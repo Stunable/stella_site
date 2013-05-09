@@ -84,6 +84,8 @@ class UserProfile(models.Model,ProfileBase):
     
     default_cc = models.CharField(max_length=6, null=True, blank=True, editable=False)
     first_login = models.BooleanField(default=True)
+
+    wishlist_is_public = models.BooleanField(default=True,blank=True)
     
     def __unicode__(self):
         try:
@@ -111,11 +113,6 @@ def postSaveUser(sender, instance, created, **kwargs):
             UP.set_default_tags()
     except:
         pass
-    
-
-
-
-        
 
 
 class AnonymousProfile(models.Model,ProfileBase):

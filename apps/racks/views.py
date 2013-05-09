@@ -140,9 +140,11 @@ def wishlist(request):
 
 
 def friends(request):
-    qs = WishListItem.objects.none()
+    qs = request.session.get('fb_friends',[])
 
-    return _all(request,template='racks/friends.html',query_set=qs,is_wishlist=True)
+    ctx = {'friends':True}
+
+    return _all(request,ctx=ctx,template='racks/friends.html',query_set=qs,is_wishlist=True)
 
 
 def variation_modal(request,wishlist_item_id, template='racks/item_modal.html'):
@@ -341,6 +343,8 @@ def pagination(request, ctx, template, query_set):
         template = 'racks/patial_carousel.html'
         if ctx.has_key('is_wishlist') and ctx['is_wishlist']:
             template = 'racks/patial_wishlist.html'
+        if ctx.get('friends','None'):
+            template = 'racks/patial_friends.html'
 
         try:
             page = int(page)
@@ -364,10 +368,11 @@ def pagination(request, ctx, template, query_set):
 
 
     if len(ctx['rack_items_list']) < 1:
-        print "NO MORERREEREREREER"
-        ctx['more_like_this'] = ctx['object'].get_more()
+        if ctx.has_key('object'):
+            ctx['more_like_this'] = ctx['object'].get_more()
     else:
-        print ctx['rack_items_list']
+        print 'outlist:',ctx['rack_items_list']
+        print template
             
     return direct_to_template(request, template, ctx)
 

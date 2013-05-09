@@ -5,16 +5,28 @@
 
 
 {% block content %}
-<div class="info-modal"></div>
-<div class="content {% block content-class%}carousel{%endblock%} friends" id="page-content" >
-    
-    <div class="inner-page-content">
+<div class="content {% block content-class%}carousel{%endblock%}wishlist" id="page-content" >
 
-        <div id="maincontent">
-        	<div class="content-message">
-        		{{ CMS.friends_placeholder|safe }}
-    		</div>
-        </div>
+    <div data-type="list" data-orient="vertical" class="scrollbox listbox inner-page-content item-list medium">
+
+        
+            <!-- <div class="sizecontrols"><span>tiny</span><span>small</span><span>medium</span>large</span></div> -->
+            <div  id="container" >
+
+                                
+                {% for f in rack_items_list %}
+                   <div class="item">
+                   		{{f.name}}
+                   </div>
+
+                {% empty %}
+                <div class="content-message">
+                    {{ CMS.friends_placeholder|safe }}
+                </div>
+                {% endfor %}
+                               
+
+            </div>
       
     </div>
 </div>

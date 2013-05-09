@@ -334,8 +334,5 @@ def delete(request, user_id, template="friends/admirers.html"):
 
 @json_view
 def get_friends(request):
-    friends = []
-    for obj in Friendship.objects.friends_for_user(request.user):
-        friends.append(obj['friend'].first_name)
-        friends.append(obj['friend'].last_name)
-    return {'friends': friends}
+    return Friendship.objects.friends_for_user(request.user)
+
