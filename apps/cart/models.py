@@ -67,6 +67,7 @@ class Checkout(models.Model):
     ref = models.CharField(max_length=250, blank=True, null=True)
     retailer = models.ForeignKey(User,blank=True,null=True,related_name="retailer_checkout_set")
     purchaser = models.ForeignKey(User,blank=True,null=True,related_name="purchaser_checkout_set")
+    messages_sent = models.BooleanField(default=False,blank=True)
 
     def check_complete(self):
         try:
@@ -80,7 +81,6 @@ class Checkout(models.Model):
         self.save()
 
     def save(self,*args,**kwargs):
-
         super(Checkout, self).save()
         if not self.ref:
             try:
@@ -89,6 +89,26 @@ class Checkout(models.Model):
             except Exception, e:
                 print e
                 pass
+
+    def send_notifications(self):
+        if not self.messages_sent:
+            url = u"%s%s" % (
+            settings.RETAILER_SUBDOMAIN.rstrip('/'),
+            reverse("retailer_order_history"),
+            )+'#'+self.ref
+
+            send_notification_on("retailer-order-placed", recipient =self.retailer, checkout = self, url=url)
+
+            url = u"%s%s" % (
+            settings.WWW_ROOT.rstrip('/'),
+            reverse("order_history"),
+            )+'#'+self.ref
+
+            send_notification_on("shopper-order-placed", recipient = self.purchaser, checkout = self, url=url)
+
+            self.messages_sent = True
+            self.save()
+
             
 
 PURCHASE_STATUS_CHOICES = (
@@ -110,7 +130,7 @@ class Purchase(models.Model):
     purchaser = models.ForeignKey(User)
     transaction = models.ForeignKey(WePayTransaction)
     ref = models.CharField(max_length=250, blank=True, null=True)
-    purchased_at = models.DateTimeField(auto_now=True)
+    purchased_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=32,choices=PURCHASE_STATUS_CHOICES,default="placed")
     shipping_method = models.ForeignKey(ShippingType, blank=True, null=True)
     shipping_address = models.ForeignKey('accounts.ShippingInfo',blank=True,null=True)
@@ -125,20 +145,9 @@ class Purchase(models.Model):
             # new order has been made
             self.ref = base35encode(self.purchaser.id+10000)+'S'+base35encode(self.id+10000)
             self.save()
-            # notify retailer
-            self.notify_retailer()
 
         self.checkout.check_complete()
             
-    def notify_retailer(self):
-        url = u"%s%s" % (
-            settings.RETAILER_SUBDOMAIN.rstrip('/'),
-            reverse("retailer_order_history"),
-        )
-
-        send_notification_on("retailer-order-placed", retailer=self.checkout.retailer,
-                                      recipient=self.checkout.retailer, shopper=self.purchaser, url=url)
-        print 'notified retailer'
     
     def name(self):
         return "Stunable.com"
@@ -209,7 +218,17 @@ class Purchase(models.Model):
                         self.save()
                         # self.transaction.capture_funds()
 
+    def send_ship_reminder(self):
+        url = u"%s%s" % (
+            settings.RETAILER_SUBDOMAIN.rstrip('/'),
+            reverse("retailer_order_history"),
+        )+'#'+self.checkout.ref
 
+        send_notification_on("retailer-ship-reminder", recipient = self.checkout.retailer, checkout = self.checkout, purchase=self, url=url)
+
+
+    def send_notifications(self):
+        self.send_ship_reminder()
 
 class ShipmentTrackingEvent(models.Model):
 
@@ -270,16 +289,44 @@ class Shipment(models.Model):
 
         events = self.shipmenttrackingevent_set.all().order_by('-date')
         if events.count():
-
             E = events[0]
             self.status = E.description
             if E.description == 'Delivered':
                 self.delivery_date = E.date
                 self.purchases.all().update(status='delivered')
+                self.send_shipment_delivered_email(self.purchases.all()[0].checkout)
             if E.description == "Picked up":
                 self.ship_date = E.date
                 self.purchases.all().update(status='shipped')
+                self.send_shipment_email(self.purchases.all()[0].checkout)
             self.save()
+
+
+    def send_notifications(self):
+        C = self.purchases.all()[0].checkout
+        self.send_shipment_emails(C)
+        self.send_shipment_delivered_email(C)
+        
+
+    def send_shipment_delivered_email(self,checkout):
+        send_notification_on("retailer-purchase-delivered", recipient = checkout.retailer, checkout = checkout)
+
+
+
+    def send_shipment_emails(self,checkout):
+        pass
+
+        track_url = 'https://www.fedex.com/fedextrack/?tracknumber=%s'%self.tracking_number
+        url = u"%s%s" % (
+            settings.WWW_ROOT.rstrip('/'),
+            reverse("order_history"),
+            )+'#'+checkout.ref
+
+        send_notification_on("user-purchase-shipped", recipient = checkout.purchaser, checkout = checkout, track_url=track_url, url=url)
+
+
+
+        send_notification_on("retailer-purchase-shipped", recipient = checkout.retailer, checkout = checkout, track_url=track_url, url=url)
 
 
 
@@ -296,11 +343,8 @@ def payment_was_successful_callback(sender, **kwargs):
 
     print 'retailer:',kwargs['item'].retailer.user
     retailer = kwargs['item'].retailer
-
     itemtype = kwargs['item'].item_variation
     
-
-
     try:
         checkout = Checkout.objects.get(cart=kwargs['item'].cart, retailer=retailer.user)
     except:
@@ -317,8 +361,9 @@ def payment_was_successful_callback(sender, **kwargs):
     )
             
     p.save()
-
     p.remove_inventory()
+
+    checkout.send_notifications()
 
 
 

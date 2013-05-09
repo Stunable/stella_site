@@ -230,7 +230,7 @@ def send_notification_on(template, **kwargs):
     t = Template(email_template.body)
     body = t.render(ctx)
     
-    send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [kwargs['recipient'].email])
+    send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [kwargs['recipient'].email],[settings.ADMIN_EMAIL])
 
 def create_notice_type(label, display, description, default=2, verbosity=1):
     """

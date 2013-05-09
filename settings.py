@@ -27,7 +27,7 @@ CONTACT_LIST = (
    ('More Dev Alerts', 'admin@stunable.com'),
 )
 
-
+ADMIN_EMAIL = 'admin@stunable.com'
 RETAILER_EMAIL = 'stylists@stunable.com'
 RETAILER_SUBDOMAIN = 'https://stylists.stunable.com/'
 
@@ -81,7 +81,7 @@ sys.path.append(APPS_ROOT)
 # Email settings
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'NOREPLY@STUNABLE.COM'
-EMAIL_HOST_PASSWORD = 'Numba1!!'
+EMAIL_HOST_PASSWORD = 'Rockininthefreeworld1'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 

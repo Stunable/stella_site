@@ -17,7 +17,7 @@
         {% for checkout in checkouts %}
         {% with checkout.purchase_set.all.0 as first_purchase %}
         <div class="cart-retailer-group">
-                <table cellpadding="0" cellspacing="0" width="100%" border="0" class="retailer-item-group">
+                <table id="{{checkout.ref}}" cellpadding="0" cellspacing="0" width="100%" border="0" class="retailer-item-group">
                             <tr>
                                 <td colspan="2" class="retailer-header">
                                     {{first_purchase.purchased_at}}<br>

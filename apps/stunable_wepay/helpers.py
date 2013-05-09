@@ -88,18 +88,8 @@ class WePayPayment(object):
 
                 wpt.save()
 
-                # print 'authorized payment for ',item
                 payment_was_successful.send(sender=wpt, item=item,shipping_address=self.shipping_address)
-
-                
-                           
-
-                email_message = """
-                    a new checkout has been created:
-                    %s
-                """%str(data_success)
-
-                send_mail('new checkout', email_message, settings.DEFAULT_FROM_EMAIL, ['gdamon@gmail.com','admin@stunable.com'])
+           
 
             if len(success) == len(items):
                 return True, success , error

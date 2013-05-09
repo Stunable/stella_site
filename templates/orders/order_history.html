@@ -20,7 +20,7 @@
 </div>
 <div class="body-copy common">
 {% for checkout in checkouts %}
-        <table id="checkout-table">
+        <table id="{{checkout.ref}}">
             <tr>
                 <th>Picture</th>
                 <th style="width: 17%;">Purchase Date</th>
