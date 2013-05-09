@@ -361,7 +361,6 @@ def check_checkout(request):
 
     ok = cart.pre_flight_checkout()
 
-    # return direct_to_template(request, 'cart/cart.html', {'cart_failed':cart})
     if ok:
         return redirect(reverse('express_checkout'))
     else:

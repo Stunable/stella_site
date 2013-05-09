@@ -2297,6 +2297,10 @@ div.cart_item_added.fail{
 	display:inline;
 }
 
+.inner-page-content>#cart_fail{
+	display:none;
+}
+
 #cart_fail{
 	width:560px;
 	text-align: center;
