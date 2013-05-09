@@ -177,7 +177,7 @@ class Kart(models.Model):
         for v in variation_list:
             id_list = [v.id for v in variation_list]
             self.variationhold_set.filter(variation__in=id_list).delete()
-            KartItem.objects.get(kart=self,item_variation__in=id_list).delete()
+            KartItem.objects.filter(id__in=id_list).delete()
 
 
 
@@ -417,7 +417,9 @@ class Kart(models.Model):
             if not ki.validate_inventory():
                 self.failed_inventory_check.append(ki)
 
-        # self.bulk_remove(self.failed_inventory_check)
+        print self.failed_inventory_check
+
+        self.bulk_remove(self.failed_inventory_check)
 
         if not len(self.failed_inventory_check):
             return True

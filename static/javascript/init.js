@@ -251,8 +251,10 @@ var stunable = {
             }
           })
 
-
-        
+  if ($('#cart_fail').length){
+    $('#cart_fail').modal()
+  }
+          
 
     },
       retailers:function(){

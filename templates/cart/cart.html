@@ -13,15 +13,21 @@
 
 
 {% if cart_failed.failed_inventory_check %}
-    <div id="cart_fail">   
+    <div id="cart_fail" class="info_modal bootstrap">   
             Bad news.  These items got snapped up since you added them to your cart. 
 
-        {% for item in cart_failed.failed_inventory_check %}
-        <div>
-            <img src="{{item.picture}}">
-            <span>{{item.retailer}}: {{item.item_name}}</span>
+        <div class="scroll_list">
+            {% for item in cart_failed.failed_inventory_check %}
+            <div>
+                <img src="{{item.picture}}">
+                <span>{{item.retailer}}: {{item.item_name}}</span>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        <div>
+            <a href="/shop" class="btn">Back to Shopping</a>
+            <a href="{{SECURE_ROOT}}/cart/check_checkout" class="btn">Checkout Anyway</a>
+        </div>
 
     </div>
 {% endif %}
@@ -47,7 +53,7 @@
            {% if request.user.is_authenticated %}
                <a class="btn big btn-primary " href="{{SECURE_ROOT}}/cart/check_checkout">checkout</a>
                {% else %}
-               <a class="btn big btn-primary login-check" data-href="{{SECURE_ROOT}}/cart/details">checkout</a>
+               <a class="btn big btn-primary login-check" href="{{SECURE_ROOT}}/cart/check_checkout">checkout</a>
 
            {% endif %}
                 <br>
