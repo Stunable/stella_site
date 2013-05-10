@@ -343,7 +343,8 @@ def pagination(request, ctx, template, query_set):
         template = 'racks/patial_carousel.html'
         if ctx.has_key('is_wishlist') and ctx['is_wishlist']:
             template = 'racks/patial_wishlist.html'
-        if ctx.get('friends','None'):
+        
+        if ctx.get('friends',None):
             template = 'racks/patial_friends.html'
 
         try:
