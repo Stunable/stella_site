@@ -1,6 +1,6 @@
 ---
 # easy Ubuntu nginx playbook as an example.
-- hosts: stunable:&dev
+- hosts: stunable
   user: ubuntu 
   sudo: True
 
@@ -29,7 +29,7 @@
      - include: server_setup/tasks/add-people.yml 
      - include: nginx/tasks/nginx-task.yml
      - include: server_setup/tasks/install-app.yml
-     - include: postgres/tasks/setup-postgres-app-task.yml
+     # - include: postgres/tasks/setup-postgres-app-task.yml
      - include: server_setup/tasks/update-app.yml
 
   handlers:

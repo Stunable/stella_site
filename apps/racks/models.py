@@ -35,8 +35,8 @@ S3BotoStorage.IGNORE_IMAGE_DIMENSIONS = False
 if settings.DEBUG:
     queued_s3storage = QueuedStorage(
         'django.core.files.storage.FileSystemStorage',
-        # 'django.core.files.storage.FileSystemStorage',
-        'storages.backends.s3boto.S3BotoStorage'
+        'django.core.files.storage.FileSystemStorage',
+        # 'storages.backends.s3boto.S3BotoStorage'
         )
 else:
     queued_s3storage = QueuedStorage(
