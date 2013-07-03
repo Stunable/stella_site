@@ -14,7 +14,7 @@
      app_port: 8080
      project_root: /home/ubuntu/$app_name
      repo: git@github.com:Stunable/stella_site.git
-     repo_branch: carouselRevision
+     repo_version: carouselRevision
      manage_path: $project_root/project/
      project_user: ubuntu
      static_path: static

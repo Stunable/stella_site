@@ -14,7 +14,7 @@ from django.utils.safestring import mark_safe
 from django.forms.models import BaseInlineFormSet
 
 
-from weekday_field.forms import WeekdayFormField,AdvancedWeekdayFormField
+from apps.weekday_field.forms import WeekdayFormField,AdvancedWeekdayFormField
 
 
 class AdminImageMixin(object):
