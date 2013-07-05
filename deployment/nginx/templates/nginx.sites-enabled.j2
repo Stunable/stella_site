@@ -46,12 +46,6 @@ server{
         access_log      off;
         log_not_found   off;
     }
-    
-    location /robots.txt {
-        root            {{project_root}}/project/{{static_path}};
-        access_log      off;
-        log_not_found   off;
-    }
 
     location /favicon.ico {
         root            {{project_root}}/project/{{static_path}}/;
