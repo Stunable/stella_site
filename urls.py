@@ -40,7 +40,7 @@ admin.autodiscover() # enables admin
 
 urlpatterns = patterns('',
 
-                       
+                       url(r'^check_login/$', 'apps.accounts.views.check_login' ,name='check_login'),
                       (r'^robots\.txt$', direct_to_template,
                          {'template': 'robots/main.txt', 'mimetype': 'text/plain'}),
                       url(r'^$', 

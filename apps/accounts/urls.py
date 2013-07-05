@@ -9,8 +9,6 @@ from accounts.views import add_facebook_friend
 
 urlpatterns = patterns('',
     url(r'^profile$', profile_edit ,name='profile_edit'),
-    url(r'^check_login/$', check_login ,name='check_login'),
-
     url(r'^avatar/upload', avatar_upload, name='avatar_upload'),
     url(r'^logout$',
        auth_views.logout,

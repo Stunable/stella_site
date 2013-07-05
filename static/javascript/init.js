@@ -20,7 +20,7 @@ var stunable = {
       $('.login-check').click(function(e){
           e.preventDefault();
           var dest = $(this).data('href')
-          $.post('/accounts/check_login/',function(data){
+          $.post('/check_login/',function(data){
               console.log(data)
               if (data.result){
                 window.location = dest;
