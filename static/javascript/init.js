@@ -18,9 +18,9 @@ var stunable = {
       init_form_errors();
 
       $('.login-check').click(function(e){
-        e.preventDefault();
+          e.preventDefault();
           var dest = $(this).data('href')
-          $.post('/accounts/check_login',function(data){
+          $.post('/accounts/check_login/',function(data){
               console.log(data)
               if (data.result){
                 window.location = dest;
