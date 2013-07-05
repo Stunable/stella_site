@@ -5,6 +5,8 @@ from contact_form.views import contact
 
 
 urlpatterns = patterns('',
+    url(r'^robots\.txt$', direct_to_template,
+                         {'template': 'robots/stylists.txt', 'mimetype': 'text/plain'}),
     url(r'^platforms/', include('apps.shopping_platforms.urls')),
 
     url(r'^accounts/', include('apps.accounts.urls')),
