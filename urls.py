@@ -40,11 +40,10 @@ admin.autodiscover() # enables admin
 
 urlpatterns = patterns('',
 
-                       url(
-                        (r'^robots\.txt$', direct_to_template,
+                       
+                      url(r'^robots\.txt$', direct_to_template,
                          {'template': 'robots/main.txt', 'mimetype': 'text/plain'}),
-
-                        r'^$', 
+                      url(r'^$', 
                            'apps.racks.views.gethome',
                            name="home"),
                        url(r'^retailers/', include('retailers.urls')),
