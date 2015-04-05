@@ -12,9 +12,11 @@ Tempita==0.5.1
 WebError==0.10.3
 WebOb==1.2.1
 beautifulsoup4==4.1.3
-bootstrap==0.1dev
-couchpy==0.2dev
-
+<<<<<<< Updated upstream
+#bootstrap==0.1dev
+#couchpy==0.2dev
+=======
+>>>>>>> Stashed changes
 django-invitation==1.0
 django-registration==0.7
 django-social-auth==0.7.0
@@ -45,9 +47,20 @@ wepay
 fedex
 xlrd
 django-sslify
-<<<<<<< HEAD
-=======
 django-mass-edit
 oauth
 gdata
->>>>>>> ca5e664ce4d56c43286a471de0e9dfa1bc5c8fbc
+ShopifyAPI
+django-celery
+django-kombu
+redis
+psycopg2
+boto
+django-queued-storage
+django-storages
+johnny-cache
+django-redis-cache
+django-redis-sessions==0.3.0
+django-debug-toolbar
+django-weekday-field
+

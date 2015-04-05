@@ -170,7 +170,7 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
     'django.template.loaders.eggs.Loader',
-    'django.template.loaders.app_directories.load_template_source',
+    # 'django.template.loaders.app_directories.load_template_source',
 #     'django.template.loaders.eggs.Loader',
 )
 
@@ -269,7 +269,7 @@ INSTALLED_APPS = (
     'djcelery',
     'storages',
     'queued_storage',
-    'debug_toolbar',
+    # 'debug_toolbar',
     'shopping_platforms',
     'stunable_search'
 )

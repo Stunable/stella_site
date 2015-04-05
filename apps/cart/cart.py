@@ -234,10 +234,11 @@ class Cart:
             option = self.get_shipping_options().filter(name=name)[0]
             self.cart.shipping_method = option
             self.cart.save()
+
+            self.shipping_method = self.cart.shipping_method
+
         except Exception,e:
             print 'error setting shipping',e
-
-        self.shipping_method = self.cart.shipping_method
 
     def check_fee_cost_per_retailer(self):
         for ret,itemlist in self.items_by_retailer.items():
