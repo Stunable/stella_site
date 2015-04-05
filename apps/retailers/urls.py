@@ -1,12 +1,11 @@
 from django.conf.urls.defaults import *
-from django.views.generic.simple import direct_to_template,redirect_to
+from django.views.generic import TemplateView, RedirectView
 from retailers.views import *
 from contact_form.views import contact
 
 
 urlpatterns = patterns('',
-    (r'^robots\.txt$', direct_to_template,
-                         {'template': 'robots/stylists.txt', 'mimetype': 'text/plain'}),
+    (r'^robots\.txt$', TemplateView.as_view(template_name='robots/stylists.txt')),
     url(r'^platforms/', include('apps.shopping_platforms.urls')),
 
     url(r'^accounts/', include('apps.accounts.urls')),

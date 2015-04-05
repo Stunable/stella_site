@@ -14,7 +14,7 @@
     {% if notice.notice_type.display == "friends_invite" %}
         {% if notice.unseen %}
         <li class="friend-notice-item">
-            <a class="item-ref" href="{% url notification_notices %}">{{ notice.sender }} wants to shop with you! (accept or decline)</a>
+            <a class="item-ref" href="{% url 'notification_notices' %}">{{ notice.sender }} wants to shop with you! (accept or decline)</a>
         </li>
         {% endif %}
     {% endif %}

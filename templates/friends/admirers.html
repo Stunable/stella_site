@@ -146,7 +146,7 @@
 </script>
 <div class="section intro clearfix">
 	<h2>your admirers</h2>
-	<form action="{% url friend_search %}" method="GET">
+	<form action="{% url 'friend_search' %}" method="GET">
 		<div class="clearfix" id="filter-form">
 			<label for="filter-by" class="unseen">Filter by</label>
 			<select name="filter" id="filter">
@@ -164,7 +164,7 @@
 		</div>
 	</form>
 	<p class="btn-wrap" id="invite-admirers">
-		<a href="{% url invite_modal %}" class="btn item-ref">Invite More Friends</a>
+		<a href="{% url 'invite_modal' %}" class="btn item-ref">Invite More Friends</a>
 	</p>
 </div>
 <div class="mg-admirers clearfix">

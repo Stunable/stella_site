@@ -14,7 +14,7 @@
         <a href="" data-target="#link_holder_item_{{item.id}}" data-href="{% url item_vote item.pk 'down' %}" class="icon disapprove refclick">No way.</a>
     </p>
     <p class="icon-link hanger">
-        <a href="" data-href="{% url add_item_from_modal %}" data-value="{{ item.id }}" class="icon rack-icon refclick">Rack it.</a>
+        <a href="" data-href="{% url 'add_item_from_modal' %}" data-value="{{ item.id }}" class="icon rack-icon refclick">Rack it.</a>
     </p>
     <p class="icon-link yes-no yes yes_{{item.pk}}">
         <a href="" data-target="#link_holder_item_{{item.id}}" data-href="{% url item_vote item.pk 'up' %}" class="icon approve refclick">Yes, please!</a>

@@ -15,10 +15,10 @@
 				<span class="text">Your Racks:</span>
 			</li>
 			<li class="tab" id="tab-private">
-				<a href="{% url racks_index %}" title="" class="text-link" id="current-tab"><span>Private</span></a>
+				<a href="{% url 'racks_index' %}" title="" class="text-link" id="current-tab"><span>Private</span></a>
 			</li>
 			<li class="tab" id="tab-shared">
-				<a href="{% url list_shared_racks %}" title="View your shared racks." class="text-link">Shared</a>
+				<a href="{% url 'list_shared_racks' %}" title="View your shared racks." class="text-link">Shared</a>
 			</li>
 		</ul>
 		<br/>
@@ -36,7 +36,7 @@
 						</ul>
 					</div>
 					<p id="add-rack">
-						<a href="{% url racks_add %}" class="icon plus" title="Create a New Rack">Add a New Rack</a>
+						<a href="{% url 'racks_add' %}" class="icon plus" title="Create a New Rack">Add a New Rack</a>
 					</p>
 				</div><!--/.rack-list-->
 				<div id="rack-contents">

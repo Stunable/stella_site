@@ -36,11 +36,11 @@ Do the following if you're using your customized build of modernizr (http://www.
   		{% if request.user.is_authenticated %}
   		<a style="float:right;margin:10px;color:white;font-size:1.2em;text-decoration:none" href="/accounts/logout" title="Sign out of Stunable." class="text-link">Log Out</a>
   		{% else %}
-  		<form style="float:right;text-align:right;position:relative;top:3px;right:10px;display:inline-block" action="{% url auth_login %}" class="user-entry php-form bootstrap" id="signin-form" method="POST">
+  		<form style="float:right;text-align:right;position:relative;top:3px;right:10px;display:inline-block" action="{% url 'auth_login' %}" class="user-entry php-form bootstrap" id="signin-form" method="POST">
 			{% csrf_token %}
 			<input width:"32" id="tester" class="txt" name="email" type="text" placeholder="email address"/>
 			<input  class="txt pass" name="password" type="password" placeholder="password"/>
-			<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{% url product_list %}{% endif %}" />
+			<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{% url 'product_list' %}{% endif %}" />
 
 				<input class="btn" type="submit" value="login" />		
 
@@ -103,7 +103,7 @@ Do the following if you're using your customized build of modernizr (http://www.
 	<div style="width:600px" id="shopify_login">
 		<div class="center">
 		<img class="logo" src="{{ STATIC_URL }}images/shopify_login.png" alt="shopify">
-		<form action="{% url apps.shopify_app.views.authenticate %}" method="post">{% csrf_token %}     
+		<form action="{% url 'apps.shopify_app.views.authenticate' %}" method="post">{% csrf_token %}     
 		  <label for='shop'><strong>Enter The URL of your Shopify Shop</strong>
 		   (YOUR SHOP NAME).myshopify.com
 		  </label>

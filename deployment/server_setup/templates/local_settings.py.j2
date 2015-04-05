@@ -1,19 +1,20 @@
 BROKER_URL = 'redis://localhost:6379/{{redis_db_number}}'
 
+ALLOWED_HOSTS=['*']
 
 DATABASES = {
     "default": {
         # Ends with "postgresql_psycopg2", "mysql", "sqlite3" or "oracle".
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         # DB name or path to database file if using sqlite3.
-        "NAME": "{{app_db_name}}",
+        "NAME": "{{db_name}}",
         # Not used with sqlite3.
         #"USER": "stunable",TODO:FIX THIS
-        "USER": "{{app_name}}",
+        "USER": "{{db_user}}",
         # Not used with sqlite3.
         "PASSWORD": "{{app_pw}}",
         # Set to empty string for localhost. Not used with sqlite3.
-        "HOST": '{{postgres_host}}',
+        "HOST": '{{db_host}}',
         # Set to empty string for default. Not used with sqlite3.
         "PORT": "5432",
     }

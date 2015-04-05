@@ -1,8 +1,7 @@
 
 from racks.models import Item as Product
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, redirect, render
 from django.core.urlresolvers import reverse
-from django.views.generic.simple import direct_to_template, redirect_to
 from django.conf import settings
 from apps.accounts.forms import BillingInfoForm, ShippingInfoForm
 from django.http import HttpResponse, HttpResponseRedirect
@@ -111,7 +110,7 @@ def remove_from_cart(request, product_id):
 
 
 def get_cart(request, template="cart/cart.html"):
-    return direct_to_template(request, template, {})
+    return render(request, template, {})
 
 @login_required
 def order_history(request, template='orders/user_order_history.html'):

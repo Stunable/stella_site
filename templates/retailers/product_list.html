@@ -194,7 +194,7 @@
 <div class="section productlist body-copy bootstrap {% if not confirm %}not{% endif %}confirm">
     
     {% if action %}
-        <form class="action_submit" action="/item_action?next={% url product_list %}" method="post">
+        <form class="action_submit" action="/item_action?next={% url 'product_list' %}" method="post">
         <p class="emphasize"> Are you sure you want to delete the following items?</p>
         <br>
         <input type="hidden" name="confirm_{{confirm.action_name}}" value="True">
@@ -246,7 +246,7 @@
     <br><br>
     {% endif %}
     {% endif %}
-    <form class="action_submit" action="/item_action?next={% url product_list %}" method="post">
+    <form class="action_submit" action="/item_action?next={% url 'product_list' %}" method="post">
         {% if not confirm %}
         <select style="display:none" id="action_select" name="action_name">
             <option value="-------------">-------------</option>
@@ -292,7 +292,7 @@
     {% if confirm %}
    
         {% if action %}
-        <a href="{% url product_list %}"><input type="button" value="Cancel"></a>
+        <a href="{% url 'product_list' %}"><input type="button" value="Cancel"></a>
         <input style="display:inline;margin-right:20px;margin-top:15px" type="submit" value="Yes. I'm sure.">
         {% endif %}
     {% endif %}

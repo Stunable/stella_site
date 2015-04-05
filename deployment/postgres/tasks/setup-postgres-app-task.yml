@@ -1,9 +1,9 @@
   - name: enable ansible postgres 
     apt: pkg=python-psycopg2 state=installed
 
-  - name: create $app_name user 
-    postgresql_user: user=$app_name password=$app_pw role_attr_flags=CREATEDB login_host=$postgres_host login_password=$postgres_pw
-    # sudo_user: postgres
+  - name: create {{db_user}} user 
+    postgresql_user: db=template1 login_user=vepkenez user={{db_user}} password={{app_pw}} role_attr_flags=CREATEDB login_host={{db_host}} login_password=p00p0ny0u
+    ignore_errors: yes
 
   - name: create database
-    postgresql_db: db=$app_db_name owner=$app_name login_host=$postgres_host login_password=$postgres_pw template=template0 encoding='UTF8'
+    postgresql_db: db={{db_name}} owner={{db_user}} login_host={{db_host}} login_user={{db_user}} login_password={{app_pw}} template=template1 encoding='UTF8'

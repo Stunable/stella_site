@@ -21,7 +21,7 @@
     <p>
 Want to start shopping with Stunable? Request an invite below and we will get back to you as soon as we can!
     </p>
-    <form action="{% url invite_waitlist %}" class="user-entry" id="waitlist-form" method="POST">
+    <form action="{% url 'invite_waitlist' %}" class="user-entry" id="waitlist-form" method="POST">
         {% csrf_token %}
         <ul>
             {% for error in form.errors.values %}

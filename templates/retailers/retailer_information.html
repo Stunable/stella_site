@@ -78,7 +78,7 @@
         </h3>
         <br>
         <div class="retailer-wrapper">
-            <form style="margin: 0px; height: 0px;" action="{% url retailer_logo_upload %}" method="POST" id="avatar-upload-form" enctype="multipart/form-data" >
+            <form style="margin: 0px; height: 0px;" action="{% url 'retailer_logo_upload' %}" method="POST" id="avatar-upload-form" enctype="multipart/form-data" >
                 {% csrf_token %}
                 <input style="visibility: collapse" type="file" id="upload_avatar" name="company_logo">
             </form>
@@ -100,7 +100,7 @@
                 </p>
             </div>
             <div class="editable bootstrap">
-                <form action='{% url update_retailer_profile %}' method="POST">
+                <form action='{% url 'update_retailer_profile' %}' method="POST">
                     <textarea name="description">{{ retailer_profile.description }}</textarea>
                     <input type="hidden" name="account_page" value="yes" />
                     <input type="submit" class="btn btn-primary" value="Save"/>
@@ -218,7 +218,7 @@
             We currently offer shipping exclusively through Fedex.  Stunable strongly prefers that all orders are shipped within <strong>two business days.</strong> If this is not acceptable to you, please don't hesitate to <a href="mailto:stylists@stunable.com"><span style="font-size:1em;font-weight:bold">Email Us</span></a> 
         </p>
         <div class="editable">
-            <form action="{% url update_retailer_profile %}" method="POST">
+            <form action="{% url 'update_retailer_profile' %}" method="POST">
                 {{ form.shipping_type }}
                 <input type="hidden" name="account_page" value="yes" />
                 <label class="checkbox">

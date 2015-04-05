@@ -80,7 +80,7 @@
 	<h2>invite your friends</h2>
 				<p>inviting your friends to join <span class="identity">Stunable</span> will unlock discounts, allow you to share your clothes with new admirers and view the closets of others</p>
 </div>
-<form action="{% url friend_invite %}" class="user-entry" id="invitation-form1" method="POST">
+<form action="{% url 'friend_invite' %}" class="user-entry" id="invitation-form1" method="POST">
 	{% csrf_token %}
 	<p class="error_msg">
 		{{ form.non_field_errors }}

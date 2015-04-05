@@ -1,6 +1,6 @@
         <div id="addbuttons" class="expandable collapsed">
             <div class="click_to_expand"><a href=""><H1 class="big">Add Items</H1></a><br></div>
-            <div><a href="{% url add_item %}"><img src="/static/images/gui/add_item.png"></a></div>
+            <div><a href="{% url 'add_item' %}"><img src="/static/images/gui/add_item.png"></a></div>
             <div id="bulk_add_box" class="expandable collapsed">
                 <a href="" class="click_to_expand"><img src="/static/images/gui/add_lots_of_items.png"></a>
                 <p style="margin:10px">If you have lots of items to sell, and would like to upload them in large batches,  just follow these two steps:<br><br>
@@ -9,7 +9,7 @@
                     2.&nbsp unzip it, put your own files and information in it, and send it back right here.
 
                       <p>Uploads need to be <strong>.zip</strong> files with a .XLS file and then an image for each item.  Upload it here and you'll know what to do next.  Email us if you have questions</p>
-                <form class="long_process_submit_form" style="float:right" action="{% url bulk_upload %}" method="POST"enctype="multipart/form-data">
+                <form class="long_process_submit_form" style="float:right" action="{% url 'bulk_upload' %}" method="POST"enctype="multipart/form-data">
                     {{bulk_upload_form.as_p}}
                     {{bulk_upload_form.errors}}
                     {% csrf_token %}

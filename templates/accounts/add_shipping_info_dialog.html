@@ -17,7 +17,7 @@
 		$('#loading').show();
 		$.ajax({
 			type : "POST",
-			url : "{% url create_new_shipping_info %}",
+			url : "{% url 'create_new_shipping_info' %}",
 			data : $("#shipping-info-insert-form").serialize(),
 			success : function(returnvalue) {
 			    console.log(returnvalue['success']);
@@ -124,7 +124,7 @@
                 </div><!--/.section#intro-->
             </div>
         </div>
-    <form action="{% url create_new_shipping_info %}" method="post" id='shipping-info-insert-form' class="user-entry">
+    <form action="{% url 'create_new_shipping_info' %}" method="post" id='shipping-info-insert-form' class="user-entry">
         {% csrf_token %}
         {{ form.non_field_errors }}
         <table>

@@ -3,8 +3,8 @@
 {% block title %} Stunable | Your Closet {% endblock %}
 
 {% block current_tab %}
-	<li class="tab" id="tab-private"><a href="{% url racks_index %}" title="" class="text-link"><span>Private</span></a></li>
-	<li class="tab" id="tab-shared"><a href="{% url list_shared_racks %}" id="current-tab" title="View your shared racks." class="text-link"><span>Shared</span></a></li>
+	<li class="tab" id="tab-private"><a href="{% url 'racks_index' %}" title="" class="text-link"><span>Private</span></a></li>
+	<li class="tab" id="tab-shared"><a href="{% url 'list_shared_racks' %}" id="current-tab" title="View your shared racks." class="text-link"><span>Shared</span></a></li>
 {% endblock %}
 
 {% block content %}
@@ -38,7 +38,7 @@
 						</ul>
 					</div>
 					<p id="add-rack">
-						<a href="{% url racks_add %}" class="icon plus item-ref" title="Create a New Rack">Add a New Rack</a>
+						<a href="{% url 'racks_add' %}" class="icon plus item-ref" title="Create a New Rack">Add a New Rack</a>
 					</p>
 				</div><!--/.rack-list-->
 				<div id="rack-contents">

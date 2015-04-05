@@ -465,8 +465,8 @@ var stunable = {
               });
 
               $('#id_tags').chosen();
-              $('#id_Sizes').after("<a class='icon plus-icon item-ref' href='{% url add_size %}'>&nbsp</a>");
-              $('#id_Colors').after("<a class='icon plus-icon item-ref' href='{% url add_color %}'>&nbsp</a>");
+              $('#id_Sizes').after("<a class='icon plus-icon item-ref' href='{% url 'add_size' %}'>&nbsp</a>");
+              $('#id_Colors').after("<a class='icon plus-icon item-ref' href='{% url 'add_color' %}'>&nbsp</a>");
               // $('.inventory').tooltip();
 
               var add_item_form = $('#add-item-form');

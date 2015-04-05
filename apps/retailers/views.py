@@ -1,6 +1,5 @@
 from django.shortcuts import redirect
 from django.forms import ValidationError
-from django.views.generic.simple import direct_to_template
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404

@@ -4,19 +4,19 @@
 <div class="nav bar clearfix" id="local-nav">
 	<ul class="horizontal-list menu">
 		<li class="navlink member" id="nav-closet">
-			<a href="{% url racks_index %}" title="Peek inside your closet." class="text-link">{% if user.first_name %}{{user.first_name}}{% else %}{{user.username}}{%endif%}'s Closet</a>
+			<a href="{% url 'racks_index' %}" title="Peek inside your closet." class="text-link">{% if user.first_name %}{{user.first_name}}{% else %}{{user.username}}{%endif%}'s Closet</a>
 		</li>
 		<li class="navlink member" id="nav-admirers">
-			<a href="{% url friend_index %}" title="Browse your admirers List." id="currentpage" class="text-link">Admirers</a>
+			<a href="{% url 'friend_index' %}" title="Browse your admirers List." id="currentpage" class="text-link">Admirers</a>
 		</li>
 		<li class="navlink" id="nav-news">
-			<a href="{% url news_index %}" title="The latest about Stunable."  class="text-link">News</a>
+			<a href="{% url 'news_index' %}" title="The latest about Stunable."  class="text-link">News</a>
 		</li>
 		<li class="navlink" id="nav-about">
 			<a href="{% url main-about %}" title="Learn more about Stunable." class="text-link">What is Stunable?</a>
 		</li>
 		<li class="navlink" id="nav-blog">
-			<a href="{% url blog_index %}" title="Read the Stunable Blog."  class="text-link">Blog</a>
+			<a href="{% url 'blog_index' %}" title="Read the Stunable Blog."  class="text-link">Blog</a>
 		</li>
 	</ul><!--/.horizontal-list -->
 </div><!--/.section#local-nav-->

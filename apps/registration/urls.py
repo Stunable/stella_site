@@ -21,7 +21,7 @@ various steps of the user-signup process.
 
 
 from django.conf.urls.defaults import *
-from django.views.generic.simple import direct_to_template
+from django.views.generic import TemplateView, RedirectView
 from django.contrib.auth import views as auth_views
 
 from registration.views import activate
@@ -70,7 +70,6 @@ urlpatterns = patterns('',
                            register,
                            name='registration_register'),
                        url(r'^register/complete/$',
-                           direct_to_template,
-                           {'template': 'registration/registration_complete.html'},
+                           TemplateView.as_view(template_name='registration/registration_complete.html'),
                            name='registration_complete'),
                        )

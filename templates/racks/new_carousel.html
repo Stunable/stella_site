@@ -10,7 +10,7 @@
     <div class="inner-page-content">
         <div class="stunable-tabs-nav">
             <div style="display:inline-block" id="search_tab" title="search" class="stunable-tab tab">
-                                <div class="text-link"><input data-append="body" data-lookup="/search/" id="tab-search" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsearch" placeholder="brand, product, mood, or occasion..." type="text"></div>
+                                <div class="text-link"><input data-append="body" data-lookup="/search/" id="tab-search" data-target="#tabs-container" data-href="{% url 'add_tab'  %}" class="refsearch" placeholder="brand, product, mood, or occasion..." type="text"></div>
                             </div>
             <div class="tabs-container-container">
             <ul id="tabs-container" class="nav tabbed">
@@ -18,7 +18,7 @@
                         {% comment %}
                         {% if request.user.is_authenticated %}
                             <li id="more-tabs-tab" title="click to add a new tab" class="stunable-tab tab">
-                                <div class="click-show" data-target="#tab-adder" href="" title="" class="text-link"><span class="bigplus">+</span> more<input data-lookup="/lookups/tagging/tag" id="tab-adder" style="display:none" data-target="#tabs-container" data-href="{% url add_tab '' %}" class="refsubmit" placeholder="add a tab" type="text"></div>
+                                <div class="click-show" data-target="#tab-adder" href="" title="" class="text-link"><span class="bigplus">+</span> more<input data-lookup="/lookups/tagging/tag" id="tab-adder" style="display:none" data-target="#tabs-container" data-href="{% url 'add_tab' %}" class="refsubmit" placeholder="add a tab" type="text"></div>
                             </li>
                         {% else %}
                             <li id="more-tabs-tab" class="stunable-tab tab">
@@ -36,10 +36,10 @@
                             <a href="/shop/all"><span>all</span></a>
                         </li>
                         <li class="stunable-tab tab{% if current == 'new' %} active{% endif %}">
-                            <a href="{% url new %}"  title=""><span>new</span></a>
+                            <a href="{% url 'new' %}"  title=""><span>new</span></a>
                         </li>
                         <li class="stunable-tab tab{% if current == 'sale' %} active{% endif %}">
-                            <a href="{% url sale %}"  title=""><span>sale</span></a>
+                            <a href="{% url 'sale' %}"  title=""><span>sale</span></a>
                         </li>
                         
                         {% include 'racks/includes/tag_tabs.html' %}

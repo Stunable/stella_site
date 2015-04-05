@@ -1,5 +1,5 @@
 import json
-from django.views.generic.simple import direct_to_template
+# from django.views.generic.simple import direct_to_template
 from apps.friends.forms import InviteFriendForm
 from random import random
 from apps.racks.models import Rack

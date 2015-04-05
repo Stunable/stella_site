@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from django.views.generic.simple import direct_to_template
+from django.views.generic import TemplateView, RedirectView
 from apps.accounts.views import *
 from django.contrib.auth import views as auth_views
 
@@ -34,8 +34,7 @@ urlpatterns += patterns('registration.views',
         'register',
         name='registration_register'),
     url(r'^register/complete/$',
-        direct_to_template,
-        {'template': 'registration/registration_complete.html'},
+        TemplateView.as_view(template_name='registration/registration_complete.html'),
         name='registration_complete'),
 )
 

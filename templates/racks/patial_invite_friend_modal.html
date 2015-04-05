@@ -15,7 +15,7 @@
 			</div>
 		</div>
 		<div id="invitation-form-wrapper">
-			<form action="{% url friend_invite %}" class="user-entry" id="invitation-form" method="POST">
+			<form action="{% url 'friend_invite' %}" class="user-entry" id="invitation-form" method="POST">
 				{% csrf_token %}
 				<p class="error_msg">
 					{{ form.non_field_errors }}

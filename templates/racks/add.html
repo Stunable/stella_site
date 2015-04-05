@@ -34,7 +34,7 @@
 			</div>
 		</div>
 		<div id="invitation-form-wrapper">
-			<form action="{% url racks_add %}" class="user-entry" id="rack-insert-form" method="POST">
+			<form action="{% url 'racks_add' %}" class="user-entry" id="rack-insert-form" method="POST">
 				{% csrf_token %}
 				<p class="error_msg">
 					{{ form.non_field_errors }}
@@ -43,7 +43,7 @@
 				
 				<input type="text" id="name" class="txt" name="name" value="Enter rack name here" style="box-shadow:none;" onfocus="clearInput(this)" onblur="restoreInput(this)"/>
 				<input type="hidden" name="public" value="{{ public }}"/>
-				<input type="hidden" id="next" name="next" value="{% url all %}" />
+				<input type="hidden" id="next" name="next" value="{% url 'all' %}" />
 				<p class="btn-wrap bootstrap">
 					<input type="submit" class="btn btn-primary send" id="btn_send" value="Submit" />
 					<center>

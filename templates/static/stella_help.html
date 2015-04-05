@@ -13,20 +13,20 @@
 	<ul class="horizontal-list menu">
 		{% if user.is_authenticated %}
 		<li class="navlink member" id="nav-closet">
-			<a href="{% url racks_index %}" title="Peek inside your closet." class="text-link">{{ user.get_full_name }}'s Closet</a>
+			<a href="{% url 'racks_index' %}" title="Peek inside your closet." class="text-link">{{ user.get_full_name }}'s Closet</a>
 		</li>
 		<li class="navlink member" id="nav-admirers">
-			<a href="{% url friend_index %}" title="Browse your admirers List." class="text-link">Admirers</a>
+			<a href="{% url 'friend_index' %}" title="Browse your admirers List." class="text-link">Admirers</a>
 		</li>
 		{% endif %}
 		<li class="navlink" id="nav-about">
 			<a href="{% url main-about %}" title="Learn more about Stunable." class="text-link">What is Stunable?</a>
 		</li>
 		<li class="navlink" id="nav-news">
-			<a href="{% url news_index %}" title="The latest about Stunable."  class="text-link">News</a>
+			<a href="{% url 'news_index' %}" title="The latest about Stunable."  class="text-link">News</a>
 		</li>
 		<li class="navlink" id="nav-blog">
-			<a href="{% url blog_index %}" title="Read the Stunable Blog."  class="text-link">Blog</a>
+			<a href="{% url 'blog_index' %}" title="Read the Stunable Blog."  class="text-link">Blog</a>
 		</li>
 	</ul><!--/.horizontal-list -->
 </div><!--/.section#local-nav-->
@@ -35,11 +35,11 @@
 {% block navigation %}
 <ul class="horizontal-list menu">
 	<li class="navlink" id="nav-home">
-		<a href="{% url home %}" title="Go back to the homepage." class="text-link">Home</a>
+		<a href="{% url 'home' %}" title="Go back to the homepage." class="text-link">Home</a>
 	</li>
 	{% if user.is_authenticated %}
 	<li class="navlink" id="nav-account">
-		<a href="{% url profile_edit %}" title="Go to your Account Preferences." class="text-link">Account</a>
+		<a href="{% url 'profile_edit' %}" title="Go to your Account Preferences." class="text-link">Account</a>
 	</li>
 	{% endif %}
 	<li class="navlink" id="nav-help">
@@ -47,7 +47,7 @@
 	</li>
 	{% if user.is_authenticated %}
 	<li class="navlink" id="nav-signout">
-		<a href="{% url auth_logout %}" title="Sign out of Stunable." class="text-link">Log Out</a>
+		<a href="{% url 'auth_logout' %}" title="Sign out of Stunable." class="text-link">Log Out</a>
 	</li>
 	{% endif %}
 </ul><!--/.horizontal-list -->

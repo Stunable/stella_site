@@ -1,7 +1,6 @@
 import json 
 from django.shortcuts import HttpResponse, get_object_or_404
 from django.shortcuts import redirect
-from django.views.generic.simple import direct_to_template
 from django.contrib.auth.decorators import login_required
 from apps.accounts.forms import AccountSettingsForm, WaitlistForm
 from apps.accounts.models import UserProfile, AnonymousProfile, Question, QuestionAnswer, Answer

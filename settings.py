@@ -439,6 +439,11 @@ SSL_REQUIRED_PATHS =(
     '/platforms',
 )
 
+WSGI_APPLICATION = 'wsgi.application'
+
+HENDRIX_CHILD_RESOURCES = (
+    'hendrix.contrib.resources.static.DjangoStaticsFinder',
+)
 
 try:                        
     from dev import *

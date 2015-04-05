@@ -5,10 +5,9 @@ import datetime
 from django.db.models import Q
 from datetime import timedelta
 from django.contrib.auth.decorators import login_required
-from django.views.generic.simple import direct_to_template
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
-from apps.racks.forms import *
+# from apps.racks.forms import *
 from friends.models import Friendship
 from django.contrib.auth.models import User
 from apps.racks.models import Rack, Rack_Item, Item, Category,ProductImage,ItemType,DailySpecial
@@ -27,6 +26,7 @@ from notification.models import Notice
 from accounts.models import UserProfile
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.loader import render_to_string
+from django.shortcuts import render
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
 from django.contrib.contenttypes.models import ContentType
@@ -172,7 +172,7 @@ def item_modal(request, slug, template='racks/item_modal.html', ctx=None):
                 }) 
                
     if request.is_ajax() and not request.GET.get('page',None):
-        return direct_to_template(request, template, ctx)
+        return render(request, template, ctx)
 
     if request.GET.get('similar',None):
         pass
@@ -332,7 +332,7 @@ def _all(request, slug=None, template='racks/new_carousel.html',query_set = None
     
     return pagination(request, ctx, template, query_set)
             
-#    return direct_to_template(request, template, ctx)
+#    return render(request, template, ctx)
 
 def pagination(request, ctx, template, query_set):
     page = request.GET.get('page')
@@ -376,7 +376,7 @@ def pagination(request, ctx, template, query_set):
         print 'outlist:',ctx['rack_items_list']
         print template
             
-    return direct_to_template(request, template, ctx)
+    return render(request, template, ctx)
 
 
 
@@ -398,7 +398,7 @@ def jean_submit(request, template="racks/bummer.html"):
     else:
         form = BrandForm()
     ctx['form'] = form
-    return direct_to_template(request, template, ctx)
+    return render(request, template, ctx)
 
 
 @login_required
@@ -423,7 +423,7 @@ def add_size(request, template="racks/add_size_dialog.html"):
         form = AddSizeForm()
     
     ctx['form'] = form
-    return direct_to_template(request, template, ctx)
+    return render(request, template, ctx)
 
 @login_required
 def add_color(request, template="racks/add_color_dialog.html"):
@@ -445,7 +445,7 @@ def add_color(request, template="racks/add_color_dialog.html"):
         form = AddColorForm()
     
     ctx['form'] = form
-    return direct_to_template(request, template, ctx)
+    return render(request, template, ctx)
 
 
 def sale_items(request, template="racks/new_carousel.html"):
@@ -465,12 +465,12 @@ def recent_added_items(request, template="racks/item_list.html"):
     ctx = {'items': qs, "title": "recently added"}
     ctx['object'] = qs[0]
 
-    return direct_to_template(request, template, ctx)
+    return render(request, template, ctx)
 
 
 @login_required
 def purchased_items(request, template="racks/item_list.html"):
     # qs = Item.objects.filter(pk__in=[ci.object_id for ci in KartItem.objects.filter(cart__purchase__purchaser=request.user)])
     ctx = {'items': [], "title": "purchased"}
-    return direct_to_template(request, template, ctx)
+    return render(request, template, ctx)
 

@@ -158,7 +158,7 @@
 			</div>
 		</div>
 		<div id="invitation-form-wrapper">
-			<form action="{% url friend_invite %}" class="user-entry" id="invitation-form" method="POST">
+			<form action="{% url 'friend_invite' %}" class="user-entry" id="invitation-form" method="POST">
 				{% csrf_token %}
 				<input type="text" class="txt" id="emails" name="emails" placeholder="EMAIL ADDRESSES, SEPARATED BY COMAS" style="box-shadow: none;"/>
 				<textarea id="email_message" id="email_message" name="email_message" placeholder="PERSONAL MESSAGE" ></textarea>

@@ -1,23 +1,20 @@
   - name: install git
     action: apt pkg=git state=installed
 
-  - name: id_rsa.pub copied
-    action: copy src=sec/pub dest=/home/ubuntu/.ssh/id_rsa.pub owner=ubuntu group=ubuntu mode=0700
+  # - name: id_rsa.pub copied
+  #   action: copy src=sec/pub dest=/home/ubuntu/.ssh/id_rsa.pub owner=ubuntu group=ubuntu mode=0700
 
-  - name: id_rsa copied
-    action: copy src=sec/key dest=/home/ubuntu/.ssh/id_rsa owner=ubuntu group=ubuntu mode=0700
+  # - name: id_rsa copied
+  #   action: copy src=sec/key dest=/home/ubuntu/.ssh/id_rsa owner=ubuntu group=ubuntu mode=0700
 
-  - name: shut ssh up
-    copy: src=sec/config dest=/home/ubuntu/.ssh/config owner=ubuntu group=ubuntu mode=0700
+  # - name: shut ssh up
+  #   copy: src=sec/config dest=/home/ubuntu/.ssh/config owner=ubuntu group=ubuntu mode=0700
 
   - name: virtual env installed
     apt: pkg=python-virtualenv state=installed
 
   - name: dev tools installalled
     apt: pkg=python-all-dev
-
-  - name: supervisor installed
-    apt: pkg=supervisor state=installed
 
   - name: redis installed
     apt: pkg=redis-server state=installed

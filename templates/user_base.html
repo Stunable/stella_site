@@ -133,14 +133,14 @@
                                             <td>
                                             <div class="image_wrapper">
                                                 {% load thumbnail %}
-                                                {% thumbnail request.user.get_profile.avatar_image "40x40" as im %} <a href="{% url profile_edit %}"><img src="{{ im.url }}"></a>
+                                                {% thumbnail request.user.get_profile.avatar_image "40x40" as im %} <a href="{% url 'profile_edit' %}"><img src="{{ im.url }}"></a>
                                                 {% empty %} <img src="{{ request.user.get_profile.avatar_image }}"/>
                                                 {% endthumbnail %}
                                             </div></td>
                                             <td>
                                             <table>
                                                 <tr>
-                                                    <td class="username">{% if request.user.get_full_name %}{{ request.user.get_full_name }}{% else %}<a href="{% url auth_login %}">Create an Account</a>{% endif %}</td>
+                                                    <td class="username">{% if request.user.get_full_name %}{{ request.user.get_full_name }}{% else %}<a href="{% url 'auth_login' %}">Create an Account</a>{% endif %}</td>
                                                 </tr>
                                                 <tr>
                                                     <!-- <td>{{ request.user.get_profile.location }}</td> -->
@@ -151,16 +151,16 @@
                                     <div class="separator"></div>
                                     <ul class="my-closet-menu link">
                                         <li>
-                                            <a href="{% url trendsetters %}">My Closet</a>
+                                            <a href="{% url 'trendsetters' %}">My Closet</a>
                                         </li>
                                         <li>
-                                            <a href="{% url my_closet_purchased_items %}">Purchased</a>
+                                            <a href="{% url 'my_closet_purchased_items' %}">Purchased</a>
                                         </li>
                                         <li>
-                                            <a href="{% url my_closet_recent_added_items %}">Recently added</a>
+                                            <a href="{% url 'my_closet_recent_added_items' %}">Recently added</a>
                                         </li>
                                         <li>
-                                            <a href="{% url my_closet_sale_items %}">Sale</a>
+                                            <a href="{% url 'my_closet_sale_items' %}">Sale</a>
                                         </li>
                                     </ul>
                                     <div class="separator"></div>
@@ -213,7 +213,7 @@
                                     <p><a href="{% url socialauth_begin "facebook" %}">Login with Facebook</a> to see who else is on Stunable! </p> 
                                     {% else %}
                                         <div class="separator"></div>
-                                        <form id="search-friend-form" method="GET" action="{% url friend_search %}" class="bootstrap">
+                                        <form id="search-friend-form" method="GET" action="{% url 'friend_search' %}" class="bootstrap">
                                             <input type="text" id="friend-search-box" autocomplete="off" name="q" class="friend-search-box" placeholder="Search Facebook" />
                                         </form>
 
@@ -227,7 +227,7 @@
 
                                     {% endif %}
                                     <p id="add-friend">
-                                        <a style="display:inline-block" href="{% url friend_invite %}" class="icon plus-icon item-ref" title="Invite a Trendsetter">Add Stunner</a><span style="display:inline">Invite Friends</span>
+                                        <a style="display:inline-block" href="{% url 'friend_invite' %}" class="icon plus-icon item-ref" title="Invite a Trendsetter">Add Stunner</a><span style="display:inline">Invite Friends</span>
                                     </p>
                                 </div>
                             </div>
@@ -299,7 +299,7 @@
             </div><!--/.footer -->
             {% if request.subdomain != 'stylists' %}
             <div class="item-send clearfix" id="send_to_admirer_reduced_form" style="opacity: 0; display: none; width: 270px;">
-                <form action="{% url send_item_to_admirer %}" id="reduced_send_to_admirer_form" method="POST" >
+                <form action="{% url 'send_item_to_admirer' %}" id="reduced_send_to_admirer_form" method="POST" >
                     {% csrf_token %}
                     <div class="item-send-right">
                         <textarea name="message" id="reduced_message" placeholder="PERSONAL MESSAGE: Less then 160 characters"></textarea>

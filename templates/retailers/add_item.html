@@ -98,7 +98,7 @@
 </div>
 
 <div class="add-color-dlg" style="display: none">
-	<form class="add-color-form" method="post" action="{% url add_color %}">
+	<form class="add-color-form" method="post" action="{% url 'add_color' %}">
 	{% csrf_token %}
 	<h3>New color</h3>
 	<input type="text" name="name" placeholder="Name"/>
@@ -109,7 +109,7 @@
 </div>
 
 <div class="add-size-dlg" style="display: none">
-	<form class="add-size-form" method="post" action="{% url add_size %}">
+	<form class="add-size-form" method="post" action="{% url 'add_size' %}">
 	{% csrf_token %}
 	<h3>New size</h3>
 	<input type="text" name="size" placeholder="Name"/>
@@ -164,7 +164,7 @@
 </div>
 
 <div style="display:none" id="new_image_form">
-	<form action="{% url add_product_image %}">{{image_upload_form}}
+	<form action="{% url 'add_product_image' %}">{{image_upload_form}}
 </div>
 
 {% endblock %} 

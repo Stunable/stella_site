@@ -22,13 +22,13 @@
         <div class="special" id="item-viewer">
             <ul class="nav tabbed clearfix">
                 <li class="tab" id="tab-choice">
-                    <a href="{% url stella_choice %}" {% if current == "Stella's Choice" %} id = "current-tab" {% endif %} title="" class="text-link"><span class="identity">Most Stunable</span></a>
+                    <a href="{% url 'stella_choice' %}" {% if current == "Stella's Choice" %} id = "current-tab" {% endif %} title="" class="text-link"><span class="identity">Most Stunable</span></a>
                 </li>
                 <li class="tab" id="tab-new">
-                    <a href="{% url new %}" {% if current == "new" %} id = "current-tab" {% endif %} title="" class="text-link"><span class="identity">new</span></a>
+                    <a href="{% url 'new' %}" {% if current == "new" %} id = "current-tab" {% endif %} title="" class="text-link"><span class="identity">new</span></a>
                 </li>
                 <li class="tab" id="tab-all">
-                    <a href="{% url all %}" title="" {% if current == "all" %} id = "current-tab" {% endif %} class="text-link"><span>all</span></a>
+                    <a href="{% url 'all' %}" title="" {% if current == "all" %} id = "current-tab" {% endif %} class="text-link"><span>all</span></a>
                 </li>
                 {% for category in categories %}
                 <li class="tab {% if category.name == 'Shoes' %}end{% endif %}" id="tab-{{category.name}}">

@@ -3,14 +3,13 @@ apps' urls confs.
 """
 
 from django.conf.urls.defaults import patterns, include, url
-from django.views.generic.simple import direct_to_template, redirect_to
+from django.views.generic import TemplateView, RedirectView
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
 from apps.beta_invite.forms import SignupForm
 from django.core.urlresolvers import reverse
 from voting.views import vote_on_object
-from django.views.generic.list_detail import object_list
 from racks.models import Item
 from racks.views import carousel 
 from django.shortcuts import redirect
@@ -41,15 +40,14 @@ admin.autodiscover() # enables admin
 urlpatterns = patterns('',
 
                        url(r'^check_login/$', 'apps.accounts.views.check_login' ,name='check_login'),
-                      (r'^robots\.txt$', direct_to_template,
-                         {'template': 'robots/main.txt', 'mimetype': 'text/plain'}),
+                      (r'^robots\.txt$', TemplateView.as_view(template_name='robots/main.txt')),
                       url(r'^$', 
                            'apps.racks.views.gethome',
                            name="home"),
                        url(r'^retailers/', include('retailers.urls')),
                        url(r'', include('social_auth.urls')),
                        url(r'^registration/', include('apps.registration.urls')),
-                       url(r'^login/$', redirect_to, {'url': '/login/facebook'}),
+                       url(r'^login/$', RedirectView.as_view(url='/login/facebook')),
                        url(r'^admin/cmstest/', 'apps.cms.views.text_test'),
                        url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
                        # export a model to csv
@@ -60,12 +58,10 @@ urlpatterns = patterns('',
                        url(r'^beta/', include('beta_invite.urls')),
                        ## Static pages here on out
                        url(r'^help$', 
-                           direct_to_template,
-                           {'template' : 'static/stella_help.html'},
+                           TemplateView.as_view(template_name='static/stella_help.html'),
                            name="main-help"),                     
                        url(r'^thankyou/$',
-                           direct_to_template,
-                           {'template': 'static/stella_thank-you.html'},
+                           TemplateView.as_view(template_name='static/stella_thank-you.html'),
                            name="main-thankyou"),
 
 
@@ -93,17 +89,17 @@ urlpatterns = patterns('',
                         
                        url(r'^trends/', include('apps.trends.urls')),
                        
-                       url(r'^vote/?$', object_list, dict(queryset=Item.objects.all(),
-                            template_object_name='link', template_name='racks/item_vote_list.html',
-                            paginate_by=15, allow_empty=True)),
+                       # url(r'^vote/?$', object_list, dict(queryset=Item.objects.all(),
+                       #      template_object_name='link', template_name='racks/item_vote_list.html',
+                       #      paginate_by=15, allow_empty=True)),
                             
                        # item vote
-                       url(r'^item_vote/(?P<slug>\d+)?/(?P<direction>up|down|clear)vote/?$',
-                            vote_on_object, dict(model=Item, template_object_name='Item',
-                                template_name='racks/vote_on_item.html',
-                                post_vote_redirect='/',
-                                allow_xmlhttprequest=True),
-                           name="item_vote"),
+                       # url(r'^item_vote/(?P<slug>\d+)?/(?P<direction>up|down|clear)vote/?$',
+                       #      vote_on_object, dict(model=Item, template_object_name='Item',
+                       #          template_name='racks/vote_on_item.html',
+                       #          post_vote_redirect='/',
+                       #          allow_xmlhttprequest=True),
+                       #     name="item_vote"),
                        
                        # blog apps
                        url(r'^comments/', include('django.contrib.comments.urls')),
